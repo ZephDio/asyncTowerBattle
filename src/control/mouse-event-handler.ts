@@ -19,7 +19,7 @@ export class MouseEventHandler {
 
   pixelPositionToRelative(position: Position) {
     const { offsetLeft, offsetTop } = this.renderer.canvas;
-    const { width, height } = this.renderer.canvas
+    const { width, height } = this.renderer.canvas;
     const pixelPosition = {
       x: position.x - offsetLeft,
       y: position.y - offsetTop,
@@ -28,8 +28,8 @@ export class MouseEventHandler {
       x: pixelPosition.x / (width / 100),
       y: 100 - pixelPosition.y / (height / 100),
     };
-    const shape = new HitShape("ellipse", {width: 5, height: 5})
-    const box = new HitBox([[shape, {x: 50,y:50}]])
+    const shape = new HitShape("ellipse", { width: 5, height: 5 });
+    const box = new HitBox([[shape, { x: 50, y: 50 }]]);
     return relativePosition;
   }
 }

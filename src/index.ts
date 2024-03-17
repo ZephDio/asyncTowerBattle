@@ -12,22 +12,43 @@ import { UnitEntityFixture } from "./engine/units/domain/units";
 import { UnitEntityStoreInMemory } from "./engine/units/infrastructure/unist-store-in-memory";
 import { CanvasRenderer } from "./renderer/implementation/canvas-renderer";
 
+async function init() {
+  const towers = [
+    TowerFixtures.centerTower,
+    TowerFixtures.topRightTower,
+    TowerFixtures.BottomRightTower,
+  ];
+  const enemyEntities = [
+    UnitEntityFixture.soldier,
+    UnitEntityFixture.soldier2,
+    UnitEntityFixture.soldier3,
+    UnitEntityFixture.soldier4,
+    UnitEntityFixture.soldier5,
+    UnitEntityFixture.soldier6,
+    UnitEntityFixture.soldier7,
+  ];
+  const towerStore = new InMemoryTowerStore(towers);
+  const pathStore = new PathStoreInMemory(PathFixture.default);
+  const enemyEntityStore = new UnitEntityStoreInMemory(enemyEntities);
+  const getTowersQueryHandler = new GetTowersQueryHandler(towerStore);
+  const getEnemyUnitEntityHandler = new GetUnitsEntityQueryHandler(
+    enemyEntityStore
+  );
+  const getPathQueryHandler = new GetPathQueryHandler(pathStore);
+  const game = new Game(
+    getTowersQueryHandler,
+    getPathQueryHandler,
+    getEnemyUnitEntityHandler
+  );
+  const renderer = new CanvasRenderer(game);
+  const inputToIntentTranslator = new InputToIntentTranslator(renderer);
+  const mouseEventHandler = new MouseEventHandler(
+    renderer,
+    inputToIntentTranslator
+  );
 
-async function init(){
-    const towers = [TowerFixtures.centerTower,TowerFixtures.topRightTower,TowerFixtures.BottomRightTower]
-    const enemyEntities = [UnitEntityFixture.soldier]
-    const towerStore = new InMemoryTowerStore(towers)
-    const pathStore = new PathStoreInMemory(PathFixture.default)
-    const enemyEntityStore =new UnitEntityStoreInMemory(enemyEntities)
-    const getTowersQueryHandler = new GetTowersQueryHandler(towerStore)
-    const getEnemyUnitEntityHandler = new GetUnitsEntityQueryHandler(enemyEntityStore)
-    const getPathQueryHandler = new GetPathQueryHandler(pathStore)
-    const game = new Game(getTowersQueryHandler,getPathQueryHandler,getEnemyUnitEntityHandler)
-    const renderer = new CanvasRenderer(game)
-    const inputToIntentTranslator = new InputToIntentTranslator(renderer)
-    const mouseEventHandler = new MouseEventHandler(renderer,inputToIntentTranslator)
-    
-    renderer.init()
+  renderer.init();
+  game.start();
 }
 
-init()
+init();
