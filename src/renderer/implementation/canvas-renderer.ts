@@ -31,7 +31,10 @@ export class CanvasRenderer implements Renderer{
         const position = this.getCanvasPosition(tower.position)
 
         const size = this.getCanvasSize(5,5)
-        this.context.fillRect(position.x,position.y,size.width,size.height)
+        this.context.beginPath();
+        this.context.ellipse(position.x, position.y,size.width/2,size.height/2,0,0, 2 * Math.PI);
+        this.context.fill()
+        this.context.stroke();
     }
 
     drawBackGround(){
