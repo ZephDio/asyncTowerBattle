@@ -1,8 +1,14 @@
 import { Game } from "../../engine/game";
+import { Path, PathNode } from "../../engine/path/domain/path";
 import { Tower } from "../../engine/tower/domain/tower";
+import { Unit, UnitEntity } from "../../engine/units/domain/units";
+import { GameState } from "../../shared/gamestate";
 import { Position } from "../../shared/position";
+import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
-
+import { Resources } from "../resources";
+import { Drawable, PathDrawable, TowerDrawable, UnitEntityDrawable } from "./drawable";
+export const proportion = (16/7.53)
 
 export class CanvasRenderer implements Renderer{
 
@@ -19,23 +25,46 @@ export class CanvasRenderer implements Renderer{
 
     async draw() {
        const state = await this.game.getState()
-       this.drawBackGround()
-       for(const tower of state.towers){
-        this.drawTower(tower)
-       }
-
+       const drawableState = this.stateToDrawable(state)
+       for(const drawable of drawableState){
+        drawable.draw(this.context)
+        }
+    }
+    
+    getCanvasPosition(position : Position){
+        const x = (this.canvas.width / 100) * position.x
+        const y = (this.canvas.height / 100) *  (100 - position.y)
+        return { x , y }
     }
 
-    drawTower(tower: Tower){
-        this.context.fillStyle = tower.type
+   stateToDrawable(state: GameState){
+        const drawables: Drawable[] = []
+        drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower)))
+        drawables.push(this.pathToPathDrawable(state.path))
+        drawables.push(...state.enemyEntities.map((unit) => this.unitToDrawable(unit)))
+        drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
+        return drawables
+    }
+    
+    towerToTowerDrawable(tower: Tower){
         const position = this.getCanvasPosition(tower.position)
-
-        const size = this.getCanvasSize(5,5)
-        this.context.beginPath();
-        this.context.ellipse(position.x, position.y,size.width/2,size.height/2,0,0, 2 * Math.PI);
-        this.context.fill()
-        this.context.stroke();
+        const { width , height } = Resources.tower[tower.type].size as Size
+        const size = this.getCanvasSize(width, height)
+        return new TowerDrawable(position, size, tower.type)
     }
+
+    pathToPathDrawable(path: Path){
+        const relativeNodes = [...path.nodes.map((node) => this.getCanvasPosition(node))]
+        return new PathDrawable(path.type, relativeNodes)
+    }
+
+    unitToDrawable(unit: UnitEntity<Unit>){
+        const position = this.getCanvasPosition(unit.position)
+        const { width , height } = Resources.unit[unit.unitType].size as Size
+        const size = this.getCanvasSize(width, height)
+        return new UnitEntityDrawable(position, size, unit.unitType)
+    }
+
 
     drawBackGround(){
         this.context.fillStyle = 'grey'
@@ -55,19 +84,21 @@ export class CanvasRenderer implements Renderer{
     }
 
     sizeGame(){
-        this.canvas.width = this.container.getBoundingClientRect().width
-        this.canvas.height = this.container.getBoundingClientRect().height
+        const { width , height } = this.container.getBoundingClientRect()
+        if(width > height * proportion){
+            this.canvas.height = height
+            this.canvas.width = height * proportion
+            return
+        }
+        this.canvas.width = width
+        this.canvas.height = width / proportion
     }
 
     getCanvasSize(width : number, height : number){
         const cWidth = (this.canvas.width / 100) * width
-        const cHeight = (this.canvas.height / 100) * height * (16/7.53) // considered to be the perfect ratio considering Navigator HeadBar
+        const cHeight = (this.canvas.height / 100) * height * proportion  // considered to be the perfect ratio considering Navigator HeadBar
         return { width : cWidth, height : cHeight}
     }
 
-    getCanvasPosition(position : Position){
-        const x = (this.canvas.width / 100) * position.x
-        const y = (this.canvas.height / 100) *  (100 - position.y)
-        return { x , y }
-    }
+
 }

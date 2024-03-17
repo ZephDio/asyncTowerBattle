@@ -3,7 +3,7 @@ import { TowerStore } from "../store/tower-store";
 
 export class GetTowersQuery implements Query{}
 
-export class GetTowersQueryHandler implements QueryHandler{
+export class GetTowersQueryHandler implements QueryHandler<GetTowersQuery>{
   constructor(private readonly towerStore : TowerStore){}
 
   async handle(query: GetTowersQuery){

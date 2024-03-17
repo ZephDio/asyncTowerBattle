@@ -1,5 +1,6 @@
 import { Game } from "../engine/game";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
+import { Entity } from "../shared/entity";
 import { Position } from "../shared/position";
 
 export interface PlayerIntent {
@@ -22,16 +23,17 @@ export class InputToIntentTranslator {
   }
 
   async playerDidClickOnTower(mousePosition: Position) {
+
     const state = await this.game.getState();
     for (const tower of state.towers) {
-      const mouseOnTowerX =
-        mousePosition.x > tower.position.x &&
-        mousePosition.x < tower.position.x + 5;
-      const mouseOnTowerY =
-        mousePosition.y < tower.position.y &&
-        mousePosition.y > tower.position.y - 5 * (16 / 7.53);
-      const mouseOnTower = mouseOnTowerX && mouseOnTowerY;
-      if (mouseOnTower) return true;
+      for(const hitShape of tower.hitbox.hitShapes){
+        if(Entity.doCollide(tower, mousePosition)){
+          console.log(tower.type)
+          return tower
+        } 
+          
+      }
     }
+    return undefined
   }
 }

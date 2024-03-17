@@ -1,5 +1,5 @@
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
-import { HitShape } from "../shared/hitbox";
+import { HitBox, HitShape } from "../shared/hitboxes";
 import { Position } from "../shared/position";
 import { InputToIntentTranslator } from "./input-to-intent-translator";
 
@@ -19,7 +19,7 @@ export class MouseEventHandler {
 
   pixelPositionToRelative(position: Position) {
     const { offsetLeft, offsetTop } = this.renderer.canvas;
-    const { width, height } = this.renderer.container.getBoundingClientRect();
+    const { width, height } = this.renderer.canvas
     const pixelPosition = {
       x: position.x - offsetLeft,
       y: position.y - offsetTop,
@@ -29,7 +29,7 @@ export class MouseEventHandler {
       y: 100 - pixelPosition.y / (height / 100),
     };
     const shape = new HitShape("ellipse", {width: 5, height: 5})
-    console.log(HitShape.pointCollision(shape,relativePosition))
+    const box = new HitBox([[shape, {x: 50,y:50}]])
     return relativePosition;
   }
 }
