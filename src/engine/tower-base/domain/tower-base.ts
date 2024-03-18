@@ -9,13 +9,12 @@ const BasePosition = {
 type Team = 'allied' | 'enemy'
 
 export class TowerBase {
-
-    position: Position
-    constructor(team: Team) {
-        this.position = BasePosition[team]
-    }
+    constructor(public team: Team) { }
 }
 
-export class TowerBaseEntity<TowerBase>{
-
+export class TowerBaseEntity<TB extends TowerBase>{
+    position: Position
+    constructor(tower: TB) {
+        this.position = BasePosition[tower.team]
+    }
 }

@@ -3,9 +3,10 @@ import {
   GetPathQueryHandler,
 } from "./path/applicative/query/get-path-query-handler";
 import { Physics } from "./physic/physics";
+import { GetTowerBaseEntityQueryHandler } from "./tower-base/applicative/query/get-tower-base";
 import {
-  GetTowersQuery,
-  GetTowersQueryHandler,
+  GetTowersEntitiesQuery,
+  GetTowersEntitiesQueryHandler,
 } from "./tower/application/query/get-towers-query";
 import {
   GetUnitsEntityQuery,
@@ -14,14 +15,16 @@ import {
 
 export class Game {
   constructor(
-    public towerGetter: GetTowersQueryHandler,
+    public towerGetter: GetTowersEntitiesQueryHandler,
     public pathGetter: GetPathQueryHandler,
-    public enemyUnitsEntityGetter: GetUnitsEntityQueryHandler
-  ) {}
+    public enemyUnitsEntityGetter: GetUnitsEntityQueryHandler,
+    public towerBaseEntityGetter: GetTowerBaseEntityQueryHandler,
+  ) { }
 
   async getState() {
     const state = {
-      towers: await this.towerGetter.handle(new GetTowersQuery()),
+      towerBase: await this.towerBaseEntityGetter.handle(new GetTowersEntitiesQuery()),
+      towers: await this.towerGetter.handle(new GetTowersEntitiesQuery()),
       path: await this.pathGetter.handle(new GetPathQuery()),
       enemyEntities: await this.enemyUnitsEntityGetter.handle(
         new GetUnitsEntityQuery()

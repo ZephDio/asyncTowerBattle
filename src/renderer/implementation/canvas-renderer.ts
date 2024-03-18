@@ -1,13 +1,14 @@
 import { Game } from "../../engine/game";
 import { Path, PathNode } from "../../engine/path/domain/path";
-import { TowerEntity } from "../../engine/tower/domain/tower";
+import { TowerBase, TowerBaseEntity } from "../../engine/tower-base/domain/tower-base";
+import { Tower, TowerEntity } from "../../engine/tower/domain/tower";
 import { Unit, UnitEntity } from "../../engine/units/domain/units";
 import { GameState } from "../../shared/gamestate";
 import { Position } from "../../shared/position";
 import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 import { Resources } from "../resources";
-import { Drawable, PathDrawable, TowerDrawable, UnitEntityDrawable } from "./drawable";
+import { Drawable, PathDrawable, TowerBaseDrawable, TowerDrawable, UnitEntityDrawable } from "./drawable";
 export const proportion = (16 / 7.53)
 
 export class CanvasRenderer implements Renderer {
@@ -42,15 +43,23 @@ export class CanvasRenderer implements Renderer {
         drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower)))
         drawables.push(this.pathToPathDrawable(state.path))
         drawables.push(...state.enemyEntities.map((unit) => this.unitToDrawable(unit)))
+        drawables.push(...state.towerBase.map((towerbase) => this.towerBaseToTowerBaseDrawable(towerbase)))
         drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
         return drawables
     }
 
-    towerToTowerDrawable(tower: TowerEntity) {
+    towerToTowerDrawable(tower: TowerEntity<Tower>) {
         const position = this.getCanvasPosition(tower.position)
         const { width, height } = Resources.tower[tower.type].size as Size
         const size = this.getCanvasSize(width, height)
         return new TowerDrawable(position, size, tower.type)
+    }
+
+    towerBaseToTowerBaseDrawable(towerBase: TowerBaseEntity<TowerBase>) {
+        const position = this.getCanvasPosition(towerBase.position)
+        const { width, height } = Resources.towerBase.size as Size
+        const size = this.getCanvasSize(width, height)
+        return new TowerBaseDrawable(position, size)
     }
 
     pathToPathDrawable(path: Path) {

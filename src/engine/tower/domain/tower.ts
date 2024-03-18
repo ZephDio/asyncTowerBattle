@@ -1,4 +1,3 @@
-import { proportion } from "../../../renderer/implementation/canvas-renderer";
 import { Entity } from "../../../shared/entity";
 import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";

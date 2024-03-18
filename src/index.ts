@@ -4,7 +4,10 @@ import { Game } from "./engine/game";
 import { GetPathQueryHandler } from "./engine/path/applicative/query/get-path-query-handler";
 import { Path, PathFixture } from "./engine/path/domain/path";
 import { PathStoreInMemory } from "./engine/path/infrastructure/path-store";
-import { GetTowersQueryHandler } from "./engine/tower/application/query/get-towers-query";
+import { GetTowerBaseEntityQuery, GetTowerBaseEntityQueryHandler } from "./engine/tower-base/applicative/query/get-tower-base";
+import { TowerBase, TowerBaseEntity } from "./engine/tower-base/domain/tower-base";
+import { TowerBaseEntityStoreInMemory } from "./engine/tower-base/infrastructure/tower-base-store-in-memory";
+import { GetTowersEntitiesQueryHandler } from "./engine/tower/application/query/get-towers-query";
 import { TowerEntity, TowerEntityFixtures } from "./engine/tower/domain/tower";
 import { InMemoryTowerStore } from "./engine/tower/infrastructure/tower-in-memory-store";
 import { GetUnitsEntityQueryHandler } from "./engine/units/applicative/get-units-query-handler";
@@ -27,18 +30,23 @@ async function init() {
     UnitEntityFixture.soldier6,
     UnitEntityFixture.soldier7,
   ];
+  const towerBase = [new TowerBaseEntity(new TowerBase('allied')), new TowerBaseEntity(new TowerBase('enemy'))]
+  const towerBaseEntityStore = new TowerBaseEntityStoreInMemory(towerBase)
   const towerStore = new InMemoryTowerStore(towers);
   const pathStore = new PathStoreInMemory(PathFixture.default);
   const enemyEntityStore = new UnitEntityStoreInMemory(enemyEntities);
-  const getTowersQueryHandler = new GetTowersQueryHandler(towerStore);
+
+  const getTowersQueryHandler = new GetTowersEntitiesQueryHandler(towerStore);
   const getEnemyUnitEntityHandler = new GetUnitsEntityQueryHandler(
     enemyEntityStore
   );
   const getPathQueryHandler = new GetPathQueryHandler(pathStore);
+  const getTowerBaseEntityQueryHandler = new GetTowerBaseEntityQueryHandler(towerBaseEntityStore)
   const game = new Game(
     getTowersQueryHandler,
     getPathQueryHandler,
-    getEnemyUnitEntityHandler
+    getEnemyUnitEntityHandler,
+    getTowerBaseEntityQueryHandler
   );
   const renderer = new CanvasRenderer(game);
   const inputToIntentTranslator = new InputToIntentTranslator(renderer);

@@ -1,5 +1,6 @@
 import { Path, PathNode } from "../../engine/path/domain/path"
-import { TowerEntity } from "../../engine/tower/domain/tower"
+import { TowerBase, TowerBaseEntity } from "../../engine/tower-base/domain/tower-base"
+import { Tower, TowerEntity } from "../../engine/tower/domain/tower"
 import { UnitEntity } from "../../engine/units/domain/units"
 import { Entity } from "../../shared/entity"
 import { Position } from "../../shared/position"
@@ -31,7 +32,7 @@ export abstract class Drawable<T = any>{
 
 }
 
-export class TowerDrawable extends Drawable<TowerEntity> {
+export class TowerDrawable extends Drawable<TowerEntity<Tower>> {
   public drawPriority: number = 2
   constructor(public position: Position, public size: Size, public type: string) {
     super()
@@ -39,7 +40,7 @@ export class TowerDrawable extends Drawable<TowerEntity> {
 
 
   draw(context: CanvasRenderingContext2D) {
-    const renderShape = Resources.tower[this.type].resource
+    const renderShape = Resources.tower[this.type].resource.shape
     this.applyStyle(context)
 
     if (renderShape == "ellipse") {
@@ -54,7 +55,31 @@ export class TowerDrawable extends Drawable<TowerEntity> {
   applyStyle(context: CanvasRenderingContext2D) {
     context.lineWidth = 1
     context.strokeStyle = "black"
-    context.fillStyle = this.type
+    const color = Resources.tower[this.type].resource.color
+    context.fillStyle = color
+  }
+
+}
+
+
+export class TowerBaseDrawable extends Drawable<TowerBaseEntity<TowerBase>> {
+  public drawPriority: number = 2
+  constructor(public position: Position, public size: Size) {
+    super()
+  }
+
+
+  draw(context: CanvasRenderingContext2D) {
+    const renderShape = Resources.towerBase.resource.shape
+    this.applyStyle(context)
+    this.drawRectangle(context, this.size, this.position)
+  }
+
+  applyStyle(context: CanvasRenderingContext2D) {
+    context.lineWidth = 1
+    context.strokeStyle = "black"
+    const color = Resources.towerBase.resource.color
+    context.fillStyle = color
   }
 
 }
