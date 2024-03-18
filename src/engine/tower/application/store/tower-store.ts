@@ -1,5 +1,5 @@
-import { Tower } from "../../domain/tower";
+import { TowerEntity } from "../../domain/tower";
 
 export interface TowerStore {
-  getAll() : Promise<Tower[]>
+  getAll(): Promise<TowerEntity[]>
 }
