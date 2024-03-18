@@ -27,6 +27,7 @@ export class CanvasRenderer implements Renderer {
     async draw() {
         const state = await this.game.getState()
         const drawableState = this.stateToDrawable(state)
+        this.drawBackGround()
         for (const drawable of drawableState) {
             drawable.draw(this.context)
         }
@@ -34,7 +35,7 @@ export class CanvasRenderer implements Renderer {
 
     getCanvasPosition(position: Position) {
         const x = (this.canvas.width / 100) * position.x
-        const y = (this.canvas.height / 100) * (100 - position.y)
+        const y = this.canvas.height - (this.canvas.width / 100) * position.y// !
         return { x, y }
     }
 
@@ -82,7 +83,6 @@ export class CanvasRenderer implements Renderer {
 
 
     init() {
-
         const render = () => {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.sizeGame()
@@ -105,9 +105,15 @@ export class CanvasRenderer implements Renderer {
 
     getCanvasSize(width: number, height: number) {
         const cWidth = (this.canvas.width / 100) * width
-        const cHeight = (this.canvas.height / 100) * height * proportion  // considered to be the perfect ratio considering Navigator HeadBar
+        const cHeight = (this.canvas.width / 100) * height
         return { width: cWidth, height: cHeight }
     }
 
+}
 
+export const PercentToReal = (position: Position) => {
+    return {
+        x: position.x,
+        y: position.y / proportion
+    }
 }

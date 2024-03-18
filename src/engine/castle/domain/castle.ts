@@ -1,8 +1,9 @@
+import { PercentToReal } from "../../../renderer/implementation/canvas-renderer"
 import { Position } from "../../../shared/position"
 
 const CastlePosition = {
-    'enemy': { x: 10, y: 90 },
-    'allied': { x: 90, y: 10 }
+    'enemy': PercentToReal({ x: 10, y: 90 }),
+    'allied':  PercentToReal({ x: 90, y: 10 })
 }
 
 

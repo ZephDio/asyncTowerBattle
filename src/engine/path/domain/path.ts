@@ -1,3 +1,4 @@
+import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { Position } from "../../../shared/position";
 import { Castle, CastleEntity, CastleEntityFixture } from "../../castle/domain/castle";
 
@@ -13,5 +14,5 @@ export class Path {
 
 
 export const PathFixture = {
-    default: new Path([{ x: 10, y: 90 }, { x: 10, y: 10 }, { x: 40, y: 40 }, { x: 55, y: 20 }], "normal", CastleEntityFixture.allied)
+    default: new Path([{ x: 10, y: 90 }, { x: 10, y: 10 }, { x: 40, y: 40 }, { x: 55, y: 20 }].map((position => PercentToReal(position))), "normal",CastleEntityFixture.allied)
 }

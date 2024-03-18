@@ -1,3 +1,4 @@
+import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { Entity } from "../../../shared/entity";
 import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
@@ -31,7 +32,7 @@ export class TowerEntity<T extends Tower> implements Entity {
 
 
 export class TowerEntityFixtures {
-    static centerTower = new TowerEntity({ x: 50, y: 50 }, new BlueTower())
-    static topRightTower = new TowerEntity({ x: 80, y: 80 }, new OrangeTower())
-    static BottomRightTower = new TowerEntity({ x: 30, y: 30 }, new GreenTower())
+    static centerTower = new TowerEntity( PercentToReal({ x: 50, y: 50 }), new BlueTower())
+    static topRightTower = new TowerEntity( PercentToReal({ x: 80, y: 80 }), new OrangeTower())
+    static BottomRightTower = new TowerEntity( PercentToReal({ x: 30, y: 30 }), new GreenTower())
 }
