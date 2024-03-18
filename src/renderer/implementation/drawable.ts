@@ -1,5 +1,5 @@
 import { Path, PathNode } from "../../engine/path/domain/path"
-import { TowerBase, TowerBaseEntity } from "../../engine/tower-base/domain/tower-base"
+import { Castle, CastleEntity } from "../../engine/castle/domain/tower-base"
 import { Tower, TowerEntity } from "../../engine/tower/domain/tower"
 import { UnitEntity } from "../../engine/units/domain/units"
 import { Entity } from "../../shared/entity"
@@ -62,7 +62,7 @@ export class TowerDrawable extends Drawable<TowerEntity<Tower>> {
 }
 
 
-export class TowerBaseDrawable extends Drawable<TowerBaseEntity<TowerBase>> {
+export class CastleDrawable extends Drawable<CastleEntity<Castle>> {
   public drawPriority: number = 2
   constructor(public position: Position, public size: Size) {
     super()
@@ -70,7 +70,7 @@ export class TowerBaseDrawable extends Drawable<TowerBaseEntity<TowerBase>> {
 
 
   draw(context: CanvasRenderingContext2D) {
-    const renderShape = Resources.towerBase.resource.shape
+    const renderShape = Resources.castle.resource.shape
     this.applyStyle(context)
     this.drawRectangle(context, this.size, this.position)
   }
@@ -78,7 +78,7 @@ export class TowerBaseDrawable extends Drawable<TowerBaseEntity<TowerBase>> {
   applyStyle(context: CanvasRenderingContext2D) {
     context.lineWidth = 1
     context.strokeStyle = "black"
-    const color = Resources.towerBase.resource.color
+    const color = Resources.castle.resource.color
     context.fillStyle = color
   }
 

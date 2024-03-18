@@ -1,6 +1,6 @@
 import { Game } from "../../engine/game";
 import { Path, PathNode } from "../../engine/path/domain/path";
-import { TowerBase, TowerBaseEntity } from "../../engine/tower-base/domain/tower-base";
+import { Castle, CastleEntity } from "../../engine/castle/domain/tower-base";
 import { Tower, TowerEntity } from "../../engine/tower/domain/tower";
 import { Unit, UnitEntity } from "../../engine/units/domain/units";
 import { GameState } from "../../shared/gamestate";
@@ -8,7 +8,7 @@ import { Position } from "../../shared/position";
 import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 import { Resources } from "../resources";
-import { Drawable, PathDrawable, TowerBaseDrawable, TowerDrawable, UnitEntityDrawable } from "./drawable";
+import { Drawable, PathDrawable, CastleDrawable, TowerDrawable, UnitEntityDrawable } from "./drawable";
 export const proportion = (16 / 7.53)
 
 export class CanvasRenderer implements Renderer {
@@ -43,7 +43,7 @@ export class CanvasRenderer implements Renderer {
         drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower)))
         drawables.push(this.pathToPathDrawable(state.path))
         drawables.push(...state.enemyEntities.map((unit) => this.unitToDrawable(unit)))
-        drawables.push(...state.towerBase.map((towerbase) => this.towerBaseToTowerBaseDrawable(towerbase)))
+        drawables.push(...state.castle.map((castle) => this.castleToCastleDrawable(castle)))
         drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
         return drawables
     }
@@ -55,11 +55,11 @@ export class CanvasRenderer implements Renderer {
         return new TowerDrawable(position, size, tower.type)
     }
 
-    towerBaseToTowerBaseDrawable(towerBase: TowerBaseEntity<TowerBase>) {
-        const position = this.getCanvasPosition(towerBase.position)
-        const { width, height } = Resources.towerBase.size as Size
+    castleToCastleDrawable(castle: CastleEntity<Castle>) {
+        const position = this.getCanvasPosition(castle.position)
+        const { width, height } = Resources.castle.size as Size
         const size = this.getCanvasSize(width, height)
-        return new TowerBaseDrawable(position, size)
+        return new CastleDrawable(position, size)
     }
 
     pathToPathDrawable(path: Path) {

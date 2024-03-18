@@ -1,6 +1,6 @@
 import { Position } from "../../../shared/position"
 
-const BasePosition = {
+const CastlePosition = {
     'enemy': { x: 10, y: 90 },
     'allied': { x: 90, y: 10 }
 }
@@ -8,13 +8,13 @@ const BasePosition = {
 
 type Team = 'allied' | 'enemy'
 
-export class TowerBase {
+export class Castle {
     constructor(public team: Team) { }
 }
 
-export class TowerBaseEntity<TB extends TowerBase>{
+export class CastleEntity<TB extends Castle>{
     position: Position
     constructor(tower: TB) {
-        this.position = BasePosition[tower.team]
+        this.position = CastlePosition[tower.team]
     }
 }

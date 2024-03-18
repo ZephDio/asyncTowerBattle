@@ -48,7 +48,7 @@ export const Resources: ResourceType = {
             resource: '#C4A484'
         }
     },
-    towerBase: {
+    castle: {
         size: {
             width: 5,
             height: 5

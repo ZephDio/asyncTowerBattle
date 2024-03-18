@@ -3,7 +3,7 @@ import {
   GetPathQueryHandler,
 } from "./path/applicative/query/get-path-query-handler";
 import { Physics } from "./physic/physics";
-import { GetTowerBaseEntityQueryHandler } from "./tower-base/applicative/query/get-tower-base";
+import { GetCastleEntityQueryHandler } from "./castle/applicative/query/get-tower-base";
 import {
   GetTowersEntitiesQuery,
   GetTowersEntitiesQueryHandler,
@@ -18,12 +18,12 @@ export class Game {
     public towerGetter: GetTowersEntitiesQueryHandler,
     public pathGetter: GetPathQueryHandler,
     public enemyUnitsEntityGetter: GetUnitsEntityQueryHandler,
-    public towerBaseEntityGetter: GetTowerBaseEntityQueryHandler,
+    public castleEntityGetter: GetCastleEntityQueryHandler,
   ) { }
 
   async getState() {
     const state = {
-      towerBase: await this.towerBaseEntityGetter.handle(new GetTowersEntitiesQuery()),
+      castle: await this.castleEntityGetter.handle(new GetTowersEntitiesQuery()),
       towers: await this.towerGetter.handle(new GetTowersEntitiesQuery()),
       path: await this.pathGetter.handle(new GetPathQuery()),
       enemyEntities: await this.enemyUnitsEntityGetter.handle(

@@ -1,10 +1,10 @@
 import { Path } from "../engine/path/domain/path"
-import { TowerBase, TowerBaseEntity } from "../engine/tower-base/domain/tower-base"
+import { Castle, CastleEntity } from "../engine/castle/domain/tower-base"
 import { Tower, TowerEntity } from "../engine/tower/domain/tower"
 import { Unit, UnitEntity } from "../engine/units/domain/units"
 
 export type GameState = {
-    towerBase: TowerBaseEntity<TowerBase>[],
+    castle: CastleEntity<Castle>[],
     towers: TowerEntity<Tower>[],
     path: Path,
     enemyEntities: UnitEntity<Unit>[]
