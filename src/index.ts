@@ -5,7 +5,7 @@ import { GetPathQueryHandler } from "./engine/path/applicative/query/get-path-qu
 import { Path, PathFixture } from "./engine/path/domain/path";
 import { PathStoreInMemory } from "./engine/path/infrastructure/path-store";
 import { GetCastleEntityQuery, GetCastleEntityQueryHandler } from "./engine/castle/applicative/query/get-tower-base";
-import { Castle, CastleEntity } from "./engine/castle/domain/tower-base";
+import { Castle, CastleEntity } from "./engine/castle/domain/castle";
 import { CastleEntityStoreInMemory } from "./engine/castle/infrastructure/tower-base-store-in-memory";
 import { GetTowersEntitiesQueryHandler } from "./engine/tower/application/query/get-towers-query";
 import { TowerEntity, TowerEntityFixtures } from "./engine/tower/domain/tower";

@@ -1,5 +1,5 @@
 import { CastleEntityStore as CastleEntityStore } from "../applicative/store/tower-base-entity-store";
-import { Castle, CastleEntity } from "../domain/tower-base";
+import { Castle, CastleEntity } from "../domain/castle";
 
 export class CastleEntityStoreInMemory implements CastleEntityStore {
     store: CastleEntity<Castle>[]

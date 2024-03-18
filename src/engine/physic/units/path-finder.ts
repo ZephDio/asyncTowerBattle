@@ -3,7 +3,8 @@ import { Position } from "../../../shared/position";
 import { Path } from "../../path/domain/path";
 
 export class PathFinder {
-  constructor(public path: Path, public progress: number = 0) {}
+  public isArrived = false
+  constructor(public path: Path, public progress: number = 0) { }
 
   getOrientation(entityPosition: Position) {
     const destination = this.getNextDestination(entityPosition);
@@ -15,19 +16,26 @@ export class PathFinder {
   }
 
   getNextDestination(entityPosition: Position) {
-    if (this.destinationReached(entityPosition)) {
-      if (this.progress < this.path.nodes.length - 1) ++this.progress;
+
+    const reached = this.destinationReached(entityPosition)
+    if (reached) {
+      if (this.progress < this.path.getNodes().length - 1) {
+        ++this.progress;
+        return this.path.getNodes()[this.progress];
+      }
+      this.isArrived = true
     }
-    return this.path.nodes[this.progress];
+    return this.path.getNodes()[this.progress];
   }
 
   destinationReached(entityPosition: Position) {
-    const destination = this.path.nodes[this.progress];
+    const destination = this.path.getNodes()[this.progress];
     const distance = Math.sqrt(
       Math.pow(destination.x - entityPosition.x, 2) +
-        Math.pow(destination.y - entityPosition.y, 2)
+      Math.pow(destination.y - entityPosition.y, 2)
     );
     if (distance < 1) return true;
     return false;
   }
+
 }

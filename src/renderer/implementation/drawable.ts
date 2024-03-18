@@ -1,5 +1,5 @@
 import { Path, PathNode } from "../../engine/path/domain/path"
-import { Castle, CastleEntity } from "../../engine/castle/domain/tower-base"
+import { Castle, CastleEntity } from "../../engine/castle/domain/castle"
 import { Tower, TowerEntity } from "../../engine/tower/domain/tower"
 import { UnitEntity } from "../../engine/units/domain/units"
 import { Entity } from "../../shared/entity"

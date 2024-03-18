@@ -1,6 +1,6 @@
 import { Game } from "../../engine/game";
 import { Path, PathNode } from "../../engine/path/domain/path";
-import { Castle, CastleEntity } from "../../engine/castle/domain/tower-base";
+import { Castle, CastleEntity } from "../../engine/castle/domain/castle";
 import { Tower, TowerEntity } from "../../engine/tower/domain/tower";
 import { Unit, UnitEntity } from "../../engine/units/domain/units";
 import { GameState } from "../../shared/gamestate";
@@ -63,7 +63,7 @@ export class CanvasRenderer implements Renderer {
     }
 
     pathToPathDrawable(path: Path) {
-        const relativeNodes = [...path.nodes.map((node) => this.getCanvasPosition(node))]
+        const relativeNodes = [...path.getNodes().map((node) => this.getCanvasPosition(node))]
         return new PathDrawable(path.type, relativeNodes)
     }
 
