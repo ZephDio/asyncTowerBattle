@@ -11,6 +11,9 @@ export abstract class EntityUnitPhysic<
 > extends Physic<UE> {
   speed: number = 1;
   pathFinder: PathFinder;
+  abstract attackSpeed: number;
+  abstract attackDamage: number;
+  attackIntent = null as null | AttackIntent
   target: CastleEntity<Castle>;
   constructor(entity: UE, path: Path) {
     super(entity);
@@ -36,8 +39,7 @@ export abstract class EntityUnitPhysic<
 }
 
 export class SoldierEntityUnitPhysic extends EntityUnitPhysic<SoldierEntityUnit> {
-  arming = 0
-  attackSpeed = 35
+  attackSpeed = 5
   attackDamage = 1
   constructor(entity: SoldierEntityUnit, path: Path) {
     super(entity, path);
@@ -47,12 +49,14 @@ export class SoldierEntityUnitPhysic extends EntityUnitPhysic<SoldierEntityUnit>
   }
 
   attack() {
-    if (this.arming == this.attackSpeed) {
-      this.target.damage(this.attackDamage)
-      this.arming = 0
+    if (!this.attackIntent) {
+      this.attackIntent = new AttackIntent(this, () => {
+        this.target.damage(this.attackDamage)
+        this.attackIntent = null
+      })
       return
     }
-    ++this.arming
+    this.attackIntent.tick()
   }
 
   tick() {
@@ -61,5 +65,17 @@ export class SoldierEntityUnitPhysic extends EntityUnitPhysic<SoldierEntityUnit>
       return
     }
     this.attack()
+  }
+}
+
+export class AttackIntent {
+  progress = 0
+  constructor(public unitEntity: EntityUnitPhysic<UnitEntity<Unit>>, public resolveAttack: Function) { }
+
+  tick() {
+    this.progress += this.unitEntity.attackSpeed
+    if (this.progress >= 100) {
+      this.resolveAttack()
+    }
   }
 }
