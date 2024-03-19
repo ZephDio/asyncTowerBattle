@@ -1,12 +1,11 @@
 import { Position } from "../../../shared/position";
-import { Tower, TowerEntity } from "../../tower/domain/tower";
-import { Physic } from "../physic";
+import { Tower, TowerRecruit } from "../../tower/domain/tower";
+import { PhysicEntity } from "../physic";
 
-export class TowerEntityPhysic extends Physic<TowerEntity<Tower>>{
+export class TowerEntityPhysic extends PhysicEntity<TowerRecruit<Tower>> {
+  constructor(towerEntity: TowerRecruit<Tower>) {
+    super(towerEntity, towerEntity.position);
+  }
 
-    constructor(towerEntity: TowerEntity<Tower>) {
-        super(towerEntity, towerEntity.position);
-    }
-
-    tick() { }
+  tick() {}
 }

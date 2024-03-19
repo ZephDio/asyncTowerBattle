@@ -1,29 +1,29 @@
-import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
-import { Entity } from "../../../shared/entity";
 import { HitBox, HitShape } from "../../../shared/hitboxes";
-import { Position } from "../../../shared/position";
+import { Recruit } from "../../physic/physic";
 
 export abstract class Unit {
   abstract type: string;
-  abstract hitbox: HitBox
+  abstract hitbox: HitBox;
 }
 
-export class Soldier implements Unit {
+export class Soldier extends Unit {
   type = "soldier" as const;
-  hitbox = new HitBox([
+  hitbox = Soldier.hitbox;
+  static hitbox = new HitBox([
     [new HitShape("ellipse", { width: 2, height: 2 }), { x: 0, y: 0 }],
-  ])
+  ]);
 }
 
-export abstract class UnitEntity<U extends Unit> extends Entity {
+export abstract class UnitRecruit<U extends Unit> implements Recruit {
   abstract unitType: U["type"];
+  abstract hitbox: HitBox;
 }
 
-export class SoldierEntityUnit extends UnitEntity<Soldier> {
+export class SoldierRecruit extends UnitRecruit<Soldier> {
   unitType = "soldier" as const;
-  hitbox = new Soldier().hitbox
+  hitbox = Soldier.hitbox;
 }
 
 export const UnitEntityFixture = {
-  soldier: new SoldierEntityUnit(),
+  soldier: new SoldierRecruit(),
 };

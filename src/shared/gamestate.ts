@@ -1,12 +1,12 @@
-import { Path } from "../engine/path/domain/path"
-import { Castle, CastleEntity } from "../engine/castle/domain/castle"
-import { Tower, TowerEntity } from "../engine/tower/domain/tower"
-import { Unit, UnitEntity } from "../engine/units/domain/units"
-import { Physic } from "../engine/physic/physic"
+import { Path } from "../engine/path/domain/path";
+import { Castle, CastleRecruit } from "../engine/castle/domain/castle";
+import { Tower, TowerRecruit } from "../engine/tower/domain/tower";
+import { Unit, UnitRecruit } from "../engine/units/domain/units";
+import { PhysicEntity } from "../engine/physic/physic";
 
 export type GameState = {
-    castles: CastleEntity<Castle>[],
-    towers: TowerEntity<Tower>[],
-    paths: Path[],
-    enemyEntities: Physic<UnitEntity<Unit>>[]
-}
+  castles: CastleRecruit<Castle>[];
+  towers: TowerRecruit<Tower>[];
+  paths: Path[];
+  enemyEntities: PhysicEntity<UnitRecruit<Unit>>[];
+};

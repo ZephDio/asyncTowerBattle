@@ -1,8 +1,7 @@
 import { Path, PathNode } from "../../engine/path/domain/path";
-import { Castle, CastleEntity } from "../../engine/castle/domain/castle";
-import { Tower, TowerEntity } from "../../engine/tower/domain/tower";
-import { UnitEntity } from "../../engine/units/domain/units";
-import { Entity } from "../../shared/entity";
+import { Castle, CastleRecruit } from "../../engine/castle/domain/castle";
+import { Tower, TowerRecruit } from "../../engine/tower/domain/tower";
+import { UnitRecruit } from "../../engine/units/domain/units";
 import { Position } from "../../shared/position";
 import { Size } from "../../shared/size";
 import { Resources } from "../resources";
@@ -71,7 +70,7 @@ export abstract class Drawable<T = any> {
   }
 }
 
-export class TowerDrawable extends Drawable<TowerEntity<Tower>> {
+export class TowerDrawable extends Drawable<TowerRecruit<Tower>> {
   public image: HTMLImageElement;
   public drawPriority: number = 2;
   constructor(
@@ -106,7 +105,7 @@ export class TowerDrawable extends Drawable<TowerEntity<Tower>> {
   }
 }
 
-export class CastleDrawable extends Drawable<CastleEntity<Castle>> {
+export class CastleDrawable extends Drawable<CastleRecruit<Castle>> {
   public image: HTMLImageElement;
   public drawPriority: number = 2;
   constructor(public position: Position, public size: Size) {
@@ -146,7 +145,7 @@ export class PathDrawable extends Drawable<Path> {
   }
 }
 
-export class UnitEntityDrawable extends Drawable<UnitEntity<any>> {
+export class UnitEntityDrawable extends Drawable<UnitRecruit<any>> {
   public image: HTMLImageElement;
   public drawPriority = 4;
 

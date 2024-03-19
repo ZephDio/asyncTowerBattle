@@ -1,5 +1,5 @@
-import { Unit, UnitEntity } from "../../domain/units";
+import { Unit, UnitRecruit } from "../../domain/units";
 
-export abstract class UnitEntityStore{
-    abstract getAll(): Promise<UnitEntity<any>[]>
+export abstract class UnitEntityStore {
+  abstract getAll(): Promise<UnitRecruit<any>[]>;
 }

@@ -1,6 +1,5 @@
 import { Game } from "../engine/game";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
-import { Entity } from "../shared/entity";
 import { Position } from "../shared/position";
 
 export interface PlayerIntent {
@@ -14,26 +13,24 @@ export class InputToIntentTranslator {
     this.game = this.renderer.game;
   }
 
-  async translateClickInput(position: Position): Promise<void> {
-    if (await this.playerDidClickOnTower(position)) {
-      this.intents.push({ intent: "TowerClicked" });
-      return;
-    }
-    this.intents.push({ intent: "No Intent" });
-  }
+  // async translateClickInput(position: Position): Promise<void> {
+  //   if (await this.playerDidClickOnTower(position)) {
+  //     this.intents.push({ intent: "TowerClicked" });
+  //     return;
+  //   }
+  //   this.intents.push({ intent: "No Intent" });
+  // }
 
-  async playerDidClickOnTower(mousePosition: Position) {
-
-    const state = await this.game.getState();
-    for (const tower of state.towers) {
-      for(const hitShape of tower.hitbox.hitShapes){
-        if(Entity.doCollide(tower, mousePosition)){
-          console.log(tower.type)
-          return tower
-        } 
-          
-      }
-    }
-    return undefined
-  }
+  //   async playerDidClickOnTower(mousePosition: Position) {
+  //     const state = await this.game.getState();
+  //     for (const tower of state.towers) {
+  //       for (const hitShape of tower.hitbox.hitShapes) {
+  //         if (Entity.doCollide(tower, mousePosition)) {
+  //           console.log(tower.type);
+  //           return tower;
+  //         }
+  //       }
+  //     }
+  //     return undefined;
+  //   }
 }
