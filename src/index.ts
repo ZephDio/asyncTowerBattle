@@ -33,7 +33,7 @@ async function init() {
   const castle = [new CastleEntity(new Castle('allied')), new CastleEntity(new Castle('enemy'))]
   const castleEntityStore = new CastleEntityStoreInMemory(castle)
   const towerStore = new InMemoryTowerStore(towers);
-  const pathStore = new PathStoreInMemory(PathFixture.default);
+  const pathStore = new PathStoreInMemory(PathFixture.defaultAllied);
   const enemyEntityStore = new UnitEntityStoreInMemory(enemyEntities);
 
   const getTowersQueryHandler = new GetTowersEntitiesQueryHandler(towerStore);
@@ -56,7 +56,7 @@ async function init() {
   );
 
   renderer.init();
-  game.start();
+  game.startBattle();
 }
 
 init();

@@ -12,8 +12,12 @@ import {
   GetUnitsEntityQuery,
   GetUnitsEntityQueryHandler,
 } from "./units/applicative/get-units-query-handler";
+import { Battle } from "./battle/battle";
+import { Army, ArmyFixture } from "./army/army";
+import { GameState } from "../shared/gamestate";
 
 export class Game {
+  battle = null as null | Battle
   constructor(
     public towerGetter: GetTowersEntitiesQueryHandler,
     public pathGetter: GetPathQueryHandler,
@@ -21,11 +25,21 @@ export class Game {
     public castleEntityGetter: GetCastleEntityQueryHandler,
   ) { }
 
-  async getState() {
+  async getState(): Promise<GameState> {
+    if (this.battle) {
+      const stateb = {
+        castles: [this.battle.playerArmy.castle, this.battle.enemyArmy.castle],
+        towers: [...this.battle.playerArmy.towers, ...this.battle.enemyArmy.towers],
+        paths: [this.battle.playerArmy.path, this.battle.enemyArmy.path],
+        enemyEntities: []
+      }
+      return stateb
+    }
+
     const state = {
-      castle: await this.castleEntityGetter.handle(new GetTowersEntitiesQuery()),
+      castles: await this.castleEntityGetter.handle(new GetTowersEntitiesQuery()),
       towers: await this.towerGetter.handle(new GetTowersEntitiesQuery()),
-      path: await this.pathGetter.handle(new GetPathQuery()),
+      paths: [await this.pathGetter.handle(new GetPathQuery())],
       enemyEntities: await this.enemyUnitsEntityGetter.handle(
         new GetUnitsEntityQuery()
       ),
@@ -33,22 +47,10 @@ export class Game {
     return state;
   }
 
-  async start() {
-    const entities = await this.enemyUnitsEntityGetter.handle(
-      new GetUnitsEntityQuery()
-    );
-    const path = await this.pathGetter.handle(new GetPathQuery());
-    const physics = new Physics(entities, path);
-    const loop = () => {
-      setTimeout(() => {
-        this.tick(physics);
-        loop();
-      }, 31);
-    };
-    loop();
+  async startBattle() {
+
+    this.battle = new Battle(ArmyFixture.allied, ArmyFixture.enemy)
+    this.battle.start()
   }
 
-  tick(physics: Physics) {
-    physics.tick();
-  }
 }

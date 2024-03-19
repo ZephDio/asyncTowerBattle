@@ -9,7 +9,7 @@ import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 import { Resources } from "../resources";
 import { Drawable, PathDrawable, CastleDrawable, TowerDrawable, UnitEntityDrawable } from "./drawable";
-export const proportion = (16 / 7.53)
+export const proportion = (16 / 9.8)
 
 export class CanvasRenderer implements Renderer {
 
@@ -42,9 +42,9 @@ export class CanvasRenderer implements Renderer {
     stateToDrawable(state: GameState) {
         const drawables: Drawable[] = []
         drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower)))
-        drawables.push(this.pathToPathDrawable(state.path))
+        drawables.push(...state.paths.map((path) => this.pathToPathDrawable(path)))
         drawables.push(...state.enemyEntities.map((unit) => this.unitToDrawable(unit)))
-        drawables.push(...state.castle.map((castle) => this.castleToCastleDrawable(castle)))
+        drawables.push(...state.castles.map((castle) => this.castleToCastleDrawable(castle)))
         drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
         return drawables
     }
