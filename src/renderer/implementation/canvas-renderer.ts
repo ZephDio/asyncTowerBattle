@@ -9,6 +9,7 @@ import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 import { Resources } from "../resources";
 import { Drawable, PathDrawable, CastleDrawable, TowerDrawable, UnitEntityDrawable } from "./drawable";
+import { Physic } from "../../engine/physic/physic";
 export const proportion = (16 / 9.8)
 
 export class CanvasRenderer implements Renderer {
@@ -43,7 +44,7 @@ export class CanvasRenderer implements Renderer {
         const drawables: Drawable[] = []
         drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower)))
         drawables.push(...state.paths.map((path) => this.pathToPathDrawable(path)))
-        drawables.push(...state.enemyEntities.map((unit) => this.unitToDrawable(unit)))
+        drawables.push(...state.enemyEntities.map((physicUnit) => this.unitToDrawable(physicUnit)))
         drawables.push(...state.castles.map((castle) => this.castleToCastleDrawable(castle)))
         drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
         return drawables
@@ -68,11 +69,11 @@ export class CanvasRenderer implements Renderer {
         return new PathDrawable(path.type, relativeNodes)
     }
 
-    unitToDrawable(unit: UnitEntity<Unit>) {
-        const position = this.getCanvasPosition(unit.position)
-        const { width, height } = Resources.unit[unit.unitType].size as Size
+    unitToDrawable(physicUnit: Physic<UnitEntity<Unit>>) {
+        const position = this.getCanvasPosition(physicUnit.position)
+        const { width, height } = Resources.unit[physicUnit.entity.unitType].size as Size
         const size = this.getCanvasSize(width, height)
-        return new UnitEntityDrawable(position, size, unit.unitType)
+        return new UnitEntityDrawable(position, size, physicUnit.entity.unitType)
     }
 
 

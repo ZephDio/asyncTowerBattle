@@ -15,34 +15,35 @@ export abstract class EntityUnitPhysic<
   abstract attackDamage: number;
   attackIntent = null as null | AttackIntent
   target: CastleEntity<Castle>;
-  constructor(entity: UE, path: Path) {
-    super(entity);
+  constructor(entity: UE, position: Position, path: Path) {
+    super(entity, position);
     this.pathFinder = new PathFinder(path);
     this.target = path.castleEntity
   }
 
   abstract canMove(): boolean;
+  
   followPath(): void {
     if (this.canMove() && !this.pathFinder.isArrived) {
-      const tetha = this.pathFinder.getOrientation(this.entity.position);
+      const tetha = this.pathFinder.getOrientation(this.position);
       const newPosition = {
-        x: this.entity.position.x + Math.cos(tetha * this.speed),
-        y: this.entity.position.y + Math.sin(tetha * this.speed),
+        x: this.position.x + Math.cos(tetha * this.speed),
+        y: this.position.y + Math.sin(tetha * this.speed),
       };
       this.move(newPosition);
     }
   }
 
   move(newPosition: Position) {
-    this.entity.position = newPosition;
+    this.position = newPosition;
   }
 }
 
 export class SoldierEntityUnitPhysic extends EntityUnitPhysic<SoldierEntityUnit> {
   attackSpeed = 5
   attackDamage = 1
-  constructor(entity: SoldierEntityUnit, path: Path) {
-    super(entity, path);
+  constructor(entity: SoldierEntityUnit, position: Position, path: Path) {
+    super(entity, position, path);
   }
   canMove() {
     return true;

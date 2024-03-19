@@ -27,22 +27,20 @@ export class Game {
 
   async getState(): Promise<GameState> {
     if (this.battle) {
-      const stateb = {
+      const battleState = {
         castles: [this.battle.playerArmy.castle, this.battle.enemyArmy.castle],
         towers: [...this.battle.playerArmy.towers, ...this.battle.enemyArmy.towers],
         paths: [this.battle.playerArmy.path, this.battle.enemyArmy.path],
-        enemyEntities: []
+        enemyEntities: [...this.battle.physics.units]
       }
-      return stateb
+      return battleState
     }
 
     const state = {
       castles: await this.castleEntityGetter.handle(new GetTowersEntitiesQuery()),
       towers: await this.towerGetter.handle(new GetTowersEntitiesQuery()),
       paths: [await this.pathGetter.handle(new GetPathQuery())],
-      enemyEntities: await this.enemyUnitsEntityGetter.handle(
-        new GetUnitsEntityQuery()
-      ),
+      enemyEntities: []
     };
     return state;
   }

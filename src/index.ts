@@ -23,12 +23,6 @@ async function init() {
   ];
   const enemyEntities = [
     UnitEntityFixture.soldier,
-    UnitEntityFixture.soldier2,
-    UnitEntityFixture.soldier3,
-    UnitEntityFixture.soldier4,
-    UnitEntityFixture.soldier5,
-    UnitEntityFixture.soldier6,
-    UnitEntityFixture.soldier7,
   ];
   const castle = [new CastleEntity(new Castle('allied')), new CastleEntity(new Castle('enemy'))]
   const castleEntityStore = new CastleEntityStoreInMemory(castle)

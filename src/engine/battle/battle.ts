@@ -1,5 +1,8 @@
 import { Army } from "../army/army";
+import { Barrack } from "../barrack/barrack";
 import { Physics } from "../physic/physics";
+import { EntityUnitPhysic } from "../physic/units/entity-units-physic";
+import { UnitEntityFixture } from "../units/domain/units";
 
 
 export class Battle {
@@ -14,9 +17,11 @@ export class Battle {
 
 
     start() {
+        const barrack = new Barrack(2, this.enemyArmy.castle.position, this, UnitEntityFixture.soldier)
         const loop = () => {
             setTimeout(() => {
                 this.tick();
+                barrack.tick()
                 loop();
             }, 31);
         };
@@ -27,7 +32,8 @@ export class Battle {
         return new Army(
             playerArmy.castle.clone(),
             playerArmy.towers.map((tower) => tower.clone()),
-            playerArmy.path
+            playerArmy.path,
+            []
         )
     }
 
