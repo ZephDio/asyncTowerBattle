@@ -19,7 +19,9 @@ export class UnitProduction<U extends Unit> {
 
 export class Barrack {
     onGoingProduction = null as null | UnitProduction<Unit>
-    constructor(public productionSpeed: number,
+    constructor(
+        public productionSpeed: number,
+        public team: 'allied' | 'enemy',
         public position: Position,
         private battle: Battle,
         public soldierEntityUnit: SoldierEntityUnit) { }
@@ -37,7 +39,7 @@ export class Barrack {
     }
 
     produce() {
-        console.log('produce')
-        this.battle.physics.units.push(new SoldierEntityUnitPhysic(this.soldierEntityUnit, this.position, this.battle.playerArmy.path))
+        const castleTarget = this.team == 'allied' ? this.battle.enemyArmy.path : this.battle.alliedArmy.path
+        this.battle.physics.units.push(new SoldierEntityUnitPhysic(this.soldierEntityUnit, this.position, castleTarget))
     }
 }

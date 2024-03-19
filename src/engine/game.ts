@@ -28,9 +28,9 @@ export class Game {
   async getState(): Promise<GameState> {
     if (this.battle) {
       const battleState = {
-        castles: [this.battle.playerArmy.castle, this.battle.enemyArmy.castle],
-        towers: [...this.battle.playerArmy.towers, ...this.battle.enemyArmy.towers],
-        paths: [this.battle.playerArmy.path, this.battle.enemyArmy.path],
+        castles: [this.battle.alliedArmy.castle, this.battle.enemyArmy.castle],
+        towers: [...this.battle.alliedArmy.towers, ...this.battle.enemyArmy.towers],
+        paths: [this.battle.alliedArmy.path, this.battle.enemyArmy.path],
         enemyEntities: [...this.battle.physics.units]
       }
       return battleState

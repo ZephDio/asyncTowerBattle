@@ -6,33 +6,35 @@ import { UnitEntityFixture } from "../units/domain/units";
 
 
 export class Battle {
-    playerArmy: Army
+    alliedArmy: Army
     enemyArmy: Army
     physics: Physics
-    constructor(playerArmy: Army, enemyArmy: Army) {
-        this.playerArmy = this.cloneArmy(playerArmy)
+    constructor(alliedArmy: Army, enemyArmy: Army) {
+        this.alliedArmy = this.cloneArmy(alliedArmy)
         this.enemyArmy = this.cloneArmy(enemyArmy)
-        this.physics = new Physics(this.playerArmy, this.enemyArmy)
+        this.physics = new Physics(this.alliedArmy, this.enemyArmy)
     }
 
 
     start() {
-        const barrack = new Barrack(2, this.enemyArmy.castle.position, this, UnitEntityFixture.soldier)
+        const barrack = new Barrack(2, 'enemy', this.enemyArmy.castle.position, this, UnitEntityFixture.soldier)
+        const obama = new Barrack(2, 'allied', this.alliedArmy.castle.position, this, UnitEntityFixture.soldier)
         const loop = () => {
             setTimeout(() => {
                 this.tick();
                 barrack.tick()
+                obama.tick()
                 loop();
             }, 31);
         };
         loop();
     }
 
-    cloneArmy(playerArmy: Army) {
+    cloneArmy(alliedArmy: Army) {
         return new Army(
-            playerArmy.castle.clone(),
-            playerArmy.towers.map((tower) => tower.clone()),
-            playerArmy.path,
+            alliedArmy.castle.clone(),
+            alliedArmy.towers.map((tower) => tower.clone()),
+            alliedArmy.path,
             []
         )
     }

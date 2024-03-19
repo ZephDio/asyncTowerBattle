@@ -26,7 +26,6 @@ export class CastleEntity<TB extends Castle> implements Entity {
 
     damage(damage: number) {
         this.actualLife = this.actualLife - damage
-        console.log('OUILLE')
         if (this.actualLife === 0) console.log('MORT')
     }
 
