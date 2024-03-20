@@ -14,7 +14,7 @@ export class MouseEventHandler {
   onClick(event: MouseEvent): void {
     const mousePosition = { x: event.x, y: event.y };
     const relativePosition = this.pixelPositionToRelative(mousePosition);
-    this.inputToIntentTranslator.translateClickInput(relativePosition);
+    // this.inputToIntentTranslator.translateClickInput(relativePosition);
   }
 
   pixelPositionToRelative(position: Position) {

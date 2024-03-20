@@ -15,6 +15,9 @@ export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
     this.actualLife = this.actualLife - damage;
   }
 
+  isAlive() {
+    return this.actualLife > 0;
+  }
 
-  tick() { }
+  tick() {}
 }
