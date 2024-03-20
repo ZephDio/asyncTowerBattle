@@ -5,10 +5,21 @@ import { Unit, UnitRecruit } from "../engine/units/domain/units";
 import { PhysicEntity } from "../engine/physic/physic";
 import { BattleTower } from "../engine/physic/tower/entity-tower-physic";
 import { BattleCastle } from "../engine/physic/castle/entity-castle-physic";
+import { BattleVerdict } from "../engine/battle-summary/battle-summary";
 
-export type GameState = {
+export interface GameState {
+  type: string;
+}
+
+export interface SummaryState {
+  type: "summary";
+  battleVerdict: BattleVerdict;
+}
+
+export interface BattleState {
+  type: "battle";
   castles: BattleCastle[];
   towers: BattleTower<TowerRecruit<Tower>>[];
   paths: Path[];
   enemyEntities: PhysicEntity<UnitRecruit<Unit>>[];
-};
+}

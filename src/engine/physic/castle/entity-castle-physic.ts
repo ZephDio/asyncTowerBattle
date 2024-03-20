@@ -8,7 +8,7 @@ export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
 
   constructor(castleEntity: CastleRecruit<Castle>) {
     super(castleEntity, castleEntity.position);
-    this.actualLife = castleEntity.actualLife;
+    this.actualLife = castleEntity.maxLife;
     this.maxLife = castleEntity.maxLife;
   }
   tick() {}

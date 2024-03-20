@@ -1,12 +1,9 @@
-import {
-  GetTowersEntitiesQuery,
-  GetTowersEntitiesQueryHandler,
-} from "./tower/application/query/get-towers-query";
 import { Battle } from "./battle/battle";
 import { Army, ArmyFixture } from "./army/army";
-import { GameState } from "../shared/gamestate";
+import { BattleState, GameState, SummaryState } from "../shared/gamestate";
 import { CastleEntityFixture } from "./castle/domain/castle";
 import { PathFixture } from "./path/domain/path";
+import { BattleSummary, BattleVerdict } from "./battle-summary/battle-summary";
 
 export class Game {
   army = new Army(
@@ -16,39 +13,49 @@ export class Game {
     []
   );
   battle = null as null | Battle;
+
+  battleSummary: null | BattleSummary = null;
   constructor() {}
 
   async getState(): Promise<GameState> {
     if (this.battle) {
-      const battleState = {
-        castles: [this.battle.alliedArmy.castle, this.battle.enemyArmy.castle],
-        towers: [
-          ...this.battle.alliedArmy.towers,
-          ...this.battle.enemyArmy.towers,
-        ],
-        paths: [this.battle.alliedArmy.path, this.battle.enemyArmy.path],
-        enemyEntities: [...this.battle.physics.units],
-      };
-      console.log(battleState);
-      return battleState;
+      return this.getBattleState();
     }
-    return {} as GameState;
+    return this.getSummaryState();
   }
 
-  handleEndBattle(battleStatus: "victory" | "defeat") {
-    if (battleStatus === "victory") {
-    }
-    if (battleStatus === "defeat") {
-    }
+  getBattleState() {
+    if (!this.battle) return {} as BattleState;
+    return this.battle.getState();
+  }
 
+  getSummaryState() {
+    if (!this.battleSummary) return {} as SummaryState;
+    return this.battleSummary.getState();
+  }
+
+  handleEndBattle(battleVerdict: BattleVerdict) {
+    const lastBattleState = this.getBattleState();
+    this.battleSummary = new BattleSummary(
+      lastBattleState,
+      battleVerdict,
+      this.handleSummaryQuit.bind(this)
+    );
     this.battle = null;
   }
 
-  async startBattle() {
+  handleSummaryQuit() {
+    this.battleSummary = null;
+    console.log("summary quit");
+    this.startBattle();
+  }
+
+  startBattle() {
+    console.log("new battle");
     this.battle = new Battle(
       ArmyFixture.allied,
       ArmyFixture.enemy,
-      this.handleEndBattle
+      this.handleEndBattle.bind(this)
     );
     this.battle.start();
   }

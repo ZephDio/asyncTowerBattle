@@ -3,21 +3,21 @@ import { Path, PathNode } from "../../engine/path/domain/path";
 import { Castle, CastleRecruit } from "../../engine/castle/domain/castle";
 import { Tower, TowerRecruit } from "../../engine/tower/domain/tower";
 import { Unit, UnitRecruit } from "../../engine/units/domain/units";
-import { GameState } from "../../shared/gamestate";
+import { BattleState, GameState, SummaryState } from "../../shared/gamestate";
 import { Position } from "../../shared/position";
 import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 import { Resources } from "../resources";
-import {
-  Drawable,
-  PathDrawable,
-  CastleDrawable,
-  TowerDrawable,
-  UnitEntityDrawable,
-} from "./drawable";
+import { Drawable } from "./drawables/drawable";
 import { PhysicEntity } from "../../engine/physic/physic";
 import { BattleTower } from "../../engine/physic/tower/entity-tower-physic";
 import { BattleCastle } from "../../engine/physic/castle/entity-castle-physic";
+import { TowerDrawable } from "./drawables/tower-drawable";
+import { CastleDrawable } from "./drawables/castle-drawable";
+import { PathDrawable } from "./drawables/path-drawable";
+import { UnitEntityDrawable } from "./drawables/unit-drawable";
+import { BattleVerdict } from "../../engine/battle-summary/battle-summary";
+import { VerdictDrawable } from "./drawables/verdict-drawable";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
@@ -34,6 +34,7 @@ export class CanvasRenderer implements Renderer {
 
   async draw() {
     const state = await this.game.getState();
+    console.log(state);
     const drawableState = this.stateToDrawable(state);
     this.drawBackGround();
     for (const drawable of drawableState) {
@@ -48,6 +49,16 @@ export class CanvasRenderer implements Renderer {
   }
 
   stateToDrawable(state: GameState) {
+    if (state.type === "summary") {
+      return this.summaryStateToDrawable(state as SummaryState);
+    }
+    if (state.type === "battle") {
+      return this.battleStateToDrawable(state as BattleState);
+    }
+    return [];
+  }
+
+  battleStateToDrawable(state: BattleState) {
     const drawables: Drawable[] = [];
     drawables.push(
       ...state.towers.map((tower) => this.towerToTowerDrawable(tower))
@@ -67,6 +78,19 @@ export class CanvasRenderer implements Renderer {
     return drawables;
   }
 
+  summaryStateToDrawable(state: SummaryState) {
+    const drawables: Drawable[] = [];
+    drawables.push(this.verdictToDrawableVerdict(state.battleVerdict));
+    return drawables;
+  }
+
+  verdictToDrawableVerdict(verdict: BattleVerdict) {
+    const position = this.getCanvasPosition({ x: 50, y: 30 });
+    const { width, height } = Resources.verdict[verdict].size as Size;
+    const size = this.getCanvasSize(width, height);
+
+    return new VerdictDrawable(verdict, size, position);
+  }
   towerToTowerDrawable(tower: BattleTower<TowerRecruit<Tower>>) {
     const position = this.getCanvasPosition(tower.position);
     const { width, height } = Resources.tower[tower.type].size as Size;

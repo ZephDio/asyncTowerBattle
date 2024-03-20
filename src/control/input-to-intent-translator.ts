@@ -13,13 +13,13 @@ export class InputToIntentTranslator {
     this.game = this.renderer.game;
   }
 
-  // async translateClickInput(position: Position): Promise<void> {
-  //   if (await this.playerDidClickOnTower(position)) {
-  //     this.intents.push({ intent: "TowerClicked" });
-  //     return;
-  //   }
-  //   this.intents.push({ intent: "No Intent" });
-  // }
+  translateClickInput(position: Position): void {
+    if (this.game.battleSummary) {
+      this.game.battleSummary.quitSummary();
+      return;
+    }
+    return;
+  }
 
   //   async playerDidClickOnTower(mousePosition: Position) {
   //     const state = await this.game.getState();

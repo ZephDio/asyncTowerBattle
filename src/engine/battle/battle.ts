@@ -1,6 +1,8 @@
+import { BattleState } from "../../shared/gamestate";
 import { Army } from "../army/army";
 import { BattleArmy } from "../army/battle-army";
 import { SoldierBarrack } from "../barrack/soldier-barrack";
+import { BattleVerdict } from "../battle-summary/battle-summary";
 import { Game } from "../game";
 import { Path } from "../path/domain/path";
 import { BattleCastle } from "../physic/castle/entity-castle-physic";
@@ -42,13 +44,14 @@ export class Battle {
     loop();
   }
 
-  checkVictoryCondition() {
+  checkVictoryCondition(): BattleVerdict | "onGoing" {
     if (this.enemyArmy.castle.actualLife <= 0) {
       return "victory";
     }
     if (this.alliedArmy.castle.actualLife <= 0) {
       return "defeat";
     }
+    return "onGoing";
   }
 
   buildBattleArmy(
@@ -67,9 +70,23 @@ export class Battle {
 
   tick() {
     const isOver = this.checkVictoryCondition();
-    if (isOver) {
+    if (isOver === "onGoing") {
+      this.physics.tick();
+      this.alliedArmy.castle.actualLife -= 0.1;
+    } else {
       this.onBattleOver(isOver);
+      this.alliedArmy.castle.actualLife = 20;
     }
-    this.physics.tick();
+  }
+
+  getState(): BattleState {
+    const battleState: BattleState = {
+      type: "battle",
+      castles: [this.alliedArmy.castle, this.enemyArmy.castle],
+      towers: [...this.alliedArmy.towers, ...this.enemyArmy.towers],
+      paths: [this.alliedArmy.path, this.enemyArmy.path],
+      enemyEntities: [...this.physics.units],
+    };
+    return battleState;
   }
 }
