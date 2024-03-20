@@ -1,18 +1,14 @@
-import { proportion } from "../../renderer/implementation/canvas-renderer";
 import { HitBox } from "../../shared/hitboxes";
 import { Position } from "../../shared/position";
-import { Castle, CastleRecruit } from "../castle/domain/castle";
-import { Tower, TowerRecruit } from "../tower/domain/tower";
-import { Unit, UnitRecruit } from "../units/domain/units";
-
 export interface Recruit {
   hitbox: HitBox;
 }
 
-export abstract class PhysicEntity<T extends Recruit> {
-  constructor(public entity: T, public position: Position) {}
+export abstract class PhysicEntity<T extends Recruit>{
+  constructor(public entity: T, public position: Position) { }
   abstract tick(): void;
-
+  abstract isAlive(): boolean
+  abstract isAttacked(damage: number): void
   static doCollide(entity: Recruit, position: Position) {
     const hitbox = entity.hitbox;
     for (const [shape, shapeRelativePosition] of hitbox.hitShapes) {
@@ -33,7 +29,7 @@ export abstract class PhysicEntity<T extends Recruit> {
           (relativeWidth * relativeHeight) /
           Math.sqrt(
             Math.pow(relativeWidth, 2) * Math.pow(Math.sin(theta), 2) +
-              Math.pow(relativeHeight, 2) * Math.pow(Math.cos(theta), 2)
+            Math.pow(relativeHeight, 2) * Math.pow(Math.cos(theta), 2)
           );
         return distance < radius;
       }

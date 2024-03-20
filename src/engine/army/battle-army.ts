@@ -1,7 +1,7 @@
 import { BattleBarrack } from "../barrack/battle-barrack";
-import { BattleCastle } from "../physic/castle/entity-castle-physic";
+import { BattleCastle } from "../physic/castle/battle-castle";
 import { PhysicEntity } from "../physic/physic";
-import { SoldierRecruit, Unit, UnitRecruit } from "../units/domain/units";
+import { Soldier, SoldierRecruit, Unit, UnitRecruit } from "../units/domain/units";
 import { Barrack } from "../barrack/barrack";
 import { Army } from "./army";
 import { Path } from "../path/domain/path";
@@ -13,7 +13,7 @@ export class BattleArmy {
     new Map();
   path: Path;
   castle: BattleCastle;
-  barracks: BattleBarrack<SoldierRecruit>[];
+  barracks: BattleBarrack<UnitRecruit<Soldier>>[];
 
   towers: BattleTower<TowerRecruit<Tower>>[];
 
@@ -37,6 +37,7 @@ export class BattleArmy {
             battleBarrack: BattleBarrack<UnitRecruit<Unit>>) => {
             this.addUnit(entityRecruit, battleBarrack)
           },
+          (entityRecruit: PhysicEntity<UnitRecruit<Unit>>) => { this.removeUnit(entityRecruit) },
           barrack.unitRecruit
         )
     );
@@ -50,5 +51,8 @@ export class BattleArmy {
     this.units.set(entityRecruit, battleBarrack);
   }
 
-  removeUnit() { }
+  removeUnit(entityRecruit: PhysicEntity<UnitRecruit<Unit>>) {
+    console.log(entityRecruit)
+    this.units.delete(entityRecruit)
+  }
 }

@@ -34,7 +34,6 @@ export class Game {
     }
     if (battleStatus === "defeat") {
     }
-
     this.battle = null;
   }
 

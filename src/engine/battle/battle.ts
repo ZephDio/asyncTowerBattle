@@ -3,13 +3,14 @@ import { BattleArmy } from "../army/battle-army";
 import { SoldierBarrack } from "../barrack/soldier-barrack";
 import { Game } from "../game";
 import { Path } from "../path/domain/path";
-import { BattleCastle } from "../physic/castle/entity-castle-physic";
+import { BattleCastle } from "../physic/castle/battle-castle";
 import { Physics } from "../physic/physics";
 
 export class Battle {
   alliedArmy: BattleArmy;
   enemyArmy: BattleArmy;
   physics: Physics;
+  isOver = false;
   constructor(
     alliedArmy: Army,
     enemyArmy: Army,
@@ -35,6 +36,7 @@ export class Battle {
   start() {
     const loop = () => {
       setTimeout(() => {
+        if (this.isOver) return
         this.tick();
         loop();
       }, 31);
@@ -67,11 +69,10 @@ export class Battle {
   }
 
   tick() {
-    console.log('battle tick')
     const isOver = this.checkVictoryCondition();
     if (isOver) {
-      console.log('Battle over')
       this.onBattleOver(isOver);
+      this.isOver = true
     }
     this.physics.tick();
     this.alliedArmy.barracks.map((b) => b.tick())

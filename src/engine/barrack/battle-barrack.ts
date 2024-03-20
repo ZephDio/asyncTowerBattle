@@ -1,7 +1,7 @@
 import { Position } from "../../shared/position";
 import { BattleArmy } from "../army/battle-army";
 import { Path } from "../path/domain/path";
-import { BattleCastle } from "../physic/castle/entity-castle-physic";
+import { BattleCastle } from "../physic/castle/battle-castle";
 import { Unit, UnitRecruit } from "../units/domain/units";
 
 export class UnitProduction<U extends Unit> {

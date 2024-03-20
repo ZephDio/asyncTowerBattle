@@ -1,14 +1,15 @@
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 
 import { HitBox, HitShape } from "../../../shared/hitboxes";
-import { Position } from "../../../shared/position";
-import { Recruit } from "../../physic/physic";
+import { Position, getDistance } from "../../../shared/position";
+import { PhysicEntity, Recruit } from "../../physic/physic";
 import {
   BattleTower,
   BlueBattleTower,
   GreenBattleTower,
   OrangeBattleTower,
 } from "../../physic/tower/entity-tower-physic";
+import { Unit, UnitRecruit } from "../../units/domain/units";
 
 export abstract class Tower {
   abstract type: "orange" | "blue" | "green";
@@ -51,20 +52,27 @@ export class OrangeTower extends Tower {
 export abstract class TowerRecruit<T extends Tower> implements Recruit {
   abstract type: T["type"];
   abstract hitbox: HitBox;
+  abstract attackSpeed: number;
+  abstract attackDamage: number;
   abstract position: Position;
   abstract tower: T;
 
+  abstract matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>): boolean
   abstract toPhysic(): BattleTower<TowerRecruit<T>>;
-
   abstract clone(): TowerRecruit<T>;
 }
 
 export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
+  attackDamage = 6;
+  attackSpeed = 3;
   type = "blue" as const;
   hitbox = BlueTower.hitbox;
 
   constructor(public position: Position, public tower: BlueTower) {
     super();
+  }
+  matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
+    return getDistance(enemyUnit.position, this.position) < 20
   }
 
   toPhysic(): BlueBattleTower {
@@ -80,11 +88,17 @@ export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
 }
 
 export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
+  attackDamage = 6
+  attackSpeed = 3;
   type = "orange" as const;
   hitbox = OrangeTower.hitbox;
 
   constructor(public position: Position, public tower: OrangeTower) {
     super();
+  }
+
+  matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
+    return getDistance(enemyUnit.position, this.position) < 35
   }
 
   toPhysic(): OrangeBattleTower {
@@ -100,12 +114,18 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
 }
 
 export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
+  attackDamage = 10;
+  attackSpeed = 3;
   type = "green" as const;
   hitbox = GreenTower.hitbox;
 
   constructor(public position: Position, public tower: GreenTower) {
     super();
   }
+  matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
+    return enemyUnit.isAlive() && getDistance(enemyUnit.position, this.position) < 10
+  }
+
 
   toPhysic(): GreenBattleTower {
     return new GreenBattleTower(this.clone());
@@ -127,7 +147,7 @@ export class TowerEntityFixtures {
     PercentToReal({ x: 80, y: 80 }),
     new OrangeTower()
   );
-  static BottomRightTower = new GreenTowerRecruit(
+  static BottomLeftTower = new GreenTowerRecruit(
     PercentToReal({ x: 30, y: 30 }),
     new GreenTower()
   );

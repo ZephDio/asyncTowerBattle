@@ -17,7 +17,7 @@ import {
 } from "./drawable";
 import { PhysicEntity } from "../../engine/physic/physic";
 import { BattleTower } from "../../engine/physic/tower/entity-tower-physic";
-import { BattleCastle } from "../../engine/physic/castle/entity-castle-physic";
+import { BattleCastle } from "../../engine/physic/castle/battle-castle";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {

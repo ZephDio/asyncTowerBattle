@@ -13,7 +13,7 @@ async function init() {
   const towers = [
     TowerEntityFixtures.centerTower,
     TowerEntityFixtures.topRightTower,
-    TowerEntityFixtures.BottomRightTower,
+    TowerEntityFixtures.BottomLeftTower,
   ];
   const enemyEntities = [UnitEntityFixture.soldier];
   const castle = [

@@ -7,6 +7,32 @@ export class Physics {
   tick() {
     this.tickBarracks()
     this.tickUnits()
+    this.setTowersTargets()
+    this.tickTowers()
+  }
+
+  tickTowers() {
+    this.setTowersTargets()
+    for (const tower of this.alliedArmy.towers) {
+      tower.tick()
+    }
+    for (const tower of this.enemyArmy.towers) {
+      tower.tick()
+    }
+  }
+
+  setTowersTargets() {
+    for (const tower of this.alliedArmy.towers) {
+      const target = tower.target
+      if (target && tower.entity.matchesRule(target)) {
+        continue
+      }
+      for (const enemyUnits of this.enemyArmy.units.keys()) {
+        if (tower.entity.matchesRule(enemyUnits)) {
+          tower.setTarget(enemyUnits)
+        }
+      }
+    }
   }
 
   tickBarracks() {

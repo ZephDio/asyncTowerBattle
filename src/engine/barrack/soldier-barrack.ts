@@ -1,7 +1,7 @@
 import { Position } from "../../shared/position";
 import { BattleArmy } from "../army/battle-army";
 import { Path } from "../path/domain/path";
-import { BattleCastle } from "../physic/castle/entity-castle-physic";
+import { BattleCastle } from "../physic/castle/battle-castle";
 import { SoldierRecruitPhysic } from "../physic/units/entity-units-physic";
 import { Soldier, SoldierRecruit, UnitEntityFixture } from "../units/domain/units";
 import { Barrack } from "./barrack";
@@ -27,6 +27,7 @@ export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
     public path: Path,
     public targetCastle: BattleCastle,
     public addRecruit: BattleArmy["addUnit"],
+    public removeRecruit: BattleArmy["removeUnit"],
 
     public recruit: SoldierRecruit
   ) { }
@@ -44,8 +45,7 @@ export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
   }
 
   produce() {
-    console.log('prod')
-    this.addRecruit(new SoldierRecruitPhysic(this.recruit, this.position, this.path), this)
+    this.addRecruit(new SoldierRecruitPhysic(this.recruit, this.position, this.path, this.targetCastle, this.removeRecruit), this)
   }
 }
 

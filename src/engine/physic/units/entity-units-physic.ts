@@ -3,22 +3,25 @@ import { Position } from "../../../shared/position";
 import { Castle, CastleRecruit } from "../../castle/domain/castle";
 import { Path } from "../../path/domain/path";
 import { SoldierRecruit, Unit, UnitRecruit } from "../../units/domain/units";
+import { BattleCastle } from "../castle/battle-castle";
 import { PhysicEntity } from "../physic";
 import { PathFinder } from "./path-finder";
 
 export abstract class UnitRecruitPhysic<
   UE extends UnitRecruit<Unit>
 > extends PhysicEntity<UE> {
-  speed: number = 1;
+  abstract speed: number
+  abstract actualLife: number
+  abstract maxLife: number
   pathFinder: PathFinder;
   abstract attackSpeed: number;
   abstract attackDamage: number;
-  attackIntent = null as null | AttackIntent;
-  target: CastleRecruit<Castle>;
-  constructor(entity: UE, position: Position, path: Path) {
+  attackIntent = null as null | UnitAttackIntent;
+  target: BattleCastle;
+  constructor(entity: UE, position: Position, path: Path, targetCastle: BattleCastle) {
     super(entity, position);
     this.pathFinder = new PathFinder(path);
-    this.target = path.castleEntity;
+    this.target = targetCastle;
   }
 
   abstract canMove(): boolean;
@@ -40,24 +43,42 @@ export abstract class UnitRecruitPhysic<
 }
 
 export class SoldierRecruitPhysic extends UnitRecruitPhysic<SoldierRecruit> {
+  speed = 1;
+  maxLife: number
+  actualLife: number
   attackSpeed = 5;
   attackDamage = 1;
-  constructor(entity: SoldierRecruit, position: Position, path: Path) {
-    super(entity, position, path);
+  constructor(entity: SoldierRecruit, position: Position, path: Path, targetCastle: BattleCastle, private onDeath: Function) {
+    super(entity, position, path, targetCastle);
+    this.speed = entity.speed
+    this.maxLife = entity.maxLife;
+    this.actualLife = entity.maxLife
   }
   canMove() {
     return true;
   }
 
+  isAlive() {
+    return this.actualLife > 0
+  }
+
   attack() {
     if (!this.attackIntent) {
-      this.attackIntent = new AttackIntent(this, () => {
-        this.target.damage(this.attackDamage);
+      this.attackIntent = new UnitAttackIntent(this, () => {
+        this.target.isAttacked(this.attackDamage);
         this.attackIntent = null;
       });
       return;
     }
     this.attackIntent.tick();
+  }
+
+  isAttacked(damage: number) {
+    console.log('AIL')
+    this.actualLife -= damage
+    if (this.actualLife < 0) {
+      this.onDeath(this)
+    }
   }
 
   tick() {
@@ -69,12 +90,12 @@ export class SoldierRecruitPhysic extends UnitRecruitPhysic<SoldierRecruit> {
   }
 }
 
-export class AttackIntent {
+export class UnitAttackIntent {
   progress = 0;
   constructor(
     public unitEntity: UnitRecruitPhysic<UnitRecruit<Unit>>,
     public resolveAttack: Function
-  ) {}
+  ) { }
 
   tick() {
     this.progress += this.unitEntity.attackSpeed;
@@ -83,3 +104,6 @@ export class AttackIntent {
     }
   }
 }
+
+
+

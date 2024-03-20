@@ -11,25 +11,18 @@ const CastlePosition = {
 type Team = "allied" | "enemy";
 
 export class Castle {
-  constructor(public team: Team) {}
+  constructor(public team: Team) { }
 }
 
 export class CastleRecruit<TB extends Castle> implements Recruit {
   position: Position;
   maxLife = 20;
-  actualLife = 20;
   hitbox = new HitBox([
     [new HitShape("rectangle", { width: 5, height: 5 }), { x: 0, y: 0 }],
   ]);
   constructor(public castle: TB) {
     this.position = CastlePosition[castle.team];
   }
-
-  damage(damage: number) {
-    this.actualLife = this.actualLife - damage;
-    if (this.actualLife === 0) console.log("MORT");
-  }
-
   clone() {
     return new CastleRecruit(new Castle(this.castle.team));
   }
