@@ -1,12 +1,12 @@
 import { BattleState } from "../../shared/gamestate";
-import { Army } from "../army/army";
-import { BattleArmy } from "../army/battle-army";
-import { SoldierBarrack } from "../barrack/soldier-barrack";
+import { Army } from "../army/entity/army";
+import { BattleArmy } from "../army/battle/battle-army";
 import { BattleVerdict } from "../battle-summary/battle-summary";
 import { Game } from "../game";
-import { Path } from "../path/domain/path";
-import { BattleCastle } from "../physic/castle/battle-castle";
+import { Path } from "../path/entity/path";
+import { BattleCastle } from "../castle/battle/battle-castle";
 import { Physics } from "../physic/physics";
+import { SoldierBarrack } from "../barrack/entity/implementation/solider-barrack";
 
 export class Battle {
   alliedArmy: BattleArmy;
@@ -79,9 +79,6 @@ export class Battle {
       this.onBattleOver(isOver);
       this.isOver = true;
     }
-    this.physics.tick();
-    this.alliedArmy.barracks.map((b) => b.tick());
-    this.enemyArmy.barracks.map((b) => b.tick());
   }
 
   getState(): BattleState {

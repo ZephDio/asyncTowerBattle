@@ -1,43 +1,42 @@
-import { BattleArmy } from "../army/battle-army";
+import { BattleArmy } from "../army/battle/battle-army";
 
 export class Physics {
-  constructor(public alliedArmy: BattleArmy, public enemyArmy: BattleArmy) {
-  }
+  constructor(public alliedArmy: BattleArmy, public enemyArmy: BattleArmy) {}
 
   tick() {
-    this.tickBarracks()
-    this.tickUnits()
-    this.setTowersTargets()
-    this.tickTowers()
+    this.tickBarracks();
+    this.tickUnits();
+    this.setTowersTargets();
+    this.tickTowers();
   }
 
   tickTowers() {
-    this.setTowersTargets()
+    this.setTowersTargets();
     for (const tower of this.alliedArmy.towers) {
-      tower.tick()
+      tower.tick();
     }
     for (const tower of this.enemyArmy.towers) {
-      tower.tick()
+      tower.tick();
     }
   }
 
   setTowersTargets() {
     for (const tower of this.alliedArmy.towers) {
-      const target = tower.target
+      const target = tower.target;
       if (target && tower.entity.matchesRule(target)) {
-        continue
+        continue;
       }
       for (const enemyUnits of this.enemyArmy.units.keys()) {
         if (tower.entity.matchesRule(enemyUnits)) {
-          tower.setTarget(enemyUnits)
+          tower.setTarget(enemyUnits);
         }
       }
     }
   }
 
   tickBarracks() {
-    this.alliedArmy.barracks.map(b => b.tick())
-    this.enemyArmy.barracks.map(b => b.tick())
+    this.alliedArmy.barracks.map((b) => b.tick());
+    this.enemyArmy.barracks.map((b) => b.tick());
   }
 
   tickUnits() {
@@ -50,6 +49,6 @@ export class Physics {
   }
 
   get units() {
-    return [...this.alliedArmy.units.keys(), ...this.enemyArmy.units.keys()]
+    return [...this.alliedArmy.units.keys(), ...this.enemyArmy.units.keys()];
   }
 }

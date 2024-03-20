@@ -1,4 +1,5 @@
-import { Castle, CastleRecruit } from "../../../engine/castle/domain/castle";
+import { Castle } from "../../../engine/castle/entity/castle";
+import { CastleRecruit } from "../../../engine/castle/recruit/castle-recruit";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";

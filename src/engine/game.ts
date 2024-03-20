@@ -1,7 +1,7 @@
 import { Battle } from "./battle/battle";
-import { ArmyFixture } from "./army/army";
 import { BattleState, GameState, SummaryState } from "../shared/gamestate";
 import { BattleSummary, BattleVerdict } from "./battle-summary/battle-summary";
+import { ArmyFixture } from "./army/entity/army-fixtures";
 
 export class Game {
   // army = new Army(

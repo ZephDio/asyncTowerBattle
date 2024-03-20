@@ -1,4 +1,4 @@
-import { Path, PathNode } from "../../../engine/path/domain/path";
+import { Path, PathNode } from "../../../engine/path/entity/path";
 import { Resources } from "../../resources";
 import { Drawable } from "./drawable";
 

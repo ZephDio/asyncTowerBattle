@@ -1,4 +1,5 @@
-import { Tower, TowerRecruit } from "../../../engine/tower/domain/tower";
+import { Tower } from "../../../engine/tower/entity/tower";
+import { TowerRecruit } from "../../../engine/tower/recruit/tower-recruit";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";

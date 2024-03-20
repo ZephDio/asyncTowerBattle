@@ -1,4 +1,4 @@
-import { UnitRecruit } from "../../../engine/units/domain/units";
+import { UnitRecruit } from "../../../engine/units/recruit/unit-recruit";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";

@@ -1,8 +1,5 @@
 import { Game } from "../../engine/game";
-import { Path, PathNode } from "../../engine/path/domain/path";
-import { Castle, CastleRecruit } from "../../engine/castle/domain/castle";
-import { Tower, TowerRecruit } from "../../engine/tower/domain/tower";
-import { Unit, UnitRecruit } from "../../engine/units/domain/units";
+import { Path } from "../../engine/path/entity/path";
 import { BattleState, GameState, SummaryState } from "../../shared/gamestate";
 import { Position } from "../../shared/position";
 import { Size } from "../../shared/size";
@@ -10,14 +7,18 @@ import { Renderer } from "../renderer";
 import { Resources } from "../resources";
 import { Drawable } from "./drawables/drawable";
 import { PhysicEntity } from "../../engine/physic/physic";
-import { BattleTower } from "../../engine/physic/tower/entity-tower-physic";
-import { BattleCastle } from "../../engine/physic/castle/battle-castle";
+import { BattleCastle } from "../../engine/castle/battle/battle-castle";
 import { TowerDrawable } from "./drawables/tower-drawable";
 import { CastleDrawable } from "./drawables/castle-drawable";
 import { PathDrawable } from "./drawables/path-drawable";
 import { UnitEntityDrawable } from "./drawables/unit-drawable";
 import { BattleVerdict } from "../../engine/battle-summary/battle-summary";
 import { VerdictDrawable } from "./drawables/verdict-drawable";
+import { BattleTower } from "../../engine/tower/battle/battle-tower";
+import { TowerRecruit } from "../../engine/tower/recruit/tower-recruit";
+import { Tower } from "../../engine/tower/entity/tower";
+import { UnitRecruit } from "../../engine/units/recruit/unit-recruit";
+import { Unit } from "../../engine/units/entity/units";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
