@@ -1,6 +1,6 @@
 import { Barrack } from "../barrack/barrack";
 import { BattleBarrack } from "../barrack/battle-barrack";
-import { SoldierBattleBarrack } from "../barrack/soldier-barrack";
+import { BarracksFixture, SoldierBattleBarrack } from "../barrack/soldier-barrack";
 import {
   Castle,
   CastleRecruit,
@@ -23,7 +23,7 @@ export class Army {
     public towers: TowerRecruit<Tower>[],
     public path: Path,
     public barracks: Barrack<Unit>[]
-  ) {}
+  ) { }
 }
 
 export const ArmyFixture = {
@@ -35,7 +35,7 @@ export const ArmyFixture = {
       TowerEntityFixtures.topRightTower,
     ],
     PathFixture.defaultAllied,
-    []
+    [BarracksFixture.soldier(2), BarracksFixture.soldier(3), BarracksFixture.soldier(4)]
   ),
-  enemy: new Army(CastleEntityFixture.enemy, [], PathFixture.defaultEnemy, []),
+  enemy: new Army(CastleEntityFixture.enemy, [], PathFixture.defaultEnemy, [BarracksFixture.soldier(5)]),
 };

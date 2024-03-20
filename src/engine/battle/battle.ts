@@ -55,21 +55,26 @@ export class Battle {
     army: Army,
     enemyCastle: BattleCastle,
     alliedCastle: BattleCastle,
-    path: Path
+    enemyPath: Path
   ) {
     return new BattleArmy(
       army,
       enemyCastle,
       alliedCastle,
+      enemyPath,
       army.barracks as SoldierBarrack[]
     );
   }
 
   tick() {
+    console.log('battle tick')
     const isOver = this.checkVictoryCondition();
     if (isOver) {
+      console.log('Battle over')
       this.onBattleOver(isOver);
     }
     this.physics.tick();
+    this.alliedArmy.barracks.map((b) => b.tick())
+    this.enemyArmy.barracks.map((b) => b.tick())
   }
 }

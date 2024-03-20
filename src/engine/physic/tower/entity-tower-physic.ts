@@ -21,15 +21,21 @@ export abstract class BattleTower<
 
 export class BlueBattleTower extends BattleTower<TowerRecruit<BlueTower>> {
   type = "blue" as const;
-  tick(): void {}
+
+  findTarget() {
+
+  }
+
+  tick() {
+  }
 }
 
 export class OrangeBattleTower extends BattleTower<TowerRecruit<OrangeTower>> {
   type = "orange" as const;
-  tick(): void {}
+  tick(): void { }
 }
 
 export class GreenBattleTower extends BattleTower<TowerRecruit<GreenTower>> {
   type = "green" as const;
-  tick(): void {}
+  tick(): void { }
 }

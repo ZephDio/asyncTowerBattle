@@ -2,14 +2,14 @@ import { Position } from "../../shared/position";
 import { BattleArmy } from "../army/battle-army";
 import { Path } from "../path/domain/path";
 import { BattleCastle } from "../physic/castle/entity-castle-physic";
-import { Soldier, SoldierRecruit, Unit } from "../units/domain/units";
+import { SoldierRecruitPhysic } from "../physic/units/entity-units-physic";
+import { Soldier, SoldierRecruit, UnitEntityFixture } from "../units/domain/units";
 import { Barrack } from "./barrack";
 import { BattleBarrack, UnitProduction } from "./battle-barrack";
 
 export class SoldierBarrack extends Barrack<Soldier> {
   type = "soldier" as const;
-  public productionSpeed = 2;
-  constructor(public unitRecruit: SoldierRecruit) {
+  constructor(public unitRecruit: SoldierRecruit, public productionSpeed: number = 2) {
     super();
   }
 
@@ -29,7 +29,7 @@ export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
     public addRecruit: BattleArmy["addUnit"],
 
     public recruit: SoldierRecruit
-  ) {}
+  ) { }
 
   tick() {
     if (this.onGoingProduction) {
@@ -44,6 +44,11 @@ export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
   }
 
   produce() {
-    const castleTarget = this.targetCastle;
+    console.log('prod')
+    this.addRecruit(new SoldierRecruitPhysic(this.recruit, this.position, this.path), this)
   }
+}
+
+export const BarracksFixture = {
+  soldier: (speed?: number) => new SoldierBarrack(UnitEntityFixture.soldier, speed)
 }

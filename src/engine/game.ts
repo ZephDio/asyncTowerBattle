@@ -1,22 +1,17 @@
-import {
-  GetTowersEntitiesQuery,
-  GetTowersEntitiesQueryHandler,
-} from "./tower/application/query/get-towers-query";
 import { Battle } from "./battle/battle";
-import { Army, ArmyFixture } from "./army/army";
+import { ArmyFixture } from "./army/army";
 import { GameState } from "../shared/gamestate";
-import { CastleEntityFixture } from "./castle/domain/castle";
-import { PathFixture } from "./path/domain/path";
 
 export class Game {
-  army = new Army(
-    CastleEntityFixture.allied,
-    [],
-    PathFixture.defaultAllied,
-    []
-  );
+  // army = new Army(
+  //   CastleEntityFixture.allied,
+  //   [],
+  //   PathFixture.defaultAllied,
+  //   [BarracksFixture.soldier]
+  // );
+  army = ArmyFixture.allied
   battle = null as null | Battle;
-  constructor() {}
+  constructor() { }
 
   async getState(): Promise<GameState> {
     if (this.battle) {
@@ -29,7 +24,6 @@ export class Game {
         paths: [this.battle.alliedArmy.path, this.battle.enemyArmy.path],
         enemyEntities: [...this.battle.physics.units],
       };
-      console.log(battleState);
       return battleState;
     }
     return {} as GameState;

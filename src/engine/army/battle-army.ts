@@ -1,6 +1,6 @@
 import { BattleBarrack } from "../barrack/battle-barrack";
 import { BattleCastle } from "../physic/castle/entity-castle-physic";
-import { PhysicEntity, Recruit } from "../physic/physic";
+import { PhysicEntity } from "../physic/physic";
 import { SoldierRecruit, Unit, UnitRecruit } from "../units/domain/units";
 import { Barrack } from "../barrack/barrack";
 import { Army } from "./army";
@@ -9,7 +9,7 @@ import { Tower, TowerRecruit } from "../tower/domain/tower";
 import { BattleTower } from "../physic/tower/entity-tower-physic";
 import { SoldierBattleBarrack } from "../barrack/soldier-barrack";
 export class BattleArmy {
-  units: Map<PhysicEntity<Recruit>, BattleBarrack<UnitRecruit<Unit>>> =
+  units: Map<PhysicEntity<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> =
     new Map();
   path: Path;
   castle: BattleCastle;
@@ -21,6 +21,7 @@ export class BattleArmy {
     army: Army,
     enemyCastle: BattleCastle,
     alliedCastle: BattleCastle,
+    enemyPath: Path,
     barracks: Barrack<SoldierRecruit>[]
   ) {
     this.castle = alliedCastle;
@@ -30,9 +31,12 @@ export class BattleArmy {
         new SoldierBattleBarrack(
           barrack.productionSpeed,
           alliedCastle.position,
-          army.path,
+          enemyPath,
           enemyCastle,
-          this.addUnit,
+          (entityRecruit: PhysicEntity<UnitRecruit<Unit>>,
+            battleBarrack: BattleBarrack<UnitRecruit<Unit>>) => {
+            this.addUnit(entityRecruit, battleBarrack)
+          },
           barrack.unitRecruit
         )
     );
@@ -40,11 +44,11 @@ export class BattleArmy {
   }
 
   addUnit(
-    entityRecruit: PhysicEntity<Recruit>,
+    entityRecruit: PhysicEntity<UnitRecruit<Unit>>,
     battleBarrack: BattleBarrack<UnitRecruit<Unit>>
   ) {
     this.units.set(entityRecruit, battleBarrack);
   }
 
-  removeUnit() {}
+  removeUnit() { }
 }

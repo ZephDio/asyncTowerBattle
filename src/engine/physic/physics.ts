@@ -1,25 +1,29 @@
-import { Army } from "../army/army";
 import { BattleArmy } from "../army/battle-army";
-import { Path } from "../path/domain/path";
-import { Tower, TowerRecruit } from "../tower/domain/tower";
-import { SoldierRecruit, Unit, UnitRecruit } from "../units/domain/units";
-import { PhysicEntity, Recruit } from "./physic";
-import { BattleTower } from "./tower/entity-tower-physic";
 
 export class Physics {
-  units: PhysicEntity<UnitRecruit<Unit>>[] = [];
-  alliedTowers: PhysicEntity<TowerRecruit<Tower>>[] = [];
-  alliedPath: Path;
-  enemyPath: Path;
-  constructor(playerArtillery: BattleArmy, enemyArmy: BattleArmy) {
-    this.enemyPath = enemyArmy.path;
-    this.alliedPath = playerArtillery.path;
-    this.alliedTowers = playerArtillery.towers;
+  constructor(public alliedArmy: BattleArmy, public enemyArmy: BattleArmy) {
   }
 
   tick() {
-    for (const unit of this.units) {
+    this.tickBarracks()
+    this.tickUnits()
+  }
+
+  tickBarracks() {
+    this.alliedArmy.barracks.map(b => b.tick())
+    this.enemyArmy.barracks.map(b => b.tick())
+  }
+
+  tickUnits() {
+    for (const [unit, barrack] of this.alliedArmy.units.entries()) {
       unit.tick();
     }
+    for (const [unit, barrack] of this.enemyArmy.units.entries()) {
+      unit.tick();
+    }
+  }
+
+  get units() {
+    return [...this.alliedArmy.units.keys(), ...this.enemyArmy.units.keys()]
   }
 }
