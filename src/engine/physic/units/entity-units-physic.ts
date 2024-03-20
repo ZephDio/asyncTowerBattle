@@ -6,7 +6,7 @@ import { SoldierRecruit, Unit, UnitRecruit } from "../../units/domain/units";
 import { PhysicEntity } from "../physic";
 import { PathFinder } from "./path-finder";
 
-export abstract class EntityUnitPhysic<
+export abstract class UnitRecruitPhysic<
   UE extends UnitRecruit<Unit>
 > extends PhysicEntity<UE> {
   speed: number = 1;
@@ -39,7 +39,7 @@ export abstract class EntityUnitPhysic<
   }
 }
 
-export class SoldierEntityUnitPhysic extends EntityUnitPhysic<SoldierRecruit> {
+export class SoldierRecruitPhysic extends UnitRecruitPhysic<SoldierRecruit> {
   attackSpeed = 5;
   attackDamage = 1;
   constructor(entity: SoldierRecruit, position: Position, path: Path) {
@@ -72,7 +72,7 @@ export class SoldierEntityUnitPhysic extends EntityUnitPhysic<SoldierRecruit> {
 export class AttackIntent {
   progress = 0;
   constructor(
-    public unitEntity: EntityUnitPhysic<UnitRecruit<Unit>>,
+    public unitEntity: UnitRecruitPhysic<UnitRecruit<Unit>>,
     public resolveAttack: Function
   ) {}
 

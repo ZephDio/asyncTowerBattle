@@ -16,6 +16,8 @@ import {
   UnitEntityDrawable,
 } from "./drawable";
 import { PhysicEntity } from "../../engine/physic/physic";
+import { BattleTower } from "../../engine/physic/tower/entity-tower-physic";
+import { BattleCastle } from "../../engine/physic/castle/entity-castle-physic";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
@@ -65,14 +67,14 @@ export class CanvasRenderer implements Renderer {
     return drawables;
   }
 
-  towerToTowerDrawable(tower: TowerRecruit<Tower>) {
+  towerToTowerDrawable(tower: BattleTower<TowerRecruit<Tower>>) {
     const position = this.getCanvasPosition(tower.position);
     const { width, height } = Resources.tower[tower.type].size as Size;
     const size = this.getCanvasSize(width, height);
     return new TowerDrawable(position, size, tower.type);
   }
 
-  castleToCastleDrawable(castle: CastleRecruit<Castle>) {
+  castleToCastleDrawable(castle: BattleCastle) {
     const position = this.getCanvasPosition(castle.position);
     const { width, height } = Resources.castle.size as Size;
     const size = this.getCanvasSize(width, height);
@@ -88,10 +90,10 @@ export class CanvasRenderer implements Renderer {
 
   unitToDrawable(physicUnit: PhysicEntity<UnitRecruit<Unit>>) {
     const position = this.getCanvasPosition(physicUnit.position);
-    const { width, height } = Resources.unit[physicUnit.entity.unitType]
+    const { width, height } = Resources.unit[physicUnit.entity.type]
       .size as Size;
     const size = this.getCanvasSize(width, height);
-    return new UnitEntityDrawable(position, size, physicUnit.entity.unitType);
+    return new UnitEntityDrawable(position, size, physicUnit.entity.type);
   }
 
   drawBackGround() {

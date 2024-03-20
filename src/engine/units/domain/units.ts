@@ -15,12 +15,12 @@ export class Soldier extends Unit {
 }
 
 export abstract class UnitRecruit<U extends Unit> implements Recruit {
-  abstract unitType: U["type"];
+  abstract type: U["type"];
   abstract hitbox: HitBox;
 }
 
 export class SoldierRecruit extends UnitRecruit<Soldier> {
-  unitType = "soldier" as const;
+  type = "soldier" as const;
   hitbox = Soldier.hitbox;
 }
 
