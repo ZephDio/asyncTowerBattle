@@ -46,12 +46,10 @@ export class Game {
 
   handleSummaryQuit() {
     this.battleSummary = null;
-    console.log("summary quit");
     this.startBattle();
   }
 
   startBattle() {
-    console.log("new battle");
     this.battle = new Battle(
       ArmyFixture.allied,
       ArmyFixture.enemy,

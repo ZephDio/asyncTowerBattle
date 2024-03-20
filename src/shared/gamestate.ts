@@ -11,12 +11,12 @@ export interface GameState {
   type: string;
 }
 
-export interface SummaryState {
+export interface SummaryState extends GameState {
   type: "summary";
   battleVerdict: BattleVerdict;
 }
 
-export interface BattleState {
+export interface BattleState extends GameState {
   type: "battle";
   castles: BattleCastle[];
   towers: BattleTower<TowerRecruit<Tower>>[];

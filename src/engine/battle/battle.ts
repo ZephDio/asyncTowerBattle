@@ -72,10 +72,8 @@ export class Battle {
     const isOver = this.checkVictoryCondition();
     if (isOver === "onGoing") {
       this.physics.tick();
-      this.alliedArmy.castle.actualLife -= 0.1;
     } else {
       this.onBattleOver(isOver);
-      this.alliedArmy.castle.actualLife = 20;
     }
   }
 
