@@ -1,6 +1,7 @@
 import { Battle } from "./battle/battle";
 import { ArmyFixture } from "./army/army";
-import { GameState } from "../shared/gamestate";
+import { BattleState, GameState, SummaryState } from "../shared/gamestate";
+import { BattleSummary, BattleVerdict } from "./battle-summary/battle-summary";
 
 export class Game {
   // army = new Army(
@@ -9,39 +10,49 @@ export class Game {
   //   PathFixture.defaultAllied,
   //   [BarracksFixture.soldier]
   // );
-  army = ArmyFixture.allied
+  army = ArmyFixture.allied;
   battle = null as null | Battle;
-  constructor() { }
+
+  battleSummary: null | BattleSummary = null;
+  constructor() {}
 
   async getState(): Promise<GameState> {
     if (this.battle) {
-      const battleState = {
-        castles: [this.battle.alliedArmy.castle, this.battle.enemyArmy.castle],
-        towers: [
-          ...this.battle.alliedArmy.towers,
-          ...this.battle.enemyArmy.towers,
-        ],
-        paths: [this.battle.alliedArmy.path, this.battle.enemyArmy.path],
-        enemyEntities: [...this.battle.physics.units],
-      };
-      return battleState;
+      return this.getBattleState();
     }
-    return {} as GameState;
+    return this.getSummaryState();
   }
 
-  handleEndBattle(battleStatus: "victory" | "defeat") {
-    if (battleStatus === "victory") {
-    }
-    if (battleStatus === "defeat") {
-    }
+  getBattleState() {
+    if (!this.battle) return {} as BattleState;
+    return this.battle.getState();
+  }
+
+  getSummaryState() {
+    if (!this.battleSummary) return {} as SummaryState;
+    return this.battleSummary.getState();
+  }
+
+  handleEndBattle(battleVerdict: BattleVerdict) {
+    const lastBattleState = this.getBattleState();
+    this.battleSummary = new BattleSummary(
+      lastBattleState,
+      battleVerdict,
+      this.handleSummaryQuit.bind(this)
+    );
     this.battle = null;
   }
 
-  async startBattle() {
+  handleSummaryQuit() {
+    this.battleSummary = null;
+    this.startBattle();
+  }
+
+  startBattle() {
     this.battle = new Battle(
       ArmyFixture.allied,
       ArmyFixture.enemy,
-      this.handleEndBattle
+      this.handleEndBattle.bind(this)
     );
     this.battle.start();
   }

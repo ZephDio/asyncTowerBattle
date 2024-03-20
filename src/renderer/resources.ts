@@ -64,4 +64,24 @@ export const Resources: ResourceType = {
       color: "#3b3b3b",
     },
   },
+  verdict: {
+    victory: {
+      size: {
+        width: 25,
+        height: 20,
+      },
+      resource: {
+        src: "./resources/verdict/victory.png",
+      },
+    },
+    defeat: {
+      size: {
+        width: 20,
+        height: 22,
+      },
+      resource: {
+        src: "./resources/verdict/defeat.png",
+      },
+    },
+  },
 };
