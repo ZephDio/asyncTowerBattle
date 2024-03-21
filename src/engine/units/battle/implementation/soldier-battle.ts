@@ -5,7 +5,7 @@ import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
 import { UnitAttackIntent, UnitRecruitPhysic } from "../entity-units-physic";
 
 export class SoldierRecruitPhysic extends UnitRecruitPhysic<SoldierRecruit> {
-  speed = 1;
+  speed: number
   maxLife: number;
   actualLife: number;
   attackSpeed = 5;

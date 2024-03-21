@@ -41,7 +41,7 @@ export class Battle {
         if (this.isOver) return;
         this.tick();
         loop();
-      }, 31);
+      }, 30);
     };
     loop();
   }

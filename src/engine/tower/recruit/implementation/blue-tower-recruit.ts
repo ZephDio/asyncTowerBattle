@@ -23,7 +23,7 @@ export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
   }
 
   getProjectile(onResolve: Function, target: PhysicEntity<Recruit>, position: Position, damage: number) {
-    return new BattleRocketProjectile(this.tower.projectile, position, onResolve, target, damage)
+    return new BattleRocketProjectile(this.tower.projectile, { x : position.x, y : position.y}, onResolve, target, damage)
   }
   matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
     return getDistance(enemyUnit.position, this.position) < 20;

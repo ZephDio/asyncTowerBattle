@@ -5,7 +5,7 @@ import { Projectile } from "../entity/projectile";
 
 export abstract class BattleProjectile<PR extends Projectile> extends PhysicEntity<Projectile>{
     pathFinder: PathFinder;
-    constructor(public projectileRecruit: PR, position: Position, public onResolve: Function, target: PhysicEntity<Recruit>, public damage: number) {
+    constructor(public projectileRecruit: PR, position: Position, public onResolve: Function,public target: PhysicEntity<Recruit>, public damage: number) {
         super(projectileRecruit, position)
         this.pathFinder = new PathFinder([target.position]);
     }
@@ -22,16 +22,21 @@ export abstract class BattleProjectile<PR extends Projectile> extends PhysicEnti
             this.move(newPosition);
         }
         if (this.pathFinder.isArrived) {
-            this.onResolve()
+           this.hit()
         }
     }
 
     tick() {
         this.followPath()
+    }
 
+    hit(){
+        this.target.isAttacked(this.damage)
+        this.onResolve(this)
     }
 
     move(newPosition: Position) {
-        this.position = newPosition;
+        this.position.x = newPosition.x
+        this.position.y = newPosition.y
     }
 }

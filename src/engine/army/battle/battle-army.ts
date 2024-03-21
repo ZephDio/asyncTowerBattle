@@ -39,7 +39,7 @@ export class BattleArmy {
       (barrack) =>
         new SoldierBattleBarrack(
           barrack.productionSpeed,
-          alliedCastle.position,
+          {x : alliedCastle.position.x, y : alliedCastle.position.y},
           enemyPath,
           enemyCastle,
           (
@@ -74,6 +74,7 @@ export class BattleArmy {
   }
 
   removeProjectile(projectile: BattleProjectile<Projectile>) {
+    console.log(this.projectiles)
     this.projectiles.delete(projectile)
   }
 }

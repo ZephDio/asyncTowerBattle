@@ -16,7 +16,7 @@ export class TowerEntityFixtures {
     new OrangeTower()
   );
   static BottomLeftTower = new GreenTowerRecruit(
-    PercentToReal({ x: 30, y: 30 }),
+    PercentToReal({ x: 30, y: 20 }),
     new GreenTower()
   );
 }

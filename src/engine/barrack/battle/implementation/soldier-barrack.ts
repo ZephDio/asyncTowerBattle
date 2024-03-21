@@ -39,7 +39,7 @@ export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
     this.addRecruit(
       new SoldierRecruitPhysic(
         this.recruit,
-        this.position,
+        {x : this.position.x , y : this.position.y},
         this.path,
         this.targetCastle,
         this.removeRecruit

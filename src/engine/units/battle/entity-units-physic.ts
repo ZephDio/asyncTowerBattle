@@ -34,15 +34,16 @@ export abstract class UnitRecruitPhysic<
     if (this.canMove() && !this.pathFinder.isArrived) {
       const tetha = this.pathFinder.getOrientation(this.position);
       const newPosition = {
-        x: this.position.x + Math.cos(tetha * this.speed),
-        y: this.position.y + Math.sin(tetha * this.speed),
+        x: this.position.x + Math.cos(tetha)  * this.speed,
+        y: this.position.y + Math.sin(tetha )* this.speed,
       };
       this.move(newPosition);
     }
   }
 
   move(newPosition: Position) {
-    this.position = newPosition;
+    this.position.x = newPosition.x;
+    this.position.y = newPosition.y;
   }
 }
 

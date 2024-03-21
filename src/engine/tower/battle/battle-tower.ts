@@ -34,16 +34,12 @@ export abstract class BattleTower<
     if (!this.attackIntent) {
       this.attackIntent = new TowerAttackIntent(this, () => {
         if (this.target) {
-          const projectile = this.entity.getProjectile(this.removeProjectile.bind(this), this.target, this.position, this.attackDamage)
+          const projectile = this.entity.getProjectile(this.removeProjectile, this.target, this.position, this.attackDamage)
           this.addProjectile(projectile, this)
           this.attackIntent = null;
         }
       });
     }
-  }
-
-  onHit() {
-    // lalalal
   }
 }
 

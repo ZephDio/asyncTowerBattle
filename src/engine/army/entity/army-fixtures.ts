@@ -23,6 +23,6 @@ export class ArmyFixture {
     CastleEntityFixture.enemy,
     [],
     PathFixture.defaultEnemy,
-    [BarracksFixture.soldier(20)]
+    [BarracksFixture.soldier(12.5)]
   );
 }

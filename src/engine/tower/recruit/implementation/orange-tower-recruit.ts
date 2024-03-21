@@ -22,7 +22,7 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
   }
 
   getProjectile(onResolve: Function, target: PhysicEntity<Recruit>, position: Position, damage: number) {
-    return new BattleBulletProjectile(this.tower.projectile, position, onResolve, target, damage)
+    return new BattleBulletProjectile(this.tower.projectile,  {x : position.x, y : position.y}, onResolve, target, damage)
   }
 
   matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {

@@ -7,6 +7,10 @@ export class PathFinder {
   constructor(public destinations: Position[], public progress: number = 0) { }
 
   getOrientation(entityPosition: Position) {
+    if(this.destinations.length === 1){
+
+      console.log(this.destinations[0])
+    }
     const destination = this.getNextDestination(entityPosition);
     const tetha = Math.atan2(
       destination.y - entityPosition.y,
