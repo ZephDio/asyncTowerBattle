@@ -91,4 +91,16 @@ export const Resources: ResourceType = {
       },
     },
   },
+  button: {
+    buy: {
+      size: {
+        width: 10,
+        height: 5,
+      },
+      resource : {
+        src: "./resources/button/buy.png",
+      }
+    }
+
+  }
 };

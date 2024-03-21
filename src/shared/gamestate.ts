@@ -8,6 +8,7 @@ import { PhysicEntity } from "../engine/physic/physic";
 import { UnitRecruit } from "../engine/units/recruit/unit-recruit";
 import { Unit } from "../engine/units/entity/units";
 import { Projectile } from "../engine/projectile/entity/projectile";
+import { Buyable } from "../engine/shop/shop";
 
 export interface GameState {
   type: string;
@@ -24,5 +25,10 @@ export interface BattleState extends GameState {
   towers: BattleTower<TowerRecruit<Tower>>[];
   paths: Path[];
   entities: PhysicEntity<UnitRecruit<Unit>>[];
-  projectiles: PhysicEntity<Projectile>[]
+  projectiles: PhysicEntity<Projectile>[];
+}
+
+export interface ShopState extends GameState {
+  type: "shop";
+  buyables: Buyable[];
 }

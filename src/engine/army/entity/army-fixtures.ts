@@ -1,7 +1,7 @@
 import { BarracksFixture } from "../../barrack/battle/implementation/soldier-barrack";
 import { CastleEntityFixture } from "../../castle/entity/castle";
 import { PathFixture } from "../../path/entity/path-fixtures";
-import { TowerEntityFixtures } from "../../tower/entity/tower-fixtures";
+import { TowerFixtures } from "../../tower/entity/tower-fixtures";
 import { Army } from "./army";
 
 export class ArmyFixture {
@@ -9,7 +9,7 @@ export class ArmyFixture {
     CastleEntityFixture.allied,
     [
       //TowerEntityFixtures.centerTower,
-      TowerEntityFixtures.BottomLeftTower,
+      TowerFixtures.BottomLeftTower,
       //TowerEntityFixtures.topRightTower,
     ],
     PathFixture.defaultAllied,

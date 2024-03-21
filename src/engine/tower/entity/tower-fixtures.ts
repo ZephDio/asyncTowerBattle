@@ -6,7 +6,7 @@ import { BlueTower } from "./implementation/blue-tower";
 import { GreenTower } from "./implementation/green-tower";
 import { OrangeTower } from "./implementation/orange-tower";
 
-export class TowerEntityFixtures {
+export class TowerFixtures {
   static centerTower = new BlueTowerRecruit(
     PercentToReal({ x: 50, y: 50 }),
     new BlueTower()

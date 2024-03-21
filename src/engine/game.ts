@@ -1,7 +1,13 @@
 import { Battle } from "./battle/battle";
-import { BattleState, GameState, SummaryState } from "../shared/gamestate";
+import {
+  BattleState,
+  GameState,
+  ShopState,
+  SummaryState,
+} from "../shared/gamestate";
 import { BattleSummary, BattleVerdict } from "./battle-summary/battle-summary";
 import { ArmyFixture } from "./army/entity/army-fixtures";
+import { Shop } from "./shop/shop";
 
 export class Game {
   // army = new Army(
@@ -12,21 +18,21 @@ export class Game {
   // );
   army = ArmyFixture.allied;
   battle = null as null | Battle;
-
   battleSummary: null | BattleSummary = null;
-  constructor() { }
+  shop: null | Shop = null;
+
+  constructor() {}
 
   async getState(): Promise<GameState> {
-    if (this.battle) {
-      return this.getBattleState();
-    }
-    return this.getSummaryState();
+    if (this.battle) return this.getBattleState();
+    if (this.battleSummary) return this.getSummaryState();
+    return this.getShopState();
   }
 
   getBattleState() {
     if (!this.battle) return {} as BattleState;
     const state = this.battle.getState();
-    return state
+    return state;
   }
 
   getSummaryState() {
@@ -34,19 +40,40 @@ export class Game {
     return this.battleSummary.getState();
   }
 
+  getShopState() {
+    if (!this.shop) return {} as ShopState;
+    return this.shop.getState();
+  }
+
   handleEndBattle(battleVerdict: BattleVerdict) {
     const lastBattleState = this.getBattleState();
-    this.battleSummary = new BattleSummary(
-      lastBattleState,
-      battleVerdict,
-      this.handleSummaryQuit.bind(this)
-    );
+    this.startBattleSummary(lastBattleState, battleVerdict);
     this.battle = null;
   }
 
   handleSummaryQuit() {
     this.battleSummary = null;
+    this.startShop();
+  }
+
+  handleShopQuit() {
+    this.shop = null;
     this.startBattle();
+  }
+
+  startShop() {
+    this.shop = new Shop(this.army, this.handleShopQuit.bind(this));
+  }
+
+  startBattleSummary(
+    lastBattleState: BattleState,
+    battleVerdict: BattleVerdict
+  ) {
+    this.battleSummary = new BattleSummary(
+      lastBattleState,
+      battleVerdict,
+      this.handleSummaryQuit.bind(this)
+    );
   }
 
   startBattle() {

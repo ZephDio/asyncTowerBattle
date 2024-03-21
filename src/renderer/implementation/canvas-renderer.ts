@@ -1,6 +1,6 @@
 import { Game } from "../../engine/game";
 import { Path } from "../../engine/path/entity/path";
-import { BattleState, GameState, SummaryState } from "../../shared/gamestate";
+import { BattleState, GameState, ShopState, SummaryState } from "../../shared/gamestate";
 import { Position } from "../../shared/position";
 import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
@@ -21,6 +21,8 @@ import { UnitRecruit } from "../../engine/units/recruit/unit-recruit";
 import { Unit } from "../../engine/units/entity/units";
 import { Projectile } from "../../engine/projectile/entity/projectile";
 import { ProjectileDrawable } from "./drawables/projectiles-drawable";
+import { Buyable } from "../../engine/shop/shop";
+import { BuyableDrawable } from "./drawables/buyable-drawable";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
@@ -57,6 +59,9 @@ export class CanvasRenderer implements Renderer {
     if (state.type === "battle") {
       return this.battleStateToDrawable(state as BattleState);
     }
+    if (state.type === "shop") {
+      return this.shopStateToDrawable(state as ShopState);
+    }
     return [];
   }
 
@@ -87,6 +92,21 @@ export class CanvasRenderer implements Renderer {
     return drawables;
   }
 
+  shopStateToDrawable(state: ShopState) {
+    const drawables: Drawable[] = [];
+    drawables.push(...state.buyables.map((buyable) => this.buyableToDrawableBuyable(buyable)));
+    return drawables;
+  }
+
+  buyableToDrawableBuyable(buyable: Buyable) {
+    const position = this.getCanvasPosition({ x: 80, y: 10 });
+    const { width, height } = Resources[buyable.type][buyable.entity.type].size as Size;
+
+    const size = this.getCanvasSize(width, height);
+
+    return new BuyableDrawable(buyable, size, position);
+  }
+
   verdictToDrawableVerdict(verdict: BattleVerdict) {
     const position = this.getCanvasPosition({ x: 50, y: 30 });
     const { width, height } = Resources.verdict[verdict].size as Size;
@@ -94,6 +114,7 @@ export class CanvasRenderer implements Renderer {
 
     return new VerdictDrawable(verdict, size, position);
   }
+
   towerToTowerDrawable(tower: BattleTower<TowerRecruit<Tower>>) {
     const position = this.getCanvasPosition(tower.position);
     const { width, height } = Resources.tower[tower.type].size as Size;
