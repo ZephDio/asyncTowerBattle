@@ -1,6 +1,10 @@
 import { HitBox } from "../../../../shared/hitboxes";
 import { getDistance, Position } from "../../../../shared/position";
-import { PhysicEntity } from "../../../physic/physic";
+import { BattleArmy } from "../../../army/battle/battle-army";
+import { PhysicEntity, Recruit } from "../../../physic/physic";
+import { BattleBulletProjectile } from "../../../projectile/battle/implementation/bullet-projectile-battle";
+import { BattleRocketProjectile } from "../../../projectile/battle/implementation/rocket-projectile-bullet";
+import { Rocket } from "../../../projectile/entity/implementation/rocket";
 import { Unit } from "../../../units/entity/units";
 import { UnitRecruit } from "../../../units/recruit/unit-recruit";
 import { BlueBattleTower } from "../../battle/implementation/battle-blue-tower";
@@ -17,12 +21,16 @@ export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
     super();
     this.hitbox = tower.hitbox;
   }
+
+  getProjectile(onResolve: Function, target: PhysicEntity<Recruit>, position: Position, damage: number) {
+    return new BattleRocketProjectile(this.tower.projectile, position, onResolve, target, damage)
+  }
   matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
     return getDistance(enemyUnit.position, this.position) < 20;
   }
 
-  toPhysic(): BlueBattleTower {
-    return new BlueBattleTower(this.clone());
+  toPhysic(addProjectile: BattleArmy["addProjectile"], removeProjectile: BattleArmy["removeProjectile"]): BlueBattleTower {
+    return new BlueBattleTower(this.clone(), addProjectile, removeProjectile);
   }
 
   clone() {

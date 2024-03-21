@@ -1,13 +1,14 @@
 import { BattleArmy } from "../army/battle/battle-army";
 
 export class Physics {
-  constructor(public alliedArmy: BattleArmy, public enemyArmy: BattleArmy) {}
+  constructor(public alliedArmy: BattleArmy, public enemyArmy: BattleArmy) { }
 
   tick() {
     this.tickBarracks();
     this.tickUnits();
     this.setTowersTargets();
     this.tickTowers();
+    this.tickProjectiles();
   }
 
   tickTowers() {
@@ -48,7 +49,20 @@ export class Physics {
     }
   }
 
+  tickProjectiles() {
+    for (const [projectile, tower] of this.alliedArmy.projectiles.entries()) {
+      projectile.tick();
+    }
+    for (const [projectile, tower] of this.enemyArmy.projectiles.entries()) {
+      projectile.tick();
+    }
+  }
+
   get units() {
     return [...this.alliedArmy.units.keys(), ...this.enemyArmy.units.keys()];
+  }
+
+  get projectiles() {
+    return [...this.alliedArmy.projectiles.keys(), ...this.enemyArmy.projectiles.keys()]
   }
 }

@@ -14,7 +14,7 @@ export class Game {
   battle = null as null | Battle;
 
   battleSummary: null | BattleSummary = null;
-  constructor() {}
+  constructor() { }
 
   async getState(): Promise<GameState> {
     if (this.battle) {
@@ -25,7 +25,8 @@ export class Game {
 
   getBattleState() {
     if (!this.battle) return {} as BattleState;
-    return this.battle.getState();
+    const state = this.battle.getState();
+    return state
   }
 
   getSummaryState() {

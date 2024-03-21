@@ -64,6 +64,13 @@ export const Resources: ResourceType = {
       color: "#3b3b3b",
     },
   },
+  projectiles: {
+    resource: {
+      src: "./resources/projectiles/bullet.png",
+      shape: "rectangle",
+      color: "#3b3b3b",
+    },
+  },
   verdict: {
     victory: {
       size: {

@@ -42,7 +42,6 @@ export class SoldierRecruitPhysic extends UnitRecruitPhysic<SoldierRecruit> {
   }
 
   isAttacked(damage: number) {
-    console.log("AIL");
     this.actualLife -= damage;
     if (this.actualLife < 0) {
       this.onDeath(this);

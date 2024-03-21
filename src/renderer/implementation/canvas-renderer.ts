@@ -19,6 +19,8 @@ import { TowerRecruit } from "../../engine/tower/recruit/tower-recruit";
 import { Tower } from "../../engine/tower/entity/tower";
 import { UnitRecruit } from "../../engine/units/recruit/unit-recruit";
 import { Unit } from "../../engine/units/entity/units";
+import { Projectile } from "../../engine/projectile/entity/projectile";
+import { ProjectileDrawable } from "./drawables/projectiles-drawable";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
@@ -35,7 +37,6 @@ export class CanvasRenderer implements Renderer {
 
   async draw() {
     const state = await this.game.getState();
-    console.log(state);
     const drawableState = this.stateToDrawable(state);
     this.drawBackGround();
     for (const drawable of drawableState) {
@@ -64,9 +65,10 @@ export class CanvasRenderer implements Renderer {
     drawables.push(
       ...state.towers.map((tower) => this.towerToTowerDrawable(tower))
     );
+    drawables.push(...state.projectiles.map((projectile) => this.projectileToDrawable(projectile)));
     drawables.push(...state.paths.map((path) => this.pathToPathDrawable(path)));
     drawables.push(
-      ...state.enemyEntities.map((physicUnit) =>
+      ...state.entities.map((physicUnit) =>
         this.unitToDrawable(physicUnit)
       )
     );
@@ -111,6 +113,12 @@ export class CanvasRenderer implements Renderer {
       ...path.getNodes().map((node) => this.getCanvasPosition(node)),
     ];
     return new PathDrawable(path.type, relativeNodes);
+  }
+
+  projectileToDrawable(projectile: PhysicEntity<Projectile>) {
+    const position = this.getCanvasPosition(projectile.position);
+    const size = this.getCanvasSize(2, 2);
+    return new ProjectileDrawable(position, size)
   }
 
   unitToDrawable(physicUnit: PhysicEntity<UnitRecruit<Unit>>) {

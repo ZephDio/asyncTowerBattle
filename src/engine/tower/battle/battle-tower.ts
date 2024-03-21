@@ -1,3 +1,4 @@
+import { BattleArmy } from "../../army/battle/battle-army";
 import { PhysicEntity } from "../../physic/physic";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
@@ -7,18 +8,20 @@ import { TowerRecruit } from "../recruit/tower-recruit";
 export abstract class BattleTower<
   BT extends TowerRecruit<Tower>
 > extends PhysicEntity<TowerRecruit<Tower>> {
+  attackDamage: number
   target = null as null | PhysicEntity<UnitRecruit<Unit>>;
   attackIntent = null as null | TowerAttackIntent;
   abstract type: TowerRecruit<Tower>["type"];
-  constructor(towerEntity: BT) {
+  constructor(towerEntity: BT, public addProjectile: BattleArmy["addProjectile"], public removeProjectile: BattleArmy["removeProjectile"]) {
     super(towerEntity.clone(), towerEntity.position);
+    this.attackDamage = this.entity.attackDamage
   }
 
   setTarget(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
     this.target = enemyUnit;
   }
 
-  isAttacked(damage: number): void {}
+  isAttacked(damage: number): void { }
 
   isAlive() {
     return true;
@@ -31,11 +34,16 @@ export abstract class BattleTower<
     if (!this.attackIntent) {
       this.attackIntent = new TowerAttackIntent(this, () => {
         if (this.target) {
-          this.target.isAttacked(this.entity.attackDamage);
+          const projectile = this.entity.getProjectile(this.removeProjectile.bind(this), this.target, this.position, this.attackDamage)
+          this.addProjectile(projectile, this)
           this.attackIntent = null;
         }
       });
     }
+  }
+
+  onHit() {
+    // lalalal
   }
 }
 
@@ -44,7 +52,7 @@ export class TowerAttackIntent {
   constructor(
     public towerRecruit: BattleTower<TowerRecruit<Tower>>,
     public resolveAttack: Function
-  ) {}
+  ) { }
 
   tick() {
     this.progress += this.towerRecruit.entity.attackSpeed;

@@ -87,7 +87,8 @@ export class Battle {
       castles: [this.alliedArmy.castle, this.enemyArmy.castle],
       towers: [...this.alliedArmy.towers, ...this.enemyArmy.towers],
       paths: [this.alliedArmy.path, this.enemyArmy.path],
-      enemyEntities: [...this.physics.units],
+      entities: [...this.physics.units],
+      projectiles: [...this.physics.projectiles]
     };
     return battleState;
   }

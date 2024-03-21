@@ -24,7 +24,7 @@ export abstract class UnitRecruitPhysic<
     targetCastle: BattleCastle
   ) {
     super(entity, position);
-    this.pathFinder = new PathFinder(path);
+    this.pathFinder = new PathFinder(path.getNodes());
     this.target = targetCastle;
   }
 
@@ -51,7 +51,7 @@ export class UnitAttackIntent {
   constructor(
     public unitEntity: UnitRecruitPhysic<UnitRecruit<Unit>>,
     public resolveAttack: Function
-  ) {}
+  ) { }
 
   tick() {
     this.progress += this.unitEntity.attackSpeed;

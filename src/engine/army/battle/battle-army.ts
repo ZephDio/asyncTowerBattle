@@ -4,6 +4,8 @@ import { Barrack } from "../../barrack/entity/barrack";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { Path } from "../../path/entity/path";
 import { PhysicEntity } from "../../physic/physic";
+import { BattleProjectile } from "../../projectile/battle/battle-projectile";
+import { Projectile } from "../../projectile/entity/projectile";
 import { BattleTower } from "../../tower/battle/battle-tower";
 import { Tower } from "../../tower/entity/tower";
 import { TowerRecruit } from "../../tower/recruit/tower-recruit";
@@ -21,7 +23,7 @@ export class BattleArmy {
   path: Path;
   castle: BattleCastle;
   barracks: BattleBarrack<UnitRecruit<Soldier>>[];
-
+  projectiles: Map<BattleProjectile<Projectile>, BattleTower<TowerRecruit<Tower>>> = new Map()
   towers: BattleTower<TowerRecruit<Tower>>[];
 
   constructor(
@@ -52,7 +54,7 @@ export class BattleArmy {
           barrack.unitRecruit
         )
     );
-    this.towers = army.towers.map((tower) => tower.toPhysic());
+    this.towers = army.towers.map((tower) => tower.toPhysic(this.addProjectile.bind(this), this.removeProjectile.bind(this)));
   }
 
   addUnit(
@@ -63,7 +65,15 @@ export class BattleArmy {
   }
 
   removeUnit(entityRecruit: PhysicEntity<UnitRecruit<Unit>>) {
-    console.log(entityRecruit);
     this.units.delete(entityRecruit);
+  }
+
+
+  addProjectile(projectile: BattleProjectile<Projectile>, source: BattleTower<TowerRecruit<Tower>>) {
+    this.projectiles.set(projectile, source)
+  }
+
+  removeProjectile(projectile: BattleProjectile<Projectile>) {
+    this.projectiles.delete(projectile)
   }
 }
