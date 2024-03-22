@@ -91,16 +91,11 @@ export const Resources: ResourceType = {
       },
     },
   },
-  button: {
-    buy: {
-      size: {
-        width: 10,
-        height: 5,
+  hudElement: {
+    startBattle: {
+      resource: {
+        src: "./resources/button/start.png",
       },
-      resource : {
-        src: "./resources/button/buy.png",
-      }
-    }
-
-  }
+    },
+  },
 };

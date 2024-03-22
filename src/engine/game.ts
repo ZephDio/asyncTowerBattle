@@ -1,21 +1,10 @@
 import { Battle } from "./battle/battle";
-import {
-  BattleState,
-  GameState,
-  ShopState,
-  SummaryState,
-} from "../shared/gamestate";
+import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary, BattleVerdict } from "./battle-summary/battle-summary";
 import { ArmyFixture } from "./army/entity/army-fixtures";
 import { Shop } from "./shop/shop";
 
 export class Game {
-  // army = new Army(
-  //   CastleEntityFixture.allied,
-  //   [],
-  //   PathFixture.defaultAllied,
-  //   [BarracksFixture.soldier]
-  // );
   army = ArmyFixture.allied;
   battle = null as null | Battle;
   battleSummary: null | BattleSummary = null;
@@ -65,23 +54,12 @@ export class Game {
     this.shop = new Shop(this.army, this.handleShopQuit.bind(this));
   }
 
-  startBattleSummary(
-    lastBattleState: BattleState,
-    battleVerdict: BattleVerdict
-  ) {
-    this.battleSummary = new BattleSummary(
-      lastBattleState,
-      battleVerdict,
-      this.handleSummaryQuit.bind(this)
-    );
+  startBattleSummary(lastBattleState: BattleState, battleVerdict: BattleVerdict) {
+    this.battleSummary = new BattleSummary(lastBattleState, battleVerdict, this.handleSummaryQuit.bind(this));
   }
 
   startBattle() {
-    this.battle = new Battle(
-      ArmyFixture.allied,
-      ArmyFixture.enemy,
-      this.handleEndBattle.bind(this)
-    );
+    this.battle = new Battle(ArmyFixture.allied, ArmyFixture.enemy, this.handleEndBattle.bind(this));
     this.battle.start();
   }
 }

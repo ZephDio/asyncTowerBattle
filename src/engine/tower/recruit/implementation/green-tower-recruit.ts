@@ -1,14 +1,10 @@
 import { HitBox } from "../../../../shared/hitboxes";
-import { getDistance, Position } from "../../../../shared/position";
+import { Position } from "../../../../shared/position";
 import { BattleArmy } from "../../../army/battle/battle-army";
-import { PhysicEntity, Recruit } from "../../../physic/physic";
+import { PhysicEntity, Recruit } from "../../../../shared/physic";
 import { BattleBulletProjectile } from "../../../projectile/battle/implementation/bullet-projectile-battle";
-import { Bullet } from "../../../projectile/entity/implementation/bullet";
-import { Unit } from "../../../units/entity/units";
-import { UnitRecruit } from "../../../units/recruit/unit-recruit";
 import { GreenBattleTower } from "../../battle/implementation/battle.green.tower";
 import { GreenTower } from "../../entity/implementation/green-tower";
-import { OrangeTower } from "../../entity/implementation/orange-tower";
 import { TowerRecruit } from "../tower-recruit";
 
 export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
@@ -23,13 +19,7 @@ export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
   }
 
   getProjectile(onResolve: Function, target: PhysicEntity<Recruit>, position: Position, damage: number) {
-    return new BattleBulletProjectile(this.tower.projectile, {x : position.x, y : position.y}, onResolve, target, damage)
-  }
-
-  matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
-    return (
-      enemyUnit.isAlive() && getDistance(enemyUnit.position, this.position) < 10
-    );
+    return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, onResolve, target, damage);
   }
 
   toPhysic(addProjectile: BattleArmy["addProjectile"], removeProjectile: BattleArmy["removeProjectile"]): GreenBattleTower {
@@ -37,9 +27,6 @@ export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
   }
 
   clone() {
-    return new GreenTowerRecruit(
-      { x: this.position.x, y: this.position.y },
-      new GreenTower()
-    );
+    return new GreenTowerRecruit({ x: this.position.x, y: this.position.y }, new GreenTower());
   }
 }

@@ -1,33 +1,49 @@
+import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { ShopState } from "../../shared/gamestate";
+import { StartBattleButton } from "../../shared/hud-element";
+import { Position } from "../../shared/position";
 import { Army } from "../army/entity/army";
-import { Barrack } from "../barrack/entity/barrack";
 import { Game } from "../game";
+import { Recruit } from "../../shared/physic";
 import { Tower } from "../tower/entity/tower";
 import { TowerFixtures } from "../tower/entity/tower-fixtures";
-import { Unit } from "../units/entity/units";
+import { TowerRecruit } from "../tower/recruit/tower-recruit";
+import { Retail } from "./retail";
 
-export type Buyable = {
-    type : string
-    entity : Tower | Barrack<Unit>
+export abstract class Buyable<T extends Recruit> {
+  abstract type: string;
+  abstract entity: T;
+  abstract position: Position;
 }
 
+export abstract class TowerBuyable<T extends TowerRecruit<Tower>> extends Buyable<T> {
+  public type = "tower";
+  abstract entity: T;
+}
 export class Shop {
-    constructor(public army: Army, public onShopExit: Game["handleShopQuit"]){}
+  public retail = new Retail();
+  constructor(public army: Army, public onShopExit: Game["handleShopQuit"]) {}
 
-    exitShop(){
-        this.onShopExit()
-    }
+  exitShop() {
+    this.onShopExit();
+  }
 
-    getState(){
-        const towerBuyable = {
-            type: "tower",
-            entity: TowerFixtures.topRightTower
-        }
-        const shopState : ShopState = {
-            type: "shop",
-            buyables: [towerBuyable]
-        }
+  buy(buyable: Buyable<Recruit>) {
+    // if enough gold
+    this.army.recruit(buyable.entity, buyable.type);
+  }
 
-        return shopState
-    }
+  getState() {
+    const towerBuyable = {
+      type: "tower",
+      entity: TowerFixtures.topRightTower,
+    };
+    const shopState: ShopState = {
+      type: "shop",
+      retail: this.retail,
+      hudElements: [new StartBattleButton()],
+    };
+
+    return shopState;
+  }
 }

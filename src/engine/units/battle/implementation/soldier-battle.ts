@@ -5,18 +5,12 @@ import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
 import { UnitAttackIntent, UnitRecruitPhysic } from "../entity-units-physic";
 
 export class SoldierRecruitPhysic extends UnitRecruitPhysic<SoldierRecruit> {
-  speed: number
+  speed: number;
   maxLife: number;
   actualLife: number;
   attackSpeed = 5;
   attackDamage = 1;
-  constructor(
-    entity: SoldierRecruit,
-    position: Position,
-    path: Path,
-    targetCastle: BattleCastle,
-    private onDeath: Function
-  ) {
+  constructor(entity: SoldierRecruit, position: Position, path: Path, targetCastle: BattleCastle, private onDeath: Function) {
     super(entity, position, path, targetCastle);
     this.speed = entity.speed;
     this.maxLife = entity.maxLife;

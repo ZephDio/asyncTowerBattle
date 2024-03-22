@@ -1,17 +1,14 @@
 import { HitBox } from "../../../../shared/hitboxes";
-import { getDistance, Position } from "../../../../shared/position";
+import { Position } from "../../../../shared/position";
 import { BattleArmy } from "../../../army/battle/battle-army";
-import { PhysicEntity, Recruit } from "../../../physic/physic";
+import { PhysicEntity, Recruit } from "../../../../shared/physic";
 import { BattleBulletProjectile } from "../../../projectile/battle/implementation/bullet-projectile-battle";
-import { Unit } from "../../../units/entity/units";
-import { UnitRecruit } from "../../../units/recruit/unit-recruit";
 import { OrangeBattleTower } from "../../battle/implementation/battle-orange-tower";
 import { OrangeTower } from "../../entity/implementation/orange-tower";
 import { TowerRecruit } from "../tower-recruit";
 
 export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
-
-  attackDamage = 6;
+  attackDamage = 10;
   attackSpeed = 3;
   type = "orange" as const;
   hitbox: HitBox;
@@ -22,11 +19,7 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
   }
 
   getProjectile(onResolve: Function, target: PhysicEntity<Recruit>, position: Position, damage: number) {
-    return new BattleBulletProjectile(this.tower.projectile,  {x : position.x, y : position.y}, onResolve, target, damage)
-  }
-
-  matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
-    return getDistance(enemyUnit.position, this.position) < 35;
+    return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, onResolve, target, damage);
   }
 
   toPhysic(addProjectile: BattleArmy["addProjectile"], removeProjectile: BattleArmy["removeProjectile"]): OrangeBattleTower {
@@ -34,9 +27,6 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
   }
 
   clone() {
-    return new OrangeTowerRecruit(
-      { x: this.position.x, y: this.position.y },
-      new OrangeTower()
-    );
+    return new OrangeTowerRecruit({ x: this.position.x, y: this.position.y }, new OrangeTower());
   }
 }

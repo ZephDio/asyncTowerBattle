@@ -3,12 +3,13 @@ import { SoldierBattleBarrack } from "../../barrack/battle/implementation/soldie
 import { Barrack } from "../../barrack/entity/barrack";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { Path } from "../../path/entity/path";
-import { PhysicEntity } from "../../physic/physic";
+import { PhysicEntity } from "../../../shared/physic";
 import { BattleProjectile } from "../../projectile/battle/battle-projectile";
 import { Projectile } from "../../projectile/entity/projectile";
 import { BattleTower } from "../../tower/battle/battle-tower";
 import { Tower } from "../../tower/entity/tower";
 import { TowerRecruit } from "../../tower/recruit/tower-recruit";
+import { UnitRecruitPhysic } from "../../units/battle/entity-units-physic";
 import { Soldier } from "../../units/entity/implementation/soldier";
 import { Unit } from "../../units/entity/units";
 import { SoldierRecruit } from "../../units/recruit/implementation/soldier-recruit";
@@ -16,14 +17,11 @@ import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { Army } from "../entity/army";
 
 export class BattleArmy {
-  units: Map<
-    PhysicEntity<UnitRecruit<Unit>>,
-    BattleBarrack<UnitRecruit<Unit>>
-  > = new Map();
+  units: Map<UnitRecruitPhysic<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> = new Map();
   path: Path;
   castle: BattleCastle;
   barracks: BattleBarrack<UnitRecruit<Soldier>>[];
-  projectiles: Map<BattleProjectile<Projectile>, BattleTower<TowerRecruit<Tower>>> = new Map()
+  projectiles: Map<BattleProjectile<Projectile>, BattleTower<TowerRecruit<Tower>>> = new Map();
   towers: BattleTower<TowerRecruit<Tower>>[];
 
   constructor(
@@ -31,7 +29,8 @@ export class BattleArmy {
     enemyCastle: BattleCastle,
     alliedCastle: BattleCastle,
     enemyPath: Path,
-    barracks: Barrack<SoldierRecruit>[]
+    barracks: Barrack<SoldierRecruit>[],
+    searchTarget: Physics["searchAlliedTarget"] | Physics["searchEnemyTarget"]
   ) {
     this.castle = alliedCastle;
     this.path = army.path;
@@ -39,42 +38,36 @@ export class BattleArmy {
       (barrack) =>
         new SoldierBattleBarrack(
           barrack.productionSpeed,
-          {x : alliedCastle.position.x, y : alliedCastle.position.y},
+          { x: alliedCastle.position.x, y: alliedCastle.position.y },
           enemyPath,
           enemyCastle,
-          (
-            entityRecruit: PhysicEntity<UnitRecruit<Unit>>,
-            battleBarrack: BattleBarrack<UnitRecruit<Unit>>
-          ) => {
+          (entityRecruit: UnitRecruitPhysic<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) => {
             this.addUnit(entityRecruit, battleBarrack);
           },
-          (entityRecruit: PhysicEntity<UnitRecruit<Unit>>) => {
+          (entityRecruit: UnitRecruitPhysic<UnitRecruit<Unit>>) => {
             this.removeUnit(entityRecruit);
           },
           barrack.unitRecruit
         )
     );
-    this.towers = army.towers.map((tower) => tower.toPhysic(this.addProjectile.bind(this), this.removeProjectile.bind(this)));
+    this.towers = army.towers.map((tower) =>
+      tower.toPhysic(this.searchTarget, this.addProjectile.bind(this), this.removeProjectile.bind(this))
+    );
   }
 
-  addUnit(
-    entityRecruit: PhysicEntity<UnitRecruit<Unit>>,
-    battleBarrack: BattleBarrack<UnitRecruit<Unit>>
-  ) {
+  addUnit(entityRecruit: UnitRecruitPhysic<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) {
     this.units.set(entityRecruit, battleBarrack);
   }
 
-  removeUnit(entityRecruit: PhysicEntity<UnitRecruit<Unit>>) {
+  removeUnit(entityRecruit: UnitRecruitPhysic<UnitRecruit<Unit>>) {
     this.units.delete(entityRecruit);
   }
 
-
   addProjectile(projectile: BattleProjectile<Projectile>, source: BattleTower<TowerRecruit<Tower>>) {
-    this.projectiles.set(projectile, source)
+    this.projectiles.set(projectile, source);
   }
 
   removeProjectile(projectile: BattleProjectile<Projectile>) {
-    console.log(this.projectiles)
-    this.projectiles.delete(projectile)
+    this.projectiles.delete(projectile);
   }
 }

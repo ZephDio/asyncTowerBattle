@@ -1,14 +1,12 @@
 import { Position } from "../../../shared/position";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { Path } from "../../path/entity/path";
-import { PathFinder } from "../../physic/path-finder";
-import { PhysicEntity } from "../../physic/physic";
+import { PathFinder } from "../../battle/path-finder";
+import { PhysicEntity } from "../../../shared/physic";
 import { Unit } from "../entity/units";
 import { UnitRecruit } from "../recruit/unit-recruit";
 
-export abstract class UnitRecruitPhysic<
-  UE extends UnitRecruit<Unit>
-> extends PhysicEntity<UE> {
+export abstract class UnitRecruitPhysic<UE extends UnitRecruit<Unit>> extends PhysicEntity<UE> {
   abstract speed: number;
   abstract actualLife: number;
   abstract maxLife: number;
@@ -17,12 +15,7 @@ export abstract class UnitRecruitPhysic<
   abstract attackDamage: number;
   attackIntent = null as null | UnitAttackIntent;
   target: BattleCastle;
-  constructor(
-    entity: UE,
-    position: Position,
-    path: Path,
-    targetCastle: BattleCastle
-  ) {
+  constructor(entity: UE, position: Position, path: Path, targetCastle: BattleCastle) {
     super(entity, position);
     this.pathFinder = new PathFinder(path.getNodes());
     this.target = targetCastle;
@@ -34,8 +27,8 @@ export abstract class UnitRecruitPhysic<
     if (this.canMove() && !this.pathFinder.isArrived) {
       const tetha = this.pathFinder.getOrientation(this.position);
       const newPosition = {
-        x: this.position.x + Math.cos(tetha)  * this.speed,
-        y: this.position.y + Math.sin(tetha )* this.speed,
+        x: this.position.x + Math.cos(tetha) * this.speed,
+        y: this.position.y + Math.sin(tetha) * this.speed,
       };
       this.move(newPosition);
     }
@@ -49,10 +42,7 @@ export abstract class UnitRecruitPhysic<
 
 export class UnitAttackIntent {
   progress = 0;
-  constructor(
-    public unitEntity: UnitRecruitPhysic<UnitRecruit<Unit>>,
-    public resolveAttack: Function
-  ) { }
+  constructor(public unitEntity: UnitRecruitPhysic<UnitRecruit<Unit>>, public resolveAttack: Function) {}
 
   tick() {
     this.progress += this.unitEntity.attackSpeed;

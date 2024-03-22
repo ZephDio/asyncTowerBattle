@@ -1,27 +1,25 @@
 import { BattleArmy } from "../../army/battle/battle-army";
-import { PhysicEntity } from "../../physic/physic";
+import { PhysicEntity } from "../../../shared/physic";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { Tower } from "../entity/tower";
 import { TowerRecruit } from "../recruit/tower-recruit";
 
-export abstract class BattleTower<
-  BT extends TowerRecruit<Tower>
-> extends PhysicEntity<TowerRecruit<Tower>> {
-  attackDamage: number
+export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends PhysicEntity<TowerRecruit<Tower>> {
+  attackDamage: number;
   target = null as null | PhysicEntity<UnitRecruit<Unit>>;
   attackIntent = null as null | TowerAttackIntent;
   abstract type: TowerRecruit<Tower>["type"];
-  constructor(towerEntity: BT, public addProjectile: BattleArmy["addProjectile"], public removeProjectile: BattleArmy["removeProjectile"]) {
+  constructor(towerEntity: BT, public fire: BattleArmy["addProjectile"], public removeProjectile: BattleArmy["removeProjectile"]) {
     super(towerEntity.clone(), towerEntity.position);
-    this.attackDamage = this.entity.attackDamage
+    this.attackDamage = this.entity.attackDamage;
   }
 
-  setTarget(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
+  setTarget(enemyUnit: PhysicEntity<UnitRecruit<Unit>> | null) {
     this.target = enemyUnit;
   }
 
-  isAttacked(damage: number): void { }
+  isAttacked(damage: number): void {}
 
   isAlive() {
     return true;
@@ -34,8 +32,8 @@ export abstract class BattleTower<
     if (!this.attackIntent) {
       this.attackIntent = new TowerAttackIntent(this, () => {
         if (this.target) {
-          const projectile = this.entity.getProjectile(this.removeProjectile, this.target, this.position, this.attackDamage)
-          this.addProjectile(projectile, this)
+          const projectile = this.entity.getProjectile(this.removeProjectile, this.target, this.position, this.attackDamage);
+          this.fire(projectile, this);
           this.attackIntent = null;
         }
       });
@@ -45,10 +43,7 @@ export abstract class BattleTower<
 
 export class TowerAttackIntent {
   progress = 0;
-  constructor(
-    public towerRecruit: BattleTower<TowerRecruit<Tower>>,
-    public resolveAttack: Function
-  ) { }
+  constructor(public towerRecruit: BattleTower<TowerRecruit<Tower>>, public resolveAttack: Function) {}
 
   tick() {
     this.progress += this.towerRecruit.entity.attackSpeed;

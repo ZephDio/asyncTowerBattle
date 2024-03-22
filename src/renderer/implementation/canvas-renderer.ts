@@ -6,7 +6,7 @@ import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 import { Resources } from "../resources";
 import { Drawable } from "./drawables/drawable";
-import { PhysicEntity } from "../../engine/physic/physic";
+import { PhysicEntity, Recruit } from "../../shared/physic";
 import { BattleCastle } from "../../engine/castle/battle/battle-castle";
 import { TowerDrawable } from "./drawables/tower-drawable";
 import { CastleDrawable } from "./drawables/castle-drawable";
@@ -23,6 +23,8 @@ import { Projectile } from "../../engine/projectile/entity/projectile";
 import { ProjectileDrawable } from "./drawables/projectiles-drawable";
 import { Buyable } from "../../engine/shop/shop";
 import { BuyableDrawable } from "./drawables/buyable-drawable";
+import { HudElement } from "../../shared/hud-element";
+import { HudElementDrawable } from "./drawables/hud-element-drawable";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
@@ -46,12 +48,6 @@ export class CanvasRenderer implements Renderer {
     }
   }
 
-  getCanvasPosition(position: Position) {
-    const x = (this.canvas.width / 100) * position.x;
-    const y = this.canvas.height - (this.canvas.width / 100) * position.y; // !
-    return { x, y };
-  }
-
   stateToDrawable(state: GameState) {
     if (state.type === "summary") {
       return this.summaryStateToDrawable(state as SummaryState);
@@ -67,22 +63,12 @@ export class CanvasRenderer implements Renderer {
 
   battleStateToDrawable(state: BattleState) {
     const drawables: Drawable[] = [];
-    drawables.push(
-      ...state.towers.map((tower) => this.towerToTowerDrawable(tower))
-    );
+    drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower)));
     drawables.push(...state.projectiles.map((projectile) => this.projectileToDrawable(projectile)));
     drawables.push(...state.paths.map((path) => this.pathToPathDrawable(path)));
-    drawables.push(
-      ...state.entities.map((physicUnit) =>
-        this.unitToDrawable(physicUnit)
-      )
-    );
-    drawables.push(
-      ...state.castles.map((castle) => this.castleToCastleDrawable(castle))
-    );
-    drawables.sort(
-      (drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority
-    );
+    drawables.push(...state.entities.map((physicUnit) => this.unitToDrawable(physicUnit)));
+    drawables.push(...state.castles.map((castle) => this.castleToCastleDrawable(castle)));
+    drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
     return drawables;
   }
 
@@ -94,19 +80,16 @@ export class CanvasRenderer implements Renderer {
 
   shopStateToDrawable(state: ShopState) {
     const drawables: Drawable[] = [];
-    drawables.push(...state.buyables.map((buyable) => this.buyableToDrawableBuyable(buyable)));
+    drawables.push(...state.hudElements.map((hudElement) => this.HudtoHudElementDrawable(hudElement)));
+    drawables.push(...[...state.retail.buyables.keys()].map((buyable) => this.buyableToDrawableBuyable(buyable)));
     return drawables;
   }
 
-  buyableToDrawableBuyable(buyable: Buyable) {
-    const position = this.getCanvasPosition({ x: 80, y: 10 });
-    const { width, height } = Resources[buyable.type][buyable.entity.type].size as Size;
-
-    const size = this.getCanvasSize(width, height);
-
-    return new BuyableDrawable(buyable, size, position);
+  HudtoHudElementDrawable(button: HudElement) {
+    const position = this.getCanvasPosition(button.position);
+    const size = this.getCanvasSize(button.size.width, button.size.height);
+    return new HudElementDrawable(button, size, position);
   }
-
   verdictToDrawableVerdict(verdict: BattleVerdict) {
     const position = this.getCanvasPosition({ x: 50, y: 30 });
     const { width, height } = Resources.verdict[verdict].size as Size;
@@ -129,23 +112,33 @@ export class CanvasRenderer implements Renderer {
     return new CastleDrawable(position, size);
   }
 
+  getCanvasPosition(position: Position) {
+    const x = (this.canvas.width / 100) * position.x;
+    const y = this.canvas.height - (this.canvas.width / 100) * position.y; // !
+    return { x, y };
+  }
+
   pathToPathDrawable(path: Path) {
-    const relativeNodes = [
-      ...path.getNodes().map((node) => this.getCanvasPosition(node)),
-    ];
+    const relativeNodes = [...path.getNodes().map((node) => this.getCanvasPosition(node))];
     return new PathDrawable(path.type, relativeNodes);
+  }
+
+  buyableToDrawableBuyable(buyable: Buyable<Recruit>) {
+    const camvasPosition = this.getCanvasPosition(buyable.position);
+    const { width, height } = Resources[buyable.type][buyable.entity.type].size as Size;
+    const size = this.getCanvasSize(width, height);
+    return new BuyableDrawable(buyable, size, camvasPosition);
   }
 
   projectileToDrawable(projectile: PhysicEntity<Projectile>) {
     const position = this.getCanvasPosition(projectile.position);
     const size = this.getCanvasSize(2, 2);
-    return new ProjectileDrawable(position, size)
+    return new ProjectileDrawable(position, size);
   }
 
   unitToDrawable(physicUnit: PhysicEntity<UnitRecruit<Unit>>) {
     const position = this.getCanvasPosition(physicUnit.position);
-    const { width, height } = Resources.unit[physicUnit.entity.type]
-      .size as Size;
+    const { width, height } = Resources.unit[physicUnit.entity.type].size as Size;
     const size = this.getCanvasSize(width, height);
     return new UnitEntityDrawable(position, size, physicUnit.entity.type);
   }

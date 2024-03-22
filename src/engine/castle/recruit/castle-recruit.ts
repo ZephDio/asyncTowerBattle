@@ -1,7 +1,7 @@
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
-import { Recruit } from "../../physic/physic";
+import { Recruit } from "../../../shared/physic";
 import { Castle } from "../entity/castle";
 
 const CastlePosition = {
@@ -9,12 +9,11 @@ const CastlePosition = {
   allied: PercentToReal({ x: 90, y: 10 }),
 };
 
-export class CastleRecruit<TB extends Castle> implements Recruit {
+export class CastleRecruit<TB extends Castle> {
+  type: string = "castle";
   position: Position;
   maxLife = 20;
-  hitbox = new HitBox([
-    [new HitShape("rectangle", { width: 5, height: 5 }), { x: 0, y: 0 }],
-  ]);
+  hitbox = new HitBox([[new HitShape("rectangle", { width: 5, height: 5 }), { x: 0, y: 0 }]]);
   constructor(public castle: TB) {
     this.position = CastlePosition[castle.team];
   }

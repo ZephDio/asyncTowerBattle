@@ -5,34 +5,14 @@ import { BattleVerdict } from "../battle-summary/battle-summary";
 import { Game } from "../game";
 import { Path } from "../path/entity/path";
 import { BattleCastle } from "../castle/battle/battle-castle";
-import { Physics } from "../physic/physics";
+import { Battlefield } from "./battlefield/battlefield";
 import { SoldierBarrack } from "../barrack/entity/implementation/solider-barrack";
 
 export class Battle {
-  alliedArmy: BattleArmy;
-  enemyArmy: BattleArmy;
-  physics: Physics;
+  battlefield: Battlefield;
   isOver = false;
-  constructor(
-    alliedArmy: Army,
-    enemyArmy: Army,
-    public onBattleOver: Game["handleEndBattle"]
-  ) {
-    const alliedCastle = new BattleCastle(alliedArmy.castle);
-    const enemyCastle = new BattleCastle(enemyArmy.castle);
-    this.alliedArmy = this.buildBattleArmy(
-      alliedArmy,
-      enemyCastle,
-      alliedCastle,
-      enemyArmy.path
-    );
-    this.enemyArmy = this.buildBattleArmy(
-      enemyArmy,
-      alliedCastle,
-      enemyCastle,
-      alliedArmy.path
-    );
-    this.physics = new Physics(this.alliedArmy, this.enemyArmy);
+  constructor(public alliedArmy: Army, public enemyArmy: Army, public onBattleOver: Game["handleEndBattle"]) {
+    this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy);
   }
 
   start() {
@@ -46,49 +26,34 @@ export class Battle {
     loop();
   }
 
-  checkVictoryCondition(): BattleVerdict | "onGoing" {
-    if (this.enemyArmy.castle.actualLife <= 0) {
-      return "victory";
-    }
-    if (this.alliedArmy.castle.actualLife <= 0) {
-      return "defeat";
-    }
-    return "onGoing";
-  }
-
-  buildBattleArmy(
-    army: Army,
-    enemyCastle: BattleCastle,
-    alliedCastle: BattleCastle,
-    enemyPath: Path
-  ) {
-    return new BattleArmy(
-      army,
-      enemyCastle,
-      alliedCastle,
-      enemyPath,
-      army.barracks as SoldierBarrack[]
-    );
-  }
+  // checkVictoryCondition(): BattleVerdict | "onGoing" {
+  //   if (this.enemyArmy.castle.actualLife <= 0) {
+  //     return "victory";
+  //   }
+  //   if (this.alliedArmy.castle.actualLife <= 0) {
+  //     return "defeat";
+  //   }
+  //   return "onGoing";
+  // }
 
   tick() {
-    const isOver = this.checkVictoryCondition();
-    if (isOver === "onGoing") {
-      this.physics.tick();
-    } else {
-      this.onBattleOver(isOver);
-      this.isOver = true;
-    }
+    this.battlefield.tick();
+    // const isOver = this.checkVictoryCondition();
+    // if (isOver === "onGoing") {
+    // } else {
+    //   this.onBattleOver(isOver);
+    //   this.isOver = true;
+    // }
   }
 
   getState(): BattleState {
     const battleState: BattleState = {
       type: "battle",
-      castles: [this.alliedArmy.castle, this.enemyArmy.castle],
-      towers: [...this.alliedArmy.towers, ...this.enemyArmy.towers],
-      paths: [this.alliedArmy.path, this.enemyArmy.path],
-      entities: [...this.physics.units],
-      projectiles: [...this.physics.projectiles]
+      castles: [this.battlefield.alliedArmy.castle, this.battlefield.enemyArmy.castle],
+      towers: [...this.battlefield.alliedArmy.towers, ...this.battlefield.enemyArmy.towers],
+      paths: [this.battlefield.alliedArmy.path, this.battlefield.enemyArmy.path],
+      entities: [...this.battlefield.units],
+      projectiles: [...this.battlefield.projectiles],
     };
     return battleState;
   }

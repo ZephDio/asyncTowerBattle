@@ -1,6 +1,6 @@
 import { HitBox } from "../../../shared/hitboxes";
-import { Position } from "../../../shared/position";
-import { PhysicEntity, Recruit } from "../../physic/physic";
+import { getDistance, Position } from "../../../shared/position";
+import { PhysicEntity, Recruit } from "../../../shared/physic";
 import { BattleProjectile } from "../../projectile/battle/battle-projectile";
 import { Projectile } from "../../projectile/entity/projectile";
 import { Unit } from "../../units/entity/units";
@@ -16,8 +16,17 @@ export abstract class TowerRecruit<T extends Tower> implements Recruit {
   abstract position: Position;
   abstract tower: T;
 
-  abstract getProjectile(onResolve: Function, target: PhysicEntity<Recruit>, position: Position, damage: number): BattleProjectile<Projectile>
-  abstract matchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>): boolean;
+  doesTargetMatchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
+    return enemyUnit.isAlive() && getDistance(enemyUnit.position, this.position) < 62;
+  }
+
+  abstract getProjectile(
+    onResolve: Function,
+    target: PhysicEntity<Recruit>,
+    position: Position,
+    damage: number
+  ): BattleProjectile<Projectile>;
+
   abstract toPhysic(addProjectile: Function, removeProjectile: Function): BattleTower<TowerRecruit<T>>;
   abstract clone(): TowerRecruit<T>;
 }

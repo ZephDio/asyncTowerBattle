@@ -1,4 +1,5 @@
 import { Game } from "../engine/game";
+import { PhysicEntity } from "../shared/physic";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
 import { Position } from "../shared/position";
 
@@ -17,6 +18,21 @@ export class InputToIntentTranslator {
     if (this.game.battleSummary) {
       this.game.battleSummary.quitSummary();
       return;
+    }
+    if (this.game.shop) {
+      if (this.game.shop) {
+        const state = this.game.shop.getState();
+        for (const [buyable, buyablePosition] of state.retail.buyables) {
+          if (PhysicEntity.doCollide(buyablePosition, buyable.entity.hitbox, position)) {
+            return this.game.shop.buy(buyable);
+          }
+        }
+        for (const hudElement of state.hudElements) {
+          if (PhysicEntity.doCollide(hudElement.position, hudElement.hitbox, position)) {
+            return this.game.handleShopQuit();
+          }
+        }
+      }
     }
     return;
   }
