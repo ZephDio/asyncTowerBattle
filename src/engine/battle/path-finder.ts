@@ -1,3 +1,4 @@
+import { Physic } from "../../shared/physic";
 import { Position } from "../../shared/position";
 
 export class PathFinder {
@@ -7,10 +8,16 @@ export class PathFinder {
   getOrientation(entityPosition: Position) {
     this.updateNextDestination(entityPosition);
     const destination = this.getNextDestination();
-    const tetha = Math.atan2(destination.y - entityPosition.y, destination.x - entityPosition.x);
-    return tetha;
+    const theta = Physic.getTheta(entityPosition, destination);
+    return theta;
   }
 
+  getNextPosition(position: Position, speed: number) {
+    this.updateNextDestination(position);
+    const destination = this.getNextDestination();
+    const nextPosition = Physic.getNextPosition(position, destination, speed);
+    return nextPosition;
+  }
   getNextDestination() {
     return this.destinations[this.progress];
   }
@@ -29,7 +36,7 @@ export class PathFinder {
   destinationReached(entityPosition: Position) {
     const destination = this.getNextDestination();
     console.log(destination);
-    const distance = Math.sqrt(Math.pow(destination.x - entityPosition.x, 2) + Math.pow(destination.y - entityPosition.y, 2));
+    const distance = Physic.getDistance(entityPosition, destination);
     if (distance < 1) return true;
     return false;
   }

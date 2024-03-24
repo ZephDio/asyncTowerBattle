@@ -6,6 +6,7 @@ import { BattleBulletProjectile } from "../../../projectile/battle/implementatio
 import { OrangeBattleTower } from "../../battle/implementation/battle-orange-tower";
 import { OrangeTower } from "../../entity/implementation/orange-tower";
 import { TowerRecruit } from "../tower-recruit";
+import { SearchTarget } from "../../../battle/battlefield/battlefield";
 
 export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
   attackDamage = 10;
@@ -22,8 +23,8 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
     return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, onResolve, target, damage);
   }
 
-  toPhysic(addProjectile: BattleArmy["addProjectile"], removeProjectile: BattleArmy["removeProjectile"]): OrangeBattleTower {
-    return new OrangeBattleTower(this.clone(), addProjectile, removeProjectile);
+  toPhysic(addProjectile: BattleArmy["addProjectile"], removeProjectile: BattleArmy["removeProjectile"], searchTarget: SearchTarget): OrangeBattleTower {
+    return new OrangeBattleTower(this.clone(), addProjectile, removeProjectile, searchTarget);
   }
 
   clone() {

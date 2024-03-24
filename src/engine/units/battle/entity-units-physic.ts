@@ -25,11 +25,7 @@ export abstract class UnitRecruitPhysic<UE extends UnitRecruit<Unit>> extends Ph
 
   followPath(): void {
     if (this.canMove() && !this.pathFinder.isArrived) {
-      const tetha = this.pathFinder.getOrientation(this.position);
-      const newPosition = {
-        x: this.position.x + Math.cos(tetha) * this.speed,
-        y: this.position.y + Math.sin(tetha) * this.speed,
-      };
+      const newPosition = this.pathFinder.getNextPosition(this.position, this.speed);
       this.move(newPosition);
     }
   }

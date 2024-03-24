@@ -6,6 +6,7 @@ import { BattleBulletProjectile } from "../../../projectile/battle/implementatio
 import { GreenBattleTower } from "../../battle/implementation/battle.green.tower";
 import { GreenTower } from "../../entity/implementation/green-tower";
 import { TowerRecruit } from "../tower-recruit";
+import { SearchTarget } from "../../../battle/battlefield/battlefield";
 
 export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
   attackDamage = 10;
@@ -22,8 +23,8 @@ export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
     return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, onResolve, target, damage);
   }
 
-  toPhysic(addProjectile: BattleArmy["addProjectile"], removeProjectile: BattleArmy["removeProjectile"]): GreenBattleTower {
-    return new GreenBattleTower(this.clone(), addProjectile, removeProjectile);
+  toPhysic(addProjectile: BattleArmy["addProjectile"], removeProjectile: BattleArmy["removeProjectile"], searchTarget: SearchTarget): GreenBattleTower {
+    return new GreenBattleTower(this.clone(), addProjectile, removeProjectile, searchTarget);
   }
 
   clone() {

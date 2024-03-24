@@ -8,8 +8,8 @@ export class ArmyFixture {
   static allied = new Army(
     CastleEntityFixture.allied,
     [
-      TowerFixtures.centerTower,
-      //TowerFixtures.BottomLeftTower,
+      //TowerFixtures.centerTower,
+      TowerFixtures.BottomLeftTower,
       //TowerEntityFixtures.topRightTower,
     ],
     PathFixture.defaultAllied,
@@ -24,6 +24,7 @@ export class ArmyFixture {
       //TowerEntityFixtures.topRightTower,
     ],
     PathFixture.defaultEnemy,
+    //[]
     [BarracksFixture.soldier(12)]
   );
 }

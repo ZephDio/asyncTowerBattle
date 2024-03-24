@@ -3,7 +3,6 @@ import { SoldierBattleBarrack } from "../../barrack/battle/implementation/soldie
 import { Barrack } from "../../barrack/entity/barrack";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { Path } from "../../path/entity/path";
-import { PhysicEntity } from "../../../shared/physic";
 import { BattleProjectile } from "../../projectile/battle/battle-projectile";
 import { Projectile } from "../../projectile/entity/projectile";
 import { BattleTower } from "../../tower/battle/battle-tower";
@@ -15,23 +14,17 @@ import { Unit } from "../../units/entity/units";
 import { SoldierRecruit } from "../../units/recruit/implementation/soldier-recruit";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { Army } from "../entity/army";
+import { SearchTarget } from "../../battle/battlefield/battlefield";
 
 export class BattleArmy {
-  units: Map<UnitRecruitPhysic<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> = new Map();
+  units: Map<UnitRecruitPhysic<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> = new Map(); //.set(BattleUnitFixture.soldier, {} as any);
   path: Path;
   castle: BattleCastle;
   barracks: BattleBarrack<UnitRecruit<Soldier>>[];
   projectiles: Map<BattleProjectile<Projectile>, BattleTower<TowerRecruit<Tower>>> = new Map();
   towers: BattleTower<TowerRecruit<Tower>>[];
 
-  constructor(
-    army: Army,
-    enemyCastle: BattleCastle,
-    alliedCastle: BattleCastle,
-    enemyPath: Path,
-    barracks: Barrack<SoldierRecruit>[],
-    searchTarget: Physics["searchAlliedTarget"] | Physics["searchEnemyTarget"]
-  ) {
+  constructor(army: Army, enemyCastle: BattleCastle, alliedCastle: BattleCastle, enemyPath: Path, barracks: Barrack<SoldierRecruit>[], public searchTarget: SearchTarget) {
     this.castle = alliedCastle;
     this.path = army.path;
     this.barracks = barracks.map(
@@ -50,9 +43,7 @@ export class BattleArmy {
           barrack.unitRecruit
         )
     );
-    this.towers = army.towers.map((tower) =>
-      tower.toPhysic(this.searchTarget, this.addProjectile.bind(this), this.removeProjectile.bind(this))
-    );
+    this.towers = army.towers.map((tower) => tower.toPhysic(this.addProjectile.bind(this), this.removeProjectile.bind(this), this.searchTarget.bind(this)));
   }
 
   addUnit(entityRecruit: UnitRecruitPhysic<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) {
