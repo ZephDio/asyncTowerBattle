@@ -6,12 +6,7 @@ import { Buyable } from "./shop";
 
 export type ShopItem = Omit<Buyable<Recruit>, "position">;
 export class Retail {
-  slots: Position[] = [
-    PercentToReal({ x: 33, y: 83 }),
-    PercentToReal({ x: 66, y: 83 }),
-    PercentToReal({ x: 33, y: 66 }),
-    PercentToReal({ x: 66, y: 66 }),
-  ];
+  slots: Position[] = [PercentToReal({ x: 33, y: 83 }), PercentToReal({ x: 66, y: 83 }), PercentToReal({ x: 33, y: 66 }), PercentToReal({ x: 66, y: 66 })];
   buyables: Map<Buyable<Recruit>, Position> = new Map();
 
   constructor() {
@@ -37,6 +32,10 @@ export class Retail {
         entity: TowerFixtures.topRightTower,
       },
     ];
+  }
+
+  removeItem(buyable: Buyable<Recruit>) {
+    this.buyables.delete(buyable);
   }
 
   async refresh() {

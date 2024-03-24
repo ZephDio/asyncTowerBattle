@@ -2,6 +2,9 @@ import { Game } from "../engine/game";
 import { Physic, PhysicEntity } from "../shared/physic";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
 import { Position } from "../shared/position";
+import { TowerBuyable } from "../engine/shop/shop";
+import { TowerRecruit } from "../engine/tower/recruit/tower-recruit";
+import { Tower } from "../engine/tower/entity/tower";
 
 export interface PlayerIntent {
   intent: string;
@@ -37,16 +40,31 @@ export class InputToIntentTranslator {
     return;
   }
 
-  //   async playerDidClickOnTower(mousePosition: Position) {
-  //     const state = await this.game.getState();
-  //     for (const tower of state.towers) {
-  //       for (const hitShape of tower.hitbox.hitShapes) {
-  //         if (Entity.doCollide(tower, mousePosition)) {
-  //           console.log(tower.type);
-  //           return tower;
-  //         }
-  //       }
-  //     }
-  //     return undefined;
-  //   }
+  translateMouseMoveInput(position: Position) {
+    if (this.game.shop) {
+      if (this.game.shop.hold) {
+        this.game.shop.moveHold(position);
+      }
+    }
+  }
+
+  translateMouseDownInput(position: Position) {
+    if (this.game.shop) {
+      const state = this.game.shop.getState();
+      for (const [buyable, buyablePosition] of state.retail.buyables) {
+        if (Physic.doCollide(buyablePosition, buyable.entity.hitbox, position)) {
+          return this.game.shop.setHold(buyable as TowerBuyable<TowerRecruit<Tower>>);
+        }
+      }
+    }
+  }
+  translateMouseReleaseInput(position: Position) {
+    if (this.game.shop) {
+      const state = this.game.shop.getState();
+      if (state.hold) {
+        this.game.shop.buy(state.hold);
+        this.game.shop.setHold(null);
+      }
+    }
+  }
 }

@@ -25,6 +25,8 @@ import { Buyable } from "../../engine/shop/shop";
 import { BuyableDrawable } from "./drawables/buyable-drawable";
 import { HudElement } from "../../shared/hud-element";
 import { HudElementDrawable } from "./drawables/hud-element-drawable";
+import { CastleRecruit } from "../../engine/castle/recruit/castle-recruit";
+import { Castle } from "../../engine/castle/entity/castle";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
@@ -82,6 +84,10 @@ export class CanvasRenderer implements Renderer {
     const drawables: Drawable[] = [];
     drawables.push(...state.hudElements.map((hudElement) => this.HudtoHudElementDrawable(hudElement)));
     drawables.push(...[...state.retail.buyables.keys()].map((buyable) => this.buyableToDrawableBuyable(buyable)));
+    drawables.push(this.pathToPathDrawable(state.path));
+    drawables.push(this.castleToCastleDrawable(state.castle));
+    drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower)));
+    drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
     return drawables;
   }
 
@@ -98,14 +104,14 @@ export class CanvasRenderer implements Renderer {
     return new VerdictDrawable(verdict, size, position);
   }
 
-  towerToTowerDrawable(tower: BattleTower<TowerRecruit<Tower>>) {
+  towerToTowerDrawable(tower: BattleTower<TowerRecruit<Tower>> | TowerRecruit<Tower>) {
     const position = this.getCanvasPosition(tower.position);
     const { width, height } = Resources.tower[tower.type].size as Size;
     const size = this.getCanvasSize(width, height);
     return new TowerDrawable(position, size, tower.type);
   }
 
-  castleToCastleDrawable(castle: BattleCastle) {
+  castleToCastleDrawable(castle: BattleCastle | CastleRecruit<Castle>) {
     const position = this.getCanvasPosition(castle.position);
     const { width, height } = Resources.castle.size as Size;
     const size = this.getCanvasSize(width, height);
