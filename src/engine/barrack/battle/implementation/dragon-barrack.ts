@@ -3,11 +3,8 @@ import { BattleArmy } from "../../../army/battle/battle-army";
 import { Path } from "../../../path/entity/path";
 import { BattleCastle } from "../../../castle/battle/battle-castle";
 import { BattleBarrack, UnitProduction } from "../battle-barrack";
-import { SoldierBarrack } from "../../entity/implementation/solider-barrack";
-import { UnitEntityFixture } from "../../../units/entity/unit-fixtures";
 import { DragonRecruit } from "../../../units/recruit/implementation/dragon-recruit";
 import { DragonRecruitPhysic } from "../../../units/battle/implementation/dragon-battle";
-import { DragonBarrack } from "../../entity/implementation/dragon-barrack";
 
 export class DragonBattleBarrack implements BattleBarrack<DragonRecruit> {
     onGoingProduction = null as null | UnitProduction<DragonRecruit>;
