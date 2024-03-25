@@ -1,9 +1,17 @@
-import { DragonRecruit } from "../recruit/implementation/dragon-recruit";
-import { SoldierRecruit } from "../recruit/implementation/soldier-recruit";
 import { Dragon } from "./implementation/dragon";
 import { Soldier } from "./implementation/soldier";
 
-export class UnitEntityFixture {
-  static soldier = new SoldierRecruit(new Soldier());
-  static dragon = new DragonRecruit(new Dragon())
+export class UnitBuilder {
+  buildSoldier() {
+    return new Soldier()
+  }
+
+  buildDragon() {
+    return new Dragon()
+  }
+}
+
+export class UnitFixture {
+  static soldier = new UnitBuilder().buildSoldier()
+  static dragon = new UnitBuilder().buildDragon()
 }

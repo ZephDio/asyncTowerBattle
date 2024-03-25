@@ -6,9 +6,6 @@ import { BattleBarrack, UnitProduction } from "../battle-barrack";
 import { SoldierRecruit } from "../../../units/recruit/implementation/soldier-recruit";
 import { Soldier } from "../../../units/entity/implementation/soldier";
 import { SoldierRecruitPhysic } from "../../../units/battle/implementation/soldier-battle";
-import { SoldierBarrack } from "../../entity/implementation/solider-barrack";
-import { UnitEntityFixture } from "../../../units/entity/unit-fixtures";
-import { DragonBarrack } from "../../entity/implementation/dragon-barrack";
 
 export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
   onGoingProduction = null as null | UnitProduction<Soldier>;
