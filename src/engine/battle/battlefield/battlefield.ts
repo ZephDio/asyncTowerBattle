@@ -32,9 +32,9 @@ export class Battlefield {
 
   tick() {
     this.tickBarracks();
+    this.tickProjectiles();
     this.tickUnits();
     this.tickTowers();
-    this.tickProjectiles();
     this.tickAreaEffects()
   }
 

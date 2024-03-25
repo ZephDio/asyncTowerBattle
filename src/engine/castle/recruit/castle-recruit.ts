@@ -4,8 +4,8 @@ import { Position } from "../../../shared/position";
 import { Castle } from "../entity/castle";
 
 const CastlePosition = {
-  enemy: PercentToReal({ x: 10, y: 90 }),
-  allied: PercentToReal({ x: 90, y: 10 }),
+  enemy: PercentToReal({ x: 10, y: 55 }),
+  allied: PercentToReal({ x: 90, y: 45 }),
 };
 
 export class CastleRecruit<TB extends Castle> {

@@ -9,8 +9,8 @@ import { TowerRecruit } from "../tower-recruit";
 import { SearchTarget } from "../../../battle/battlefield/battlefield";
 
 export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
-  attackDamage = 10;
-  attackSpeed = 3;
+  attackDamage = 7;
+  attackSpeed = 1.2;
   type = "blue" as const;
   hitbox: HitBox;
 

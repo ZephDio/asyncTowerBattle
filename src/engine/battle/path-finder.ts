@@ -42,8 +42,8 @@ export class PathFinder {
 
   destinationReached(entityPosition: Position) {
     const destination = this.getNextDestination();
-    const distance = Physic.getDistance(entityPosition, destination);
-    if (distance < 1) return true;
+    const distance = Physic.getDistanceSqrd(entityPosition, destination);
+    if (distance < 0.20) return true;
     return false;
   }
 }

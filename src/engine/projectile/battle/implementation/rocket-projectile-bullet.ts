@@ -21,6 +21,12 @@ export class BattleRocketProjectile extends BattleProjectile<Rocket>{
     isAlive(): boolean {
         return true
     }
+
+    tick(){
+        this.speed = this.speed + 0.12
+        this.followPath();
+    }
+
     hit() {
         this.hooks.addAreaEffect(new Explosion({ width: 10, height: 10 }, { x: this.position.x, y: this.position.y }, this.damage, this.hooks), this);
         this.hooks.removeProjectile(this);

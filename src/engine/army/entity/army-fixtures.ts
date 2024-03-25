@@ -29,7 +29,7 @@ export class ArmyFixture {
       ],
       PathFixture.defaultEnemy,
       //[]
-      [BarracksFixture.dragon(5), BarracksFixture.dragon(7), BarracksFixture.dragon(9)]
+      [BarracksFixture.soldier(2) , BarracksFixture.dragon()]
     );
   }
 }

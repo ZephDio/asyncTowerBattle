@@ -7,10 +7,10 @@ export class PathFixture {
 
     return new Path(
       [
-        { x: 10, y: 90 },
+        { x: 10, y: 55 },
         { x: 10, y: 10 },
-        { x: 40, y: 40 },
-        { x: 55, y: 20 },
+        { x: 40, y: 10 },
+        { x: 40, y: 45 },
       ].map((position) => PercentToReal(position)),
       "normal",
       CastleRecruitFixture.allied
@@ -20,10 +20,10 @@ export class PathFixture {
 
     return new Path(
       [
-        { x: 90, y: 10 },
+        { x: 90, y: 45 },
         { x: 90, y: 90 },
-        { x: 60, y: 60 },
-        { x: 30, y: 65 },
+        { x: 60, y: 90 },
+        { x: 60, y: 55 },
       ].map((position) => PercentToReal(position)),
       "normal",
       CastleRecruitFixture.enemy
