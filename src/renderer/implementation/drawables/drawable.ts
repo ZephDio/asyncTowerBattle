@@ -57,6 +57,7 @@ export abstract class Drawable<T = any> {
     theta: number | undefined = undefined
   ) {
     if (theta) {
+      context.save()
       context.translate(position.x, position.y)
       context.rotate(-theta) // canvas rotate clockwise
       context.drawImage(image,
@@ -64,6 +65,7 @@ export abstract class Drawable<T = any> {
         -size.height / 2,
         size.width,
         size.height)
+      context.restore()
       return
     }
     context.drawImage(
