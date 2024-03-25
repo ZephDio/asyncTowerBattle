@@ -1,4 +1,4 @@
-import { BattleArmy } from "../../army/battle/battle-army";
+import { BattleArmy, BattleArmyHooks } from "../../army/battle/battle-army";
 import { PhysicEntity } from "../../../shared/physic";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
@@ -12,7 +12,9 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
   target = null as null | BattleUnit<UnitRecruit<Unit>>;
   attackIntent = null as null | TowerAttackIntent;
   abstract type: TowerRecruit<Tower>["type"];
-  constructor(towerEntity: BT, public fire: BattleArmy["addProjectile"], public removeProjectile: BattleArmy["removeProjectile"], public searchTarget: SearchTarget) {
+  constructor(
+    towerEntity: BT,
+    public hooks: BattleArmyHooks) {
     super(towerEntity.clone(), towerEntity.position, 0, towerEntity.type);
     this.attackDamage = this.entity.attackDamage;
   }
@@ -37,7 +39,7 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
           this.attack(this.target);
           return;
         }
-        const target = this.searchTarget(this);
+        const target = this.hooks.searchTarget(this);
         this.setTarget(target);
         if (this.target) {
           this.attack(this.target);
@@ -48,8 +50,8 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
   }
 
   attack(target: BattleUnit<UnitRecruit<Unit>>) {
-    const projectile = this.entity.getProjectile(this.removeProjectile, target, this.position, this.attackDamage);
-    this.fire(projectile, this);
+    const projectile = this.entity.getProjectile(this.hooks, target, this.position, this.attackDamage);
+    this.hooks.addProjectile(projectile, this);
     this.attackIntent = null;
   }
 }

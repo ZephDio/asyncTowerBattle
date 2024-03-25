@@ -2,11 +2,12 @@ import { Position } from "../../../shared/position";
 import { PathFinder } from "../../battle/path-finder";
 import { Physic, PhysicEntity, Recruit } from "../../../shared/physic";
 import { Projectile } from "../entity/projectile";
+import { BattleArmyHooks } from "../../army/battle/battle-army";
 
 export abstract class BattleProjectile<PR extends Projectile> extends PhysicEntity<Projectile> {
   pathFinder: PathFinder;
   theta: number;
-  constructor(public projectileRecruit: PR, position: Position, public onResolve: Function, public target: PhysicEntity<Recruit>, public damage: number) {
+  constructor(public projectileRecruit: PR, position: Position, public hooks: BattleArmyHooks, public target: PhysicEntity<Recruit>, public damage: number) {
     const theta = Physic.getTheta(position, target.position)
     super(projectileRecruit, position, theta, projectileRecruit.type);
     this.theta = theta
@@ -32,7 +33,7 @@ export abstract class BattleProjectile<PR extends Projectile> extends PhysicEnti
 
   hit() {
     this.target.isAttacked(this.damage);
-    this.onResolve(this);
+    this.hooks.removeProjectile(this);
   }
 
   updateTheta(theta: number) {

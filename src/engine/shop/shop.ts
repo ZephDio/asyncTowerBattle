@@ -21,7 +21,7 @@ export abstract class TowerBuyable<T extends TowerRecruit<Tower>> extends Buyabl
 export class Shop {
   public hold = null as null | TowerBuyable<TowerRecruit<Tower>>;
   public retail = new Retail();
-  constructor(public army: Army, public onShopExit: Game["handleShopQuit"]) {}
+  constructor(public army: Army, public onShopExit: Game["handleShopQuit"]) { }
 
   exitShop() {
     this.onShopExit();
@@ -31,7 +31,6 @@ export class Shop {
     this.retail.removeItem(buyable);
     buyable.entity.position = buyable.position;
     this.army.recruit(buyable.entity, buyable.type);
-    console.log(this.army.towers)
   }
 
   buy(buyable: Buyable<Recruit>) {

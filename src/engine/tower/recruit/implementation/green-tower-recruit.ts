@@ -1,6 +1,6 @@
 import { HitBox } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
-import { BattleArmy } from "../../../army/battle/battle-army";
+import { BattleArmy, BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Physic, PhysicEntity, Recruit } from "../../../../shared/physic";
 import { BattleBulletProjectile } from "../../../projectile/battle/implementation/bullet-projectile-battle";
 import { GreenBattleTower } from "../../battle/implementation/battle.green.tower";
@@ -19,12 +19,12 @@ export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
     this.hitbox = tower.hitbox;
   }
 
-  getProjectile(onResolve: Function, target: PhysicEntity<Recruit>, position: Position, damage: number) {
-    return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, onResolve, target, damage);
+  getProjectile(hooks: BattleArmyHooks, target: PhysicEntity<Recruit>, position: Position, damage: number) {
+    return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, hooks, target, damage);
   }
 
-  toPhysic(addProjectile: BattleArmy["addProjectile"], removeProjectile: BattleArmy["removeProjectile"], searchTarget: SearchTarget): GreenBattleTower {
-    return new GreenBattleTower(this.clone(), addProjectile, removeProjectile, searchTarget);
+  toPhysic(hooks: BattleArmyHooks): GreenBattleTower {
+    return new GreenBattleTower(this.clone(), hooks);
   }
 
   clone() {

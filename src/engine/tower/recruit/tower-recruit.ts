@@ -8,6 +8,7 @@ import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { BattleTower } from "../battle/battle-tower";
 import { Tower } from "../entity/tower";
 import { SearchTarget } from "../../battle/battlefield/battlefield";
+import { BattleArmy, BattleArmyHooks } from "../../army/battle/battle-army";
 
 export abstract class TowerRecruit<T extends Tower> implements Recruit {
   abstract type: T["type"];
@@ -21,8 +22,8 @@ export abstract class TowerRecruit<T extends Tower> implements Recruit {
     return enemyUnit.isAlive() && Physic.getDistance(enemyUnit.position, this.position) < 62;
   }
 
-  abstract getProjectile(onResolve: Function, target: PhysicEntity<Recruit>, position: Position, damage: number): BattleProjectile<Projectile>;
+  abstract getProjectile(hooks: BattleArmyHooks, target: PhysicEntity<Recruit>, position: Position, damage: number): BattleProjectile<Projectile>;
 
-  abstract toPhysic(addProjectile: Function, removeProjectile: Function, setTarget: SearchTarget): BattleTower<TowerRecruit<T>>;
+  abstract toPhysic(hooks: BattleArmyHooks): BattleTower<TowerRecruit<T>>;
   abstract clone(): TowerRecruit<T>;
 }

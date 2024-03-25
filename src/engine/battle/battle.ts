@@ -40,6 +40,7 @@ export class Battle {
       paths: [this.battlefield.alliedArmy.path, this.battlefield.enemyArmy.path],
       entities: [...this.battlefield.units],
       projectiles: [...this.battlefield.projectiles],
+      areaEffects: [...this.battlefield.areaEffects]
     };
     return battleState;
   }

@@ -11,7 +11,6 @@ export class ProjectileDrawable extends Drawable<BattleProjectile<Projectile>> {
     constructor(public position: Position, public size: Size, public theta: number, public type: string) {
         super();
         this.image = new Image(size.width, size.height);
-        console.log(type)
         this.image.src = Resources.projectiles[type].resource.src;
     }
 

@@ -13,6 +13,7 @@ import { Retail } from "../engine/shop/retail";
 import { Castle } from "../engine/castle/entity/castle";
 import { CastleRecruit } from "../engine/castle/recruit/castle-recruit";
 import { TowerBuyable } from "../engine/shop/shop";
+import { AreaEffect } from "../engine/area-effect/area-effect";
 
 export interface GameState {
   type: string;
@@ -29,6 +30,7 @@ export interface BattleState extends GameState {
   towers: BattleTower<TowerRecruit<Tower>>[];
   paths: Path[];
   entities: PhysicEntity<UnitRecruit<Unit>>[];
+  areaEffects: AreaEffect[]
   projectiles: PhysicEntity<Projectile>[];
 }
 

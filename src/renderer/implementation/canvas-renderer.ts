@@ -27,6 +27,8 @@ import { HudElement } from "../../shared/hud-element";
 import { HudElementDrawable } from "./drawables/hud-element-drawable";
 import { CastleRecruit } from "../../engine/castle/recruit/castle-recruit";
 import { Castle } from "../../engine/castle/entity/castle";
+import { AreaEffect } from "../../engine/area-effect/area-effect";
+import { AreaEffectDrawable } from "./drawables/earea-effect-drawable";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
@@ -70,6 +72,7 @@ export class CanvasRenderer implements Renderer {
     drawables.push(...state.paths.map((path) => this.pathToPathDrawable(path)));
     drawables.push(...state.entities.map((physicUnit) => this.unitToDrawable(physicUnit)));
     drawables.push(...state.castles.map((castle) => this.castleToCastleDrawable(castle)));
+    drawables.push(...state.areaEffects.map((areaEffect) => this.areaEffectToDrawable(areaEffect)));
     drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
     return drawables;
   }
@@ -140,6 +143,12 @@ export class CanvasRenderer implements Renderer {
     const position = this.getCanvasPosition(projectile.position);
     const size = this.getCanvasSize(2, 2);
     return new ProjectileDrawable(position, size, projectile.theta, projectile.type);
+  }
+
+  areaEffectToDrawable(areaEffect: AreaEffect) {
+    const position = this.getCanvasPosition(areaEffect.position);
+    const size = this.getCanvasSize(areaEffect.size.width, areaEffect.size.height);
+    return new AreaEffectDrawable(areaEffect, size, position)
   }
 
   unitToDrawable(physicUnit: PhysicEntity<UnitRecruit<Unit>>) {

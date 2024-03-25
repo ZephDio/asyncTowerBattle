@@ -17,6 +17,16 @@ import { Army } from "../entity/army";
 import { SearchTarget } from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
 
+export type BattleArmyHooks = {
+  addUnits: BattleArmy["addUnit"],
+  removeUnit: BattleArmy["removeUnit"],
+  addProjectile: BattleArmy["addProjectile"],
+  removeProjectile: BattleArmy["removeProjectile"],
+  addAreaEffect: BattleArmy["addAreaEffect"],
+  removeAreaEffect: BattleArmy["removeAreaEffect"],
+  searchTarget: BattleArmy["searchTarget"],
+}
+
 export class BattleArmy {
   units: Map<BattleUnit<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> = new Map(); //.set(BattleUnitFixture.soldier, {} as any);
   areaEffects: Map<AreaEffect, any> = new Map()
@@ -45,7 +55,7 @@ export class BattleArmy {
           barrack.unitRecruit
         )
     );
-    this.towers = army.towers.map((tower) => tower.toPhysic(this.addProjectile.bind(this), this.removeProjectile.bind(this), this.searchTarget.bind(this)));
+    this.towers = army.towers.map((tower) => tower.toPhysic(this.getHooks()));
   }
 
   addUnit(entityRecruit: BattleUnit<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) {
@@ -64,7 +74,23 @@ export class BattleArmy {
     this.projectiles.delete(projectile);
   }
 
+  addAreaEffect(areaEffect: AreaEffect, source: any) {
+    this.areaEffects.set(areaEffect, source)
+  }
+
   removeAreaEffect(areaEffect: AreaEffect) {
     this.areaEffects.delete(areaEffect)
+  }
+
+  getHooks(): BattleArmyHooks {
+    return {
+      addUnits: this.addUnit.bind(this),
+      removeUnit: this.removeUnit.bind(this),
+      addProjectile: this.addProjectile.bind(this),
+      removeProjectile: this.removeProjectile.bind(this),
+      addAreaEffect: this.addAreaEffect.bind(this),
+      removeAreaEffect: this.removeAreaEffect.bind(this),
+      searchTarget: this.searchTarget.bind(this)
+    }
   }
 }

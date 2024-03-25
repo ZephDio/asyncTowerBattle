@@ -90,6 +90,14 @@ export const Resources: ResourceType = {
       }
     }
   },
+  areaEffects: {
+    explosion: {
+      resource: {
+        shape: "ellipse",
+        color: 'red'
+      }
+    }
+  },
   verdict: {
     victory: {
       size: {

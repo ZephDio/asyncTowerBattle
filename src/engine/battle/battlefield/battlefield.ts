@@ -32,6 +32,7 @@ export class Battlefield {
     this.tickUnits();
     this.tickTowers();
     this.tickProjectiles();
+    this.tickAreaEffects()
   }
 
   tickTowers() {
@@ -93,11 +94,24 @@ export class Battlefield {
     }
   }
 
+  tickAreaEffects() {
+    for (const [areaEffect, source] of this.alliedArmy.areaEffects.entries()) {
+      areaEffect.tick()
+    }
+    for (const [areaEffect, source] of this.enemyArmy.areaEffects.entries()) {
+      areaEffect.tick()
+    }
+  }
+
   get units() {
     return [...this.alliedArmy.units.keys(), ...this.enemyArmy.units.keys()];
   }
 
   get projectiles() {
     return [...this.alliedArmy.projectiles.keys(), ...this.enemyArmy.projectiles.keys()];
+  }
+
+  get areaEffects() {
+    return [...this.alliedArmy.areaEffects.keys(), ...this.enemyArmy.areaEffects.keys()];
   }
 }
