@@ -1,4 +1,5 @@
-import { BarracksFixture } from "../../barrack/battle/implementation/soldier-barrack";
+
+import { BarracksFixture } from "../../barrack/battle/battle-barrack-fixture";
 import { CastleEntityFixture } from "../../castle/entity/castle";
 import { PathFixture } from "../../path/entity/path-fixtures";
 import { TowerFixtures } from "../../tower/entity/tower-fixtures";

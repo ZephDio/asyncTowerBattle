@@ -49,10 +49,4 @@ export class DragonBattleBarrack implements BattleBarrack<DragonRecruit> {
     }
 }
 
-export class BarracksFixture {
-    static soldier = (speed?: number) =>
-        new SoldierBarrack(UnitEntityFixture.soldier, speed);
 
-    static dragon = (speed?: number) =>
-        new DragonBarrack(UnitEntityFixture.dragon, speed)
-}
