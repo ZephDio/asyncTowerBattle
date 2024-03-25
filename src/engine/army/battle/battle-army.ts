@@ -8,7 +8,7 @@ import { Projectile } from "../../projectile/entity/projectile";
 import { BattleTower } from "../../tower/battle/battle-tower";
 import { Tower } from "../../tower/entity/tower";
 import { TowerRecruit } from "../../tower/recruit/tower-recruit";
-import { UnitRecruitPhysic } from "../../units/battle/entity-units-physic";
+import { BattleUnit } from "../../units/battle/entity-units-physic";
 import { Soldier } from "../../units/entity/implementation/soldier";
 import { Unit } from "../../units/entity/units";
 import { SoldierRecruit } from "../../units/recruit/implementation/soldier-recruit";
@@ -17,7 +17,7 @@ import { Army } from "../entity/army";
 import { SearchTarget } from "../../battle/battlefield/battlefield";
 
 export class BattleArmy {
-  units: Map<UnitRecruitPhysic<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> = new Map(); //.set(BattleUnitFixture.soldier, {} as any);
+  units: Map<BattleUnit<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> = new Map(); //.set(BattleUnitFixture.soldier, {} as any);
   path: Path;
   castle: BattleCastle;
   barracks: BattleBarrack<UnitRecruit<Soldier>>[];
@@ -34,10 +34,10 @@ export class BattleArmy {
           { x: alliedCastle.position.x, y: alliedCastle.position.y },
           enemyPath,
           enemyCastle,
-          (entityRecruit: UnitRecruitPhysic<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) => {
+          (entityRecruit: BattleUnit<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) => {
             this.addUnit(entityRecruit, battleBarrack);
           },
-          (entityRecruit: UnitRecruitPhysic<UnitRecruit<Unit>>) => {
+          (entityRecruit: BattleUnit<UnitRecruit<Unit>>) => {
             this.removeUnit(entityRecruit);
           },
           barrack.unitRecruit
@@ -46,11 +46,11 @@ export class BattleArmy {
     this.towers = army.towers.map((tower) => tower.toPhysic(this.addProjectile.bind(this), this.removeProjectile.bind(this), this.searchTarget.bind(this)));
   }
 
-  addUnit(entityRecruit: UnitRecruitPhysic<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) {
+  addUnit(entityRecruit: BattleUnit<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) {
     this.units.set(entityRecruit, battleBarrack);
   }
 
-  removeUnit(entityRecruit: UnitRecruitPhysic<UnitRecruit<Unit>>) {
+  removeUnit(entityRecruit: BattleUnit<UnitRecruit<Unit>>) {
     this.units.delete(entityRecruit);
   }
 

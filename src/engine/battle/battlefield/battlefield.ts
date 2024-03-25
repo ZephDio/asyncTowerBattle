@@ -2,7 +2,7 @@ import { Army } from "../../army/entity/army";
 import { BattleTower } from "../../tower/battle/battle-tower";
 import { Tower } from "../../tower/entity/tower";
 import { TowerRecruit } from "../../tower/recruit/tower-recruit";
-import { UnitRecruitPhysic } from "../../units/battle/entity-units-physic";
+import { BattleUnit } from "../../units/battle/entity-units-physic";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { BattleArmy } from "../../army/battle/battle-army";
@@ -44,7 +44,7 @@ export class Battlefield {
   }
 
   searchAlliedTowerTarget(tower: BattleTower<TowerRecruit<Tower>>) {
-    let bestTarget: [UnitRecruitPhysic<UnitRecruit<Unit>> | null, number] = [null, Infinity];
+    let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
     for (const enemyUnit of [...this.enemyArmy.units.keys()]) {
       if (tower.entity.doesTargetMatchesRule(enemyUnit)) {
         const distance = Physic.getDistance(tower.position, enemyUnit.position);
@@ -57,7 +57,7 @@ export class Battlefield {
   }
 
   searchEnemyTowerTarget(tower: BattleTower<TowerRecruit<Tower>>) {
-    let bestTarget: [UnitRecruitPhysic<UnitRecruit<Unit>> | null, number] = [null, Infinity];
+    let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
     for (const enemyUnit of [...this.alliedArmy.units.keys()]) {
       if (tower.entity.doesTargetMatchesRule(enemyUnit)) {
         const distance = Physic.getDistance(tower.position, enemyUnit.position);

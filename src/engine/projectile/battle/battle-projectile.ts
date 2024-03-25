@@ -5,8 +5,11 @@ import { Projectile } from "../entity/projectile";
 
 export abstract class BattleProjectile<PR extends Projectile> extends PhysicEntity<Projectile> {
   pathFinder: PathFinder;
+  theta: number;
   constructor(public projectileRecruit: PR, position: Position, public onResolve: Function, public target: PhysicEntity<Recruit>, public damage: number) {
-    super(projectileRecruit, position);
+    const theta = Physic.getTheta(position, target.position)
+    super(projectileRecruit, position, theta);
+    this.theta = theta
     this.pathFinder = new PathFinder([target.position]);
   }
 
@@ -14,7 +17,8 @@ export abstract class BattleProjectile<PR extends Projectile> extends PhysicEnti
 
   followPath(): void {
     if (this.canMove() && !this.pathFinder.isArrived) {
-      const nextPosition = this.pathFinder.getNextPosition(this.position, this.entity.baseSpeed);
+      const [nextPosition, theta] = this.pathFinder.getNextPositionAndOrientation(this.position, this.entity.baseSpeed);
+      this.updateTheta(theta)
       this.move(nextPosition);
     }
     if (this.pathFinder.isArrived) {
@@ -29,6 +33,10 @@ export abstract class BattleProjectile<PR extends Projectile> extends PhysicEnti
   hit() {
     this.target.isAttacked(this.damage);
     this.onResolve(this);
+  }
+
+  updateTheta(theta: number) {
+    this.theta = theta
   }
 
   move(newPosition: Position) {

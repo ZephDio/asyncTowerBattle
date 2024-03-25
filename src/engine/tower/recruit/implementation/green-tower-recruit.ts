@@ -1,7 +1,7 @@
 import { HitBox } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
 import { BattleArmy } from "../../../army/battle/battle-army";
-import { PhysicEntity, Recruit } from "../../../../shared/physic";
+import { Physic, PhysicEntity, Recruit } from "../../../../shared/physic";
 import { BattleBulletProjectile } from "../../../projectile/battle/implementation/bullet-projectile-battle";
 import { GreenBattleTower } from "../../battle/implementation/battle.green.tower";
 import { GreenTower } from "../../entity/implementation/green-tower";

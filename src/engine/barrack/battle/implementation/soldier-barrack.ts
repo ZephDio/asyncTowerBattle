@@ -8,6 +8,7 @@ import { Soldier } from "../../../units/entity/implementation/soldier";
 import { SoldierRecruitPhysic } from "../../../units/battle/implementation/soldier-battle";
 import { SoldierBarrack } from "../../entity/implementation/solider-barrack";
 import { UnitEntityFixture } from "../../../units/entity/unit-fixtures";
+import { DragonBarrack } from "../../entity/implementation/dragon-barrack";
 
 export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
   onGoingProduction = null as null | UnitProduction<Soldier>;
@@ -21,7 +22,7 @@ export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
     public removeRecruit: BattleArmy["removeUnit"],
 
     public recruit: SoldierRecruit
-  ) {}
+  ) { }
 
   tick() {
     if (this.onGoingProduction) {
@@ -39,7 +40,7 @@ export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
     this.addRecruit(
       new SoldierRecruitPhysic(
         this.recruit,
-        {x : this.position.x , y : this.position.y},
+        { x: this.position.x, y: this.position.y },
         this.path,
         this.targetCastle,
         this.removeRecruit
@@ -52,4 +53,6 @@ export class SoldierBattleBarrack implements BattleBarrack<SoldierRecruit> {
 export class BarracksFixture {
   static soldier = (speed?: number) =>
     new SoldierBarrack(UnitEntityFixture.soldier, speed);
+  static dragon = (speed?: number) =>
+    new DragonBarrack(UnitEntityFixture.dragon, speed);
 }

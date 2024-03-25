@@ -53,8 +53,19 @@ export abstract class Drawable<T = any> {
     context: CanvasRenderingContext2D,
     size: Size,
     position: Position,
-    image: HTMLImageElement
+    image: HTMLImageElement,
+    theta: number | undefined = undefined
   ) {
+    if (theta) {
+      context.translate(position.x, position.y)
+      context.rotate(-theta) // canvas rotate clockwise
+      context.drawImage(image,
+        -size.width / 2,
+        -size.height / 2,
+        size.width,
+        size.height)
+      return
+    }
     context.drawImage(
       image,
       position.x - size.width / 2,

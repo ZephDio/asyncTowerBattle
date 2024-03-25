@@ -124,16 +124,16 @@ export class CanvasRenderer implements Renderer {
   }
 
   buyableToDrawableBuyable(buyable: Buyable<Recruit>) {
-    const camvasPosition = this.getCanvasPosition(buyable.position);
+    const canvasPosition = this.getCanvasPosition(buyable.position);
     const { width, height } = Resources[buyable.type][buyable.entity.type].size as Size;
     const size = this.getCanvasSize(width, height);
-    return new BuyableDrawable(buyable, size, camvasPosition);
+    return new BuyableDrawable(buyable, size, canvasPosition);
   }
 
   projectileToDrawable(projectile: PhysicEntity<Projectile>) {
     const position = this.getCanvasPosition(projectile.position);
     const size = this.getCanvasSize(2, 2);
-    return new ProjectileDrawable(position, size);
+    return new ProjectileDrawable(position, size, projectile.theta);
   }
 
   unitToDrawable(physicUnit: PhysicEntity<UnitRecruit<Unit>>) {
@@ -149,10 +149,11 @@ export class CanvasRenderer implements Renderer {
   }
 
   init() {
-    const render = () => {
+    const render = async () => {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.sizeGame();
       this.draw();
+      await new Promise((res: any) => setTimeout(() => res(), 1))
       window.requestAnimationFrame(render);
     };
     render();

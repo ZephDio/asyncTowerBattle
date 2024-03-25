@@ -5,11 +5,11 @@ import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { Tower } from "../entity/tower";
 import { TowerRecruit } from "../recruit/tower-recruit";
 import { SearchTarget } from "../../battle/battlefield/battlefield";
-import { UnitRecruitPhysic } from "../../units/battle/entity-units-physic";
+import { BattleUnit } from "../../units/battle/entity-units-physic";
 
 export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends PhysicEntity<TowerRecruit<Tower>> {
   attackDamage: number;
-  target = null as null | UnitRecruitPhysic<UnitRecruit<Unit>>;
+  target = null as null | BattleUnit<UnitRecruit<Unit>>;
   attackIntent = null as null | TowerAttackIntent;
   abstract type: TowerRecruit<Tower>["type"];
   constructor(towerEntity: BT, public fire: BattleArmy["addProjectile"], public removeProjectile: BattleArmy["removeProjectile"], public searchTarget: SearchTarget) {
@@ -17,11 +17,11 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
     this.attackDamage = this.entity.attackDamage;
   }
 
-  setTarget(enemyUnit: UnitRecruitPhysic<UnitRecruit<Unit>> | null) {
+  setTarget(enemyUnit: BattleUnit<UnitRecruit<Unit>> | null) {
     this.target = enemyUnit;
   }
 
-  isAttacked(damage: number): void {}
+  isAttacked(damage: number): void { }
 
   isAlive() {
     return true;
@@ -47,7 +47,7 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
     }
   }
 
-  attack(target: UnitRecruitPhysic<UnitRecruit<Unit>>) {
+  attack(target: BattleUnit<UnitRecruit<Unit>>) {
     const projectile = this.entity.getProjectile(this.removeProjectile, target, this.position, this.attackDamage);
     this.fire(projectile, this);
     this.attackIntent = null;
@@ -56,7 +56,7 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
 
 export class TowerAttackIntent {
   progress = 0;
-  constructor(public towerRecruit: BattleTower<TowerRecruit<Tower>>, public resolveAttack: Function) {}
+  constructor(public towerRecruit: BattleTower<TowerRecruit<Tower>>, public resolveAttack: Function) { }
 
   tick() {
     this.progress += this.towerRecruit.entity.attackSpeed;

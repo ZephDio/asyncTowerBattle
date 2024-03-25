@@ -6,7 +6,7 @@ import { PhysicEntity } from "../../../shared/physic";
 import { Unit } from "../entity/units";
 import { UnitRecruit } from "../recruit/unit-recruit";
 
-export abstract class UnitRecruitPhysic<UE extends UnitRecruit<Unit>> extends PhysicEntity<UE> {
+export abstract class BattleUnit<UE extends UnitRecruit<Unit>> extends PhysicEntity<UE> {
   abstract speed: number;
   abstract actualLife: number;
   abstract maxLife: number;
@@ -16,7 +16,7 @@ export abstract class UnitRecruitPhysic<UE extends UnitRecruit<Unit>> extends Ph
   attackIntent = null as null | UnitAttackIntent;
   target: BattleCastle;
   constructor(entity: UE, position: Position, path: Path, targetCastle: BattleCastle) {
-    super(entity, position);
+    super(entity, position, 0);
     this.pathFinder = new PathFinder(path.getNodes());
     this.target = targetCastle;
   }
@@ -38,7 +38,7 @@ export abstract class UnitRecruitPhysic<UE extends UnitRecruit<Unit>> extends Ph
 
 export class UnitAttackIntent {
   progress = 0;
-  constructor(public unitEntity: UnitRecruitPhysic<UnitRecruit<Unit>>, public resolveAttack: Function) {}
+  constructor(public unitEntity: BattleUnit<UnitRecruit<Unit>>, public resolveAttack: Function) { }
 
   tick() {
     this.progress += this.unitEntity.attackSpeed;

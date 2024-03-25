@@ -34,19 +34,18 @@ export class Physic {
     return (radiusWidth * radiusHeight) / Math.sqrt(Math.pow(radiusWidth, 2) * Math.pow(Math.sin(theta), 2) + Math.pow(radiusHeight, 2) * Math.pow(Math.cos(theta), 2));
   }
 
-  static getNextPosition(position: Position, destination: Position, speed: number) {
+  static getNextPositionAndOrientation(position: Position, destination: Position, speed: number) {
     const theta = Physic.getTheta(position, destination);
-    console.log(theta);
     const nextPosition = {
       x: position.x + Math.cos(theta) * speed,
       y: position.y + Math.sin(theta) * speed,
     };
-    const differential = Physic.getDistance(destination, position);
+    const differential = Physic.getDistanceSqrd(destination, position);
 
-    if (differential < speed) {
-      return destination;
+    if (differential < speed * speed) {
+      return [destination, theta] as const;
     }
-    return nextPosition;
+    return [nextPosition, theta] as const;
   }
 
   static doCollide(entityPosition: Position, hitbox: HitBox, position: Position) {
@@ -74,7 +73,7 @@ export class Physic {
 }
 
 export abstract class PhysicEntity<T extends Recruit> {
-  constructor(public entity: T, public position: Position) {}
+  constructor(public entity: T, public position: Position, public theta: number) { }
   abstract tick(): void;
   abstract isAlive(): boolean;
   abstract isAttacked(damage: number): void;

@@ -47,6 +47,16 @@ export const Resources: ResourceType = {
         src: "./resources/units/soldier.png",
       },
     },
+    dragon: {
+      size: {
+        width: 3,
+        height: 3,
+      },
+      resource: {
+        src: "./resources/units/dragon.png",
+        shape: "ellipse",
+      }
+    }
   },
   path: {
     normal: {

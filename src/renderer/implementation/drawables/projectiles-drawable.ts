@@ -8,14 +8,14 @@ import { Drawable } from "./drawable";
 export class ProjectileDrawable extends Drawable<BattleProjectile<Projectile>> {
     public image: HTMLImageElement;
     public drawPriority: number = 5;
-    constructor(public position: Position, public size: Size) {
+    constructor(public position: Position, public size: Size, public theta: number) {
         super();
         this.image = new Image(size.width, size.height);
         this.image.src = Resources.projectiles.resource.src;
     }
 
     draw(context: CanvasRenderingContext2D) {
-        this.drawImage(context, this.size, this.position, this.image);
+        this.drawImage(context, this.size, this.position, this.image, this.theta);
     }
 
     applyStyle(context: CanvasRenderingContext2D) {
