@@ -9,6 +9,7 @@ export class Game {
   battle = null as null | Battle;
   battleSummary: null | BattleSummary = null;
   shop: null | Shop = null;
+  enemyArmy = ArmyFixture.enemy
 
   constructor() {}
 
@@ -59,7 +60,7 @@ export class Game {
   }
 
   startBattle() {
-    this.battle = new Battle(ArmyFixture.allied, ArmyFixture.enemy, this.handleEndBattle.bind(this));
+    this.battle = new Battle(this.army, this.enemyArmy, this.handleEndBattle.bind(this));
     this.battle.start();
   }
 }

@@ -36,7 +36,6 @@ export class Physic {
 
   static getNextPosition(position: Position, destination: Position, speed: number) {
     const theta = Physic.getTheta(position, destination);
-    console.log(theta);
     const nextPosition = {
       x: position.x + Math.cos(theta) * speed,
       y: position.y + Math.sin(theta) * speed,

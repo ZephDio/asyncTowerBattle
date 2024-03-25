@@ -1,7 +1,6 @@
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
-import { Recruit } from "../../../shared/physic";
 import { Castle } from "../entity/castle";
 
 const CastlePosition = {

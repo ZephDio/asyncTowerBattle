@@ -1,4 +1,3 @@
-import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { ShopState } from "../../shared/gamestate";
 import { StartBattleButton } from "../../shared/hud-element";
 import { Position } from "../../shared/position";
@@ -6,7 +5,6 @@ import { Army } from "../army/entity/army";
 import { Game } from "../game";
 import { Recruit } from "../../shared/physic";
 import { Tower } from "../tower/entity/tower";
-import { TowerFixtures } from "../tower/entity/tower-fixtures";
 import { TowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
 
@@ -33,6 +31,7 @@ export class Shop {
     this.retail.removeItem(buyable);
     buyable.entity.position = buyable.position;
     this.army.recruit(buyable.entity, buyable.type);
+    console.log(this.army.towers)
   }
 
   buy(buyable: Buyable<Recruit>) {

@@ -6,7 +6,11 @@ export class Castle {
   constructor(public team: Team) {}
 }
 
-export class CastleEntityFixture {
-  static allied = new CastleRecruit(new Castle("allied"));
-  static enemy = new CastleRecruit(new Castle("enemy"));
+export class CastleRecruitFixture {
+  static get allied(){
+    return new CastleRecruit(new Castle("allied"));
+  }
+  static get enemy(){
+    return new CastleRecruit(new Castle("enemy"));
+  }
 }

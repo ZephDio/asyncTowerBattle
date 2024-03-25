@@ -1,7 +1,6 @@
 import { Castle } from "../entity/castle";
 import { PhysicEntity } from "../../../shared/physic";
 import { CastleRecruit } from "../recruit/castle-recruit";
-import { Battle } from "../../battle/battle";
 
 export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
   public type = "castle";

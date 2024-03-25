@@ -1,7 +1,7 @@
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { Position } from "../../shared/position";
 import { Recruit } from "../../shared/physic";
-import { TowerFixtures } from "../tower/entity/tower-fixtures";
+import { TowerRecruitFixtures } from "../tower/recruit/tower-recruit-fixtures";
 import { Buyable } from "./shop";
 
 export type ShopItem = Omit<Buyable<Recruit>, "position">;
@@ -17,19 +17,19 @@ export class Retail {
     return [
       {
         type: "tower",
-        entity: TowerFixtures.BottomLeftTower,
+        entity: TowerRecruitFixtures.bottomLeftTower,
       },
       {
         type: "tower",
-        entity: TowerFixtures.BottomMiddleTower,
+        entity: TowerRecruitFixtures.bottomMiddleTower,
       },
       {
         type: "tower",
-        entity: TowerFixtures.centerTower,
+        entity: TowerRecruitFixtures.centerTower,
       },
       {
         type: "tower",
-        entity: TowerFixtures.topRightTower,
+        entity: TowerRecruitFixtures.topRightTower,
       },
     ];
   }
