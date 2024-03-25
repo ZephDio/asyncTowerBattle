@@ -17,10 +17,11 @@ export abstract class Buyable<T extends Recruit> {
 }
 
 export abstract class TowerBuyable<T extends TowerRecruit<Tower>> extends Buyable<T> {
-  public type = "tower";
-  abstract entity: T;
+  public type = "tower" as const;
 }
+
 export class Shop {
+  public hold = null as null | TowerBuyable<TowerRecruit<Tower>>;
   public retail = new Retail();
   constructor(public army: Army, public onShopExit: Game["handleShopQuit"]) {}
 
@@ -28,20 +29,38 @@ export class Shop {
     this.onShopExit();
   }
 
-  buy(buyable: Buyable<Recruit>) {
-    // if enough gold
+  buyTower(buyable: TowerBuyable<TowerRecruit<Tower>>) {
+    this.retail.removeItem(buyable);
+    buyable.entity.position = buyable.position;
     this.army.recruit(buyable.entity, buyable.type);
   }
 
+  buy(buyable: Buyable<Recruit>) {
+    switch (buyable.type) {
+      case "tower":
+        this.buyTower(buyable as TowerBuyable<TowerRecruit<Tower>>);
+    }
+  }
+
+  setHold(focus: null | TowerBuyable<TowerRecruit<Tower>>) {
+    this.hold = focus;
+  }
+
+  moveHold(position: Position) {
+    if (this.hold) {
+      this.hold.position = position;
+    }
+  }
+
   getState() {
-    const towerBuyable = {
-      type: "tower",
-      entity: TowerFixtures.topRightTower,
-    };
     const shopState: ShopState = {
       type: "shop",
       retail: this.retail,
+      hold: this.hold,
       hudElements: [new StartBattleButton()],
+      towers: [...this.army.towers],
+      castle: this.army.castle,
+      path: this.army.path,
     };
 
     return shopState;

@@ -10,6 +10,9 @@ import { Unit } from "../engine/units/entity/units";
 import { Projectile } from "../engine/projectile/entity/projectile";
 import { HudElement } from "./hud-element";
 import { Retail } from "../engine/shop/retail";
+import { Castle } from "../engine/castle/entity/castle";
+import { CastleRecruit } from "../engine/castle/recruit/castle-recruit";
+import { TowerBuyable } from "../engine/shop/shop";
 
 export interface GameState {
   type: string;
@@ -32,6 +35,12 @@ export interface BattleState extends GameState {
 export interface ShopState extends GameState {
   type: "shop";
   retail: Retail;
+
+  castle: CastleRecruit<Castle>;
+  towers: TowerRecruit<Tower>[];
+  path: Path;
+
+  hold: null | TowerBuyable<TowerRecruit<Tower>>;
 
   hudElements: HudElement[];
 }
