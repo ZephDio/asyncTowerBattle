@@ -168,7 +168,7 @@ export class CanvasRenderer implements Renderer {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.sizeGame();
       this.draw();
-      await new Promise((res: any) => setTimeout(() => res(), 1))
+      //await new Promise((res: any) => setTimeout(() => res(), 1))
       window.requestAnimationFrame(render);
     };
     render();

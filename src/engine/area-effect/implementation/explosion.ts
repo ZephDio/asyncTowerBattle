@@ -1,3 +1,4 @@
+import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { BattleArmy, BattleArmyHooks } from "../../army/battle/battle-army";
@@ -6,19 +7,26 @@ import { AreaEffect } from "../area-effect";
 
 export class Explosion implements AreaEffect {
     type = 'explosion' as const
-    size: Size
+    hitbox: HitBox
     constructor(public MaxSize: Size, public position: Position, public damage: number, public hooks: BattleArmyHooks) {
-        this.size = { width: 1, height: 1 }
+        this.hitbox = new HitBox([[new HitShape('ellipse', { width: 1, height: 1 }), { x: 0, y: 0 }]])
     }
 
 
     tick() {
-        this.size.width++
-        this.size.height++
-        if (this.size.width > this.MaxSize.width) {
-            console.log('removed')
+        const explosionShape = this.hitbox.hitShapes[0][0]
+        explosionShape.size.width++
+        explosionShape.size.height++
+        if (explosionShape.size.width > this.MaxSize.width) {
+            const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox)
+            for (const enemy of enemies) {
+                enemy.isAttacked(this.damage)
+            }
             this.hooks.removeAreaEffect(this)
         }
-        console.log('et coucou')
+    }
+
+    get size() {
+        return this.hitbox.hitShapes[0][0].size
     }
 }

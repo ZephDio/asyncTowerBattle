@@ -11,20 +11,23 @@ import { Path } from "../../path/entity/path";
 import { SoldierBarrack } from "../../barrack/entity/implementation/solider-barrack";
 import { Battle } from "../battle";
 import { Physic } from "../../../shared/physic";
+import { HitBox } from "../../../shared/hitboxes";
+import { Position } from "../../../shared/position";
 
 export type SearchTarget = Battlefield["searchAlliedTowerTarget"] | Battlefield["searchEnemyTowerTarget"];
+export type SearchAreaForUnit = Battlefield["searchAlliesInArea"] | Battlefield["searchEnemiesInArea"];
 export class Battlefield {
   public alliedArmy: BattleArmy;
   public enemyArmy: BattleArmy;
   constructor(alliedArmy: Army, enemyArmy: Army, public onBattleOver: Battle["handleBattleOver"]) {
     const enemyCastle = new BattleCastle(enemyArmy.castle, () => this.onBattleOver("victory"));
     const alliedCastle = new BattleCastle(alliedArmy.castle, () => this.onBattleOver("defeat"));
-    this.alliedArmy = this.buildBattleArmy(alliedArmy, enemyCastle, alliedCastle, enemyArmy.path, this.searchAlliedTowerTarget.bind(this));
-    this.enemyArmy = this.buildBattleArmy(enemyArmy, alliedCastle, enemyCastle, alliedArmy.path, this.searchEnemyTowerTarget.bind(this));
+    this.alliedArmy = this.buildBattleArmy(alliedArmy, enemyCastle, alliedCastle, enemyArmy.path, this.searchAlliedTowerTarget.bind(this), this.searchEnemiesInArea.bind(this));
+    this.enemyArmy = this.buildBattleArmy(enemyArmy, alliedCastle, enemyCastle, alliedArmy.path, this.searchEnemyTowerTarget.bind(this), this.searchAlliesInArea.bind(this));
   }
 
-  buildBattleArmy(army: Army, enemyCastle: BattleCastle, alliedCastle: BattleCastle, enemyPath: Path, setTarget: SearchTarget) {
-    return new BattleArmy(army, enemyCastle, alliedCastle, enemyPath, army.barracks as SoldierBarrack[], setTarget);
+  buildBattleArmy(army: Army, enemyCastle: BattleCastle, alliedCastle: BattleCastle, enemyPath: Path, setTarget: SearchTarget, searchEnemiesInArea: SearchAreaForUnit) {
+    return new BattleArmy(army, enemyCastle, alliedCastle, enemyPath, army.barracks as SoldierBarrack[], setTarget, searchEnemiesInArea);
   }
 
   tick() {
@@ -42,6 +45,26 @@ export class Battlefield {
     for (const tower of this.enemyArmy.towers) {
       tower.tick();
     }
+  }
+
+  searchEnemiesInArea(areaPosition: Position, hitbox: HitBox): BattleUnit<UnitRecruit<Unit>>[] {
+    const found: BattleUnit<UnitRecruit<Unit>>[] = []
+    for (const enemyUnit of this.enemyArmy.units.keys()) {
+      if (Physic.doCollide(areaPosition, hitbox, enemyUnit.position)) {
+        found.push(enemyUnit)
+      }
+    }
+    return found
+  }
+
+  searchAlliesInArea(areaPosition: Position, hitbox: HitBox): BattleUnit<UnitRecruit<Unit>>[] {
+    const found: BattleUnit<UnitRecruit<Unit>>[] = []
+    for (const enemyUnit of this.alliedArmy.units.keys()) {
+      if (Physic.doCollide(areaPosition, hitbox, enemyUnit.position)) {
+        found.push(enemyUnit)
+      }
+    }
+    return found
   }
 
   searchAlliedTowerTarget(tower: BattleTower<TowerRecruit<Tower>>) {

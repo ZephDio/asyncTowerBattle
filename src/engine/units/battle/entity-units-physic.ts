@@ -16,7 +16,7 @@ export abstract class BattleUnit<UE extends UnitRecruit<Unit>> extends PhysicEnt
   attackIntent = null as null | UnitAttackIntent;
   target: BattleCastle;
   constructor(entity: UE, position: Position, path: Path, targetCastle: BattleCastle) {
-    super(entity, position, 0);
+    super(entity, position, 0, entity.type);
     this.pathFinder = new PathFinder(path.getNodes());
     this.target = targetCastle;
   }
