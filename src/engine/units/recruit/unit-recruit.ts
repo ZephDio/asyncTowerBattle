@@ -7,4 +7,6 @@ export abstract class UnitRecruit<U extends Unit> implements Recruit {
   abstract speed: number;
   abstract type: U["type"];
   abstract hitbox: HitBox;
+  abstract attackSpeed: number;
+  abstract attackDamage: number
 }

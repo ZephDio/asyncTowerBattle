@@ -56,6 +56,7 @@ export class Battlefield {
     return bestTarget[0];
   }
 
+
   searchEnemyTowerTarget(tower: BattleTower<TowerRecruit<Tower>>) {
     let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
     for (const enemyUnit of [...this.alliedArmy.units.keys()]) {

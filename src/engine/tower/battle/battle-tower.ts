@@ -13,7 +13,7 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
   attackIntent = null as null | TowerAttackIntent;
   abstract type: TowerRecruit<Tower>["type"];
   constructor(towerEntity: BT, public fire: BattleArmy["addProjectile"], public removeProjectile: BattleArmy["removeProjectile"], public searchTarget: SearchTarget) {
-    super(towerEntity.clone(), towerEntity.position);
+    super(towerEntity.clone(), towerEntity.position, 0, towerEntity.type);
     this.attackDamage = this.entity.attackDamage;
   }
 

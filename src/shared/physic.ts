@@ -73,7 +73,7 @@ export class Physic {
 }
 
 export abstract class PhysicEntity<T extends Recruit> {
-  constructor(public entity: T, public position: Position, public theta: number) { }
+  constructor(public entity: T, public position: Position, public theta: number, public type: string) { }
   abstract tick(): void;
   abstract isAlive(): boolean;
   abstract isAttacked(damage: number): void;

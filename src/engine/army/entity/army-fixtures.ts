@@ -11,7 +11,7 @@ export class ArmyFixture {
       CastleRecruitFixture.allied,
       [
         //TowerFixtures.centerTower,
-        TowerRecruitFixtures.bottomLeftTower,
+        TowerRecruitFixtures.centerTower,
         //TowerEntityFixtures.topRightTower,
       ],
       PathFixture.defaultAllied,
@@ -29,7 +29,7 @@ export class ArmyFixture {
       ],
       PathFixture.defaultEnemy,
       //[]
-      [BarracksFixture.soldier(5)]
+      [BarracksFixture.dragon(5), BarracksFixture.dragon(7), BarracksFixture.dragon(9)]
     );
   }
 }

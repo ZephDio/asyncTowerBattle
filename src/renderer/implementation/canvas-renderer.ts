@@ -139,7 +139,7 @@ export class CanvasRenderer implements Renderer {
   projectileToDrawable(projectile: PhysicEntity<Projectile>) {
     const position = this.getCanvasPosition(projectile.position);
     const size = this.getCanvasSize(2, 2);
-    return new ProjectileDrawable(position, size, projectile.theta);
+    return new ProjectileDrawable(position, size, projectile.theta, projectile.type);
   }
 
   unitToDrawable(physicUnit: PhysicEntity<UnitRecruit<Unit>>) {

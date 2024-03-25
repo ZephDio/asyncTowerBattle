@@ -8,7 +8,7 @@ export abstract class BattleProjectile<PR extends Projectile> extends PhysicEnti
   theta: number;
   constructor(public projectileRecruit: PR, position: Position, public onResolve: Function, public target: PhysicEntity<Recruit>, public damage: number) {
     const theta = Physic.getTheta(position, target.position)
-    super(projectileRecruit, position, theta);
+    super(projectileRecruit, position, theta, projectileRecruit.type);
     this.theta = theta
     this.pathFinder = new PathFinder([target.position]);
   }

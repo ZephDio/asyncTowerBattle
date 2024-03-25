@@ -15,9 +15,11 @@ import { SoldierRecruit } from "../../units/recruit/implementation/soldier-recru
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { Army } from "../entity/army";
 import { SearchTarget } from "../../battle/battlefield/battlefield";
+import { AreaEffect } from "../../area-effect/area-effect";
 
 export class BattleArmy {
   units: Map<BattleUnit<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> = new Map(); //.set(BattleUnitFixture.soldier, {} as any);
+  areaEffects: Map<AreaEffect, any> = new Map()
   path: Path;
   castle: BattleCastle;
   barracks: BattleBarrack<UnitRecruit<Soldier>>[];
@@ -60,5 +62,9 @@ export class BattleArmy {
 
   removeProjectile(projectile: BattleProjectile<Projectile>) {
     this.projectiles.delete(projectile);
+  }
+
+  removeAreaEffect(areaEffect: AreaEffect) {
+    this.areaEffects.delete(areaEffect)
   }
 }
