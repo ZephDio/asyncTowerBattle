@@ -1,10 +1,13 @@
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { GridPosition, Position } from "../../../shared/position";
+import { Grid } from "../../grid/grid";
 import { Castle } from "../entity/castle";
 
 const CastleGridPosition = {
-  default: () => { return { gridX: 16, gridY: 6 } },
+  default: () => {
+    return { gridX: 12, gridY: 5 };
+  },
 };
 
 export class CastleRecruit<TB extends Castle> {
@@ -13,21 +16,22 @@ export class CastleRecruit<TB extends Castle> {
   gridPosition: GridPosition;
   hitbox = new HitBox([[new HitShape("rectangle", { width: 5, height: 5 }), { x: 0, y: 0 }]]);
   constructor(public castle: TB) {
-    this.gridPosition = CastleGridPosition.default()
+    this.gridPosition = CastleGridPosition.default();
   }
   clone() {
     return new CastleRecruit(new Castle(this.castle.team));
   }
 
-  toSerialized(): SerializedCastleRecruit {
+  toSerialized(grid: Grid): SerializedCastleRecruit {
     return {
       type: this.type,
-      gridPosition: this.gridPosition
-    }
+      gridPosition: this.gridPosition,
+      position: grid.gridPositionToReal(this.gridPosition),
+    };
   }
 }
 export type SerializedCastleRecruit = {
-  type: string,
-  gridPosition: GridPosition
-}
-
+  type: string;
+  gridPosition: GridPosition;
+  position: Position;
+};

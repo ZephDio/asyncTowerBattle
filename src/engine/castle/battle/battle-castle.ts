@@ -6,13 +6,13 @@ import { GridPosition, Position } from "../../../shared/position";
 export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
   public actualLife: number;
   public maxLife: number;
-  public gridPosition: GridPosition
+  public gridPosition: GridPosition;
 
   constructor(castleEntity: CastleRecruit<Castle>, public onDeath: Function, position: Position) {
     super(castleEntity, position, 0, "castle");
     this.actualLife = castleEntity.maxLife;
     this.maxLife = castleEntity.maxLife;
-    this.gridPosition = castleEntity.gridPosition
+    this.gridPosition = castleEntity.gridPosition;
   }
 
   isAttacked(damage: number): void {
@@ -26,17 +26,19 @@ export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
     return this.actualLife > 0;
   }
 
-  tick() { }
+  tick() {}
 
   toSerialized(): SerializedBattleCastle {
     return {
       type: this.type,
-      gridPosition: this.gridPosition
-    }
+      gridPosition: this.gridPosition,
+      position: this.position,
+    };
   }
 }
 
 export type SerializedBattleCastle = {
-  type: string,
-  gridPosition: GridPosition
-}
+  type: string;
+  gridPosition: GridPosition;
+  position: Position;
+};

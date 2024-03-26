@@ -1,49 +1,38 @@
 import { Position } from "../../../../shared/position";
 import { BattleArmy } from "../../../army/battle/battle-army";
-import { Path } from "../../../path/entity/path";
+import { ArmyPath, BattlePath } from "../../../path/entity/path";
 import { BattleCastle } from "../../../castle/battle/battle-castle";
 import { BattleBarrack, UnitProduction } from "../battle-barrack";
 import { DragonRecruit } from "../../../units/recruit/implementation/dragon-recruit";
-import { DragonRecruitPhysic } from "../../../units/battle/implementation/dragon-battle";
+import { BattleDragon } from "../../../units/battle/implementation/dragon-battle";
 
 export class DragonBattleBarrack implements BattleBarrack<DragonRecruit> {
-    onGoingProduction = null as null | UnitProduction<DragonRecruit>;
+  onGoingProduction = null as null | UnitProduction<DragonRecruit>;
 
-    constructor(
-        public productionSpeed: number,
-        public position: Position,
-        public path: Path,
-        public targetCastle: BattleCastle,
-        public addRecruit: BattleArmy["addUnit"],
-        public removeRecruit: BattleArmy["removeUnit"],
+  constructor(
+    public productionSpeed: number,
+    public position: Position,
+    public path: BattlePath,
+    public targetCastle: BattleCastle,
+    public addRecruit: BattleArmy["addUnit"],
+    public removeRecruit: BattleArmy["removeUnit"],
 
-        public recruit: DragonRecruit
-    ) { }
+    public recruit: DragonRecruit
+  ) {}
 
-    tick() {
-        if (this.onGoingProduction) {
-            this.onGoingProduction.tick();
-        }
-        if (!this.onGoingProduction) {
-            this.onGoingProduction = new UnitProduction(this, () => {
-                this.produce();
-                this.onGoingProduction = null;
-            });
-        }
+  tick() {
+    if (this.onGoingProduction) {
+      this.onGoingProduction.tick();
     }
-
-    produce() {
-        this.addRecruit(
-            new DragonRecruitPhysic(
-                this.recruit,
-                { x: this.position.x, y: this.position.y },
-                this.path,
-                this.targetCastle,
-                this.removeRecruit
-            ),
-            this
-        );
+    if (!this.onGoingProduction) {
+      this.onGoingProduction = new UnitProduction(this, () => {
+        this.produce();
+        this.onGoingProduction = null;
+      });
     }
+  }
+
+  produce() {
+    this.addRecruit(new BattleDragon(this.recruit, { x: this.position.x, y: this.position.y }, this.path, this.targetCastle, this.removeRecruit), this);
+  }
 }
-
-

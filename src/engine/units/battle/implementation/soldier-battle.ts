@@ -1,22 +1,22 @@
 import { Position } from "../../../../shared/position";
 import { BattleCastle } from "../../../castle/battle/battle-castle";
-import { Path } from "../../../path/entity/path";
+import { ArmyPath, BattlePath } from "../../../path/entity/path";
 import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
 import { UnitAttackIntent, BattleUnit } from "../entity-units-physic";
 
-export class SoldierRecruitPhysic extends BattleUnit<SoldierRecruit> {
+export class BattleSoldier extends BattleUnit<SoldierRecruit> {
   speed: number;
   maxLife: number;
   actualLife: number;
   attackSpeed: number;
   attackDamage: number;
-  constructor(entity: SoldierRecruit, position: Position, path: Path, targetCastle: BattleCastle, private onDeath: Function) {
+  constructor(entity: SoldierRecruit, position: Position, path: BattlePath, targetCastle: BattleCastle, private onDeath: Function) {
     super(entity, position, path, targetCastle);
     this.speed = entity.speed;
     this.maxLife = entity.maxLife;
     this.actualLife = entity.maxLife;
-    this.attackSpeed = entity.attackSpeed
-    this.attackDamage = entity.attackDamage
+    this.attackSpeed = entity.attackSpeed;
+    this.attackDamage = entity.attackDamage;
   }
   canMove() {
     return true;

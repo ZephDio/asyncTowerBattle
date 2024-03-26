@@ -6,27 +6,25 @@ import { Tower } from "../entity/tower";
 import { TowerRecruit } from "../recruit/tower-recruit";
 import { BattleUnit } from "../../units/battle/entity-units-physic";
 import { GridPosition, Position } from "../../../shared/position";
+import { BattleGrid } from "../../grid/battle-grid";
 
 export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends PhysicEntity<TowerRecruit<Tower>> {
   attackDamage: number;
   target = null as null | BattleUnit<UnitRecruit<Unit>>;
   attackIntent = null as null | TowerAttackIntent;
   abstract type: TowerRecruit<Tower>["type"];
-  gridPosition: GridPosition
-  constructor(
-    towerEntity: BT,
-    public position: Position,
-    public hooks: BattleArmyHooks) {
+  gridPosition: GridPosition;
+  constructor(towerEntity: BT, public position: Position, public hooks: BattleArmyHooks) {
     super(towerEntity.clone(), position, 0, towerEntity.type);
     this.attackDamage = this.entity.attackDamage;
-    this.gridPosition = this.entity.gridPosition
+    this.gridPosition = this.entity.gridPosition;
   }
 
   setTarget(enemyUnit: BattleUnit<UnitRecruit<Unit>> | null) {
     this.target = enemyUnit;
   }
 
-  isAttacked(damage: number): void { }
+  isAttacked(damage: number): void {}
 
   isAlive() {
     return true;
@@ -58,22 +56,24 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
     this.attackIntent = null;
   }
 
-  toSerialized() {
+  toSerialized(grid: BattleGrid) {
     return {
       type: this.type,
-      gridPosition: this.gridPosition
-    }
+      gridPosition: this.gridPosition,
+      position: grid.gridPositionToReal(this.gridPosition),
+    };
   }
 }
 
 export type SerializedBattleTower = {
-  type: string,
-  gridPosition: GridPosition
-}
+  type: string;
+  gridPosition: GridPosition;
+  position: Position;
+};
 
 export class TowerAttackIntent {
   progress = 0;
-  constructor(public towerRecruit: BattleTower<TowerRecruit<Tower>>, public resolveAttack: Function) { }
+  constructor(public towerRecruit: BattleTower<TowerRecruit<Tower>>, public resolveAttack: Function) {}
 
   tick() {
     this.progress += this.towerRecruit.entity.attackSpeed;

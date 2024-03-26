@@ -21,7 +21,7 @@ export abstract class TowerBuyable<T extends TowerRecruit<Tower>> extends Buyabl
 export class Shop {
   public hold = null as null | TowerBuyable<TowerRecruit<Tower>>;
   public retail = new Retail();
-  constructor(public army: Army, public onShopExit: Game["handleShopQuit"]) { }
+  constructor(public army: Army, public onShopExit: Game["handleShopQuit"]) {}
 
   exitShop() {
     this.onShopExit();
@@ -56,10 +56,10 @@ export class Shop {
       retail: this.retail,
       hold: this.hold,
       hudElements: [new StartBattleButton()],
-      towers: this.army.towers.map((tower) => tower.toSerialized()),
-      castle: this.army.castle.toSerialized(),
+      towers: this.army.towers.map((tower) => tower.toSerialized(this.army.grid)),
+      castle: this.army.castle.toSerialized(this.army.grid),
       path: this.army.path,
-      grid: this.army.grid
+      grid: this.army.grid.toSerialized(),
     };
 
     return shopState;

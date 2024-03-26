@@ -1,4 +1,3 @@
-
 import { BarracksFixture } from "../../barrack/battle/battle-barrack-fixture";
 import { CastleRecruitFixture } from "../../castle/entity/castle";
 import { Grid } from "../../grid/grid";
@@ -16,7 +15,7 @@ export class ArmyFixture {
         //TowerEntityFixtures.topRightTower,
       ],
       PathFixture.defaultAllied,
-      new Grid(16, 6),
+      new Grid(),
       //[]
       [BarracksFixture.soldier(2), BarracksFixture.dragon()]
     );
@@ -30,7 +29,7 @@ export class ArmyFixture {
         //TowerEntityFixtures.topRightTower,
       ],
       PathFixture.defaultEnemy,
-      new Grid(16, 6),
+      new Grid(),
       //[]
       [BarracksFixture.soldier(2), BarracksFixture.dragon()]
     );

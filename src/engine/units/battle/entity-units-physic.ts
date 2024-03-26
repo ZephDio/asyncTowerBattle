@@ -1,6 +1,6 @@
 import { Position } from "../../../shared/position";
 import { BattleCastle } from "../../castle/battle/battle-castle";
-import { Path } from "../../path/entity/path";
+import { ArmyPath, BattlePath } from "../../path/entity/path";
 import { PathFinder } from "../../battle/path-finder";
 import { PhysicEntity } from "../../../shared/physic";
 import { Unit } from "../entity/units";
@@ -15,7 +15,7 @@ export abstract class BattleUnit<UE extends UnitRecruit<Unit>> extends PhysicEnt
   abstract attackDamage: number;
   attackIntent = null as null | UnitAttackIntent;
   target: BattleCastle;
-  constructor(entity: UE, position: Position, path: Path, targetCastle: BattleCastle) {
+  constructor(entity: UE, position: Position, path: BattlePath, targetCastle: BattleCastle) {
     super(entity, position, 0, entity.type);
     this.pathFinder = new PathFinder(path.getNodes());
     this.target = targetCastle;
@@ -38,19 +38,19 @@ export abstract class BattleUnit<UE extends UnitRecruit<Unit>> extends PhysicEnt
   toSerialized(): SerializedBattleUnit {
     return {
       type: this.type,
-      position: this.position
-    }
+      position: this.position,
+    };
   }
 }
 
 export type SerializedBattleUnit = {
-  type: string,
-  position: Position
-}
+  type: string;
+  position: Position;
+};
 
 export class UnitAttackIntent {
   progress = 0;
-  constructor(public unitEntity: BattleUnit<UnitRecruit<Unit>>, public resolveAttack: Function) { }
+  constructor(public unitEntity: BattleUnit<UnitRecruit<Unit>>, public resolveAttack: Function) {}
 
   tick() {
     this.progress += this.unitEntity.attackSpeed;

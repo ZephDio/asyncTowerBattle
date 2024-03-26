@@ -1,14 +1,13 @@
 import { HitBox } from "../../../shared/hitboxes";
 import { GridPosition, Position } from "../../../shared/position";
-import { Physic, PhysicEntity, Recruit } from "../../../shared/physic";
+import { PhysicEntity, Recruit } from "../../../shared/physic";
 import { BattleProjectile } from "../../projectile/battle/battle-projectile";
 import { Projectile } from "../../projectile/entity/projectile";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { BattleTower } from "../battle/battle-tower";
 import { Tower } from "../entity/tower";
-import { SearchTarget } from "../../battle/battlefield/battlefield";
-import { BattleArmy, BattleArmyHooks } from "../../army/battle/battle-army";
+import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { Grid } from "../../grid/grid";
 
 export abstract class TowerRecruit<T extends Tower> implements Recruit {
@@ -16,27 +15,34 @@ export abstract class TowerRecruit<T extends Tower> implements Recruit {
   abstract hitbox: HitBox;
   abstract attackSpeed: number;
   abstract attackDamage: number;
-  abstract gridPosition: GridPosition
+  abstract gridPosition: GridPosition;
   abstract tower: T;
 
   doesTargetMatchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>, distanceSqrd: number) {
     return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
   }
 
-  abstract getProjectile(hooks: BattleArmyHooks, target: PhysicEntity<Recruit>, position: Position, damage: number): BattleProjectile<Projectile>;
+  abstract getProjectile(
+    hooks: BattleArmyHooks,
+    target: PhysicEntity<Recruit>,
+    position: Position,
+    damage: number
+  ): BattleProjectile<Projectile>;
 
   abstract toPhysic(position: Position, hooks: BattleArmyHooks): BattleTower<TowerRecruit<T>>;
   abstract clone(): TowerRecruit<T>;
 
-  toSerialized(): SerializedTowerRecruit {
+  toSerialized(grid: Grid): SerializedTowerRecruit {
     return {
       type: this.type,
-      gridPosition: this.gridPosition
-    }
+      gridPosition: this.gridPosition,
+      position: grid.gridPositionToReal(this.gridPosition),
+    };
   }
 }
 
 export interface SerializedTowerRecruit {
-  type: "orange" | "blue" | "green"
-  gridPosition: GridPosition
+  type: "orange" | "blue" | "green";
+  gridPosition: GridPosition;
+  position: Position;
 }

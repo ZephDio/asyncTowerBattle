@@ -1,16 +1,13 @@
 import { Position } from "../../../shared/position";
 import { BattleArmy } from "../../army/battle/battle-army";
-import { Path } from "../../path/entity/path";
+import { ArmyPath, BattlePath } from "../../path/entity/path";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 
 export class UnitProduction<U extends Unit> {
   progress = 0;
-  constructor(
-    public barrack: BattleBarrack<UnitRecruit<U>>,
-    public resolve: Function
-  ) {}
+  constructor(public barrack: BattleBarrack<UnitRecruit<U>>, public resolve: Function) {}
 
   tick() {
     this.progress += this.barrack.productionSpeed;
@@ -25,7 +22,7 @@ export abstract class BattleBarrack<U extends UnitRecruit<Unit>> {
     public targetCastle: BattleCastle,
     public productionSpeed: number,
     public position: Position,
-    public path: Path,
+    public path: BattlePath,
     public addRecruit: BattleArmy["addUnit"],
 
     public recruit: U
