@@ -34,6 +34,18 @@ export abstract class BattleUnit<UE extends UnitRecruit<Unit>> extends PhysicEnt
     this.position.x = newPosition.x;
     this.position.y = newPosition.y;
   }
+
+  toSerialized(): SerializedBattleUnit {
+    return {
+      type: this.type,
+      position: this.position
+    }
+  }
+}
+
+export type SerializedBattleUnit = {
+  type: string,
+  position: Position
 }
 
 export class UnitAttackIntent {

@@ -20,8 +20,8 @@ export class Battlefield {
   public alliedArmy: BattleArmy;
   public enemyArmy: BattleArmy;
   constructor(alliedArmy: Army, enemyArmy: Army, public onBattleOver: Battle["handleBattleOver"]) {
-    const enemyCastle = new BattleCastle(enemyArmy.castle, () => this.onBattleOver("victory"));
-    const alliedCastle = new BattleCastle(alliedArmy.castle, () => this.onBattleOver("defeat"));
+    const enemyCastle = new BattleCastle(enemyArmy.castle, () => this.onBattleOver("victory"), enemyArmy.grid.gridPositionToReal(enemyArmy.castle.gridPosition));
+    const alliedCastle = new BattleCastle(alliedArmy.castle, () => this.onBattleOver("defeat"), alliedArmy.grid.gridPositionToReal(alliedArmy.castle.gridPosition));
     this.alliedArmy = this.buildBattleArmy(alliedArmy, enemyCastle, alliedCastle, enemyArmy.path, this.searchAlliedTowerTarget.bind(this), this.searchEnemiesInArea.bind(this));
     this.enemyArmy = this.buildBattleArmy(enemyArmy, alliedCastle, enemyCastle, alliedArmy.path, this.searchEnemyTowerTarget.bind(this), this.searchAlliesInArea.bind(this));
   }

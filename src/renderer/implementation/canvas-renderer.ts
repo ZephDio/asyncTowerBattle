@@ -1,21 +1,21 @@
 import { Game } from "../../engine/game";
 import { Path } from "../../engine/path/entity/path";
 import { BattleState, GameState, ShopState, SummaryState } from "../../shared/gamestate";
-import { Position } from "../../shared/position";
+import { GridPosition, Position } from "../../shared/position";
 import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 import { Resources } from "../resources";
 import { Drawable } from "./drawables/drawable";
 import { PhysicEntity, Recruit } from "../../shared/physic";
-import { BattleCastle } from "../../engine/castle/battle/battle-castle";
+import { BattleCastle, SerializedBattleCastle } from "../../engine/castle/battle/battle-castle";
 import { TowerDrawable } from "./drawables/tower-drawable";
 import { CastleDrawable } from "./drawables/castle-drawable";
 import { PathDrawable } from "./drawables/path-drawable";
 import { UnitEntityDrawable } from "./drawables/unit-drawable";
 import { BattleVerdict } from "../../engine/battle-summary/battle-summary";
 import { VerdictDrawable } from "./drawables/verdict-drawable";
-import { BattleTower } from "../../engine/tower/battle/battle-tower";
-import { TowerRecruit } from "../../engine/tower/recruit/tower-recruit";
+import { BattleTower, SerializedBattleTower } from "../../engine/tower/battle/battle-tower";
+import { SerializedTowerRecruit, TowerRecruit } from "../../engine/tower/recruit/tower-recruit";
 import { Tower } from "../../engine/tower/entity/tower";
 import { UnitRecruit } from "../../engine/units/recruit/unit-recruit";
 import { Unit } from "../../engine/units/entity/units";
@@ -25,10 +25,11 @@ import { Buyable } from "../../engine/shop/shop";
 import { BuyableDrawable } from "./drawables/buyable-drawable";
 import { HudElement } from "../../shared/hud-element";
 import { HudElementDrawable } from "./drawables/hud-element-drawable";
-import { CastleRecruit } from "../../engine/castle/recruit/castle-recruit";
+import { CastleRecruit, SerializedCastleRecruit } from "../../engine/castle/recruit/castle-recruit";
 import { Castle } from "../../engine/castle/entity/castle";
 import { AreaEffect } from "../../engine/area-effect/area-effect";
 import { AreaEffectDrawable } from "./drawables/earea-effect-drawable";
+import { Grid } from "../../engine/grid/grid";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
@@ -67,11 +68,11 @@ export class CanvasRenderer implements Renderer {
 
   battleStateToDrawable(state: BattleState) {
     const drawables: Drawable[] = [];
-    drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower)));
+    drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower, state.grid.gridPositionToReal(tower.gridPosition))));
     drawables.push(...state.projectiles.map((projectile) => this.projectileToDrawable(projectile)));
     drawables.push(...state.paths.map((path) => this.pathToPathDrawable(path)));
     drawables.push(...state.entities.map((physicUnit) => this.unitToDrawable(physicUnit)));
-    drawables.push(...state.castles.map((castle) => this.castleToCastleDrawable(castle)));
+    drawables.push(...state.castles.map((castle) => this.castleToCastleDrawable(castle, state.grid.gridPositionToReal(castle.gridPosition))));
     drawables.push(...state.areaEffects.map((areaEffect) => this.areaEffectToDrawable(areaEffect)));
     drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
     return drawables;
@@ -88,8 +89,8 @@ export class CanvasRenderer implements Renderer {
     drawables.push(...state.hudElements.map((hudElement) => this.HudtoHudElementDrawable(hudElement)));
     drawables.push(...[...state.retail.buyables.keys()].map((buyable) => this.buyableToDrawableBuyable(buyable)));
     drawables.push(this.pathToPathDrawable(state.path));
-    drawables.push(this.castleToCastleDrawable(state.castle));
-    drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower)));
+    drawables.push(this.castleToCastleDrawable(state.castle, state.grid.gridPositionToReal(state.castle.gridPosition)));
+    drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower, state.grid.gridPositionToReal(tower.gridPosition))));
     drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
     return drawables;
   }
@@ -107,18 +108,18 @@ export class CanvasRenderer implements Renderer {
     return new VerdictDrawable(verdict, size, position);
   }
 
-  towerToTowerDrawable(tower: BattleTower<TowerRecruit<Tower>> | TowerRecruit<Tower>) {
-    const position = this.getCanvasPosition(tower.position);
+  towerToTowerDrawable(tower: SerializedBattleTower | SerializedTowerRecruit, position: Position) {
+    const canvasPosition = this.getCanvasPosition(position);
     const { width, height } = Resources.tower[tower.type].size as Size;
     const size = this.getCanvasSize(width, height);
-    return new TowerDrawable(position, size, tower.type);
+    return new TowerDrawable(canvasPosition, size, tower.type);
   }
 
-  castleToCastleDrawable(castle: BattleCastle | CastleRecruit<Castle>) {
-    const position = this.getCanvasPosition(castle.position);
+  castleToCastleDrawable(castle: SerializedBattleCastle | SerializedCastleRecruit, position: Position) {
+    const canvasPosition = this.getCanvasPosition(position);
     const { width, height } = Resources.castle.size as Size;
     const size = this.getCanvasSize(width, height);
-    return new CastleDrawable(position, size);
+    return new CastleDrawable(canvasPosition, size);
   }
 
   getCanvasPosition(position: Position) {

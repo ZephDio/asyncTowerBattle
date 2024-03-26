@@ -1,12 +1,11 @@
 import { HitBox } from "../../../../shared/hitboxes";
-import { Position } from "../../../../shared/position";
-import { BattleArmy, BattleArmyHooks } from "../../../army/battle/battle-army";
-import { Physic, PhysicEntity, Recruit } from "../../../../shared/physic";
+import { GridPosition, Position } from "../../../../shared/position";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { PhysicEntity, Recruit } from "../../../../shared/physic";
 import { BattleRocketProjectile } from "../../../projectile/battle/implementation/rocket-projectile-bullet";
 import { BlueBattleTower } from "../../battle/implementation/battle-blue-tower";
 import { BlueTower } from "../../entity/implementation/blue-tower";
 import { TowerRecruit } from "../tower-recruit";
-import { SearchTarget } from "../../../battle/battlefield/battlefield";
 
 export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
   attackDamage = 7;
@@ -14,7 +13,7 @@ export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
   type = "blue" as const;
   hitbox: HitBox;
 
-  constructor(public position: Position, public tower: BlueTower) {
+  constructor(public tower: BlueTower, public gridPosition: GridPosition) {
     super();
     this.hitbox = tower.hitbox;
   }
@@ -24,12 +23,12 @@ export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
   }
 
 
-  toPhysic(hooks: BattleArmyHooks): BlueBattleTower {
-    return new BlueBattleTower(this.clone(), hooks);
+  toPhysic(position: Position, hooks: BattleArmyHooks): BlueBattleTower {
+    return new BlueBattleTower(this.clone(), position, hooks);
   }
 
 
   clone() {
-    return new BlueTowerRecruit({ x: this.position.x, y: this.position.y }, new BlueTower());
+    return new BlueTowerRecruit(new BlueTower(), { gridX: this.gridPosition.gridX, gridY: this.gridPosition.gridY });
   }
 }

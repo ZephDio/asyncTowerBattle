@@ -29,7 +29,7 @@ export class Shop {
 
   buyTower(buyable: TowerBuyable<TowerRecruit<Tower>>) {
     this.retail.removeItem(buyable);
-    buyable.entity.position = buyable.position;
+    buyable.position = buyable.position; // ICI C KC
     this.army.recruit(buyable.entity, buyable.type);
   }
 
@@ -56,9 +56,10 @@ export class Shop {
       retail: this.retail,
       hold: this.hold,
       hudElements: [new StartBattleButton()],
-      towers: [...this.army.towers],
-      castle: this.army.castle,
+      towers: this.army.towers.map((tower) => tower.toSerialized()),
+      castle: this.army.castle.toSerialized(),
       path: this.army.path,
+      grid: this.army.grid
     };
 
     return shopState;

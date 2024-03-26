@@ -19,16 +19,6 @@ export class TowerDrawable extends Drawable<TowerRecruit<Tower>> {
   }
 
   draw(context: CanvasRenderingContext2D) {
-    // const renderShape = Resources.tower[this.type].resource.shape;
-    // this.applyStyle(context);
-
-    // if (renderShape == "ellipse") {
-    //   this.drawEllipse(context, this.size, this.position);
-    //   return;
-    // }
-    // if (renderShape == "rectangle") {
-    //   this.drawRectangle(context, this.size, this.position);
-    // }
     this.drawImage(context, this.size, this.position, this.image);
   }
 

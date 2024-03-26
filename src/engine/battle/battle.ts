@@ -2,6 +2,7 @@ import { BattleState } from "../../shared/gamestate";
 import { Army } from "../army/entity/army";
 import { BattleVerdict } from "../battle-summary/battle-summary";
 import { Game } from "../game";
+import { Grid } from "../grid/grid";
 import { Battlefield } from "./battlefield/battlefield";
 
 export class Battle {
@@ -35,12 +36,13 @@ export class Battle {
   getState(): BattleState {
     const battleState: BattleState = {
       type: "battle",
-      castles: [this.battlefield.alliedArmy.castle, this.battlefield.enemyArmy.castle],
-      towers: [...this.battlefield.alliedArmy.towers, ...this.battlefield.enemyArmy.towers],
+      castles: [this.battlefield.alliedArmy.castle, this.battlefield.enemyArmy.castle].map((castle) => castle.toSerialized()),
+      towers: [...this.battlefield.alliedArmy.towers, ...this.battlefield.enemyArmy.towers].map((tower) => tower.toSerialized()),
       paths: [this.battlefield.alliedArmy.path, this.battlefield.enemyArmy.path],
       entities: [...this.battlefield.units],
       projectiles: [...this.battlefield.projectiles],
-      areaEffects: [...this.battlefield.areaEffects]
+      areaEffects: [...this.battlefield.areaEffects],
+      grid: Grid.fuse(this.alliedArmy.grid, this.enemyArmy.grid)
     };
     return battleState;
   }

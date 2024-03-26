@@ -1,5 +1,5 @@
 import { HitBox } from "../../../../shared/hitboxes";
-import { Position } from "../../../../shared/position";
+import { GridPosition, Position } from "../../../../shared/position";
 import { BattleArmy, BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PhysicEntity, Recruit } from "../../../../shared/physic";
 import { BattleBulletProjectile } from "../../../projectile/battle/implementation/bullet-projectile-battle";
@@ -14,7 +14,7 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
   type = "orange" as const;
   hitbox: HitBox;
 
-  constructor(public position: Position, public tower: OrangeTower) {
+  constructor(public tower: OrangeTower, public gridPosition: GridPosition) {
     super();
     this.hitbox = tower.hitbox;
   }
@@ -23,11 +23,11 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
     return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, hooks, target, damage);
   }
 
-  toPhysic(hooks: BattleArmyHooks): OrangeBattleTower {
-    return new OrangeBattleTower(this.clone(), hooks);
+  toPhysic(position: Position, hooks: BattleArmyHooks): OrangeBattleTower {
+    return new OrangeBattleTower(this.clone(), position, hooks);
   }
 
   clone() {
-    return new OrangeTowerRecruit({ x: this.position.x, y: this.position.y }, new OrangeTower());
+    return new OrangeTowerRecruit(new OrangeTower(), { gridX: this.gridPosition.gridX, gridY: this.gridPosition.gridY });
   }
 }

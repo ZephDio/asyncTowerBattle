@@ -1,22 +1,25 @@
-import { BattleArmy, BattleArmyHooks } from "../../army/battle/battle-army";
-import { PhysicEntity } from "../../../shared/physic";
+import { BattleArmyHooks } from "../../army/battle/battle-army";
+import { Physic, PhysicEntity } from "../../../shared/physic";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { Tower } from "../entity/tower";
 import { TowerRecruit } from "../recruit/tower-recruit";
-import { SearchTarget } from "../../battle/battlefield/battlefield";
 import { BattleUnit } from "../../units/battle/entity-units-physic";
+import { GridPosition, Position } from "../../../shared/position";
 
 export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends PhysicEntity<TowerRecruit<Tower>> {
   attackDamage: number;
   target = null as null | BattleUnit<UnitRecruit<Unit>>;
   attackIntent = null as null | TowerAttackIntent;
   abstract type: TowerRecruit<Tower>["type"];
+  gridPosition: GridPosition
   constructor(
     towerEntity: BT,
+    public position: Position,
     public hooks: BattleArmyHooks) {
-    super(towerEntity.clone(), towerEntity.position, 0, towerEntity.type);
+    super(towerEntity.clone(), position, 0, towerEntity.type);
     this.attackDamage = this.entity.attackDamage;
+    this.gridPosition = this.entity.gridPosition
   }
 
   setTarget(enemyUnit: BattleUnit<UnitRecruit<Unit>> | null) {
@@ -35,7 +38,7 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
     }
     if (!this.attackIntent) {
       this.attackIntent = new TowerAttackIntent(this, () => {
-        if (this.target && this.entity.doesTargetMatchesRule(this.target)) {
+        if (this.target && this.entity.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))) {
           this.attack(this.target);
           return;
         }
@@ -54,6 +57,18 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
     this.hooks.addProjectile(projectile, this);
     this.attackIntent = null;
   }
+
+  toSerialized() {
+    return {
+      type: this.type,
+      gridPosition: this.gridPosition
+    }
+  }
+}
+
+export type SerializedBattleTower = {
+  type: string,
+  gridPosition: GridPosition
 }
 
 export class TowerAttackIntent {

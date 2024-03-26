@@ -16,6 +16,7 @@ import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { Army } from "../entity/army";
 import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
+import { Grid } from "../../grid/grid";
 
 export type BattleArmyHooks = {
   addUnits: BattleArmy["addUnit"],
@@ -36,8 +37,17 @@ export class BattleArmy {
   barracks: BattleBarrack<UnitRecruit<Soldier>>[];
   projectiles: Map<BattleProjectile<Projectile>, BattleTower<TowerRecruit<Tower>>> = new Map();
   towers: BattleTower<TowerRecruit<Tower>>[];
+  grid: Grid
 
-  constructor(army: Army, enemyCastle: BattleCastle, alliedCastle: BattleCastle, enemyPath: Path, barracks: Barrack<SoldierRecruit>[], public searchTarget: SearchTarget, public searchEnemyInArea: SearchAreaForUnit) {
+  constructor(
+    army: Army,
+    enemyCastle: BattleCastle,
+    alliedCastle: BattleCastle,
+    enemyPath: Path,
+    barracks: Barrack<SoldierRecruit>[],
+    public searchTarget: SearchTarget,
+    public searchEnemyInArea: SearchAreaForUnit) {
+    this.grid = army.grid
     this.castle = alliedCastle;
     this.path = army.path;
     this.barracks = barracks.map(
@@ -56,7 +66,7 @@ export class BattleArmy {
           barrack.unitRecruit
         )
     );
-    this.towers = army.towers.map((tower) => tower.toPhysic(this.getHooks()));
+    this.towers = army.towers.map((tower) => tower.toPhysic(this.grid.gridPositionToReal(tower.gridPosition), this.getHooks()));
   }
 
   addUnit(entityRecruit: BattleUnit<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) {

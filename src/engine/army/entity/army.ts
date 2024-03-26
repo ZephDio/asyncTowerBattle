@@ -6,14 +6,16 @@ import { Recruit } from "../../../shared/physic";
 import { Tower } from "../../tower/entity/tower";
 import { TowerRecruit } from "../../tower/recruit/tower-recruit";
 import { Unit } from "../../units/entity/units";
+import { Grid } from "../../grid/grid";
 
 export class Army {
   constructor(
     public castle: CastleRecruit<Castle>,
     public towers: TowerRecruit<Tower>[],
     public path: Path,
+    public grid: Grid,
     public barracks: Barrack<Unit>[]
-  ) {}
+  ) { }
 
   recruit(recruit: Recruit, type: string) {
     if (type === "tower") {
