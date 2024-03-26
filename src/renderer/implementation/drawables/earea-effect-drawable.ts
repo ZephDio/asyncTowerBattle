@@ -20,7 +20,8 @@ export class AreaEffectDrawable extends Drawable<AreaEffect>{
     applyStyle(context: CanvasRenderingContext2D) {
         const color = Resources.areaEffects[this.areaEffect.type].resource.color;
         context.strokeStyle = color;
-        context.lineWidth = 50;
+        context.fillStyle = "transparent"
+        context.lineWidth = 11
     }
     draw(context: CanvasRenderingContext2D) {
         this.applyStyle(context)

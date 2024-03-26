@@ -18,8 +18,8 @@ export abstract class TowerRecruit<T extends Tower> implements Recruit {
   abstract position: Position;
   abstract tower: T;
 
-  doesTargetMatchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>) {
-    return enemyUnit.isAlive() && Physic.getDistance(enemyUnit.position, this.position) < 62;
+  doesTargetMatchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>, distanceSqrd : number) {
+    return enemyUnit.isAlive() && distanceSqrd < 62*62;
   }
 
   abstract getProjectile(hooks: BattleArmyHooks, target: PhysicEntity<Recruit>, position: Position, damage: number): BattleProjectile<Projectile>;

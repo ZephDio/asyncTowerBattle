@@ -70,10 +70,10 @@ export class Battlefield {
   searchAlliedTowerTarget(tower: BattleTower<TowerRecruit<Tower>>) {
     let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
     for (const enemyUnit of [...this.enemyArmy.units.keys()]) {
-      if (tower.entity.doesTargetMatchesRule(enemyUnit)) {
-        const distance = Physic.getDistance(tower.position, enemyUnit.position);
-        if (distance < bestTarget[1]) {
-          bestTarget = [enemyUnit, distance];
+      const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
+      if (tower.entity.doesTargetMatchesRule(enemyUnit, distanceSqrd)) {
+        if (distanceSqrd < bestTarget[1]) {
+          bestTarget = [enemyUnit, distanceSqrd];
         }
       }
     }
@@ -84,10 +84,10 @@ export class Battlefield {
   searchEnemyTowerTarget(tower: BattleTower<TowerRecruit<Tower>>) {
     let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
     for (const enemyUnit of [...this.alliedArmy.units.keys()]) {
-      if (tower.entity.doesTargetMatchesRule(enemyUnit)) {
-        const distance = Physic.getDistance(tower.position, enemyUnit.position);
-        if (distance < bestTarget[1]) {
-          bestTarget = [enemyUnit, distance];
+      const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
+      if (tower.entity.doesTargetMatchesRule(enemyUnit, distanceSqrd)) {
+        if (distanceSqrd < bestTarget[1]) {
+          bestTarget = [enemyUnit, distanceSqrd];
         }
       }
     }

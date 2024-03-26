@@ -35,7 +35,7 @@ export class Physic {
   static getVectorSqrd(positionA: Position, positionB: Position) {
     const differentialX = positionA.x - positionB.x;
     const differentialY = positionA.y - positionB.y;
-    return { distance: Math.pow(differentialX, 2) + Math.pow(differentialY, 2), theta: Math.atan2(differentialY, differentialX) };
+    return { distance: Math.pow(differentialX, 2) + Math.pow(differentialY, 2), theta: Math.atan2(differentialY, differentialX)  };
   }
 
   static getEllipseRadius(radiusWidth: number, radiusHeight: number, theta: number) {
