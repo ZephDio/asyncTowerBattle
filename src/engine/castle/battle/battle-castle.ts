@@ -2,13 +2,13 @@ import { Castle } from "../entity/castle";
 import { PhysicEntity } from "../../../shared/physic";
 import { CastleRecruit } from "../recruit/castle-recruit";
 import { GridPosition, Position } from "../../../shared/position";
+import { BattleGrid } from "../../grid/battle-grid";
 
 export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
   public actualLife: number;
   public maxLife: number;
-  public gridPosition: GridPosition;
 
-  constructor(castleEntity: CastleRecruit<Castle>, public onDeath: Function, position: Position) {
+  constructor(castleEntity: CastleRecruit<Castle>, public onDeath: Function, public gridPosition : GridPosition, position: Position) {
     super(castleEntity, position, 0, "castle");
     this.actualLife = castleEntity.maxLife;
     this.maxLife = castleEntity.maxLife;
@@ -34,6 +34,15 @@ export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
       gridPosition: this.gridPosition,
       position: this.position,
     };
+  }
+
+  static toAllied(castleRecruit : CastleRecruit<Castle>, battleGrid : BattleGrid, onBattleOver : Function){
+    return new BattleCastle(castleRecruit, onBattleOver,castleRecruit.gridPosition, battleGrid.gridPositionToReal(castleRecruit.gridPosition))
+  }
+
+  static toEnemy(castleRecruit : CastleRecruit<Castle>, battleGrid : BattleGrid, onBattleOver : Function){
+    const flippedGridPosition = BattleGrid.flip(battleGrid,castleRecruit.gridPosition)
+    return new BattleCastle(castleRecruit, onBattleOver, flippedGridPosition,battleGrid.gridPositionToReal(flippedGridPosition))
   }
 }
 

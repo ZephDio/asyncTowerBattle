@@ -6,7 +6,8 @@ import { BattleBulletProjectile } from "../../../projectile/battle/implementatio
 import { OrangeBattleTower } from "../../battle/implementation/battle-orange-tower";
 import { OrangeTower } from "../../entity/implementation/orange-tower";
 import { TowerRecruit } from "../tower-recruit";
-import { SearchTarget } from "../../../battle/battlefield/battlefield";
+import { BattleGrid } from "../../../grid/battle-grid";
+import { BattleTower } from "../../battle/battle-tower";
 
 export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
   attackDamage = 10;
@@ -23,8 +24,17 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
     return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, hooks, target, damage);
   }
 
-  toPhysic(position: Position, hooks: BattleArmyHooks): OrangeBattleTower {
-    return new OrangeBattleTower(this.clone(), position, hooks);
+  toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<OrangeTower>> {
+    const clone = this.clone()
+    const position =grid.gridPositionToReal(clone.gridPosition) 
+    return new OrangeBattleTower(clone, position, clone.gridPosition, hooks);
+  }
+
+  toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<OrangeTower>> {
+    const clone = this.clone()
+    const gridPosition = BattleGrid.flip(grid,clone.gridPosition)
+    const position = grid.gridPositionToReal(gridPosition) 
+    return new OrangeBattleTower(clone, position,gridPosition, hooks);
   }
 
   clone() {

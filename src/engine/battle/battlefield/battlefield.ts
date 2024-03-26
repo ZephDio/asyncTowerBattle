@@ -30,63 +30,43 @@ export class Battlefield {
 
   init(alliedArmy: Army, enemyArmy: Army): { alliedBattleArmy: BattleArmy; enemyBattleArmy: BattleArmy; battleGrid: BattleGrid } {
     const grid = BattleGrid.fuse(alliedArmy.grid, enemyArmy.grid);
-    const enemyCastle = new BattleCastle(
-      enemyArmy.castle,
-      () => this.onBattleOver("victory"),
-      enemyArmy.grid.gridPositionToReal(enemyArmy.castle.gridPosition)
-    );
-    const alliedCastle = new BattleCastle(
-      alliedArmy.castle,
-      () => this.onBattleOver("defeat"),
-      alliedArmy.grid.gridPositionToReal(alliedArmy.castle.gridPosition)
-    );
+    const alliedBattleArmy = new BattleArmy(grid,this.searchAlliedTowerTarget.bind(this), this.searchEnemiesInArea.bind(this))
+    const enemyBattleArmy = new BattleArmy(grid,this.searchEnemyTowerTarget.bind(this), this.searchAlliesInArea.bind(this))
+    const enemyCastle = BattleCastle.toEnemy(enemyArmy.castle, grid, () => this.onBattleOver("victory"))
+    const alliedCastle = BattleCastle.toAllied(alliedArmy.castle, grid, () => this.onBattleOver("defeat"))
     const alliedBattlePath = alliedArmy.path.toBattlePath(alliedArmy.grid, alliedCastle, enemyCastle);
     const enemyBattlePath = enemyArmy.path.toBattlePath(alliedArmy.grid, enemyCastle, alliedCastle);
-    const alliedBattleArmy = this.buildBattleArmy(
-      alliedArmy,
-      enemyCastle,
-      alliedCastle,
-      enemyBattlePath,
-      this.searchAlliedTowerTarget.bind(this),
-      this.searchEnemiesInArea.bind(this)
-    );
-    const enemyBattleArmy = this.buildBattleArmy(
-      enemyArmy,
-      alliedCastle,
-      enemyCastle,
-      alliedBattlePath,
-      this.searchEnemyTowerTarget.bind(this),
-      this.searchAlliesInArea.bind(this)
-    );
+    const enemyTowers = enemyArmy.towers.map(tower => tower.toEnemy(grid, enemyBattleArmy.getHooks()))
+    const alliedTowers = alliedArmy.towers.map(tower => tower.toAllied(grid, alliedBattleArmy.getHooks()))
 
-    enemyBattleArmy.flip();
+
+    // const alliedBattleArmy = BattleArmy.build(
+    //   alliedArmy,
+    //   enemyCastle,
+    //   alliedCastle,
+    //   enemyBattlePath,
+    //   grid,
+    //   alliedTowers,
+    //   this.searchAlliedTowerTarget.bind(this),
+    //   this.searchEnemiesInArea.bind(this)
+    // );
+    // const enemyBattleArmy = BattleArmy.build(
+    //   enemyArmy,
+    //   alliedCastle,
+    //   enemyCastle,
+    //   alliedBattlePath,
+    //   grid,
+    //   enemyTowers,
+    //   this.searchEnemyTowerTarget.bind(this),
+    //   this.searchAlliesInArea.bind(this)
+    // );
+
 
     return {
       alliedBattleArmy: alliedBattleArmy,
       enemyBattleArmy: enemyBattleArmy,
       battleGrid: grid,
     };
-  }
-
-  buildBattleArmy(
-    army: Army,
-    enemyCastle: BattleCastle,
-    alliedCastle: BattleCastle,
-    enemyPath: BattlePath,
-    grid: BattleGrid,
-    setTarget: SearchTarget,
-    searchEnemiesInArea: SearchAreaForUnit
-  ) {
-    return new BattleArmy(
-      army,
-      enemyCastle,
-      alliedCastle,
-      enemyPath,
-      army.barracks as SoldierBarrack[],
-      grid,
-      setTarget,
-      searchEnemiesInArea
-    );
   }
 
   tick() {

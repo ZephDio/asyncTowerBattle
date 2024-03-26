@@ -18,6 +18,7 @@ import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battle
 import { AreaEffect } from "../../area-effect/area-effect";
 import { Grid } from "../../grid/grid";
 import { BattleGrid } from "../../grid/battle-grid";
+import { SoldierBarrack } from "../../barrack/entity/implementation/solider-barrack";
 
 export type BattleArmyHooks = {
   addUnits: BattleArmy["addUnit"];
@@ -33,44 +34,47 @@ export type BattleArmyHooks = {
 export class BattleArmy {
   units: Map<BattleUnit<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> = new Map(); //.set(BattleUnitFixture.soldier, {} as any);
   areaEffects: Map<AreaEffect, any> = new Map();
-  path: ArmyPath;
+  path: BattlePath;
   castle: BattleCastle;
   barracks: BattleBarrack<UnitRecruit<Soldier>>[];
   projectiles: Map<BattleProjectile<Projectile>, BattleTower<TowerRecruit<Tower>>> = new Map();
-  towers: BattleTower<TowerRecruit<Tower>>[];
+  towers : BattleTower<TowerRecruit<Tower>>[]
 
   constructor(
-    army: Army,
-    enemyCastle: BattleCastle,
-    alliedCastle: BattleCastle,
-    enemyPath: BattlePath,
-    barracks: Barrack<SoldierRecruit>[],
+
     public grid: BattleGrid,
     public searchTarget: SearchTarget,
     public searchEnemyInArea: SearchAreaForUnit
   ) {
-    this.castle = alliedCastle;
-    this.path = army.path;
-    this.barracks = barracks.map(
-      (barrack) =>
-        new SoldierBattleBarrack(
-          barrack.productionSpeed,
-          { x: alliedCastle.position.x, y: alliedCastle.position.y },
-          enemyPath,
-          enemyCastle,
-          (entityRecruit: BattleUnit<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) => {
-            this.addUnit(entityRecruit, battleBarrack);
-          },
-          (entityRecruit: BattleUnit<UnitRecruit<Unit>>) => {
-            this.removeUnit(entityRecruit);
-          },
-          barrack.unitRecruit
-        )
-    );
-    this.towers = army.towers.map((tower) => tower.toPhysic(this.grid.gridPositionToReal(tower.gridPosition), this.getHooks()));
+    // this.castle = alliedCastle;
+    // this.path = army.path;
+    // this.barracks = barracks.map(
+    //   (barrack) =>
+    //     new SoldierBattleBarrack(
+    //       barrack.productionSpeed,
+    //       { x: alliedCastle.position.x, y: alliedCastle.position.y },
+    //       enemyPath,
+    //       enemyCastle,
+    //       (entityRecruit: BattleUnit<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) => {
+    //         this.addUnit(entityRecruit, battleBarrack);
+    //       },
+    //       (entityRecruit: BattleUnit<UnitRecruit<Unit>>) => {
+    //         this.removeUnit(entityRecruit);
+    //       },
+    //       barrack.unitRecruit
+    //     )
+    // );
+    // this.towers = army.towers.map((tower) => tower.toPhysic(this.grid.gridPositionToReal(tower.gridPosition), this.getHooks()));
   }
 
-  flip() {}
+  init(castle : BattleCastle, path: BattlePath, towers : BattleTower<TowerRecruit<Tower>>[], barracks : BattleBarrack<UnitRecruit<Soldier>>[]){
+    this.castle = castle
+    this.path = path
+    this.towers = towers
+    this.barracks = barracks
+  }
+
+
   addUnit(entityRecruit: BattleUnit<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) {
     this.units.set(entityRecruit, battleBarrack);
   }
@@ -107,4 +111,28 @@ export class BattleArmy {
       searchEnemyInArea: this.searchEnemyInArea.bind(this),
     };
   }
+
+
+  // static build(
+  //   army: Army,
+  //   enemyCastle: BattleCastle,
+  //   alliedCastle: BattleCastle,
+  //   enemyPath: BattlePath,
+  //   grid: BattleGrid,
+  //   towers: BattleTower<TowerRecruit<Tower>>[],
+  //   setTarget: SearchTarget,
+  //   searchEnemiesInArea: SearchAreaForUnit
+  // ) {
+  //   return new BattleArmy(
+  //     army,
+  //     enemyCastle,
+  //     alliedCastle,
+  //     enemyPath,
+  //     army.barracks as SoldierBarrack[],
+  //     grid,
+  //     towers,
+  //     setTarget,
+  //     searchEnemiesInArea
+  //   );
+  // }
 }

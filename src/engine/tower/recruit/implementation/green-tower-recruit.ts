@@ -7,6 +7,8 @@ import { GreenBattleTower } from "../../battle/implementation/battle.green.tower
 import { GreenTower } from "../../entity/implementation/green-tower";
 import { TowerRecruit } from "../tower-recruit";
 import { SearchTarget } from "../../../battle/battlefield/battlefield";
+import { BattleTower } from "../../battle/battle-tower";
+import { BattleGrid } from "../../../grid/battle-grid";
 
 export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
   attackDamage = 10;
@@ -23,9 +25,19 @@ export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
     return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, hooks, target, damage);
   }
 
-  toPhysic(position: Position, hooks: BattleArmyHooks): GreenBattleTower {
-    return new GreenBattleTower(this.clone(), position, hooks);
+  toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<GreenTower>> {
+    const clone = this.clone()
+    const position =grid.gridPositionToReal(clone.gridPosition) 
+    return new GreenBattleTower(clone, position, clone.gridPosition, hooks);
   }
+
+  toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<GreenTower>> {
+    const clone = this.clone()
+    const gridPosition = BattleGrid.flip(grid,clone.gridPosition)
+    const position = grid.gridPositionToReal(gridPosition) 
+    return new GreenBattleTower(clone, position,gridPosition, hooks);
+  }
+
 
   clone() {
     return new GreenTowerRecruit(new GreenTower(), { gridX: this.gridPosition.gridX, gridY: this.gridPosition.gridY });

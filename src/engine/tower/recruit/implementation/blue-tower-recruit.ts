@@ -6,6 +6,8 @@ import { BattleRocketProjectile } from "../../../projectile/battle/implementatio
 import { BlueBattleTower } from "../../battle/implementation/battle-blue-tower";
 import { BlueTower } from "../../entity/implementation/blue-tower";
 import { TowerRecruit } from "../tower-recruit";
+import { BattleGrid } from "../../../grid/battle-grid";
+import { BattleTower } from "../../battle/battle-tower";
 
 export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
   attackDamage = 7;
@@ -23,8 +25,17 @@ export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
   }
 
 
-  toPhysic(position: Position, hooks: BattleArmyHooks): BlueBattleTower {
-    return new BlueBattleTower(this.clone(), position, hooks);
+  toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<BlueTower>> {
+    const clone = this.clone()
+    const position =grid.gridPositionToReal(clone.gridPosition) 
+    return new BlueBattleTower(clone, position, clone.gridPosition, hooks);
+  }
+
+  toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<BlueTower>> {
+    const clone = this.clone()
+    const gridPosition = BattleGrid.flip(grid,clone.gridPosition)
+    const position = grid.gridPositionToReal(gridPosition) 
+    return new BlueBattleTower(clone, position,gridPosition, hooks);
   }
 
 

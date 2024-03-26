@@ -13,11 +13,9 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
   target = null as null | BattleUnit<UnitRecruit<Unit>>;
   attackIntent = null as null | TowerAttackIntent;
   abstract type: TowerRecruit<Tower>["type"];
-  gridPosition: GridPosition;
-  constructor(towerEntity: BT, public position: Position, public hooks: BattleArmyHooks) {
+  constructor(towerEntity: BT, public position: Position, gridPosition : GridPosition, public hooks: BattleArmyHooks) {
     super(towerEntity.clone(), position, 0, towerEntity.type);
     this.attackDamage = this.entity.attackDamage;
-    this.gridPosition = this.entity.gridPosition;
   }
 
   setTarget(enemyUnit: BattleUnit<UnitRecruit<Unit>> | null) {
@@ -63,6 +61,7 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
       position: grid.gridPositionToReal(this.gridPosition),
     };
   }
+
 }
 
 export type SerializedBattleTower = {

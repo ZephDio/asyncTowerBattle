@@ -9,6 +9,7 @@ import { BattleTower } from "../battle/battle-tower";
 import { Tower } from "../entity/tower";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { Grid } from "../../grid/grid";
+import { BattleGrid } from "../../grid/battle-grid";
 
 export abstract class TowerRecruit<T extends Tower> implements Recruit {
   abstract type: T["type"];
@@ -29,7 +30,8 @@ export abstract class TowerRecruit<T extends Tower> implements Recruit {
     damage: number
   ): BattleProjectile<Projectile>;
 
-  abstract toPhysic(position: Position, hooks: BattleArmyHooks): BattleTower<TowerRecruit<T>>;
+  abstract toAllied(grid : BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<T>>;
+  abstract toEnemy(grid : BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<T>>;
   abstract clone(): TowerRecruit<T>;
 
   toSerialized(grid: Grid): SerializedTowerRecruit {
