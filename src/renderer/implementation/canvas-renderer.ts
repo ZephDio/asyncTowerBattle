@@ -176,7 +176,7 @@ export class CanvasRenderer implements Renderer {
 	}
 
 	drawBackGround() {
-		this.context.fillStyle = "grey";
+		this.context.fillStyle = "#A65";
 		this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 

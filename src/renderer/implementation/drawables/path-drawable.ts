@@ -4,7 +4,7 @@ import { Resources } from "../../resources";
 import { Drawable } from "./drawable";
 
 export class PathDrawable extends Drawable {
-	public drawPriority: number = 1;
+	public drawPriority: number = 2;
 	constructor(
 		public tiles: { position: Position; type: string }[],
 		public size: Size,
@@ -20,8 +20,8 @@ export class PathDrawable extends Drawable {
 
 	applyStyle(context: CanvasRenderingContext2D, type: string) {
 		const color = (Resources as any).path[type].resource;
-		context.strokeStyle = color;
+		context.strokeStyle = "transparent";
 		context.fillStyle = color;
-		context.lineWidth = 1;
+		context.lineWidth = 0;
 	}
 }
