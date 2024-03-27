@@ -26,7 +26,7 @@ import { HudElement } from "../../shared/hud-element";
 import { HudElementDrawable } from "./drawables/hud-element-drawable";
 import { SerializedCastleRecruit } from "../../engine/castle/recruit/castle-recruit";
 import { AreaEffect } from "../../engine/area-effect/area-effect";
-import { AreaEffectDrawable } from "./drawables/earea-effect-drawable";
+import { AreaEffectDrawable } from "./drawables/area-effect-drawable";
 import { GridDrawable } from "./drawables/grid-drawable";
 import { SerializedGrid } from "../../engine/grid/grid";
 export const proportion = 16 / 9.8;

@@ -1,5 +1,4 @@
 import { BattleBarrack } from "../../barrack/battle/battle-barrack";
-import { SoldierBattleBarrack } from "../../barrack/battle/implementation/soldier-barrack";
 import { Barrack } from "../../barrack/entity/barrack";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { ArmyPath, BattlePath } from "../../path/entity/path";
@@ -14,11 +13,14 @@ import { Unit } from "../../units/entity/units";
 import { SoldierRecruit } from "../../units/recruit/implementation/soldier-recruit";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { Army } from "../entity/army";
-import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
+import {
+  SearchAreaForUnit,
+  SearchTarget,
+} from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
 import { Grid } from "../../grid/grid";
 import { BattleGrid } from "../../grid/battle-grid";
-import { SoldierBarrack } from "../../barrack/entity/implementation/solider-barrack";
+import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 
 export type BattleArmyHooks = {
   addUnits: BattleArmy["addUnit"];
@@ -32,16 +34,19 @@ export type BattleArmyHooks = {
 };
 
 export class BattleArmy {
-  units: Map<BattleUnit<UnitRecruit<Unit>>, BattleBarrack<UnitRecruit<Unit>>> = new Map(); //.set(BattleUnitFixture.soldier, {} as any);
+  units: Map<BattleUnit<UnitRecruit<Unit>>, BattleBarrack<BarrackRecruit>> =
+    new Map();
   areaEffects: Map<AreaEffect, any> = new Map();
   path: BattlePath;
   castle: BattleCastle;
-  barracks: BattleBarrack<UnitRecruit<Soldier>>[];
-  projectiles: Map<BattleProjectile<Projectile>, BattleTower<TowerRecruit<Tower>>> = new Map();
-  towers : BattleTower<TowerRecruit<Tower>>[]
+  barracks: BattleBarrack<BarrackRecruit>[];
+  projectiles: Map<
+    BattleProjectile<Projectile>,
+    BattleTower<TowerRecruit<Tower>>
+  > = new Map();
+  towers: BattleTower<TowerRecruit<Tower>>[];
 
   constructor(
-
     public grid: BattleGrid,
     public searchTarget: SearchTarget,
     public searchEnemyInArea: SearchAreaForUnit
@@ -67,15 +72,22 @@ export class BattleArmy {
     // this.towers = army.towers.map((tower) => tower.toPhysic(this.grid.gridPositionToReal(tower.gridPosition), this.getHooks()));
   }
 
-  init(castle : BattleCastle, path: BattlePath, towers : BattleTower<TowerRecruit<Tower>>[], barracks : BattleBarrack<UnitRecruit<Soldier>>[]){
-    this.castle = castle
-    this.path = path
-    this.towers = towers
-    this.barracks = barracks
+  init(
+    castle: BattleCastle,
+    path: BattlePath,
+    towers: BattleTower<TowerRecruit<Tower>>[],
+    barracks: BattleBarrack<BarrackRecruit>[]
+  ) {
+    this.castle = castle;
+    this.path = path;
+    this.towers = towers;
+    this.barracks = barracks;
   }
 
-
-  addUnit(entityRecruit: BattleUnit<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<UnitRecruit<Unit>>) {
+  addUnit(
+    entityRecruit: BattleUnit<UnitRecruit<Unit>>,
+    battleBarrack: BattleBarrack<BarrackRecruit>
+  ) {
     this.units.set(entityRecruit, battleBarrack);
   }
 
@@ -83,7 +95,10 @@ export class BattleArmy {
     this.units.delete(entityRecruit);
   }
 
-  addProjectile(projectile: BattleProjectile<Projectile>, source: BattleTower<TowerRecruit<Tower>>) {
+  addProjectile(
+    projectile: BattleProjectile<Projectile>,
+    source: BattleTower<TowerRecruit<Tower>>
+  ) {
     this.projectiles.set(projectile, source);
   }
 
@@ -111,7 +126,6 @@ export class BattleArmy {
       searchEnemyInArea: this.searchEnemyInArea.bind(this),
     };
   }
-
 
   // static build(
   //   army: Army,

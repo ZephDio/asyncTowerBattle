@@ -29,6 +29,13 @@ export class Grid {
     };
   }
 
+  realPositionToGrid(position: Position) {
+    return {
+      gridX: Math.round((position.x - this.position.x) / this.tileSize - 0.5),
+      gridY: Math.round((position.y - this.position.y) / this.tileSize - 0.5),
+    };
+  }
+
   setElement(gridElement: GridElement) {
     //this.grid.set(gridElement.gridPosition.x)
   }

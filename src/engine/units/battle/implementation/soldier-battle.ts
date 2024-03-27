@@ -1,4 +1,5 @@
 import { Position } from "../../../../shared/position";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattleCastle } from "../../../castle/battle/battle-castle";
 import { ArmyPath, BattlePath } from "../../../path/entity/path";
 import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
@@ -10,8 +11,13 @@ export class BattleSoldier extends BattleUnit<SoldierRecruit> {
   actualLife: number;
   attackSpeed: number;
   attackDamage: number;
-  constructor(entity: SoldierRecruit, position: Position, path: BattlePath, targetCastle: BattleCastle, private onDeath: Function) {
-    super(entity, position, path, targetCastle);
+  constructor(
+    entity: SoldierRecruit,
+    position: Position,
+    path: BattlePath,
+    private hooks: BattleArmyHooks
+  ) {
+    super(entity, position, path);
     this.speed = entity.speed;
     this.maxLife = entity.maxLife;
     this.actualLife = entity.maxLife;
@@ -40,7 +46,7 @@ export class BattleSoldier extends BattleUnit<SoldierRecruit> {
   isAttacked(damage: number) {
     this.actualLife -= damage;
     if (this.actualLife < 0) {
-      this.onDeath(this);
+      this.hooks.removeUnit(this);
     }
   }
 

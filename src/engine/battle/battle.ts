@@ -37,7 +37,9 @@ export class Battle {
     const battleState: BattleState = {
       type: "battle",
       castles: [this.battlefield.alliedArmy.castle, this.battlefield.enemyArmy.castle].map((castle) => castle.toSerialized()),
-      towers: [...this.battlefield.alliedArmy.towers, ...this.battlefield.enemyArmy.towers].map((tower) => tower.toSerialized(this.grid)),
+      towers: [...this.battlefield.alliedArmy.towers, ...this.battlefield.enemyArmy.towers].map((tower) =>
+        tower.toSerialized(this.battlefield.grid)
+      ),
       paths: [this.battlefield.alliedArmy.path, this.battlefield.enemyArmy.path],
       entities: [...this.battlefield.units],
       projectiles: [...this.battlefield.projectiles],

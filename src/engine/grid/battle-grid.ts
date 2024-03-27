@@ -35,13 +35,12 @@ export class BattleGrid {
     return serialized;
   }
 
-  static flip(battleGrid : BattleGrid, gridPosition: GridPosition){
-    const halfWidth = battleGrid.width / 2
-    const halfHeight = battleGrid.height /2
+  static flip(battleGrid: BattleGrid, gridPosition: GridPosition) {
+    const halfWidth = (battleGrid.width - 1) / 2;
+    const halfHeight = (battleGrid.height - 1) / 2;
     return {
-      gridX :  (halfWidth - gridPosition.gridX ) + halfWidth,
-      gridY : (halfHeight - gridPosition.gridX) + halfHeight
-    }
-  } 
+      gridX: halfWidth - gridPosition.gridX + halfWidth,
+      gridY: halfHeight - gridPosition.gridY + halfHeight,
+    };
+  }
 }
- 

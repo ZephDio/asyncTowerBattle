@@ -26,18 +26,17 @@ export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
   }
 
   toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<GreenTower>> {
-    const clone = this.clone()
-    const position =grid.gridPositionToReal(clone.gridPosition) 
+    const clone = this.clone();
+    const position = grid.gridPositionToReal(clone.gridPosition);
     return new GreenBattleTower(clone, position, clone.gridPosition, hooks);
   }
 
   toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<GreenTower>> {
-    const clone = this.clone()
-    const gridPosition = BattleGrid.flip(grid,clone.gridPosition)
-    const position = grid.gridPositionToReal(gridPosition) 
-    return new GreenBattleTower(clone, position,gridPosition, hooks);
+    const clone = this.clone();
+    const gridPosition = BattleGrid.flip(grid, clone.gridPosition);
+    const position = grid.gridPositionToReal(gridPosition);
+    return new GreenBattleTower(clone, position, gridPosition, hooks);
   }
-
 
   clone() {
     return new GreenTowerRecruit(new GreenTower(), { gridX: this.gridPosition.gridX, gridY: this.gridPosition.gridY });

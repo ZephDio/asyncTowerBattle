@@ -1,13 +1,17 @@
 import { Position } from "../../../shared/position";
-import { BattleArmy } from "../../army/battle/battle-army";
+import { BattleArmy, BattleArmyHooks } from "../../army/battle/battle-army";
 import { ArmyPath, BattlePath } from "../../path/entity/path";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
+import { BarrackRecruit } from "../recruit/barrack-recruit";
 
-export class UnitProduction<U extends Unit> {
+export class UnitProduction {
   progress = 0;
-  constructor(public barrack: BattleBarrack<UnitRecruit<U>>, public resolve: Function) {}
+  constructor(
+    public barrack: BattleBarrack<BarrackRecruit>,
+    public resolve: Function
+  ) {}
 
   tick() {
     this.progress += this.barrack.productionSpeed;
@@ -17,15 +21,14 @@ export class UnitProduction<U extends Unit> {
   }
 }
 
-export abstract class BattleBarrack<U extends UnitRecruit<Unit>> {
+export abstract class BattleBarrack<BR extends BarrackRecruit> {
   constructor(
-    public targetCastle: BattleCastle,
+    public barrackRecruit: BR,
     public productionSpeed: number,
     public position: Position,
     public path: BattlePath,
-    public addRecruit: BattleArmy["addUnit"],
-
-    public recruit: U
+    public recruit: UnitRecruit<Unit>,
+    public hooks: BattleArmyHooks
   ) {}
 
   abstract tick(): void;

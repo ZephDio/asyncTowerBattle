@@ -2,6 +2,7 @@ import { GridPosition, Position } from "../../../shared/position";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { Castle } from "../../castle/entity/castle";
 import { CastleRecruit } from "../../castle/recruit/castle-recruit";
+import { BattleGrid } from "../../grid/battle-grid";
 import { Grid } from "../../grid/grid";
 
 export type PathNode = Position;
@@ -16,9 +17,20 @@ export class ArmyPath {
   // getNodes() {
   //   return [...this.tiles, PercentToReal({ x: 10, y: 90 }) as Position];
   // }
-  toBattlePath(grid: Grid, alliedCastle: BattleCastle, enemyCastle: BattleCastle) {
+  toAllied(battleGrid: BattleGrid, grid: Grid, alliedCastle: BattleCastle, enemyCastle: BattleCastle) {
     return new BattlePath(
       this.tiles.map((tile) => new BattlePathTile(tile.gridPosition, grid.gridPositionToReal(tile.gridPosition), tile.type)),
+      alliedCastle,
+      enemyCastle
+    );
+  }
+
+  toEnemy(battleGrid: BattleGrid, grid: Grid, alliedCastle: BattleCastle, enemyCastle: BattleCastle) {
+    return new BattlePath(
+      this.tiles.map((tile) => {
+        const flippedGridPosition = BattleGrid.flip(battleGrid, tile.gridPosition);
+        return new BattlePathTile(flippedGridPosition, grid.gridPositionToReal(flippedGridPosition), tile.type);
+      }),
       alliedCastle,
       enemyCastle
     );

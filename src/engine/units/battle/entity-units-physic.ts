@@ -15,10 +15,10 @@ export abstract class BattleUnit<UE extends UnitRecruit<Unit>> extends PhysicEnt
   abstract attackDamage: number;
   attackIntent = null as null | UnitAttackIntent;
   target: BattleCastle;
-  constructor(entity: UE, position: Position, path: BattlePath, targetCastle: BattleCastle) {
+  constructor(entity: UE, position: Position, enemyPath: BattlePath) {
     super(entity, position, 0, entity.type);
-    this.pathFinder = new PathFinder(path.getNodes());
-    this.target = targetCastle;
+    this.pathFinder = new PathFinder(enemyPath.getNodes());
+    this.target = enemyPath.alliedCastle;
   }
 
   abstract canMove(): boolean;

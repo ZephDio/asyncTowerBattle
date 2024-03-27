@@ -25,16 +25,16 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
   }
 
   toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<OrangeTower>> {
-    const clone = this.clone()
-    const position =grid.gridPositionToReal(clone.gridPosition) 
+    const clone = this.clone();
+    const position = grid.gridPositionToReal(clone.gridPosition);
     return new OrangeBattleTower(clone, position, clone.gridPosition, hooks);
   }
 
   toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<OrangeTower>> {
-    const clone = this.clone()
-    const gridPosition = BattleGrid.flip(grid,clone.gridPosition)
-    const position = grid.gridPositionToReal(gridPosition) 
-    return new OrangeBattleTower(clone, position,gridPosition, hooks);
+    const clone = this.clone();
+    const gridPosition = BattleGrid.flip(grid, clone.gridPosition);
+    const position = grid.gridPositionToReal(gridPosition);
+    return new OrangeBattleTower(clone, position, gridPosition, hooks);
   }
 
   clone() {
