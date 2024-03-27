@@ -1,7 +1,7 @@
 import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
-import { BattleArmy, BattleArmyHooks } from "../../army/battle/battle-army";
+import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { AreaEffect } from "../area-effect";
 
 export class Explosion implements AreaEffect {
@@ -17,7 +17,7 @@ export class Explosion implements AreaEffect {
 	}
 
 	tick() {
-		const explosionShape = this.hitbox.hitShapes[0][0];
+		const explosionShape = this.hitbox.hitShapes[0]?.[0] || { size: { width: 0, height: 0 } };
 		explosionShape.size.width++;
 		explosionShape.size.height++;
 		if (explosionShape.size.width > this.MaxSize.width) {
@@ -30,6 +30,6 @@ export class Explosion implements AreaEffect {
 	}
 
 	get size() {
-		return this.hitbox.hitShapes[0][0].size;
+		return this.hitbox.hitShapes[0]?.[0]?.size || { width: 0, height: 0 };
 	}
 }

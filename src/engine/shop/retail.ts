@@ -51,16 +51,16 @@ export class Retail {
 
 	async fill(items: ShopItem[]) {
 		for (const [index, item] of items.entries()) {
+			const slot = this.slots[index];
+			if (!slot) throw new Error("Slot not found");
+
 			this.buyables.set(
 				{
 					type: item.type,
 					entity: item.entity,
-					position: {
-						x: this.slots[index].x,
-						y: this.slots[index].y,
-					},
+					position: slot,
 				},
-				this.slots[index],
+				slot,
 			);
 		}
 	}

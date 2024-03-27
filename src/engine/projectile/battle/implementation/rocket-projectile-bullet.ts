@@ -8,11 +8,11 @@ import { BattleProjectile } from "../battle-projectile";
 
 export class BattleRocketProjectile extends BattleProjectile<Rocket> {
 	constructor(
-		public projectileRecruit: Rocket,
+		projectileRecruit: Rocket,
 		position: Position,
-		public hooks: BattleArmyHooks,
-		public target: PhysicEntity<Recruit>,
-		public damage: number,
+		hooks: BattleArmyHooks,
+		target: PhysicEntity<Recruit>,
+		damage: number,
 	) {
 		const theta = Physic.getTheta(position, target.position);
 		super(projectileRecruit, position, hooks, target, damage);
@@ -23,23 +23,25 @@ export class BattleRocketProjectile extends BattleProjectile<Rocket> {
 	canMove(): boolean {
 		return true;
 	}
+
 	isAlive(): boolean {
 		return true;
 	}
 
-	tick() {
+	override tick() {
 		this.speed = this.speed + 0.12;
 		this.followPath();
 	}
 
-	hit() {
+	override hit() {
 		this.hooks.addAreaEffect(
 			new Explosion({ width: 10, height: 10 }, { x: this.position.x, y: this.position.y }, this.damage, this.hooks),
 			this,
 		);
 		this.hooks.removeProjectile(this);
 	}
-	isAttacked(damage: number): void {
+
+	isAttacked(): void {
 		return;
 	}
 }

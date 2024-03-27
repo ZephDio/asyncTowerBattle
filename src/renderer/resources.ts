@@ -1,12 +1,10 @@
-type ResourceType = { [key: string]: any };
-
 function createImage(src: string): HTMLImageElement {
 	const image = new Image();
 	image.src = src;
 	return image;
 }
 
-export const Resources: ResourceType = {
+export const Resources = {
 	tower: {
 		orange: {
 			size: {
@@ -131,4 +129,4 @@ export const Resources: ResourceType = {
 			},
 		},
 	},
-};
+} as const;

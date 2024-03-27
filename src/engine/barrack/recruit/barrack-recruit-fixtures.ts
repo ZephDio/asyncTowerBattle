@@ -1,5 +1,4 @@
 import { Unit } from "../../units/entity/units";
-import { SoldierRecruit } from "../../units/recruit/implementation/soldier-recruit";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { UnitRecruitFixture } from "../../units/recruit/unit-recruit-fixtures";
 import { BasicBarrack } from "../entity/implementation/basic-barrack";

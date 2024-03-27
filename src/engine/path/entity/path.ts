@@ -1,7 +1,5 @@
 import { GridPosition, Position } from "../../../shared/position";
 import { BattleCastle } from "../../castle/battle/battle-castle";
-import { Castle } from "../../castle/entity/castle";
-import { CastleRecruit } from "../../castle/recruit/castle-recruit";
 import { BattleGrid } from "../../grid/battle-grid";
 import { Grid } from "../../grid/grid";
 
@@ -15,15 +13,12 @@ export class PathTile {
 }
 
 export class ArmyPath {
-	constructor(
-		public tiles: PathTile[],
-		alliedCastle: CastleRecruit<Castle>,
-	) {}
+	constructor(public tiles: PathTile[]) {}
 
 	// getNodes() {
 	//   return [...this.tiles, PercentToReal({ x: 10, y: 90 }) as Position];
 	// }
-	toAllied(battleGrid: BattleGrid, grid: Grid, alliedCastle: BattleCastle, enemyCastle: BattleCastle) {
+	toAllied(_battleGrid: BattleGrid, grid: Grid, alliedCastle: BattleCastle, enemyCastle: BattleCastle) {
 		return new BattlePath(
 			this.tiles.map(
 				(tile) => new BattlePathTile(tile.gridPosition, grid.gridPositionToReal(tile.gridPosition), tile.type),

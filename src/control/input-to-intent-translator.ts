@@ -1,5 +1,5 @@
 import { Game } from "../engine/game";
-import { Physic, PhysicEntity } from "../shared/physic";
+import { Physic } from "../shared/physic";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
 import { Position } from "../shared/position";
 import { TowerBuyable } from "../engine/shop/shop";
@@ -58,7 +58,7 @@ export class InputToIntentTranslator {
 			}
 		}
 	}
-	translateMouseReleaseInput(position: Position) {
+	translateMouseReleaseInput() {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			if (state.hold) {

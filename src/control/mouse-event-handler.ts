@@ -1,5 +1,4 @@
 import { CanvasRenderer, PercentToReal } from "../renderer/implementation/canvas-renderer";
-import { HitBox, HitShape } from "../shared/hitboxes";
 import { Position } from "../shared/position";
 import { InputToIntentTranslator } from "./input-to-intent-translator";
 
@@ -32,10 +31,10 @@ export class MouseEventHandler {
 		this.inputToIntentTranslator.translateClickInput(relativePosition);
 	}
 
-	onMouseUp(event: MouseEvent): any {
-		const mousePosition = { x: event.x, y: event.y };
-		const relativePosition = this.pixelPositionToRelative(mousePosition);
-		this.inputToIntentTranslator.translateMouseReleaseInput(relativePosition);
+	onMouseUp(_event: MouseEvent): any {
+		// const mousePosition = { x: event.x, y: event.y };
+		// const relativePosition = this.pixelPositionToRelative(mousePosition);
+		this.inputToIntentTranslator.translateMouseReleaseInput();
 	}
 
 	pixelPositionToRelative(position: Position) {
@@ -49,8 +48,7 @@ export class MouseEventHandler {
 			x: pixelPosition.x / (width / 100),
 			y: 100 - pixelPosition.y / (height / 100),
 		});
-		const shape = new HitShape("ellipse", { width: 5, height: 5 });
-		const box = new HitBox([[shape, { x: 50, y: 50 }]]);
+		// const shape = new HitShape("ellipse", { width: 5, height: 5 });
 		return relativePosition;
 	}
 }

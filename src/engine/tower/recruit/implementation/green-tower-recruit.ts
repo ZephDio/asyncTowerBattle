@@ -1,12 +1,11 @@
 import { HitBox } from "../../../../shared/hitboxes";
 import { GridPosition, Position } from "../../../../shared/position";
-import { BattleArmy, BattleArmyHooks } from "../../../army/battle/battle-army";
-import { Physic, PhysicEntity, Recruit } from "../../../../shared/physic";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { PhysicEntity, Recruit } from "../../../../shared/physic";
 import { BattleBulletProjectile } from "../../../projectile/battle/implementation/bullet-projectile-battle";
 import { GreenBattleTower } from "../../battle/implementation/battle.green.tower";
 import { GreenTower } from "../../entity/implementation/green-tower";
 import { TowerRecruit } from "../tower-recruit";
-import { SearchTarget } from "../../../battle/battlefield/battlefield";
 import { BattleTower } from "../../battle/battle-tower";
 import { BattleGrid } from "../../../grid/battle-grid";
 

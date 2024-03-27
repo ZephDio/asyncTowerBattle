@@ -1,9 +1,6 @@
-import { Position } from "../../../shared/position";
-import { BattleArmy, BattleArmyHooks } from "../../army/battle/battle-army";
-import { BattleCastle } from "../../castle/battle/battle-castle";
+import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattlePath } from "../../path/entity/path";
 import { Unit } from "../../units/entity/units";
-import { DragonRecruit } from "../../units/recruit/implementation/dragon-recruit";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { BattleBarrack } from "../battle/battle-barrack";
 import { Barrack } from "../entity/barrack";

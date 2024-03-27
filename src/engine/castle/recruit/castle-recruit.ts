@@ -1,4 +1,3 @@
-import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { GridPosition, Position } from "../../../shared/position";
 import { Grid } from "../../grid/grid";

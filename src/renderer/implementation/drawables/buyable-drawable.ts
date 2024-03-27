@@ -5,7 +5,7 @@ import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";
 import { Drawable } from "./drawable";
 
-export class BuyableDrawable extends Drawable<Buyable<Recruit>> {
+export class BuyableDrawable extends Drawable {
 	drawPriority: number = 2;
 	image: HTMLImageElement;
 	constructor(
@@ -14,8 +14,9 @@ export class BuyableDrawable extends Drawable<Buyable<Recruit>> {
 		public position: Position,
 	) {
 		super();
-		this.image = Resources[buyable.type][buyable.entity.type].resource.image;
+		this.image = (Resources as any)[buyable.type][buyable.entity.type].resource.image;
 	}
+
 	draw(context: CanvasRenderingContext2D) {
 		this.drawImage(context, this.size, this.position, this.image);
 	}

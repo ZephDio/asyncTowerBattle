@@ -10,7 +10,7 @@ export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
 
 	constructor(
 		castleEntity: CastleRecruit<Castle>,
-		public onDeath: Function,
+		public onDeath: () => void,
 		public gridPosition: GridPosition,
 		position: Position,
 	) {
@@ -20,7 +20,7 @@ export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
 		this.gridPosition = castleEntity.gridPosition;
 	}
 
-	isAttacked(damage: number): void {
+	override isAttacked(damage: number): void {
 		this.actualLife = this.actualLife - damage;
 		if (!this.isAlive()) {
 			this.onDeath();
@@ -41,7 +41,7 @@ export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
 		};
 	}
 
-	static toAllied(castleRecruit: CastleRecruit<Castle>, battleGrid: BattleGrid, onBattleOver: Function) {
+	static toAllied(castleRecruit: CastleRecruit<Castle>, battleGrid: BattleGrid, onBattleOver: () => void) {
 		return new BattleCastle(
 			castleRecruit,
 			onBattleOver,
@@ -50,7 +50,7 @@ export class BattleCastle extends PhysicEntity<CastleRecruit<Castle>> {
 		);
 	}
 
-	static toEnemy(castleRecruit: CastleRecruit<Castle>, battleGrid: BattleGrid, onBattleOver: Function) {
+	static toEnemy(castleRecruit: CastleRecruit<Castle>, battleGrid: BattleGrid, onBattleOver: () => void) {
 		const flippedGridPosition = BattleGrid.flip(battleGrid, castleRecruit.gridPosition);
 		return new BattleCastle(
 			castleRecruit,

@@ -4,7 +4,7 @@ import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";
 import { Drawable } from "./drawable";
 
-export class VerdictDrawable extends Drawable<BattleVerdict> {
+export class VerdictDrawable extends Drawable {
 	drawPriority: number = 2;
 	image: HTMLImageElement;
 	constructor(

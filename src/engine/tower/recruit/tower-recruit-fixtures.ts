@@ -1,13 +1,11 @@
-import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { BlueTowerRecruit } from "./implementation/blue-tower-recruit";
 import { GreenTowerRecruit } from "./implementation/green-tower-recruit";
 import { OrangeTowerRecruit } from "./implementation/orange-tower-recruit";
 import { BlueTower } from "../entity/implementation/blue-tower";
 import { GreenTower } from "../entity/implementation/green-tower";
 import { OrangeTower } from "../entity/implementation/orange-tower";
-import { GridPosition, Position } from "../../../shared/position";
+import { GridPosition } from "../../../shared/position";
 import { TowerFixtures } from "../entity/tower-fixtures";
-import { GridFixture } from "../../grid/grid-fixture";
 
 export class TowerRecruitBuilder {
 	gridPosition: GridPosition;

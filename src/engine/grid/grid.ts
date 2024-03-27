@@ -1,10 +1,7 @@
-import { proportion } from "../../renderer/implementation/canvas-renderer";
 import { GridPosition, Position } from "../../shared/position";
-import { BattleCastle } from "../castle/battle/battle-castle";
 import { Castle } from "../castle/entity/castle";
 import { CastleRecruit } from "../castle/recruit/castle-recruit";
 import { PathTile } from "../path/entity/path";
-import { BattleTower } from "../tower/battle/battle-tower";
 import { Tower } from "../tower/entity/tower";
 import { TowerRecruit } from "../tower/recruit/tower-recruit";
 

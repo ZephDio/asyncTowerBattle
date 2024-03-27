@@ -118,12 +118,12 @@ export class CanvasRenderer implements Renderer {
 
 	towerToTowerDrawable(tower: SerializedBattleTower | SerializedTowerRecruit, position: Position) {
 		const canvasPosition = this.getCanvasPosition(position);
-		const { width, height } = Resources.tower[tower.type].size as Size;
+		const { width, height } = (Resources.tower as any)[tower.type].size as Size;
 		const size = this.getCanvasSize(width, height);
 		return new TowerDrawable(canvasPosition, size, tower.type);
 	}
 
-	castleToCastleDrawable(castle: SerializedBattleCastle | SerializedCastleRecruit, position: Position) {
+	castleToCastleDrawable(_castle: SerializedBattleCastle | SerializedCastleRecruit, position: Position) {
 		const canvasPosition = this.getCanvasPosition(position);
 		const { width, height } = Resources.castle.size as Size;
 		const size = this.getCanvasSize(width, height);
@@ -151,7 +151,7 @@ export class CanvasRenderer implements Renderer {
 
 	buyableToDrawableBuyable(buyable: Buyable<Recruit>) {
 		const canvasPosition = this.getCanvasPosition(buyable.position);
-		const { width, height } = Resources[buyable.type][buyable.entity.type].size as Size;
+		const { width, height } = (Resources as any)[buyable.type as any][buyable.entity.type as any].size as Size;
 		const size = this.getCanvasSize(width, height);
 		return new BuyableDrawable(buyable, size, canvasPosition);
 	}
@@ -170,7 +170,7 @@ export class CanvasRenderer implements Renderer {
 
 	unitToDrawable(physicUnit: PhysicEntity<UnitRecruit<Unit>>) {
 		const position = this.getCanvasPosition(physicUnit.position);
-		const { width, height } = Resources.unit[physicUnit.entity.type].size as Size;
+		const { width, height } = (Resources as any).unit[physicUnit.entity.type].size as Size;
 		const size = this.getCanvasSize(width, height);
 		return new UnitEntityDrawable(position, size, physicUnit.entity.type);
 	}

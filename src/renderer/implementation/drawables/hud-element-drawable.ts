@@ -4,7 +4,7 @@ import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";
 import { Drawable } from "./drawable";
 
-export class HudElementDrawable<T extends HudElement> extends Drawable<T> {
+export class HudElementDrawable extends Drawable {
 	drawPriority: number = 1;
 
 	image: HTMLImageElement;
@@ -14,7 +14,7 @@ export class HudElementDrawable<T extends HudElement> extends Drawable<T> {
 		public position: Position,
 	) {
 		super();
-		this.image = Resources.hudElement[this.hudElement.type].resource.image;
+		this.image = (Resources as any).hudElement[this.hudElement.type].resource.image;
 	}
 
 	draw(context: CanvasRenderingContext2D) {

@@ -1,7 +1,7 @@
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 
-export abstract class Drawable<T = any> {
+export abstract class Drawable {
 	abstract drawPriority: number;
 	abstract draw(context: CanvasRenderingContext2D): void;
 	protected drawEllipse(context: CanvasRenderingContext2D, size: Size, position: Position) {

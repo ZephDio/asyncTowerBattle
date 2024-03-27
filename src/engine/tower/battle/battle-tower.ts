@@ -12,7 +12,7 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
 	attackDamage: number;
 	target = null as null | BattleUnit<UnitRecruit<Unit>>;
 	attackIntent = null as null | TowerAttackIntent;
-	abstract type: TowerRecruit<Tower>["type"];
+	abstract override type: TowerRecruit<Tower>["type"];
 	constructor(
 		towerEntity: BT,
 		position: Position,
@@ -26,8 +26,6 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
 	setTarget(enemyUnit: BattleUnit<UnitRecruit<Unit>> | null) {
 		this.target = enemyUnit;
 	}
-
-	isAttacked(damage: number): void {}
 
 	isAlive() {
 		return true;
@@ -81,7 +79,7 @@ export class TowerAttackIntent {
 	progress = 0;
 	constructor(
 		public towerRecruit: BattleTower<TowerRecruit<Tower>>,
-		public resolveAttack: Function,
+		public resolveAttack: () => void,
 	) {}
 
 	tick() {

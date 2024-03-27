@@ -6,7 +6,6 @@ import { BattleArmyHooks } from "../../army/battle/battle-army";
 
 export abstract class BattleProjectile<PR extends Projectile> extends PhysicEntity<Projectile> {
 	pathFinder: PathFinder;
-	theta: number;
 	speed: number;
 	constructor(
 		public projectileRecruit: PR,
