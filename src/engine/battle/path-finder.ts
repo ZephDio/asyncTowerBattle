@@ -2,48 +2,51 @@ import { Physic } from "../../shared/physic";
 import { Position } from "../../shared/position";
 
 export class PathFinder {
-  public isArrived = false;
-  constructor(public destinations: Position[], public progress: number = 0) { }
+	public isArrived = false;
+	constructor(
+		public destinations: Position[],
+		public progress: number = 0,
+	) {}
 
-  getOrientation(entityPosition: Position) {
-    this.updateNextDestination(entityPosition);
-    const destination = this.getNextDestination();
-    const theta = Physic.getTheta(entityPosition, destination);
-    return theta;
-  }
+	getOrientation(entityPosition: Position) {
+		this.updateNextDestination(entityPosition);
+		const destination = this.getNextDestination();
+		const theta = Physic.getTheta(entityPosition, destination);
+		return theta;
+	}
 
-  getNextPositionAndOrientation(position: Position, speed: number) {
-    this.updateNextDestination(position);
-    const destination = this.getNextDestination();
-    const [nextPosition, theta] = Physic.getNextPositionAndOrientation(position, destination, speed);
-    return [nextPosition, theta] as const;
-  }
+	getNextPositionAndOrientation(position: Position, speed: number) {
+		this.updateNextDestination(position);
+		const destination = this.getNextDestination();
+		const [nextPosition, theta] = Physic.getNextPositionAndOrientation(position, destination, speed);
+		return [nextPosition, theta] as const;
+	}
 
-  getNextPosition(position: Position, speed: number) {
-    this.updateNextDestination(position);
-    const destination = this.getNextDestination();
-    const [nextPosition] = Physic.getNextPositionAndOrientation(position, destination, speed);
-    return nextPosition;
-  }
-  getNextDestination() {
-    return this.destinations[this.progress];
-  }
+	getNextPosition(position: Position, speed: number) {
+		this.updateNextDestination(position);
+		const destination = this.getNextDestination();
+		const [nextPosition] = Physic.getNextPositionAndOrientation(position, destination, speed);
+		return nextPosition;
+	}
+	getNextDestination() {
+		return this.destinations[this.progress];
+	}
 
-  updateNextDestination(entityPosition: Position) {
-    const reached = this.destinationReached(entityPosition);
-    if (reached) {
-      if (this.progress < this.destinations.length - 1) {
-        this.progress++;
-        return;
-      }
-      this.isArrived = true;
-    }
-  }
+	updateNextDestination(entityPosition: Position) {
+		const reached = this.destinationReached(entityPosition);
+		if (reached) {
+			if (this.progress < this.destinations.length - 1) {
+				this.progress++;
+				return;
+			}
+			this.isArrived = true;
+		}
+	}
 
-  destinationReached(entityPosition: Position) {
-    const destination = this.getNextDestination();
-    const distance = Physic.getDistanceSqrd(entityPosition, destination);
-    if (distance < 0.20) return true;
-    return false;
-  }
+	destinationReached(entityPosition: Position) {
+		const destination = this.getNextDestination();
+		const distance = Physic.getDistanceSqrd(entityPosition, destination);
+		if (distance < 0.2) return true;
+		return false;
+	}
 }

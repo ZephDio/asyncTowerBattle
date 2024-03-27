@@ -1,3 +1,3 @@
 export abstract class Barrack {
-  abstract productionSpeed: number;
+	abstract productionSpeed: number;
 }

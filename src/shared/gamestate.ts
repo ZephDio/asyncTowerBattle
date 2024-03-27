@@ -16,35 +16,35 @@ import { AreaEffect } from "../engine/area-effect/area-effect";
 import { SerializedGrid } from "../engine/grid/grid";
 
 export interface GameState {
-  type: string;
+	type: string;
 }
 
 export interface SummaryState extends GameState {
-  type: "summary";
-  battleVerdict: BattleVerdict;
+	type: "summary";
+	battleVerdict: BattleVerdict;
 }
 
 export interface BattleState extends GameState {
-  type: "battle";
-  castles: SerializedBattleCastle[];
-  towers: SerializedBattleTower[];
-  paths: SerializedPath[];
-  grid: SerializedGrid;
-  entities: PhysicEntity<UnitRecruit<Unit>>[];
-  areaEffects: AreaEffect[];
-  projectiles: PhysicEntity<Projectile>[];
+	type: "battle";
+	castles: SerializedBattleCastle[];
+	towers: SerializedBattleTower[];
+	paths: SerializedPath[];
+	grid: SerializedGrid;
+	entities: PhysicEntity<UnitRecruit<Unit>>[];
+	areaEffects: AreaEffect[];
+	projectiles: PhysicEntity<Projectile>[];
 }
 
 export interface ShopState extends GameState {
-  type: "shop";
-  retail: Retail;
+	type: "shop";
+	retail: Retail;
 
-  castle: SerializedCastleRecruit;
-  towers: SerializedTowerRecruit[];
-  path: SerializedPath;
-  grid: SerializedGrid;
+	castle: SerializedCastleRecruit;
+	towers: SerializedTowerRecruit[];
+	path: SerializedPath;
+	grid: SerializedGrid;
 
-  hold: null | TowerBuyable<TowerRecruit<Tower>>;
+	hold: null | TowerBuyable<TowerRecruit<Tower>>;
 
-  hudElements: HudElement[];
+	hudElements: HudElement[];
 }

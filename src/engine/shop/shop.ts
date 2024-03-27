@@ -9,60 +9,63 @@ import { TowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
 
 export abstract class Buyable<T extends Recruit> {
-  abstract type: string;
-  abstract entity: T;
-  abstract position: Position;
+	abstract type: string;
+	abstract entity: T;
+	abstract position: Position;
 }
 
 export abstract class TowerBuyable<T extends TowerRecruit<Tower>> extends Buyable<T> {
-  public type = "tower" as const;
+	public type = "tower" as const;
 }
 
 export class Shop {
-  public hold = null as null | TowerBuyable<TowerRecruit<Tower>>;
-  public retail = new Retail();
-  constructor(public army: Army, public onShopExit: Game["handleShopQuit"]) {}
+	public hold = null as null | TowerBuyable<TowerRecruit<Tower>>;
+	public retail = new Retail();
+	constructor(
+		public army: Army,
+		public onShopExit: Game["handleShopQuit"],
+	) {}
 
-  exitShop() {
-    this.onShopExit();
-  }
+	exitShop() {
+		this.onShopExit();
+	}
 
-  buyTower(buyable: TowerBuyable<TowerRecruit<Tower>>) {
-    this.retail.removeItem(buyable);
-    buyable.entity.gridPosition = this.army.grid.realPositionToGrid(buyable.position);
-    this.army.grid.setElement(buyable.entity);
-    this.army.recruit(buyable.entity, buyable.type);
-  }
+	buyTower(buyable: TowerBuyable<TowerRecruit<Tower>>) {
+		this.retail.removeItem(buyable);
+		buyable.entity.gridPosition = this.army.grid.realPositionToGrid(buyable.position);
+		this.army.grid.setElement(buyable.entity);
+		this.army.recruit(buyable.entity, buyable.type);
+	}
 
-  buy(buyable: Buyable<Recruit>) {
-    switch (buyable.type) {
-      case "tower":
-        this.buyTower(buyable as TowerBuyable<TowerRecruit<Tower>>);
-    }
-  }
+	buy(buyable: Buyable<Recruit>) {
+		switch (buyable.type) {
+			case "tower":
+				this.buyTower(buyable as TowerBuyable<TowerRecruit<Tower>>);
+		}
+	}
 
-  setHold(focus: null | TowerBuyable<TowerRecruit<Tower>>) {
-    this.hold = focus;
-  }
+	setHold(focus: null | TowerBuyable<TowerRecruit<Tower>>) {
+		this.hold = focus;
+	}
 
-  moveHold(position: Position) {
-    if (this.hold) {
-      this.hold.position = position;
-    }
-  }
+	moveHold(position: Position) {
+		if (this.hold) {
+			this.hold.position = position;
+		}
+	}
 
-  getState() {
-    const shopState: ShopState = {
-      type: "shop",
-      retail: this.retail,
-      hold: this.hold,
-      hudElements: [new StartBattleButton()],
-      towers: this.army.towers.map((tower) => tower.toSerialized(this.army.grid)),
-      castle: this.army.castle.toSerialized(this.army.grid),
-      path: this.army.path,
-      grid: this.army.grid.toSerialized(),
-    };
+	getState() {
+		const shopState: ShopState = {
+			type: "shop",
+			retail: this.retail,
+			hold: this.hold,
+			hudElements: [new StartBattleButton()],
+			towers: this.army.towers.map((tower) => tower.toSerialized(this.army.grid)),
+			castle: this.army.castle.toSerialized(this.army.grid),
+			path: this.army.path,
+			grid: this.army.grid.toSerialized(),
+		};
 
-    return shopState;
-  }
+		return shopState;
+	}
 }

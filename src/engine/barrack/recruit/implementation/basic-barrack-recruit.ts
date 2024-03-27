@@ -10,13 +10,17 @@ import { BasicBarrack } from "../../entity/implementation/basic-barrack";
 import { BarrackRecruit } from "../barrack-recruit";
 
 export class BasicBarrackRecruit extends BarrackRecruit {
-  constructor(barrack: BasicBarrack) {
-    super(barrack);
-  }
-  unitRecruit: null | UnitRecruit<Unit>;
-  toBattle(productionSpeed: number, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack<BarrackRecruit> | undefined {
-    if (this.unitRecruit) {
-      return new BasicBattleBarrack(productionSpeed, this, path.enemyCastle.position, path, hooks, this.unitRecruit);
-    }
-  }
+	constructor(barrack: BasicBarrack) {
+		super(barrack);
+	}
+	unitRecruit: null | UnitRecruit<Unit>;
+	toBattle(
+		productionSpeed: number,
+		path: BattlePath,
+		hooks: BattleArmyHooks,
+	): BasicBattleBarrack<BarrackRecruit> | undefined {
+		if (this.unitRecruit) {
+			return new BasicBattleBarrack(productionSpeed, this, path.enemyCastle.position, path, hooks, this.unitRecruit);
+		}
+	}
 }
