@@ -2,19 +2,18 @@ import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { Physic, PhysicEntity } from "../../../shared/physic";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
-import { Tower } from "../entity/tower";
 import { TowerRecruit } from "../recruit/tower-recruit";
 import { BattleUnit } from "../../units/battle/entity-units-physic";
 import { GridPosition, Position } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
+import { AnyTower } from "../entity/tower";
 
-export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends PhysicEntity<TowerRecruit<Tower>> {
+export abstract class BattleTower extends PhysicEntity<TowerRecruit> {
 	attackDamage: number;
 	target = null as null | BattleUnit<UnitRecruit<Unit>>;
 	attackIntent = null as null | TowerAttackIntent;
-	abstract override type: TowerRecruit<Tower>["type"];
 	constructor(
-		towerEntity: BT,
+		towerEntity: TowerRecruit,
 		position: Position,
 		public gridPosition: GridPosition,
 		public hooks: BattleArmyHooks,
@@ -62,7 +61,7 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
 
 	toSerialized(grid: BattleGrid) {
 		return {
-			type: this.type,
+			type: this.entity.type,
 			gridPosition: this.gridPosition,
 			position: grid.gridPositionToReal(this.gridPosition),
 		};
@@ -70,7 +69,7 @@ export abstract class BattleTower<BT extends TowerRecruit<Tower>> extends Physic
 }
 
 export type SerializedBattleTower = {
-	type: string;
+	type: AnyTower["type"];
 	gridPosition: GridPosition;
 	position: Position;
 };
@@ -78,7 +77,7 @@ export type SerializedBattleTower = {
 export class TowerAttackIntent {
 	progress = 0;
 	constructor(
-		public towerRecruit: BattleTower<TowerRecruit<Tower>>,
+		public towerRecruit: BattleTower,
 		public resolveAttack: () => void,
 	) {}
 

@@ -2,11 +2,9 @@ import { GridPosition, Position } from "../../shared/position";
 import { BattleCastle } from "../castle/battle/battle-castle";
 import { PathTile } from "../path/entity/path";
 import { BattleTower } from "../tower/battle/battle-tower";
-import { Tower } from "../tower/entity/tower";
-import { TowerRecruit } from "../tower/recruit/tower-recruit";
 import { Grid, GridElement, SerializedGrid } from "./grid";
 
-export type BattleGridElement = BattleTower<TowerRecruit<Tower>> | PathTile | BattleCastle;
+export type BattleGridElement = BattleTower | PathTile | BattleCastle;
 export class BattleGrid {
 	grid: Map<GridPosition, BattleGridElement>;
 	constructor(

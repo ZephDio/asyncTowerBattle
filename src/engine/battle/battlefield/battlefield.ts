@@ -1,7 +1,5 @@
 import { Army } from "../../army/entity/army";
 import { BattleTower } from "../../tower/battle/battle-tower";
-import { Tower } from "../../tower/entity/tower";
-import { TowerRecruit } from "../../tower/recruit/tower-recruit";
 import { BattleUnit } from "../../units/battle/entity-units-physic";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
@@ -106,7 +104,7 @@ export class Battlefield {
 		return found;
 	}
 
-	searchAlliedTowerTarget(tower: BattleTower<TowerRecruit<Tower>>) {
+	searchAlliedTowerTarget(tower: BattleTower) {
 		let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
 		for (const enemyUnit of [...this.enemyArmy.units.keys()]) {
 			const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
@@ -119,7 +117,7 @@ export class Battlefield {
 		return bestTarget[0];
 	}
 
-	searchEnemyTowerTarget(tower: BattleTower<TowerRecruit<Tower>>) {
+	searchEnemyTowerTarget(tower: BattleTower) {
 		let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
 		for (const enemyUnit of [...this.alliedArmy.units.keys()]) {
 			const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);

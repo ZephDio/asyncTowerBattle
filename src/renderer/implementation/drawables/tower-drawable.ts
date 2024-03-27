@@ -1,3 +1,4 @@
+import { AnyTower } from "../../../engine/tower/entity/tower";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";
@@ -9,7 +10,7 @@ export class TowerDrawable extends Drawable {
 	constructor(
 		public position: Position,
 		public size: Size,
-		public type: string,
+		public type: AnyTower["type"],
 	) {
 		super();
 		this.image = Resources.tower[this.type].resource.image;

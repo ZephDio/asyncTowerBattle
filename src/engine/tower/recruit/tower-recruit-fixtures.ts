@@ -26,7 +26,7 @@ export class TowerRecruitBuilder {
 
 export class TowerRecruitFixtures {
 	static get centerTower() {
-		return new TowerRecruitBuilder().gridPositioned({ gridX: 2, gridY: 2 }).buildBlue(TowerFixtures.blue);
+		return new TowerRecruitBuilder().gridPositioned({ gridX: 1, gridY: 2 }).buildBlue(TowerFixtures.blue);
 	}
 	static get topRightTower() {
 		return new TowerRecruitBuilder().gridPositioned({ gridX: 4, gridY: 3 }).buildOrange(TowerFixtures.orange);

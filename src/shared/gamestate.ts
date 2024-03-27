@@ -2,8 +2,7 @@ import { SerializedPath } from "../engine/path/entity/path";
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
 import { SerializedBattleCastle } from "../engine/castle/battle/battle-castle";
 import { SerializedBattleTower } from "../engine/tower/battle/battle-tower";
-import { SerializedTowerRecruit, TowerRecruit } from "../engine/tower/recruit/tower-recruit";
-import { Tower } from "../engine/tower/entity/tower";
+import { SerializedTowerRecruit } from "../engine/tower/recruit/tower-recruit";
 import { PhysicEntity } from "./physic";
 import { UnitRecruit } from "../engine/units/recruit/unit-recruit";
 import { Unit } from "../engine/units/entity/units";
@@ -44,7 +43,7 @@ export interface ShopState extends GameState {
 	path: SerializedPath;
 	grid: SerializedGrid;
 
-	hold: null | TowerBuyable<TowerRecruit<Tower>>;
+	hold: null | TowerBuyable;
 
 	hudElements: HudElement[];
 }
