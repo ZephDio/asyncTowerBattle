@@ -14,8 +14,7 @@ export class TowerDrawable extends Drawable<TowerRecruit<Tower>> {
 		public type: string,
 	) {
 		super();
-		this.image = new Image(size.width, size.height);
-		this.image.src = Resources.tower[this.type].resource.src;
+		this.image = Resources.tower[this.type].resource.image;
 	}
 
 	draw(context: CanvasRenderingContext2D) {

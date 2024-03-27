@@ -14,8 +14,7 @@ export class UnitEntityDrawable extends Drawable<UnitRecruit<any>> {
 		public type: string,
 	) {
 		super();
-		this.image = new Image(size.width, size.height);
-		this.image.src = Resources.unit[this.type].resource.src;
+		this.image = Resources.unit[this.type].resource.image;
 	}
 
 	applyStyle(context: CanvasRenderingContext2D) {

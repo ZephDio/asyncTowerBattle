@@ -14,8 +14,7 @@ export class BuyableDrawable extends Drawable<Buyable<Recruit>> {
 		public position: Position,
 	) {
 		super();
-		this.image = new Image(size.width, size.height);
-		this.image.src = Resources[buyable.type][buyable.entity.type].resource.src;
+		this.image = Resources[buyable.type][buyable.entity.type].resource.image;
 	}
 	draw(context: CanvasRenderingContext2D) {
 		this.drawImage(context, this.size, this.position, this.image);

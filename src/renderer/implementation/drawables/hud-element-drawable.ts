@@ -14,8 +14,7 @@ export class HudElementDrawable<T extends HudElement> extends Drawable<T> {
 		public position: Position,
 	) {
 		super();
-		this.image = new Image(this.size.width, this.size.width);
-		this.image.src = Resources.hudElement[this.hudElement.type].resource.src;
+		this.image = Resources.hudElement[this.hudElement.type].resource.image;
 	}
 
 	draw(context: CanvasRenderingContext2D) {

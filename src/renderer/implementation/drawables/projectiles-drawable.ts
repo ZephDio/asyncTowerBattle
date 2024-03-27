@@ -15,8 +15,7 @@ export class ProjectileDrawable extends Drawable<BattleProjectile<Projectile>> {
 		public type: string,
 	) {
 		super();
-		this.image = new Image(size.width, size.height);
-		this.image.src = Resources.projectiles[type].resource.src;
+		this.image = Resources.projectiles[type].resource.image;
 	}
 
 	draw(context: CanvasRenderingContext2D) {
