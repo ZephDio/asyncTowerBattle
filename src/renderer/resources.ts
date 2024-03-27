@@ -8,7 +8,7 @@ export const Resources: ResourceType = {
 				height: 10,
 			},
 			resource: {
-				src: "./resources/towers/tower-1.png",
+				src: "/resources/towers/tower-1.png",
 				shape: "ellipse",
 				color: "orange",
 			},
@@ -19,7 +19,7 @@ export const Resources: ResourceType = {
 				height: 10,
 			},
 			resource: {
-				src: "./resources/towers/tower-2.png",
+				src: "/resources/towers/tower-2.png",
 				shape: "ellipse",
 				color: "blue",
 			},
@@ -30,7 +30,7 @@ export const Resources: ResourceType = {
 				height: 6,
 			},
 			resource: {
-				src: "./resources/towers/tower-3.png",
+				src: "/resources/towers/tower-3.png",
 				shape: "rectangle",
 				color: "green",
 			},
@@ -44,7 +44,7 @@ export const Resources: ResourceType = {
 			},
 			resource: {
 				shape: "ellipse",
-				src: "./resources/units/soldier.png",
+				src: "/resources/units/soldier.png",
 			},
 		},
 		dragon: {
@@ -53,7 +53,7 @@ export const Resources: ResourceType = {
 				height: 3,
 			},
 			resource: {
-				src: "./resources/units/dragon.png",
+				src: "/resources/units/dragon.png",
 				shape: "ellipse",
 			},
 		},
@@ -69,7 +69,7 @@ export const Resources: ResourceType = {
 			height: 7,
 		},
 		resource: {
-			src: "./resources/castle/castle.png",
+			src: "/resources/castle/castle.png",
 			shape: "rectangle",
 			color: "#3b3b3b",
 		},
@@ -77,14 +77,14 @@ export const Resources: ResourceType = {
 	projectiles: {
 		bullet: {
 			resource: {
-				src: "./resources/projectiles/bullet.png",
+				src: "/resources/projectiles/bullet.png",
 				shape: "rectangle",
 				color: "#3b3b3b",
 			},
 		},
 		rocket: {
 			resource: {
-				src: "./resources/projectiles/rocket.png",
+				src: "/resources/projectiles/rocket.png",
 				shape: "rectangle",
 				color: "#3b3b3b",
 			},
@@ -105,7 +105,7 @@ export const Resources: ResourceType = {
 				height: 20,
 			},
 			resource: {
-				src: "./resources/verdict/victory.png",
+				src: "/resources/verdict/victory.png",
 			},
 		},
 		defeat: {
@@ -114,14 +114,14 @@ export const Resources: ResourceType = {
 				height: 22,
 			},
 			resource: {
-				src: "./resources/verdict/defeat.png",
+				src: "/resources/verdict/defeat.png",
 			},
 		},
 	},
 	hudElement: {
 		startBattle: {
 			resource: {
-				src: "./resources/button/start.png",
+				src: "/resources/button/start.png",
 			},
 		},
 	},
