@@ -10,13 +10,13 @@ export class Physic {
 	static getDistance(positionA: Position, positionB: Position) {
 		const differentialX = positionA.x - positionB.x;
 		const differentialY = positionA.y - positionB.y;
-		return Math.sqrt(Math.pow(differentialX, 2) + Math.pow(differentialY, 2));
+		return Math.sqrt(differentialX ** 2 + differentialY ** 2);
 	}
 
 	static getDistanceSqrd(positionA: Position, positionB: Position) {
 		const differentialX = positionA.x - positionB.x;
 		const differentialY = positionA.y - positionB.y;
-		return Math.pow(differentialX, 2) + Math.pow(differentialY, 2);
+		return differentialX ** 2 + differentialY ** 2;
 	}
 
 	static getTheta(positionA: Position, positionB: Position) {
@@ -29,7 +29,7 @@ export class Physic {
 		const differentialX = positionA.x - positionB.x;
 		const differentialY = positionA.y - positionB.y;
 		return {
-			distance: Math.sqrt(Math.pow(differentialX, 2) + Math.pow(differentialY, 2)),
+			distance: Math.sqrt(differentialX ** 2 + differentialY ** 2),
 			theta: Math.atan2(differentialY, differentialX),
 		};
 	}
@@ -38,7 +38,7 @@ export class Physic {
 		const differentialX = positionA.x - positionB.x;
 		const differentialY = positionA.y - positionB.y;
 		return {
-			distance: Math.pow(differentialX, 2) + Math.pow(differentialY, 2),
+			distance: differentialX ** 2 + differentialY ** 2,
 			theta: Math.atan2(differentialY, differentialX),
 		};
 	}
@@ -46,10 +46,7 @@ export class Physic {
 	static getEllipseRadius(radiusWidth: number, radiusHeight: number, theta: number) {
 		return (
 			(radiusWidth * radiusHeight) /
-			Math.sqrt(
-				Math.pow(radiusWidth, 2) * Math.pow(Math.sin(theta), 2) +
-					Math.pow(radiusHeight, 2) * Math.pow(Math.cos(theta), 2),
-			)
+			Math.sqrt(radiusWidth ** 2 * Math.sin(theta) ** 2 + radiusHeight ** 2 * Math.cos(theta) ** 2)
 		);
 	}
 
@@ -82,7 +79,7 @@ export class Physic {
 				x: entityPosition.x - shapeRelativePosition.x,
 				y: entityPosition.y - shapeRelativePosition.y,
 			};
-			if (shape.type == "ellipse") {
+			if (shape.type === "ellipse") {
 				if (!Physic.isPointInsideEllipse(position, absoluteShapePosition, shape.size)) {
 					return false;
 				}
@@ -92,7 +89,7 @@ export class Physic {
 				const radius = Physic.getEllipseRadiusSqrd(radiusWidth, radiusHeight, theta);
 				return distance < radius;
 			}
-			if (shape.type == "rectangle") {
+			if (shape.type === "rectangle") {
 				const isInRangeWidth =
 					position.x > absoluteShapePosition.x - shape.size.width / 2 &&
 					position.x < absoluteShapePosition.x + shape.size.width / 2;
@@ -104,6 +101,7 @@ export class Physic {
 				return true;
 			}
 		}
+		return false;
 	}
 
 	static isPointInsideEllipse(point: Position, ellipsePosition: Position, ellipseSize: Size): boolean {
@@ -126,5 +124,8 @@ export abstract class PhysicEntity<T extends Recruit> {
 	) {}
 	abstract tick(): void;
 	abstract isAlive(): boolean;
-	abstract isAttacked(damage: number): void;
+	isAttacked(damage: number): void {
+		// Do nothing
+		damage;
+	}
 }

@@ -1,11 +1,9 @@
-import { BattleProjectile } from "../../../engine/projectile/battle/battle-projectile";
-import { Projectile } from "../../../engine/projectile/entity/projectile";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";
 import { Drawable } from "./drawable";
 
-export class ProjectileDrawable extends Drawable<BattleProjectile<Projectile>> {
+export class ProjectileDrawable extends Drawable {
 	public image: HTMLImageElement;
 	public drawPriority: number = 5;
 	constructor(
@@ -15,18 +13,10 @@ export class ProjectileDrawable extends Drawable<BattleProjectile<Projectile>> {
 		public type: string,
 	) {
 		super();
-		this.image = new Image(size.width, size.height);
-		this.image.src = Resources.projectiles[type].resource.src;
+		this.image = (Resources as any).projectiles[type].resource.image;
 	}
 
 	draw(context: CanvasRenderingContext2D) {
 		this.drawImage(context, this.size, this.position, this.image, this.theta);
-	}
-
-	applyStyle(context: CanvasRenderingContext2D) {
-		context.lineWidth = 1;
-		context.strokeStyle = "black";
-		const color = Resources.projectile.resource.color;
-		context.fillStyle = color;
 	}
 }

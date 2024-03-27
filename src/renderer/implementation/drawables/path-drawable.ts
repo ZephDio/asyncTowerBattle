@@ -1,10 +1,9 @@
-import { ArmyPath } from "../../../engine/path/entity/path";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";
 import { Drawable } from "./drawable";
 
-export class PathDrawable extends Drawable<ArmyPath> {
+export class PathDrawable extends Drawable {
 	public drawPriority: number = 1;
 	constructor(
 		public tiles: { position: Position; type: string }[],
@@ -20,7 +19,7 @@ export class PathDrawable extends Drawable<ArmyPath> {
 	}
 
 	applyStyle(context: CanvasRenderingContext2D, type: string) {
-		const color = Resources.path[type].resource;
+		const color = (Resources as any).path[type].resource;
 		context.strokeStyle = color;
 		context.fillStyle = color;
 		context.lineWidth = 1;

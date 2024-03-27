@@ -1,6 +1,5 @@
 import { HitBox, HitShape } from "../../../../shared/hitboxes";
 import { Bullet } from "../../../projectile/entity/implementation/bullet";
-import { Projectile } from "../../../projectile/entity/projectile";
 import { Tower } from "../tower";
 
 export class OrangeTower extends Tower {

@@ -4,7 +4,7 @@ import { Size } from "../../../shared/size";
 import { Resources } from "../../resources";
 import { Drawable } from "./drawable";
 
-export class VerdictDrawable extends Drawable<BattleVerdict> {
+export class VerdictDrawable extends Drawable {
 	drawPriority: number = 2;
 	image: HTMLImageElement;
 	constructor(
@@ -13,8 +13,7 @@ export class VerdictDrawable extends Drawable<BattleVerdict> {
 		public position: Position,
 	) {
 		super();
-		this.image = new Image(size.width, size.height);
-		this.image.src = Resources.verdict[verdict].resource.src;
+		this.image = Resources.verdict[verdict].resource.image;
 	}
 	draw(context: CanvasRenderingContext2D) {
 		this.drawImage(context, this.size, this.position, this.image);

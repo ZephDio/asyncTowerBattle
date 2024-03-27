@@ -138,28 +138,28 @@ export class Battlefield {
 	}
 
 	tickUnits() {
-		for (const [unit, barrack] of this.alliedArmy.units.entries()) {
+		for (const unit of this.alliedArmy.units.keys()) {
 			unit.tick();
 		}
-		for (const [unit, barrack] of this.enemyArmy.units.entries()) {
+		for (const unit of this.enemyArmy.units.keys()) {
 			unit.tick();
 		}
 	}
 
 	tickProjectiles() {
-		for (const [projectile, tower] of this.alliedArmy.projectiles.entries()) {
+		for (const projectile of this.alliedArmy.projectiles.keys()) {
 			projectile.tick();
 		}
-		for (const [projectile, tower] of this.enemyArmy.projectiles.entries()) {
+		for (const projectile of this.enemyArmy.projectiles.keys()) {
 			projectile.tick();
 		}
 	}
 
 	tickAreaEffects() {
-		for (const [areaEffect, source] of this.alliedArmy.areaEffects.entries()) {
+		for (const areaEffect of this.alliedArmy.areaEffects.keys()) {
 			areaEffect.tick();
 		}
-		for (const [areaEffect, source] of this.enemyArmy.areaEffects.entries()) {
+		for (const areaEffect of this.enemyArmy.areaEffects.keys()) {
 			areaEffect.tick();
 		}
 	}

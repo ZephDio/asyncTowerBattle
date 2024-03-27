@@ -1,21 +1,16 @@
 import { BattleBarrack } from "../../barrack/battle/battle-barrack";
-import { Barrack } from "../../barrack/entity/barrack";
 import { BattleCastle } from "../../castle/battle/battle-castle";
-import { ArmyPath, BattlePath } from "../../path/entity/path";
+import { BattlePath } from "../../path/entity/path";
 import { BattleProjectile } from "../../projectile/battle/battle-projectile";
 import { Projectile } from "../../projectile/entity/projectile";
 import { BattleTower } from "../../tower/battle/battle-tower";
 import { Tower } from "../../tower/entity/tower";
 import { TowerRecruit } from "../../tower/recruit/tower-recruit";
 import { BattleUnit } from "../../units/battle/entity-units-physic";
-import { Soldier } from "../../units/entity/implementation/soldier";
 import { Unit } from "../../units/entity/units";
-import { SoldierRecruit } from "../../units/recruit/implementation/soldier-recruit";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
-import { Army } from "../entity/army";
 import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
-import { Grid } from "../../grid/grid";
 import { BattleGrid } from "../../grid/battle-grid";
 import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 

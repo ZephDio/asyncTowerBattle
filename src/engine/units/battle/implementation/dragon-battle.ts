@@ -1,9 +1,7 @@
 import { Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { BattleCastle } from "../../../castle/battle/battle-castle";
-import { ArmyPath, BattlePath } from "../../../path/entity/path";
+import { BattlePath } from "../../../path/entity/path";
 import { DragonRecruit } from "../../recruit/implementation/dragon-recruit";
-import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
 import { UnitAttackIntent, BattleUnit } from "../entity-units-physic";
 
 export class BattleDragon extends BattleUnit<DragonRecruit> {

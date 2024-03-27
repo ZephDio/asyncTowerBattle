@@ -1,6 +1,6 @@
 import { Position } from "../../../shared/position";
 import { BattleCastle } from "../../castle/battle/battle-castle";
-import { ArmyPath, BattlePath } from "../../path/entity/path";
+import { BattlePath } from "../../path/entity/path";
 import { PathFinder } from "../../battle/path-finder";
 import { PhysicEntity } from "../../../shared/physic";
 import { Unit } from "../entity/units";
@@ -52,7 +52,7 @@ export class UnitAttackIntent {
 	progress = 0;
 	constructor(
 		public unitEntity: BattleUnit<UnitRecruit<Unit>>,
-		public resolveAttack: Function,
+		public resolveAttack: () => void,
 	) {}
 
 	tick() {

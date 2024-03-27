@@ -8,7 +8,7 @@ export class BattleBulletProjectile extends BattleProjectile<Bullet> {
 	isAlive(): boolean {
 		return true;
 	}
-	isAttacked(damage: number): void {
+	isAttacked(): void {
 		return;
 	}
 }

@@ -4,12 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "snowpack dev",
-    "format": "biome format src --write"
+    "start": "vite",
+    "format": "biome format src --write",
+    "typecheck": "pnpm tsc --noEmit"
   },
   "devDependencies": {
     "@biomejs/biome": "1.6.3",
-    "snowpack": "^3.8.8",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "vite": "^5.2.6"
   }
 }
