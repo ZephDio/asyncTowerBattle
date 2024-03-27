@@ -10,33 +10,33 @@ import { TowerFixtures } from "../entity/tower-fixtures";
 import { GridFixture } from "../../grid/grid-fixture";
 
 export class TowerRecruitBuilder {
-  gridPosition: GridPosition
-  gridPositioned(position: GridPosition) {
-    this.gridPosition = position
-    return this
-  }
-  buildBlue(tower: BlueTower) {
-    return new BlueTowerRecruit(tower, this.gridPosition)
-  }
-  buildGreen(tower: GreenTower) {
-    return new GreenTowerRecruit(tower, this.gridPosition)
-  }
-  buildOrange(tower: OrangeTower) {
-    return new OrangeTowerRecruit(tower, this.gridPosition)
-  }
+	gridPosition: GridPosition;
+	gridPositioned(position: GridPosition) {
+		this.gridPosition = position;
+		return this;
+	}
+	buildBlue(tower: BlueTower) {
+		return new BlueTowerRecruit(tower, this.gridPosition);
+	}
+	buildGreen(tower: GreenTower) {
+		return new GreenTowerRecruit(tower, this.gridPosition);
+	}
+	buildOrange(tower: OrangeTower) {
+		return new OrangeTowerRecruit(tower, this.gridPosition);
+	}
 }
 
 export class TowerRecruitFixtures {
-  static get centerTower() {
-    return new TowerRecruitBuilder().gridPositioned({ gridX: 2, gridY: 2 }).buildBlue(TowerFixtures.blue)
-  }
-  static get topRightTower() {
-    return new TowerRecruitBuilder().gridPositioned({ gridX: 4, gridY: 3 }).buildOrange(TowerFixtures.orange);
-  }
-  static get bottomLeftTower() {
-    return new TowerRecruitBuilder().gridPositioned({ gridX: 1, gridY: 2 }).buildGreen(TowerFixtures.green)
-  }
-  static get bottomMiddleTower() {
-    return new TowerRecruitBuilder().gridPositioned({ gridX: 5, gridY: 3 }).buildGreen(TowerFixtures.green)
-  }
+	static get centerTower() {
+		return new TowerRecruitBuilder().gridPositioned({ gridX: 2, gridY: 2 }).buildBlue(TowerFixtures.blue);
+	}
+	static get topRightTower() {
+		return new TowerRecruitBuilder().gridPositioned({ gridX: 4, gridY: 3 }).buildOrange(TowerFixtures.orange);
+	}
+	static get bottomLeftTower() {
+		return new TowerRecruitBuilder().gridPositioned({ gridX: 1, gridY: 2 }).buildGreen(TowerFixtures.green);
+	}
+	static get bottomMiddleTower() {
+		return new TowerRecruitBuilder().gridPositioned({ gridX: 5, gridY: 3 }).buildGreen(TowerFixtures.green);
+	}
 }

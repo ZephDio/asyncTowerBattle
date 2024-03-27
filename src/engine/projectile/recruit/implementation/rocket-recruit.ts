@@ -5,7 +5,6 @@
 // import { Rocket } from "../../entity/implementation/rocket"
 // import { ProjectileRecruit } from "../projectile-recruit"
 
-
 // export class RocketRecruit extends ProjectileRecruit<Rocket>{
 //     constructor(rocket: Rocket) {
 //         super(rocket)
