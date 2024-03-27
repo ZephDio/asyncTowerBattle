@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "vite",
-    "format": "biome format src --write"
+    "format": "biome format src --write",
+    "typecheck": "pnpm tsc --noEmit"
   },
   "devDependencies": {
     "@biomejs/biome": "1.6.3",

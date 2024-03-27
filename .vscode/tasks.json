@@ -1,0 +1,31 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"isBackground": true,
+			"runOptions": {
+				"runOn": "folderOpen",
+				"instanceLimit": 1
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "never",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true
+			},
+			"type": "shell",
+			"command": "pnpm typecheck --watch",
+			"problemMatcher": [
+				"$tsc-watch"
+			],
+			"icon": {
+				"id": "symbol-type-parameter",
+				"color": "terminal.ansiGreen"
+			},
+			"group": "build",
+			"label": "typecheck"
+		}
+	]
+}

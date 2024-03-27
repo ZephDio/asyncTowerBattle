@@ -44,9 +44,9 @@
 				"useTemplate": "off",
 				"noNonNullAssertion": "off",
 				"noInferrableTypes": "off",
-				"useBlockStatements": "error",
 				"noCommaOperator": "error",
-				"useImportType": "off"
+				"useImportType": "off",
+				"useNumberNamespace": "off"
 			},
 			"complexity": {
 				"useOptionalChain": "off",
@@ -90,6 +90,11 @@
 		"clientKind": "git"
 	},
 	"files": {
-		"ignore": ["**/node_modules/**", "**/lib/**", "**/*.json", "**/.env"]
+		"ignore": [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/*.json",
+			"**/.env"
+		]
 	}
 }
