@@ -4,12 +4,19 @@ import { PathTile } from "../path/entity/path";
 import { BattleTower } from "../tower/battle/battle-tower";
 import { Tower } from "../tower/entity/tower";
 import { TowerRecruit } from "../tower/recruit/tower-recruit";
-import { Grid, SerializedGrid } from "./grid";
+import { Grid, GridElement, SerializedGrid } from "./grid";
 
 export type BattleGridElement = BattleTower<TowerRecruit<Tower>> | PathTile | BattleCastle;
 export class BattleGrid {
-  grid: Map<number, Map<number, BattleGridElement>>;
-  constructor(public width: number, public height: number, public position: Position = { x: 2, y: 1.5 }, public tileSize = 4.9) {}
+  grid: Map<GridPosition, BattleGridElement>;
+  constructor(
+    public gridAllied: Grid,
+    public gridEnemy: Grid,
+    public width: number,
+    public height: number,
+    public position: Position = { x: 2, y: 1.5 },
+    public tileSize = 4.9
+  ) {}
 
   gridPositionToReal(gridPosition: GridPosition) {
     return {
@@ -22,7 +29,21 @@ export class BattleGrid {
     if (gridAllied.width !== gridEnemy.width || gridAllied.height !== gridEnemy.height) {
       throw new Error("cannot fuse grid with different grid size");
     }
-    return new BattleGrid(gridAllied.width, gridAllied.height + gridEnemy.height);
+    const battleGrid = new BattleGrid(
+      gridAllied,
+      gridEnemy,
+      gridAllied.width,
+      gridAllied.height + gridEnemy.height,
+      gridAllied.position,
+      gridAllied.tileSize
+    );
+    return battleGrid;
+  }
+
+  setElement(gridElement: GridElement, previousPosition?: GridPosition) {
+    if (previousPosition) this.grid.delete(previousPosition);
+    this.grid.set(gridElement.gridPosition, gridElement);
+    console.log(this.grid);
   }
 
   toSerialized() {

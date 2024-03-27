@@ -29,7 +29,8 @@ export class Shop {
 
   buyTower(buyable: TowerBuyable<TowerRecruit<Tower>>) {
     this.retail.removeItem(buyable);
-    buyable.entity.gridPosition = this.army.grid.realPositionToGrid(buyable.position); // ICI C KC
+    buyable.entity.gridPosition = this.army.grid.realPositionToGrid(buyable.position);
+    this.army.grid.setElement(buyable.entity);
     this.army.recruit(buyable.entity, buyable.type);
   }
 
