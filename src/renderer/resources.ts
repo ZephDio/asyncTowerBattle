@@ -9,10 +9,10 @@ export const Resources = {
 		orange: {
 			size: {
 				width: 5,
-				height: 10,
+				height: 8,
 			},
 			resource: {
-				image: createImage("/resources/towers/tower-1.png"),
+				image: createImage("/resources/towers/tower_blue.png"),
 				shape: "ellipse",
 				color: "orange",
 			},
@@ -20,21 +20,21 @@ export const Resources = {
 		blue: {
 			size: {
 				width: 5,
-				height: 10,
+				height: 8,
 			},
 			resource: {
-				image: createImage("/resources/towers/tower-2.png"),
+				image: createImage("/resources/towers/tower_red.png"),
 				shape: "ellipse",
 				color: "blue",
 			},
 		},
 		green: {
 			size: {
-				width: 3,
-				height: 6,
+				width: 5,
+				height: 8,
 			},
 			resource: {
-				image: createImage("/resources/towers/tower-3.png"),
+				image: createImage("/resources/towers/tower_yellow.png"),
 				shape: "rectangle",
 				color: "green",
 			},
@@ -69,11 +69,11 @@ export const Resources = {
 	},
 	castle: {
 		size: {
-			width: 6,
+			width: 7,
 			height: 7,
 		},
 		resource: {
-			image: createImage("/resources/castle/castle.png"),
+			image: createImage("/resources/castle/castle_blue.png"),
 			shape: "rectangle",
 			color: "#3b3b3b",
 		},

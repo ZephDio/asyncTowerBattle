@@ -4,8 +4,6 @@ import { BattlePath } from "../../path/entity/path";
 import { BattleProjectile } from "../../projectile/battle/battle-projectile";
 import { Projectile } from "../../projectile/entity/projectile";
 import { BattleTower } from "../../tower/battle/battle-tower";
-import { Tower } from "../../tower/entity/tower";
-import { TowerRecruit } from "../../tower/recruit/tower-recruit";
 import { BattleUnit } from "../../units/battle/entity-units-physic";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
@@ -31,8 +29,8 @@ export class BattleArmy {
 	path: BattlePath;
 	castle: BattleCastle;
 	barracks: BattleBarrack<BarrackRecruit>[];
-	projectiles: Map<BattleProjectile<Projectile>, BattleTower<TowerRecruit<Tower>>> = new Map();
-	towers: BattleTower<TowerRecruit<Tower>>[];
+	projectiles: Map<BattleProjectile<Projectile>, BattleTower> = new Map();
+	towers: BattleTower[];
 
 	constructor(
 		public grid: BattleGrid,
@@ -60,12 +58,7 @@ export class BattleArmy {
 		// this.towers = army.towers.map((tower) => tower.toPhysic(this.grid.gridPositionToReal(tower.gridPosition), this.getHooks()));
 	}
 
-	init(
-		castle: BattleCastle,
-		path: BattlePath,
-		towers: BattleTower<TowerRecruit<Tower>>[],
-		barracks: BattleBarrack<BarrackRecruit>[],
-	) {
+	init(castle: BattleCastle, path: BattlePath, towers: BattleTower[], barracks: BattleBarrack<BarrackRecruit>[]) {
 		this.castle = castle;
 		this.path = path;
 		this.towers = towers;
@@ -80,7 +73,7 @@ export class BattleArmy {
 		this.units.delete(entityRecruit);
 	}
 
-	addProjectile(projectile: BattleProjectile<Projectile>, source: BattleTower<TowerRecruit<Tower>>) {
+	addProjectile(projectile: BattleProjectile<Projectile>, source: BattleTower) {
 		this.projectiles.set(projectile, source);
 	}
 

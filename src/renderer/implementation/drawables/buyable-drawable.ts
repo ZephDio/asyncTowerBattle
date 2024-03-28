@@ -6,7 +6,7 @@ import { Resources } from "../../resources";
 import { Drawable } from "./drawable";
 
 export class BuyableDrawable extends Drawable {
-	drawPriority: number = 2;
+	drawPriority: number = 5;
 	image: HTMLImageElement;
 	constructor(
 		public buyable: Buyable<Recruit>,

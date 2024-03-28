@@ -2,10 +2,9 @@ import { GridPosition, Position } from "../../shared/position";
 import { Castle } from "../castle/entity/castle";
 import { CastleRecruit } from "../castle/recruit/castle-recruit";
 import { PathTile } from "../path/entity/path";
-import { Tower } from "../tower/entity/tower";
 import { TowerRecruit } from "../tower/recruit/tower-recruit";
 
-export type GridElement = TowerRecruit<Tower> | PathTile | CastleRecruit<Castle>;
+export type GridElement = TowerRecruit | PathTile | CastleRecruit<Castle>;
 
 export type SerializedGrid = {
 	width: number;

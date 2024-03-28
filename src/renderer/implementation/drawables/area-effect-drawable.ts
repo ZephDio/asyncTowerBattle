@@ -4,7 +4,7 @@ import { Size } from "../../../shared/size";
 import { Drawable } from "./drawable";
 
 export class AreaEffectDrawable extends Drawable {
-	drawPriority: number = 1;
+	drawPriority: number = 5;
 	shape: string;
 	constructor(
 		public areaEffect: AreaEffect,

@@ -27,13 +27,13 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
 		return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, hooks, target, damage);
 	}
 
-	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<OrangeTower>> {
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower {
 		const clone = this.clone();
 		const position = grid.gridPositionToReal(clone.gridPosition);
 		return new OrangeBattleTower(clone, position, clone.gridPosition, hooks);
 	}
 
-	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<OrangeTower>> {
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower {
 		const clone = this.clone();
 		const gridPosition = BattleGrid.flip(grid, clone.gridPosition);
 		const position = grid.gridPositionToReal(gridPosition);

@@ -27,13 +27,13 @@ export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
 		return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, hooks, target, damage);
 	}
 
-	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<GreenTower>> {
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower {
 		const clone = this.clone();
 		const position = grid.gridPositionToReal(clone.gridPosition);
 		return new GreenBattleTower(clone, position, clone.gridPosition, hooks);
 	}
 
-	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower<TowerRecruit<GreenTower>> {
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower {
 		const clone = this.clone();
 		const gridPosition = BattleGrid.flip(grid, clone.gridPosition);
 		const position = grid.gridPositionToReal(gridPosition);

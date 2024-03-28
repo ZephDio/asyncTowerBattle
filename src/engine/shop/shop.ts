@@ -4,7 +4,6 @@ import { Position } from "../../shared/position";
 import { Army } from "../army/entity/army";
 import { Game } from "../game";
 import { Recruit } from "../../shared/physic";
-import { Tower } from "../tower/entity/tower";
 import { TowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
 
@@ -14,12 +13,12 @@ export abstract class Buyable<T extends Recruit> {
 	abstract position: Position;
 }
 
-export abstract class TowerBuyable<T extends TowerRecruit<Tower>> extends Buyable<T> {
+export abstract class TowerBuyable extends Buyable<TowerRecruit> {
 	public type = "tower" as const;
 }
 
 export class Shop {
-	public hold = null as null | TowerBuyable<TowerRecruit<Tower>>;
+	public hold = null as null | TowerBuyable;
 	public retail = new Retail();
 	constructor(
 		public army: Army,
@@ -30,7 +29,7 @@ export class Shop {
 		this.onShopExit();
 	}
 
-	buyTower(buyable: TowerBuyable<TowerRecruit<Tower>>) {
+	buyTower(buyable: TowerBuyable) {
 		this.retail.removeItem(buyable);
 		buyable.entity.gridPosition = this.army.grid.realPositionToGrid(buyable.position);
 		this.army.grid.setElement(buyable.entity);
@@ -40,11 +39,11 @@ export class Shop {
 	buy(buyable: Buyable<Recruit>) {
 		switch (buyable.type) {
 			case "tower":
-				this.buyTower(buyable as TowerBuyable<TowerRecruit<Tower>>);
+				this.buyTower(buyable as TowerBuyable);
 		}
 	}
 
-	setHold(focus: null | TowerBuyable<TowerRecruit<Tower>>) {
+	setHold(focus: null | TowerBuyable) {
 		this.hold = focus;
 	}
 
