@@ -2,37 +2,50 @@ import { BarrackRecruitFixtures } from "../../barrack/recruit/barrack-recruit-fi
 import { CastleRecruitFixture } from "../../castle/entity/castle";
 import { Grid } from "../../grid/grid";
 import { PathFixture } from "../../path/entity/path-fixtures";
-import { TowerRecruitFixtures } from "../../tower/recruit/tower-recruit-fixtures";
+import { TowerFixtures } from "../../tower/entity/tower-fixtures";
+import { TowerRecruit } from "../../tower/recruit/tower-recruit";
+import { TowerRecruitBuilder, TowerRecruitFixtures } from "../../tower/recruit/tower-recruit-fixtures";
 import { Army } from "./army";
 
 export class ArmyFixture {
-	static get allied() {
-		const grid = new Grid();
-		const castle = CastleRecruitFixture.allied;
-		const towers = [
-			//TowerFixtures.centerTower,
-			TowerRecruitFixtures.centerTower,
-			//TowerEntityFixtures.topRightTower,
-		];
-		const path = PathFixture.defaultAllied;
-		const barracks = [BarrackRecruitFixtures.basicWithSoldier(4), BarrackRecruitFixtures.basicWithDragon(2)];
-		[castle, ...towers, ...path.tiles].map((e) => grid.setElement(e));
-		return new Army(castle, towers, path, grid, barracks);
-	}
-	static get enemy() {
-		const grid = new Grid();
-		const towers = [TowerRecruitFixtures.centerTower];
-		const castle = CastleRecruitFixture.enemy;
-		const path = PathFixture.defaultAllied;
-		[castle, ...towers, ...path.tiles].map((e) => grid.setElement(e));
+  static get allied() {
+    const grid = new Grid();
+    const castle = CastleRecruitFixture.allied;
+    const towers: TowerRecruit[] = [
+      //TowerFixtures.centerTower,
+      TowerRecruitFixtures.centerTower,
+      //TowerEntityFixtures.topRightTower,
+    ];
+    const path = PathFixture.defaultAllied;
+    const barracks = [BarrackRecruitFixtures.basicWithSoldier(4), BarrackRecruitFixtures.basicWithDragon(2)];
+    [castle, ...towers, ...path.tiles].map((e) => grid.setElement(e));
+    return new Army(castle, towers, path, grid, barracks);
+  }
+  static get enemy() {
+    const grid = new Grid();
+    const towers = [
+      new TowerRecruitBuilder().gridPositioned({ gridX: 5, gridY: 5 }).buildBlue(TowerFixtures.blue),
+      new TowerRecruitBuilder().gridPositioned({ gridX: 1, gridY: 1 }).buildOrange(TowerFixtures.orange),
+      new TowerRecruitBuilder().gridPositioned({ gridX: 4, gridY: 3 }).buildGreen(TowerFixtures.green),
+    ];
+    const castle = CastleRecruitFixture.enemy;
+    const path = PathFixture.defaultAllied;
+    [castle, ...towers, ...path.tiles].map((e) => grid.setElement(e));
 
-		return new Army(
-			castle,
-			towers,
-			path,
-			grid,
-			//[]
-			[BarrackRecruitFixtures.basicWithSoldier(4), BarrackRecruitFixtures.basicWithDragon(1)],
-		);
-	}
+    return new Army(
+      castle,
+      towers,
+      path,
+      grid,
+      //[]
+      [
+        BarrackRecruitFixtures.basicWithSoldier(4),
+        BarrackRecruitFixtures.basicWithDragon(),
+        // BarrackRecruitFixtures.basicWithDragon(34),
+        // BarrackRecruitFixtures.basicWithDragon(25),
+        // BarrackRecruitFixtures.basicWithDragon(20),
+        // BarrackRecruitFixtures.basicWithDragon(50),
+      ]
+    );
+  }
 }

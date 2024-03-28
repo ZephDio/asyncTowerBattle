@@ -17,6 +17,7 @@ export class Army {
 
 	recruit(recruit: Recruit, type: string) {
 		if (type === "tower") {
+			this.grid.setElement(recruit as TowerRecruit);
 			this.towers.push(recruit as TowerRecruit);
 		}
 	}

@@ -43,6 +43,10 @@ export class Retail {
 		this.buyables.delete(buyable);
 	}
 
+	addItem(buyable: Buyable) {
+		this.buyables.set(buyable, buyable.position);
+	}
+
 	async refresh() {
 		this.buyables.clear();
 		const items = await this.getRetailItems();
