@@ -1,4 +1,5 @@
 import { GridPosition, Position } from "../../shared/position";
+import { BattleArmy } from "../army/battle/battle-army";
 import { BattleCastle } from "../castle/battle/battle-castle";
 import { PathTile } from "../path/entity/path";
 import { BattleTower } from "../tower/battle/battle-tower";
@@ -6,7 +7,7 @@ import { Grid, GridElement, SerializedGrid } from "./grid";
 
 export type BattleGridElement = BattleTower | PathTile | BattleCastle;
 export class BattleGrid {
-	grid: Map<GridPosition, BattleGridElement>;
+	grid: Map<string, BattleGridElement> = new Map();
 	constructor(
 		public gridAllied: Grid,
 		public gridEnemy: Grid,
@@ -38,10 +39,22 @@ export class BattleGrid {
 		return battleGrid;
 	}
 
-	setElement(gridElement: GridElement, previousPosition?: GridPosition) {
-		if (previousPosition) this.grid.delete(previousPosition);
-		this.grid.set(gridElement.gridPosition, gridElement);
-		console.log(this.grid);
+	initElements(alliedArmy: BattleArmy, enemyArmy: BattleArmy) {
+		const gridElements = [
+			...alliedArmy.towers,
+			alliedArmy.castle,
+			...alliedArmy.path.tiles,
+			...enemyArmy.towers,
+			enemyArmy.castle,
+			...enemyArmy.path.tiles,
+		];
+		for (const gridElement of gridElements) {
+			this.setElement(gridElement);
+		}
+	}
+
+	setElement(gridElement: GridElement) {
+		this.grid.set(Grid.posToString(gridElement.gridPosition), gridElement);
 	}
 
 	toSerialized() {
@@ -54,6 +67,21 @@ export class BattleGrid {
 		return serialized;
 	}
 
+	getRelativeNeighbor(gridPosition: GridPosition, relativePosition: GridPosition) {
+		const targetPosition = {
+			gridX: gridPosition.gridX + relativePosition.gridX,
+			gridY: gridPosition.gridY + relativePosition.gridY,
+		};
+		const elementFound = this.grid.get(Grid.posToString(targetPosition));
+		return elementFound;
+	}
+
+	getHooks() {
+		return {
+			getRelativeNeighbor: this.getRelativeNeighbor.bind(this),
+		};
+	}
+
 	static flip(battleGrid: BattleGrid, gridPosition: GridPosition) {
 		const halfWidth = (battleGrid.width - 1) / 2;
 		const halfHeight = (battleGrid.height - 1) / 2;
@@ -63,3 +91,7 @@ export class BattleGrid {
 		};
 	}
 }
+
+export type GridHooks = {
+	getRelativeNeighbor: BattleGrid["getRelativeNeighbor"];
+};

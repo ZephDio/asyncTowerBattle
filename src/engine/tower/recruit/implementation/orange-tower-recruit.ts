@@ -1,8 +1,6 @@
 import { HitBox } from "../../../../shared/hitboxes";
-import { GridPosition, Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { PhysicEntity, Recruit } from "../../../../shared/physic";
-import { BattleBulletProjectile } from "../../../projectile/battle/implementation/bullet-projectile-battle";
 import { OrangeBattleTower } from "../../battle/implementation/battle-orange-tower";
 import { OrangeTower } from "../../entity/implementation/orange-tower";
 import { TowerRecruit } from "../tower-recruit";
@@ -23,10 +21,6 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
 		this.hitbox = tower.hitbox;
 	}
 
-	getProjectile(hooks: BattleArmyHooks, target: PhysicEntity<Recruit>, position: Position, damage: number) {
-		return new BattleBulletProjectile(this.tower.projectile, { x: position.x, y: position.y }, hooks, target, damage);
-	}
-
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower {
 		const clone = this.clone();
 		const position = grid.gridPositionToReal(clone.gridPosition);
@@ -40,7 +34,7 @@ export class OrangeTowerRecruit extends TowerRecruit<OrangeTower> {
 		return new OrangeBattleTower(clone, position, gridPosition, hooks);
 	}
 
-	clone() {
+	clone(): OrangeTowerRecruit {
 		return new OrangeTowerRecruit(new OrangeTower(), {
 			gridX: this.gridPosition.gridX,
 			gridY: this.gridPosition.gridY,

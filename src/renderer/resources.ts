@@ -12,7 +12,7 @@ export const Resources = {
 				height: 8,
 			},
 			resource: {
-				image: createImage("/resources/towers/tower_blue.png"),
+				image: createImage("/resources/towers/tower_red.png"),
 				shape: "ellipse",
 				color: "orange",
 			},
@@ -23,7 +23,7 @@ export const Resources = {
 				height: 8,
 			},
 			resource: {
-				image: createImage("/resources/towers/tower_red.png"),
+				image: createImage("/resources/towers/tower_blue.png"),
 				shape: "ellipse",
 				color: "blue",
 			},

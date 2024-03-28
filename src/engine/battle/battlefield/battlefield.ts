@@ -35,15 +35,16 @@ export class Battlefield {
 		enemyArmy: Army,
 	): { alliedBattleArmy: BattleArmy; enemyBattleArmy: BattleArmy; battleGrid: BattleGrid } {
 		const grid = BattleGrid.fuse(alliedArmy.grid, enemyArmy.grid);
+		const gridHooks = grid.getHooks();
 		const alliedBattleArmy = new BattleArmy(
-			grid,
 			this.searchAlliedTowerTarget.bind(this),
 			this.searchEnemiesInArea.bind(this),
+			gridHooks,
 		);
 		const enemyBattleArmy = new BattleArmy(
-			grid,
 			this.searchEnemyTowerTarget.bind(this),
 			this.searchAlliesInArea.bind(this),
+			gridHooks,
 		);
 		const enemyBattleCastle = BattleCastle.toEnemy(enemyArmy.castle, grid, () => this.onBattleOver("victory"));
 		const alliedBattleCastle = BattleCastle.toAllied(alliedArmy.castle, grid, () => this.onBattleOver("defeat"));
@@ -59,7 +60,8 @@ export class Battlefield {
 			.filter((b): b is BattleBarrack<BarrackRecruit> => b !== undefined);
 		alliedBattleArmy.init(alliedBattleCastle, alliedBattlePath, alliedBattleTowers, alliedBattleBarrack);
 		enemyBattleArmy.init(enemyBattleCastle, enemyBattlePath, enemyBattleTowers, enemyBattleBarracks);
-
+		grid.initElements(alliedBattleArmy, enemyBattleArmy);
+		console.log(enemyArmy.grid.grid);
 		return {
 			alliedBattleArmy: alliedBattleArmy,
 			enemyBattleArmy: enemyBattleArmy,
@@ -104,11 +106,11 @@ export class Battlefield {
 		return found;
 	}
 
-	searchAlliedTowerTarget(tower: BattleTower) {
+	searchAlliedTowerTarget(tower: BattleTower, criteria: Function) {
 		let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
 		for (const enemyUnit of [...this.enemyArmy.units.keys()]) {
 			const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
-			if (tower.entity.doesTargetMatchesRule(enemyUnit, distanceSqrd)) {
+			if (criteria(enemyUnit, distanceSqrd)) {
 				if (distanceSqrd < bestTarget[1]) {
 					bestTarget = [enemyUnit, distanceSqrd];
 				}
@@ -117,11 +119,11 @@ export class Battlefield {
 		return bestTarget[0];
 	}
 
-	searchEnemyTowerTarget(tower: BattleTower) {
+	searchEnemyTowerTarget(tower: BattleTower, criteria: Function) {
 		let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
 		for (const enemyUnit of [...this.alliedArmy.units.keys()]) {
 			const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
-			if (tower.entity.doesTargetMatchesRule(enemyUnit, distanceSqrd)) {
+			if (criteria(enemyUnit)) {
 				if (distanceSqrd < bestTarget[1]) {
 					bestTarget = [enemyUnit, distanceSqrd];
 				}

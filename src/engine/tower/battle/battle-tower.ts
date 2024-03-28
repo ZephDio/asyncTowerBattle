@@ -1,5 +1,5 @@
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { Physic, PhysicEntity } from "../../../shared/physic";
+import { PhysicEntity } from "../../../shared/physic";
 import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { TowerRecruit } from "../recruit/tower-recruit";
@@ -8,19 +8,20 @@ import { GridPosition, Position } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyTower } from "../entity/tower";
 
-export abstract class BattleTower extends PhysicEntity<TowerRecruit> {
+export abstract class BattleTower<TR extends TowerRecruit = TowerRecruit> extends PhysicEntity<TR> {
 	attackDamage: number;
 	target = null as null | BattleUnit<UnitRecruit<Unit>>;
 	attackIntent = null as null | TowerAttackIntent;
 	constructor(
-		towerEntity: TowerRecruit,
+		towerEntity: TR,
 		position: Position,
 		public gridPosition: GridPosition,
 		public hooks: BattleArmyHooks,
 	) {
-		super(towerEntity.clone(), position, 0, towerEntity.type);
+		super(towerEntity.clone() as TR, position, 0, towerEntity.type); // :c Elies help
 		this.attackDamage = this.entity.attackDamage;
 	}
+	abstract tick(): void;
 
 	setTarget(enemyUnit: BattleUnit<UnitRecruit<Unit>> | null) {
 		this.target = enemyUnit;
@@ -28,35 +29,6 @@ export abstract class BattleTower extends PhysicEntity<TowerRecruit> {
 
 	isAlive() {
 		return true;
-	}
-
-	tick() {
-		if (this.attackIntent) {
-			this.attackIntent.tick();
-		}
-		if (!this.attackIntent) {
-			this.attackIntent = new TowerAttackIntent(this, () => {
-				if (
-					this.target &&
-					this.entity.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
-				) {
-					this.attack(this.target);
-					return;
-				}
-				const target = this.hooks.searchTarget(this);
-				this.setTarget(target);
-				if (this.target) {
-					this.attack(this.target);
-					return;
-				}
-			});
-		}
-	}
-
-	attack(target: BattleUnit<UnitRecruit<Unit>>) {
-		const projectile = this.entity.getProjectile(this.hooks, target, this.position, this.attackDamage);
-		this.hooks.addProjectile(projectile, this);
-		this.attackIntent = null;
 	}
 
 	toSerialized(grid: BattleGrid) {

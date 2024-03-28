@@ -40,7 +40,7 @@ export class GreenTowerRecruit extends TowerRecruit<GreenTower> {
 		return new GreenBattleTower(clone, position, gridPosition, hooks);
 	}
 
-	clone() {
+	clone(): GreenTowerRecruit {
 		return new GreenTowerRecruit(new GreenTower(), { gridX: this.gridPosition.gridX, gridY: this.gridPosition.gridY });
 	}
 }

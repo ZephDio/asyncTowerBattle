@@ -7,7 +7,7 @@ import { OrangeTower } from "./implementation/orange-tower";
 export abstract class Tower {
 	abstract type: string;
 	abstract hitbox: HitBox;
-	abstract projectile: Projectile;
+	abstract projectile?: Projectile;
 }
 
 export type AnyTower = BlueTower | GreenTower | OrangeTower;

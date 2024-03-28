@@ -40,7 +40,7 @@ export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
 		return new BlueBattleTower(clone, position, gridPosition, hooks);
 	}
 
-	clone() {
+	clone(): BlueTowerRecruit {
 		return new BlueTowerRecruit(new BlueTower(), { gridX: this.gridPosition.gridX, gridY: this.gridPosition.gridY });
 	}
 }

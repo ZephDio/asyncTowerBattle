@@ -14,7 +14,7 @@ export type SerializedGrid = {
 };
 
 export class Grid {
-	grid: Map<GridPosition, GridElement> = new Map();
+	grid: Map<string, GridElement> = new Map();
 
 	constructor(
 		public width: number = 13,
@@ -37,10 +37,8 @@ export class Grid {
 		};
 	}
 
-	setElement(gridElement: GridElement, previousPosition?: GridPosition) {
-		if (previousPosition) this.grid.delete(previousPosition);
-		this.grid.set(gridElement.gridPosition, gridElement);
-		console.log(this.grid);
+	setElement(gridElement: GridElement) {
+		this.grid.set(Grid.posToString(gridElement.gridPosition), gridElement);
 	}
 
 	toSerialized() {
@@ -51,5 +49,9 @@ export class Grid {
 			tileSize: this.tileSize,
 		};
 		return serialized;
+	}
+
+	static posToString(gridPosition: GridPosition) {
+		return `${gridPosition.gridX}|${gridPosition.gridY}`;
 	}
 }
