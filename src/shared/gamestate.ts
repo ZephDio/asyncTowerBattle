@@ -1,18 +1,19 @@
-import { SerializedPath } from "../engine/path/entity/path";
+import { ArmyPath, SerializedPath } from "../engine/path/entity/path";
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
 import { SerializedBattleCastle } from "../engine/castle/battle/battle-castle";
 import { SerializedBattleTower } from "../engine/tower/battle/battle-tower";
-import { SerializedTowerRecruit } from "../engine/tower/recruit/tower-recruit";
+import { SerializedTowerRecruit, TowerRecruit } from "../engine/tower/recruit/tower-recruit";
 import { PhysicEntity } from "./physic";
 import { UnitRecruit } from "../engine/units/recruit/unit-recruit";
 import { Unit } from "../engine/units/entity/units";
 import { Projectile } from "../engine/projectile/entity/projectile";
 import { HudElement } from "./hud-element";
 import { Retail } from "../engine/shop/retail";
-import { SerializedCastleRecruit } from "../engine/castle/recruit/castle-recruit";
-import { TowerBuyable } from "../engine/shop/shop";
+import { CastleRecruit, SerializedCastleRecruit } from "../engine/castle/recruit/castle-recruit";
 import { AreaEffect } from "../engine/area-effect/area-effect";
-import { SerializedGrid } from "../engine/grid/grid";
+import { Grid, SerializedGrid } from "../engine/grid/grid";
+import { TokenDrag } from "../engine/shop/token-dragable";
+import { Castle } from "../engine/castle/entity/castle";
 
 export interface GameState {
 	type: string;
@@ -43,7 +44,21 @@ export interface ShopState extends GameState {
 	path: SerializedPath;
 	grid: SerializedGrid;
 
-	hold: null | TowerBuyable;
+	hold: TokenDrag | null;
+
+	hudElements: HudElement[];
+}
+
+export interface ShopState2 extends GameState {
+	type: "shop";
+	retail: Retail;
+
+	castle: CastleRecruit<Castle>;
+	towers: TowerRecruit[];
+	path: ArmyPath;
+	grid: Grid;
+
+	hold: TokenDrag | null;
 
 	hudElements: HudElement[];
 }

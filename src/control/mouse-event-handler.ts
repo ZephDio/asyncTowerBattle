@@ -31,10 +31,10 @@ export class MouseEventHandler {
 		this.inputToIntentTranslator.translateClickInput(relativePosition);
 	}
 
-	onMouseUp(_event: MouseEvent): any {
-		// const mousePosition = { x: event.x, y: event.y };
-		// const relativePosition = this.pixelPositionToRelative(mousePosition);
-		this.inputToIntentTranslator.translateMouseReleaseInput();
+	onMouseUp(event: MouseEvent): any {
+		const mousePosition = { x: event.x, y: event.y };
+		const relativePosition = this.pixelPositionToRelative(mousePosition);
+		this.inputToIntentTranslator.translateMouseReleaseInput(relativePosition);
 	}
 
 	pixelPositionToRelative(position: Position) {

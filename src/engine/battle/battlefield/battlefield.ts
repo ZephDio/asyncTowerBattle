@@ -61,7 +61,6 @@ export class Battlefield {
 		alliedBattleArmy.init(alliedBattleCastle, alliedBattlePath, alliedBattleTowers, alliedBattleBarrack);
 		enemyBattleArmy.init(enemyBattleCastle, enemyBattlePath, enemyBattleTowers, enemyBattleBarracks);
 		grid.initElements(alliedBattleArmy, enemyBattleArmy);
-		console.log(enemyArmy.grid.grid);
 		return {
 			alliedBattleArmy: alliedBattleArmy,
 			enemyBattleArmy: enemyBattleArmy,
@@ -123,7 +122,7 @@ export class Battlefield {
 		let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
 		for (const enemyUnit of [...this.alliedArmy.units.keys()]) {
 			const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
-			if (criteria(enemyUnit)) {
+			if (criteria(enemyUnit, distanceSqrd)) {
 				if (distanceSqrd < bestTarget[1]) {
 					bestTarget = [enemyUnit, distanceSqrd];
 				}

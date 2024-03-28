@@ -15,7 +15,7 @@ import { UnitEntityDrawable } from "./drawables/unit-drawable";
 import { BattleVerdict } from "../../engine/battle-summary/battle-summary";
 import { VerdictDrawable } from "./drawables/verdict-drawable";
 import { SerializedBattleTower } from "../../engine/tower/battle/battle-tower";
-import { SerializedTowerRecruit } from "../../engine/tower/recruit/tower-recruit";
+import { TowerRecruit } from "../../engine/tower/recruit/tower-recruit";
 import { UnitRecruit } from "../../engine/units/recruit/unit-recruit";
 import { Unit } from "../../engine/units/entity/units";
 import { Projectile } from "../../engine/projectile/entity/projectile";
@@ -28,7 +28,8 @@ import { SerializedCastleRecruit } from "../../engine/castle/recruit/castle-recr
 import { AreaEffect } from "../../engine/area-effect/area-effect";
 import { AreaEffectDrawable } from "./drawables/area-effect-drawable";
 import { GridDrawable } from "./drawables/grid-drawable";
-import { SerializedGrid } from "../../engine/grid/grid";
+import { Grid, SerializedGrid } from "../../engine/grid/grid";
+import { TokenDrag } from "../../engine/shop/token-dragable";
 export const proportion = 16 / 9.8;
 
 export class CanvasRenderer implements Renderer {
@@ -88,12 +89,22 @@ export class CanvasRenderer implements Renderer {
 	shopStateToDrawable(state: ShopState) {
 		const drawables: Drawable[] = [];
 		drawables.push(...state.hudElements.map((hudElement) => this.HudtoHudElementDrawable(hudElement)));
-		drawables.push(...[...state.retail.buyables.keys()].map((buyable) => this.buyableToDrawableBuyable(buyable)));
+		drawables.push(
+			...[...state.retail.buyables.keys()].map((buyable) => this.buyableToDrawableBuyable(buyable, buyable.position)),
+		);
 		drawables.push(this.pathToPathDrawable(state.path, state.grid));
 		drawables.push(this.castleToCastleDrawable(state.castle, state.castle.position));
 		drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower, tower.position)));
 		drawables.push(this.gridToGridDrawable(state.grid));
 		drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
+		if (state.hold) {
+			if (TokenDrag.isBuyableToken(state.hold)) {
+				drawables.push(this.buyableToDrawableBuyable(state.hold.entity, state.hold.position));
+			}
+			if (TokenDrag.isTowerToken(state.hold)) {
+				drawables.push(this.towerToTowerDrawable(state.hold.entity.toSerialized(new Grid()), state.hold.position));
+			}
+		}
 		return drawables;
 	}
 
@@ -116,7 +127,7 @@ export class CanvasRenderer implements Renderer {
 		return new GridDrawable(position, { width: grid.width, height: grid.height }, tileSize);
 	}
 
-	towerToTowerDrawable(tower: SerializedBattleTower | SerializedTowerRecruit, position: Position) {
+	towerToTowerDrawable(tower: SerializedBattleTower | TowerRecruit, position: Position) {
 		const canvasPosition = this.getCanvasPosition(position);
 		const { width, height } = (Resources.tower as any)[tower.type].size as Size;
 		const size = this.getCanvasSize(width, height);
@@ -149,8 +160,8 @@ export class CanvasRenderer implements Renderer {
 		return new PathDrawable(relativeTiles, size);
 	}
 
-	buyableToDrawableBuyable(buyable: Buyable<Recruit>) {
-		const canvasPosition = this.getCanvasPosition(buyable.position);
+	buyableToDrawableBuyable(buyable: Buyable<Recruit>, position: Position) {
+		const canvasPosition = this.getCanvasPosition(position);
 		const { width, height } = (Resources as any)[buyable.type as any][buyable.entity.type as any].size as Size;
 		const size = this.getCanvasSize(width, height);
 		return new BuyableDrawable(buyable, size, canvasPosition);

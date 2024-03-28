@@ -31,9 +31,14 @@ export class Grid {
 	}
 
 	realPositionToGrid(position: Position) {
+		const x = Math.round((position.x - this.position.x) / this.tileSize - 0.5);
+		const y = Math.round((position.y - this.position.y) / this.tileSize - 0.5);
+		if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
+			return undefined;
+		}
 		return {
-			gridX: Math.round((position.x - this.position.x) / this.tileSize - 0.5),
-			gridY: Math.round((position.y - this.position.y) / this.tileSize - 0.5),
+			gridX: x,
+			gridY: y,
 		};
 	}
 

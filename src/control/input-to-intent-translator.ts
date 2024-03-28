@@ -21,17 +21,10 @@ export class InputToIntentTranslator {
 			return;
 		}
 		if (this.game.shop) {
-			if (this.game.shop) {
-				const state = this.game.shop.getState();
-				for (const [buyable, buyablePosition] of state.retail.buyables) {
-					if (Physic.doCollide(buyablePosition, buyable.entity.hitbox, position)) {
-						return this.game.shop.buy(buyable);
-					}
-				}
-				for (const hudElement of state.hudElements) {
-					if (Physic.doCollide(hudElement.position, hudElement.hitbox, position)) {
-						return this.game.handleShopQuit();
-					}
+			const state = this.game.shop.getState();
+			for (const hudElement of state.hudElements) {
+				if (Physic.doCollide(hudElement.position, hudElement.hitbox, position)) {
+					return this.game.handleShopQuit();
 				}
 			}
 		}
@@ -48,20 +41,26 @@ export class InputToIntentTranslator {
 
 	translateMouseDownInput(position: Position) {
 		if (this.game.shop) {
-			const state = this.game.shop.getState();
-			for (const [buyable, buyablePosition] of state.retail.buyables) {
-				if (Physic.doCollide(buyablePosition, buyable.entity.hitbox, position)) {
-					return this.game.shop.setHold(buyable as TowerBuyable);
+			const state = this.game.shop.getState2();
+			if (!state.hold) {
+				for (const [buyable, buyablePosition] of state.retail.buyables) {
+					if (Physic.doCollide(buyablePosition, buyable.entity.hitbox, position)) {
+						return this.game.shop.setHoldFromRetail(buyable as TowerBuyable, position);
+					}
+				}
+				for (const tower of state.towers) {
+					if (Physic.doCollide(state.grid.gridPositionToReal(tower.gridPosition), tower.hitbox, position)) {
+						return this.game.shop.setHoldFromArmy(tower, position);
+					}
 				}
 			}
 		}
 	}
-	translateMouseReleaseInput() {
+	translateMouseReleaseInput(position: Position) {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			if (state.hold) {
-				this.game.shop.buy(state.hold);
-				this.game.shop.setHold(null);
+				state.hold.onRelease(position);
 			}
 		}
 	}

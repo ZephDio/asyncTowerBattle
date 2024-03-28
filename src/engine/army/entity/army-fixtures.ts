@@ -2,6 +2,7 @@ import { BarrackRecruitFixtures } from "../../barrack/recruit/barrack-recruit-fi
 import { CastleRecruitFixture } from "../../castle/entity/castle";
 import { Grid } from "../../grid/grid";
 import { PathFixture } from "../../path/entity/path-fixtures";
+import { TowerRecruit } from "../../tower/recruit/tower-recruit";
 import { TowerRecruitFixtures } from "../../tower/recruit/tower-recruit-fixtures";
 import { Army } from "./army";
 
@@ -9,7 +10,7 @@ export class ArmyFixture {
 	static get allied() {
 		const grid = new Grid();
 		const castle = CastleRecruitFixture.allied;
-		const towers = [
+		const towers: TowerRecruit[] = [
 			//TowerFixtures.centerTower,
 			TowerRecruitFixtures.centerTower,
 			//TowerEntityFixtures.topRightTower,
@@ -32,7 +33,10 @@ export class ArmyFixture {
 			path,
 			grid,
 			//[]
-			[BarrackRecruitFixtures.basicWithSoldier(4), BarrackRecruitFixtures.basicWithDragon(1)],
+			[
+				//BarrackRecruitFixtures.basicWithSoldier(4),
+				BarrackRecruitFixtures.basicWithDragon(1),
+			],
 		);
 	}
 }
