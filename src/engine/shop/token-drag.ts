@@ -7,11 +7,11 @@ type Holdable = Buyable | TowerRecruit;
 export abstract class TokenDrag<T extends Holdable = Holdable> {
   type: "buyable" | "tower";
   constructor(public entity: T, public position: Position, public onRelease: (position?: Position) => void) {}
-  static isBuyableToken(token: TokenDrag<Holdable>): token is BuyableToken {
-    return token.type === "buyable";
+  isBuyableToken(): this is BuyableToken {
+    return this.type === "buyable";
   }
-  static isTowerToken(token: TokenDrag<Holdable>): token is TowerToken {
-    return token.type === "tower";
+  isTowerToken(): this is TowerToken {
+    return this.type === "tower";
   }
 }
 

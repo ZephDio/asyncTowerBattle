@@ -96,10 +96,10 @@ export class CanvasRenderer implements Renderer {
     drawables.push(this.gridToGridDrawable(state.grid));
     drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
     if (state.hold) {
-      if (TokenDrag.isBuyableToken(state.hold)) {
+      if (state.hold.isBuyableToken()) {
         drawables.push(this.buyableToDrawableBuyable(state.hold.entity, state.hold.position));
       }
-      if (TokenDrag.isTowerToken(state.hold)) {
+      if (state.hold.isTowerToken()) {
         drawables.push(this.towerToTowerDrawable(state.hold.entity.toSerialized(new Grid()), state.hold.position));
       }
     }
