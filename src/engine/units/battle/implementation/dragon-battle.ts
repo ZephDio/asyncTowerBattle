@@ -1,21 +1,27 @@
+import { Derive } from "@ddd-ts/traits";
 import { Position } from "../../../../shared/position";
+import { Caster } from "../../../../shared/traits/cast";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { DragonRecruit } from "../../recruit/implementation/dragon-recruit";
-import { UnitAttackIntent, BattleUnit } from "../entity-units-physic";
+import { PathFinder } from "../../../battle/path-finder";
+import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { Resources } from "../../../../renderer/resources";
 
-export class BattleDragon extends BattleUnit<DragonRecruit> {
+export class BattleDragon extends Derive(Caster, TDrawable, TRenderable) {
   speed: number;
   maxLife: number;
   actualLife: number;
   attackSpeed: number;
   attackDamage: number;
-  constructor(entity: DragonRecruit, position: Position, path: BattlePath, private hooks: BattleArmyHooks) {
-    super(entity, position, path);
+  pathFinder: PathFinder;
+  constructor(entity: DragonRecruit, public position: Position, public enemyPath: BattlePath, private hooks: BattleArmyHooks) {
+    super({});
+    this.pathFinder = new PathFinder(enemyPath.getNodes());
     this.speed = entity.speed;
     this.maxLife = entity.maxLife;
     this.actualLife = entity.maxLife;
-    this.attackSpeed = entity.attackSpeed;
+    this.castSpeed = entity.attackSpeed;
     this.attackDamage = entity.attackDamage;
   }
   canMove() {
@@ -26,22 +32,27 @@ export class BattleDragon extends BattleUnit<DragonRecruit> {
     return this.actualLife > 0;
   }
 
-  attack() {
-    if (!this.attackIntent) {
-      this.attackIntent = new UnitAttackIntent(this, () => {
-        this.target.isAttacked(this.attackDamage);
-        this.attackIntent = null;
-      });
-      return;
-    }
-    this.attackIntent.tick();
+  onCastResolve() {
+    this.enemyPath.alliedCastle.takeDamage(this.attackDamage);
   }
 
-  isAttacked(damage: number) {
+  takeDamage(damage: number) {
     this.actualLife -= damage;
     if (this.actualLife < 0) {
       this.hooks.removeUnit(this);
     }
+  }
+
+  followPath(): void {
+    if (this.canMove() && !this.pathFinder.isArrived) {
+      const newPosition = this.pathFinder.getNextPosition(this.position, this.speed);
+      this.move(newPosition);
+    }
+  }
+
+  move(newPosition: Position) {
+    this.position.x = newPosition.x;
+    this.position.y = newPosition.y;
   }
 
   tick() {
@@ -49,6 +60,19 @@ export class BattleDragon extends BattleUnit<DragonRecruit> {
       this.followPath();
       return;
     }
-    this.attack();
+    this.tickCast();
+  }
+
+  get realPosition() {
+    return this.position;
+  }
+
+  drawPriority = 4;
+  draw(context: CanvasRenderingContext2D, position: Position): void {
+    const image = Resources.unit.dragon.resource.image;
+    const canvasPosition = this.getCanvasPosition(context, position);
+    const { width, height } = Resources.unit.dragon.size;
+    const size = this.getCanvasSize(context, width, height);
+    this.drawImage(context, size, canvasPosition, image);
   }
 }

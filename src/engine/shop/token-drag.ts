@@ -1,30 +1,17 @@
+import { Derive } from "@ddd-ts/traits";
 import { Position } from "../../shared/position";
-import { TowerRecruit } from "../tower/recruit/tower-recruit";
+import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Buyable } from "./shop";
+import { TDrawable, TRenderable } from "../../shared/traits/drawable";
 
-type Holdable = Buyable | TowerRecruit;
+type Holdable = Buyable | AnyTowerRecruit;
 
-export abstract class TokenDrag<T extends Holdable = Holdable> {
-  type: "buyable" | "tower";
-  constructor(public entity: T, public position: Position, public onRelease: (position?: Position) => void) {}
-  static isBuyableToken(token: TokenDrag<Holdable>): token is BuyableToken {
-    return token.type === "buyable";
+export class TokenDrag<T extends Holdable = Holdable> extends Derive(TDrawable, TRenderable) {
+  draw!: T["draw"];
+  constructor(public entity: T, public position: Position, public onRelease: (position?: Position) => void) {
+    super({});
+    this.draw = entity.draw;
   }
-  static isTowerToken(token: TokenDrag<Holdable>): token is TowerToken {
-    return token.type === "tower";
-  }
-}
 
-export class BuyableToken extends TokenDrag<Buyable> {
-  readonly type = "buyable" as const;
-  //   constructor(entity: Buyable, position: Position, public onRelease: (position?: Position) => void) {
-  //     super(entity, position, onRelease);
-  //   }
-}
-
-export class TowerToken extends TokenDrag<TowerRecruit> {
-  readonly type = "tower" as const;
-  //   constructor(entity: TowerRecruit, position: Position, public onRelease: (position?: Position) => void) {
-  //     super(entity, position, onRelease);
-  //   }
+  drawPriority = 5;
 }

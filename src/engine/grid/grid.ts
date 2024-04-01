@@ -1,10 +1,12 @@
-import { GridPosition, Position } from "../../shared/position";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
+import { Cell, Position } from "../../shared/position";
 import { Castle } from "../castle/entity/castle";
 import { CastleRecruit } from "../castle/recruit/castle-recruit";
 import { PathTile } from "../path/entity/path";
 import { TowerRecruit } from "../tower/recruit/tower-recruit";
+import { TDrawable, TRenderable } from "../../shared/traits/drawable";
 
-export type GridElement = TowerRecruit | PathTile | CastleRecruit<Castle>;
+export type GridElement = ImplementsTrait<typeof TowerRecruit> | PathTile | CastleRecruit<Castle>;
 
 export type SerializedGrid = {
   width: number;
@@ -13,16 +15,25 @@ export type SerializedGrid = {
   tileSize: number;
 };
 
-export class Grid {
-  grid: Map<string, GridElement> = new Map();
+export class Grid extends Derive(TDrawable, TRenderable) {
+  tiles: Map<string, GridElement> = new Map();
+  overEffect: Cell | undefined = undefined;
+  synergiesEffects: Cell[] = [];
 
-  constructor(public width: number = 13, public height: number = 6, public position: Position = { x: 2, y: 1.5 }, public tileSize = 4.9) {}
+  constructor(
+    public width: number = 13,
+    public height: number = 6,
+    public position: Position = new Position({ x: 2, y: 1.5 }),
+    public tileSize = 4.9
+  ) {
+    super({});
+  }
 
-  gridPositionToReal(gridPosition: GridPosition) {
-    return {
-      x: this.position.x + (gridPosition.gridX + 0.5) * this.tileSize,
-      y: this.position.y + (gridPosition.gridY + 0.5) * this.tileSize,
-    };
+  cellToReal(cell: Cell) {
+    return new Position({
+      x: this.position.x + (cell.x + 0.5) * this.tileSize,
+      y: this.position.y + (cell.y + 0.5) * this.tileSize,
+    });
   }
 
   realPositionToGrid(position: Position) {
@@ -31,14 +42,31 @@ export class Grid {
     if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
       return undefined;
     }
-    return {
-      gridX: x,
-      gridY: y,
-    };
+    return new Cell({ x: x, y: y });
+  }
+
+  setOveredTile(cell: Cell | undefined) {
+    this.overEffect = cell;
+  }
+
+  setSynergiesTiles(cell: Cell, relativeCellsSynergies: Cell[]) {
+    this.clearSynergiesTiles();
+    for (const synergyCell of relativeCellsSynergies) {
+      this.synergiesEffects.push(
+        new Cell({
+          x: cell.x + synergyCell.x,
+          y: cell.y + synergyCell.y,
+        })
+      );
+    }
+  }
+
+  clearSynergiesTiles() {
+    this.synergiesEffects = [];
   }
 
   setElement(gridElement: GridElement) {
-    this.grid.set(Grid.posToString(gridElement.gridPosition), gridElement);
+    this.tiles.set(Grid.posToString(gridElement.cell), gridElement);
   }
 
   toSerialized() {
@@ -51,7 +79,25 @@ export class Grid {
     return serialized;
   }
 
-  static posToString(gridPosition: GridPosition) {
-    return `${gridPosition.gridX}|${gridPosition.gridY}`;
+  static posToString(cell: Cell) {
+    return `${cell.x}|${cell.y}`;
+  }
+
+  drawPriority = 1;
+  draw(context: CanvasRenderingContext2D): void {
+    context.fillStyle = "#6C6";
+    const position = this.getCanvasPosition(context, this.position);
+    const tileSize = this.getCanvasSize(context, this.tileSize, this.tileSize).width;
+    context.rect(position.x, position.y, this.width * tileSize, -this.height * tileSize);
+    context.fill();
+
+    context.lineWidth = 3;
+    context.strokeStyle = "rgba(0,0,0,0.1)";
+    for (const ci of new Array(this.width + 1).keys()) {
+      this.drawLine(context, position.x + ci * tileSize, position.y, position.x + ci * tileSize, position.y - this.height * tileSize);
+    }
+    for (const ri of new Array(this.height + 1).keys()) {
+      this.drawLine(context, position.x, position.y - ri * tileSize, position.x + this.width * tileSize, position.y - ri * tileSize);
+    }
   }
 }

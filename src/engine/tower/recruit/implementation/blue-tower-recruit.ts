@@ -1,46 +1,60 @@
 import { HitBox } from "../../../../shared/hitboxes";
-import { GridPosition, Position } from "../../../../shared/position";
+import { Cell, Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { PhysicEntity, Recruit } from "../../../../shared/physic";
-import { BattleRocketProjectile } from "../../../projectile/battle/implementation/rocket-projectile-bullet";
+import { BattleRocketProjectile } from "../../../projectile/battle/implementation/battle-rocket";
 import { BlueBattleTower } from "../../battle/implementation/battle-blue-tower";
 import { BlueTower } from "../../entity/implementation/blue-tower";
 import { TowerRecruit } from "../tower-recruit";
 import { BattleGrid } from "../../../grid/battle-grid";
-import { BattleTower } from "../../battle/battle-tower";
+import { AnyBattleTower } from "../../battle/battle-tower";
+import { Derive } from "@ddd-ts/traits";
+import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { Resources } from "../../../../renderer/resources";
+import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 
-export class BlueTowerRecruit extends TowerRecruit<BlueTower> {
-	attackDamage = 7;
-	attackSpeed = 1.2;
-	type = "blue" as const;
-	hitbox: HitBox;
+export class BlueTowerRecruit extends Derive(TowerRecruit, TDrawable, TRenderable) {
+  patternEffect: Cell[];
+  attackDamage = 7;
+  attackSpeed = 1.2;
+  hitbox: HitBox;
 
-	constructor(
-		public tower: BlueTower,
-		public gridPosition: GridPosition,
-	) {
-		super();
-		this.hitbox = tower.hitbox;
-	}
+  constructor(public tower: BlueTower, public cell: Cell) {
+    super({});
+    this.hitbox = tower.hitbox;
+    this.patternEffect = tower.patternEffect;
+  }
 
-	getProjectile(hooks: BattleArmyHooks, target: PhysicEntity<Recruit>, position: Position, damage: number) {
-		return new BattleRocketProjectile(this.tower.projectile, { x: position.x, y: position.y }, hooks, target, damage);
-	}
+  getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: Position, damage: number) {
+    return new BattleRocketProjectile(this.tower.projectile, position.clone(), hooks, target, damage);
+  }
 
-	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower {
-		const clone = this.clone();
-		const position = grid.gridPositionToReal(clone.gridPosition);
-		return new BlueBattleTower(clone, position, clone.gridPosition, hooks);
-	}
+  toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
+    const clone = this.clone();
+    const position = grid.cellToReal(clone.cell);
+    return new BlueBattleTower(clone, hooks, position, clone.cell);
+  }
 
-	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BattleTower {
-		const clone = this.clone();
-		const gridPosition = BattleGrid.flip(grid, clone.gridPosition);
-		const position = grid.gridPositionToReal(gridPosition);
-		return new BlueBattleTower(clone, position, gridPosition, hooks);
-	}
+  toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
+    const clone = this.clone();
+    const cell = BattleGrid.flip(grid, clone.cell);
+    const position = grid.cellToReal(cell);
+    return new BlueBattleTower(clone, hooks, position, cell);
+  }
 
-	clone(): BlueTowerRecruit {
-		return new BlueTowerRecruit(new BlueTower(), { gridX: this.gridPosition.gridX, gridY: this.gridPosition.gridY });
-	}
+  clone() {
+    return new BlueTowerRecruit(new BlueTower({}), new Cell({ x: this.cell.x, y: this.cell.y }));
+  }
+
+  get position(): Cell {
+    return this.cell;
+  }
+
+  drawPriority = 3;
+  draw(context: CanvasRenderingContext2D, position: Position): void {
+    const image = Resources.tower.blue.resource.image;
+    const canvasPosition = this.getCanvasPosition(context, position);
+    const { width, height } = Resources.tower.blue.size;
+    const size = this.getCanvasSize(context, width, height);
+    this.drawImage(context, size, canvasPosition, image);
+  }
 }

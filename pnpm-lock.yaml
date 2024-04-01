@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  '@ddd-ts/traits':
+    specifier: 0.0.3-61
+    version: 0.0.3-61
+
 devDependencies:
   '@biomejs/biome':
     specifier: 1.6.3
@@ -104,6 +109,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@ddd-ts/traits@0.0.3-61:
+    resolution: {integrity: sha512-cipG6/e67rHqQXGPYKIaYr2Ty4C5ojiWj9lrke957HQapbmMQwFiXPfWGbwbf1cn3eoAWFPnxyZpStj0EYhXkQ==}
+    dev: false
 
   /@esbuild/aix-ppc64@0.20.2:
     resolution: {integrity: sha512-D+EBOJHXdNZcLJRBkhENNG8Wji2kgc9AZ9KiPr1JuZjsNtyHzrsfLRrY0tk2H2aoFu6RANO1y1iPPUCDYWkb5g==}

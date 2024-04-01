@@ -1,16 +1,14 @@
-import { BattleBarrack } from "../../barrack/battle/battle-barrack";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { BattleProjectile } from "../../projectile/battle/battle-projectile";
 import { Projectile } from "../../projectile/entity/projectile";
-import { BattleTower } from "../../tower/battle/battle-tower";
-import { BattleUnit } from "../../units/battle/entity-units-physic";
-import { Unit } from "../../units/entity/units";
-import { UnitRecruit } from "../../units/recruit/unit-recruit";
+import { AnyBattleTower } from "../../tower/battle/battle-tower";
+import { AnyBattleUnit } from "../../units/recruit/unit-recruit";
 import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
 import { GridHooks } from "../../grid/battle-grid";
 import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 import { BattlePath } from "../../path/battle/battle-path";
+import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 
 export type BattleArmyHooks = {
   addUnits: BattleArmy["addUnit"];
@@ -25,32 +23,32 @@ export type BattleArmyHooks = {
 };
 
 export class BattleArmy {
-  units: Map<BattleUnit<UnitRecruit<Unit>>, BattleBarrack<BarrackRecruit>> = new Map();
+  units: Map<AnyBattleUnit, AnyBattleBarrack> = new Map();
   areaEffects: Map<AreaEffect, any> = new Map();
   path: BattlePath;
   castle: BattleCastle;
-  barracks: BattleBarrack<BarrackRecruit>[];
-  projectiles: Map<BattleProjectile<Projectile>, BattleTower> = new Map();
-  towers: BattleTower[];
+  barracks: AnyBattleBarrack[];
+  projectiles: Map<BattleProjectile<Projectile>, AnyBattleTower> = new Map();
+  towers: AnyBattleTower[];
 
   constructor(public searchTarget: SearchTarget, public searchEnemyInArea: SearchAreaForUnit, public gridHooks: GridHooks) {}
 
-  init(castle: BattleCastle, path: BattlePath, towers: BattleTower[], barracks: BattleBarrack<BarrackRecruit>[]) {
+  init(castle: BattleCastle, path: BattlePath, towers: AnyBattleTower[], barracks: AnyBattleBarrack[]) {
     this.castle = castle;
     this.path = path;
     this.towers = towers;
     this.barracks = barracks;
   }
 
-  addUnit(entityRecruit: BattleUnit<UnitRecruit<Unit>>, battleBarrack: BattleBarrack<BarrackRecruit>) {
+  addUnit(entityRecruit: AnyBattleUnit, battleBarrack: AnyBattleBarrack) {
     this.units.set(entityRecruit, battleBarrack);
   }
 
-  removeUnit(entityRecruit: BattleUnit<UnitRecruit<Unit>>) {
+  removeUnit(entityRecruit: AnyBattleUnit) {
     this.units.delete(entityRecruit);
   }
 
-  addProjectile(projectile: BattleProjectile<Projectile>, source: BattleTower) {
+  addProjectile(projectile: BattleProjectile<Projectile>, source: AnyBattleTower) {
     this.projectiles.set(projectile, source);
   }
 

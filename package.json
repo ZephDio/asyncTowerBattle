@@ -12,5 +12,8 @@
     "@biomejs/biome": "1.6.3",
     "typescript": "^5.4.2",
     "vite": "^5.2.6"
+  },
+  "dependencies": {
+    "@ddd-ts/traits": "0.0.3-61"
   }
 }

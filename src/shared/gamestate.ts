@@ -1,22 +1,23 @@
-import { ArmyPath, SerializedPath } from "../engine/path/entity/path";
+import { ArmyPath, PathTile } from "../engine/path/entity/path";
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
-import { SerializedBattleCastle } from "../engine/castle/battle/battle-castle";
-import { SerializedBattleTower } from "../engine/tower/battle/battle-tower";
-import { SerializedTowerRecruit, TowerRecruit } from "../engine/tower/recruit/tower-recruit";
-import { PhysicEntity } from "./physic";
-import { UnitRecruit } from "../engine/units/recruit/unit-recruit";
-import { Unit } from "../engine/units/entity/units";
-import { Projectile } from "../engine/projectile/entity/projectile";
+import { BattleCastle } from "../engine/castle/battle/battle-castle";
+import { TowerRecruit } from "../engine/tower/recruit/tower-recruit";
 import { HudElement } from "./hud-element";
 import { Retail } from "../engine/shop/retail";
-import { CastleRecruit, SerializedCastleRecruit } from "../engine/castle/recruit/castle-recruit";
+import { CastleRecruit } from "../engine/castle/recruit/castle-recruit";
 import { AreaEffect } from "../engine/area-effect/area-effect";
-import { Grid, SerializedGrid } from "../engine/grid/grid";
+import { Grid } from "../engine/grid/grid";
 import { TokenDrag } from "../engine/shop/token-drag";
 import { Castle } from "../engine/castle/entity/castle";
+import { BattleGrid } from "../engine/grid/battle-grid";
+import { ImplementsTrait } from "@ddd-ts/traits";
+import { AnyBattleTower } from "../engine/tower/battle/battle-tower";
+import { AnyBattleUnit } from "../engine/units/recruit/unit-recruit";
+import { BattleProjectile } from "../engine/projectile/battle/battle-projectile";
 
 export interface GameState {
   type: string;
+  grid: Grid | BattleGrid;
 }
 
 export interface SummaryState extends GameState {
@@ -26,35 +27,21 @@ export interface SummaryState extends GameState {
 
 export interface BattleState extends GameState {
   type: "battle";
-  castles: SerializedBattleCastle[];
-  towers: SerializedBattleTower[];
-  paths: SerializedPath[];
-  grid: SerializedGrid;
-  entities: PhysicEntity<UnitRecruit<Unit>>[];
+  castles: BattleCastle[];
+  towers: AnyBattleTower[];
+  paths: PathTile[][];
+  grid: BattleGrid;
+  units: AnyBattleUnit[];
   areaEffects: AreaEffect[];
-  projectiles: PhysicEntity<Projectile>[];
+  projectiles: BattleProjectile<any>[];
 }
 
 export interface ShopState extends GameState {
   type: "shop";
   retail: Retail;
 
-  castle: SerializedCastleRecruit;
-  towers: SerializedTowerRecruit[];
-  path: SerializedPath;
-  grid: SerializedGrid;
-
-  hold: TokenDrag | null;
-
-  hudElements: HudElement[];
-}
-
-export interface ShopState2 extends GameState {
-  type: "shop";
-  retail: Retail;
-
   castle: CastleRecruit<Castle>;
-  towers: TowerRecruit[];
+  towers: ImplementsTrait<typeof TowerRecruit>[];
   path: ArmyPath;
   grid: Grid;
 

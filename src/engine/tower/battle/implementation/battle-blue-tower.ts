@@ -1,43 +1,58 @@
-import { Physic, PhysicEntity } from "../../../../shared/physic";
-import { BattleUnit } from "../../../units/battle/entity-units-physic";
-import { Unit } from "../../../units/entity/units";
-import { UnitRecruit } from "../../../units/recruit/unit-recruit";
+import { Derive } from "@ddd-ts/traits";
+import { Physic } from "../../../../shared/physic";
 import { BlueTowerRecruit } from "../../recruit/implementation/blue-tower-recruit";
-import { BattleTower, TowerAttackIntent } from "../battle-tower";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { Cell, Position } from "../../../../shared/position";
+import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { Caster } from "../../../../shared/traits/cast";
+import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
+export class BlueBattleTower extends Derive(TDrawable, TRenderable, Caster) {
+  draw: BlueTowerRecruit["draw"];
+  drawPriority = 3;
 
-export class BlueBattleTower extends BattleTower<BlueTowerRecruit> {
-	type = "blue" as const;
+  public attackDamage: number;
+  constructor(
+    private readonly recruit: BlueTowerRecruit,
+    private readonly hooks: BattleArmyHooks,
+    public readonly position: Position,
+    public readonly cell: Cell
+  ) {
+    super({});
+    this.attackDamage = recruit.attackDamage;
+    this.castSpeed = recruit.attackSpeed;
+    this.draw = this.recruit.draw;
+  }
 
-	doesTargetMatchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>, distanceSqrd: number) {
-		return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
-	}
+  private attack(target: AnyBattleUnit) {
+    const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.attackDamage);
+    this.hooks.addProjectile(projectile, this);
+  }
 
-	attack(target: BattleUnit<UnitRecruit<Unit>>) {
-		const projectile = this.entity.getProjectile(this.hooks, target, this.position, this.attackDamage);
-		this.hooks.addProjectile(projectile, this);
-		this.attackIntent = null;
-	}
+  private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
+    return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
+  }
 
-	tick() {
-		if (this.attackIntent) {
-			this.attackIntent.tick();
-		}
-		if (!this.attackIntent) {
-			this.attackIntent = new TowerAttackIntent(this, () => {
-				if (
-					this.target &&
-					this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
-				) {
-					this.attack(this.target);
-					return;
-				}
-				const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
-				this.setTarget(target);
-				if (this.target) {
-					this.attack(this.target);
-					return;
-				}
-			});
-		}
-	}
+  target = null as null | AnyBattleUnit;
+  setTarget(enemyUnit: AnyBattleUnit | null) {
+    this.target = enemyUnit;
+  }
+
+  onCastResolve() {
+    if (this.target && this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))) {
+      this.attack(this.target);
+      this.cast = null;
+      return;
+    }
+    const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
+    this.setTarget(target);
+    if (this.target) {
+      this.attack(this.target);
+      this.cast = null;
+      return;
+    }
+  }
+
+  tick() {
+    super.tickCast();
+  }
 }

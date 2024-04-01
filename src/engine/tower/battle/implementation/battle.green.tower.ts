@@ -1,43 +1,98 @@
-import { Physic, PhysicEntity } from "../../../../shared/physic";
-import { BattleUnit } from "../../../units/battle/entity-units-physic";
-import { Unit } from "../../../units/entity/units";
-import { UnitRecruit } from "../../../units/recruit/unit-recruit";
+import { Derive } from "@ddd-ts/traits";
+import { Physic } from "../../../../shared/physic";
 import { GreenTowerRecruit } from "../../recruit/implementation/green-tower-recruit";
-import { BattleTower, TowerAttackIntent } from "../battle-tower";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { Cell, Position } from "../../../../shared/position";
+import { Caster } from "../../../../shared/traits/cast";
+import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
+import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
 
-export class GreenBattleTower extends BattleTower<GreenTowerRecruit> {
-	type = "green" as const;
+export class GreenBattleTower extends Derive(TDrawable, TRenderable, Caster) {
+  draw: GreenTowerRecruit["draw"];
+  drawPriority = 3;
+  target = null as null | AnyBattleUnit;
+  public attackDamage: number;
+  constructor(
+    private readonly recruit: GreenTowerRecruit,
+    private readonly hooks: BattleArmyHooks,
+    public readonly position: Position,
+    public readonly cell: Cell
+  ) {
+    super({});
+    this.draw = this.recruit.draw;
+    this.attackDamage = recruit.attackDamage;
+    this.castSpeed = recruit.attackSpeed;
+  }
 
-	doesTargetMatchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>, distanceSqrd: number) {
-		return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
-	}
+  takeDamage(_damage: number): void {
+    return;
+  }
 
-	attack(target: BattleUnit<UnitRecruit<Unit>>) {
-		const projectile = this.entity.getProjectile(this.hooks, target, this.position, this.attackDamage);
-		this.hooks.addProjectile(projectile, this);
-		this.attackIntent = null;
-	}
+  private attack(target: AnyBattleUnit) {
+    const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.attackDamage);
+    this.hooks.addProjectile(projectile, this);
+    this.cast = null;
+  }
+  private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
+    return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
+  }
+  setTarget(enemyUnit: AnyBattleUnit | null) {
+    this.target = enemyUnit;
+  }
 
-	tick() {
-		if (this.attackIntent) {
-			this.attackIntent.tick();
-		}
-		if (!this.attackIntent) {
-			this.attackIntent = new TowerAttackIntent(this, () => {
-				if (
-					this.target &&
-					this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
-				) {
-					this.attack(this.target);
-					return;
-				}
-				const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
-				this.setTarget(target);
-				if (this.target) {
-					this.attack(this.target);
-					return;
-				}
-			});
-		}
-	}
+  isAlive() {
+    return true;
+  }
+
+  onCastResolve(): void {
+    if (this.target && this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))) {
+      this.attack(this.target);
+      return;
+    }
+    const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
+    this.setTarget(target);
+    if (this.target) {
+      this.attack(this.target);
+      return;
+    }
+  }
+
+  tick() {
+    this.tickCast();
+  }
 }
+// 	type = "green" as const;
+
+// 	doesTargetMatchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>, distanceSqrd: number) {
+// 		return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
+// 	}
+
+// 	attack(target: BattleUnit<UnitRecruit<Unit>>) {
+// 		const projectile = this.entity.getProjectile(this.hooks, target, this.position, this.attackDamage);
+// 		this.hooks.addProjectile(projectile, this);
+// 		this.attackIntent = null;
+// 	}
+
+// 	tick() {
+// 		if (this.attackIntent) {
+// 			this.attackIntent.tick();
+// 		}
+// 		if (!this.attackIntent) {
+// 			this.attackIntent = new TowerAttackIntent(this, () => {
+// 				if (
+// 					this.target &&
+// 					this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
+// 				) {
+// 					this.attack(this.target);
+// 					return;
+// 				}
+// 				const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
+// 				this.setTarget(target);
+// 				if (this.target) {
+// 					this.attack(this.target);
+// 					return;
+// 				}
+// 			});
+// 		}
+// 	}
+// }

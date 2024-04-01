@@ -1,71 +1,53 @@
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { Position } from "../../shared/position";
-import { Recruit } from "../../shared/physic";
-import { TowerRecruitFixtures } from "../tower/recruit/tower-recruit-fixtures";
 import { Buyable } from "./shop";
+import { OrangeTower } from "../tower/entity/implementation/orange-tower";
+import { BlueTower } from "../tower/entity/implementation/blue-tower";
+import { GreenTower } from "../tower/entity/implementation/green-tower";
 
-export type ShopItem = Omit<Buyable<Recruit>, "position">;
+export type ShopItem = Buyable;
 export class Retail {
-	slots: Position[] = [
-		PercentToReal({ x: 33, y: 83 }),
-		PercentToReal({ x: 66, y: 83 }),
-		PercentToReal({ x: 33, y: 66 }),
-		PercentToReal({ x: 66, y: 66 }),
-	];
-	buyables: Map<Buyable<Recruit>, Position> = new Map();
+  slots: Position[] = [
+    new Position(PercentToReal({ x: 33, y: 83 })),
+    new Position(PercentToReal({ x: 66, y: 83 })),
+    new Position(PercentToReal({ x: 33, y: 66 })),
+    new Position(PercentToReal({ x: 66, y: 66 })),
+  ];
+  buyables: Map<Buyable, Position> = new Map();
 
-	constructor() {
-		this.refresh();
-	}
+  constructor() {
+    this.refresh();
+  }
 
-	async getRetailItems(): Promise<ShopItem[]> {
-		return [
-			{
-				type: "tower",
-				entity: TowerRecruitFixtures.bottomLeftTower,
-			},
-			{
-				type: "tower",
-				entity: TowerRecruitFixtures.bottomMiddleTower,
-			},
-			{
-				type: "tower",
-				entity: TowerRecruitFixtures.centerTower,
-			},
-			{
-				type: "tower",
-				entity: TowerRecruitFixtures.topRightTower,
-			},
-		];
-	}
+  async getRetailItems(): Promise<ShopItem[]> {
+    return [
+      Buyable.from(new OrangeTower({}), this.slots[0]!),
+      Buyable.from(new BlueTower({}), this.slots[1]!),
+      Buyable.from(new GreenTower({}), this.slots[2]!),
+      Buyable.from(new BlueTower({}), this.slots[3]!),
+    ];
+  }
 
-	removeItem(buyable: Buyable<Recruit>) {
-		this.buyables.delete(buyable);
-	}
+  removeItem(buyable: Buyable) {
+    this.buyables.delete(buyable);
+  }
 
-	addItem(buyable: Buyable) {
-		this.buyables.set(buyable, buyable.position);
-	}
+  addItem(buyable: Buyable) {
+    this.buyables.set(buyable, buyable.position);
+  }
 
-	async refresh() {
-		this.buyables.clear();
-		const items = await this.getRetailItems();
-		await this.fill(items);
-	}
+  async refresh() {
+    this.buyables.clear();
+    const items = await this.getRetailItems();
+    await this.fill(items);
+  }
 
-	async fill(items: ShopItem[]) {
-		for (const [index, item] of items.entries()) {
-			const slot = this.slots[index];
-			if (!slot) throw new Error("Slot not found");
+  async fill(items: ShopItem[]) {
+    for (const [index, item] of items.entries()) {
+      const slot = this.slots[index];
+      if (!slot) throw new Error("Slot not found");
 
-			this.buyables.set(
-				{
-					type: item.type,
-					entity: item.entity,
-					position: slot,
-				},
-				slot,
-			);
-		}
-	}
+      this.buyables.set(item, slot);
+    }
+  }
 }

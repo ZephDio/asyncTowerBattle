@@ -17,5 +17,5 @@ export class StartBattleButton extends HudElement {
 
   public size = { width: 12, height: 6 };
 
-  public hitbox = new HitBox([[new HitShape("rectangle", this.size), { x: 0, y: 0 }]]);
+  public hitbox = new HitBox([[new HitShape("rectangle", this.size), new Position({ x: 0, y: 0 })]]);
 }

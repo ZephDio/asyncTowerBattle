@@ -1,6 +1,6 @@
+import { ImplementsTrait } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattlePath } from "../../path/battle/battle-path";
-import { Unit } from "../../units/entity/units";
 import { UnitRecruit } from "../../units/recruit/unit-recruit";
 import { BattleBarrack } from "../battle/battle-barrack";
 import { Barrack } from "../entity/barrack";
@@ -11,10 +11,10 @@ export abstract class BarrackRecruit {
     this.productionSpeed = barrack.productionSpeed;
   }
 
-  abstract unitRecruit: null | UnitRecruit<Unit>;
+  abstract unitRecruit: null | ImplementsTrait<typeof UnitRecruit>;
   abstract toBattle(productionSpeed: number, path: BattlePath, hooks: BattleArmyHooks): BattleBarrack<BarrackRecruit> | undefined;
 
-  setUnit(unit: UnitRecruit<Unit>) {
+  setUnit(unit: ImplementsTrait<typeof UnitRecruit>) {
     this.unitRecruit = unit;
   }
 }

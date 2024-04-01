@@ -1,26 +1,27 @@
-import { ShopState } from "../../shared/gamestate";
 import { StartBattleButton } from "../../shared/hud-element";
 import { Position } from "../../shared/position";
 import { Army } from "../army/entity/army";
 import { Game } from "../game";
-import { Recruit } from "../../shared/physic";
-import { TowerRecruit } from "../tower/recruit/tower-recruit";
+import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
-import { BuyableToken, TokenDrag, TowerToken } from "./token-drag";
+import { TokenDrag } from "./token-drag";
 import { Grid } from "../grid/grid";
+import { ShopState } from "../../shared/gamestate";
+import { TDrawable, TRenderable } from "../../shared/traits/drawable";
+import { Derive } from "@ddd-ts/traits";
+import { AnyTower } from "../tower/entity/tower";
 
-export abstract class Buyable<T extends Recruit = Recruit> {
-  abstract type: string;
-  abstract entity: T;
-  abstract position: Position;
-
-  static isTower(buyable: Buyable): buyable is TowerBuyable {
-    return buyable.type === "tower";
+export class Buyable extends Derive(TDrawable, TRenderable) {
+  draw!: AnyTower["draw"];
+  drawPriority = 5;
+  constructor(public entity: AnyTower, public position: Position) {
+    super({});
+    this.draw = this.entity.draw;
   }
-}
 
-export abstract class TowerBuyable extends Buyable<TowerRecruit> {
-  public type = "tower" as const;
+  static from(entity: AnyTower, position: Position) {
+    return new Buyable(entity, position);
+  }
 }
 
 export class Shop {
@@ -35,25 +36,22 @@ export class Shop {
     this.onShopExit();
   }
 
-  buyTower(buyable: TowerBuyable, position: Position) {
-    const gridPosition = this.army.grid.realPositionToGrid(position);
-    if (!gridPosition) {
+  buyTower(buyable: Buyable, position: Position) {
+    const cell = this.army.grid.realPositionToGrid(position);
+    if (!cell) {
       throw new Error();
     }
     this.retail.removeItem(buyable);
-    buyable.entity.gridPosition = gridPosition;
-    this.army.recruit(buyable.entity, buyable.type);
+    this.army.recruit(buyable.entity, cell);
   }
 
-  buy(buyable: Buyable<Recruit>, position: Position) {
-    if (Buyable.isTower(buyable)) {
-      this.buyTower(buyable, position);
-    }
+  buy(buyable: Buyable, position: Position) {
+    this.buyTower(buyable, position);
   }
 
   setHoldFromRetail(buyable: Buyable, position: Position) {
     this.retail.removeItem(buyable);
-    const token = new BuyableToken(buyable, position, (position?: Position) => {
+    const token = new TokenDrag(buyable, position, (position?: Position) => {
       try {
         if (!position) throw new Error();
         this.buy(buyable, position);
@@ -66,23 +64,23 @@ export class Shop {
     this.setHold(token);
   }
 
-  setHoldFromArmy(tower: TowerRecruit, position: Position) {
+  setHoldFromArmy(tower: AnyTowerRecruit, position: Position) {
     this.army.towers.splice(this.army.towers.indexOf(tower), 1);
-    this.army.grid.grid.delete(Grid.posToString(tower.gridPosition));
-    const token = new TowerToken(tower, position, (position?: Position) => {
+    this.army.grid.tiles.delete(Grid.posToString(tower.cell));
+    const token = new TokenDrag(tower, position, (position?: Position) => {
       try {
         if (!position) throw new Error();
-        const gridPosition = this.army.grid.realPositionToGrid(position);
-        if (gridPosition) {
-          tower.gridPosition.gridX = gridPosition.gridX;
-          tower.gridPosition.gridY = gridPosition.gridY;
-          this.army.recruit(tower, "tower");
+        const cell = this.army.grid.realPositionToGrid(position);
+        if (cell) {
+          tower.cell.x = cell.x;
+          tower.cell.y = cell.y;
+          this.army.add(tower);
           this.hold = null;
           return;
         }
         throw new Error();
       } catch {
-        this.army.recruit(tower, "tower");
+        this.army.add(tower);
         this.hold = null;
       }
     });
@@ -102,18 +100,30 @@ export class Shop {
     this.hold = token;
   }
 
+  getDrawables() {
+    return {
+      drawables: [
+        this.army.castle,
+        ...this.army.towers,
+        this.army.grid,
+        ...this.retail.buyables.keys(),
+        ...this.army.path.tiles,
+        ...(this.hold ? [this.hold] : []),
+      ],
+      grid: this.army.grid,
+    };
+  }
+
   getState() {
-    const shopState: ShopState = {
+    return {
       type: "shop",
       retail: this.retail,
       hold: this.hold,
       hudElements: [new StartBattleButton()],
-      towers: this.army.towers.map((tower) => tower.toSerialized(this.army.grid)),
-      castle: this.army.castle.toSerialized(this.army.grid),
+      towers: this.army.towers,
+      castle: this.army.castle,
       path: this.army.path,
-      grid: this.army.grid.toSerialized(),
-    };
-
-    return shopState;
+      grid: this.army.grid,
+    } as ShopState;
   }
 }

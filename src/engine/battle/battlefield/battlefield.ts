@@ -1,8 +1,6 @@
 import { Army } from "../../army/entity/army";
-import { BattleTower } from "../../tower/battle/battle-tower";
-import { BattleUnit } from "../../units/battle/entity-units-physic";
-import { Unit } from "../../units/entity/units";
-import { UnitRecruit } from "../../units/recruit/unit-recruit";
+import { AnyBattleTower } from "../../tower/battle/battle-tower";
+import { AnyBattleUnit } from "../../units/battle/battle-unit";
 import { BattleArmy } from "../../army/battle/battle-army";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { Battle } from "../battle";
@@ -10,8 +8,7 @@ import { Physic } from "../../../shared/physic";
 import { HitBox } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
-import { BattleBarrack } from "../../barrack/battle/battle-barrack";
-import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
+import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 
 export type SearchTarget = Battlefield["searchAlliedTowerTarget"] | Battlefield["searchEnemyTowerTarget"];
 export type SearchAreaForUnit = Battlefield["searchAlliesInArea"] | Battlefield["searchEnemiesInArea"];
@@ -47,10 +44,10 @@ export class Battlefield {
     const alliedBattleTowers = alliedArmy.towers.map((tower) => tower.toAllied(grid, alliedBattleArmy.getHooks()));
     const enemyBattleBarracks = enemyArmy.barracks
       .map((barrack) => barrack.toBattle(barrack.productionSpeed, alliedBattlePath, enemyBattleArmy.getHooks()))
-      .filter((b): b is BattleBarrack<BarrackRecruit> => b !== undefined);
+      .filter((b): b is AnyBattleBarrack => b !== undefined);
     const alliedBattleBarrack = alliedArmy.barracks
       .map((barrack) => barrack.toBattle(barrack.productionSpeed, enemyBattlePath, alliedBattleArmy.getHooks()))
-      .filter((b): b is BattleBarrack<BarrackRecruit> => b !== undefined);
+      .filter((b): b is AnyBattleBarrack => b !== undefined);
     alliedBattleArmy.init(alliedBattleCastle, alliedBattlePath, alliedBattleTowers, alliedBattleBarrack);
     enemyBattleArmy.init(enemyBattleCastle, enemyBattlePath, enemyBattleTowers, enemyBattleBarracks);
     grid.initElements(alliedBattleArmy, enemyBattleArmy);
@@ -78,8 +75,8 @@ export class Battlefield {
     }
   }
 
-  searchEnemiesInArea(areaPosition: Position, hitbox: HitBox): BattleUnit<UnitRecruit<Unit>>[] {
-    const found: BattleUnit<UnitRecruit<Unit>>[] = [];
+  searchEnemiesInArea(areaPosition: Position, hitbox: HitBox): AnyBattleUnit[] {
+    const found: AnyBattleUnit[] = [];
     for (const enemyUnit of this.enemyArmy.units.keys()) {
       if (Physic.doCollide(areaPosition, hitbox, enemyUnit.position)) {
         found.push(enemyUnit);
@@ -88,8 +85,8 @@ export class Battlefield {
     return found;
   }
 
-  searchAlliesInArea(areaPosition: Position, hitbox: HitBox): BattleUnit<UnitRecruit<Unit>>[] {
-    const found: BattleUnit<UnitRecruit<Unit>>[] = [];
+  searchAlliesInArea(areaPosition: Position, hitbox: HitBox): AnyBattleUnit[] {
+    const found: AnyBattleUnit[] = [];
     for (const enemyUnit of this.alliedArmy.units.keys()) {
       if (Physic.doCollide(areaPosition, hitbox, enemyUnit.position)) {
         found.push(enemyUnit);
@@ -98,8 +95,8 @@ export class Battlefield {
     return found;
   }
 
-  searchAlliedTowerTarget(tower: BattleTower, criteria: (enemyUnit: BattleUnit, distanceSqrd: number) => boolean) {
-    let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
+  searchAlliedTowerTarget(tower: AnyBattleTower, criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean) {
+    let bestTarget: [AnyBattleUnit | null, number] = [null, Infinity];
     for (const enemyUnit of [...this.enemyArmy.units.keys()]) {
       const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
       if (criteria(enemyUnit, distanceSqrd)) {
@@ -111,8 +108,8 @@ export class Battlefield {
     return bestTarget[0];
   }
 
-  searchEnemyTowerTarget(tower: BattleTower, criteria: (enemyUnit: BattleUnit, distanceSqrd: number) => boolean) {
-    let bestTarget: [BattleUnit<UnitRecruit<Unit>> | null, number] = [null, Infinity];
+  searchEnemyTowerTarget(tower: AnyBattleTower, criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean) {
+    let bestTarget: [AnyBattleUnit | null, number] = [null, Infinity];
     for (const enemyUnit of [...this.alliedArmy.units.keys()]) {
       const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
       if (criteria(enemyUnit, distanceSqrd)) {

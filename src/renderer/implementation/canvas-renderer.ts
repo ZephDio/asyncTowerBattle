@@ -1,36 +1,16 @@
 import { Game } from "../../engine/game";
-import { SerializedPath } from "../../engine/path/entity/path";
-import { BattleState, GameState, ShopState, SummaryState } from "../../shared/gamestate";
 import { Position } from "../../shared/position";
-import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
-import { Resources } from "../resources";
-import { Drawable } from "./drawables/drawable";
-import { PhysicEntity, Recruit } from "../../shared/physic";
-import { SerializedBattleCastle } from "../../engine/castle/battle/battle-castle";
-import { TowerDrawable } from "./drawables/tower-drawable";
-import { CastleDrawable } from "./drawables/castle-drawable";
-import { PathDrawable } from "./drawables/path-drawable";
-import { UnitEntityDrawable } from "./drawables/unit-drawable";
-import { BattleVerdict } from "../../engine/battle-summary/battle-summary";
-import { VerdictDrawable } from "./drawables/verdict-drawable";
-import { SerializedBattleTower } from "../../engine/tower/battle/battle-tower";
-import { TowerRecruit } from "../../engine/tower/recruit/tower-recruit";
-import { UnitRecruit } from "../../engine/units/recruit/unit-recruit";
-import { Unit } from "../../engine/units/entity/units";
-import { Projectile } from "../../engine/projectile/entity/projectile";
-import { ProjectileDrawable } from "./drawables/projectiles-drawable";
-import { Buyable } from "../../engine/shop/shop";
-import { BuyableDrawable } from "./drawables/buyable-drawable";
-import { HudElement } from "../../shared/hud-element";
-import { HudElementDrawable } from "./drawables/hud-element-drawable";
-import { SerializedCastleRecruit } from "../../engine/castle/recruit/castle-recruit";
-import { AreaEffect } from "../../engine/area-effect/area-effect";
-import { AreaEffectDrawable } from "./drawables/area-effect-drawable";
-import { GridDrawable } from "./drawables/grid-drawable";
-import { Grid, SerializedGrid } from "../../engine/grid/grid";
-import { TokenDrag } from "../../engine/shop/token-drag";
+
 export const proportion = 16 / 9.8;
+
+/**
+ * Path: the road to castle
+ * Tile: a square of the Path
+ *
+ * Grid: a rectangle of
+ *
+ */
 
 export class CanvasRenderer implements Renderer {
   public container: HTMLElement;
@@ -45,99 +25,116 @@ export class CanvasRenderer implements Renderer {
   }
 
   async draw() {
-    const state = await this.game.getState();
-    const drawableState = this.stateToDrawable(state);
+    const { drawables, grid } = this.game.getRenderState();
+    // const drawableState = this.stateToDrawable(state);
     this.drawBackGround();
-    for (const drawable of drawableState) {
-      drawable.draw(this.context);
-    }
+    drawables
+      .sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
+      .map((drawable) => drawable.render(this.context, grid));
   }
 
-  stateToDrawable(state: GameState) {
-    if (state.type === "summary") {
-      return this.summaryStateToDrawable(state as SummaryState);
-    }
-    if (state.type === "battle") {
-      return this.battleStateToDrawable(state as BattleState);
-    }
-    if (state.type === "shop") {
-      return this.shopStateToDrawable(state as ShopState);
-    }
-    return [];
-  }
+  // stateToDrawable(state: GameState) {
+  //   if (state.type === "summary") {
+  //     return this.summaryStateToDrawable(state as SummaryState);
+  //   }
+  //   if (state.type === "battle") {
+  //     return this.battleStateToDrawable(state as BattleState);
+  //   }
+  //   if (state.type === "shop") {
+  //     return this.shopStateToDrawable(state as ShopState);
+  //   }
+  //   return [];
+  // }
 
-  battleStateToDrawable(state: BattleState) {
-    const drawables: Drawable[] = [];
-    drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower, tower.position)));
-    drawables.push(...state.projectiles.map((projectile) => this.projectileToDrawable(projectile)));
-    drawables.push(...state.paths.map((path) => this.pathToPathDrawable(path, state.grid)));
-    drawables.push(...state.entities.map((physicUnit) => this.unitToDrawable(physicUnit)));
-    drawables.push(...state.castles.map((castle) => this.castleToCastleDrawable(castle, castle.position)));
-    drawables.push(...state.areaEffects.map((areaEffect) => this.areaEffectToDrawable(areaEffect)));
-    drawables.push(this.gridToGridDrawable(state.grid));
+  // battleStateToDrawable(state: BattleState) {
+  //   const drawables: Drawable[] = [];
+  //   drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower, tower.position)));
+  //   drawables.push(...state.projectiles.map((projectile) => this.projectileToDrawable(projectile)));
+  //   drawables.push(...state.paths.map((path) => this.pathToPathDrawable(path, state.grid)));
+  //   drawables.push(...state.entities.map((physicUnit) => this.unitToDrawable(physicUnit)));
+  //   drawables.push(...state.castles.map((castle) => this.castleToCastleDrawable(castle, castle.position)));
+  //   drawables.push(...state.areaEffects.map((areaEffect) => this.areaEffectToDrawable(areaEffect)));
+  //   drawables.push(this.gridToGridDrawable(state.grid));
 
-    drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
-    return drawables;
-  }
+  //   drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
+  //   return drawables;
+  // }
 
-  summaryStateToDrawable(state: SummaryState) {
-    const drawables: Drawable[] = [];
-    drawables.push(this.verdictToDrawableVerdict(state.battleVerdict));
-    return drawables;
-  }
+  // summaryStateToDrawable(state: SummaryState) {
+  //   const drawables: Drawable[] = [];
+  //   drawables.push(this.verdictToDrawableVerdict(state.battleVerdict));
+  //   return drawables;
+  // }
 
-  shopStateToDrawable(state: ShopState) {
-    const drawables: Drawable[] = [];
-    drawables.push(...state.hudElements.map((hudElement) => this.HudtoHudElementDrawable(hudElement)));
-    drawables.push(...[...state.retail.buyables.keys()].map((buyable) => this.buyableToDrawableBuyable(buyable, buyable.position)));
-    drawables.push(this.pathToPathDrawable(state.path, state.grid));
-    drawables.push(this.castleToCastleDrawable(state.castle, state.castle.position));
-    drawables.push(...state.towers.map((tower) => this.towerToTowerDrawable(tower, tower.position)));
-    drawables.push(this.gridToGridDrawable(state.grid));
-    drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
-    if (state.hold) {
-      if (TokenDrag.isBuyableToken(state.hold)) {
-        drawables.push(this.buyableToDrawableBuyable(state.hold.entity, state.hold.position));
-      }
-      if (TokenDrag.isTowerToken(state.hold)) {
-        drawables.push(this.towerToTowerDrawable(state.hold.entity.toSerialized(new Grid()), state.hold.position));
-      }
-    }
-    return drawables;
-  }
+  // shopStateToDrawable(drawables: ImplementsTrait<typeof TDrawable>[]) {
+  //   // const drawables: (ImplementsTrait<typeof TDrawable> | Drawable)[] = [];
+  //   // drawables.push(...state.hudElements.map((hudElement) => this.HudtoHudElementDrawable(hudElement)));
+  //   // drawables.push(...[...state.retail.buyables.keys()].map((buyable) => this.buyableToDrawableBuyable(buyable, buyable.position)));
+  //   // drawables.push(this.pathToPathDrawable(state.path, state.grid));
+  //   // drawables.push(state.castle);
+  //   // drawables.push(...state.towers);
+  //   // drawables.push(this.gridToGridDrawable(state.grid));
+  //   // drawables.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority);
+  //   // if (state.hold) {
+  //   //   if (TokenDrag.isBuyableToken(state.hold)) {
+  //   //     drawables.push(this.buyableToDrawableBuyable(state.hold.entity, state.hold.position));
+  //   //   }
+  //   //   if (TokenDrag.isTowerToken(state.hold)) {
+  //   //     drawables.push(this.towerToTowerDrawable(state.hold.entity.toSerialized(new Grid()), state.hold.position));
+  //   //   }
+  //   // }
+  //   // if (state.grid.overEffect) {
+  //   //   drawables.push(this.hoverEffectToDrawable(state.grid.overEffect, state.grid));
+  //   // }
+  //   // drawables.push(...state.grid.synergiesEffects.map((synergyEffect) => this.synergyEffectToDrawable(synergyEffect, state.grid)));
+  //   drawables.map((drawable) => drawable.draw(this.context, this.game.army.grid));
+  //   return drawables;
+  // }
 
-  HudtoHudElementDrawable(button: HudElement) {
-    const position = this.getCanvasPosition(button.position);
-    const size = this.getCanvasSize(button.size.width, button.size.height);
-    return new HudElementDrawable(button, size, position);
-  }
-  verdictToDrawableVerdict(verdict: BattleVerdict) {
-    const position = this.getCanvasPosition({ x: 50, y: 30 });
-    const { width, height } = Resources.verdict[verdict].size as Size;
-    const size = this.getCanvasSize(width, height);
+  // HudToHudElementDrawable(button: HudElement) {
+  //   const position = this.getCanvasPosition(button.position);
+  //   const size = this.getCanvasSize(button.size.width, button.size.height);
+  //   return new HudElementDrawable(button, size, position);
+  // }
+  // verdictToDrawableVerdict(verdict: BattleVerdict) {
+  //   const position = this.getCanvasPosition({ x: 50, y: 30 });
+  //   const { width, height } = Resources.verdict[verdict].size as Size;
+  //   const size = this.getCanvasSize(width, height);
 
-    return new VerdictDrawable(verdict, size, position);
-  }
+  //   return new VerdictDrawable(verdict, size, position);
+  // }
 
-  gridToGridDrawable(grid: SerializedGrid) {
-    const position = this.getCanvasPosition(grid.position);
-    const tileSize = this.getCanvasSize(grid.tileSize, grid.tileSize).width;
-    return new GridDrawable(position, { width: grid.width, height: grid.height }, tileSize);
-  }
+  // gridToGridDrawable(grid: BattleGrid | Grid) {
+  //   const position = this.getCanvasPosition(grid.position);
+  //   const tileSize = this.getCanvasSize(grid.tileSize, grid.tileSize).width;
+  //   return new GridDrawable(position, { width: grid.width, height: grid.height }, tileSize);
+  // }
 
-  towerToTowerDrawable(tower: SerializedBattleTower | TowerRecruit, position: Position) {
-    const canvasPosition = this.getCanvasPosition(position);
-    const { width, height } = (Resources.tower as any)[tower.type].size as Size;
-    const size = this.getCanvasSize(width, height);
-    return new TowerDrawable(canvasPosition, size, tower.type);
-  }
+  // hoverEffectToDrawable(overEffect: GridPosition, grid: Grid) {
+  //   const position = this.getCanvasPosition(grid.cellToReal(overEffect));
+  //   const size = this.getCanvasSize(grid.tileSize, grid.tileSize);
+  //   return new HoverEffectDrawable(position, size);
+  // }
 
-  castleToCastleDrawable(_castle: SerializedBattleCastle | SerializedCastleRecruit, position: Position) {
-    const canvasPosition = this.getCanvasPosition(position);
-    const { width, height } = Resources.castle.size as Size;
-    const size = this.getCanvasSize(width, height);
-    return new CastleDrawable(canvasPosition, size);
-  }
+  // synergyEffectToDrawable(synergyEffect: GridPosition, grid: Grid) {
+  //   const position = this.getCanvasPosition(grid.cellToReal(synergyEffect));
+  //   const size = this.getCanvasSize(grid.tileSize / 2, grid.tileSize / 2);
+  //   return new SynergyEffectDrawable(position, size);
+  // }
+
+  // towerToTowerDrawable(tower: AnyTowerRecruit, position: Position) {
+  //   const canvasPosition = this.getCanvasPosition(position);
+  //   const { width, height } = (Resources.tower as any)[tower.type].size as Size;
+  //   const size = this.getCanvasSize(width, height);
+  //   return new TowerDrawable(canvasPosition, size, tower.type);
+  // }
+
+  // castleToCastleDrawable(_castle: SerializedBattleCastle | SerializedCastleRecruit, position: Position) {
+  //   const canvasPosition = this.getCanvasPosition(position);
+  //   const { width, height } = Resources.castle.size as Size;
+  //   const size = this.getCanvasSize(width, height);
+  //   return new CastleDrawable(canvasPosition, size);
+  // }
 
   getCanvasPosition(position: Position) {
     const x = (this.canvas.width / 100) * position.x;
@@ -145,44 +142,44 @@ export class CanvasRenderer implements Renderer {
     return { x, y };
   }
 
-  pathToPathDrawable(path: SerializedPath, grid: SerializedGrid) {
-    const relativeTiles = [
-      ...path.tiles.map((tile) => {
-        return {
-          position: this.getCanvasPosition(this.game.army.grid.gridPositionToReal(tile.gridPosition)),
-          type: "normal",
-        };
-      }),
-    ];
-    const size = this.getCanvasSize(grid.tileSize, grid.tileSize);
-    return new PathDrawable(relativeTiles, size);
-  }
+  // pathToPathDrawable(path: SerializedPath, grid: SerializedGrid) {
+  //   const relativeTiles = [
+  //     ...path.tiles.map((tile) => {
+  //       return {
+  //         position: this.getCanvasPosition(this.game.army.grid.cellToReal(tile.cell)),
+  //         type: "normal",
+  //       };
+  //     }),
+  //   ];
+  //   const size = this.getCanvasSize(grid.tileSize, grid.tileSize);
+  //   return new PathDrawable(relativeTiles, size);
+  // }
 
-  buyableToDrawableBuyable(buyable: Buyable<Recruit>, position: Position) {
-    const canvasPosition = this.getCanvasPosition(position);
-    const { width, height } = (Resources as any)[buyable.type as any][buyable.entity.type as any].size as Size;
-    const size = this.getCanvasSize(width, height);
-    return new BuyableDrawable(buyable, size, canvasPosition);
-  }
+  // buyableToDrawableBuyable(buyable: Buyable<Recruit>, position: Position) {
+  //   const canvasPosition = this.getCanvasPosition(position);
+  //   const { width, height } = (Resources as any)[buyable.type as any][buyable.entity.type as any].size as Size;
+  //   const size = this.getCanvasSize(width, height);
+  //   return new BuyableDrawable(buyable, size, canvasPosition);
+  // }
 
-  projectileToDrawable(projectile: PhysicEntity<Projectile>) {
-    const position = this.getCanvasPosition(projectile.position);
-    const size = this.getCanvasSize(2, 2);
-    return new ProjectileDrawable(position, size, projectile.theta, projectile.type);
-  }
+  // projectileToDrawable(projectile: PhysicEntity<Projectile>) {
+  //   const position = this.getCanvasPosition(projectile.position);
+  //   const size = this.getCanvasSize(2, 2);
+  //   return new ProjectileDrawable(position, size, projectile.theta, projectile.type);
+  // }
 
-  areaEffectToDrawable(areaEffect: AreaEffect) {
-    const position = this.getCanvasPosition(areaEffect.position);
-    const size = this.getCanvasSize(areaEffect.size.width, areaEffect.size.height);
-    return new AreaEffectDrawable(areaEffect, size, position);
-  }
+  // areaEffectToDrawable(areaEffect: AreaEffect) {
+  //   const position = this.getCanvasPosition(areaEffect.position);
+  //   const size = this.getCanvasSize(areaEffect.size.width, areaEffect.size.height);
+  //   return new AreaEffectDrawable(areaEffect, size, position);
+  // }
 
-  unitToDrawable(physicUnit: PhysicEntity<UnitRecruit<Unit>>) {
-    const position = this.getCanvasPosition(physicUnit.position);
-    const { width, height } = (Resources as any).unit[physicUnit.entity.type].size as Size;
-    const size = this.getCanvasSize(width, height);
-    return new UnitEntityDrawable(position, size, physicUnit.entity.type);
-  }
+  // unitToDrawable(physicUnit: PhysicEntity<UnitRecruit<Unit>>) {
+  //   const position = this.getCanvasPosition(physicUnit.position);
+  //   const { width, height } = (Resources as any).unit[physicUnit.entity.type].size as Size;
+  //   const size = this.getCanvasSize(width, height);
+  //   return new UnitEntityDrawable(position, size, physicUnit.entity.type);
+  // }
 
   drawBackGround() {
     this.context.fillStyle = "#A65";
@@ -218,9 +215,9 @@ export class CanvasRenderer implements Renderer {
   }
 }
 
-export const PercentToReal = (position: Position) => {
-  return {
+export const PercentToReal = (position: { x: number; y: number }) => {
+  return new Position({
     x: position.x,
     y: position.y / proportion,
-  };
+  });
 };

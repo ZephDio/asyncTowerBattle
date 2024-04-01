@@ -1,24 +1,29 @@
 import { Castle } from "../../castle/entity/castle";
 import { CastleRecruit } from "../../castle/recruit/castle-recruit";
 import { ArmyPath } from "../../path/entity/path";
-import { Recruit } from "../../../shared/physic";
-import { TowerRecruit } from "../../tower/recruit/tower-recruit";
+import { AnyTowerRecruit } from "../../tower/recruit/tower-recruit";
 import { Grid } from "../../grid/grid";
 import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
+import { AnyTower } from "../../tower/entity/tower";
+import { Cell } from "../../../shared/position";
 
 export class Army {
-	constructor(
-		public castle: CastleRecruit<Castle>,
-		public towers: TowerRecruit[],
-		public path: ArmyPath,
-		public grid: Grid,
-		public barracks: BarrackRecruit[],
-	) {}
+  constructor(
+    public castle: CastleRecruit<Castle>,
+    public towers: AnyTowerRecruit[],
+    public path: ArmyPath,
+    public grid: Grid,
+    public barracks: BarrackRecruit[]
+  ) {}
 
-	recruit(recruit: Recruit, type: string) {
-		if (type === "tower") {
-			this.grid.setElement(recruit as TowerRecruit);
-			this.towers.push(recruit as TowerRecruit);
-		}
-	}
+  recruit(blueprint: AnyTower, tile: Cell) {
+    const recruit = blueprint.toRecruit(tile);
+    this.grid.setElement(recruit);
+    this.towers.push(recruit);
+  }
+
+  add(recruit: AnyTowerRecruit) {
+    this.grid.setElement(recruit);
+    this.towers.push(recruit);
+  }
 }

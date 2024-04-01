@@ -1,9 +1,10 @@
+import { Cell } from "../../../shared/position";
 import { BarrackRecruitFixtures } from "../../barrack/recruit/barrack-recruit-fixtures";
 import { CastleRecruitFixture } from "../../castle/entity/castle";
 import { Grid } from "../../grid/grid";
 import { PathFixture } from "../../path/entity/path-fixtures";
 import { TowerFixtures } from "../../tower/entity/tower-fixtures";
-import { TowerRecruit } from "../../tower/recruit/tower-recruit";
+import { AnyTowerRecruit } from "../../tower/recruit/tower-recruit";
 import { TowerRecruitBuilder, TowerRecruitFixtures } from "../../tower/recruit/tower-recruit-fixtures";
 import { Army } from "./army";
 
@@ -11,7 +12,7 @@ export class ArmyFixture {
   static get allied() {
     const grid = new Grid();
     const castle = CastleRecruitFixture.allied;
-    const towers: TowerRecruit[] = [
+    const towers: AnyTowerRecruit[] = [
       //TowerFixtures.centerTower,
       TowerRecruitFixtures.centerTower,
       //TowerEntityFixtures.topRightTower,
@@ -24,9 +25,9 @@ export class ArmyFixture {
   static get enemy() {
     const grid = new Grid();
     const towers = [
-      new TowerRecruitBuilder().gridPositioned({ gridX: 5, gridY: 5 }).buildBlue(TowerFixtures.blue),
-      new TowerRecruitBuilder().gridPositioned({ gridX: 1, gridY: 1 }).buildOrange(TowerFixtures.orange),
-      new TowerRecruitBuilder().gridPositioned({ gridX: 4, gridY: 3 }).buildGreen(TowerFixtures.green),
+      new TowerRecruitBuilder().celled(new Cell({ x: 5, y: 5 })).buildBlue(TowerFixtures.blue),
+      new TowerRecruitBuilder().celled(new Cell({ x: 1, y: 1 })).buildOrange(TowerFixtures.orange),
+      new TowerRecruitBuilder().celled(new Cell({ x: 4, y: 3 })).buildGreen(TowerFixtures.green),
     ];
     const castle = CastleRecruitFixture.enemy;
     const path = PathFixture.defaultAllied;

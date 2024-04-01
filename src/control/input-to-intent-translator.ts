@@ -2,7 +2,9 @@ import { Game } from "../engine/game";
 import { Physic } from "../shared/physic";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
 import { Position } from "../shared/position";
-import { TowerBuyable } from "../engine/shop/shop";
+import { Grid } from "../engine/grid/grid";
+import { TowerRecruit } from "../engine/tower/recruit/tower-recruit";
+import { implementsTrait } from "@ddd-ts/traits";
 
 export interface PlayerIntent {
   intent: string;
@@ -36,6 +38,20 @@ export class InputToIntentTranslator {
       if (this.game.shop.hold) {
         this.game.shop.moveHold(position);
       }
+
+      const grid = this.game.shop.army.grid;
+      const cell = grid.realPositionToGrid(position);
+      this.game.shop.army.grid.setOveredTile(cell);
+      if (cell) {
+        const gridElement = grid.tiles.get(Grid.posToString(cell));
+        if (gridElement) {
+          if (implementsTrait(gridElement, TowerRecruit)) {
+            grid.setSynergiesTiles(gridElement.cell, gridElement.patternEffect);
+            return;
+          }
+        }
+        grid.clearSynergiesTiles();
+      }
     }
   }
 
@@ -45,11 +61,11 @@ export class InputToIntentTranslator {
       if (!state.hold) {
         for (const [buyable, buyablePosition] of this.game.shop.retail.buyables) {
           if (Physic.doCollide(buyablePosition, buyable.entity.hitbox, position)) {
-            return this.game.shop.setHoldFromRetail(buyable as TowerBuyable, position);
+            return this.game.shop.setHoldFromRetail(buyable, position);
           }
         }
         for (const tower of this.game.shop.army.towers) {
-          if (Physic.doCollide(this.game.shop.army.grid.gridPositionToReal(tower.gridPosition), tower.hitbox, position)) {
+          if (Physic.doCollide(this.game.shop.army.grid.cellToReal(tower.cell), tower.hitbox, position)) {
             return this.game.shop.setHoldFromArmy(tower, position);
           }
         }

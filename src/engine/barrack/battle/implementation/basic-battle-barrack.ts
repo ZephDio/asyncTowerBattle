@@ -1,37 +1,31 @@
 import { Position } from "../../../../shared/position";
 import { UnitRecruit } from "../../../units/recruit/unit-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { Unit } from "../../../units/entity/units";
-import { BattleBarrack, UnitProduction } from "../battle-barrack";
-import { BarrackRecruit } from "../../recruit/barrack-recruit";
 import { BattlePath } from "../../../path/battle/battle-path";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
+import { Cast, Caster } from "../../../../shared/traits/cast";
+import { BasicBarrackRecruit } from "../../recruit/implementation/basic-barrack-recruit";
 
-export class BasicBattleBarrack<BasicBarrackRecruit extends BarrackRecruit> extends BattleBarrack<BarrackRecruit> {
-  onGoingProduction = null as null | UnitProduction;
+export class BasicBattleBarrack extends Derive(Caster) {
+  cast = null as null | Cast;
+  onGoingProduction = null as null | Cast;
   constructor(
-    productionSpeed: number,
-    barrackRecruit: BasicBarrackRecruit,
-    position: Position,
-    path: BattlePath,
-    hooks: BattleArmyHooks,
-    recruit: UnitRecruit<Unit>
+    public castSpeed: number,
+    public readonly barrackRecruit: BasicBarrackRecruit,
+    public readonly position: Position,
+    public readonly path: BattlePath,
+    public readonly hooks: BattleArmyHooks,
+    public readonly recruit: ImplementsTrait<typeof UnitRecruit>
   ) {
-    super(barrackRecruit, productionSpeed, position, path, recruit, hooks);
+    super({});
   }
 
   tick() {
-    if (this.onGoingProduction) {
-      this.onGoingProduction.tick();
-    }
-    if (!this.onGoingProduction) {
-      this.onGoingProduction = new UnitProduction(this, () => {
-        this.produce();
-        this.onGoingProduction = null;
-      });
-    }
+    super.tickCast();
   }
 
-  produce() {
-    this.hooks.addUnits(this.recruit.toBattle({ x: this.position.x, y: this.position.y }, this.path, this.hooks), this);
+  onCastResolve(): void {
+    this.hooks.addUnits(this.recruit.toBattle(this.position.clone(), this.path, this.hooks), this);
+    this.cast = null;
   }
 }

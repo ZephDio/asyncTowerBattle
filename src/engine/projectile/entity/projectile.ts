@@ -1,7 +1,10 @@
+import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../shared/hitboxes";
+import { TDrawable } from "../../../shared/traits/drawable";
 
-export abstract class Projectile {
-	abstract hitbox: HitBox;
-	abstract type: string;
-	abstract baseSpeed: number;
+export abstract class Projectile extends Derive(TDrawable) {
+  abstract hitbox: HitBox;
+  abstract baseSpeed: number;
+
+  drawPriority = 3;
 }

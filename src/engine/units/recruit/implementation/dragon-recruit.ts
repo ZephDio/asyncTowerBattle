@@ -1,3 +1,4 @@
+import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
@@ -6,14 +7,14 @@ import { BattleDragon } from "../../battle/implementation/dragon-battle";
 import { Dragon } from "../../entity/implementation/dragon";
 import { UnitRecruit } from "../unit-recruit";
 
-export class DragonRecruit extends UnitRecruit<Dragon> {
+export class DragonRecruit extends Derive(UnitRecruit) {
   hitbox: HitBox;
   speed: number;
   maxLife: number;
   attackSpeed: number;
   attackDamage: number;
   constructor(dragon: Dragon) {
-    super();
+    super({});
     this.hitbox = dragon.hitbox;
     this.maxLife = dragon.baseMaxLife;
     this.speed = dragon.baseSpeed;

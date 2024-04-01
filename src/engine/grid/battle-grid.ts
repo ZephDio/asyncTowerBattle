@@ -1,27 +1,32 @@
-import { GridPosition, Position } from "../../shared/position";
+import { Derive } from "@ddd-ts/traits";
+import { Cell, Position } from "../../shared/position";
+import { TDrawable, TRenderable } from "../../shared/traits/drawable";
 import { BattleArmy } from "../army/battle/battle-army";
 import { BattleCastle } from "../castle/battle/battle-castle";
-import { PathTile } from "../path/entity/path";
-import { BattleTower } from "../tower/battle/battle-tower";
-import { Grid, GridElement, SerializedGrid } from "./grid";
+import { AnyBattleTower } from "../tower/battle/battle-tower";
+import { Grid, SerializedGrid } from "./grid";
+import { BattlePathTile } from "../path/battle/battle-path";
 
-export type BattleGridElement = BattleTower | PathTile | BattleCastle;
-export class BattleGrid {
-  grid: Map<string, BattleGridElement> = new Map();
+export type BattleGridElement = AnyBattleTower | BattlePathTile | BattleCastle;
+export class BattleGrid extends Derive(TDrawable, TRenderable) {
+  tiles: Map<string, BattleGridElement> = new Map();
+
   constructor(
     public gridAllied: Grid,
     public gridEnemy: Grid,
     public width: number,
     public height: number,
-    public position: Position = { x: 2, y: 1.5 },
+    public position: Position = new Position({ x: 2, y: 1.5 }),
     public tileSize = 4.9
-  ) {}
+  ) {
+    super({});
+  }
 
-  gridPositionToReal(gridPosition: GridPosition) {
-    return {
-      x: this.position.x + (gridPosition.gridX + 0.5) * this.tileSize,
-      y: this.position.y + (gridPosition.gridY + 0.5) * this.tileSize,
-    };
+  cellToReal(cell: Cell) {
+    return new Position({
+      x: this.position.x + (cell.x + 0.5) * this.tileSize,
+      y: this.position.y + (cell.y + 0.5) * this.tileSize,
+    });
   }
 
   static fuse(gridAllied: Grid, gridEnemy: Grid): BattleGrid {
@@ -53,8 +58,8 @@ export class BattleGrid {
     }
   }
 
-  setElement(gridElement: GridElement) {
-    this.grid.set(Grid.posToString(gridElement.gridPosition), gridElement);
+  setElement(gridElement: BattleGridElement) {
+    this.tiles.set(Grid.posToString(gridElement.cell), gridElement);
   }
 
   toSerialized() {
@@ -67,15 +72,15 @@ export class BattleGrid {
     return serialized;
   }
 
-  getRelativeNeighborsInArmy(armyGridPosition: GridPosition, relativePositions: GridPosition[], isEnemy: boolean) {
+  getRelativeNeighborsInArmy(armyGridPosition: Cell, relativePositions: Cell[], isEnemy: boolean) {
     const founds: BattleGridElement[] = [];
     for (const relativePosition of relativePositions) {
-      const yCoordinate = armyGridPosition.gridY + (isEnemy ? -relativePosition.gridY : relativePosition.gridY);
-      const targetPosition = {
-        gridX: armyGridPosition.gridX + (isEnemy ? -relativePosition.gridX : relativePosition.gridX),
-        gridY: yCoordinate,
-      };
-      const elementFound = this.grid.get(Grid.posToString(targetPosition));
+      const yCoordinate = armyGridPosition.y + (isEnemy ? -relativePosition.y : relativePosition.y);
+      const targetPosition = new Cell({
+        x: armyGridPosition.x + (isEnemy ? -relativePosition.x : relativePosition.x),
+        y: yCoordinate,
+      });
+      const elementFound = this.tiles.get(Grid.posToString(targetPosition));
       if (elementFound) {
         founds.push(elementFound);
       }
@@ -83,14 +88,14 @@ export class BattleGrid {
     return founds;
   }
 
-  getRelativeNeighborsInBattle(gridPosition: GridPosition, relativePositions: GridPosition[], isEnemy: boolean) {
+  getRelativeNeighborsInBattle(cell: Cell, relativePositions: Cell[], isEnemy: boolean) {
     const founds: BattleGridElement[] = [];
     for (const relativePosition of relativePositions) {
-      const targetPosition = {
-        gridX: gridPosition.gridX + (isEnemy ? -relativePosition.gridX : relativePosition.gridX),
-        gridY: gridPosition.gridY + (isEnemy ? -relativePosition.gridY : relativePosition.gridY),
-      };
-      const elementFound = this.grid.get(Grid.posToString(targetPosition));
+      const targetPosition = new Cell({
+        x: cell.x + (isEnemy ? -relativePosition.x : relativePosition.x),
+        y: cell.y + (isEnemy ? -relativePosition.y : relativePosition.y),
+      });
+      const elementFound = this.tiles.get(Grid.posToString(targetPosition));
       if (elementFound) {
         founds.push(elementFound);
       }
@@ -100,37 +105,56 @@ export class BattleGrid {
 
   getAlliedHooks(): GridHooks {
     return {
-      getRelativeNeighborsInArmy: (gridPosition: GridPosition, relativePositions: GridPosition[]) => {
-        return this.getRelativeNeighborsInArmy(gridPosition, relativePositions, false);
+      getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => {
+        return this.getRelativeNeighborsInArmy(cell, relativePositions, false);
       },
-      getRelativeNeighborsInBattle: (gridPosition: GridPosition, relativePositions: GridPosition[]) => {
-        return this.getRelativeNeighborsInBattle(gridPosition, relativePositions, false);
+      getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => {
+        return this.getRelativeNeighborsInBattle(cell, relativePositions, false);
       },
     };
   }
 
   getEnemyHooks(): GridHooks {
     return {
-      getRelativeNeighborsInArmy: (gridPosition: GridPosition, relativePositions: GridPosition[]) => {
-        return this.getRelativeNeighborsInArmy(gridPosition, relativePositions, true);
+      getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => {
+        return this.getRelativeNeighborsInArmy(cell, relativePositions, true);
       },
-      getRelativeNeighborsInBattle: (gridPosition: GridPosition, relativePositions: GridPosition[]) => {
-        return this.getRelativeNeighborsInBattle(gridPosition, relativePositions, true);
+      getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => {
+        return this.getRelativeNeighborsInBattle(cell, relativePositions, true);
       },
     };
   }
 
-  static flip(battleGrid: BattleGrid, gridPosition: GridPosition) {
+  static flip(battleGrid: BattleGrid, cell: Cell) {
     const halfWidth = (battleGrid.width - 1) / 2;
     const halfHeight = (battleGrid.height - 1) / 2;
-    return {
-      gridX: halfWidth - gridPosition.gridX + halfWidth,
-      gridY: halfHeight - gridPosition.gridY + halfHeight,
-    };
+    return new Cell({
+      x: halfWidth - cell.x + halfWidth,
+      y: halfHeight - cell.y + halfHeight,
+    });
+  }
+
+  drawPriority = 1;
+
+  draw(context: CanvasRenderingContext2D): void {
+    context.fillStyle = "#6C6";
+    const position = this.getCanvasPosition(context, this.position);
+    const tileSize = this.getCanvasSize(context, this.tileSize, this.tileSize).width;
+    context.rect(position.x, position.y, this.width * tileSize, -this.height * tileSize);
+    context.fill();
+
+    context.lineWidth = 3;
+    context.strokeStyle = "rgba(0,0,0,0.1)";
+    for (const ci of new Array(this.width + 1).keys()) {
+      this.drawLine(context, position.x + ci * tileSize, position.y, position.x + ci * tileSize, position.y - this.height * tileSize);
+    }
+    for (const ri of new Array(this.height + 1).keys()) {
+      this.drawLine(context, position.x, position.y - ri * tileSize, position.x + this.width * tileSize, position.y - ri * tileSize);
+    }
   }
 }
 
 export type GridHooks = {
-  getRelativeNeighborsInBattle: (gridPosition: GridPosition, relativePositions: GridPosition[]) => BattleGridElement[];
-  getRelativeNeighborsInArmy: (gridPosition: GridPosition, relativePositions: GridPosition[]) => BattleGridElement[];
+  getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
+  getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
 };

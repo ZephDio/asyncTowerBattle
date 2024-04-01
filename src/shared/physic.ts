@@ -58,10 +58,10 @@ export class Physic {
 
   static getNextPositionAndOrientation(position: Position, destination: Position, speed: number) {
     const theta = Physic.getTheta(position, destination);
-    const nextPosition = {
+    const nextPosition = new Position({
       x: position.x + Math.cos(theta) * speed,
       y: position.y + Math.sin(theta) * speed,
-    };
+    });
     const differential = Physic.getDistanceSqrd(destination, position);
 
     if (differential < speed * speed) {
@@ -72,10 +72,10 @@ export class Physic {
 
   static doCollide(entityPosition: Position, hitbox: HitBox, position: Position) {
     for (const [shape, shapeRelativePosition] of hitbox.hitShapes) {
-      const absoluteShapePosition = {
+      const absoluteShapePosition = new Position({
         x: entityPosition.x - shapeRelativePosition.x,
         y: entityPosition.y - shapeRelativePosition.y,
-      };
+      });
       if (shape.type === "ellipse") {
         if (!Physic.isPointInsideEllipse(position, absoluteShapePosition, shape.size)) {
           return false;

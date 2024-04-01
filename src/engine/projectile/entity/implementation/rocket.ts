@@ -1,8 +1,19 @@
+import { Resources } from "../../../../renderer/resources";
 import { HitBox, HitShape } from "../../../../shared/hitboxes";
+import { Position } from "../../../../shared/position";
 import { Projectile } from "../projectile";
 
-export class Rocket implements Projectile {
-	type = "rocket" as const;
-	hitbox = new HitBox([[new HitShape("ellipse", { width: 1, height: 1 }), { x: 0, y: 0 }]]);
-	constructor(public baseSpeed: number = 0.7) {}
+export class Rocket extends Projectile {
+  hitbox = new HitBox([[new HitShape("ellipse", { width: 1, height: 1 }), new Position({ x: 0, y: 0 })]]);
+  constructor(public baseSpeed: number = 0.7) {
+    super({});
+  }
+
+  draw(context: CanvasRenderingContext2D, position: Position): void {
+    const image = Resources.projectiles.rocket.resource.image;
+    const canvasPosition = this.getCanvasPosition(context, position);
+    const { width, height } = Resources.tower.green.size;
+    const size = this.getCanvasSize(context, width, height);
+    this.drawImage(context, size, canvasPosition, image);
+  }
 }

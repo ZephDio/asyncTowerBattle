@@ -1,22 +1,48 @@
+import { Derive } from "@ddd-ts/traits";
+import { TPhysics } from "../../../../shared/traits/physics";
+import { Cell, Position } from "../../../../shared/position";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { OrangeTowerRecruit } from "../../recruit/implementation/orange-tower-recruit";
-import { BattleTower } from "../battle-tower";
+import { BlueBattleTower } from "./battle-blue-tower";
+import { GreenBattleTower } from "./battle.green.tower";
+import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
 
-export class OrangeBattleTower extends BattleTower<OrangeTowerRecruit> {
-  type = "orange" as const;
+export class OrangeBattleTower extends Derive(TPhysics, TDrawable, TRenderable) {
   hasTriggered = false;
+  draw: OrangeTowerRecruit["draw"];
+  drawPriority = 3;
+
+  constructor(
+    private readonly recruit: OrangeTowerRecruit,
+    readonly hooks: BattleArmyHooks,
+    public readonly position: Position,
+    public readonly cell: Cell
+  ) {
+    super({});
+    this.draw = this.recruit.draw;
+  }
+
+  get realPosition(): Position {
+    return this.position;
+  }
 
   tick() {
     if (!this.hasTriggered) {
-      const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(this.gridPosition, [
-        { gridX: 0, gridY: 1 },
-        { gridX: 0, gridY: -1 },
-      ]);
+      const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(this.cell, [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })]);
       for (const neighbor of neighbors) {
-        if (["blue", "orange", "green"].includes(neighbor.type)) {
-          (neighbor as BattleTower).attackDamage += 20;
+        if (neighbor instanceof BlueBattleTower || neighbor instanceof GreenBattleTower) {
+          neighbor.attackDamage += 20;
         }
       }
       this.hasTriggered = true;
     }
+  }
+
+  isAlive(): boolean {
+    return true;
+  }
+
+  takeDamage(_damage: number): void {
+    return;
   }
 }
