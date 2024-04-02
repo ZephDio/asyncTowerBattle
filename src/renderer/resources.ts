@@ -65,7 +65,11 @@ export const Resources = {
   path: {
     normal: {
       resource: "#C4A484",
-      image: createImage("/resources/path/pathtile.png"),
+      image: createImage("/resources/path/normal.png"),
+    },
+    slowing: {
+      resource: "#C4A484",
+      image: createImage("/resources/path/slowing.png"),
     },
   },
   castle: {

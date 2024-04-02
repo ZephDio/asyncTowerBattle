@@ -2,11 +2,11 @@ import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, Position } from "../../shared/position";
 import { Castle } from "../castle/entity/castle";
 import { CastleRecruit } from "../castle/recruit/castle-recruit";
-import { PathTile } from "../path/entity/path";
 import { TowerRecruit } from "../tower/recruit/tower-recruit";
 import { TDrawable, TRenderable } from "../../shared/traits/drawable";
+import { AnyPathTile } from "../tile/entity/tile";
 
-export type GridElement = ImplementsTrait<typeof TowerRecruit> | PathTile | CastleRecruit<Castle>;
+export type GridElement = ImplementsTrait<typeof TowerRecruit> | AnyPathTile | CastleRecruit<Castle>;
 
 export type SerializedGrid = {
   width: number;

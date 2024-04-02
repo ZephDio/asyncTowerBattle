@@ -3,8 +3,9 @@ import { Position } from "../../shared/position";
 import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Buyable } from "./shop";
 import { TDrawable, TRenderable } from "../../shared/traits/drawable";
+import { BasicPathTile } from "../tile/entity/tile";
 
-type Holdable = Buyable | AnyTowerRecruit;
+type Holdable = Buyable | AnyTowerRecruit | BasicPathTile;
 
 export class TokenDrag<T extends Holdable = Holdable> extends Derive(TDrawable, TRenderable) {
   draw!: T["draw"];

@@ -38,8 +38,20 @@ export class Battlefield {
     );
     const enemyBattleCastle = BattleCastle.toEnemy(enemyArmy.castle, grid, () => this.onBattleOver("victory"));
     const alliedBattleCastle = BattleCastle.toAllied(alliedArmy.castle, grid, () => this.onBattleOver("defeat"));
-    const alliedBattlePath = alliedArmy.path.toAllied(grid, alliedArmy.grid, alliedBattleCastle, enemyBattleCastle);
-    const enemyBattlePath = enemyArmy.path.toEnemy(grid, alliedArmy.grid, enemyBattleCastle, alliedBattleCastle);
+    const alliedBattlePath = alliedArmy.path.toAllied(
+      grid,
+      alliedArmy.grid,
+      alliedBattleCastle,
+      enemyBattleCastle,
+      alliedBattleArmy.getHooks()
+    );
+    const enemyBattlePath = enemyArmy.path.toEnemy(
+      grid,
+      alliedArmy.grid,
+      enemyBattleCastle,
+      alliedBattleCastle,
+      enemyBattleArmy.getHooks()
+    );
     const enemyBattleTowers = enemyArmy.towers.map((tower) => tower.toEnemy(grid, enemyBattleArmy.getHooks()));
     const alliedBattleTowers = alliedArmy.towers.map((tower) => tower.toAllied(grid, alliedBattleArmy.getHooks()));
     const enemyBattleBarracks = enemyArmy.barracks
@@ -64,6 +76,7 @@ export class Battlefield {
     this.tickUnits();
     this.tickTowers();
     this.tickAreaEffects();
+    this.tickPath();
   }
 
   tickTowers() {
@@ -128,6 +141,11 @@ export class Battlefield {
     for (const barrack of this.enemyArmy.barracks) {
       barrack.tick();
     }
+  }
+
+  tickPath() {
+    this.alliedArmy.path.tick();
+    this.enemyArmy.path.tick();
   }
 
   tickUnits() {
