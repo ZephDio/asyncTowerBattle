@@ -10,6 +10,8 @@ import { ShopState } from "../../shared/gamestate";
 import { TDrawable, TRenderable } from "../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { AnyTower } from "../tower/entity/tower";
+import { OverEffect } from "../grid/grid-effects/over-effect";
+import { SynergyEffect } from "../grid/grid-effects/synerny-effect";
 
 export class Buyable extends Derive(TDrawable, TRenderable) {
   draw!: AnyTower["draw"];
@@ -109,6 +111,9 @@ export class Shop {
         ...this.retail.buyables.keys(),
         ...this.army.path.tiles,
         ...(this.hold ? [this.hold] : []),
+        ...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
+          ...this.army.grid.synergiesEffects.map((synergiesEffect) =>
+          new SynergyEffect(synergiesEffect, this.army.grid))
       ],
       grid: this.army.grid,
     };

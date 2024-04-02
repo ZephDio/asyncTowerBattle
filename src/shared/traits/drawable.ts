@@ -85,10 +85,9 @@ export const TRenderable = Subtrait([TDrawable], (base) => {
   return IRenderable;
 });
 
-const TImageDrawable = Subtrait([TDrawable], (base) => {
+export const TImageDrawable = Subtrait([TDrawable], (base) => {
   abstract class TImageDrawable extends base {
     abstract drawable: {
-      priority: number;
       image: HTMLImageElement;
       size: { width: number; height: number };
     };
@@ -96,7 +95,8 @@ const TImageDrawable = Subtrait([TDrawable], (base) => {
     draw(context: CanvasRenderingContext2D, position: Position): void {
       const { width, height } = this.drawable.size;
       const size = this.getCanvasSize(context, width, height);
-      this.drawImage(context, size, position, this.drawable.image);
+      const canvasPosition = this.getCanvasPosition(context,position)
+      this.drawImage(context, size, canvasPosition, this.drawable.image);
     }
   }
   return TImageDrawable;

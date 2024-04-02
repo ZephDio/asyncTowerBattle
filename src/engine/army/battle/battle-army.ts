@@ -6,7 +6,6 @@ import { AnyBattleUnit } from "../../units/recruit/unit-recruit";
 import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
 import { GridHooks } from "../../grid/battle-grid";
-import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 import { BattlePath } from "../../path/battle/battle-path";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 

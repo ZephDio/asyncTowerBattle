@@ -11,7 +11,7 @@ export class BasicBarrackRecruit extends BarrackRecruit {
     super(barrack);
   }
   unitRecruit: null | ImplementsTrait<typeof UnitRecruit>;
-  toBattle(productionSpeed: number, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack<BarrackRecruit> | undefined {
+  toBattle(productionSpeed: number, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
     if (this.unitRecruit) {
       return new BasicBattleBarrack(productionSpeed, this, path.enemyCastle.position, path, hooks, this.unitRecruit);
     }

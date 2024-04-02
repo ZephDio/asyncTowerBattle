@@ -24,21 +24,21 @@ export class Grid extends Derive(TDrawable, TRenderable) {
     public width: number = 13,
     public height: number = 6,
     public position: Position = new Position({ x: 2, y: 1.5 }),
-    public tileSize = 4.9
+    public cellSize = 4.9
   ) {
     super({});
   }
 
   cellToReal(cell: Cell) {
     return new Position({
-      x: this.position.x + (cell.x + 0.5) * this.tileSize,
-      y: this.position.y + (cell.y + 0.5) * this.tileSize,
+      x: this.position.x + (cell.x + 0.5) * this.cellSize,
+      y: this.position.y + (cell.y + 0.5) * this.cellSize,
     });
   }
 
   realPositionToGrid(position: Position) {
-    const x = Math.round((position.x - this.position.x) / this.tileSize - 0.5);
-    const y = Math.round((position.y - this.position.y) / this.tileSize - 0.5);
+    const x = Math.round((position.x - this.position.x) / this.cellSize - 0.5);
+    const y = Math.round((position.y - this.position.y) / this.cellSize - 0.5);
     if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
       return undefined;
     }
@@ -74,7 +74,7 @@ export class Grid extends Derive(TDrawable, TRenderable) {
       width: this.width,
       height: this.height,
       position: this.position,
-      tileSize: this.tileSize,
+      tileSize: this.cellSize,
     };
     return serialized;
   }
@@ -87,7 +87,7 @@ export class Grid extends Derive(TDrawable, TRenderable) {
   draw(context: CanvasRenderingContext2D): void {
     context.fillStyle = "#6C6";
     const position = this.getCanvasPosition(context, this.position);
-    const tileSize = this.getCanvasSize(context, this.tileSize, this.tileSize).width;
+    const tileSize = this.getCanvasSize(context, this.cellSize, this.cellSize).width;
     context.rect(position.x, position.y, this.width * tileSize, -this.height * tileSize);
     context.fill();
 

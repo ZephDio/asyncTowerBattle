@@ -12,7 +12,9 @@ import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 
-export class BlueTowerRecruit extends Derive(TowerRecruit, TDrawable, TRenderable) {
+export class BlueTowerRecruit extends Derive(TowerRecruit,TDrawable, TRenderable) {
+
+
   patternEffect: Cell[];
   attackDamage = 7;
   attackSpeed = 1.2;
@@ -48,12 +50,12 @@ export class BlueTowerRecruit extends Derive(TowerRecruit, TDrawable, TRenderabl
   get position(): Cell {
     return this.cell;
   }
-
-  drawPriority = 3;
+  
+  drawPriority= 3;
   draw(context: CanvasRenderingContext2D, position: Position): void {
     const image = Resources.tower.blue.resource.image;
     const canvasPosition = this.getCanvasPosition(context, position);
-    const { width, height } = Resources.tower.blue.size;
+    const { width, height } = Resources.tower.green.size;
     const size = this.getCanvasSize(context, width, height);
     this.drawImage(context, size, canvasPosition, image);
   }
