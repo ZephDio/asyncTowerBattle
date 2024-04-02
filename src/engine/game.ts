@@ -2,7 +2,7 @@ import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary, BattleVerdict } from "./battle-summary/battle-summary";
 import { ArmyFixture } from "./army/entity/army-fixtures";
-import { Shop } from "./shop/shop";
+import { EconomyHooks, Shop } from "./shop/shop";
 
 export class Game {
   army = ArmyFixture.allied;
@@ -10,6 +10,9 @@ export class Game {
   battleSummary: null | BattleSummary = null;
   shop: null | Shop = null;
   enemyArmy = ArmyFixture.enemy;
+  economy = {
+    gold : 20
+  };
 
   constructor() {}
 
@@ -53,12 +56,12 @@ export class Game {
 
   getRenderState() {
     if (this.battle) return this.battle.getDrawables();
+    if (this.battleSummary) return { drawables : [], grid : this.army.grid };
     return this.shop!.getDrawables();
-    // if (this.battleSummary) return this.getDrawables();
   }
 
   startShop() {
-    this.shop = new Shop(this.army, this.handleShopQuit.bind(this));
+    this.shop = new Shop(this.army, this.handleShopQuit.bind(this), this.getEconomyHooks());
   }
 
   startBattleSummary(lastBattleState: BattleState, battleVerdict: BattleVerdict) {
@@ -68,5 +71,25 @@ export class Game {
   startBattle() {
     this.battle = new Battle(this.army, this.enemyArmy, this.handleEndBattle.bind(this));
     this.battle.start();
+  }
+
+  getEconomy() {
+    return this.economy;
+  }
+
+  spendGold(amount: number) {
+    this.economy.gold -= amount;
+  }
+
+  addGold(amount: number) {
+    this.economy.gold += amount;
+  }
+
+  getEconomyHooks(): EconomyHooks {
+    return {
+      getEconomy: this.getEconomy.bind(this),
+      spendGold: this.spendGold.bind(this),
+      addGold: this.addGold.bind(this),
+    };
   }
 }

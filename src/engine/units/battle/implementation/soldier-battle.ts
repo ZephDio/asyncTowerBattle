@@ -29,6 +29,7 @@ export class BattleSoldier extends Derive(Caster, TDrawable, TRenderable) {
 
   onCastResolve(): void {
     this.enemyPath.alliedCastle.takeDamage(this.attackDamage);
+    this.cast = null
   }
 
   drawPriority = 4;

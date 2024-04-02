@@ -129,5 +129,10 @@ export const Resources = {
         image: createImage("/resources/button/start.png"),
       },
     },
+    gold: {
+      resource: {
+        image: createImage("/resources/economy/gold.png"),
+      },
+    },
   },
 } as const;

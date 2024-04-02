@@ -34,6 +34,7 @@ export class BattleDragon extends Derive(Caster, TDrawable, TRenderable) {
 
   onCastResolve() {
     this.enemyPath.alliedCastle.takeDamage(this.attackDamage);
+    this.cast = null
   }
 
   takeDamage(damage: number) {

@@ -21,10 +21,10 @@ export class Retail {
 
   async getRetailItems(): Promise<ShopItem[]> {
     return [
-      Buyable.from(new OrangeTower({}), this.slots[0]!),
-      Buyable.from(new BlueTower({}), this.slots[1]!),
-      Buyable.from(new GreenTower({}), this.slots[2]!),
-      Buyable.from(new BlueTower({}), this.slots[3]!),
+      Buyable.from(new OrangeTower({}), this.slots[0]!,10),
+      Buyable.from(new BlueTower({}), this.slots[1]!,10),
+      Buyable.from(new GreenTower({}), this.slots[2]!,10),
+      Buyable.from(new BlueTower({}), this.slots[3]!,10),
     ];
   }
 

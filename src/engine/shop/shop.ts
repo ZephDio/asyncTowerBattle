@@ -1,4 +1,4 @@
-import { StartBattleButton } from "../../shared/hud-element";
+import { GoldDisplay, StartBattleButton } from "../../shared/hud-element";
 import { Position } from "../../shared/position";
 import { Army } from "../army/entity/army";
 import { Game } from "../game";
@@ -13,23 +13,30 @@ import { AnyTower } from "../tower/entity/tower";
 import { OverEffect } from "../grid/grid-effects/over-effect";
 import { SynergyEffect } from "../grid/grid-effects/synerny-effect";
 
+
+export type EconomyHooks ={
+  getEconomy: () => {gold: number};
+  addGold: (amount: number) => void;
+  spendGold: (amount: number) => void;
+}
+
 export class Buyable extends Derive(TDrawable, TRenderable) {
   draw!: AnyTower["draw"];
   drawPriority = 5;
-  constructor(public entity: AnyTower, public position: Position) {
+  constructor(public entity: AnyTower, public position: Position, public price : number) {
     super({});
     this.draw = this.entity.draw;
   }
 
-  static from(entity: AnyTower, position: Position) {
-    return new Buyable(entity, position);
+  static from(entity: AnyTower, position: Position, price : number) {
+    return new Buyable(entity, position,price);
   }
 }
 
 export class Shop {
   public hold = null as null | TokenDrag;
   public retail = new Retail();
-  constructor(public army: Army, public onShopExit: Game["handleShopQuit"]) {}
+  constructor(public army: Army, public onShopExit: Game["handleShopQuit"], public economyHooks : EconomyHooks) {}
 
   exitShop() {
     if (this.hold) {
@@ -43,11 +50,18 @@ export class Shop {
     if (!cell) {
       throw new Error();
     }
+    if (!this.army.isValidDestinationCell(cell)) {
+      throw new Error();
+    }
+    this.economyHooks.spendGold(buyable.price);
     this.retail.removeItem(buyable);
     this.army.recruit(buyable.entity, cell);
   }
 
   buy(buyable: Buyable, position: Position) {
+    if(this.economyHooks.getEconomy().gold < buyable.price){
+      throw new Error
+    } 
     this.buyTower(buyable, position);
   }
 
@@ -74,6 +88,9 @@ export class Shop {
         if (!position) throw new Error();
         const cell = this.army.grid.realPositionToGrid(position);
         if (cell) {
+          if(!this.army.isValidDestinationCell(cell)){
+            throw new Error();
+          }
           tower.cell.x = cell.x;
           tower.cell.y = cell.y;
           this.army.add(tower);
@@ -113,7 +130,9 @@ export class Shop {
         ...(this.hold ? [this.hold] : []),
         ...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
           ...this.army.grid.synergiesEffects.map((synergiesEffect) =>
-          new SynergyEffect(synergiesEffect, this.army.grid))
+          new SynergyEffect(synergiesEffect, this.army.grid)),
+          new StartBattleButton({}),
+          new GoldDisplay(this.economyHooks.getEconomy().gold),
       ],
       grid: this.army.grid,
     };
@@ -124,7 +143,7 @@ export class Shop {
       type: "shop",
       retail: this.retail,
       hold: this.hold,
-      hudElements: [new StartBattleButton()],
+      hudElements: [new StartBattleButton({})],
       towers: this.army.towers,
       castle: this.army.castle,
       path: this.army.path,

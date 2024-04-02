@@ -22,6 +22,11 @@ export class Army {
     this.towers.push(recruit);
   }
 
+  isValidDestinationCell(cell: Cell) {
+    const cellString = Grid.posToString(cell);
+    return !this.grid.tiles.has(cellString)
+  }
+
   add(recruit: AnyTowerRecruit) {
     this.grid.setElement(recruit);
     this.towers.push(recruit);
