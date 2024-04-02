@@ -4,7 +4,7 @@ import { Cell, Position } from "../../../../shared/position";
 import { Caster } from "../../../../shared/traits/cast";
 import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { YellowTowerRecruit } from "../../recruit/implementation/yellow-tower-recruit";
-import { BattlePathTile } from "../../../path/battle/battle-path";
+import { BasicBattlePathTile, SlowingBattlePathTile } from "../../../tile/battle/battle-tile";
 
 export class YellowBattleTower extends Derive(TDrawable, TRenderable, Caster) {
   draw: YellowTowerRecruit["draw"];
@@ -27,21 +27,20 @@ export class YellowBattleTower extends Derive(TDrawable, TRenderable, Caster) {
   }
 
   private attack() {
-    const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(this.cell,
-      [
-       new Cell({x : 1 , y : 0}), 
-       new Cell({x : -1 , y : 0}), 
-       new Cell({x : 0 , y : 1}), 
-       new Cell({x : 0 , y : -1}), 
-       ])
-   
-   for(const neighbor of neighbors){
-    if(neighbor instanceof BattlePathTile){
-      const position = this.hooks.gridHooks.getRealPosition(neighbor.cell)
-      const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.attackDamage);
-      this.hooks.addAreaEffect(areaEffects, this);
+    const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(this.cell, [
+      new Cell({ x: 1, y: 0 }),
+      new Cell({ x: -1, y: 0 }),
+      new Cell({ x: 0, y: 1 }),
+      new Cell({ x: 0, y: -1 }),
+    ]);
+
+    for (const neighbor of neighbors) {
+      if (neighbor instanceof BasicBattlePathTile || neighbor instanceof SlowingBattlePathTile) {
+        const position = this.hooks.gridHooks.getRealPosition(neighbor.cell);
+        const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.attackDamage);
+        this.hooks.addAreaEffect(areaEffects, this);
+      }
     }
-   }
     this.cast = null;
   }
 
@@ -51,7 +50,7 @@ export class YellowBattleTower extends Derive(TDrawable, TRenderable, Caster) {
 
   onCastResolve(): void {
     this.attack();
-    this.cast = null
+    this.cast = null;
   }
 
   tick() {

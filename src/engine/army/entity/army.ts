@@ -6,6 +6,7 @@ import { Grid } from "../../grid/grid";
 import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 import { AnyTower } from "../../tower/entity/tower";
 import { Cell } from "../../../shared/position";
+import { AnyPathTile } from "../../tile/entity/tile";
 
 export class Army {
   constructor(
@@ -24,11 +25,16 @@ export class Army {
 
   isValidDestinationCell(cell: Cell) {
     const cellString = Grid.posToString(cell);
-    return !this.grid.tiles.has(cellString)
+    return !this.grid.tiles.has(cellString);
   }
 
-  add(recruit: AnyTowerRecruit) {
+  addTower(recruit: AnyTowerRecruit) {
     this.grid.setElement(recruit);
     this.towers.push(recruit);
+  }
+
+  addTile(tile: AnyPathTile) {
+    this.grid.setElement(tile);
+    this.path.tiles.push(tile);
   }
 }

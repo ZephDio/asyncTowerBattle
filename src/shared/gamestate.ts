@@ -1,4 +1,4 @@
-import { ArmyPath, PathTile } from "../engine/path/entity/path";
+import { ArmyPath } from "../engine/path/entity/path";
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
 import { BattleCastle } from "../engine/castle/battle/battle-castle";
 import { TowerRecruit } from "../engine/tower/recruit/tower-recruit";
@@ -14,6 +14,7 @@ import { ImplementsTrait } from "@ddd-ts/traits";
 import { AnyBattleTower } from "../engine/tower/battle/battle-tower";
 import { AnyBattleUnit } from "../engine/units/recruit/unit-recruit";
 import { BattleProjectile } from "../engine/projectile/battle/battle-projectile";
+import { AnyBattleTile } from "../engine/tile/battle/battle-tile";
 
 export interface GameState {
   type: string;
@@ -29,7 +30,7 @@ export interface BattleState extends GameState {
   type: "battle";
   castles: BattleCastle[];
   towers: AnyBattleTower[];
-  paths: PathTile[][];
+  paths: AnyBattleTile[];
   grid: BattleGrid;
   units: AnyBattleUnit[];
   areaEffects: AreaEffect[];

@@ -2,12 +2,12 @@ import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, Position } from "../../shared/position";
 import { Castle } from "../castle/entity/castle";
 import { CastleRecruit } from "../castle/recruit/castle-recruit";
-import { PathTile } from "../path/entity/path";
 import { TowerRecruit } from "../tower/recruit/tower-recruit";
 import { TDrawable, TRenderable } from "../../shared/traits/drawable";
 import { SynergyEffect } from "./grid-effects/synerny-effect";
+import { AnyPathTile } from "../tile/entity/tile";
 
-export type GridElement = ImplementsTrait<typeof TowerRecruit> | PathTile | CastleRecruit<Castle>;
+export type GridElement = ImplementsTrait<typeof TowerRecruit> | AnyPathTile | CastleRecruit<Castle>;
 
 export type SerializedGrid = {
   width: number;
@@ -50,14 +50,18 @@ export class Grid extends Derive(TDrawable, TRenderable) {
     this.overEffect = cell;
   }
 
-  setSynergiesTiles(cell: Cell, relativeCellsSynergies: Cell[], isActivated : (gridElement : GridElement | undefined) => boolean) {
+  setSynergiesTiles(cell: Cell, relativeCellsSynergies: Cell[], isActivated: (gridElement: GridElement | undefined) => boolean) {
     this.clearSynergiesTiles();
     for (const synergyCell of relativeCellsSynergies) {
       this.synergiesEffects.push(
-        new SynergyEffect(new Cell({
-          x: cell.x + synergyCell.x,
-          y: cell.y + synergyCell.y,
-        }), this, isActivated)
+        new SynergyEffect(
+          new Cell({
+            x: cell.x + synergyCell.x,
+            y: cell.y + synergyCell.y,
+          }),
+          this,
+          isActivated
+        )
       );
     }
   }
@@ -68,6 +72,10 @@ export class Grid extends Derive(TDrawable, TRenderable) {
 
   setElement(gridElement: GridElement) {
     this.tiles.set(Grid.posToString(gridElement.cell), gridElement);
+  }
+
+  deleteElement(gridElement: GridElement) {
+    this.tiles.delete(Grid.posToString(gridElement.cell));
   }
 
   toSerialized() {

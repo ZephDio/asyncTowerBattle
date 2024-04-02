@@ -5,38 +5,36 @@ import { Game } from "../game";
 import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
 import { TokenDrag } from "./token-drag";
-import { Grid } from "../grid/grid";
 import { ShopState } from "../../shared/gamestate";
 import { TDrawable, TRenderable } from "../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { AnyTower } from "../tower/entity/tower";
 import { OverEffect } from "../grid/grid-effects/over-effect";
-import { SynergyEffect } from "../grid/grid-effects/synerny-effect";
+import { AnyPathTile } from "../tile/entity/tile";
 
-
-export type EconomyHooks ={
-  getEconomy: () => {gold: number};
+export type EconomyHooks = {
+  getEconomy: () => { gold: number };
   addGold: (amount: number) => void;
   spendGold: (amount: number) => void;
-}
+};
 
 export class Buyable extends Derive(TDrawable, TRenderable) {
   draw!: AnyTower["draw"];
   drawPriority = 5;
-  constructor(public entity: AnyTower, public position: Position, public price : number) {
+  constructor(public entity: AnyTower, public position: Position, public price: number) {
     super({});
     this.draw = this.entity.draw;
   }
 
-  static from(entity: AnyTower, position: Position, price : number) {
-    return new Buyable(entity, position,price);
+  static from(entity: AnyTower, position: Position, price: number) {
+    return new Buyable(entity, position, price);
   }
 }
 
 export class Shop {
   public hold = null as null | TokenDrag;
   public retail = new Retail();
-  constructor(public army: Army, public onShopExit: Game["handleShopQuit"], public economyHooks : EconomyHooks) {}
+  constructor(public army: Army, public onShopExit: Game["handleShopQuit"], public economyHooks: EconomyHooks) {}
 
   exitShop() {
     if (this.hold) {
@@ -59,9 +57,9 @@ export class Shop {
   }
 
   buy(buyable: Buyable, position: Position) {
-    if(this.economyHooks.getEconomy().gold < buyable.price){
-      throw new Error
-    } 
+    if (this.economyHooks.getEconomy().gold < buyable.price) {
+      throw new Error();
+    }
     this.buyTower(buyable, position);
   }
 
@@ -80,26 +78,50 @@ export class Shop {
     this.setHold(token);
   }
 
-  setHoldFromArmy(tower: AnyTowerRecruit, position: Position) {
+  setHoldFromArmyTower(tower: AnyTowerRecruit, position: Position) {
     this.army.towers.splice(this.army.towers.indexOf(tower), 1);
-    this.army.grid.tiles.delete(Grid.posToString(tower.cell));
+    this.army.grid.deleteElement(tower);
     const token = new TokenDrag(tower, position, (position?: Position) => {
       try {
         if (!position) throw new Error();
         const cell = this.army.grid.realPositionToGrid(position);
         if (cell) {
-          if(!this.army.isValidDestinationCell(cell)){
+          if (!this.army.isValidDestinationCell(cell)) {
             throw new Error();
           }
           tower.cell.x = cell.x;
           tower.cell.y = cell.y;
-          this.army.add(tower);
+          this.army.addTower(tower);
           this.hold = null;
           return;
         }
         throw new Error();
       } catch {
-        this.army.add(tower);
+        this.army.addTower(tower);
+        this.hold = null;
+      }
+    });
+    this.setHold(token);
+  }
+
+  setHoldFromArmyTiles(tile: AnyPathTile, position: Position) {
+    this.army.path.tiles.splice(this.army.path.tiles.indexOf(tile), 1);
+    this.army.grid.deleteElement(tile);
+
+    const token = new TokenDrag(tile, position, (position?: Position) => {
+      try {
+        if (!position) throw new Error();
+        const cell = this.army.grid.realPositionToGrid(position);
+        if (cell) {
+          tile.cell.x = cell.x;
+          tile.cell.y = cell.y;
+          this.army.addTile(tile);
+          this.hold = null;
+          return;
+        }
+        throw new Error();
+      } catch {
+        this.army.addTile(tile);
         this.hold = null;
       }
     });
@@ -129,9 +151,9 @@ export class Shop {
         ...this.army.path.tiles,
         ...(this.hold ? [this.hold] : []),
         ...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
-          ...this.army.grid.synergiesEffects,
-          new StartBattleButton({}),
-          new GoldDisplay(this.economyHooks.getEconomy().gold),
+        ...this.army.grid.synergiesEffects,
+        new StartBattleButton({}),
+        new GoldDisplay(this.economyHooks.getEconomy().gold),
       ],
       grid: this.army.grid,
     };

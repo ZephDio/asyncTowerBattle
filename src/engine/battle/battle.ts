@@ -57,7 +57,7 @@ export class Battle {
       type: "battle",
       castles: [this.battlefield.alliedArmy.castle, this.battlefield.enemyArmy.castle],
       towers: [...this.battlefield.alliedArmy.towers, ...this.battlefield.enemyArmy.towers],
-      paths: [this.battlefield.alliedArmy.path.tiles, this.battlefield.enemyArmy.path.tiles],
+      paths: [...this.battlefield.alliedArmy.path.tiles, ...this.battlefield.enemyArmy.path.tiles],
       units: [...this.battlefield.units],
       projectiles: [...this.battlefield.projectiles],
       areaEffects: [...this.battlefield.areaEffects],

@@ -7,14 +7,14 @@ import { Resources } from "../../../../renderer/resources";
 import { Bullet } from "../../../projectile/entity/implementation/bullet";
 import { YellowTowerRecruit } from "../../recruit/implementation/yellow-tower-recruit";
 import { GridElement } from "../../../grid/grid";
-import { PathTile } from "../../../path/entity/path";
+import { BasicPathTile, SlowingPathTile } from "../../../tile/entity/tile";
 
 export class YellowTower extends Derive(TDrawable) {
   drawPriority = 5;
   patternEffect = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 })];
-  isPatternActivated = (gridElement : GridElement | undefined) => {
-    return gridElement ? gridElement instanceof PathTile : false
-  }
+  isPatternActivated = (gridElement: GridElement | undefined) => {
+    return gridElement ? gridElement instanceof BasicPathTile || gridElement instanceof SlowingPathTile : false;
+  };
   type = "yellow" as const;
 
   draw(context: CanvasRenderingContext2D, position: Position): void {

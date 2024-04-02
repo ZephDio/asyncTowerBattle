@@ -5,9 +5,9 @@ import { BattleArmy } from "../army/battle/battle-army";
 import { BattleCastle } from "../castle/battle/battle-castle";
 import { AnyBattleTower } from "../tower/battle/battle-tower";
 import { Grid, SerializedGrid } from "./grid";
-import { BattlePathTile } from "../path/battle/battle-path";
+import { AnyBattleTile } from "../tile/battle/battle-tile";
 
-export type BattleGridElement = AnyBattleTower | BattlePathTile | BattleCastle;
+export type BattleGridElement = AnyBattleTower | AnyBattleTile | BattleCastle;
 export class BattleGrid extends Derive(TDrawable, TRenderable) {
   tiles: Map<string, BattleGridElement> = new Map();
 
