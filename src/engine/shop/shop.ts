@@ -5,13 +5,13 @@ import { Game } from "../game";
 import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
 import { TokenDrag } from "./token-drag";
-import { Grid } from "../grid/grid";
 import { ShopState } from "../../shared/gamestate";
 import { TDrawable, TRenderable } from "../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { AnyTower } from "../tower/entity/tower";
 import { OverEffect } from "../grid/grid-effects/over-effect";
 import { SynergyEffect } from "../grid/grid-effects/synerny-effect";
+import { AnyPathTile } from "../tile/entity/tile";
 
 export class Buyable extends Derive(TDrawable, TRenderable) {
   draw!: AnyTower["draw"];
@@ -66,9 +66,8 @@ export class Shop {
     this.setHold(token);
   }
 
-  setHoldFromArmy(tower: AnyTowerRecruit, position: Position) {
+  setHoldFromArmyTower(tower: AnyTowerRecruit, position: Position) {
     this.army.towers.splice(this.army.towers.indexOf(tower), 1);
-    this.army.grid.tiles.delete(Grid.posToString(tower.cell));
     const token = new TokenDrag(tower, position, (position?: Position) => {
       try {
         if (!position) throw new Error();
@@ -83,6 +82,28 @@ export class Shop {
         throw new Error();
       } catch {
         this.army.add(tower);
+        this.hold = null;
+      }
+    });
+    this.setHold(token);
+  }
+
+  setHoldFromArmyTiles(tile: AnyPathTile, position: Position) {
+    this.army.path.tiles.splice(this.army.path.tiles.indexOf(tile), 1);
+    const token = new TokenDrag(tile, position, (position?: Position) => {
+      try {
+        if (!position) throw new Error();
+        const cell = this.army.grid.realPositionToGrid(position);
+        if (cell) {
+          tile.cell.x = cell.x;
+          tile.cell.y = cell.y;
+          this.army.path.tiles.push(tile);
+          this.hold = null;
+          return;
+        }
+        throw new Error();
+      } catch {
+        this.army.path.tiles.push(tile);
         this.hold = null;
       }
     });
@@ -112,8 +133,7 @@ export class Shop {
         ...this.army.path.tiles,
         ...(this.hold ? [this.hold] : []),
         ...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
-          ...this.army.grid.synergiesEffects.map((synergiesEffect) =>
-          new SynergyEffect(synergiesEffect, this.army.grid))
+        ...this.army.grid.synergiesEffects.map((synergiesEffect) => new SynergyEffect(synergiesEffect, this.army.grid)),
       ],
       grid: this.army.grid,
     };

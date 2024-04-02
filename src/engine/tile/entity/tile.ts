@@ -4,10 +4,12 @@ import { Cell, Position } from "../../../shared/position";
 import { Resources } from "../../../renderer/resources";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BasicBattlePathTile, SlowingBattlePathTile } from "../battle/battle-tile";
+import { HitBox, HitShape } from "../../../shared/hitboxes";
 
 export type AnyPathTile = BasicPathTile | SlowingPathTile;
 
 export class BasicPathTile extends Derive(TDrawable, TRenderable) {
+  public hitbox = new HitBox([[new HitShape("rectangle", { width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]]);
   constructor(public cell: Cell) {
     super({});
   }
@@ -32,6 +34,8 @@ export class BasicPathTile extends Derive(TDrawable, TRenderable) {
 }
 
 export class SlowingPathTile extends Derive(TDrawable, TRenderable) {
+  public hitbox = new HitBox([[new HitShape("rectangle", { width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]]);
+
   constructor(public cell: Cell) {
     super({});
   }
