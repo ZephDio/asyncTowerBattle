@@ -5,30 +5,24 @@ import { TowerRecruit } from "../tower-recruit";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
-import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
-import { Resources } from "../../../../renderer/resources";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { YellowTower } from "../../entity/implementation/yellow-tower";
 import { YellowBattleTower } from "../../battle/implementation/battle-yellow-tower";
 import { PoisonGround } from "../../../area-effect/implementation/poison-ground";
-import { GridElement } from "../../../grid/grid";
+import { HTSynergy } from "../../../../shared/traits/synergy";
+import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class YellowTowerRecruit extends Derive(TowerRecruit, TDrawable, TRenderable) {
-  isPatternActivated: (gridElement: GridElement | undefined) => boolean;
-  patternEffect: Cell[];
-  attackDamage = 10;
+export class YellowTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTSynergy, HTImageDrawable, TRenderable) {
   attackSpeed = 0.8;
-  type = "yellow" as const;
   hitbox: HitBox;
 
   constructor(public tower: YellowTower, public cell: Cell) {
-    super({});
+    super({ synergy: tower, damageDealer: tower, imageDrawable: tower });
     this.hitbox = tower.hitbox;
-    this.patternEffect = tower.patternEffect;
-    this.isPatternActivated = tower.isPatternActivated;
   }
 
   getAreaEffect(hooks: BattleArmyHooks, position: Position, damage: number) {
-    return new PoisonGround(80,position, damage,hooks);
+    return new PoisonGround(80, position, damage, hooks);
   }
 
   toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
@@ -50,14 +44,5 @@ export class YellowTowerRecruit extends Derive(TowerRecruit, TDrawable, TRendera
 
   get position(): Cell {
     return this.cell;
-  }
-
-  drawPriority = 3;
-  draw(context: CanvasRenderingContext2D, position: Position): void {
-    const image = Resources.tower.yellow.resource.image;
-    const canvasPosition = this.getCanvasPosition(context, position);
-    const { width, height } = Resources.tower.green.size;
-    const size = this.getCanvasSize(context, width, height);
-    this.drawImage(context, size, canvasPosition, image);
   }
 }

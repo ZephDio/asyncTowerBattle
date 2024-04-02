@@ -11,7 +11,7 @@ export class Game {
   shop: null | Shop = null;
   enemyArmy = ArmyFixture.enemy;
   economy = {
-    gold : 0
+    gold: 120,
   };
 
   constructor() {}
@@ -56,13 +56,13 @@ export class Game {
 
   getRenderState() {
     if (this.battle) return this.battle.getDrawables();
-    if (this.battleSummary) return { drawables : [], grid : this.army.grid };
+    if (this.battleSummary) return { drawables: [], grid: this.army.grid };
     return this.shop!.getDrawables();
   }
 
   startShop() {
     this.shop = new Shop(this.army, this.handleShopQuit.bind(this), this.getEconomyHooks());
-    this.addGold(20)
+    this.addGold(20);
   }
 
   startBattleSummary(lastBattleState: BattleState, battleVerdict: BattleVerdict) {

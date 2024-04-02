@@ -1,42 +1,33 @@
 import { Derive } from "@ddd-ts/traits";
 import { BasicPathTile, SlowingPathTile } from "../entity/tile";
-import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Cell, Position } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { HitBox } from "../../../shared/hitboxes";
 import { AnyBattleUnit } from "../../units/recruit/unit-recruit";
 
 export type AnyBattleTile = BasicBattlePathTile | SlowingBattlePathTile;
-export class BasicBattlePathTile extends Derive(TDrawable, TRenderable) {
-  draw: BasicPathTile["draw"];
+export class BasicBattlePathTile extends Derive(TRenderable, HTImageDrawable) {
   public hitbox: HitBox;
 
-  constructor(pathTile: BasicPathTile, public cell: Cell, public position: Position, private hooks: BattleArmyHooks) {
-    super({});
-    this.draw = pathTile.draw;
+  constructor(pathTile: BasicPathTile, public cell: Cell, public position: Position, _hooks: BattleArmyHooks) {
+    super({ imageDrawable: pathTile });
     this.hitbox = pathTile.hitbox;
   }
-
-  public drawPriority = 2;
 
   tick() {
     return;
   }
 }
 
-export class SlowingBattlePathTile extends Derive(TDrawable, TRenderable) {
-  draw: SlowingPathTile["draw"];
-
+export class SlowingBattlePathTile extends Derive(TRenderable, HTImageDrawable) {
   private affected: Map<AnyBattleUnit, number> = new Map();
   public hitbox: HitBox;
 
   constructor(pathTile: SlowingPathTile, public cell: Cell, public position: Position, private hooks: BattleArmyHooks) {
-    super({});
-    this.draw = pathTile.draw;
+    super({ imageDrawable: pathTile });
     this.hitbox = pathTile.hitbox;
   }
-
-  public drawPriority = 2;
 
   tick() {
     const unitsStepping = this.hooks.searchEnemyInArea(this.position, this.hitbox);

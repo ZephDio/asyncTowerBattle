@@ -1,29 +1,26 @@
 import { Derive } from "@ddd-ts/traits";
 import { HitBox, HitShape } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
-import { TDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 
 import { Bullet } from "../../../projectile/entity/implementation/bullet";
 import { YellowTowerRecruit } from "../../recruit/implementation/yellow-tower-recruit";
 import { GridElement } from "../../../grid/grid";
 import { BasicPathTile, SlowingPathTile } from "../../../tile/entity/tile";
+import { TSynergy } from "../../../../shared/traits/synergy";
+import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class YellowTower extends Derive(TDrawable) {
-  drawPriority = 5;
+export class YellowTower extends Derive(
+  TDamageDealer(10),
+  TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, 3),
+  TSynergy
+) {
   patternEffect = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 })];
   isPatternActivated = (gridElement: GridElement | undefined) => {
     return gridElement ? gridElement instanceof BasicPathTile || gridElement instanceof SlowingPathTile : false;
   };
   type = "yellow" as const;
-
-  draw(context: CanvasRenderingContext2D, position: Position): void {
-    const image = Resources.tower.yellow.resource.image;
-    const canvasPosition = this.getCanvasPosition(context, position);
-    const { width, height } = Resources.tower.green.size;
-    const size = this.getCanvasSize(context, width, height);
-    this.drawImage(context, size, canvasPosition, image);
-  }
 
   toRecruit(cell: Cell) {
     return new YellowTowerRecruit(this, cell);

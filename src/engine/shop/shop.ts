@@ -6,7 +6,7 @@ import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
 import { TokenDrag } from "./token-drag";
 import { ShopState } from "../../shared/gamestate";
-import { TDrawable, TRenderable } from "../../shared/traits/drawable";
+import { HTImageDrawable, TDrawable, TImageDrawable, TRenderable } from "../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { AnyTower } from "../tower/entity/tower";
 import { OverEffect } from "../grid/grid-effects/over-effect";
@@ -18,12 +18,10 @@ export type EconomyHooks = {
   spendGold: (amount: number) => void;
 };
 
-export class Buyable extends Derive(TDrawable, TRenderable) {
-  draw!: AnyTower["draw"];
-  drawPriority = 5;
+export class Buyable extends Derive(TDrawable, TRenderable, TImageDrawable(new Image(), { width: 0, height: 0 }, 0), HTImageDrawable) {
+  drawPriority = 3;
   constructor(public entity: AnyTower, public position: Position, public price: number) {
-    super({});
-    this.draw = this.entity.draw;
+    super({ imageDrawable: entity });
   }
 
   static from(entity: AnyTower, position: Position, price: number) {

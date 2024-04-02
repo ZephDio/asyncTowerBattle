@@ -5,22 +5,19 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { OrangeTowerRecruit } from "../../recruit/implementation/orange-tower-recruit";
 import { BlueBattleTower } from "./battle-blue-tower";
 import { GreenBattleTower } from "./battle.green.tower";
-import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { YellowBattleTower } from "./battle-yellow-tower";
 
-export class OrangeBattleTower extends Derive(TPhysics, TDrawable, TRenderable) {
+export class OrangeBattleTower extends Derive(TPhysics, HTImageDrawable, TRenderable) {
   hasTriggered = false;
-  draw: OrangeTowerRecruit["draw"];
-  drawPriority = 3;
 
   constructor(
-    private readonly recruit: OrangeTowerRecruit,
+    recruit: OrangeTowerRecruit,
     readonly hooks: BattleArmyHooks,
     public readonly position: Position,
     public readonly cell: Cell
   ) {
-    super({});
-    this.draw = this.recruit.draw;
+    super({ imageDrawable: recruit });
   }
 
   get realPosition(): Position {
