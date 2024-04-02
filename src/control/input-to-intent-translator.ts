@@ -46,7 +46,6 @@ export class InputToIntentTranslator {
         const gridElement = grid.tiles.get(Grid.posToString(cell));
         if (gridElement) {
           if (implementsTrait(gridElement, TowerRecruit)) {
-            console.log('yo')
             grid.setSynergiesTiles(gridElement.cell, gridElement.patternEffect, gridElement.isPatternActivated);
             return;
           }

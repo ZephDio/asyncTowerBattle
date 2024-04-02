@@ -31,7 +31,6 @@ export class BlueBattleTower extends Derive(TDrawable, TRenderable, Caster) {
   private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
     return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
   }
-
   target = null as null | AnyBattleUnit;
   setTarget(enemyUnit: AnyBattleUnit | null) {
     this.target = enemyUnit;

@@ -21,6 +21,7 @@ export class PoisonGround extends Derive(TDrawable, TRenderable) {
     }
     const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
     for (const enemy of enemies) {
+      console.log(this.damage/32)
        enemy.takeDamage(this.damage/32);
     }
   }

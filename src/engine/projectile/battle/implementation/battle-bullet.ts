@@ -11,6 +11,7 @@ export class BattleBulletProjectile extends BattleProjectile<Bullet> {
   public drawPriority = 5;
 
   draw(context: CanvasRenderingContext2D, position: Position) {
+    context.globalAlpha = 1;
     const canvasPosition = this.getCanvasPosition(context, position);
     const size = this.getCanvasSize(context, 2, 2);
     const image = Resources.projectiles.bullet.resource.image;

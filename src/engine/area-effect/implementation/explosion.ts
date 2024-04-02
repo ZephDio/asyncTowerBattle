@@ -35,6 +35,7 @@ export class Explosion extends Derive(TDrawable, TRenderable) {
     context.strokeStyle = "red";
     context.fillStyle = "transparent";
     context.lineWidth = 11;
+    context.globalAlpha = 1;
     const size = this.getCanvasSize(context, this.size.width, this.size.height);
     const canvasPosition = this.getCanvasPosition(context, position);
     this.drawEllipse(context, size, canvasPosition);

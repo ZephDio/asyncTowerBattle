@@ -6,6 +6,7 @@ import { OrangeTowerRecruit } from "../../recruit/implementation/orange-tower-re
 import { BlueBattleTower } from "./battle-blue-tower";
 import { GreenBattleTower } from "./battle.green.tower";
 import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { YellowBattleTower } from "./battle-yellow-tower";
 
 export class OrangeBattleTower extends Derive(TPhysics, TDrawable, TRenderable) {
   hasTriggered = false;
@@ -30,7 +31,7 @@ export class OrangeBattleTower extends Derive(TPhysics, TDrawable, TRenderable) 
     if (!this.hasTriggered) {
       const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(this.cell, [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })]);
       for (const neighbor of neighbors) {
-        if (neighbor instanceof BlueBattleTower || neighbor instanceof GreenBattleTower) {
+        if (neighbor instanceof BlueBattleTower || neighbor instanceof GreenBattleTower || neighbor instanceof YellowBattleTower) {
           neighbor.attackDamage += 20;
         }
       }

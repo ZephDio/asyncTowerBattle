@@ -13,7 +13,7 @@ export class YellowTower extends Derive(TDrawable) {
   drawPriority = 5;
   patternEffect = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 })];
   isPatternActivated = (gridElement : GridElement | undefined) => {
-    return gridElement && gridElement instanceof PathTile
+    return gridElement ? gridElement instanceof PathTile : false
   }
   type = "yellow" as const;
 

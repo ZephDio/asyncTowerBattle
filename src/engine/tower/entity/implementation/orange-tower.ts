@@ -8,6 +8,12 @@ import { TowerRecruit } from "../../recruit/tower-recruit";
 import { GridElement } from "../../../grid/grid";
 
 export class OrangeTower extends Derive(TDrawable) {
+
+  patternEffect: Cell[] = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })];
+  isPatternActivated = (gridElement : GridElement | undefined) => {
+    return gridElement ? implementsTrait(gridElement, TowerRecruit) : false
+  }
+
   drawPriority: 5;
   draw(context: CanvasRenderingContext2D, position: Position): void {
     const image = Resources.tower.orange.resource.image;
@@ -20,10 +26,7 @@ export class OrangeTower extends Derive(TDrawable) {
   toRecruit(cell: Cell) {
     return new OrangeTowerRecruit(this, cell);
   }
-  patternEffect: Cell[] = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })];
-  isPatternActivated = (gridElement : GridElement | undefined) => {
-    return gridElement && implementsTrait(gridElement, TowerRecruit)
-  }
+
   type = "orange" as const;
   hitbox = new HitBox([[new HitShape("ellipse", { width: 5, height: 5 }), new Position({ x: 0, y: 0 })]]);
   projectile = undefined;
