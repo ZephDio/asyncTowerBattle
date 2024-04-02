@@ -5,6 +5,7 @@ import { Rocket } from "../../../projectile/entity/implementation/rocket";
 import { TDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 import { BlueTowerRecruit } from "../../recruit/implementation/blue-tower-recruit";
+import { GridElement } from "../../../grid/grid";
 
 export class BlueTower extends Derive(TDrawable) {
   drawPriority: number;
@@ -22,6 +23,7 @@ export class BlueTower extends Derive(TDrawable) {
   }
 
   patternEffect: Cell[] = [];
+  isPatternActivated = (_gridElement : GridElement | undefined) => false
   type = "blue" as const;
   hitbox = new HitBox([[new HitShape("ellipse", { width: 5, height: 10 }), new Position({ x: 0, y: 0 })]]);
   projectile = new Rocket();

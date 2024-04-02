@@ -8,6 +8,8 @@ import { BlueTowerRecruit } from "./implementation/blue-tower-recruit";
 import { GreenTowerRecruit } from "./implementation/green-tower-recruit";
 import { OrangeTowerRecruit } from "./implementation/orange-tower-recruit";
 import { Trait } from "@ddd-ts/traits";
+import { YellowTowerRecruit } from "./implementation/yellow-tower-recruit";
+import { GridElement } from "../../grid/grid";
 
 export const TowerRecruit = Trait((base) => {
   abstract class ITowerRecruit extends base {
@@ -15,6 +17,7 @@ export const TowerRecruit = Trait((base) => {
     abstract attackSpeed: number;
     abstract attackDamage: number;
     abstract patternEffect: Cell[];
+    abstract isPatternActivated: (gridElement : GridElement | undefined) => boolean;
     abstract cell: Cell;
 
     abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
@@ -46,7 +49,7 @@ export const TowerRecruit = Trait((base) => {
 //   }
 // }
 
-export type AnyTowerRecruit = BlueTowerRecruit | GreenTowerRecruit | OrangeTowerRecruit;
+export type AnyTowerRecruit = BlueTowerRecruit | GreenTowerRecruit | OrangeTowerRecruit | YellowTowerRecruit;
 
 export interface SerializedTowerRecruit {
   type: AnyTower["type"];

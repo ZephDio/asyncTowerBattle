@@ -6,10 +6,12 @@ import { Resources } from "../../../../renderer/resources";
 
 import { Bullet } from "../../../projectile/entity/implementation/bullet";
 import { GreenTowerRecruit } from "../../recruit/implementation/green-tower-recruit";
+import { GridElement } from "../../../grid/grid";
 
 export class GreenTower extends Derive(TDrawable) {
   drawPriority = 5;
   patternEffect: Cell[] = [];
+  isPatternActivated = (_gridElement : GridElement | undefined) => false;
   type = "green" as const;
 
   draw(context: CanvasRenderingContext2D, position: Position): void {

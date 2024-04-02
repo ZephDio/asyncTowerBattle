@@ -6,6 +6,8 @@ import { GreenTower } from "../entity/implementation/green-tower";
 import { OrangeTower } from "../entity/implementation/orange-tower";
 import { Cell } from "../../../shared/position";
 import { TowerFixtures } from "../entity/tower-fixtures";
+import { YellowTower } from "../entity/implementation/yellow-tower";
+import { YellowTowerRecruit } from "./implementation/yellow-tower-recruit";
 
 export class TowerRecruitBuilder {
   cell: Cell;
@@ -22,6 +24,10 @@ export class TowerRecruitBuilder {
   buildOrange(tower: OrangeTower) {
     return new OrangeTowerRecruit(tower, this.cell);
   }
+  buildYellow(tower : YellowTower){
+    return new YellowTowerRecruit(tower, this.cell);
+  
+  }
 }
 
 export class TowerRecruitFixtures {
@@ -36,5 +42,8 @@ export class TowerRecruitFixtures {
   }
   static get bottomMiddleTower() {
     return new TowerRecruitBuilder().celled(new Cell({ x: 5, y: 3 })).buildGreen(TowerFixtures.green);
+  }
+  static get bottomLeftYellowTower(){
+    return new TowerRecruitBuilder().celled(new Cell({ x : 3 , y:1})).buildYellow(TowerFixtures.yellow);
   }
 }

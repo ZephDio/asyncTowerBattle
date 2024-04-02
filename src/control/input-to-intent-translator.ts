@@ -46,12 +46,13 @@ export class InputToIntentTranslator {
         const gridElement = grid.tiles.get(Grid.posToString(cell));
         if (gridElement) {
           if (implementsTrait(gridElement, TowerRecruit)) {
-            grid.setSynergiesTiles(gridElement.cell, gridElement.patternEffect);
+            console.log('yo')
+            grid.setSynergiesTiles(gridElement.cell, gridElement.patternEffect, gridElement.isPatternActivated);
             return;
           }
         }
-        grid.clearSynergiesTiles();
       }
+      grid.clearSynergiesTiles();
     }
   }
 

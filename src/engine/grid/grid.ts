@@ -5,6 +5,7 @@ import { CastleRecruit } from "../castle/recruit/castle-recruit";
 import { PathTile } from "../path/entity/path";
 import { TowerRecruit } from "../tower/recruit/tower-recruit";
 import { TDrawable, TRenderable } from "../../shared/traits/drawable";
+import { SynergyEffect } from "./grid-effects/synerny-effect";
 
 export type GridElement = ImplementsTrait<typeof TowerRecruit> | PathTile | CastleRecruit<Castle>;
 
@@ -18,7 +19,7 @@ export type SerializedGrid = {
 export class Grid extends Derive(TDrawable, TRenderable) {
   tiles: Map<string, GridElement> = new Map();
   overEffect: Cell | undefined = undefined;
-  synergiesEffects: Cell[] = [];
+  synergiesEffects: SynergyEffect[] = [];
 
   constructor(
     public width: number = 13,
@@ -49,14 +50,14 @@ export class Grid extends Derive(TDrawable, TRenderable) {
     this.overEffect = cell;
   }
 
-  setSynergiesTiles(cell: Cell, relativeCellsSynergies: Cell[]) {
+  setSynergiesTiles(cell: Cell, relativeCellsSynergies: Cell[], isActivated : (gridElement : GridElement | undefined) => boolean) {
     this.clearSynergiesTiles();
     for (const synergyCell of relativeCellsSynergies) {
       this.synergiesEffects.push(
-        new Cell({
+        new SynergyEffect(new Cell({
           x: cell.x + synergyCell.x,
           y: cell.y + synergyCell.y,
-        })
+        }), this, isActivated)
       );
     }
   }

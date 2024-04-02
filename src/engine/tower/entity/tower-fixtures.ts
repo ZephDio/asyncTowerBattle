@@ -1,8 +1,12 @@
 import { BlueTower } from "./implementation/blue-tower";
 import { GreenTower } from "./implementation/green-tower";
 import { OrangeTower } from "./implementation/orange-tower";
+import { YellowTower } from "./implementation/yellow-tower";
 
 export class TowerBuilder {
+  buildYellow() {
+    return new YellowTower({})
+  }
   buildBlue() {
     return new BlueTower({});
   }
@@ -23,5 +27,9 @@ export class TowerFixtures {
   }
   static get blue() {
     return new TowerBuilder().buildBlue();
+  }
+
+  static get yellow() {
+    return new TowerBuilder().buildYellow();
   }
 }

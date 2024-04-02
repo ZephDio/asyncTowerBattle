@@ -11,10 +11,10 @@ import { Derive } from "@ddd-ts/traits";
 import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
+import { GridElement } from "../../../grid/grid";
 
 export class BlueTowerRecruit extends Derive(TowerRecruit,TDrawable, TRenderable) {
-
-
+  isPatternActivated: (gridElement: GridElement | undefined) => boolean;
   patternEffect: Cell[];
   attackDamage = 7;
   attackSpeed = 1.2;
@@ -24,6 +24,7 @@ export class BlueTowerRecruit extends Derive(TowerRecruit,TDrawable, TRenderable
     super({});
     this.hitbox = tower.hitbox;
     this.patternEffect = tower.patternEffect;
+    this.isPatternActivated = tower.isPatternActivated;
   }
 
   getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: Position, damage: number) {

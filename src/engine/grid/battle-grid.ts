@@ -105,6 +105,7 @@ export class BattleGrid extends Derive(TDrawable, TRenderable) {
 
   getAlliedHooks(): GridHooks {
     return {
+      getRealPosition: this.cellToReal.bind(this),
       getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => {
         return this.getRelativeNeighborsInArmy(cell, relativePositions, false);
       },
@@ -116,6 +117,7 @@ export class BattleGrid extends Derive(TDrawable, TRenderable) {
 
   getEnemyHooks(): GridHooks {
     return {
+      getRealPosition: this.cellToReal.bind(this),
       getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => {
         return this.getRelativeNeighborsInArmy(cell, relativePositions, true);
       },
@@ -155,6 +157,7 @@ export class BattleGrid extends Derive(TDrawable, TRenderable) {
 }
 
 export type GridHooks = {
+  getRealPosition: (cell: Cell)=> Position
   getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
   getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
 };

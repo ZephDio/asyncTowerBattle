@@ -8,8 +8,10 @@ import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
 import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { GridElement } from "../../../grid/grid";
 
 export class OrangeTowerRecruit extends Derive(TowerRecruit, TDrawable, TRenderable) {
+  isPatternActivated: (gridElement: GridElement | undefined) => boolean;
   patternEffect: Cell[];
   attackDamage = 10;
   attackSpeed = 3;
@@ -22,6 +24,7 @@ export class OrangeTowerRecruit extends Derive(TowerRecruit, TDrawable, TRendera
     this.hitbox = tower.hitbox;
     this.patternEffect = tower.patternEffect;
     this.draw = tower.draw;
+    this.isPatternActivated = tower.isPatternActivated;
   }
 
   toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {

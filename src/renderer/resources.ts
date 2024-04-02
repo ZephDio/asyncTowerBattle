@@ -34,6 +34,17 @@ export const Resources = {
         height: 8,
       },
       resource: {
+        image: createImage("/resources/towers/tower_green.png"),
+        shape: "rectangle",
+        color: "green",
+      },
+    },
+    yellow: {
+      size: {
+        width: 5,
+        height: 8,
+      },
+      resource: {
         image: createImage("/resources/towers/tower_yellow.png"),
         shape: "rectangle",
         color: "green",

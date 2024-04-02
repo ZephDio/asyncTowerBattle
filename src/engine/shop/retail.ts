@@ -4,6 +4,7 @@ import { Buyable } from "./shop";
 import { OrangeTower } from "../tower/entity/implementation/orange-tower";
 import { BlueTower } from "../tower/entity/implementation/blue-tower";
 import { GreenTower } from "../tower/entity/implementation/green-tower";
+import { YellowTower } from "../tower/entity/implementation/yellow-tower";
 
 export type ShopItem = Buyable;
 export class Retail {
@@ -24,7 +25,7 @@ export class Retail {
       Buyable.from(new OrangeTower({}), this.slots[0]!,10),
       Buyable.from(new BlueTower({}), this.slots[1]!,10),
       Buyable.from(new GreenTower({}), this.slots[2]!,10),
-      Buyable.from(new BlueTower({}), this.slots[3]!,10),
+      Buyable.from(new YellowTower({}), this.slots[3]!,10),
     ];
   }
 

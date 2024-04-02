@@ -1,4 +1,5 @@
 import { Explosion } from "./implementation/explosion";
+import { PoisonGround } from "./implementation/poison-ground";
 
 // export abstract class AreaEffect {
 //   abstract type: string;
@@ -8,4 +9,4 @@ import { Explosion } from "./implementation/explosion";
 //   abstract tick(): void;
 // }
 
-export type AreaEffect = Explosion;
+export type AreaEffect = Explosion | PoisonGround;
