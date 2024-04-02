@@ -1,26 +1,18 @@
 import { Derive } from "@ddd-ts/traits";
 import { HitBox, HitShape } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
-import { TDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 
 import { Bullet } from "../../../projectile/entity/implementation/bullet";
 import { GreenTowerRecruit } from "../../recruit/implementation/green-tower-recruit";
-import { GridElement } from "../../../grid/grid";
+import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class GreenTower extends Derive(TDrawable) {
-  drawPriority = 5;
-  patternEffect: Cell[] = [];
-  isPatternActivated = (_gridElement : GridElement | undefined) => false;
+export class GreenTower extends Derive(
+  TImageDrawable(Resources.tower.green.resource.image, Resources.tower.green.size, 3),
+  TDamageDealer(10)
+) {
   type = "green" as const;
-
-  draw(context: CanvasRenderingContext2D, position: Position): void {
-    const image = Resources.tower.green.resource.image;
-    const canvasPosition = this.getCanvasPosition(context, position);
-    const { width, height } = Resources.tower.green.size;
-    const size = this.getCanvasSize(context, width, height);
-    this.drawImage(context, size, canvasPosition, image);
-  }
 
   toRecruit(cell: Cell) {
     return new GreenTowerRecruit(this, cell);

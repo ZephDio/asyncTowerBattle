@@ -3,8 +3,8 @@ import { Physic } from "../shared/physic";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
 import { Position } from "../shared/position";
 import { Grid } from "../engine/grid/grid";
-import { TowerRecruit } from "../engine/tower/recruit/tower-recruit";
 import { implementsTrait } from "@ddd-ts/traits";
+import { TSynergy } from "../shared/traits/synergy";
 
 export interface PlayerIntent {
   intent: string;
@@ -45,7 +45,7 @@ export class InputToIntentTranslator {
       if (cell) {
         const gridElement = grid.tiles.get(Grid.posToString(cell));
         if (gridElement) {
-          if (implementsTrait(gridElement, TowerRecruit)) {
+          if (implementsTrait(gridElement, TSynergy)) {
             grid.setSynergiesTiles(gridElement.cell, gridElement.patternEffect, gridElement.isPatternActivated);
             return;
           }

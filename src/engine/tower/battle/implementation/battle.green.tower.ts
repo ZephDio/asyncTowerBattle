@@ -5,11 +5,9 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
 import { Caster } from "../../../../shared/traits/cast";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
-import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 
-export class GreenBattleTower extends Derive(TDrawable, TRenderable, Caster) {
-  draw: GreenTowerRecruit["draw"];
-  drawPriority = 3;
+export class GreenBattleTower extends Derive(TRenderable, Caster, HTImageDrawable) {
   target = null as null | AnyBattleUnit;
   public attackDamage: number;
   constructor(
@@ -18,7 +16,7 @@ export class GreenBattleTower extends Derive(TDrawable, TRenderable, Caster) {
     public readonly position: Position,
     public readonly cell: Cell
   ) {
-    super({});
+    super({ imageDrawable: recruit });
     this.draw = this.recruit.draw;
     this.attackDamage = recruit.attackDamage;
     this.castSpeed = recruit.attackSpeed;
@@ -34,7 +32,7 @@ export class GreenBattleTower extends Derive(TDrawable, TRenderable, Caster) {
     this.cast = null;
   }
   private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
-    return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
+    return enemyUnit.isAlive() && distanceSqrd < 20 * 20;
   }
   setTarget(enemyUnit: AnyBattleUnit | null) {
     this.target = enemyUnit;

@@ -3,24 +3,24 @@ import { Physic } from "../../../../shared/physic";
 import { BlueTowerRecruit } from "../../recruit/implementation/blue-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
-import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Caster } from "../../../../shared/traits/cast";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
-export class BlueBattleTower extends Derive(TDrawable, TRenderable, Caster) {
-  draw: BlueTowerRecruit["draw"];
-  drawPriority = 3;
-
-  public attackDamage: number;
+import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+export class BlueBattleTower extends Derive(
+  HTDamageDealer,
+  TRenderable,
+  Caster,
+  HTImageDrawable
+) {
   constructor(
     private readonly recruit: BlueTowerRecruit,
     private readonly hooks: BattleArmyHooks,
     public readonly position: Position,
     public readonly cell: Cell
   ) {
-    super({});
-    this.attackDamage = recruit.attackDamage;
+    super({ imageDrawable: recruit, damageDealer: recruit });
     this.castSpeed = recruit.attackSpeed;
-    this.draw = this.recruit.draw;
   }
 
   private attack(target: AnyBattleUnit) {
@@ -29,7 +29,7 @@ export class BlueBattleTower extends Derive(TDrawable, TRenderable, Caster) {
   }
 
   private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
-    return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
+    return enemyUnit.isAlive() && distanceSqrd < 20 * 20;
   }
   target = null as null | AnyBattleUnit;
   setTarget(enemyUnit: AnyBattleUnit | null) {

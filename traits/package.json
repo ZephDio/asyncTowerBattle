@@ -1,0 +1,5 @@
+{
+  "name": "@ddd-ts/traits",
+  "main": "./traits.ts",
+  "types": "./traits.ts"
+}

@@ -8,24 +8,17 @@ import { TowerRecruit } from "../tower-recruit";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
-import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
-import { Resources } from "../../../../renderer/resources";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
-import { GridElement } from "../../../grid/grid";
+import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class GreenTowerRecruit extends Derive(TowerRecruit, TDrawable, TRenderable) {
-  isPatternActivated: (gridElement: GridElement | undefined) => boolean;
-  patternEffect: Cell[];
-  attackDamage = 10;
+export class GreenTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTImageDrawable, TRenderable) {
   attackSpeed = 3;
-  type = "green" as const;
   hitbox: HitBox;
 
   constructor(public tower: GreenTower, public cell: Cell) {
-    super({});
+    super({ damageDealer: tower, imageDrawable: tower });
     this.hitbox = tower.hitbox;
-    this.patternEffect = tower.patternEffect;
-    this.isPatternActivated = tower.isPatternActivated;
   }
 
   getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: Position, damage: number) {
@@ -51,14 +44,5 @@ export class GreenTowerRecruit extends Derive(TowerRecruit, TDrawable, TRenderab
 
   get position(): Cell {
     return this.cell;
-  }
-
-  drawPriority = 3;
-  draw(context: CanvasRenderingContext2D, position: Position): void {
-    const image = Resources.tower.green.resource.image;
-    const canvasPosition = this.getCanvasPosition(context, position);
-    const { width, height } = Resources.tower.green.size;
-    const size = this.getCanvasSize(context, width, height);
-    this.drawImage(context, size, canvasPosition, image);
   }
 }

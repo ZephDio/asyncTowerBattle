@@ -2,23 +2,19 @@ import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
 import { Caster } from "../../../../shared/traits/cast";
-import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { YellowTowerRecruit } from "../../recruit/implementation/yellow-tower-recruit";
 import { BasicBattlePathTile, SlowingBattlePathTile } from "../../../tile/battle/battle-tile";
+import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class YellowBattleTower extends Derive(TDrawable, TRenderable, Caster) {
-  draw: YellowTowerRecruit["draw"];
-  drawPriority = 3;
-  public attackDamage: number;
+export class YellowBattleTower extends Derive(HTDamageDealer, TRenderable, Caster, HTImageDrawable) {
   constructor(
     private readonly recruit: YellowTowerRecruit,
     private readonly hooks: BattleArmyHooks,
     public readonly position: Position,
     public readonly cell: Cell
   ) {
-    super({});
-    this.draw = this.recruit.draw;
-    this.attackDamage = recruit.attackDamage;
+    super({ imageDrawable: recruit, damageDealer: recruit });
     this.castSpeed = recruit.attackSpeed;
   }
 

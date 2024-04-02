@@ -7,24 +7,15 @@ import { TowerRecruit } from "../tower-recruit";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
-import { TDrawable, TRenderable } from "../../../../shared/traits/drawable";
-import { GridElement } from "../../../grid/grid";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTSynergy } from "../../../../shared/traits/synergy";
 
-export class OrangeTowerRecruit extends Derive(TowerRecruit, TDrawable, TRenderable) {
-  isPatternActivated: (gridElement: GridElement | undefined) => boolean;
-  patternEffect: Cell[];
-  attackDamage = 10;
-  attackSpeed = 3;
-  type = "orange" as const;
+export class OrangeTowerRecruit extends Derive(TowerRecruit, HTSynergy, HTImageDrawable, TRenderable) {
   hitbox: HitBox;
-  draw: OrangeTower["draw"];
 
   constructor(public tower: OrangeTower, public cell: Cell) {
-    super({});
+    super({ synergy: tower, imageDrawable: tower });
     this.hitbox = tower.hitbox;
-    this.patternEffect = tower.patternEffect;
-    this.draw = tower.draw;
-    this.isPatternActivated = tower.isPatternActivated;
   }
 
   toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
@@ -53,6 +44,4 @@ export class OrangeTowerRecruit extends Derive(TowerRecruit, TDrawable, TRendera
   get position(): Cell {
     return this.cell;
   }
-
-  drawPriority = 3;
 }

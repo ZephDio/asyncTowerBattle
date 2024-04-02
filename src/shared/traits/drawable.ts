@@ -1,4 +1,4 @@
-import { Subtrait, Trait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { BattleGrid } from "../../engine/grid/battle-grid";
 import { Grid } from "../../engine/grid/grid";
 import { Cell, Position } from "../position";
@@ -85,19 +85,35 @@ export const TRenderable = Subtrait([TDrawable], (base) => {
   return IRenderable;
 });
 
-export const TImageDrawable = Subtrait([TDrawable], (base) => {
-  abstract class TImageDrawable extends base {
-    abstract drawable: {
-      image: HTMLImageElement;
-      size: { width: number; height: number };
-    };
+export const TImageDrawable = (image: HTMLImageElement, size: { width: number; height: number }, priority: number) =>
+  Subtrait([TDrawable], (base) => {
+    abstract class TImageDrawable extends base {
+      drawable = {
+        image: image,
+        size: size,
+        priority: priority,
+      };
 
-    draw(context: CanvasRenderingContext2D, position: Position): void {
-      const { width, height } = this.drawable.size;
-      const size = this.getCanvasSize(context, width, height);
-      const canvasPosition = this.getCanvasPosition(context,position)
-      this.drawImage(context, size, canvasPosition, this.drawable.image);
+      get drawPriority() {
+        return this.drawable.priority;
+      }
+
+      draw(context: CanvasRenderingContext2D, position: Position): void {
+        const { width, height } = this.drawable.size;
+        const size = this.getCanvasSize(context, width, height);
+        const canvasPosition = this.getCanvasPosition(context, position);
+        this.drawImage(context, size, canvasPosition, this.drawable.image);
+      }
     }
-  }
-  return TImageDrawable;
+    return TImageDrawable;
+  });
+
+export const HTImageDrawable = Subtrait([TImageDrawable(new Image(), { width: 0, height: 0 }, 0)], (base, Props) => {
+  return class HTImageDrawable extends base {
+    constructor(props: { imageDrawable: ImplementsTrait<ReturnType<typeof TImageDrawable>> } & typeof Props) {
+      super(props);
+      this.draw = props.imageDrawable.draw;
+      this.drawable = props.imageDrawable.drawable;
+    }
+  };
 });
