@@ -113,6 +113,9 @@ export class Shop {
         if (!position) throw new Error();
         const cell = this.army.grid.realPositionToGrid(position);
         if (cell) {
+          if (!this.army.isValidDestinationCell(cell)) {
+            throw new Error();
+          }
           tile.cell.x = cell.x;
           tile.cell.y = cell.y;
           this.army.addTile(tile);
