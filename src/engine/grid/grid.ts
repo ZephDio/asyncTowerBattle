@@ -32,6 +32,10 @@ export class Grid extends Derive(TRenderable, TGrid, TGridDrawable) {
     super({});
   }
 
+  getEnemyDoorCell() {
+    return new Cell({ x: 0, y: this.height - 1 });
+  }
+
   setOveredTile(cell: Cell | undefined) {
     this.overEffect = cell;
   }

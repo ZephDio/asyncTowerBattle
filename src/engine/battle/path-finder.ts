@@ -6,7 +6,7 @@ export class PathFinder {
 	constructor(
 		public destinations: Position[],
 		public progress: number = 0,
-	) {}
+	) { }
 
 	getOrientation(entityPosition: Position) {
 		this.updateNextDestination(entityPosition);
