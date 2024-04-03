@@ -5,19 +5,21 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { BasicBarrackRecruit } from "../../recruit/implementation/basic-barrack-recruit";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 
-export class BasicBattleBarrack extends Derive(Caster) {
+export class BasicBattleBarrack extends Derive(Caster, HTImageDrawable, TRenderable) {
   cast = null as null | Cast;
   onGoingProduction = null as null | Cast;
+
   constructor(
-    public castSpeed: number,
     public readonly barrackRecruit: BasicBarrackRecruit,
     public readonly position: Position,
     public readonly path: BattlePath,
     public readonly hooks: BattleArmyHooks,
     public readonly recruit: ImplementsTrait<typeof UnitRecruit>
   ) {
-    super({});
+    super({ imageDrawable: barrackRecruit });
+    this.castSpeed = barrackRecruit.productionSpeed;
   }
 
   tick() {

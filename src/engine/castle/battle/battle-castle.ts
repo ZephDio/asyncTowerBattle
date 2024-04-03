@@ -5,8 +5,9 @@ import { BattleGrid } from "../../grid/battle-grid";
 import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { TPhysics } from "../../../shared/traits/physics";
+import { GridElement } from "../../grid/grid";
 
-export class BattleCastle extends Derive(TDrawable, TRenderable, TPhysics) {
+export class BattleCastle extends Derive(TDrawable, TRenderable, TPhysics, GridElement) {
   public actualLife: number;
   public maxLife: number;
   public drawPriority: number;

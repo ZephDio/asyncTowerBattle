@@ -1,4 +1,4 @@
-import { Derive, implementsTrait } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { HitBox, HitShape } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
@@ -8,12 +8,9 @@ import { TowerRecruit } from "../../recruit/tower-recruit";
 import { GridElement } from "../../../grid/grid";
 import { TSynergy } from "../../../../shared/traits/synergy";
 
-export class OrangeTower extends Derive(
-  TImageDrawable(Resources.tower.orange.resource.image, Resources.tower.orange.size, 3),
-  TSynergy
-) {
+export class OrangeTower extends Derive(TImageDrawable(Resources.tower.orange.resource.image, Resources.tower.orange.size, 3), TSynergy) {
   patternEffect: Cell[] = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })];
-  isPatternActivated = (gridElement: GridElement | undefined) => {
+  isPatternActivated = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
     return gridElement ? implementsTrait(gridElement, TowerRecruit) : false;
   };
   toRecruit(cell: Cell) {

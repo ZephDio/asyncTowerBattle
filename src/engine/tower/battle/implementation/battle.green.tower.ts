@@ -6,8 +6,9 @@ import { Cell, Position } from "../../../../shared/position";
 import { Caster } from "../../../../shared/traits/cast";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { GridElement } from "../../../grid/grid";
 
-export class GreenBattleTower extends Derive(TRenderable, Caster, HTImageDrawable) {
+export class GreenBattleTower extends Derive(TRenderable, Caster, HTImageDrawable, GridElement) {
   target = null as null | AnyBattleUnit;
   public attackDamage: number;
   constructor(

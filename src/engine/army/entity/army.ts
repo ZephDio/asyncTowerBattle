@@ -3,10 +3,10 @@ import { CastleRecruit } from "../../castle/recruit/castle-recruit";
 import { ArmyPath } from "../../path/entity/path";
 import { AnyTowerRecruit } from "../../tower/recruit/tower-recruit";
 import { Grid } from "../../grid/grid";
-import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 import { AnyTower } from "../../tower/entity/tower";
 import { Cell } from "../../../shared/position";
 import { AnyPathTile } from "../../tile/entity/tile";
+import { AnyBarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 
 export class Army {
   constructor(
@@ -14,7 +14,7 @@ export class Army {
     public towers: AnyTowerRecruit[],
     public path: ArmyPath,
     public grid: Grid,
-    public barracks: BarrackRecruit[]
+    public barracks: AnyBarrackRecruit[]
   ) {}
 
   recruit(blueprint: AnyTower, tile: Cell) {

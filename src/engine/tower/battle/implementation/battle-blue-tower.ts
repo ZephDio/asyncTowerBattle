@@ -7,12 +7,8 @@ import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable
 import { Caster } from "../../../../shared/traits/cast";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
-export class BlueBattleTower extends Derive(
-  HTDamageDealer,
-  TRenderable,
-  Caster,
-  HTImageDrawable
-) {
+import { GridElement } from "../../../grid/grid";
+export class BlueBattleTower extends Derive(HTDamageDealer, TRenderable, Caster, HTImageDrawable, GridElement) {
   constructor(
     private readonly recruit: BlueTowerRecruit,
     private readonly hooks: BattleArmyHooks,

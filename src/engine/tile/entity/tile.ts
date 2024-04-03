@@ -5,10 +5,12 @@ import { Resources } from "../../../renderer/resources";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BasicBattlePathTile, SlowingBattlePathTile } from "../battle/battle-tile";
 import { HitBox, HitShape } from "../../../shared/hitboxes";
+import { GridElement } from "../../grid/grid";
 
 export type AnyPathTile = BasicPathTile | SlowingPathTile;
 
 export class BasicPathTile extends Derive(
+  GridElement,
   TDrawable,
   TRenderable,
   TImageDrawable(Resources.path.normal.image, { width: 4.9, height: 4.9 }, 2)

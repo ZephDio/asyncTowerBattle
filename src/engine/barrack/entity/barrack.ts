@@ -1,3 +1,3 @@
-export abstract class Barrack {
-	abstract productionSpeed: number;
-}
+import { BasicBarrack } from "./implementation/basic-barrack";
+
+export type AnyBarrack = BasicBarrack;

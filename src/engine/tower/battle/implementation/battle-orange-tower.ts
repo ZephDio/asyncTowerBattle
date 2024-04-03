@@ -7,8 +7,9 @@ import { BlueBattleTower } from "./battle-blue-tower";
 import { GreenBattleTower } from "./battle.green.tower";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { YellowBattleTower } from "./battle-yellow-tower";
+import { GridElement } from "../../../grid/grid";
 
-export class OrangeBattleTower extends Derive(TPhysics, HTImageDrawable, TRenderable) {
+export class OrangeBattleTower extends Derive(TPhysics, HTImageDrawable, TRenderable, GridElement) {
   hasTriggered = false;
 
   constructor(

@@ -5,7 +5,7 @@ import { Cell } from "../position";
 export const TSynergy = Trait((base) => {
   abstract class ISynergy extends base {
     abstract patternEffect: Cell[];
-    abstract isPatternActivated: (gridElement: GridElement | undefined) => boolean;
+    abstract isPatternActivated: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean;
   }
   return ISynergy;
 });
@@ -13,7 +13,7 @@ export const TSynergy = Trait((base) => {
 export const HTSynergy = Subtrait([TSynergy], (base, Param) => {
   class THsynergy extends base {
     patternEffect: Cell[];
-    isPatternActivated: (gridElement: GridElement | undefined) => boolean;
+    isPatternActivated: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean;
     constructor(props: { synergy: ImplementsTrait<typeof TSynergy> } & typeof Param) {
       super(props);
       this.isPatternActivated = props.synergy.isPatternActivated;

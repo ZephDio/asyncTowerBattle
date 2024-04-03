@@ -11,8 +11,9 @@ import { YellowBattleTower } from "../../battle/implementation/battle-yellow-tow
 import { PoisonGround } from "../../../area-effect/implementation/poison-ground";
 import { HTSynergy } from "../../../../shared/traits/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { GridElement } from "../../../grid/grid";
 
-export class YellowTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTSynergy, HTImageDrawable, TRenderable) {
+export class YellowTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTSynergy, HTImageDrawable, TRenderable, GridElement) {
   attackSpeed = 0.8;
   hitbox: HitBox;
 

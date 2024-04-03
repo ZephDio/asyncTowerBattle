@@ -153,6 +153,7 @@ export class Shop {
         ...(this.hold ? [this.hold] : []),
         ...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
         ...this.army.grid.synergiesEffects,
+        ...this.army.barracks,
         new StartBattleButton({}),
         new GoldDisplay(this.economyHooks.getEconomy().gold),
       ],

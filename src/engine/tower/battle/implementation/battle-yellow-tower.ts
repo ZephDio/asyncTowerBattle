@@ -6,8 +6,9 @@ import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable
 import { YellowTowerRecruit } from "../../recruit/implementation/yellow-tower-recruit";
 import { BasicBattlePathTile, SlowingBattlePathTile } from "../../../tile/battle/battle-tile";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { GridElement } from "../../../grid/grid";
 
-export class YellowBattleTower extends Derive(HTDamageDealer, TRenderable, Caster, HTImageDrawable) {
+export class YellowBattleTower extends Derive(HTDamageDealer, TRenderable, Caster, HTImageDrawable, GridElement) {
   constructor(
     private readonly recruit: YellowTowerRecruit,
     private readonly hooks: BattleArmyHooks,

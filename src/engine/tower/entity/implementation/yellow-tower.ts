@@ -1,4 +1,4 @@
-import { Derive } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { HitBox, HitShape } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
@@ -17,7 +17,7 @@ export class YellowTower extends Derive(
   TSynergy
 ) {
   patternEffect = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 })];
-  isPatternActivated = (gridElement: GridElement | undefined) => {
+  isPatternActivated = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
     return gridElement ? gridElement instanceof BasicPathTile || gridElement instanceof SlowingPathTile : false;
   };
   type = "yellow" as const;

@@ -5,9 +5,11 @@ import { Cell, Position } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { HitBox } from "../../../shared/hitboxes";
 import { AnyBattleUnit } from "../../units/recruit/unit-recruit";
+import { GridElement } from "../../grid/grid";
 
 export type AnyBattleTile = BasicBattlePathTile | SlowingBattlePathTile;
-export class BasicBattlePathTile extends Derive(TRenderable, HTImageDrawable) {
+
+export class BasicBattlePathTile extends Derive(GridElement, TRenderable, HTImageDrawable) {
   public hitbox: HitBox;
 
   constructor(pathTile: BasicPathTile, public cell: Cell, public position: Position, _hooks: BattleArmyHooks) {

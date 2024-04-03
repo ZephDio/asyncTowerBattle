@@ -10,12 +10,10 @@ import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
-import { GridElement } from "../../../grid/grid";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { GridElement } from "../../../grid/grid";
 
-export class BlueTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTImageDrawable, TRenderable) {
-  isPatternActivated: (gridElement: GridElement | undefined) => boolean;
-  patternEffect: Cell[];
+export class BlueTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTImageDrawable, TRenderable, GridElement) {
   attackSpeed = 1.2;
   hitbox: HitBox;
 

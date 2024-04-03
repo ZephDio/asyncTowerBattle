@@ -11,8 +11,9 @@ import { Derive } from "@ddd-ts/traits";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { GridElement } from "../../../grid/grid";
 
-export class GreenTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTImageDrawable, TRenderable) {
+export class GreenTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTImageDrawable, TRenderable, GridElement) {
   attackSpeed = 3;
   hitbox: HitBox;
 

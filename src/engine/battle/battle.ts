@@ -46,6 +46,8 @@ export class Battle {
         ...this.battlefield.alliedArmy.path.tiles,
         ...this.battlefield.enemyArmy.path.tiles,
         ...this.battlefield.projectiles,
+        ...this.battlefield.alliedArmy.barracks,
+        ...this.battlefield.enemyArmy.barracks,
         this.battlefield.grid,
       ],
       grid: this.battlefield.grid,

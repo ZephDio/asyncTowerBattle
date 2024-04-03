@@ -1,14 +1,15 @@
 import { Derive } from "@ddd-ts/traits";
 import { Cell, Position } from "../../shared/position";
-import { TDrawable, TRenderable } from "../../shared/traits/drawable";
+import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
 import { BattleArmy } from "../army/battle/battle-army";
 import { BattleCastle } from "../castle/battle/battle-castle";
 import { AnyBattleTower } from "../tower/battle/battle-tower";
 import { Grid, SerializedGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
+import { TGrid } from "./tgrid";
 
 export type BattleGridElement = AnyBattleTower | AnyBattleTile | BattleCastle;
-export class BattleGrid extends Derive(TDrawable, TRenderable) {
+export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
   tiles: Map<string, BattleGridElement> = new Map();
 
   constructor(
@@ -20,13 +21,6 @@ export class BattleGrid extends Derive(TDrawable, TRenderable) {
     public cellSize = 4.9
   ) {
     super({});
-  }
-
-  cellToReal(cell: Cell) {
-    return new Position({
-      x: this.position.x + (cell.x + 0.5) * this.cellSize,
-      y: this.position.y + (cell.y + 0.5) * this.cellSize,
-    });
   }
 
   static fuse(gridAllied: Grid, gridEnemy: Grid): BattleGrid {
@@ -57,11 +51,6 @@ export class BattleGrid extends Derive(TDrawable, TRenderable) {
       this.setElement(gridElement);
     }
   }
-
-  setElement(gridElement: BattleGridElement) {
-    this.tiles.set(Grid.posToString(gridElement.cell), gridElement);
-  }
-
   toSerialized() {
     const serialized: SerializedGrid = {
       width: this.width,
@@ -135,29 +124,10 @@ export class BattleGrid extends Derive(TDrawable, TRenderable) {
       y: halfHeight - cell.y + halfHeight,
     });
   }
-
-  drawPriority = 1;
-
-  draw(context: CanvasRenderingContext2D): void {
-    context.fillStyle = "#6C6";
-    const position = this.getCanvasPosition(context, this.position);
-    const tileSize = this.getCanvasSize(context, this.cellSize, this.cellSize).width;
-    context.rect(position.x, position.y, this.width * tileSize, -this.height * tileSize);
-    context.fill();
-
-    context.lineWidth = 3;
-    context.strokeStyle = "rgba(0,0,0,0.1)";
-    for (const ci of new Array(this.width + 1).keys()) {
-      this.drawLine(context, position.x + ci * tileSize, position.y, position.x + ci * tileSize, position.y - this.height * tileSize);
-    }
-    for (const ri of new Array(this.height + 1).keys()) {
-      this.drawLine(context, position.x, position.y - ri * tileSize, position.x + this.width * tileSize, position.y - ri * tileSize);
-    }
-  }
 }
 
 export type GridHooks = {
-  getRealPosition: (cell: Cell)=> Position
+  getRealPosition: (cell: Cell) => Position;
   getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
   getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
 };

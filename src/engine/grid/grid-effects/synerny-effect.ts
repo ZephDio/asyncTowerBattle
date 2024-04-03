@@ -1,4 +1,4 @@
-import { Derive } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, Position } from "../../../shared/position";
 import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Grid, GridElement } from "../grid";
@@ -6,7 +6,11 @@ import { Grid, GridElement } from "../grid";
 export class SynergyEffect extends Derive(TDrawable, TRenderable) {
   drawPriority: 8;
   size: number;
-  constructor(public cell: Cell, public grid: Grid, public isActivatedCheck: (gridElement: GridElement | undefined) => boolean) {
+  constructor(
+    public cell: Cell,
+    public grid: Grid,
+    public isActivatedCheck: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean
+  ) {
     super({});
     this.size = grid.cellSize;
   }

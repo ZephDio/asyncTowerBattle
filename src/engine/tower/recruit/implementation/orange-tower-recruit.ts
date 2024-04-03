@@ -9,8 +9,9 @@ import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { HTSynergy } from "../../../../shared/traits/synergy";
+import { GridElement } from "../../../grid/grid";
 
-export class OrangeTowerRecruit extends Derive(TowerRecruit, HTSynergy, HTImageDrawable, TRenderable) {
+export class OrangeTowerRecruit extends Derive(TowerRecruit, HTSynergy, HTImageDrawable, TRenderable, GridElement) {
   hitbox: HitBox;
 
   constructor(public tower: OrangeTower, public cell: Cell) {

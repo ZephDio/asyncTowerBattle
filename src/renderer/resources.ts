@@ -118,6 +118,19 @@ export const Resources = {
       },
     },
   },
+  barracks: {
+    basic: {
+      size: {
+        width: 5,
+        height: 8,
+      },
+      resource: {
+        image: createImage("/resources/house/house_blue.png"),
+        shape: "rectangle",
+        color: "green",
+      },
+    },
+  },
   verdict: {
     victory: {
       size: {

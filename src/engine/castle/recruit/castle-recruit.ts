@@ -1,13 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
 import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { Cell, Position } from "../../../shared/position";
-import { Grid } from "../../grid/grid";
+import { Grid, GridElement } from "../../grid/grid";
 import { Castle } from "../entity/castle";
 import { Size } from "../../../shared/size";
 import { Resources } from "../../../renderer/resources";
 import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
 
-export class CastleRecruit<TB extends Castle> extends Derive(TDrawable, TRenderable) {
+export class CastleRecruit<TB extends Castle> extends Derive(TDrawable, TRenderable, GridElement) {
   type: string = "castle";
   maxLife = 20;
   cell: Cell;
