@@ -1,6 +1,5 @@
 import { BattleState } from "../../shared/gamestate";
 import { Army } from "../army/entity/army";
-import { BattleVerdict } from "../battle-summary/battle-summary";
 import { Game } from "../game";
 import { Battlefield } from "./battlefield/battlefield";
 
@@ -27,7 +26,7 @@ export class Battle {
     this.battlefield.tick();
   }
 
-  handleBattleOver(battleVerdict: BattleVerdict) {
+  handleBattleOver(battleVerdict: "victory" | "defeat") {
     // could be nice to build summary here
     this.isOver = true;
     this.onBattleOver(battleVerdict);

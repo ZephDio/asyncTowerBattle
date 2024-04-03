@@ -6,21 +6,27 @@ import { Cell, Position } from "../../../../shared/position";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Caster } from "../../../../shared/traits/cast";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { GridElement } from "../../../grid/grid";
-export class BlueBattleTower extends Derive(HTDamageDealer, TRenderable, Caster, HTImageDrawable, GridElement) {
+import { HaveStats } from "../../../stats/stats";
+export class BlueBattleTower extends Derive(TRenderable, Caster, HTImageDrawable, GridElement, HaveStats) {
   constructor(
     private readonly recruit: BlueTowerRecruit,
     private readonly hooks: BattleArmyHooks,
     public readonly position: Position,
     public readonly cell: Cell
   ) {
-    super({ imageDrawable: recruit, damageDealer: recruit });
-    this.castSpeed = recruit.attackSpeed;
+    super({
+      imageDrawable: recruit,
+      maxHealth: NaN,
+      attack: recruit.attackDamage,
+      movementSpeed: NaN,
+      castSpeed: recruit.attackSpeed,
+      onDeath: () => {},
+    });
   }
 
   private attack(target: AnyBattleUnit) {
-    const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.attackDamage);
+    const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
     this.hooks.addProjectile(projectile, this);
   }
 
@@ -48,6 +54,7 @@ export class BlueBattleTower extends Derive(HTDamageDealer, TRenderable, Caster,
   }
 
   tick() {
+    this.stats.tick();
     super.tickCast();
   }
 }

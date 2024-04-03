@@ -19,14 +19,14 @@ export class ArmyFixture {
     ];
     const path = PathFixture.defaultAllied;
     const barracks = [BarrackRecruitFixtures.basicWithSoldier(4), BarrackRecruitFixtures.basicWithDragon(2)];
-    [castle, ...towers, ...path.tiles].map((e) => grid.setElement(e));
+    [castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
     return new Army(castle, towers, path, grid, barracks);
   }
   static get enemy() {
     const grid = new Grid();
     const towers = [
       new TowerRecruitBuilder().celled(new Cell({ x: 5, y: 5 })).buildBlue(TowerFixtures.blue),
-      new TowerRecruitBuilder().celled(new Cell({ x: 1, y: 1 })).buildOrange(TowerFixtures.orange),
+      new TowerRecruitBuilder().celled(new Cell({ x: 4, y: 4 })).buildOrange(TowerFixtures.orange),
       new TowerRecruitBuilder().celled(new Cell({ x: 4, y: 3 })).buildGreen(TowerFixtures.green),
     ];
     const castle = CastleRecruitFixture.enemy;

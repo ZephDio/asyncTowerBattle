@@ -1,4 +1,5 @@
-import { ImplementsTrait, Trait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
+import { HaveStats } from "../../engine/stats/stats";
 
 export class Cast {
   progress = 0;
@@ -12,10 +13,9 @@ export class Cast {
   }
 }
 
-export const Caster = Trait((base) => {
+export const Caster = Subtrait([HaveStats], (base) => {
   abstract class ICaster extends base {
     cast = null as null | Cast;
-    castSpeed: number;
 
     abstract onCastResolve(): void;
 
@@ -23,8 +23,11 @@ export const Caster = Trait((base) => {
       if (this.cast) {
         return this.cast.tick();
       }
-
       this.cast = new Cast(this, () => this.onCastResolve());
+    }
+
+    get castSpeed() {
+      return this.stats.castSpeed;
     }
   }
 

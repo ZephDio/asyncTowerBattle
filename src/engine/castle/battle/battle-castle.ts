@@ -2,24 +2,20 @@ import { Castle } from "../entity/castle";
 import { CastleRecruit } from "../recruit/castle-recruit";
 import { Cell, Position } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
-import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { TPhysics } from "../../../shared/traits/physics";
 import { GridElement } from "../../grid/grid";
 
-export class BattleCastle extends Derive(TDrawable, TRenderable, TPhysics, GridElement) {
+export class BattleCastle extends Derive(TRenderable, HTImageDrawable, TPhysics, GridElement) {
   public actualLife: number;
   public maxLife: number;
-  public drawPriority: number;
-  public draw!: CastleRecruit<Castle>["draw"];
 
-  constructor(castleEntity: CastleRecruit<Castle>, public onDeath: () => void, public cell: Cell, public position: Position) {
-    super({});
-    this.drawPriority = castleEntity.drawPriority;
-    this.draw = castleEntity.draw;
-    this.actualLife = castleEntity.maxLife;
-    this.maxLife = castleEntity.maxLife;
-    this.cell = castleEntity.cell;
+  constructor(recruit: CastleRecruit<Castle>, public onDeath: () => void, public cell: Cell, public position: Position) {
+    super({ imageDrawable: recruit });
+    this.actualLife = recruit.maxLife;
+    this.maxLife = recruit.maxLife;
+    this.cell = recruit.cell;
   }
 
   override takeDamage(damage: number): void {

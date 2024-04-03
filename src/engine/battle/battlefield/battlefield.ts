@@ -55,10 +55,10 @@ export class Battlefield {
     const enemyBattleTowers = enemyArmy.towers.map((tower) => tower.toEnemy(grid, enemyBattleArmy.getHooks()));
     const alliedBattleTowers = alliedArmy.towers.map((tower) => tower.toAllied(grid, alliedBattleArmy.getHooks()));
     const enemyBattleBarracks = enemyArmy.barracks
-      .map((barrack) => barrack.toBattle(alliedBattlePath, enemyBattleArmy.getHooks()))
+      .map((barrack) => barrack.toEnemy(grid, alliedBattlePath, enemyBattleArmy.getHooks()))
       .filter((b): b is AnyBattleBarrack => b !== undefined);
     const alliedBattleBarrack = alliedArmy.barracks
-      .map((barrack) => barrack.toBattle(enemyBattlePath, alliedBattleArmy.getHooks()))
+      .map((barrack) => barrack.toAllied(grid, enemyBattlePath, alliedBattleArmy.getHooks()))
       .filter((b): b is AnyBattleBarrack => b !== undefined);
     alliedBattleArmy.init(alliedBattleCastle, alliedBattlePath, alliedBattleTowers, alliedBattleBarrack);
     enemyBattleArmy.init(enemyBattleCastle, enemyBattlePath, enemyBattleTowers, enemyBattleBarracks);

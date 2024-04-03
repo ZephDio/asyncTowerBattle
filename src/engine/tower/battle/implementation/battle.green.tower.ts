@@ -7,20 +7,24 @@ import { Caster } from "../../../../shared/traits/cast";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { GridElement } from "../../../grid/grid";
+import { HaveStats } from "../../../stats/stats";
 
-export class GreenBattleTower extends Derive(TRenderable, Caster, HTImageDrawable, GridElement) {
+export class GreenBattleTower extends Derive(TRenderable, Caster, HTImageDrawable, GridElement, HaveStats) {
   target = null as null | AnyBattleUnit;
-  public attackDamage: number;
   constructor(
     private readonly recruit: GreenTowerRecruit,
     private readonly hooks: BattleArmyHooks,
     public readonly position: Position,
     public readonly cell: Cell
   ) {
-    super({ imageDrawable: recruit });
-    this.draw = this.recruit.draw;
-    this.attackDamage = recruit.attackDamage;
-    this.castSpeed = recruit.attackSpeed;
+    super({
+      imageDrawable: recruit,
+      maxHealth: NaN,
+      attack: recruit.attackDamage,
+      movementSpeed: NaN,
+      castSpeed: recruit.attackSpeed,
+      onDeath: () => {},
+    });
   }
 
   takeDamage(_damage: number): void {
@@ -28,7 +32,7 @@ export class GreenBattleTower extends Derive(TRenderable, Caster, HTImageDrawabl
   }
 
   private attack(target: AnyBattleUnit) {
-    const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.attackDamage);
+    const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
     this.hooks.addProjectile(projectile, this);
     this.cast = null;
   }
@@ -58,40 +62,6 @@ export class GreenBattleTower extends Derive(TRenderable, Caster, HTImageDrawabl
 
   tick() {
     this.tickCast();
+    this.stats.tick();
   }
 }
-// 	type = "green" as const;
-
-// 	doesTargetMatchesRule(enemyUnit: PhysicEntity<UnitRecruit<Unit>>, distanceSqrd: number) {
-// 		return enemyUnit.isAlive() && distanceSqrd < 62 * 62;
-// 	}
-
-// 	attack(target: BattleUnit<UnitRecruit<Unit>>) {
-// 		const projectile = this.entity.getProjectile(this.hooks, target, this.position, this.attackDamage);
-// 		this.hooks.addProjectile(projectile, this);
-// 		this.attackIntent = null;
-// 	}
-
-// 	tick() {
-// 		if (this.attackIntent) {
-// 			this.attackIntent.tick();
-// 		}
-// 		if (!this.attackIntent) {
-// 			this.attackIntent = new TowerAttackIntent(this, () => {
-// 				if (
-// 					this.target &&
-// 					this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
-// 				) {
-// 					this.attack(this.target);
-// 					return;
-// 				}
-// 				const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
-// 				this.setTarget(target);
-// 				if (this.target) {
-// 					this.attack(this.target);
-// 					return;
-// 				}
-// 			});
-// 		}
-// 	}
-// }

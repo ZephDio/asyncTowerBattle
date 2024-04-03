@@ -3,26 +3,26 @@ import { HitBox, HitShape } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { Poisoned } from "../../tower/battle/implementation/battle-yellow-tower";
 
 export class PoisonGround extends Derive(TDrawable, TRenderable) {
   type = "explosion" as const;
   hitbox: HitBox;
   drawPriority = 5;
-  duration = 0
+  clock = 0;
   constructor(public maxDuration: number, public position: Position, public damage: number, public hooks: BattleArmyHooks) {
     super({});
     this.hitbox = new HitBox([[new HitShape("ellipse", { width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]]);
   }
 
   tick() {
-    if (this.duration++ > this.maxDuration) {
+    if (this.clock++ > this.maxDuration) {
       this.hooks.removeAreaEffect(this);
-      return
+      return;
     }
     const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
     for (const enemy of enemies) {
-      console.log(this.damage/32)
-       enemy.takeDamage(this.damage/32);
+      enemy.addStatus(new Poisoned(this.damage));
     }
   }
 

@@ -7,12 +7,13 @@ import { Resources } from "../../../../renderer/resources";
 import { Bullet } from "../../../projectile/entity/implementation/bullet";
 import { YellowTowerRecruit } from "../../recruit/implementation/yellow-tower-recruit";
 import { GridElement } from "../../../grid/grid";
-import { BasicPathTile, SlowingPathTile } from "../../../tile/entity/tile";
 import { TSynergy } from "../../../../shared/traits/synergy";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { BasicPathTile } from "../../../tile/entity/implementation/basic-tile";
+import { SlowingPathTile } from "../../../tile/entity/implementation/slowing-tile";
 
 export class YellowTower extends Derive(
-  TDamageDealer(10),
+  TDamageDealer(6),
   TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, 3),
   TSynergy
 ) {

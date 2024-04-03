@@ -6,20 +6,20 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleSoldier } from "../../battle/implementation/soldier-battle";
 import { Soldier } from "../../entity/implementation/soldier";
 import { UnitRecruit } from "../unit-recruit";
+import { HTImageDrawable } from "../../../../shared/traits/drawable";
+import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class SoldierRecruit extends Derive(UnitRecruit) {
+export class SoldierRecruit extends Derive(UnitRecruit, HTImageDrawable, HTDamageDealer) {
   hitbox: HitBox;
   speed: number;
   maxLife: number;
   attackSpeed: number;
-  attackDamage: number;
   constructor(soldier: Soldier) {
-    super({});
+    super({ imageDrawable: soldier, damageDealer: soldier });
     this.hitbox = soldier.hitbox;
     this.maxLife = soldier.baseMaxLife;
     this.speed = soldier.baseSpeed;
     this.attackSpeed = soldier.attackSpeed;
-    this.attackDamage = soldier.attackDamage;
   }
   type = "soldier" as const;
 

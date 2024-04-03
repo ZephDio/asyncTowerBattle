@@ -1,6 +1,6 @@
 import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
-import { BattleSummary, BattleVerdict } from "./battle-summary/battle-summary";
+import { BattleSummary } from "./battle-summary/battle-summary";
 import { ArmyFixture } from "./army/entity/army-fixtures";
 import { EconomyHooks, Shop } from "./shop/shop";
 
@@ -38,7 +38,7 @@ export class Game {
     return this.shop.getState();
   }
 
-  handleEndBattle(battleVerdict: BattleVerdict) {
+  handleEndBattle(battleVerdict: "victory" | "defeat") {
     const lastBattleState = this.getBattleState();
     this.startBattleSummary(lastBattleState, battleVerdict);
     this.battle = null;
@@ -56,7 +56,7 @@ export class Game {
 
   getRenderState() {
     if (this.battle) return this.battle.getDrawables();
-    if (this.battleSummary) return { drawables: [], grid: this.army.grid };
+    if (this.battleSummary) return this.battleSummary.getDrawables();
     return this.shop!.getDrawables();
   }
 
@@ -65,7 +65,7 @@ export class Game {
     this.addGold(20);
   }
 
-  startBattleSummary(lastBattleState: BattleState, battleVerdict: BattleVerdict) {
+  startBattleSummary(lastBattleState: BattleState, battleVerdict: "victory" | "defeat") {
     this.battleSummary = new BattleSummary(lastBattleState, battleVerdict, this.handleSummaryQuit.bind(this));
   }
 

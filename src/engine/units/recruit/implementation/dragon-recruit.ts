@@ -6,20 +6,20 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleDragon } from "../../battle/implementation/dragon-battle";
 import { Dragon } from "../../entity/implementation/dragon";
 import { UnitRecruit } from "../unit-recruit";
+import { HTImageDrawable } from "../../../../shared/traits/drawable";
+import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class DragonRecruit extends Derive(UnitRecruit) {
+export class DragonRecruit extends Derive(HTDamageDealer, UnitRecruit, HTImageDrawable) {
   hitbox: HitBox;
   speed: number;
   maxLife: number;
   attackSpeed: number;
-  attackDamage: number;
   constructor(dragon: Dragon) {
-    super({});
+    super({ imageDrawable: dragon, damageDealer: dragon });
     this.hitbox = dragon.hitbox;
     this.maxLife = dragon.baseMaxLife;
     this.speed = dragon.baseSpeed;
     this.attackSpeed = dragon.attackSpeed;
-    this.attackDamage = dragon.attackDamage;
   }
   type = "dragon" as const;
 

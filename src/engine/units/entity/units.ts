@@ -1,8 +1,4 @@
-import { HitBox } from "../../../shared/hitboxes";
+import { Dragon } from "./implementation/dragon";
+import { Soldier } from "./implementation/soldier";
 
-export abstract class Unit {
-	abstract type: string;
-	abstract hitbox: HitBox;
-	abstract attackSpeed: number;
-	abstract attackDamage: number;
-}
+export type AnyUnit = Dragon | Soldier;

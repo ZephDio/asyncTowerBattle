@@ -88,7 +88,6 @@ export type Props<T extends { __traits_props__: any } | Trait | Trait[]> = T ext
 function InnerDerive<R extends Trait[]>(traits: R, base: Constructor) {
   let current: Constructor = base;
   for (const trait of traits) {
-    console.log(trait);
     if ((current as any)[trait.symbol]) {
       continue;
     }

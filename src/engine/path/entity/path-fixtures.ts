@@ -1,6 +1,7 @@
 import { Cell } from "../../../shared/position";
+import { BasicPathTile } from "../../tile/entity/implementation/basic-tile";
+import { SlowingPathTile } from "../../tile/entity/implementation/slowing-tile";
 import { ArmyPath } from "./path";
-import { BasicPathTile, SlowingPathTile } from "../../tile/entity/tile";
 
 export class PathFixture {
   static get defaultAllied() {

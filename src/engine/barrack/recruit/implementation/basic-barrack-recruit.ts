@@ -7,8 +7,10 @@ import { BasicBarrack } from "../../entity/implementation/basic-barrack";
 import { BarrackRecruit } from "../barrack-recruit";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Cell, Position } from "../../../../shared/position";
+import { BattleGrid } from "../../../grid/battle-grid";
+import { GridElement } from "../../../grid/grid";
 
-export class BasicBarrackRecruit extends Derive(HTImageDrawable, TRenderable, BarrackRecruit) {
+export class BasicBarrackRecruit extends Derive(HTImageDrawable, TRenderable, BarrackRecruit, GridElement) {
   productionSpeed: number;
   constructor(barrack: BasicBarrack, public cell: Cell) {
     super({ imageDrawable: barrack });
@@ -20,9 +22,17 @@ export class BasicBarrackRecruit extends Derive(HTImageDrawable, TRenderable, Ba
     return this.cell;
   }
 
-  toBattle(path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
+  toAllied(_grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
     if (this.unitRecruit) {
-      return new BasicBattleBarrack(this, path.enemyCastle.position, path, hooks, this.unitRecruit);
+      return new BasicBattleBarrack(this, this.position.clone(), path.enemyCastle.position, path, hooks, this.unitRecruit);
+    }
+    return undefined;
+  }
+
+  toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
+    if (this.unitRecruit) {
+      const newPosition = BattleGrid.flip(grid, this.position);
+      return new BasicBattleBarrack(this, newPosition.clone(), path.enemyCastle.position, path, hooks, this.unitRecruit);
     }
     return undefined;
   }
