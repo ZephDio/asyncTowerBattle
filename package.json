@@ -10,10 +10,14 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.6.3",
+    "@swc/jest": "^0.2.36",
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
     "typescript": "^5.4.2",
     "vite": "^5.2.6"
   },
   "dependencies": {
+    "@ddd-ts/shape": "0.0.3-62",
     "@ddd-ts/traits": "file:./traits"
   }
 }
