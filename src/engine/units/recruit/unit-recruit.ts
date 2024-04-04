@@ -9,14 +9,14 @@ import { BattleSoldier } from "../battle/implementation/soldier-battle";
 export type AnyBattleUnit = BattleDragon | BattleSoldier;
 
 export const UnitRecruit = Trait((base) => {
-  abstract class IUnitRecruit extends base {
-    abstract maxLife: number;
-    abstract speed: number;
-    abstract hitbox: HitBox;
-    abstract attackSpeed: number;
-    abstract attackDamage: number;
+	abstract class IUnitRecruit extends base {
+		abstract maxLife: number;
+		abstract speed: number;
+		abstract hitbox: HitBox;
+		abstract attackSpeed: number;
+		abstract attackDamage: number;
 
-    abstract toBattle(position: Position, path: BattlePath, hooks: BattleArmyHooks): AnyBattleUnit;
-  }
-  return IUnitRecruit;
+		abstract toBattle(position: Position, path: BattlePath, hooks: BattleArmyHooks): AnyBattleUnit;
+	}
+	return IUnitRecruit;
 });

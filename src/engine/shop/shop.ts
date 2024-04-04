@@ -33,7 +33,7 @@ export class Buyable extends Derive(TDrawable, TRenderable, TImageDrawable(new I
 export class Shop {
   public hold = null as null | TokenDrag;
   public retail = new Retail();
-  constructor(public army: Army, public onShopExit: Game["handleShopQuit"], public economyHooks: EconomyHooks) { }
+  constructor(public army: Army, public onShopExit: Game["handleShopQuit"], public economyHooks: EconomyHooks) {}
 
   exitShop() {
     if (this.hold) {
@@ -96,7 +96,7 @@ export class Shop {
         }
         if (this.retail.hit(position)) {
           this.hold = null;
-          this.economyHooks.addGold(5)
+          this.economyHooks.addGold(5);
           return;
         }
         throw new Error();

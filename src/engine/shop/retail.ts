@@ -10,7 +10,10 @@ import { Derive } from "@ddd-ts/traits";
 import { HitBox, Rectangle, TCollider } from "../../shared/hitboxes";
 
 export type ShopItem = Buyable;
-export class Retail extends Derive(TRenderable, TCollider(new HitBox([[new Rectangle({ width: 50, height: 25 }), new Position({ x: 0, y: 0 })]]))) {
+export class Retail extends Derive(
+  TRenderable,
+  TCollider(new HitBox([[new Rectangle({ width: 50, height: 25 }), new Position({ x: 0, y: 0 })]]))
+) {
   slots: Position[] = [
     new Position(PercentToReal({ x: 33, y: 83 })),
     new Position(PercentToReal({ x: 66, y: 83 })),
@@ -20,7 +23,7 @@ export class Retail extends Derive(TRenderable, TCollider(new HitBox([[new Recta
   buyables: Map<Buyable, Position> = new Map();
 
   constructor() {
-    super({})
+    super({});
     this.refresh();
   }
   drawPriority = 1;
@@ -33,7 +36,7 @@ export class Retail extends Derive(TRenderable, TCollider(new HitBox([[new Recta
   }
 
   hit(position: Position): boolean {
-    return this.contains(position)
+    return this.contains(position);
   }
 
   async getRetailItems(): Promise<ShopItem[]> {

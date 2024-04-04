@@ -8,16 +8,16 @@ import { BattleGrid } from "../../grid/battle-grid";
 
 export type AnyBarrackRecruit = BasicBarrackRecruit;
 export const BarrackRecruit = Trait((base) => {
-  abstract class BarrackRecruit extends base {
-    abstract productionSpeed: number;
-    abstract unitRecruit: null | ImplementsTrait<typeof UnitRecruit>;
+	abstract class BarrackRecruit extends base {
+		abstract productionSpeed: number;
+		abstract unitRecruit: null | ImplementsTrait<typeof UnitRecruit>;
 
-    setUnit(unit: ImplementsTrait<typeof UnitRecruit>) {
-      this.unitRecruit = unit;
-    }
+		setUnit(unit: ImplementsTrait<typeof UnitRecruit>) {
+			this.unitRecruit = unit;
+		}
 
-    abstract toAllied(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
-    abstract toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
-  }
-  return BarrackRecruit;
+		abstract toAllied(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
+		abstract toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
+	}
+	return BarrackRecruit;
 });

@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Ellipse, HitBox,  } from "../../../shared/hitboxes";
+import { Ellipse, HitBox } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TRenderable } from "../../../shared/traits/drawable";
@@ -29,11 +29,10 @@ export class PoisonGround extends Derive(TDrawable, TRenderable) {
 
   get size() {
     return {
-      width :  (this.hitbox.hitShapes[0]?.[0] as Ellipse).rx *2,
-      height :  (this.hitbox.hitShapes[0]?.[0] as Ellipse).ry *2
-    }
+      width: (this.hitbox.hitShapes[0]?.[0] as Ellipse).rx * 2,
+      height: (this.hitbox.hitShapes[0]?.[0] as Ellipse).ry * 2,
+    };
   }
-
 
   draw(context: CanvasRenderingContext2D, position: Position): void {
     context.globalAlpha = 0.18;

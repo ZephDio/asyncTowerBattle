@@ -1,5 +1,5 @@
 import { PercentToReal } from "../renderer/implementation/canvas-renderer";
-import { HitBox, Rectangle,  } from "./hitboxes";
+import { HitBox, Rectangle } from "./hitboxes";
 import { Position } from "./position";
 import { Size } from "./size";
 import { TRenderable } from "./traits/drawable";
@@ -54,5 +54,5 @@ export class GoldDisplay extends Derive(TDrawable, TRenderable) {
   public position = PercentToReal({ x: 8, y: 96 });
   public size = { width: 3, height: 3 };
 
-  public hitbox = new HitBox([[new Rectangle( this.size), new Position({ x: 0, y: 0 })]]);
+  public hitbox = new HitBox([[new Rectangle(this.size), new Position({ x: 0, y: 0 })]]);
 }

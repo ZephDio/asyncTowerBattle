@@ -13,37 +13,47 @@ import { HTSynergy } from "../../../../shared/traits/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { GridElement } from "../../../grid/grid";
 
-export class YellowTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTSynergy, HTImageDrawable, TRenderable, GridElement) {
-  attackSpeed = 0.8;
-  hitbox: HitBox;
+export class YellowTowerRecruit extends Derive(
+	HTDamageDealer,
+	TowerRecruit,
+	HTSynergy,
+	HTImageDrawable,
+	TRenderable,
+	GridElement,
+) {
+	attackSpeed = 0.8;
+	hitbox: HitBox;
 
-  constructor(public tower: YellowTower, public cell: Cell) {
-    super({ synergy: tower, damageDealer: tower, imageDrawable: tower });
-    this.hitbox = tower.hitbox;
-  }
+	constructor(
+		public tower: YellowTower,
+		public cell: Cell,
+	) {
+		super({ synergy: tower, damageDealer: tower, imageDrawable: tower });
+		this.hitbox = tower.hitbox;
+	}
 
-  getAreaEffect(hooks: BattleArmyHooks, position: Position, damage: number) {
-    return new PoisonGround(80, position, damage, hooks);
-  }
+	getAreaEffect(hooks: BattleArmyHooks, position: Position, damage: number) {
+		return new PoisonGround(80, position, damage, hooks);
+	}
 
-  toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-    const clone = this.clone();
-    const position = grid.cellToReal(clone.cell);
-    return new YellowBattleTower(clone, hooks, position, clone.cell);
-  }
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
+		const clone = this.clone();
+		const position = grid.cellToReal(clone.cell);
+		return new YellowBattleTower(clone, hooks, position, clone.cell);
+	}
 
-  toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-    const clone = this.clone();
-    const cell = BattleGrid.flip(grid, clone.cell);
-    const position = grid.cellToReal(cell);
-    return new YellowBattleTower(clone, hooks, position, cell);
-  }
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
+		const clone = this.clone();
+		const cell = BattleGrid.flip(grid, clone.cell);
+		const position = grid.cellToReal(cell);
+		return new YellowBattleTower(clone, hooks, position, cell);
+	}
 
-  clone() {
-    return new YellowTowerRecruit(new YellowTower({}), this.cell);
-  }
+	clone() {
+		return new YellowTowerRecruit(new YellowTower({}), this.cell);
+	}
 
-  get position(): Cell {
-    return this.cell;
-  }
+	get position(): Cell {
+		return this.cell;
+	}
 }

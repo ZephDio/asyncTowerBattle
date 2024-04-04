@@ -22,9 +22,9 @@ export class BasicBarrackRecruit extends Derive(HTImageDrawable, TRenderable, Ba
     return this.cell;
   }
 
-  toAllied(_grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
+  toAllied(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
     if (this.unitRecruit) {
-      return new BasicBattleBarrack(this, this.position.clone(), path.enemyCastle.position, path, hooks, this.unitRecruit);
+      return new BasicBattleBarrack(this, grid.cellToReal(this.position), path.enemyCastle.position, path, hooks, this.unitRecruit);
     }
     return undefined;
   }
@@ -32,7 +32,7 @@ export class BasicBarrackRecruit extends Derive(HTImageDrawable, TRenderable, Ba
   toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
     if (this.unitRecruit) {
       const newPosition = BattleGrid.flip(grid, this.position);
-      return new BasicBattleBarrack(this, newPosition.clone(), path.enemyCastle.position, path, hooks, this.unitRecruit);
+      return new BasicBattleBarrack(this, grid.cellToReal(newPosition), path.enemyCastle.position, path, hooks, this.unitRecruit);
     }
     return undefined;
   }
