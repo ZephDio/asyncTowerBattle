@@ -1,7 +1,8 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, Position } from "../../../shared/position";
-import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { TRenderable } from "../../../shared/traits/drawable";
 import { Grid, GridElement } from "../grid";
+import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export class SynergyEffect extends Derive(TDrawable, TRenderable) {
   drawPriority: 8;

@@ -3,7 +3,8 @@ import { Ellipse, HitBox } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { TRenderable } from "../../../shared/traits/drawable";
+import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export class Explosion extends Derive(TDrawable, TRenderable) {
   type = "explosion" as const;

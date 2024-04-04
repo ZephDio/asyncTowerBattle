@@ -5,7 +5,8 @@ import { Projectile } from "../entity/projectile";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { AnyBattleUnit } from "../../units/recruit/unit-recruit";
 import { Derive } from "@ddd-ts/traits";
-import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { TRenderable } from "../../../shared/traits/drawable";
+import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export abstract class BattleProjectile<PR extends Projectile> extends Derive(TDrawable, TRenderable) {
   pathFinder: PathFinder;

@@ -2,73 +2,13 @@ import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { BattleGrid } from "../../engine/grid/battle-grid";
 import { Grid } from "../../engine/grid/grid";
 import { Cell, Position } from "../position";
-import { Size } from "../size";
+
 import { TGrid } from "../../engine/grid/tgrid";
+import { HaveStats } from "../../engine/stats/stats";
+import { LifeBar } from "../lifebar";
+import { TDrawable } from "./tdrawable";
 
-export const TDrawable = Trait((base) => {
-  abstract class IDrawable extends base {
-    abstract drawPriority: number;
 
-    abstract draw(context: CanvasRenderingContext2D, position: Position): void;
-
-    protected drawEllipse(context: CanvasRenderingContext2D, size: Size, position: { x: number; y: number }) {
-      context.beginPath();
-      context.ellipse(position.x, position.y, size.width / 2, size.height / 2, 0, 0, 2 * Math.PI);
-      context.fill();
-      context.stroke();
-    }
-    protected drawRectangle(context: CanvasRenderingContext2D, size: Size, position: { x: number; y: number }) {
-      context.strokeRect(position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);
-      context.fillRect(position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);
-      context.stroke();
-    }
-    protected drawLines(context: CanvasRenderingContext2D, points: Position[]) {
-      context.beginPath();
-      for (const point of points) {
-        context.lineTo(point.x, point.y);
-      }
-      context.stroke();
-    }
-
-    protected drawLine(context: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number) {
-      context.beginPath();
-      context.lineTo(x1, y1);
-      context.lineTo(x2, y2);
-      context.stroke();
-    }
-
-    protected getCanvasPosition(context: CanvasRenderingContext2D, position: Position) {
-      const x = (context.canvas.width / 100) * position.x;
-      const y = context.canvas.height - (context.canvas.width / 100) * position.y; // !
-      return { x, y };
-    }
-
-    protected getCanvasSize(context: CanvasRenderingContext2D, width: number, height: number) {
-      const cWidth = (context.canvas.width / 100) * width;
-      const cHeight = (context.canvas.width / 100) * height;
-      return { width: cWidth, height: cHeight };
-    }
-
-    protected drawImage(
-      context: CanvasRenderingContext2D,
-      size: Size,
-      position: { x: number; y: number },
-      image: HTMLImageElement,
-      theta: number | undefined = undefined
-    ) {
-      if (theta) {
-        context.save();
-        context.translate(position.x, position.y);
-        context.rotate(-theta); // canvas rotate clockwise
-        context.drawImage(image, -size.width / 2, -size.height / 2, size.width, size.height);
-        context.restore();
-        return;
-      }
-      context.drawImage(image, position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);
-    }
-  }
-  return IDrawable;
-});
 
 export const TRenderable = Subtrait([TDrawable], (base) => {
   abstract class IRenderable extends base {
@@ -85,6 +25,53 @@ export const TRenderable = Subtrait([TDrawable], (base) => {
   }
   return IRenderable;
 });
+
+export const THudRenderable = Subtrait([TRenderable], (base) => { 
+  abstract class IHudRenderable extends base {
+    abstract get huds(): { 
+      hud :ImplementsTrait<typeof TDrawable>
+      position: Position
+    }[];
+
+    render(context: CanvasRenderingContext2D, grid: Grid | BattleGrid): void {
+      super.render(context,grid)
+      for (const { hud, position } of this.huds) {
+        if (this.position instanceof Cell) {
+          const realPosition = grid.cellToReal(this.position).add(position);
+          hud.draw(context, realPosition);
+          return
+        }
+        hud.draw(context, this.position.add(position))
+      }
+    }
+  }
+  return IHudRenderable;
+});
+
+export const TLifeBarRenderable = Subtrait([THudRenderable, HaveStats], (base) => {
+  abstract class ILifeBarRenderable extends base {
+
+    get lifeBarHud(){
+      return { hud : new LifeBar(this.stats.maxHealth, this.stats.health), position : new Position({ x: 0, y: 2.5 }) }
+    }
+
+    render(context: CanvasRenderingContext2D, grid: Grid | BattleGrid): void {
+      super.render(context,grid)
+      const huds = [...this.huds, this.lifeBarHud]
+      for (const { hud, position } of huds) {
+        if (this.position instanceof Cell) {
+          const realPosition = grid.cellToReal(this.position).add(position);
+          hud.draw(context, realPosition);
+          return
+        }
+        hud.draw(context, this.position.add(position))
+      }
+    }
+  }
+  return ILifeBarRenderable;
+});
+
+
 
 export const TImageDrawable = (image: HTMLImageElement, size: { width: number; height: number }, priority: number) =>
   Subtrait([TDrawable], (base) => {

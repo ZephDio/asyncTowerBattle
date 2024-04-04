@@ -1,11 +1,12 @@
 import { Derive } from "@ddd-ts/traits";
 import { GridElement } from "../../../grid/grid";
-import { TDrawable, TImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { TImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { HitBox, Rectangle } from "../../../../shared/hitboxes";
 import { Resources } from "../../../../renderer/resources";
 import { Cell, Position } from "../../../../shared/position";
 import { BasicBattlePathTile } from "../../battle/implementation/basic-battle-tile";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { TDrawable } from "../../../../shared/traits/tdrawable";
 
 export class BasicPathTile extends Derive(
   GridElement,

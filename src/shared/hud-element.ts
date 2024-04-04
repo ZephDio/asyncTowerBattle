@@ -2,9 +2,10 @@ import { PercentToReal } from "../renderer/implementation/canvas-renderer";
 import { HitBox, Rectangle,  } from "./hitboxes";
 import { Position } from "./position";
 import { Size } from "./size";
-import { TDrawable, TRenderable } from "./traits/drawable";
+import { TRenderable } from "./traits/drawable";
 import { Resources } from "../renderer/resources";
 import { Derive } from "../../traits/traits";
+import { TDrawable } from "./traits/tdrawable";
 
 export abstract class HudElement {
   abstract type: string;

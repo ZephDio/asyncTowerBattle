@@ -5,10 +5,11 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
 import { PathFinder } from "../../../battle/path-finder";
 import { Caster } from "../../../../shared/traits/cast";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
 import { HaveStats, Stats } from "../../../stats/stats";
 
-export class BattleSoldier extends Derive(Caster, TRenderable, HTImageDrawable, HaveStats) {
+export class BattleSoldier extends Derive(Caster,  HTImageDrawable, TLifeBarRenderable,HaveStats) {
+
   pathFinder: PathFinder;
 
   stats: Stats;
@@ -62,4 +63,9 @@ export class BattleSoldier extends Derive(Caster, TRenderable, HTImageDrawable, 
     }
     this.tickCast();
   }
+
+  get huds() {
+    return [];
+  }
+
 }

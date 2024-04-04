@@ -6,11 +6,12 @@ import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
 import { TokenDrag } from "./token-drag";
 import { ShopState } from "../../shared/gamestate";
-import { HTImageDrawable, TDrawable, TImageDrawable, TRenderable } from "../../shared/traits/drawable";
+import { HTImageDrawable, TImageDrawable, TRenderable } from "../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { AnyTower } from "../tower/entity/tower";
 import { OverEffect } from "../grid/grid-effects/over-effect";
 import { AnyPathTile } from "../tile/entity/tile";
+import { TDrawable } from "../../shared/traits/tdrawable";
 
 export type EconomyHooks = {
   getEconomy: () => { gold: number };
@@ -153,13 +154,13 @@ export class Shop {
         this.retail,
         this.army.castle,
         ...this.army.towers,
+        ...this.army.barracks,
         this.army.grid,
         ...this.retail.buyables.keys(),
         ...this.army.path.tiles,
         ...(this.hold ? [this.hold] : []),
         ...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
         ...this.army.grid.synergiesEffects,
-        ...this.army.barracks,
         new StartBattleButton({}),
         new GoldDisplay(this.economyHooks.getEconomy().gold),
       ],

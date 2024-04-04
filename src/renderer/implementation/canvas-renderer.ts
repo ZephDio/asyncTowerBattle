@@ -11,7 +11,12 @@ export const proportion = 16 / 9.8;
  * Grid: a rectangle of
  *
  */
-
+export const PercentToReal = (position: { x: number; y: number }) => {
+  return new Position({
+    x: position.x,
+    y: position.y / proportion,
+  });
+};
 export class CanvasRenderer implements Renderer {
   public container: HTMLElement;
   public canvas: HTMLCanvasElement;
@@ -72,10 +77,3 @@ export class CanvasRenderer implements Renderer {
     return { width: cWidth, height: cHeight };
   }
 }
-
-export const PercentToReal = (position: { x: number; y: number }) => {
-  return new Position({
-    x: position.x,
-    y: position.y / proportion,
-  });
-};

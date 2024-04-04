@@ -1,9 +1,10 @@
 import { Derive } from "@ddd-ts/traits";
 import { HitBox, Rectangle } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
-import { TDrawable, TImageDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { TDrawable } from "../../../../shared/traits/tdrawable";
 
 export class Dragon extends Derive(
   TDrawable,

@@ -5,10 +5,11 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { DragonRecruit } from "../../recruit/implementation/dragon-recruit";
 import { PathFinder } from "../../../battle/path-finder";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
 import { HaveStats, Stats } from "../../../stats/stats";
 
-export class BattleDragon extends Derive(Caster, TRenderable, HTImageDrawable, HaveStats) {
+export class BattleDragon extends Derive(Caster, HTImageDrawable,TLifeBarRenderable, HaveStats) {
+
   pathFinder: PathFinder;
 
   stats: Stats;
@@ -61,6 +62,10 @@ export class BattleDragon extends Derive(Caster, TRenderable, HTImageDrawable, H
     }
 
     this.tickCast();
+  }
+
+  get huds() {
+    return [];
   }
 
   get realPosition() {

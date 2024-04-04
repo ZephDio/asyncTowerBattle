@@ -2,8 +2,9 @@ import { Derive } from "@ddd-ts/traits";
 import { Ellipse, HitBox,  } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { TRenderable } from "../../../shared/traits/drawable";
 import { Poisoned } from "../../tower/battle/implementation/battle-yellow-tower";
+import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export class PoisonGround extends Derive(TDrawable, TRenderable) {
   type = "poison-ground" as const;

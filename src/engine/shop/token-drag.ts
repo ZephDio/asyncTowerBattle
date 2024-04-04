@@ -2,8 +2,9 @@ import { Derive } from "@ddd-ts/traits";
 import { Position } from "../../shared/position";
 import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Buyable } from "./shop";
-import { HTImageDrawable, TDrawable, TImageDrawable, TRenderable } from "../../shared/traits/drawable";
+import { HTImageDrawable,  TImageDrawable, TRenderable } from "../../shared/traits/drawable";
 import { AnyPathTile } from "../tile/entity/tile";
+import { TDrawable } from "../../shared/traits/tdrawable";
 
 type Holdable = Buyable | AnyTowerRecruit | AnyPathTile;
 

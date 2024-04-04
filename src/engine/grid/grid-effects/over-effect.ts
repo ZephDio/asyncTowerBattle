@@ -1,8 +1,9 @@
 import { Derive } from "@ddd-ts/traits";
 import { Cell, Position } from "../../../shared/position";
-import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { TRenderable } from "../../../shared/traits/drawable";
 import { Grid } from "../grid";
 import { BattleGrid } from "../battle-grid";
+import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export class OverEffect extends Derive(TDrawable, TRenderable) {
   drawPriority: 8;

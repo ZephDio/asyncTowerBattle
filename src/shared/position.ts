@@ -1,4 +1,5 @@
 export class Position {
+
   x: number;
   y: number;
   type = "position";
@@ -6,6 +7,10 @@ export class Position {
   constructor(param: { x: number; y: number }) {
     this.x = param.x;
     this.y = param.y;
+  }
+
+  add(other: Position) {
+    return new Position({ x: this.x + other.x, y: this.y + other.y });
   }
 
   clone() {
