@@ -9,32 +9,32 @@ import { AnyPathTile } from "../../tile/entity/tile";
 import { AnyBarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 
 export class Army {
-  constructor(
-    public castle: CastleRecruit<Castle>,
-    public towers: AnyTowerRecruit[],
-    public path: ArmyPath,
-    public grid: Grid,
-    public barracks: AnyBarrackRecruit[]
-  ) {}
+	constructor(
+		public castle: CastleRecruit<Castle>,
+		public towers: AnyTowerRecruit[],
+		public path: ArmyPath,
+		public grid: Grid,
+		public barracks: AnyBarrackRecruit[],
+	) {}
 
-  recruit(blueprint: AnyTower, tile: Cell) {
-    const recruit = blueprint.toRecruit(tile);
-    this.grid.setElement(recruit);
-    this.towers.push(recruit);
-  }
+	recruit(blueprint: AnyTower, tile: Cell) {
+		const recruit = blueprint.toRecruit(tile);
+		this.grid.setElement(recruit);
+		this.towers.push(recruit);
+	}
 
-  isValidDestinationCell(cell: Cell) {
-    const cellString = Grid.posToString(cell);
-    return !this.grid.tiles.has(cellString);
-  }
+	isValidDestinationCell(cell: Cell) {
+		const cellString = Grid.posToString(cell);
+		return !this.grid.tiles.has(cellString);
+	}
 
-  addTower(recruit: AnyTowerRecruit) {
-    this.grid.setElement(recruit);
-    this.towers.push(recruit);
-  }
+	addTower(recruit: AnyTowerRecruit) {
+		this.grid.setElement(recruit);
+		this.towers.push(recruit);
+	}
 
-  addTile(tile: AnyPathTile) {
-    this.grid.setElement(tile);
-    this.path.tiles.push(tile);
-  }
+	addTile(tile: AnyPathTile) {
+		this.grid.setElement(tile);
+		this.path.tiles.push(tile);
+	}
 }

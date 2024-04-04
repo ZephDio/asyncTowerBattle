@@ -7,14 +7,19 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BasicPathTile } from "../../entity/implementation/basic-tile";
 
 export class BasicBattlePathTile extends Derive(GridElement, TRenderable, HTImageDrawable) {
-  public hitbox: HitBox;
+	public hitbox: HitBox;
 
-  constructor(pathTile: BasicPathTile, public cell: Cell, public position: Position, _hooks: BattleArmyHooks) {
-    super({ imageDrawable: pathTile });
-    this.hitbox = pathTile.hitbox;
-  }
+	constructor(
+		pathTile: BasicPathTile,
+		public cell: Cell,
+		public position: Position,
+		_hooks: BattleArmyHooks,
+	) {
+		super({ imageDrawable: pathTile });
+		this.hitbox = pathTile.hitbox;
+	}
 
-  tick() {
-    return;
-  }
+	tick() {
+		return;
+	}
 }

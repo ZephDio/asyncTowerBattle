@@ -3,7 +3,8 @@ import { Ellipse, HitBox } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { TRenderable } from "../../../shared/traits/drawable";
+import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export class Explosion extends Derive(TDrawable, TRenderable) {
   type = "explosion" as const;
@@ -29,9 +30,9 @@ export class Explosion extends Derive(TDrawable, TRenderable) {
 
   get size() {
     return {
-      width :  (this.hitbox.hitShapes[0]?.[0] as Ellipse).rx *2,
-      height :  (this.hitbox.hitShapes[0]?.[0] as Ellipse).ry * 2
-    }
+      width: (this.hitbox.hitShapes[0]?.[0] as Ellipse).rx * 2,
+      height: (this.hitbox.hitShapes[0]?.[0] as Ellipse).ry * 2,
+    };
   }
 
   draw(context: CanvasRenderingContext2D, position: Position): void {

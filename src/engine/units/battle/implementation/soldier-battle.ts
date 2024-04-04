@@ -5,61 +5,63 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
 import { PathFinder } from "../../../battle/path-finder";
 import { Caster } from "../../../../shared/traits/cast";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
-import { HaveStats, Stats } from "../../../stats/stats";
+import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
+import { HaveStats } from "../../../stats/stats";
 
-export class BattleSoldier extends Derive(Caster, TRenderable, HTImageDrawable, HaveStats) {
-  pathFinder: PathFinder;
+export class BattleSoldier extends Derive(Caster, HTImageDrawable, TLifeBarRenderable, HaveStats) {
+	pathFinder: PathFinder;
 
-  stats: Stats;
+	constructor(
+		recruit: SoldierRecruit,
+		public position: Position,
+		public enemyPath: BattlePath,
+		private hooks: BattleArmyHooks,
+	) {
+		super({
+			imageDrawable: recruit,
+			maxHealth: recruit.maxLife,
+			attack: recruit.attackDamage,
+			movementSpeed: recruit.speed,
+			castSpeed: recruit.attackSpeed,
+			onDeath: () => this.hooks.removeUnit(this),
+		});
+		this.pathFinder = new PathFinder(enemyPath.getNodes());
+	}
+	canMove() {
+		return true;
+	}
 
-  constructor(recruit: SoldierRecruit, public position: Position, public enemyPath: BattlePath, private hooks: BattleArmyHooks) {
-    super({
-      imageDrawable: recruit,
-      maxHealth: recruit.maxLife,
-      attack: recruit.attackDamage,
-      movementSpeed: recruit.speed,
-      castSpeed: recruit.attackSpeed,
-      onDeath: () => this.hooks.removeUnit(this),
-    });
-    this.pathFinder = new PathFinder(enemyPath.getNodes());
-    this.stats = new Stats(recruit.maxLife, recruit.attackDamage, recruit.speed, recruit.attackSpeed, () => this.hooks.removeUnit(this));
-  }
-  canMove() {
-    return true;
-  }
+	onCastResolve(): void {
+		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
+		this.cast = null;
+	}
 
-  onCastResolve(): void {
-    this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
-    this.cast = null;
-  }
+	isAlive() {
+		return this.stats.health > 0;
+	}
 
-  isAlive() {
-    return this.stats.health > 0;
-  }
+	followPath(): void {
+		if (this.canMove() && !this.pathFinder.isArrived) {
+			const newPosition = this.pathFinder.getNextPosition(this.position, this.stats.movementSpeed);
+			this.move(newPosition);
+		}
+	}
 
-  followPath(): void {
-    if (this.canMove() && !this.pathFinder.isArrived) {
-      const newPosition = this.pathFinder.getNextPosition(this.position, this.stats.movementSpeed);
-      this.move(newPosition);
-    }
-  }
+	move(newPosition: Position) {
+		this.position.x = newPosition.x;
+		this.position.y = newPosition.y;
+	}
 
-  move(newPosition: Position) {
-    this.position.x = newPosition.x;
-    this.position.y = newPosition.y;
-  }
+	takeDamage(damage: number): void {
+		this.stats.takeDamage(damage);
+	}
 
-  takeDamage(damage: number): void {
-    this.stats.takeDamage(damage);
-  }
-
-  tick() {
-    this.stats.tick();
-    if (!this.pathFinder.isArrived) {
-      this.followPath();
-      return;
-    }
-    this.tickCast();
-  }
+	tick() {
+		this.stats.tick();
+		if (!this.pathFinder.isArrived) {
+			this.followPath();
+			return;
+		}
+		this.tickCast();
+	}
 }

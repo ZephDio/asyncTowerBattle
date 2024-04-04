@@ -6,11 +6,12 @@ import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
 import { TokenDrag } from "./token-drag";
 import { ShopState } from "../../shared/gamestate";
-import { HTImageDrawable, TDrawable, TImageDrawable, TRenderable } from "../../shared/traits/drawable";
+import { HTImageDrawable, TImageDrawable, TRenderable } from "../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { AnyTower } from "../tower/entity/tower";
 import { OverEffect } from "../grid/grid-effects/over-effect";
 import { AnyPathTile } from "../tile/entity/tile";
+import { TDrawable } from "../../shared/traits/tdrawable";
 
 export type EconomyHooks = {
   getEconomy: () => { gold: number };
@@ -32,7 +33,7 @@ export class Buyable extends Derive(TDrawable, TRenderable, TImageDrawable(new I
 export class Shop {
   public hold = null as null | TokenDrag;
   public retail = new Retail();
-  constructor(public army: Army, public onShopExit: Game["handleShopQuit"], public economyHooks: EconomyHooks) { }
+  constructor(public army: Army, public onShopExit: Game["handleShopQuit"], public economyHooks: EconomyHooks) {}
 
   exitShop() {
     if (this.hold) {
@@ -95,7 +96,7 @@ export class Shop {
         }
         if (this.retail.hit(position)) {
           this.hold = null;
-          this.economyHooks.addGold(5)
+          this.economyHooks.addGold(5);
           return;
         }
         throw new Error();
@@ -153,13 +154,13 @@ export class Shop {
         this.retail,
         this.army.castle,
         ...this.army.towers,
+        ...this.army.barracks,
         this.army.grid,
         ...this.retail.buyables.keys(),
         ...this.army.path.tiles,
         ...(this.hold ? [this.hold] : []),
         ...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
         ...this.army.grid.synergiesEffects,
-        ...this.army.barracks,
         new StartBattleButton({}),
         new GoldDisplay(this.economyHooks.getEconomy().gold),
       ],

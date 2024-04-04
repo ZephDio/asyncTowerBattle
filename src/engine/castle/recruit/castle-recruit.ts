@@ -6,38 +6,38 @@ import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Castle } from "../entity/castle";
 
 export class CastleRecruit<TB extends Castle> extends Derive(HTImageDrawable, TRenderable, GridElement) {
-  type: string = "castle";
-  cell: Cell;
+	type: string = "castle";
+	cell: Cell;
 
   maxLife: number;
   hitbox = new HitBox([[new Rectangle({ width: 5, height: 5 }), new Position({ x: 0, y: 0 })]]);
 
-  constructor(castle: TB) {
-    super({ imageDrawable: castle });
-    this.cell = new Cell({ x: 12, y: 5 });
-    this.maxLife = castle.maxLife;
-  }
+	constructor(castle: TB) {
+		super({ imageDrawable: castle });
+		this.cell = new Cell({ x: 12, y: 5 });
+		this.maxLife = castle.maxLife;
+	}
 
-  clone() {
-    // TODO
-    return new CastleRecruit(new Castle({}));
-  }
+	clone() {
+		// TODO
+		return new CastleRecruit(new Castle({}));
+	}
 
-  get position() {
-    return this.cell;
-  }
+	get position() {
+		return this.cell;
+	}
 
-  toSerialized(grid: Grid): SerializedCastleRecruit {
-    return {
-      type: this.type,
-      cell: this.cell,
-      position: grid.cellToReal(this.cell),
-    };
-  }
+	toSerialized(grid: Grid): SerializedCastleRecruit {
+		return {
+			type: this.type,
+			cell: this.cell,
+			position: grid.cellToReal(this.cell),
+		};
+	}
 }
 
 export type SerializedCastleRecruit = {
-  type: string;
-  cell: Cell;
-  position: Position;
+	type: string;
+	cell: Cell;
+	position: Position;
 };

@@ -71,13 +71,11 @@ export class Physic {
   }
 
   static doCollide(entityPosition: Position, hitbox: HitBox, point: Position) {
-    for (const [shape,shapeRelativePosition] of hitbox.hitShapes) {
-      const shapePosition = new Position(
-        {
-          x : entityPosition.x + shapeRelativePosition.x,
-          y : entityPosition.y + shapeRelativePosition.y
-        }
-      )
+    for (const [shape, shapeRelativePosition] of hitbox.hitShapes) {
+      const shapePosition = new Position({
+        x: entityPosition.x + shapeRelativePosition.x,
+        y: entityPosition.y + shapeRelativePosition.y,
+      });
       if (shape instanceof Rectangle) {
         const x1 = shapePosition.x - shape.w / 2;
         const y1 = shapePosition.y - shape.h / 2;
@@ -86,27 +84,23 @@ export class Physic {
         }
       }
       if (shape instanceof Ellipse) {
-        return ((point.x - shapePosition.x) / shape.rx ** 2) + ((point.y - shapePosition.y) / shape.ry) ** 2 <= 1;
+        return (point.x - shapePosition.x) / shape.rx ** 2 + ((point.y - shapePosition.y) / shape.ry) ** 2 <= 1;
       }
     }
     return false;
   }
 
-  static doHitboxsCollide(elementPosition : Position, hitbox : HitBox, otherElementPosition : Position, otherHitBox : HitBox){
+  static doHitboxsCollide(elementPosition: Position, hitbox: HitBox, otherElementPosition: Position, otherHitBox: HitBox) {
     for (const [shape, position] of hitbox.hitShapes) {
-      const shapePosition = new Position(
-        {
-          x : elementPosition.x + position.x,
-          y : elementPosition.y + position.y
-        }
-      )
-      for (const [otherShape , otherShapeRelativePosition] of otherHitBox.hitShapes) {
-        const otherShapePosition = new Position(
-          {
-            x : otherElementPosition.x + otherShapeRelativePosition.x,
-            y : otherElementPosition.y + otherShapeRelativePosition.y
-          }
-        )
+      const shapePosition = new Position({
+        x: elementPosition.x + position.x,
+        y: elementPosition.y + position.y,
+      });
+      for (const [otherShape, otherShapeRelativePosition] of otherHitBox.hitShapes) {
+        const otherShapePosition = new Position({
+          x: otherElementPosition.x + otherShapeRelativePosition.x,
+          y: otherElementPosition.y + otherShapeRelativePosition.y,
+        });
         if (shape instanceof Rectangle && otherShape instanceof Rectangle) {
           // check for square collision
           const x1 = shapePosition.x - shape.w / 2;
@@ -114,10 +108,7 @@ export class Physic {
           const x2 = otherShapePosition.x - otherShape.w / 2;
           const y2 = otherShapePosition.y - otherShape.h / 2;
 
-          if (x1 < x2 + otherShape.w &&
-            x1 + shape.w > x2 &&
-            y1 < y2 + otherShape.h &&
-            y1 + shape.h > y2) {
+          if (x1 < x2 + otherShape.w && x1 + shape.w > x2 && y1 < y2 + otherShape.h && y1 + shape.h > y2) {
             return true;
           }
         }
@@ -126,33 +117,35 @@ export class Physic {
           const dx = otherShapePosition.x - shapePosition.x;
           const dy = otherShapePosition.y - shapePosition.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-        
+
           // Check if the distance is less than the sum of the radii
-          return distance < (shape.rx + otherShape.rx) && distance < (shape.rx + otherShape.ry);
+          return distance < shape.rx + otherShape.rx && distance < shape.rx + otherShape.ry;
         }
         if (shape instanceof Rectangle && otherShape instanceof Ellipse) {
           // Calculate the top-left corner of the rectangle
           let rectTopLeftX = shapePosition.x - shape.w / 2;
           let rectTopLeftY = shapePosition.y - shape.h / 2;
-        
+
           // Find the closest point on the rectangle to the ellipse
           let closestX = Physic.clamp(otherShapePosition.x, rectTopLeftX, rectTopLeftX + shape.w);
           let closestY = Physic.clamp(otherShapePosition.y, rectTopLeftY, rectTopLeftY + shape.h);
-        
+
           // Calculate the distance between the closest point and the ellipse's center
           let distanceX = otherShapePosition.x - closestX;
           let distanceY = otherShapePosition.y - closestY;
-          let distance = Math.sqrt((distanceX * distanceX) / (otherShape.rx * otherShape.rx) + (distanceY * distanceY) / (otherShape.ry * otherShape.ry));
-        
+          let distance = Math.sqrt(
+            (distanceX * distanceX) / (otherShape.rx * otherShape.rx) + (distanceY * distanceY) / (otherShape.ry * otherShape.ry)
+          );
+
           // Threshold for collision check
           const COLLISION_THRESHOLD = 1;
-        
+
           // Check if the distance is less than or equal to COLLISION_THRESHOLD
           return distance <= COLLISION_THRESHOLD;
         }
         if (shape instanceof Ellipse && otherShape instanceof Rectangle) {
           // check for circle square collision
-              // Calculate the coordinates of the top-left corner of the rectangle
+          // Calculate the coordinates of the top-left corner of the rectangle
           let rectTopLeftX = otherShapePosition.x - otherShape.w / 2;
           let rectTopLeftY = otherShapePosition.y - otherShape.h / 2;
 
@@ -167,27 +160,17 @@ export class Physic {
 
           // Check if the distance is less than or equal to 1
           const COLLISION_THRESHOLD = 1;
-        
+
           // Check if the distance is less than or equal to COLLISION_THRESHOLD
           return distance <= COLLISION_THRESHOLD;
         }
       }
     }
-    return false
+    return false;
   }
 
-  static clamp(value: number, min : number, max : number){
+  static clamp(value: number, min: number, max: number) {
     return Math.min(Math.max(value, min), max);
-  }
-
-  static isPointInsideEllipse(point: Position, ellipsePosition: Position, ellipseSize: Size): boolean {
-    const localPoint = {
-      x: point.x - ellipsePosition.x,
-      y: point.y - ellipsePosition.y,
-    };
-    const dx = localPoint.x / (ellipseSize.width / 2);
-    const dy = localPoint.y / (ellipseSize.height / 2);
-    return dx * dx + dy * dy <= 1;
   }
 }
 

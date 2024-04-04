@@ -3,12 +3,12 @@ import { Physic } from "../../../../shared/physic";
 import { BlueTowerRecruit } from "../../recruit/implementation/blue-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
 import { Caster } from "../../../../shared/traits/cast";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
-export class BlueBattleTower extends Derive(TRenderable, Caster, HTImageDrawable, GridElement, HaveStats) {
+export class BlueBattleTower extends Derive(TCasterHudRenderable, Caster, HTImageDrawable, GridElement, HaveStats) {
   constructor(
     private readonly recruit: BlueTowerRecruit,
     private readonly hooks: BattleArmyHooks,

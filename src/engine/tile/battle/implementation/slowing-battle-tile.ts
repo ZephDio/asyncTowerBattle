@@ -9,40 +9,45 @@ import { SlowingPathTile } from "../../entity/implementation/slowing-tile";
 import { GridElement } from "../../../grid/grid";
 
 export class SlowingBattlePathTile extends Derive(GridElement, TRenderable, HTImageDrawable) {
-  public hitbox: HitBox;
+	public hitbox: HitBox;
 
-  constructor(pathTile: SlowingPathTile, public cell: Cell, public position: Position, private hooks: BattleArmyHooks) {
-    super({ imageDrawable: pathTile });
-    this.hitbox = pathTile.hitbox;
-  }
+	constructor(
+		pathTile: SlowingPathTile,
+		public cell: Cell,
+		public position: Position,
+		private hooks: BattleArmyHooks,
+	) {
+		super({ imageDrawable: pathTile });
+		this.hitbox = pathTile.hitbox;
+	}
 
-  tick() {
-    const unitsStepping = this.hooks.searchEnemyInArea(this.position, this.hitbox);
-    for (const unitStepping of unitsStepping) {
-      unitStepping.addStatus(new BoggedDown({}));
-    }
-  }
+	tick() {
+		const unitsStepping = this.hooks.searchEnemyInArea(this.position, this.hitbox);
+		for (const unitStepping of unitsStepping) {
+			unitStepping.addStatus(new BoggedDown({}));
+		}
+	}
 }
 
 export class BoggedDown extends Derive(Status) {
-  key = "boggedDown";
-  clock = 0;
-  duration = 3;
-  stats: Stats;
-  didTrigger = false;
-  tick() {
-    this.clock++;
-    if (this.clock >= this.duration) {
-      this.onRemove();
-    }
+	key = "boggedDown";
+	clock = 0;
+	duration = 3;
+	stats: Stats;
+	didTrigger = false;
+	tick() {
+		this.clock++;
+		if (this.clock >= this.duration) {
+			this.onRemove();
+		}
 
-    if (this.didTrigger) return;
-    this.stats.basePercentStat.movementSpeed -= 30;
-    this.didTrigger = true;
-  }
+		if (this.didTrigger) return;
+		this.stats.basePercentStat.movementSpeed -= 30;
+		this.didTrigger = true;
+	}
 
-  onRemove() {
-    this.stats.basePercentStat.movementSpeed += 30;
-    this.stats.removeStatus(this);
-  }
+	onRemove() {
+		this.stats.basePercentStat.movementSpeed += 30;
+		this.stats.removeStatus(this);
+	}
 }

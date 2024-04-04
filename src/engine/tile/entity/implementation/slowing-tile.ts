@@ -1,10 +1,11 @@
 import { Derive } from "@ddd-ts/traits";
-import { TDrawable, TImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { TImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 import { Cell, Position } from "../../../../shared/position";
 import { HitBox, Rectangle } from "../../../../shared/hitboxes";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { SlowingBattlePathTile } from "../../battle/implementation/slowing-battle-tile";
+import { TDrawable } from "../../../../shared/traits/tdrawable";
 
 export class SlowingPathTile extends Derive(
   TDrawable,

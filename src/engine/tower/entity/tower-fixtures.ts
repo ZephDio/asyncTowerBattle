@@ -4,32 +4,32 @@ import { OrangeTower } from "./implementation/orange-tower";
 import { YellowTower } from "./implementation/yellow-tower";
 
 export class TowerBuilder {
-  buildYellow() {
-    return new YellowTower({})
-  }
-  buildBlue() {
-    return new BlueTower({});
-  }
-  buildGreen() {
-    return new GreenTower({});
-  }
-  buildOrange() {
-    return new OrangeTower({});
-  }
+	buildYellow() {
+		return new YellowTower({});
+	}
+	buildBlue() {
+		return new BlueTower({});
+	}
+	buildGreen() {
+		return new GreenTower({});
+	}
+	buildOrange() {
+		return new OrangeTower({});
+	}
 }
 
 export class TowerFixtures {
-  static get orange() {
-    return new TowerBuilder().buildOrange();
-  }
-  static get green() {
-    return new TowerBuilder().buildGreen();
-  }
-  static get blue() {
-    return new TowerBuilder().buildBlue();
-  }
+	static get orange() {
+		return new TowerBuilder().buildOrange();
+	}
+	static get green() {
+		return new TowerBuilder().buildGreen();
+	}
+	static get blue() {
+		return new TowerBuilder().buildBlue();
+	}
 
-  static get yellow() {
-    return new TowerBuilder().buildYellow();
-  }
+	static get yellow() {
+		return new TowerBuilder().buildYellow();
+	}
 }

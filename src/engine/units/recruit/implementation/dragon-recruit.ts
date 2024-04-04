@@ -10,20 +10,20 @@ import { HTImageDrawable } from "../../../../shared/traits/drawable";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
 export class DragonRecruit extends Derive(HTDamageDealer, UnitRecruit, HTImageDrawable) {
-  hitbox: HitBox;
-  speed: number;
-  maxLife: number;
-  attackSpeed: number;
-  constructor(dragon: Dragon) {
-    super({ imageDrawable: dragon, damageDealer: dragon });
-    this.hitbox = dragon.hitbox;
-    this.maxLife = dragon.baseMaxLife;
-    this.speed = dragon.baseSpeed;
-    this.attackSpeed = dragon.attackSpeed;
-  }
-  type = "dragon" as const;
+	hitbox: HitBox;
+	speed: number;
+	maxLife: number;
+	attackSpeed: number;
+	constructor(dragon: Dragon) {
+		super({ imageDrawable: dragon, damageDealer: dragon });
+		this.hitbox = dragon.hitbox;
+		this.maxLife = dragon.baseMaxLife;
+		this.speed = dragon.baseSpeed;
+		this.attackSpeed = dragon.attackSpeed;
+	}
+	type = "dragon" as const;
 
-  toBattle(position: Position, path: BattlePath, hooks: BattleArmyHooks) {
-    return new BattleDragon(this, position, path, hooks);
-  }
+	toBattle(position: Position, path: BattlePath, hooks: BattleArmyHooks) {
+		return new BattleDragon(this, position, path, hooks);
+	}
 }

@@ -17,36 +17,36 @@ import { BattleProjectile } from "../engine/projectile/battle/battle-projectile"
 import { AnyBattleTile } from "../engine/tile/battle/battle-tile";
 
 export interface GameState {
-  type: string;
-  grid: Grid | BattleGrid;
+	type: string;
+	grid: Grid | BattleGrid;
 }
 
 export interface SummaryState extends GameState {
-  type: "summary";
-  battleVerdict: BattleVerdict;
+	type: "summary";
+	battleVerdict: BattleVerdict;
 }
 
 export interface BattleState extends GameState {
-  type: "battle";
-  castles: BattleCastle[];
-  towers: AnyBattleTower[];
-  paths: AnyBattleTile[];
-  grid: BattleGrid;
-  units: AnyBattleUnit[];
-  areaEffects: AreaEffect[];
-  projectiles: BattleProjectile<any>[];
+	type: "battle";
+	castles: BattleCastle[];
+	towers: AnyBattleTower[];
+	paths: AnyBattleTile[];
+	grid: BattleGrid;
+	units: AnyBattleUnit[];
+	areaEffects: AreaEffect[];
+	projectiles: BattleProjectile<any>[];
 }
 
 export interface ShopState extends GameState {
-  type: "shop";
-  retail: Retail;
+	type: "shop";
+	retail: Retail;
 
-  castle: CastleRecruit<Castle>;
-  towers: ImplementsTrait<typeof TowerRecruit>[];
-  path: ArmyPath;
-  grid: Grid;
+	castle: CastleRecruit<Castle>;
+	towers: ImplementsTrait<typeof TowerRecruit>[];
+	path: ArmyPath;
+	grid: Grid;
 
-  hold: TokenDrag | null;
+	hold: TokenDrag | null;
 
-  hudElements: HudElement[];
+	hudElements: HudElement[];
 }

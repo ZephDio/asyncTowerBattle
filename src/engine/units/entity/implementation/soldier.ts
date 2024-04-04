@@ -2,8 +2,9 @@ import { Derive } from "@ddd-ts/traits";
 import { Resources } from "../../../../renderer/resources";
 import { HitBox, Rectangle } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
-import { TDrawable, TImageDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { TDrawable } from "../../../../shared/traits/tdrawable";
 
 export class Soldier extends Derive(
   TDrawable,
