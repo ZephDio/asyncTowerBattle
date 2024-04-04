@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@ddd-ts/shape':
-    specifier: 0.0.3-62
-    version: 0.0.3-62
   '@ddd-ts/traits':
     specifier: file:./traits
     version: file:traits
@@ -459,16 +456,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /@ddd-ts/shape@0.0.3-62:
-    resolution: {integrity: sha512-3IIDmPzeEoXdG02UzYaiuC1RguquCnUikncpfUULC+3xdbkClfimNfYwmNA88/qwpE449bkt0QBm81Mz3jxfJQ==}
-    dependencies:
-      '@ddd-ts/traits': 0.0.3-62
-    dev: false
-
-  /@ddd-ts/traits@0.0.3-62:
-    resolution: {integrity: sha512-DgxkC2Qjx8k7JSj0wXwRnjECecevNLJfl84sC9vRvPbbWzv2uPNFsbVRr69Gxce7Vj04QK8/va1HNiEOymYHSQ==}
-    dev: false
 
   /@esbuild/aix-ppc64@0.20.2:
     resolution: {integrity: sha512-D+EBOJHXdNZcLJRBkhENNG8Wji2kgc9AZ9KiPr1JuZjsNtyHzrsfLRrY0tk2H2aoFu6RANO1y1iPPUCDYWkb5g==}

@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { HitBox, HitShape } from "../../../shared/hitboxes";
+import { Ellipse, HitBox } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
@@ -11,14 +11,14 @@ export class Explosion extends Derive(TDrawable, TRenderable) {
   drawPriority = 5;
   constructor(public MaxSize: Size, public position: Position, public damage: number, public hooks: BattleArmyHooks) {
     super({});
-    this.hitbox = new HitBox([[new HitShape("ellipse", { width: 1, height: 1 }), new Position({ x: 0, y: 0 })]]);
+    this.hitbox = new HitBox([[new Ellipse({ width: 1, height: 1 }), new Position({ x: 0, y: 0 })]]);
   }
 
   tick() {
-    const explosionShape = this.hitbox.hitShapes[0]?.[0] || { size: { width: 0, height: 0 } };
-    explosionShape.size.width++;
-    explosionShape.size.height++;
-    if (explosionShape.size.width > this.MaxSize.width) {
+    const explosionShape = this.hitbox.hitShapes[0]?.[0] as Ellipse;
+    explosionShape.rx += 0.5;
+    explosionShape.ry += 0.5;
+    if (this.size.width > this.MaxSize.width) {
       const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
       for (const enemy of enemies) {
         enemy.takeDamage(this.damage);
@@ -28,7 +28,10 @@ export class Explosion extends Derive(TDrawable, TRenderable) {
   }
 
   get size() {
-    return this.hitbox.hitShapes[0]?.[0]?.size || { width: 0, height: 0 };
+    return {
+      width :  (this.hitbox.hitShapes[0]?.[0] as Ellipse).rx *2,
+      height :  (this.hitbox.hitShapes[0]?.[0] as Ellipse).ry * 2
+    }
   }
 
   draw(context: CanvasRenderingContext2D, position: Position): void {

@@ -7,10 +7,10 @@ import { GreenTower } from "../tower/entity/implementation/green-tower";
 import { YellowTower } from "../tower/entity/implementation/yellow-tower";
 import { TRenderable } from "../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
-import { Rectangle, TCollider } from "../../shared/hitboxes";
+import { HitBox, Rectangle, TCollider } from "../../shared/hitboxes";
 
 export type ShopItem = Buyable;
-export class Retail extends Derive(TRenderable, TCollider([new Rectangle({ w: 50, h: 25 })])) {
+export class Retail extends Derive(TRenderable, TCollider(new HitBox([[new Rectangle({ width: 50, height: 25 }), new Position({ x: 0, y: 0 })]]))) {
   slots: Position[] = [
     new Position(PercentToReal({ x: 33, y: 83 })),
     new Position(PercentToReal({ x: 66, y: 83 })),

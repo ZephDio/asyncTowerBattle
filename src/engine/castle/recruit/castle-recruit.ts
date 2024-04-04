@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { HitBox, HitShape } from "../../../shared/hitboxes";
+import { HitBox, Rectangle } from "../../../shared/hitboxes";
 import { Cell, Position } from "../../../shared/position";
 import { Grid, GridElement } from "../../grid/grid";
 import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
@@ -10,7 +10,7 @@ export class CastleRecruit<TB extends Castle> extends Derive(HTImageDrawable, TR
   cell: Cell;
 
   maxLife: number;
-  hitbox = new HitBox([[new HitShape("rectangle", { width: 5, height: 5 }), new Position({ x: 0, y: 0 })]]);
+  hitbox = new HitBox([[new Rectangle({ width: 5, height: 5 }), new Position({ x: 0, y: 0 })]]);
 
   constructor(castle: TB) {
     super({ imageDrawable: castle });
