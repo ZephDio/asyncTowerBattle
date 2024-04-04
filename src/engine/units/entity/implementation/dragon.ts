@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { HitBox, HitShape } from "../../../../shared/hitboxes";
+import { HitBox, Rectangle } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
 import { TDrawable, TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
@@ -14,5 +14,5 @@ export class Dragon extends Derive(
   baseSpeed = 0.25;
   attackSpeed = 4;
   type = "dragon" as const;
-  hitbox = new HitBox([[new HitShape("ellipse", { width: 3, height: 3 }), new Position({ x: 0, y: 0 })]]);
+  hitbox = new HitBox([[new Rectangle({ width: 3, height: 3 }), new Position({ x: 0, y: 0 })]]);
 }

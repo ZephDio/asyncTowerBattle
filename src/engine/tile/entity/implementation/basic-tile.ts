@@ -1,7 +1,7 @@
 import { Derive } from "@ddd-ts/traits";
 import { GridElement } from "../../../grid/grid";
 import { TDrawable, TImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
-import { HitBox, HitShape } from "../../../../shared/hitboxes";
+import { HitBox, Rectangle } from "../../../../shared/hitboxes";
 import { Resources } from "../../../../renderer/resources";
 import { Cell, Position } from "../../../../shared/position";
 import { BasicBattlePathTile } from "../../battle/implementation/basic-battle-tile";
@@ -13,7 +13,7 @@ export class BasicPathTile extends Derive(
   TRenderable,
   TImageDrawable(Resources.path.normal.image, { width: 4.9, height: 4.9 }, 2)
 ) {
-  public hitbox = new HitBox([[new HitShape("rectangle", { width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]]);
+  public hitbox = new HitBox([[new Rectangle({ width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]]);
   constructor(public cell: Cell) {
     super({});
   }

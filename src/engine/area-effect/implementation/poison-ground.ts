@@ -1,18 +1,18 @@
 import { Derive } from "@ddd-ts/traits";
-import { HitBox, HitShape } from "../../../shared/hitboxes";
+import { Ellipse, HitBox,  } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Poisoned } from "../../tower/battle/implementation/battle-yellow-tower";
 
 export class PoisonGround extends Derive(TDrawable, TRenderable) {
-  type = "explosion" as const;
+  type = "poison-ground" as const;
   hitbox: HitBox;
   drawPriority = 5;
   clock = 0;
   constructor(public maxDuration: number, public position: Position, public damage: number, public hooks: BattleArmyHooks) {
     super({});
-    this.hitbox = new HitBox([[new HitShape("ellipse", { width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]]);
+    this.hitbox = new HitBox([[new Ellipse({ width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]]);
   }
 
   tick() {
@@ -27,8 +27,12 @@ export class PoisonGround extends Derive(TDrawable, TRenderable) {
   }
 
   get size() {
-    return this.hitbox.hitShapes[0]?.[0]?.size || { width: 0, height: 0 };
+    return {
+      width :  (this.hitbox.hitShapes[0]?.[0] as Ellipse).rx *2,
+      height :  (this.hitbox.hitShapes[0]?.[0] as Ellipse).ry *2
+    }
   }
+
 
   draw(context: CanvasRenderingContext2D, position: Position): void {
     context.globalAlpha = 0.18;

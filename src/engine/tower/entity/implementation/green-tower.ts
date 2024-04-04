@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { HitBox, HitShape } from "../../../../shared/hitboxes";
+import { HitBox, Rectangle } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
@@ -18,6 +18,6 @@ export class GreenTower extends Derive(
     return new GreenTowerRecruit(this, cell);
   }
 
-  hitbox = new HitBox([[new HitShape("rectangle", { width: 4, height: 6 }), new Position({ x: 0, y: 0 })]]);
+  hitbox = new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]]);
   projectile = new Bullet();
 }

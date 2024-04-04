@@ -6,7 +6,7 @@ import { BasicBattleBarrack } from "../../battle/implementation/basic-battle-bar
 import { BasicBarrack } from "../../entity/implementation/basic-barrack";
 import { BarrackRecruit } from "../barrack-recruit";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell } from "../../../../shared/position";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { GridElement } from "../../../grid/grid";
 
@@ -18,7 +18,7 @@ export class BasicBarrackRecruit extends Derive(HTImageDrawable, TRenderable, Ba
   }
   unitRecruit: null | ImplementsTrait<typeof UnitRecruit>;
 
-  get position(): Cell | Position {
+  get position(): Cell {
     return this.cell;
   }
 

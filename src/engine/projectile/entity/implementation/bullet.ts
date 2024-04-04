@@ -1,5 +1,5 @@
 import { Resources } from "../../../../renderer/resources";
-import { HitBox, HitShape } from "../../../../shared/hitboxes";
+import { Ellipse, HitBox } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
 import { Projectile } from "../projectile";
 
@@ -13,7 +13,7 @@ export class Bullet extends Projectile {
   }
 
   type = "bullet" as const;
-  hitbox = new HitBox([[new HitShape("ellipse", { width: 1, height: 1 }), new Position({ x: 0, y: 0 })]]);
+  hitbox = new HitBox([[new Ellipse({ width: 1, height: 1 }), new Position({ x: 0, y: 0 })]]);
   constructor(public baseSpeed: number = 2.8) {
     super({});
   }
