@@ -1,8 +1,8 @@
 import { Derive, ImplementsTrait, Trait } from "@ddd-ts/traits";
 import { Cell, Position } from "../../shared/position";
 import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
-import { SynergyEffect } from "./grid-effects/synerny-effect";
 import { TGrid } from "./tgrid";
+import { SynergyEffect } from "./grid-effects/synergy-effect";
 
 export const GridElement = Trait((base) => {
 	abstract class IGridElement extends base {

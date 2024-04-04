@@ -34,7 +34,7 @@ export const THudRenderable = Subtrait([TRenderable], (base) => {
 			return [];
 		}
 
-		render(context: CanvasRenderingContext2D, grid: Grid | BattleGrid): void {
+		override render(context: CanvasRenderingContext2D, grid: Grid | BattleGrid): void {
 			super.render(context, grid);
 			for (const { hud, position } of this.huds()) {
 				if (this.position instanceof Cell) {
@@ -52,7 +52,7 @@ export const THudRenderable = Subtrait([TRenderable], (base) => {
 export const TLifeBarRenderable = Subtrait([THudRenderable, Caster], (base) => {
 	abstract class ILifeBarRenderable extends base {
 		lifeBar = new LifeBar(this);
-		huds() {
+		override huds() {
 			return [
 				...super.huds(),
 				{
@@ -68,7 +68,7 @@ export const TLifeBarRenderable = Subtrait([THudRenderable, Caster], (base) => {
 export const TCasterHudRenderable = Subtrait([THudRenderable, Caster], (base) => {
 	abstract class ICasterRenderable extends base {
 		casterCamembert = new CasterCamembert(this);
-		huds() {
+		override huds() {
 			if (this.cast) {
 				return [
 					...super.huds(),

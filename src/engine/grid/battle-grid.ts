@@ -7,11 +7,13 @@ import { AnyBattleTower } from "../tower/battle/battle-tower";
 import { Grid, SerializedGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
 import { TGrid } from "./tgrid";
+import { SynergyEffect } from "./grid-effects/synergy-effect";
 
 export type BattleGridElement = AnyBattleTower | AnyBattleTile | BattleCastle;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();
-
+	overEffect: Cell | undefined = undefined;
+	synergiesEffects: SynergyEffect[] = [];
 	constructor(
 		public gridAllied: Grid,
 		public gridEnemy: Grid,

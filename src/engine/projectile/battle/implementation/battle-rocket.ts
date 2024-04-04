@@ -6,7 +6,7 @@ import { Rocket } from "../../entity/implementation/rocket";
 import { BattleProjectile } from "../battle-projectile";
 
 export class BattleRocketProjectile extends BattleProjectile<Rocket> {
-	pathFinder = new PathFinder([new Position({ x: this.target.position.x, y: this.target.position.y })]);
+	override pathFinder = new PathFinder([new Position({ x: this.target.position.x, y: this.target.position.y })]);
 
 	canMove(): boolean {
 		return true;

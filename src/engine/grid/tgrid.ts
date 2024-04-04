@@ -1,17 +1,17 @@
 import { ImplementsTrait, Trait } from "@ddd-ts/traits";
 import { Grid, GridElement } from "./grid";
 import { Cell, Position } from "../../shared/position";
-import { SynergyEffect } from "./grid-effects/synerny-effect";
+import { SynergyEffect } from "./grid-effects/synergy-effect";
 
 export const TGrid = Trait((base) => {
 	abstract class IGrid extends base {
-		tiles: Map<string, ImplementsTrait<typeof GridElement>>;
-		overEffect: Cell | undefined;
-		synergiesEffects: SynergyEffect[];
-		public width: number;
-		public height: number;
-		public position: Position;
-		public cellSize: number;
+		abstract tiles: Map<string, ImplementsTrait<typeof GridElement>>;
+		abstract overEffect: Cell | undefined;
+		abstract synergiesEffects: SynergyEffect[];
+		public abstract width: number;
+		public abstract height: number;
+		public abstract position: Position;
+		public abstract cellSize: number;
 		cellToReal(cell: Cell) {
 			return new Position({
 				x: this.position.x + (cell.x + 0.5) * this.cellSize,
