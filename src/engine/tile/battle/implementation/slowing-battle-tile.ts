@@ -6,8 +6,9 @@ import { Status } from "../../../../shared/traits/status";
 import { Stats } from "../../../stats/stats";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { SlowingPathTile } from "../../entity/implementation/slowing-tile";
+import { GridElement } from "../../../grid/grid";
 
-export class SlowingBattlePathTile extends Derive(TRenderable, HTImageDrawable) {
+export class SlowingBattlePathTile extends Derive(GridElement, TRenderable, HTImageDrawable) {
   public hitbox: HitBox;
 
   constructor(pathTile: SlowingPathTile, public cell: Cell, public position: Position, private hooks: BattleArmyHooks) {

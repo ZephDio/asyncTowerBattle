@@ -23,6 +23,30 @@ export class Cell {
     this.y = param.y;
   }
 
+  down() {
+    return new Cell({
+      x: this.x,
+      y: this.y - 1
+    })
+  }
+
+  up() {
+    return new Cell({
+      x: this.x,
+      y: this.y + 1
+    })
+  }
+
+  isAdjascentTo(other: Cell) {
+    return (
+      Math.abs(this.x - other.x) + Math.abs(this.y - other.y) === 1
+    );
+  }
+
+  equals(other: Cell) {
+    return this.x === other.x && this.y === other.y;
+  }
+
   clone() {
     return new Cell({ x: this.x, y: this.y });
   }
