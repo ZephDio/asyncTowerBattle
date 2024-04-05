@@ -5,7 +5,7 @@ import { Grid, GridElement } from "../grid";
 import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export class SynergyEffect extends Derive(TDrawable, TRenderable) {
-	drawPriority: 8;
+	drawPriority = 8;
 	size: number;
 	constructor(
 		public cell: Cell,

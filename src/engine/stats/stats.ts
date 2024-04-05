@@ -52,7 +52,6 @@ export class Stats {
 		this._attack = attack;
 		this._movementSpeed = speed;
 		this._castSpeed = castSpeed;
-		console.log("yay");
 	}
 
 	get health() {

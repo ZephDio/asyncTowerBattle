@@ -1,6 +1,5 @@
 import { Ellipse, HitBox, Rectangle } from "./hitboxes";
 import { Position } from "./position";
-import { Size } from "./size";
 export interface Recruit {
 	type: string;
 	hitbox: HitBox;
