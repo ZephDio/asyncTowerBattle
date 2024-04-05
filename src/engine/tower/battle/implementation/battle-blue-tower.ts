@@ -8,53 +8,66 @@ import { Caster } from "../../../../shared/traits/cast";
 import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
-export class BlueBattleTower extends Derive(TCasterHudRenderable, Caster, HTImageDrawable, GridElement, HaveStats) {
-  constructor(
-    private readonly recruit: BlueTowerRecruit,
-    private readonly hooks: BattleArmyHooks,
-    public readonly position: Position,
-    public readonly cell: Cell
-  ) {
-    super({
-      imageDrawable: recruit,
-      maxHealth: NaN,
-      attack: recruit.attackDamage,
-      movementSpeed: NaN,
-      castSpeed: recruit.attackSpeed,
-      onDeath: () => {},
-    });
-  }
+import { HTHitbox } from "../../../../shared/hitboxes";
+export class BlueBattleTower extends Derive(
+	HTHitbox,
+	TCasterHudRenderable,
+	Caster,
+	HTImageDrawable,
+	GridElement,
+	HaveStats,
+) {
+	constructor(
+		private readonly recruit: BlueTowerRecruit,
+		private readonly hooks: BattleArmyHooks,
+		public readonly position: Position,
+		public readonly cell: Cell,
+	) {
+		console.log("BlueBattleTower :", recruit);
+		super({
+			hitboxHolder: recruit,
+			imageDrawable: recruit,
+			maxHealth: NaN,
+			attack: recruit.attackDamage,
+			movementSpeed: NaN,
+			castSpeed: recruit.attackSpeed,
+			onDeath: () => {},
+		});
+	}
 
-  private attack(target: AnyBattleUnit) {
-    const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
-    this.hooks.addProjectile(projectile, this);
-  }
+	private attack(target: AnyBattleUnit) {
+		const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
+		this.hooks.addProjectile(projectile, this);
+	}
 
-  private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
-    return enemyUnit.isAlive() && distanceSqrd < 20 * 20;
-  }
-  target = null as null | AnyBattleUnit;
-  setTarget(enemyUnit: AnyBattleUnit | null) {
-    this.target = enemyUnit;
-  }
+	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
+		return enemyUnit.isAlive() && distanceSqrd < 20 * 20;
+	}
+	target = null as null | AnyBattleUnit;
+	setTarget(enemyUnit: AnyBattleUnit | null) {
+		this.target = enemyUnit;
+	}
 
-  onCastResolve() {
-    if (this.target && this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))) {
-      this.attack(this.target);
-      this.cast = null;
-      return;
-    }
-    const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
-    this.setTarget(target);
-    if (this.target) {
-      this.attack(this.target);
-      this.cast = null;
-      return;
-    }
-  }
+	onCastResolve() {
+		if (
+			this.target &&
+			this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
+		) {
+			this.attack(this.target);
+			this.cast = null;
+			return;
+		}
+		const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
+		this.setTarget(target);
+		if (this.target) {
+			this.attack(this.target);
+			this.cast = null;
+			return;
+		}
+	}
 
-  tick() {
-    this.stats.tick();
-    super.tickCast();
-  }
+	tick() {
+		this.stats.tick();
+		super.tickCast();
+	}
 }

@@ -9,8 +9,16 @@ import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/status";
 import { SlowingBattlePathTile } from "../../../tile/battle/implementation/slowing-battle-tile";
 import { BasicBattlePathTile } from "../../../tile/battle/implementation/basic-battle-tile";
+import { HTHitbox } from "../../../../shared/hitboxes";
 
-export class YellowBattleTower extends Derive(TCasterHudRenderable, Caster, HTImageDrawable, GridElement, HaveStats) {
+export class YellowBattleTower extends Derive(
+	HTHitbox,
+	TCasterHudRenderable,
+	Caster,
+	HTImageDrawable,
+	GridElement,
+	HaveStats,
+) {
 	constructor(
 		private readonly recruit: YellowTowerRecruit,
 		private readonly hooks: BattleArmyHooks,
@@ -24,6 +32,7 @@ export class YellowBattleTower extends Derive(TCasterHudRenderable, Caster, HTIm
 			movementSpeed: NaN,
 			castSpeed: recruit.attackSpeed,
 			onDeath: () => {},
+			hitboxHolder: recruit,
 		});
 	}
 

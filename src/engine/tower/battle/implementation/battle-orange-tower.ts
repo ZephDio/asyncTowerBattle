@@ -7,8 +7,9 @@ import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable
 import { GridElement } from "../../../grid/grid";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/status";
+import { HTHitbox } from "../../../../shared/hitboxes";
 
-export class OrangeBattleTower extends Derive(TPhysics, HTImageDrawable, TRenderable, GridElement) {
+export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement) {
 	hasTriggered = false;
 
 	constructor(
@@ -17,7 +18,7 @@ export class OrangeBattleTower extends Derive(TPhysics, HTImageDrawable, TRender
 		public readonly position: Position,
 		public readonly cell: Cell,
 	) {
-		super({ imageDrawable: recruit });
+		super({ imageDrawable: recruit, hitboxHolder: recruit });
 	}
 
 	get realPosition(): Position {

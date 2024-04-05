@@ -7,8 +7,9 @@ import { PathFinder } from "../../../battle/path-finder";
 import { Caster } from "../../../../shared/traits/cast";
 import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
 import { HaveStats } from "../../../stats/stats";
+import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
 
-export class BattleSoldier extends Derive(Caster, HTImageDrawable, TLifeBarRenderable, HaveStats) {
+export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDrawable, TLifeBarRenderable, HaveStats) {
 	pathFinder: PathFinder;
 
 	constructor(
@@ -24,6 +25,7 @@ export class BattleSoldier extends Derive(Caster, HTImageDrawable, TLifeBarRende
 			movementSpeed: recruit.speed,
 			castSpeed: recruit.attackSpeed,
 			onDeath: () => this.hooks.removeUnit(this),
+			hitboxHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

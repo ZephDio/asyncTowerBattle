@@ -13,6 +13,7 @@ import { OverEffect } from "../grid/grid-effects/over-effect";
 import { AnyPathTile } from "../tile/entity/tile";
 import { TDrawable } from "../../shared/traits/tdrawable";
 import { AnyBarrackRecruit } from "../barrack/recruit/barrack-recruit";
+import { HTHitbox, TCollider } from "../../shared/hitboxes";
 
 export type EconomyHooks = {
 	getEconomy: () => { gold: number };
@@ -21,6 +22,8 @@ export type EconomyHooks = {
 };
 
 export class Buyable extends Derive(
+	TCollider,
+	HTHitbox,
 	TDrawable,
 	TRenderable,
 	TImageDrawable(new Image(), { width: 0, height: 0 }, 0),
@@ -32,7 +35,7 @@ export class Buyable extends Derive(
 		public position: Position,
 		public price: number,
 	) {
-		super({ imageDrawable: entity });
+		super({ imageDrawable: entity, hitboxHolder: entity });
 	}
 
 	static from(entity: AnyTower, position: Position, price: number) {

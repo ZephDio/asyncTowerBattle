@@ -36,15 +36,15 @@ export class Army {
 	removeRecruit(recruit: AnyTowerRecruit | AnyBarrackRecruit | AnyPathTile) {
 		this.grid.deleteElement(recruit);
 		if (implementsTrait(recruit, TowerRecruit)) {
-			this.towers = this.towers.filter((tower) => tower !== recruit);
+			this.towers.splice(this.towers.indexOf(recruit), 1);
 			return;
 		}
 		if (implementsTrait(recruit, PathTile)) {
-			this.path.tiles = this.path.tiles.filter((tile) => tile !== recruit);
+			this.path.tiles.splice(this.path.tiles.indexOf(recruit), 1);
 			return;
 		}
 		if (implementsTrait(recruit, BarrackRecruit)) {
-			this.barracks = this.barracks.filter((barrack) => barrack !== recruit);
+			this.barracks.splice(this.barracks.indexOf(recruit), 1);
 			return;
 		}
 	}
