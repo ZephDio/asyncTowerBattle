@@ -5,24 +5,20 @@ import { Cell, Position } from "../../../../shared/position";
 import { HitBox, Rectangle } from "../../../../shared/hitboxes";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { SlowingBattlePathTile } from "../../battle/implementation/slowing-battle-tile";
-import { TDrawable } from "../../../../shared/traits/tdrawable";
+import { PathTile } from "../tile";
 
 export class SlowingPathTile extends Derive(
-  TDrawable,
-  TRenderable,
-  TImageDrawable(Resources.path.slowing.image, { width: 4.9, height: 4.9 }, 2)
+	PathTile,
+	TRenderable,
+	TImageDrawable(Resources.path.slowing.image, { width: 4.9, height: 4.9 }, 2),
 ) {
-  public hitbox = new HitBox([[new Rectangle({ width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]]);
+	public hitbox = new HitBox([[new Rectangle({ width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]]);
 
-  constructor(public cell: Cell) {
-    super({});
-  }
+	constructor(public cell: Cell) {
+		super({});
+	}
 
-  get position() {
-    return this.cell;
-  }
-
-  toBattle(cell: Cell, position: Position, hooks: BattleArmyHooks) {
-    return new SlowingBattlePathTile(this, cell, position, hooks);
-  }
+	toBattle(cell: Cell, position: Position, hooks: BattleArmyHooks) {
+		return new SlowingBattlePathTile(this, cell, position, hooks);
+	}
 }
