@@ -6,8 +6,10 @@ import { HTImageDrawable, TImageDrawable, TRenderable } from "../../shared/trait
 import { AnyPathTile } from "../tile/entity/tile";
 import { TDrawable } from "../../shared/traits/tdrawable";
 import { TSynergy } from "../../shared/traits/synergy";
+import { AnyBarrackRecruit } from "../barrack/recruit/barrack-recruit";
+import { AnyBarrack } from "../barrack/entity/barrack";
 
-type Holdable = Buyable | AnyTowerRecruit | AnyPathTile;
+type Holdable = Buyable | AnyTowerRecruit | AnyPathTile | AnyBarrackRecruit | AnyBarrack;
 
 export class TokenDrag<T extends Holdable = Holdable> extends Derive(
 	TDrawable,

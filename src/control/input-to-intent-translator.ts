@@ -73,14 +73,9 @@ export class InputToIntentTranslator {
 						return this.game.shop.setHoldFromRetail(buyable, position);
 					}
 				}
-				for (const tower of this.game.shop.army.towers) {
+				for (const tower of this.game.shop.army.getRecruits()) {
 					if (Physic.doCollide(this.game.shop.army.grid.cellToReal(tower.cell), tower.hitbox, position)) {
-						return this.game.shop.setHoldFromArmyTower(tower, position);
-					}
-				}
-				for (const tile of this.game.shop.army.path.tiles) {
-					if (Physic.doCollide(this.game.shop.army.grid.cellToReal(tile.cell), tile.hitbox, position)) {
-						return this.game.shop.setHoldFromArmyTiles(tile, position);
+						return this.game.shop.setHoldFromArmyRecruit(tower, position);
 					}
 				}
 			}

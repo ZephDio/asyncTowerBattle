@@ -12,172 +12,153 @@ import { AnyTower } from "../tower/entity/tower";
 import { OverEffect } from "../grid/grid-effects/over-effect";
 import { AnyPathTile } from "../tile/entity/tile";
 import { TDrawable } from "../../shared/traits/tdrawable";
+import { AnyBarrackRecruit } from "../barrack/recruit/barrack-recruit";
 
 export type EconomyHooks = {
-  getEconomy: () => { gold: number };
-  addGold: (amount: number) => void;
-  spendGold: (amount: number) => void;
+	getEconomy: () => { gold: number };
+	addGold: (amount: number) => void;
+	spendGold: (amount: number) => void;
 };
 
-export class Buyable extends Derive(TDrawable, TRenderable, TImageDrawable(new Image(), { width: 0, height: 0 }, 0), HTImageDrawable) {
-  drawPriority = 3;
-  constructor(public entity: AnyTower, public position: Position, public price: number) {
-    super({ imageDrawable: entity });
-  }
+export class Buyable extends Derive(
+	TDrawable,
+	TRenderable,
+	TImageDrawable(new Image(), { width: 0, height: 0 }, 0),
+	HTImageDrawable,
+) {
+	drawPriority = 3;
+	constructor(
+		public entity: AnyTower,
+		public position: Position,
+		public price: number,
+	) {
+		super({ imageDrawable: entity });
+	}
 
-  static from(entity: AnyTower, position: Position, price: number) {
-    return new Buyable(entity, position, price);
-  }
+	static from(entity: AnyTower, position: Position, price: number) {
+		return new Buyable(entity, position, price);
+	}
 }
 
 export class Shop {
-  public hold = null as null | TokenDrag;
-  public retail = new Retail();
-  constructor(public army: Army, public onShopExit: Game["handleShopQuit"], public economyHooks: EconomyHooks) {}
+	public hold = null as null | TokenDrag;
+	public retail = new Retail();
+	constructor(
+		public army: Army,
+		public onShopExit: Game["handleShopQuit"],
+		public economyHooks: EconomyHooks,
+	) {}
 
-  exitShop() {
-    if (this.hold) {
-      this.hold.onRelease();
-    }
-    this.onShopExit();
-  }
+	exitShop() {
+		if (this.hold) {
+			this.hold.onRelease();
+		}
+		this.onShopExit();
+	}
 
-  buyTower(buyable: Buyable, position: Position) {
-    const cell = this.army.grid.realPositionToGrid(position);
-    if (!cell) {
-      throw new Error();
-    }
-    if (!this.army.isValidDestinationCell(cell)) {
-      throw new Error();
-    }
-    this.economyHooks.spendGold(buyable.price);
-    this.retail.removeItem(buyable);
-    this.army.recruit(buyable.entity, cell);
-  }
+	buyTower(buyable: Buyable, position: Position) {
+		const cell = this.army.grid.realPositionToGrid(position);
+		if (!cell) {
+			throw new Error();
+		}
+		if (!this.army.isValidDestinationCell(cell)) {
+			throw new Error();
+		}
+		this.economyHooks.spendGold(buyable.price);
+		this.retail.removeItem(buyable);
+		this.army.recruit(buyable.entity, cell);
+	}
 
-  buy(buyable: Buyable, position: Position) {
-    if (this.economyHooks.getEconomy().gold < buyable.price) {
-      throw new Error();
-    }
-    this.buyTower(buyable, position);
-  }
+	buy(buyable: Buyable, position: Position) {
+		if (this.economyHooks.getEconomy().gold < buyable.price) {
+			throw new Error();
+		}
+		this.buyTower(buyable, position);
+	}
 
-  setHoldFromRetail(buyable: Buyable, position: Position) {
-    this.retail.removeItem(buyable);
-    const token = new TokenDrag(buyable, position, (position?: Position) => {
-      try {
-        if (!position) throw new Error();
-        this.buy(buyable, position);
-        this.hold = null;
-      } catch {
-        this.retail.addItem(buyable);
-        this.hold = null;
-      }
-    });
-    this.setHold(token);
-  }
+	setHoldFromRetail(buyable: Buyable, position: Position) {
+		this.retail.removeItem(buyable);
+		const token = new TokenDrag(buyable, position, (position?: Position) => {
+			try {
+				if (!position) throw new Error();
+				this.buy(buyable, position);
+				this.hold = null;
+			} catch {
+				this.retail.addItem(buyable);
+				this.hold = null;
+			}
+		});
+		this.setHold(token);
+	}
 
-  setHoldFromArmyTower(tower: AnyTowerRecruit, position: Position) {
-    this.army.towers.splice(this.army.towers.indexOf(tower), 1);
-    this.army.grid.deleteElement(tower);
-    const token = new TokenDrag(tower, position, (position?: Position) => {
-      try {
-        if (!position) throw new Error();
-        const cell = this.army.grid.realPositionToGrid(position);
-        if (cell) {
-          if (!this.army.isValidDestinationCell(cell)) {
-            throw new Error();
-          }
-          tower.cell.x = cell.x;
-          tower.cell.y = cell.y;
-          this.army.addTower(tower);
-          this.hold = null;
-          return;
-        }
-        if (this.retail.hit(position)) {
-          this.hold = null;
-          this.economyHooks.addGold(5);
-          return;
-        }
-        throw new Error();
-      } catch {
-        this.army.addTower(tower);
-        this.hold = null;
-      }
-    });
-    this.setHold(token);
-  }
+	setHoldFromArmyRecruit(recruit: AnyPathTile | AnyTowerRecruit | AnyBarrackRecruit, position: Position) {
+		this.army.removeRecruit(recruit);
+		const token = new TokenDrag(recruit, position, (position?: Position) => {
+			try {
+				if (!position) throw new Error();
+				const cell = this.army.grid.realPositionToGrid(position);
+				if (cell) {
+					if (!this.army.isValidDestinationCell(cell)) {
+						throw new Error();
+					}
+					recruit.cell.x = cell.x;
+					recruit.cell.y = cell.y;
+					this.army.addRecruit(recruit);
+					this.hold = null;
+					return;
+				}
+				throw new Error();
+			} catch {
+				this.army.addRecruit(recruit);
+				this.hold = null;
+			}
+		});
+		this.setHold(token);
+	}
 
-  setHoldFromArmyTiles(tile: AnyPathTile, position: Position) {
-    this.army.path.tiles.splice(this.army.path.tiles.indexOf(tile), 1);
-    this.army.grid.deleteElement(tile);
+	moveHold(position: Position) {
+		if (this.hold) {
+			this.hold.position = position;
+		}
+	}
 
-    const token = new TokenDrag(tile, position, (position?: Position) => {
-      try {
-        if (!position) throw new Error();
-        const cell = this.army.grid.realPositionToGrid(position);
-        if (cell) {
-          if (!this.army.isValidDestinationCell(cell)) {
-            throw new Error();
-          }
-          tile.cell.x = cell.x;
-          tile.cell.y = cell.y;
-          this.army.addTile(tile);
-          this.hold = null;
-          return;
-        }
-        throw new Error();
-      } catch {
-        this.army.addTile(tile);
-        this.hold = null;
-      }
-    });
-    this.setHold(token);
-  }
+	private setHold(token: TokenDrag) {
+		if (this.hold) {
+			this.hold.onRelease();
+		}
+		this.hold = token;
+	}
 
-  moveHold(position: Position) {
-    if (this.hold) {
-      this.hold.position = position;
-    }
-  }
+	getDrawables() {
+		return {
+			drawables: [
+				this.retail,
+				this.army.castle,
+				...this.army.towers,
+				...this.army.barracks,
+				this.army.grid,
+				...this.retail.buyables.keys(),
+				...this.army.path.tiles,
+				...(this.hold ? [this.hold] : []),
+				...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
+				...this.army.grid.synergiesEffects,
+				new StartBattleButton({}),
+				new GoldDisplay(this.economyHooks.getEconomy().gold),
+			],
+			grid: this.army.grid,
+		};
+	}
 
-  private setHold(token: TokenDrag) {
-    if (this.hold) {
-      this.hold.onRelease();
-    }
-    this.hold = token;
-  }
-
-  getDrawables() {
-    return {
-      drawables: [
-        this.retail,
-        this.army.castle,
-        ...this.army.towers,
-        ...this.army.barracks,
-        this.army.grid,
-        ...this.retail.buyables.keys(),
-        ...this.army.path.tiles,
-        ...(this.hold ? [this.hold] : []),
-        ...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
-        ...this.army.grid.synergiesEffects,
-        new StartBattleButton({}),
-        new GoldDisplay(this.economyHooks.getEconomy().gold),
-      ],
-      grid: this.army.grid,
-    };
-  }
-
-  getState() {
-    return {
-      type: "shop",
-      retail: this.retail,
-      hold: this.hold,
-      hudElements: [new StartBattleButton({})],
-      towers: this.army.towers,
-      castle: this.army.castle,
-      path: this.army.path,
-      grid: this.army.grid,
-    } as ShopState;
-  }
+	getState() {
+		return {
+			type: "shop",
+			retail: this.retail,
+			hold: this.hold,
+			hudElements: [new StartBattleButton({})],
+			towers: this.army.towers,
+			castle: this.army.castle,
+			path: this.army.path,
+			grid: this.army.grid,
+		} as ShopState;
+	}
 }
