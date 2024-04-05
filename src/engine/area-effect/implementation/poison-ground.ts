@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Ellipse, HitBox, TCollider } from "../../../shared/hitboxes";
+import { Ellipse, HitBox, TCollider, THitbox } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TRenderable } from "../../../shared/traits/drawable";
@@ -9,7 +9,8 @@ import { TDrawable } from "../../../shared/traits/tdrawable";
 export class PoisonGround extends Derive(
 	TDrawable,
 	TRenderable,
-	TCollider(new HitBox([[new Ellipse({ width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Ellipse({ width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]])),
+	TCollider,
 ) {
 	type = "poison-ground" as const;
 	drawPriority = 5;
@@ -28,7 +29,7 @@ export class PoisonGround extends Derive(
 			this.hooks.removeAreaEffect(this);
 			return;
 		}
-		const enemies = this.hooks.searchEnemyInArea(this.position, this.body);
+		const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
 		for (const enemy of enemies) {
 			enemy.addStatus(new Poisoned(this.damage));
 		}
@@ -36,8 +37,8 @@ export class PoisonGround extends Derive(
 
 	get size() {
 		return {
-			width: (this.body.hitShapes[0]?.[0] as Ellipse).rx * 2,
-			height: (this.body.hitShapes[0]?.[0] as Ellipse).ry * 2,
+			width: (this.hitbox.hitShapes[0]?.[0] as Ellipse).rx * 2,
+			height: (this.hitbox.hitShapes[0]?.[0] as Ellipse).ry * 2,
 		};
 	}
 

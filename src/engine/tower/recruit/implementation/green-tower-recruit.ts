@@ -1,4 +1,4 @@
-import { HitBox } from "../../../../shared/hitboxes";
+import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattleBulletProjectile } from "../../../projectile/battle/implementation/battle-bullet";
@@ -13,16 +13,22 @@ import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { GridElement } from "../../../grid/grid";
 import { BattleGrid } from "../../../grid/battle-grid";
 
-export class GreenTowerRecruit extends Derive(HTDamageDealer, TowerRecruit, HTImageDrawable, TRenderable, GridElement) {
+export class GreenTowerRecruit extends Derive(
+	TGCollider,
+	HTHitbox,
+	HTDamageDealer,
+	TowerRecruit,
+	HTImageDrawable,
+	TRenderable,
+	GridElement,
+) {
 	attackSpeed = 3;
-	hitbox: HitBox;
 
 	constructor(
 		public tower: GreenTower,
 		public cell: Cell,
 	) {
-		super({ damageDealer: tower, imageDrawable: tower });
-		this.hitbox = tower.hitbox;
+		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: Position, damage: number) {

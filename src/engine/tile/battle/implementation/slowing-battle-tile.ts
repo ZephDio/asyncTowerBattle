@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { HitBox } from "../../../../shared/hitboxes";
+import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Cell, Position } from "../../../../shared/position";
 import { Status } from "../../../../shared/traits/status";
@@ -8,17 +8,14 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { SlowingPathTile } from "../../entity/implementation/slowing-tile";
 import { GridElement } from "../../../grid/grid";
 
-export class SlowingBattlePathTile extends Derive(GridElement, TRenderable, HTImageDrawable) {
-	public hitbox: HitBox;
-
+export class SlowingBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
 	constructor(
 		pathTile: SlowingPathTile,
 		public cell: Cell,
 		public position: Position,
 		private hooks: BattleArmyHooks,
 	) {
-		super({ imageDrawable: pathTile });
-		this.hitbox = pathTile.hitbox;
+		super({ imageDrawable: pathTile, hitboxHolder: pathTile });
 	}
 
 	tick() {

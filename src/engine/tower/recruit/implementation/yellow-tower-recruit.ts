@@ -1,4 +1,4 @@
-import { HitBox } from "../../../../shared/hitboxes";
+import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { TowerRecruit } from "../tower-recruit";
@@ -14,6 +14,8 @@ import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { GridElement } from "../../../grid/grid";
 
 export class YellowTowerRecruit extends Derive(
+	TGCollider,
+	HTHitbox,
 	HTDamageDealer,
 	TowerRecruit,
 	HTSynergy,
@@ -22,14 +24,12 @@ export class YellowTowerRecruit extends Derive(
 	GridElement,
 ) {
 	attackSpeed = 0.8;
-	hitbox: HitBox;
 
 	constructor(
 		public tower: YellowTower,
 		public cell: Cell,
 	) {
-		super({ synergy: tower, damageDealer: tower, imageDrawable: tower });
-		this.hitbox = tower.hitbox;
+		super({ synergy: tower, damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
 	}
 
 	getAreaEffect(hooks: BattleArmyHooks, position: Position, damage: number) {

@@ -8,8 +8,16 @@ import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
+import { HTHitbox } from "../../../../shared/hitboxes";
 
-export class GreenBattleTower extends Derive(TCasterHudRenderable, Caster, HTImageDrawable, GridElement, HaveStats) {
+export class GreenBattleTower extends Derive(
+	HTHitbox,
+	TCasterHudRenderable,
+	Caster,
+	HTImageDrawable,
+	GridElement,
+	HaveStats,
+) {
 	target = null as null | AnyBattleUnit;
 	constructor(
 		private readonly recruit: GreenTowerRecruit,
@@ -24,6 +32,7 @@ export class GreenBattleTower extends Derive(TCasterHudRenderable, Caster, HTIma
 			movementSpeed: NaN,
 			castSpeed: recruit.attackSpeed,
 			onDeath: () => {},
+			hitboxHolder: recruit,
 		});
 	}
 

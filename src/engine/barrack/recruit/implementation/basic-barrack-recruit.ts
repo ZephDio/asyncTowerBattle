@@ -9,18 +9,24 @@ import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable
 import { Cell } from "../../../../shared/position";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { GridElement } from "../../../grid/grid";
-import { HitBox } from "../../../../shared/hitboxes";
+import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 
-export class BasicBarrackRecruit extends Derive(HTImageDrawable, TRenderable, BarrackRecruit, GridElement) {
+export class BasicBarrackRecruit extends Derive(
+	TGCollider,
+	HTHitbox,
+	HTImageDrawable,
+	TRenderable,
+	BarrackRecruit,
+	GridElement,
+) {
 	productionSpeed: number;
-	hitbox: HitBox;
+
 	constructor(
 		barrack: BasicBarrack,
 		public cell: Cell,
 	) {
-		super({ imageDrawable: barrack });
+		super({ imageDrawable: barrack, hitboxHolder: barrack });
 		this.productionSpeed = barrack.productionSpeed;
-		this.hitbox = barrack.hitbox;
 	}
 	unitRecruit: null | ImplementsTrait<typeof UnitRecruit>;
 

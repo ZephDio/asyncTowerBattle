@@ -1,4 +1,4 @@
-import { HitBox } from "../../../../shared/hitboxes";
+import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { Cell } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { OrangeBattleTower } from "../../battle/implementation/battle-orange-tower";
@@ -11,15 +11,20 @@ import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable
 import { HTSynergy } from "../../../../shared/traits/synergy";
 import { GridElement } from "../../../grid/grid";
 
-export class OrangeTowerRecruit extends Derive(TowerRecruit, HTSynergy, HTImageDrawable, TRenderable, GridElement) {
-	hitbox: HitBox;
-
+export class OrangeTowerRecruit extends Derive(
+	TGCollider,
+	HTHitbox,
+	TowerRecruit,
+	HTSynergy,
+	HTImageDrawable,
+	TRenderable,
+	GridElement,
+) {
 	constructor(
 		public tower: OrangeTower,
 		public cell: Cell,
 	) {
-		super({ synergy: tower, imageDrawable: tower });
-		this.hitbox = tower.hitbox;
+		super({ synergy: tower, imageDrawable: tower, hitboxHolder: tower });
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {

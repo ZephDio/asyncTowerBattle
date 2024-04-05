@@ -1,4 +1,4 @@
-import { HitBox, Rectangle } from "../../../../shared/hitboxes";
+import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { Rocket } from "../../../projectile/entity/implementation/rocket";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
@@ -7,11 +7,14 @@ import { BlueTowerRecruit } from "../../recruit/implementation/blue-tower-recrui
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { Derive } from "../../../../../traits/traits";
 
-export class BlueTower extends Derive(TDamageDealer(7), TImageDrawable(Resources.tower.blue.resource.image, Resources.tower.blue.size, 3)) {
-  toRecruit(cell: Cell) {
-    return new BlueTowerRecruit(this, cell);
-  }
-  type = "blue" as const;
-  hitbox = new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]]);
-  projectile = new Rocket();
+export class BlueTower extends Derive(
+	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]])),
+	TDamageDealer(7),
+	TImageDrawable(Resources.tower.blue.resource.image, Resources.tower.blue.size, 3),
+) {
+	toRecruit(cell: Cell) {
+		return new BlueTowerRecruit(this, cell);
+	}
+	type = "blue" as const;
+	projectile = new Rocket();
 }

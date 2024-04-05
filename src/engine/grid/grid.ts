@@ -7,6 +7,10 @@ import { SynergyEffect } from "./grid-effects/synergy-effect";
 export const GridElement = Trait((base) => {
 	abstract class IGridElement extends base {
 		abstract cell: Cell;
+
+		getRealPosition(grid: ImplementsTrait<typeof TGrid>) {
+			return grid.cellToReal(this.cell);
+		}
 	}
 	return IGridElement;
 });

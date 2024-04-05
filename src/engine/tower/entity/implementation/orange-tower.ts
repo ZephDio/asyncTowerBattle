@@ -1,5 +1,5 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
-import { HitBox, Rectangle } from "../../../../shared/hitboxes";
+import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
@@ -9,6 +9,7 @@ import { TSynergy } from "../../../../shared/traits/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
 export class OrangeTower extends Derive(
+	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.tower.orange.resource.image, Resources.tower.orange.size, 3),
 	TSynergy,
 ) {
@@ -20,6 +21,5 @@ export class OrangeTower extends Derive(
 		return new OrangeTowerRecruit(this, cell);
 	}
 
-	hitbox = new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]]);
 	projectile = undefined;
 }

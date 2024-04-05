@@ -98,7 +98,7 @@ export class Battlefield {
 	searchEnemiesInArea(areaPosition: Position, hitbox: HitBox): AnyBattleUnit[] {
 		const found: AnyBattleUnit[] = [];
 		for (const enemyUnit of this.enemyArmy.units.keys()) {
-			if (Physic.doCollide(areaPosition, hitbox, enemyUnit.position)) {
+			if (enemyUnit.collides(hitbox, areaPosition)) {
 				found.push(enemyUnit);
 			}
 		}
@@ -107,9 +107,9 @@ export class Battlefield {
 
 	searchAlliesInArea(areaPosition: Position, hitbox: HitBox): AnyBattleUnit[] {
 		const found: AnyBattleUnit[] = [];
-		for (const enemyUnit of this.alliedArmy.units.keys()) {
-			if (Physic.doCollide(areaPosition, hitbox, enemyUnit.position)) {
-				found.push(enemyUnit);
+		for (const alliedUnit of this.alliedArmy.units.keys()) {
+			if (alliedUnit.collides(hitbox, areaPosition)) {
+				found.push(alliedUnit);
 			}
 		}
 		return found;

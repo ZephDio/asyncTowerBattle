@@ -15,7 +15,7 @@ export const HaveStats = Trait((base) => {
 			castSpeed: number;
 			onDeath: () => void;
 		}) {
-			super({});
+			super(props);
 			this.stats = new Stats(props.maxHealth, props.attack, props.movementSpeed, props.castSpeed, props.onDeath);
 		}
 	}

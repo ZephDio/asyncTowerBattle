@@ -1,5 +1,4 @@
 import { Game } from "../engine/game";
-import { Physic } from "../shared/physic";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
 import { Position } from "../shared/position";
 import { Grid } from "../engine/grid/grid";
@@ -25,7 +24,7 @@ export class InputToIntentTranslator {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			for (const hudElement of state.hudElements) {
-				if (Physic.doCollide(hudElement.position, hudElement.hitbox, position)) {
+				if (hudElement.contains(position)) {
 					return this.game.handleShopQuit();
 				}
 			}
@@ -68,14 +67,14 @@ export class InputToIntentTranslator {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			if (!state.hold) {
-				for (const [buyable, buyablePosition] of this.game.shop.retail.buyables) {
-					if (Physic.doCollide(buyablePosition, buyable.entity.hitbox, position)) {
+				for (const [buyable] of this.game.shop.retail.buyables) {
+					if (buyable.contains(position)) {
 						return this.game.shop.setHoldFromRetail(buyable, position);
 					}
 				}
-				for (const tower of this.game.shop.army.getRecruits()) {
-					if (Physic.doCollide(this.game.shop.army.grid.cellToReal(tower.cell), tower.hitbox, position)) {
-						return this.game.shop.setHoldFromArmyRecruit(tower, position);
+				for (const gridElement of this.game.shop.army.getRecruits()) {
+					if (gridElement.contains(position, this.game.shop.army.grid)) {
+						return this.game.shop.setHoldFromArmyRecruit(gridElement, position);
 					}
 				}
 			}

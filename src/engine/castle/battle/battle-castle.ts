@@ -6,8 +6,9 @@ import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { TPhysics } from "../../../shared/traits/physics";
 import { GridElement } from "../../grid/grid";
+import { HTHitbox } from "../../../shared/hitboxes";
 
-export class BattleCastle extends Derive(TRenderable, HTImageDrawable, TPhysics, GridElement) {
+export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement) {
 	public actualLife: number;
 	public maxLife: number;
 
@@ -17,7 +18,7 @@ export class BattleCastle extends Derive(TRenderable, HTImageDrawable, TPhysics,
 		public cell: Cell,
 		public position: Position,
 	) {
-		super({ imageDrawable: recruit });
+		super({ imageDrawable: recruit, hitboxHolder: recruit });
 		this.actualLife = recruit.maxLife;
 		this.maxLife = recruit.maxLife;
 		this.cell = recruit.cell;

@@ -8,8 +8,17 @@ import { BasicBarrackRecruit } from "../../recruit/implementation/basic-barrack-
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
+import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
 
-export class BasicBattleBarrack extends Derive(Caster, HTImageDrawable, TRenderable, GridElement, HaveStats) {
+export class BasicBattleBarrack extends Derive(
+	TCollider,
+	HTHitbox,
+	Caster,
+	HTImageDrawable,
+	TRenderable,
+	GridElement,
+	HaveStats,
+) {
 	onGoingProduction = null as null | Cast;
 
 	cell: Cell;
@@ -29,6 +38,7 @@ export class BasicBattleBarrack extends Derive(Caster, HTImageDrawable, TRendera
 			movementSpeed: NaN,
 			castSpeed: barrackRecruit.productionSpeed,
 			onDeath: () => {},
+			hitboxHolder: barrackRecruit,
 		});
 		this.cell = barrackRecruit.cell;
 	}
