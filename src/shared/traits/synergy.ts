@@ -6,6 +6,13 @@ export const TSynergy = Trait((base) => {
 	abstract class ISynergy extends base {
 		abstract patternEffect: Cell[];
 		abstract isPatternActivated: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean;
+
+		getSynergies() {
+			return {
+				patternEffect: this.patternEffect,
+				isPatternActivated: this.isPatternActivated,
+			};
+		}
 	}
 	return ISynergy;
 });
@@ -18,6 +25,7 @@ export const HTSynergy = Subtrait([TSynergy], (base, Param) => {
 			super(props);
 			this.isPatternActivated = props.synergy.isPatternActivated;
 			this.patternEffect = props.synergy.patternEffect;
+			this.getSynergies = this.getSynergies.bind(this);
 		}
 	}
 	return THsynergy;

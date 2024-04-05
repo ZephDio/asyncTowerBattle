@@ -43,11 +43,20 @@ export class InputToIntentTranslator {
 			const cell = grid.realPositionToGrid(position);
 			this.game.shop.army.grid.setOveredTile(cell);
 			if (cell) {
-				const gridElement = grid.tiles.get(Grid.posToString(cell));
-				if (gridElement) {
-					if (implementsTrait(gridElement, TSynergy)) {
-						grid.setSynergiesTiles(gridElement.cell, gridElement.patternEffect, gridElement.isPatternActivated);
+				if (this.game.shop.hold) {
+					const synergy = this.game.shop.hold.getSynergies();
+					if (synergy) {
+						grid.setSynergiesTiles(cell, synergy.patternEffect, synergy.isPatternActivated);
 						return;
+					}
+				} else {
+					const gridElement = grid.tiles.get(Grid.posToString(cell));
+					if (gridElement) {
+						if (implementsTrait(gridElement, TSynergy)) {
+							const synergy = gridElement.getSynergies();
+							grid.setSynergiesTiles(gridElement.cell, synergy.patternEffect, synergy.isPatternActivated);
+							return;
+						}
 					}
 				}
 			}

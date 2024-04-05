@@ -8,15 +8,18 @@ import { GridElement } from "../../../grid/grid";
 import { TSynergy } from "../../../../shared/traits/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class OrangeTower extends Derive(TImageDrawable(Resources.tower.orange.resource.image, Resources.tower.orange.size, 3), TSynergy) {
-  patternEffect: Cell[] = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })];
-  isPatternActivated = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
-    return gridElement ? implementsTrait(gridElement, HTDamageDealer) : false;
-  };
-  toRecruit(cell: Cell) {
-    return new OrangeTowerRecruit(this, cell);
-  }
+export class OrangeTower extends Derive(
+	TImageDrawable(Resources.tower.orange.resource.image, Resources.tower.orange.size, 3),
+	TSynergy,
+) {
+	patternEffect: Cell[] = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })];
+	isPatternActivated = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
+		return gridElement ? implementsTrait(gridElement, HTDamageDealer) : false;
+	};
+	toRecruit(cell: Cell) {
+		return new OrangeTowerRecruit(this, cell);
+	}
 
-  hitbox = new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]]);
-  projectile = undefined;
+	hitbox = new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]]);
+	projectile = undefined;
 }
