@@ -3,10 +3,11 @@ import { HitBox } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattlePath } from "../../path/battle/battle-path";
-import { BattleDragon } from "../battle/implementation/dragon-battle";
-import { BattleSoldier } from "../battle/implementation/soldier-battle";
+import { SoldierRecruit } from "./implementation/soldier-recruit";
+import { DragonRecruit } from "./implementation/dragon-recruit";
+import { AnyBattleUnit } from "../battle/battle-unit";
 
-export type AnyBattleUnit = BattleDragon | BattleSoldier;
+export type AnyRecruitUnit = SoldierRecruit | DragonRecruit;
 
 export const UnitRecruit = Trait((base) => {
 	abstract class IUnitRecruit extends base {

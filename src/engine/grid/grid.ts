@@ -1,10 +1,11 @@
-import { Derive, ImplementsTrait, Trait } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { Cell, Position } from "../../shared/position";
 import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
 import { TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
+import { OverEffect } from "./grid-effects/over-effect";
 
-export const GridElement = Trait((base) => {
+export const GridElement = Subtrait([TRenderable], (base) => {
 	abstract class IGridElement extends base {
 		abstract cell: Cell;
 
@@ -15,16 +16,9 @@ export const GridElement = Trait((base) => {
 	return IGridElement;
 });
 
-export type SerializedGrid = {
-	width: number;
-	height: number;
-	position: Position;
-	tileSize: number;
-};
-
-export class Grid extends Derive(TRenderable, TGrid, TGridDrawable) {
+export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();
-	overEffect: Cell | undefined = undefined;
+	overEffect: OverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 
 	constructor(
@@ -39,9 +33,15 @@ export class Grid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	getEnemyDoorCell() {
 		return new Cell({ x: 0, y: this.height - 1 });
 	}
-
 	setOveredTile(cell: Cell | undefined) {
-		this.overEffect = cell;
+		if (cell) {
+			if (this.overEffect && ArmyGrid.posToString(cell) === ArmyGrid.posToString(this.overEffect?.cell)) {
+				return;
+			}
+			this.overEffect = new OverEffect(cell, this);
+			return;
+		}
+		this.overEffect = undefined;
 	}
 
 	setSynergiesTiles(
@@ -69,35 +69,5 @@ export class Grid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 	static posToString(cell: Cell) {
 		return `${cell.x}|${cell.y}`;
-	}
-
-	drawPriority = 1;
-	draw(context: CanvasRenderingContext2D): void {
-		context.fillStyle = "#6C6";
-		const position = this.getCanvasPosition(context, this.position);
-		const tileSize = this.getCanvasSize(context, this.cellSize, this.cellSize).width;
-		context.rect(position.x, position.y, this.width * tileSize, -this.height * tileSize);
-		context.fill();
-
-		context.lineWidth = 3;
-		context.strokeStyle = "rgba(0,0,0,0.1)";
-		for (const ci of new Array(this.width + 1).keys()) {
-			this.drawLine(
-				context,
-				position.x + ci * tileSize,
-				position.y,
-				position.x + ci * tileSize,
-				position.y - this.height * tileSize,
-			);
-		}
-		for (const ri of new Array(this.height + 1).keys()) {
-			this.drawLine(
-				context,
-				position.x,
-				position.y - ri * tileSize,
-				position.x + this.width * tileSize,
-				position.y - ri * tileSize,
-			);
-		}
 	}
 }

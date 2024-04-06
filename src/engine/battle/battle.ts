@@ -41,19 +41,10 @@ export class Battle {
 			drawables: [
 				...this.battlefield.alliedArmy.areaEffects.keys(),
 				...this.battlefield.enemyArmy.areaEffects.keys(),
-				this.battlefield.alliedArmy.castle,
-				this.battlefield.enemyArmy.castle,
-				...this.battlefield.alliedArmy.towers,
-				...this.battlefield.enemyArmy.towers,
 				...this.battlefield.units,
-				...this.battlefield.alliedArmy.path.tiles,
-				...this.battlefield.enemyArmy.path.tiles,
 				...this.battlefield.projectiles,
-				...this.battlefield.alliedArmy.barracks,
-				...this.battlefield.enemyArmy.barracks,
-				this.battlefield.grid,
 			],
-			grid: this.battlefield.grid,
+			grids: [this.battlefield.grid],
 		};
 	}
 

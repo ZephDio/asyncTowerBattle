@@ -2,7 +2,6 @@ import { Army } from "../../army/entity/army";
 import { AnyBattleTower } from "../../tower/battle/battle-tower";
 import { AnyBattleUnit } from "../../units/battle/battle-unit";
 import { BattleArmy } from "../../army/battle/battle-army";
-import { BattleCastle } from "../../castle/battle/battle-castle";
 import { Battle } from "../battle";
 import { Physic } from "../../../shared/physic";
 import { HitBox } from "../../../shared/hitboxes";
@@ -43,8 +42,8 @@ export class Battlefield {
 			this.searchAlliesInArea.bind(this),
 			grid.getEnemyHooks(),
 		);
-		const enemyBattleCastle = BattleCastle.toEnemy(enemyArmy.castle, grid, () => this.onBattleOver("victory"));
-		const alliedBattleCastle = BattleCastle.toAllied(alliedArmy.castle, grid, () => this.onBattleOver("defeat"));
+		const enemyBattleCastle = enemyArmy.castle.toEnemy(grid, () => this.onBattleOver("victory"));
+		const alliedBattleCastle = alliedArmy.castle.toAllied(grid, () => this.onBattleOver("defeat"));
 		const alliedBattlePath = alliedArmy.path.toAllied(
 			grid,
 			alliedArmy.grid,

@@ -1,5 +1,5 @@
-import { Grid } from "./grid";
+import { ArmyGrid } from "./grid";
 
 export class GridFixture {
-	static default = new Grid();
+	static default = new ArmyGrid();
 }

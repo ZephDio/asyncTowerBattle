@@ -1,7 +1,7 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, Position } from "../../../shared/position";
 import { TRenderable } from "../../../shared/traits/drawable";
-import { Grid, GridElement } from "../grid";
+import { ArmyGrid, GridElement } from "../grid";
 import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export class SynergyEffect extends Derive(TDrawable, TRenderable) {
@@ -9,7 +9,7 @@ export class SynergyEffect extends Derive(TDrawable, TRenderable) {
 	size: number;
 	constructor(
 		public cell: Cell,
-		public grid: Grid,
+		public grid: ArmyGrid,
 		public isActivatedCheck: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean,
 	) {
 		super({});
@@ -19,7 +19,7 @@ export class SynergyEffect extends Derive(TDrawable, TRenderable) {
 	draw(context: CanvasRenderingContext2D, position: Position): void {
 		context.globalAlpha = 0.4;
 		context.fillStyle = "red";
-		if (this.isActivatedCheck(this.grid.tiles.get(Grid.posToString(this.cell)))) {
+		if (this.isActivatedCheck(this.grid.tiles.get(ArmyGrid.posToString(this.cell)))) {
 			context.fillStyle = "blue";
 		}
 		const { width, height } = this.getCanvasSize(context, this.size, this.size);

@@ -1,20 +1,46 @@
-import { GoldDisplay, StartBattleButton } from "../../shared/hud-element";
-import { Position } from "../../shared/position";
+import { Cell, Position } from "../../shared/position";
 import { Army } from "../army/entity/army";
 import { Game } from "../game";
 import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
-import { TokenDrag } from "./token-drag";
 import { ShopState } from "../../shared/gamestate";
 import { HTImageDrawable, TImageDrawable, TRenderable } from "../../shared/traits/drawable";
-import { Derive } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { AnyTower } from "../tower/entity/tower";
-import { OverEffect } from "../grid/grid-effects/over-effect";
 import { AnyPathTile } from "../tile/entity/tile";
 import { TDrawable } from "../../shared/traits/tdrawable";
 import { AnyBarrackRecruit } from "../barrack/recruit/barrack-recruit";
 import { HTHitbox, TCollider } from "../../shared/hitboxes";
+import { GoldHud } from "../../shared/hud-element/gold-hud";
+import { StartBattleButton } from "../../shared/hud-element/start-battle-button";
+import { PtiWrapRanch } from "../grid/inventory/unit-inventory";
+import { TTokenDrag } from "./token-drag/token-drag";
+import { TGrid } from "../grid/tgrid";
+import { AnyRecruitUnit } from "../units/recruit/unit-recruit";
+import { BuyableTokenDrag } from "./token-drag/buyable-token-drag";
+import { UnitTokenDrag } from "./token-drag/unit-token-drag";
+import { ArmyRecruitTokenDrag } from "./token-drag/army-recruit-token-drag";
 
+type ArmyHooks = {
+	recruit: (blueprint: AnyTower, tile: Cell) => void;
+	isValidDestinationCell: (cell: Cell) => boolean;
+	removeRecruit: (recruit: AnyTowerRecruit | AnyBarrackRecruit | AnyPathTile) => void;
+	addRecruit: (recruit: AnyTowerRecruit | AnyBarrackRecruit | AnyPathTile) => void;
+	getArmyGrid: () => ImplementsTrait<typeof TGrid>;
+	addUnit: (unit: AnyRecruitUnit) => void;
+};
+
+type ShopHooks = {
+	buy: (buyable: Buyable, position: Position) => void;
+	addItem: (buyable: Buyable) => void;
+};
+
+export type TokenHooks = {
+	economyHooks: EconomyHooks;
+	armyHooks: ArmyHooks;
+	shopHooks: ShopHooks;
+	removeHold: () => void;
+};
 export type EconomyHooks = {
 	getEconomy: () => { gold: number };
 	addGold: (amount: number) => void;
@@ -44,7 +70,7 @@ export class Buyable extends Derive(
 }
 
 export class Shop {
-	public hold = null as null | TokenDrag;
+	public hold = null as null | ImplementsTrait<typeof TTokenDrag>;
 	public retail = new Retail();
 	constructor(
 		public army: Army,
@@ -81,41 +107,19 @@ export class Shop {
 
 	setHoldFromRetail(buyable: Buyable, position: Position) {
 		this.retail.removeItem(buyable);
-		const token = new TokenDrag(buyable, position, (position?: Position) => {
-			try {
-				if (!position) throw new Error();
-				this.buy(buyable, position);
-				this.hold = null;
-			} catch {
-				this.retail.addItem(buyable);
-				this.hold = null;
-			}
-		});
+		const token = new BuyableTokenDrag(buyable, position, this.getTokenHooks());
+		this.setHold(token);
+	}
+
+	setHoldFromUnitInventory(unit: PtiWrapRanch, position: Position) {
+		this.army.unitInventory.deleteElement(unit);
+		const token = new UnitTokenDrag(unit, position, this.getTokenHooks());
 		this.setHold(token);
 	}
 
 	setHoldFromArmyRecruit(recruit: AnyPathTile | AnyTowerRecruit | AnyBarrackRecruit, position: Position) {
 		this.army.removeRecruit(recruit);
-		const token = new TokenDrag(recruit, position, (position?: Position) => {
-			try {
-				if (!position) throw new Error();
-				const cell = this.army.grid.realPositionToGrid(position);
-				if (cell) {
-					if (!this.army.isValidDestinationCell(cell)) {
-						throw new Error();
-					}
-					recruit.cell.x = cell.x;
-					recruit.cell.y = cell.y;
-					this.army.addRecruit(recruit);
-					this.hold = null;
-					return;
-				}
-				throw new Error();
-			} catch {
-				this.army.addRecruit(recruit);
-				this.hold = null;
-			}
-		});
+		const token = new ArmyRecruitTokenDrag(recruit, position, this.getTokenHooks());
 		this.setHold(token);
 	}
 
@@ -125,7 +129,7 @@ export class Shop {
 		}
 	}
 
-	private setHold(token: TokenDrag) {
+	private setHold(token: ImplementsTrait<typeof TTokenDrag>) {
 		if (this.hold) {
 			this.hold.onRelease();
 		}
@@ -134,21 +138,35 @@ export class Shop {
 
 	getDrawables() {
 		return {
+			grids: [this.army.grid, this.army.unitInventory],
 			drawables: [
-				this.retail,
-				this.army.castle,
-				...this.army.towers,
-				...this.army.barracks,
-				this.army.grid,
-				...this.retail.buyables.keys(),
-				...this.army.path.tiles,
-				...(this.hold ? [this.hold] : []),
-				...(this.army.grid.overEffect ? [new OverEffect(this.army.grid.overEffect, this.army.grid)] : []),
-				...this.army.grid.synergiesEffects,
 				new StartBattleButton({}),
-				new GoldDisplay(this.economyHooks.getEconomy().gold),
+				new GoldHud(this.economyHooks.getEconomy().gold),
+				this.retail,
+				...this.retail.buyables.keys(),
+				...(this.hold ? [this.hold] : []),
 			],
-			grid: this.army.grid,
+		};
+	}
+
+	getTokenHooks(): TokenHooks {
+		return {
+			economyHooks: this.economyHooks,
+			armyHooks: {
+				recruit: this.army.recruit.bind(this.army),
+				isValidDestinationCell: this.army.isValidDestinationCell.bind(this.army),
+				removeRecruit: this.army.removeRecruit.bind(this.army),
+				addRecruit: this.army.addRecruit.bind(this.army),
+				getArmyGrid: () => this.army.grid,
+				addUnit: this.army.unitInventory.addUnit.bind(this.army.unitInventory),
+			},
+			shopHooks: {
+				buy: this.buy.bind(this),
+				addItem: this.retail.addItem.bind(this.retail),
+			},
+			removeHold: () => {
+				this.hold = null;
+			},
 		};
 	}
 

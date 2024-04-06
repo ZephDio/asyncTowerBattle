@@ -69,7 +69,7 @@ export const TCollider = Subtrait([THitbox(new HitBox([]))], (base) => {
 		}
 
 		intersects(other: ImplementsTrait<typeof TCollider>) {
-			return Physic.doHitboxsCollide(this.position, this.hitbox, other.position, other.hitbox);
+			return Physic.doHitboxesCollide(this.position, this.hitbox, other.position, other.hitbox);
 		}
 	}
 
@@ -87,7 +87,7 @@ export const TGCollider = Subtrait([GridElement, THitbox(new HitBox([]))], (base
 		}
 
 		intersects(other: ImplementsTrait<typeof TCollider>, grid: ImplementsTrait<typeof TGrid>) {
-			return Physic.doHitboxsCollide(this.getRealPosition(grid), this.hitbox, other.position, other.hitbox);
+			return Physic.doHitboxesCollide(this.getRealPosition(grid), this.hitbox, other.position, other.hitbox);
 		}
 
 		gridIntersects(other: ImplementsTrait<typeof TGCollider>) {

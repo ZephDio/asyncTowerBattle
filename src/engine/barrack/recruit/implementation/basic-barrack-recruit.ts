@@ -39,6 +39,7 @@ export class BasicBarrackRecruit extends Derive(
 			return new BasicBattleBarrack(
 				this,
 				grid.cellToReal(this.position),
+				this.cell.clone(),
 				path.enemyCastle.position,
 				path,
 				hooks,
@@ -54,6 +55,7 @@ export class BasicBarrackRecruit extends Derive(
 			return new BasicBattleBarrack(
 				this,
 				grid.cellToReal(newPosition),
+				newPosition,
 				path.enemyCastle.position,
 				path,
 				hooks,

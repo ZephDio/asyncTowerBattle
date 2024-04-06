@@ -1,12 +1,13 @@
 import { ImplementsTrait, Trait } from "@ddd-ts/traits";
-import { Grid, GridElement } from "./grid";
+import { ArmyGrid, GridElement } from "./grid";
 import { Cell, Position } from "../../shared/position";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
+import { OverEffect } from "./grid-effects/over-effect";
 
 export const TGrid = Trait((base) => {
 	abstract class IGrid extends base {
 		abstract tiles: Map<string, ImplementsTrait<typeof GridElement>>;
-		abstract overEffect: Cell | undefined;
+		abstract overEffect: OverEffect | undefined;
 		abstract synergiesEffects: SynergyEffect[];
 		public abstract width: number;
 		public abstract height: number;
@@ -28,11 +29,14 @@ export const TGrid = Trait((base) => {
 			return new Cell({ x: x, y: y });
 		}
 		setElement(gridElement: ImplementsTrait<typeof GridElement>) {
-			this.tiles.set(Grid.posToString(gridElement.cell), gridElement);
+			this.tiles.set(ArmyGrid.posToString(gridElement.cell), gridElement);
 		}
 
 		deleteElement(gridElement: ImplementsTrait<typeof GridElement>) {
-			this.tiles.delete(Grid.posToString(gridElement.cell));
+			this.tiles.delete(ArmyGrid.posToString(gridElement.cell));
+		}
+		getDrawables() {
+			return [...this.tiles.values(), ...this.synergiesEffects, ...(this.overEffect ? [this.overEffect] : [])];
 		}
 	}
 	return IGrid;

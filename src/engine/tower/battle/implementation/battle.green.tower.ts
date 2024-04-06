@@ -4,11 +4,11 @@ import { GreenTowerRecruit } from "../../recruit/implementation/green-tower-recr
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
 import { Caster } from "../../../../shared/traits/cast";
-import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
 import { HTHitbox } from "../../../../shared/hitboxes";
+import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 
 export class GreenBattleTower extends Derive(
 	HTHitbox,

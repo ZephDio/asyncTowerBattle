@@ -21,11 +21,10 @@ export class BasicBattleBarrack extends Derive(
 ) {
 	onGoingProduction = null as null | Cast;
 
-	cell: Cell;
-
 	constructor(
 		public readonly barrackRecruit: BasicBarrackRecruit,
 		public readonly position: Position,
+		public readonly cell: Cell,
 		public spawnPosition: Position,
 		public readonly path: BattlePath,
 		public readonly hooks: BattleArmyHooks,
@@ -40,7 +39,6 @@ export class BasicBattleBarrack extends Derive(
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 		});
-		this.cell = barrackRecruit.cell;
 	}
 
 	tick() {

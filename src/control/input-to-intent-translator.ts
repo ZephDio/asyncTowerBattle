@@ -1,7 +1,7 @@
 import { Game } from "../engine/game";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
 import { Position } from "../shared/position";
-import { Grid } from "../engine/grid/grid";
+import { ArmyGrid } from "../engine/grid/grid";
 import { implementsTrait } from "@ddd-ts/traits";
 import { TSynergy } from "../shared/traits/synergy";
 
@@ -38,9 +38,10 @@ export class InputToIntentTranslator {
 				this.game.shop.moveHold(position);
 			}
 
+			// ArmyGrid
 			const grid = this.game.shop.army.grid;
 			const cell = grid.realPositionToGrid(position);
-			this.game.shop.army.grid.setOveredTile(cell);
+			grid.setOveredTile(cell);
 			if (cell) {
 				if (this.game.shop.hold) {
 					const synergy = this.game.shop.hold.getSynergies();
@@ -49,7 +50,7 @@ export class InputToIntentTranslator {
 						return;
 					}
 				} else {
-					const gridElement = grid.tiles.get(Grid.posToString(cell));
+					const gridElement = grid.tiles.get(ArmyGrid.posToString(cell));
 					if (gridElement) {
 						if (implementsTrait(gridElement, TSynergy)) {
 							const synergy = gridElement.getSynergies();
@@ -59,6 +60,14 @@ export class InputToIntentTranslator {
 					}
 				}
 			}
+
+			// UnitInventoryGrid
+			const uigrid = this.game.shop.army.unitInventory;
+			const uicell = uigrid.realPositionToGrid(position);
+			uigrid.setOveredTile(uicell);
+			if (uicell) {
+			}
+
 			grid.clearSynergiesTiles();
 		}
 	}
@@ -75,6 +84,11 @@ export class InputToIntentTranslator {
 				for (const gridElement of this.game.shop.army.getRecruits()) {
 					if (gridElement.contains(position, this.game.shop.army.grid)) {
 						return this.game.shop.setHoldFromArmyRecruit(gridElement, position);
+					}
+				}
+				for (const gridElement of this.game.shop.army.unitInventory.getUnits()) {
+					if (gridElement.contains(position, this.game.shop.army.unitInventory)) {
+						return this.game.shop.setHoldFromUnitInventory(gridElement, position);
 					}
 				}
 			}
