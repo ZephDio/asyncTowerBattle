@@ -7,11 +7,14 @@ import { OrangeTowerRecruit } from "../../recruit/implementation/orange-tower-re
 import { GridElement } from "../../../grid/grid";
 import { TSynergy } from "../../../../shared/traits/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { TBuyable, TTowerBuyable } from "../../../shop/buyable";
 
 export class OrangeTower extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.tower.orange.resource.image, Resources.tower.orange.size, 3),
 	TSynergy,
+	TTowerBuyable,
+	TBuyable(10),
 ) {
 	patternEffect: Cell[] = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })];
 	isPatternActivated = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {

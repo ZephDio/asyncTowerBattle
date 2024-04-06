@@ -4,12 +4,10 @@ import { Game } from "../game";
 import { AnyTowerRecruit } from "../tower/recruit/tower-recruit";
 import { Retail } from "./retail";
 import { ShopState } from "../../shared/gamestate";
-import { HTImageDrawable, TRenderable } from "../../shared/traits/drawable";
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { AnyTower } from "../tower/entity/tower";
 import { AnyPathTile } from "../tile/entity/tile";
 import { AnyBarrackRecruit } from "../barrack/recruit/barrack-recruit";
-import { HTHitbox, TGCollider } from "../../shared/hitboxes";
 import { GoldHud } from "../../shared/hud-element/gold-hud";
 import { StartBattleButton } from "../../shared/hud-element/start-battle-button";
 import { PtiWrapRanch } from "../grid/inventory/unit-inventory";
@@ -19,9 +17,10 @@ import { AnyRecruitUnit } from "../units/recruit/unit-recruit";
 import { BuyableTokenDrag } from "./token-drag/buyable-token-drag";
 import { UnitTokenDrag } from "./token-drag/unit-token-drag";
 import { ArmyRecruitTokenDrag } from "./token-drag/army-recruit-token-drag";
+import { TBuyable } from "./buyable";
+import { HTHitbox, TGCollider } from "../../shared/hitboxes";
+import { HTImageDrawable, TRenderable } from "../../shared/traits/drawable";
 import { GridElement } from "../grid/grid";
-import { AnyUnit } from "../units/entity/units";
-import { AnyBarrack } from "../barrack/entity/barrack";
 
 type ArmyHooks = {
 	recruit: (blueprint: AnyTower, tile: Cell) => void;
@@ -32,8 +31,10 @@ type ArmyHooks = {
 	addUnit: (unit: AnyRecruitUnit) => void;
 };
 
+export type BuyableItem = ImplementsTrait<ReturnType<typeof TBuyable>>;
+
 type ShopHooks = {
-	buy: (buyable: Buyable, position: Position) => void;
+	buy: (buyable: Buyable, cell: Cell) => void;
 	addItem: (buyable: Buyable) => void;
 };
 
@@ -52,7 +53,7 @@ export type EconomyHooks = {
 export class Buyable extends Derive(TGCollider, HTHitbox, TRenderable, HTImageDrawable, GridElement) {
 	drawPriority = 10;
 	constructor(
-		public entity: AnyTower | AnyUnit | AnyBarrack,
+		public entity: BuyableItem,
 		public cell: Cell,
 		public price: number,
 	) {
@@ -62,7 +63,7 @@ export class Buyable extends Derive(TGCollider, HTHitbox, TRenderable, HTImageDr
 		return this.cell;
 	}
 
-	static from(entity: AnyTower | AnyUnit | AnyBarrack, cell: Cell, price: number) {
+	static from(entity: BuyableItem, cell: Cell, price: number) {
 		return new Buyable(entity, cell, price);
 	}
 }
@@ -92,7 +93,7 @@ export class Shop {
 		// }
 		this.economyHooks.spendGold(buyable.price);
 		this.retail.removeItem(buyable);
-		this.army.recruit(buyable.entity, cell);
+		this.army.recruit(buyable, cell);
 	}
 
 	// buy(buyable: Buyable, position: Position) {

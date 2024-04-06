@@ -1,27 +1,48 @@
 import { Subtrait, Trait } from "@ddd-ts/traits";
-import { Position } from "../../shared/position";
+import { Cell, Position } from "../../shared/position";
 import { TokenHooks } from "./shop";
+import { TGCollider, THitbox } from "../../shared/hitboxes";
+import { GridElement } from "../grid/grid";
+import { TDrawable } from "../../shared/traits/tdrawable";
 
 export const TBuyable = (price: number) =>
-	Trait((base) => {
+	Subtrait([TGCollider, TDrawable], (base) => {
 		abstract class IBuyable extends base {
-			buyValue: number = price;
+			price: number = price;
 
-			abstract buy(): void;
+			buy(hooks: TokenHooks, position: Position) {
+				const grid = hooks.armyHooks.getArmyGrid();
+				const cell = grid.realPositionToGrid(position);
+				if (!cell) {
+					throw new Error("Invalid position");
+				}
+
+				if (!hooks.armyHooks.isValidDestinationCell(cell)) {
+					throw new Error("Invalid position");
+				}
+				const gold = hooks.economyHooks.getEconomy().gold;
+				if (gold < this.price) {
+					throw new Error("Not enough money");
+				}
+				hooks.shopHooks.buy(this, cell);
+			}
 		}
 		return IBuyable;
 	});
 
 export const TTowerBuyable = Subtrait([TBuyable(0)], (base) => {
-	class ITowerBuyable extends base {
-		buy(hooks: TokenHooks, position: Position) {
-			const grid = hooks.armyHooks.getArmyGrid()
-			const cell = grid.realPositionToGrid(position);
-			if(!cell) {
-				throw new Error("Invalid position");
-			}
-			hooks.armyHooks.isValidDestinationCell(position).
-		}
-	}
+	abstract class ITowerBuyable extends base {}
 	return ITowerBuyable;
+});
+
+export const TUnitBuyable = Subtrait([TBuyable(0)], (base) => {
+	abstract class IUnitBuyable extends base {
+		override buy(hooks: TokenHooks, position: Position) {}
+	}
+	return IUnitBuyable;
+});
+
+export const TBarrackBuyable = Subtrait([TBuyable(0)], (base) => {
+	abstract class IBarrackBuyable extends base {}
+	return IBarrackBuyable;
 });
