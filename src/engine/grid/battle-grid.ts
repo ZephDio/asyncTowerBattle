@@ -4,19 +4,20 @@ import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
 import { BattleArmy } from "../army/battle/battle-army";
 import { BattleCastle } from "../castle/battle/battle-castle";
 import { AnyBattleTower } from "../tower/battle/battle-tower";
-import { Grid, SerializedGrid } from "./grid";
+import { ArmyGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
 import { TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
+import { OverEffect } from "./grid-effects/over-effect";
 
 export type BattleGridElement = AnyBattleTower | AnyBattleTile | BattleCastle;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();
-	overEffect: Cell | undefined = undefined;
+	overEffect: OverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 	constructor(
-		public gridAllied: Grid,
-		public gridEnemy: Grid,
+		public gridAllied: ArmyGrid,
+		public gridEnemy: ArmyGrid,
 		public width: number,
 		public height: number,
 		public position: Position = new Position({ x: 2, y: 1.5 }),
@@ -25,7 +26,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		super({});
 	}
 
-	static fuse(gridAllied: Grid, gridEnemy: Grid): BattleGrid {
+	static fuse(gridAllied: ArmyGrid, gridEnemy: ArmyGrid): BattleGrid {
 		if (gridAllied.width !== gridEnemy.width || gridAllied.height !== gridEnemy.height) {
 			throw new Error("cannot fuse grid with different grid size");
 		}
@@ -46,23 +47,18 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			alliedArmy.castle,
 			...alliedArmy.path.tiles,
 			...enemyArmy.towers,
+			...alliedArmy.barracks,
 			enemyArmy.castle,
 			...enemyArmy.path.tiles,
-			...alliedArmy.barracks,
 			...enemyArmy.barracks,
 		];
+		//console.log(this.tiles.get("12|5"));
 		for (const gridElement of gridElements) {
+			// if (gridElement.cell.x === 12 && gridElement.cell.y === 5) {
+			// 	//console.log(gridElement);
+			// }
 			this.setElement(gridElement);
 		}
-	}
-	toSerialized() {
-		const serialized: SerializedGrid = {
-			width: this.width,
-			height: this.height,
-			position: this.position,
-			tileSize: this.cellSize,
-		};
-		return serialized;
 	}
 
 	getRelativeNeighborsInArmy(armyGridPosition: Cell, relativePositions: Cell[], isEnemy: boolean) {
@@ -73,7 +69,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 				x: armyGridPosition.x + (isEnemy ? -relativePosition.x : relativePosition.x),
 				y: yCoordinate,
 			});
-			const elementFound = this.tiles.get(Grid.posToString(targetPosition));
+			const elementFound = this.tiles.get(ArmyGrid.posToString(targetPosition));
 			if (elementFound) {
 				founds.push(elementFound);
 			}
@@ -88,7 +84,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 				x: cell.x + (isEnemy ? -relativePosition.x : relativePosition.x),
 				y: cell.y + (isEnemy ? -relativePosition.y : relativePosition.y),
 			});
-			const elementFound = this.tiles.get(Grid.posToString(targetPosition));
+			const elementFound = this.tiles.get(ArmyGrid.posToString(targetPosition));
 			if (elementFound) {
 				founds.push(elementFound);
 			}

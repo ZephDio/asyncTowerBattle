@@ -1,20 +1,23 @@
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { BattleGrid } from "../../engine/grid/battle-grid";
-import { Grid } from "../../engine/grid/grid";
+import { ArmyGrid } from "../../engine/grid/grid";
 import { Cell, Position } from "../position";
 
 import { TGrid } from "../../engine/grid/tgrid";
-import { LifeBar } from "../lifebar";
+import { LifeBar } from "../hud-element/lifebar";
 import { TDrawable } from "./tdrawable";
 import { Caster } from "./cast";
-import { CasterCamembert } from "../caster-camembert";
+import { CasterCamembert } from "../hud-element/caster-camembert";
 
 export const TRenderable = Subtrait([TDrawable], (base) => {
 	abstract class IRenderable extends base {
 		abstract get position(): Position | Cell;
 
-		render(context: CanvasRenderingContext2D, grid: Grid | BattleGrid) {
+		render(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid>) {
 			if (this.position instanceof Cell) {
+				if (!grid) {
+					throw new Error("Grid is required to render cell position");
+				}
 				const realPosition = grid.cellToReal(this.position);
 				return this.draw(context, realPosition);
 			}
@@ -34,10 +37,13 @@ export const THudRenderable = Subtrait([TRenderable], (base) => {
 			return [];
 		}
 
-		override render(context: CanvasRenderingContext2D, grid: Grid | BattleGrid): void {
+		override render(context: CanvasRenderingContext2D, grid?: ArmyGrid | BattleGrid): void {
 			super.render(context, grid);
 			for (const { hud, position } of this.huds()) {
 				if (this.position instanceof Cell) {
+					if (!grid) {
+						throw new Error("Grid is required to render cell position");
+					}
 					const realPosition = grid.cellToReal(this.position).add(position);
 					hud.draw(context, realPosition);
 					return;

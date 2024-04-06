@@ -2,20 +2,24 @@ import { Castle } from "../../castle/entity/castle";
 import { CastleRecruit } from "../../castle/recruit/castle-recruit";
 import { ArmyPath } from "../../path/entity/path";
 import { AnyTowerRecruit, TowerRecruit } from "../../tower/recruit/tower-recruit";
-import { Grid } from "../../grid/grid";
+import { ArmyGrid } from "../../grid/grid";
 import { AnyTower } from "../../tower/entity/tower";
 import { Cell } from "../../../shared/position";
 import { AnyPathTile, PathTile } from "../../tile/entity/tile";
 import { AnyBarrackRecruit, BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 import { implementsTrait } from "@ddd-ts/traits";
+import { AnyRecruitUnit } from "../../units/recruit/unit-recruit";
+import { UnitInventory } from "../../grid/inventory/unit-inventory";
 
 export class Army {
 	constructor(
 		public castle: CastleRecruit<Castle>,
 		public towers: AnyTowerRecruit[],
 		public path: ArmyPath,
-		public grid: Grid,
+		public grid: ArmyGrid,
 		public barracks: AnyBarrackRecruit[],
+		public unitRecruits: AnyRecruitUnit[],
+		public unitInventory: UnitInventory,
 	) {}
 
 	getRecruits() {
@@ -29,7 +33,7 @@ export class Army {
 	}
 
 	isValidDestinationCell(cell: Cell) {
-		const cellString = Grid.posToString(cell);
+		const cellString = ArmyGrid.posToString(cell);
 		return !this.grid.tiles.has(cellString);
 	}
 

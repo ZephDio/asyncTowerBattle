@@ -2,12 +2,12 @@ import { BattleCastle } from "../../castle/battle/battle-castle";
 import { BattleProjectile } from "../../projectile/battle/battle-projectile";
 import { Projectile } from "../../projectile/entity/projectile";
 import { AnyBattleTower } from "../../tower/battle/battle-tower";
-import { AnyBattleUnit } from "../../units/recruit/unit-recruit";
 import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
 import { GridHooks } from "../../grid/battle-grid";
 import { BattlePath } from "../../path/battle/battle-path";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
+import { AnyBattleUnit } from "../../units/battle/battle-unit";
 
 export type BattleArmyHooks = {
 	addUnits: BattleArmy["addUnit"];

@@ -2,6 +2,11 @@ import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { GridElement } from "../../engine/grid/grid";
 import { Cell } from "../position";
 
+export type Synergy = {
+	patternEffect: Cell[];
+	isPatternActivated: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean;
+};
+
 export const TSynergy = Trait((base) => {
 	abstract class ISynergy extends base {
 		abstract patternEffect: Cell[];

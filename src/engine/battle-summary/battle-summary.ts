@@ -49,7 +49,7 @@ export class BattleSummary {
 	getDrawables() {
 		return {
 			drawables: [this.battleVerdict],
-			grid: this.lastBattleState.grid,
+			grids: [this.lastBattleState.grid],
 		};
 	}
 

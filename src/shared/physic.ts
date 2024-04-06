@@ -86,7 +86,6 @@ export class Physic {
 				}
 			}
 			if (shape instanceof Ellipse) {
-				console.log(((point.x - shapePosition.x) / shape.rx) ** 2 + ((point.y - shapePosition.y) / shape.ry) ** 2 <= 1);
 				return ((point.x - shapePosition.x) / shape.rx) ** 2 + ((point.y - shapePosition.y) / shape.ry) ** 2 <= 1;
 			}
 		}

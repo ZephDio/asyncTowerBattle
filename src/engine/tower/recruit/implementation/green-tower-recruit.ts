@@ -8,10 +8,10 @@ import { TowerRecruit } from "../tower-recruit";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
-import { AnyBattleUnit } from "../../../units/recruit/unit-recruit";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { GridElement } from "../../../grid/grid";
 import { BattleGrid } from "../../../grid/battle-grid";
+import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 
 export class GreenTowerRecruit extends Derive(
 	TGCollider,

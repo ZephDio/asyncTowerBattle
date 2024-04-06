@@ -2,23 +2,23 @@ import { ArmyPath } from "../engine/path/entity/path";
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
 import { BattleCastle } from "../engine/castle/battle/battle-castle";
 import { TowerRecruit } from "../engine/tower/recruit/tower-recruit";
-import { HudElement } from "./hud-element";
+import { HudElement } from "./hud-element/hud-element";
 import { Retail } from "../engine/shop/retail";
 import { CastleRecruit } from "../engine/castle/recruit/castle-recruit";
 import { AreaEffect } from "../engine/area-effect/area-effect";
-import { Grid } from "../engine/grid/grid";
-import { TokenDrag } from "../engine/shop/token-drag";
+import { ArmyGrid } from "../engine/grid/grid";
 import { Castle } from "../engine/castle/entity/castle";
 import { BattleGrid } from "../engine/grid/battle-grid";
 import { ImplementsTrait } from "@ddd-ts/traits";
 import { AnyBattleTower } from "../engine/tower/battle/battle-tower";
-import { AnyBattleUnit } from "../engine/units/recruit/unit-recruit";
 import { BattleProjectile } from "../engine/projectile/battle/battle-projectile";
 import { AnyBattleTile } from "../engine/tile/battle/battle-tile";
+import { AnyBattleUnit } from "../engine/units/battle/battle-unit";
+import { TTokenDrag } from "../engine/shop/token-drag/token-drag";
 
 export interface GameState {
 	type: string;
-	grid: Grid | BattleGrid;
+	grid: ArmyGrid | BattleGrid;
 }
 
 export interface SummaryState extends GameState {
@@ -44,9 +44,9 @@ export interface ShopState extends GameState {
 	castle: CastleRecruit<Castle>;
 	towers: ImplementsTrait<typeof TowerRecruit>[];
 	path: ArmyPath;
-	grid: Grid;
+	grid: ArmyGrid;
 
-	hold: TokenDrag | null;
+	hold: ImplementsTrait<typeof TTokenDrag> | null;
 
 	hudElements: HudElement[];
 }

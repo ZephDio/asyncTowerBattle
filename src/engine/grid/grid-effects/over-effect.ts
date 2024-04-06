@@ -1,16 +1,15 @@
-import { Derive } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, Position } from "../../../shared/position";
 import { TRenderable } from "../../../shared/traits/drawable";
-import { Grid } from "../grid";
-import { BattleGrid } from "../battle-grid";
+import { TGrid } from "../tgrid";
 import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export class OverEffect extends Derive(TDrawable, TRenderable) {
-	drawPriority: 8;
+	drawPriority = 8;
 	size: number;
 	constructor(
 		public cell: Cell,
-		grid: Grid | BattleGrid,
+		grid: ImplementsTrait<typeof TGrid>,
 	) {
 		super({});
 		this.size = grid.cellSize;

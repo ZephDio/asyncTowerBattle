@@ -21,14 +21,12 @@ export class Explosion extends Derive(
 		public hooks: BattleArmyHooks,
 	) {
 		super({});
-		console.log((this.hitbox.hitShapes[0]?.[0] as Ellipse).rx);
 	}
 
 	tick() {
 		const explosionShape = this.hitbox.hitShapes[0]?.[0] as Ellipse;
 		explosionShape.rx += 0.5;
 		explosionShape.ry += 0.5;
-		console.log("Explosion tick");
 		if (this.size.width > this.MaxSize.width) {
 			const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
 			for (const enemy of enemies) {

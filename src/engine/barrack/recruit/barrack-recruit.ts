@@ -7,6 +7,7 @@ import { BasicBarrackRecruit } from "./implementation/basic-barrack-recruit";
 import { BattleGrid } from "../../grid/battle-grid";
 
 export type AnyBarrackRecruit = BasicBarrackRecruit;
+
 export const BarrackRecruit = Trait((base) => {
 	abstract class BarrackRecruit extends base {
 		abstract productionSpeed: number;

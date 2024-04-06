@@ -1,6 +1,6 @@
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { BattleGrid } from "../../grid/battle-grid";
-import { Grid } from "../../grid/grid";
+import { ArmyGrid } from "../../grid/grid";
 import { BattlePath } from "../battle/battle-path";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { AnyPathTile } from "../../tile/entity/tile";
@@ -50,7 +50,7 @@ export class ArmyPath {
 	// }
 	toAllied(
 		_battleGrid: BattleGrid,
-		grid: Grid,
+		grid: ArmyGrid,
 		alliedCastle: BattleCastle,
 		enemyCastle: BattleCastle,
 		hooks: BattleArmyHooks,
@@ -64,7 +64,7 @@ export class ArmyPath {
 
 	toEnemy(
 		battleGrid: BattleGrid,
-		grid: Grid,
+		grid: ArmyGrid,
 		alliedCastle: BattleCastle,
 		enemyCastle: BattleCastle,
 		hooks: BattleArmyHooks,

@@ -21,7 +21,6 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 		super({ imageDrawable: recruit, hitboxHolder: recruit });
 		this.actualLife = recruit.maxLife;
 		this.maxLife = recruit.maxLife;
-		this.cell = recruit.cell;
 	}
 
 	override takeDamage(damage: number): void {

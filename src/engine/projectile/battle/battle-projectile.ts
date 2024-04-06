@@ -3,10 +3,10 @@ import { PathFinder } from "../../battle/path-finder";
 import { Physic } from "../../../shared/physic";
 import { Projectile } from "../entity/projectile";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { AnyBattleUnit } from "../../units/recruit/unit-recruit";
 import { Derive } from "@ddd-ts/traits";
 import { TRenderable } from "../../../shared/traits/drawable";
 import { TDrawable } from "../../../shared/traits/tdrawable";
+import { AnyBattleUnit } from "../../units/battle/battle-unit";
 
 export abstract class BattleProjectile<PR extends Projectile> extends Derive(TDrawable, TRenderable) {
 	pathFinder: PathFinder;

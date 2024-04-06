@@ -30,12 +30,18 @@ export class CanvasRenderer implements Renderer {
 	}
 
 	async draw() {
-		const { drawables, grid } = this.game.getRenderState();
-		// const drawableState = this.stateToDrawable(state);
+		const { grids, drawables } = this.game.getRenderState();
 		this.drawBackGround();
+		for (const grid of grids) {
+			grid.render(this.context);
+			const gridDrawables = grid.getDrawables();
+			gridDrawables
+				.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
+				.map((drawable) => drawable.render(this.context, grid));
+		}
 		drawables
 			.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
-			.map((drawable) => drawable.render(this.context, grid));
+			.map((drawable) => drawable.render(this.context));
 	}
 
 	getCanvasPosition(position: Position) {
