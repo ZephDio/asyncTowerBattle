@@ -16,7 +16,7 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 	onRelease(position?: Position): void {
 		try {
 			if (!position) throw new Error();
-			this.entity.buy(this.entity, position);
+			this.hooks.shopHooks.buy(this.entity, position);
 		} catch {
 			this.hooks.shopHooks.addItem(this.entity);
 		}

@@ -83,13 +83,17 @@ export class Shop {
 		this.onShopExit();
 	}
 
-	buy(buyable: Buyable, cell: Cell) {
-		// if (this.economyHooks.getEconomy().gold < buyable.price) {
-		// 	throw new Error();
-		// }
-		// if (!this.army.isValidDestinationCell(cell)) {
-		// 	throw new Error();
-		// }
+	buy(buyable: Buyable, position: Position) {
+		const cell = this.army.grid.realPositionToGrid(position);
+		if (!cell) {
+			throw new Error("Invalid position");
+		}
+		if (this.economyHooks.getEconomy().gold < buyable.price) {
+			throw new Error();
+		}
+		if (!this.army.isValidDestinationCell(cell)) {
+			throw new Error();
+		}
 		this.economyHooks.spendGold(buyable.price);
 		this.retail.removeItem(buyable);
 		this.army.recruit(buyable.entity, cell);
