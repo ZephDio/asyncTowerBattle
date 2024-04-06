@@ -20,7 +20,7 @@ export class ArmyFixture {
 			//TowerEntityFixtures.topRightTower,
 		];
 		const path = PathFixture.defaultAllied;
-		const barracks = [BarrackRecruitFixtures.basicWithSoldier(4), BarrackRecruitFixtures.basicWithDragon(2)] as any;
+		const barracks = [BarrackRecruitFixtures.basicWithSoldier(4), BarrackRecruitFixtures.waveWithSoldier()] as any;
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier];
 		const unitInventory = new UnitInventory();
 		unitInInventory.map((e) => unitInventory.addUnit(e));

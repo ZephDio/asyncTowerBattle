@@ -3,6 +3,8 @@ import { UnitRecruitFixture } from "../../units/recruit/unit-recruit-fixtures";
 import { BasicBarrack } from "../entity/implementation/basic-barrack";
 import { BasicBarrackRecruit } from "../recruit/implementation/basic-barrack-recruit";
 import { Cell } from "../../../shared/position";
+import { WaveBarrack } from "../entity/implementation/wave-barrack";
+import { WaveBarrackRecruit } from "./implementation/wave-barrack-recruit";
 
 export class BarrackRecruitBuilder {
 	productionSpeed: number | undefined;
@@ -30,6 +32,12 @@ export class BarrackRecruitBuilder {
 		if (this.productionSpeed) basicBarrackRecruit.productionSpeed = this.productionSpeed;
 		return basicBarrackRecruit;
 	}
+	buildWave(barrack: WaveBarrack) {
+		const waveBarrackRecruit = new WaveBarrackRecruit(barrack, this.cell);
+		if (this.unit) waveBarrackRecruit.setUnit(this.unit);
+		if (this.productionSpeed) waveBarrackRecruit.productionSpeed = this.productionSpeed;
+		return waveBarrackRecruit;
+	}
 }
 
 export class BarrackRecruitFixtures {
@@ -47,5 +55,13 @@ export class BarrackRecruitFixtures {
 			.setUnit(UnitRecruitFixture.dragon)
 			.withCell(new Cell({ x: 1, y: 1 }))
 			.buildBasic(new BasicBarrack({}));
+	}
+
+	static waveWithSoldier(speed?: number) {
+		return new BarrackRecruitBuilder()
+			.withProductionSpeed(speed)
+			.setUnit(UnitRecruitFixture.soldier)
+			.withCell(new Cell({ x: 3, y: 1 }))
+			.buildWave(new WaveBarrack({}));
 	}
 }

@@ -13,11 +13,13 @@ export class SoldierRecruit extends Derive(HTHitbox, UnitRecruit, HTImageDrawabl
 	speed: number;
 	maxLife: number;
 	attackSpeed: number;
+	cost: number;
 	constructor(soldier: Soldier) {
 		super({ imageDrawable: soldier, damageDealer: soldier, hitboxHolder: soldier });
 		this.maxLife = soldier.baseMaxLife;
 		this.speed = soldier.baseSpeed;
 		this.attackSpeed = soldier.attackSpeed;
+		this.cost = soldier.cost;
 	}
 	type = "soldier" as const;
 

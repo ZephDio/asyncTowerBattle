@@ -76,7 +76,7 @@ export const TCasterHudRenderable = Subtrait([THudRenderable, Caster], (base) =>
 	abstract class ICasterRenderable extends base {
 		casterCamembert = new CasterCamembert(this);
 		override huds() {
-			if (this.cast) {
+			if (this.castInProgress) {
 				return [
 					...super.huds(),
 					{

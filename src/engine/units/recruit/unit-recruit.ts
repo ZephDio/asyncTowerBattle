@@ -16,6 +16,7 @@ export const UnitRecruit = Trait((base) => {
 		abstract hitbox: HitBox;
 		abstract attackSpeed: number;
 		abstract attackDamage: number;
+		abstract cost: number;
 
 		abstract toBattle(position: Position, path: BattlePath, hooks: BattleArmyHooks): AnyBattleUnit;
 	}

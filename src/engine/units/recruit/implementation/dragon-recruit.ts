@@ -13,11 +13,13 @@ export class DragonRecruit extends Derive(HTHitbox, HTDamageDealer, UnitRecruit,
 	speed: number;
 	maxLife: number;
 	attackSpeed: number;
+	cost: number;
 	constructor(dragon: Dragon) {
 		super({ imageDrawable: dragon, damageDealer: dragon, hitboxHolder: dragon });
 		this.maxLife = dragon.baseMaxLife;
 		this.speed = dragon.baseSpeed;
 		this.attackSpeed = dragon.attackSpeed;
+		this.cost = dragon.cost;
 	}
 	type = "dragon" as const;
 

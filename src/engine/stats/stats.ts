@@ -39,6 +39,7 @@ export class Stats {
 	};
 
 	public status: Map<string, ImplementsTrait<typeof Status>> = new Map();
+	attackSpeed: number;
 
 	constructor(
 		maxHealth: number,

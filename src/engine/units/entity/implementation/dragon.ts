@@ -5,6 +5,7 @@ import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/tdrawable";
+import { DragonRecruit } from "../../recruit/implementation/dragon-recruit";
 
 export class Dragon extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new Position({ x: 0, y: 0 })]])),
@@ -15,5 +16,11 @@ export class Dragon extends Derive(
 	baseMaxLife = 18;
 	baseSpeed = 0.25;
 	attackSpeed = 4;
+
+	cost = 110;
 	type = "dragon" as const;
+
+	toRecruit() {
+		return new DragonRecruit(this);
+	}
 }

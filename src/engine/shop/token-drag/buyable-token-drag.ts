@@ -16,12 +16,11 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 	onRelease(position?: Position): void {
 		try {
 			if (!position) throw new Error();
-			this.hooks.shopHooks.buy(this.entity, position);
-			this.hooks.removeHold();
+			this.entity.buy(this.entity, position);
 		} catch {
 			this.hooks.shopHooks.addItem(this.entity);
-			this.hooks.removeHold();
 		}
+		this.hooks.removeHold();
 	}
 
 	getSynergies() {

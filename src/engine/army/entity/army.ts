@@ -8,8 +8,10 @@ import { Cell } from "../../../shared/position";
 import { AnyPathTile, PathTile } from "../../tile/entity/tile";
 import { AnyBarrackRecruit, BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 import { implementsTrait } from "@ddd-ts/traits";
-import { AnyRecruitUnit } from "../../units/recruit/unit-recruit";
+import { AnyRecruitUnit, UnitRecruit } from "../../units/recruit/unit-recruit";
 import { UnitInventory } from "../../grid/inventory/unit-inventory";
+import { AnyBarrack } from "../../barrack/entity/barrack";
+import { AnyUnit } from "../../units/entity/units";
 
 export class Army {
 	constructor(
@@ -26,10 +28,9 @@ export class Army {
 		return [...this.towers, ...this.barracks, ...this.path.tiles];
 	}
 
-	recruit(blueprint: AnyTower, tile: Cell) {
+	recruit(blueprint: AnyTower | AnyUnit | AnyBarrack, tile: Cell) {
 		const recruit = blueprint.toRecruit(tile);
-		this.grid.setElement(recruit);
-		this.towers.push(recruit);
+		this.addRecruit(recruit);
 	}
 
 	isValidDestinationCell(cell: Cell) {
@@ -53,7 +54,11 @@ export class Army {
 		}
 	}
 
-	addRecruit(recruit: AnyTowerRecruit | AnyBarrackRecruit | AnyPathTile) {
+	addRecruit(recruit: AnyTowerRecruit | AnyBarrackRecruit | AnyPathTile | AnyRecruitUnit) {
+		if (implementsTrait(recruit, UnitRecruit)) {
+			this.unitInventory.addUnit(recruit);
+			return;
+		}
 		this.grid.setElement(recruit);
 		if (implementsTrait(recruit, TowerRecruit)) {
 			this.addTower(recruit);

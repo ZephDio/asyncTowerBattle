@@ -19,7 +19,7 @@ export class BasicBattleBarrack extends Derive(
 	GridElement,
 	HaveStats,
 ) {
-	onGoingProduction = null as null | Cast;
+	castCost: number;
 
 	constructor(
 		public readonly barrackRecruit: BasicBarrackRecruit,
@@ -39,14 +39,19 @@ export class BasicBattleBarrack extends Derive(
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 		});
+		this.castCost = unitRecruit.cost;
 	}
 
 	tick() {
 		super.tickCast();
 	}
 
+	casts(): void {
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost);
+	}
+
 	onCastResolve(): void {
 		this.hooks.addUnits(this.unitRecruit.toBattle(this.spawnPosition.clone(), this.path, this.hooks), this);
-		this.cast = null;
+		this.castInProgress = null;
 	}
 }

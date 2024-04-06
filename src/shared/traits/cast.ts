@@ -6,11 +6,13 @@ export class Cast {
 	constructor(
 		private readonly caster: ImplementsTrait<typeof Caster>,
 		private readonly resolve: () => void,
+
+		private readonly castCost: number,
 	) {}
 
 	tick() {
 		this.progress += this.caster.castSpeed;
-		if (this.progress >= 100) {
+		if (this.progress >= this.castCost) {
 			this.resolve();
 		}
 	}
@@ -18,15 +20,17 @@ export class Cast {
 
 export const Caster = Subtrait([HaveStats], (base) => {
 	abstract class ICaster extends base {
-		cast = null as null | Cast;
+		castInProgress = null as null | Cast;
 
 		abstract onCastResolve(): void;
 
+		abstract casts(): void;
+
 		tickCast() {
-			if (this.cast) {
-				return this.cast.tick();
+			if (this.castInProgress) {
+				return this.castInProgress.tick();
 			}
-			this.cast = new Cast(this, () => this.onCastResolve());
+			this.casts();
 		}
 
 		get castSpeed() {
