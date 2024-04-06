@@ -52,11 +52,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			...enemyArmy.path.tiles,
 			...enemyArmy.barracks,
 		];
-		//console.log(this.tiles.get("12|5"));
 		for (const gridElement of gridElements) {
-			// if (gridElement.cell.x === 12 && gridElement.cell.y === 5) {
-			// 	//console.log(gridElement);
-			// }
 			this.setElement(gridElement);
 		}
 	}

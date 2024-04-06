@@ -45,9 +45,6 @@ export class ArmyPath {
 		return path;
 	}
 
-	// getNodes() {
-	//   return [...this.tiles, PercentToReal({ x: 10, y: 90 }) as Position];
-	// }
 	toAllied(
 		_battleGrid: BattleGrid,
 		grid: ArmyGrid,

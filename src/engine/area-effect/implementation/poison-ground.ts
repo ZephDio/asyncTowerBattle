@@ -9,8 +9,8 @@ import { TDrawable } from "../../../shared/traits/tdrawable";
 export class PoisonGround extends Derive(
 	TDrawable,
 	TRenderable,
-	THitbox(new HitBox([[new Ellipse({ width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]])),
 	TCollider,
+	THitbox(new HitBox([[new Ellipse({ width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]])),
 ) {
 	type = "poison-ground" as const;
 	drawPriority = 5;

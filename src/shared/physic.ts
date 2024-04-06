@@ -92,7 +92,7 @@ export class Physic {
 		return false;
 	}
 
-	static doHitboxsCollide(
+	static doHitboxesCollide(
 		elementPosition: Position,
 		hitbox: HitBox,
 		otherElementPosition: Position,

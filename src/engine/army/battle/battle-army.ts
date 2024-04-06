@@ -80,27 +80,4 @@ export class BattleArmy {
 			gridHooks: this.gridHooks,
 		};
 	}
-
-	// static build(
-	//   army: Army,
-	//   enemyCastle: BattleCastle,
-	//   alliedCastle: BattleCastle,
-	//   enemyPath: BattlePath,
-	//   grid: BattleGrid,
-	//   towers: BattleTower<TowerRecruit<Tower>>[],
-	//   setTarget: SearchTarget,
-	//   searchEnemiesInArea: SearchAreaForUnit
-	// ) {
-	//   return new BattleArmy(
-	//     army,
-	//     enemyCastle,
-	//     alliedCastle,
-	//     enemyPath,
-	//     army.barracks as SoldierBarrack[],
-	//     grid,
-	//     towers,
-	//     setTarget,
-	//     searchEnemiesInArea
-	//   );
-	// }
 }

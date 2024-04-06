@@ -68,7 +68,6 @@ export class Battlefield {
 			.filter((b): b is AnyBattleBarrack => b !== undefined);
 		alliedBattleArmy.init(alliedBattleCastle, alliedBattlePath, alliedBattleTowers, alliedBattleBarrack);
 		enemyBattleArmy.init(enemyBattleCastle, enemyBattlePath, enemyBattleTowers, enemyBattleBarracks);
-		console.log(alliedBattleArmy.castle, enemyBattleArmy.castle);
 		grid.initElements(alliedBattleArmy, enemyBattleArmy);
 		return {
 			alliedBattleArmy: alliedBattleArmy,

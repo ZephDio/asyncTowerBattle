@@ -45,9 +45,7 @@ export class CastleRecruit<TB extends Castle> extends Derive(HTHitbox, HTImageDr
 		const clone = this.clone();
 		const cell = BattleGrid.flip(grid, clone.cell);
 		const position = grid.cellToReal(cell);
-		console.log(cell);
 		const BC = new BattleCastle(clone, onDeath, cell, position);
-		console.log(BC.cell);
 		return BC;
 	}
 }
