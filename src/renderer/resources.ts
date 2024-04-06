@@ -101,12 +101,20 @@ export const Resources = {
 				shape: "rectangle",
 				color: "#3b3b3b",
 			},
+			size: {
+				width: 5,
+				height: 8,
+			},
 		},
 		rocket: {
 			resource: {
 				image: createImage("/resources/projectiles/rocket.png"),
 				shape: "rectangle",
 				color: "#3b3b3b",
+			},
+			size: {
+				width: 5,
+				height: 8,
 			},
 		},
 	},

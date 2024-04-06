@@ -3,7 +3,7 @@ import { PtiWrapRanch } from "../../grid/inventory/unit-inventory";
 import { TTokenDrag } from "./token-drag";
 import { Cell, Position } from "../../../shared/position";
 import { TokenHooks } from "../shop";
-import { AnyBarrackRecruit, BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
+import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
 import { ArmyGrid } from "../../grid/grid";
 
 export class UnitTokenDrag extends Derive(TTokenDrag) {
@@ -19,7 +19,7 @@ export class UnitTokenDrag extends Derive(TTokenDrag) {
 		const grid = this.hooks.armyHooks.getArmyGrid();
 		const recruit = grid.tiles.get(ArmyGrid.posToString(cell));
 		if (recruit && implementsTrait(recruit, BarrackRecruit)) {
-			return recruit as AnyBarrackRecruit;
+			return recruit;
 		}
 		return false;
 	}
@@ -36,6 +36,9 @@ export class UnitTokenDrag extends Derive(TTokenDrag) {
 				}
 				this.entity.cell.x = cell.x;
 				this.entity.cell.y = cell.y;
+				if (recruit.unitRecruit) {
+					this.hooks.armyHooks.addUnit(recruit.unitRecruit);
+				}
 				recruit.setUnit(this.entity.unit);
 				this.hooks.removeHold();
 				return;

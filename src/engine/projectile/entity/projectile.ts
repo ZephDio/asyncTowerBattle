@@ -1,10 +1,4 @@
-import { Derive } from "@ddd-ts/traits";
-import { HitBox } from "../../../shared/hitboxes";
-import { TDrawable } from "../../../shared/traits/tdrawable";
+import { Bullet } from "./implementation/bullet";
+import { Rocket } from "./implementation/rocket";
 
-export abstract class Projectile extends Derive(TDrawable) {
-	abstract hitbox: HitBox;
-	abstract baseSpeed: number;
-
-	drawPriority = 3;
-}
+export type AnyProjectile = Bullet | Rocket;

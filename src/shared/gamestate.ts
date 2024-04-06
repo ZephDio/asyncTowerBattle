@@ -11,10 +11,10 @@ import { Castle } from "../engine/castle/entity/castle";
 import { BattleGrid } from "../engine/grid/battle-grid";
 import { ImplementsTrait } from "@ddd-ts/traits";
 import { AnyBattleTower } from "../engine/tower/battle/battle-tower";
-import { BattleProjectile } from "../engine/projectile/battle/battle-projectile";
 import { AnyBattleTile } from "../engine/tile/battle/battle-tile";
 import { AnyBattleUnit } from "../engine/units/battle/battle-unit";
 import { TTokenDrag } from "../engine/shop/token-drag/token-drag";
+import { AnyBattleProjectile } from "../engine/projectile/battle/battle-projectile";
 
 export interface GameState {
 	type: string;
@@ -34,7 +34,7 @@ export interface BattleState extends GameState {
 	grid: BattleGrid;
 	units: AnyBattleUnit[];
 	areaEffects: AreaEffect[];
-	projectiles: BattleProjectile<any>[];
+	projectiles: AnyBattleProjectile[];
 }
 
 export interface ShopState extends GameState {

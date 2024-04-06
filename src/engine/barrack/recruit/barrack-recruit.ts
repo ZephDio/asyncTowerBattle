@@ -1,7 +1,7 @@
-import { ImplementsTrait, Trait } from "@ddd-ts/traits";
+import { Trait } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattlePath } from "../../path/battle/battle-path";
-import { UnitRecruit } from "../../units/recruit/unit-recruit";
+import { AnyRecruitUnit } from "../../units/recruit/unit-recruit";
 import { AnyBattleBarrack } from "../battle/battle-barrack";
 import { BasicBarrackRecruit } from "./implementation/basic-barrack-recruit";
 import { BattleGrid } from "../../grid/battle-grid";
@@ -11,9 +11,9 @@ export type AnyBarrackRecruit = BasicBarrackRecruit;
 export const BarrackRecruit = Trait((base) => {
 	abstract class BarrackRecruit extends base {
 		abstract productionSpeed: number;
-		abstract unitRecruit: null | ImplementsTrait<typeof UnitRecruit>;
+		abstract unitRecruit: null | AnyRecruitUnit;
 
-		setUnit(unit: ImplementsTrait<typeof UnitRecruit>) {
+		setUnit(unit: AnyRecruitUnit) {
 			this.unitRecruit = unit;
 		}
 

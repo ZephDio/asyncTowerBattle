@@ -1,5 +1,4 @@
-import { ImplementsTrait } from "@ddd-ts/traits";
-import { UnitRecruit } from "../../units/recruit/unit-recruit";
+import { AnyRecruitUnit } from "../../units/recruit/unit-recruit";
 import { UnitRecruitFixture } from "../../units/recruit/unit-recruit-fixtures";
 import { BasicBarrack } from "../entity/implementation/basic-barrack";
 import { BasicBarrackRecruit } from "../recruit/implementation/basic-barrack-recruit";
@@ -7,7 +6,7 @@ import { Cell } from "../../../shared/position";
 
 export class BarrackRecruitBuilder {
 	productionSpeed: number | undefined;
-	unit: ImplementsTrait<typeof UnitRecruit>;
+	unit: AnyRecruitUnit | undefined;
 	cell: Cell;
 
 	withProductionSpeed(speed: number | undefined) {
@@ -15,7 +14,7 @@ export class BarrackRecruitBuilder {
 		return this;
 	}
 
-	setUnit(unit: ImplementsTrait<typeof UnitRecruit>) {
+	setUnit(unit: AnyRecruitUnit) {
 		this.unit = unit;
 		return this;
 	}

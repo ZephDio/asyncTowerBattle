@@ -1,12 +1,30 @@
-import { Resources } from "../../../../renderer/resources";
+import { Derive } from "@ddd-ts/traits";
+import { HTHitbox } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Explosion } from "../../../area-effect/implementation/explosion";
 import { PathFinder } from "../../../battle/path-finder";
 import { Rocket } from "../../entity/implementation/rocket";
-import { BattleProjectile } from "../battle-projectile";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 
-export class BattleRocketProjectile extends BattleProjectile<Rocket> {
-	override pathFinder = new PathFinder([new Position({ x: this.target.position.x, y: this.target.position.y })]);
+export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable) {
+	pathFinder: PathFinder;
+	speed: number;
+
+	constructor(
+		public projectile: Rocket,
+		public position: Position,
+		public hooks: BattleArmyHooks,
+		public target: AnyBattleUnit,
+		public damage: number,
+	) {
+		super({ hitboxHolder: projectile, imageDrawable: projectile });
+		this.pathFinder = new PathFinder([new Position({ x: this.target.position.x, y: this.target.position.y })]);
+		this.speed = this.projectile.baseSpeed;
+		const theta = this.pathFinder.getOrientation(this.position);
+		this.updateTheta(theta);
+	}
 
 	canMove(): boolean {
 		return true;
@@ -15,13 +33,32 @@ export class BattleRocketProjectile extends BattleProjectile<Rocket> {
 	isAlive(): boolean {
 		return true;
 	}
+	followPath(): void {
+		if (this.canMove() && !this.pathFinder.isArrived) {
+			const [nextPosition, theta] = this.pathFinder.getNextPositionAndOrientation(this.position, this.speed);
+			this.updateTheta(theta);
+			this.move(nextPosition);
+		}
+		if (this.pathFinder.isArrived) {
+			this.hit();
+		}
+	}
 
-	override tick() {
+	updateTheta(theta: number) {
+		this.angle = theta;
+	}
+
+	move(newPosition: Position) {
+		this.position.x = newPosition.x;
+		this.position.y = newPosition.y;
+	}
+
+	tick() {
 		this.speed = this.speed + 0.12;
 		this.followPath();
 	}
 
-	override hit() {
+	hit() {
 		this.hooks.addAreaEffect(
 			new Explosion(
 				{ width: 10, height: 10 },
@@ -36,14 +73,5 @@ export class BattleRocketProjectile extends BattleProjectile<Rocket> {
 
 	isAttacked(): void {
 		return;
-	}
-
-	public drawPriority = 5;
-	draw(context: CanvasRenderingContext2D, position: Position) {
-		context.globalAlpha = 1;
-		const canvasPosition = this.getCanvasPosition(context, position);
-		const size = this.getCanvasSize(context, 2, 2);
-		const image = Resources.projectiles.rocket.resource.image;
-		this.drawImage(context, size, canvasPosition, image, this.angle);
 	}
 }

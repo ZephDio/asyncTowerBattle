@@ -1,11 +1,11 @@
-import { Derive, ImplementsTrait } from "@ddd-ts/traits";
+import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
-import { UnitRecruit } from "../../../units/recruit/unit-recruit";
+import { AnyRecruitUnit } from "../../../units/recruit/unit-recruit";
 import { BasicBattleBarrack } from "../../battle/implementation/basic-battle-barrack";
 import { BasicBarrack } from "../../entity/implementation/basic-barrack";
 import { BarrackRecruit } from "../barrack-recruit";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable, TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
 import { Cell } from "../../../../shared/position";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { GridElement } from "../../../grid/grid";
@@ -15,7 +15,7 @@ export class BasicBarrackRecruit extends Derive(
 	TGCollider,
 	HTHitbox,
 	HTImageDrawable,
-	TRenderable,
+	TUnitPreviewHudRenderable,
 	BarrackRecruit,
 	GridElement,
 ) {
@@ -28,7 +28,7 @@ export class BasicBarrackRecruit extends Derive(
 		super({ imageDrawable: barrack, hitboxHolder: barrack });
 		this.productionSpeed = barrack.productionSpeed;
 	}
-	unitRecruit: null | ImplementsTrait<typeof UnitRecruit>;
+	unitRecruit: null | AnyRecruitUnit;
 
 	get position() {
 		return this.cell;

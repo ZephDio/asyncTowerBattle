@@ -1,20 +1,59 @@
-import { Resources } from "../../../../renderer/resources";
+import { Derive } from "@ddd-ts/traits";
+import { HTHitbox } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { PathFinder } from "../../../battle/path-finder";
+import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Bullet } from "../../entity/implementation/bullet";
-import { BattleProjectile } from "../battle-projectile";
 
-export class BattleBulletProjectile extends BattleProjectile<Bullet> {
+export class BattleBullet extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
+	pathFinder: PathFinder;
+	speed: number;
+
+	constructor(
+		public projectile: Bullet,
+		public position: Position,
+		public hooks: BattleArmyHooks,
+		public target: AnyBattleUnit,
+		public damage: number,
+	) {
+		super({ hitboxHolder: projectile, imageDrawable: projectile });
+		this.pathFinder = new PathFinder([target.position]);
+		this.speed = this.projectile.baseSpeed;
+	}
+
 	canMove() {
 		return true;
 	}
 
-	public drawPriority = 5;
+	followPath(): void {
+		if (this.canMove() && !this.pathFinder.isArrived) {
+			const [nextPosition, theta] = this.pathFinder.getNextPositionAndOrientation(this.position, this.speed);
 
-	draw(context: CanvasRenderingContext2D, position: Position) {
-		context.globalAlpha = 1;
-		const canvasPosition = this.getCanvasPosition(context, position);
-		const size = this.getCanvasSize(context, 2, 2);
-		const image = Resources.projectiles.bullet.resource.image;
-		this.drawImage(context, size, canvasPosition, image, this.angle);
+			this.updateTheta(theta);
+			this.move(nextPosition);
+		}
+		if (this.pathFinder.isArrived) {
+			this.hit();
+		}
+	}
+
+	tick() {
+		this.followPath();
+	}
+
+	hit() {
+		this.target.takeDamage(this.damage);
+		this.hooks.removeProjectile(this);
+	}
+
+	updateTheta(theta: number) {
+		this.angle = theta;
+	}
+
+	move(newPosition: Position) {
+		this.position.x = newPosition.x;
+		this.position.y = newPosition.y;
 	}
 }

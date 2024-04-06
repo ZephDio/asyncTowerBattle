@@ -8,6 +8,7 @@ import { LifeBar } from "../hud-element/lifebar";
 import { TDrawable } from "./tdrawable";
 import { Caster } from "./cast";
 import { CasterCamembert } from "../hud-element/caster-camembert";
+import { UnitPreviewHud } from "../hud-element/unit-preview";
 
 export const TRenderable = Subtrait([TDrawable], (base) => {
 	abstract class IRenderable extends base {
@@ -90,9 +91,26 @@ export const TCasterHudRenderable = Subtrait([THudRenderable, Caster], (base) =>
 	return ICasterRenderable;
 });
 
+export const TUnitPreviewHudRenderable = Subtrait([THudRenderable], (base) => {
+	abstract class IUnitPreviewHudRenderable extends base {
+		unitPreview = new UnitPreviewHud(this as any);
+		override huds() {
+			return [
+				...super.huds(),
+				{
+					hud: this.unitPreview,
+					position: new Position({ x: 0, y: 1.8 }),
+				},
+			];
+		}
+	}
+	return IUnitPreviewHudRenderable;
+});
+
 export const TImageDrawable = (image: HTMLImageElement, size: { width: number; height: number }, priority: number) =>
 	Subtrait([TDrawable], (base) => {
 		abstract class TImageDrawable extends base {
+			angle: number = 0;
 			drawable = {
 				image: image,
 				size: size,
@@ -107,7 +125,7 @@ export const TImageDrawable = (image: HTMLImageElement, size: { width: number; h
 				const { width, height } = this.drawable.size;
 				const size = this.getCanvasSize(context, width, height);
 				const canvasPosition = this.getCanvasPosition(context, position);
-				this.drawImage(context, size, canvasPosition, this.drawable.image);
+				this.drawImage(context, size, canvasPosition, this.drawable.image, this.angle);
 			}
 		}
 		return TImageDrawable;
@@ -128,6 +146,7 @@ export const TGridDrawable = Subtrait([TGrid, TDrawable], (base) => {
 		drawPriority = 1;
 		draw(context: CanvasRenderingContext2D): void {
 			context.fillStyle = "#6C6";
+			context.globalAlpha = 1;
 			const position = this.getCanvasPosition(context, this.position);
 			const tileSize = this.getCanvasSize(context, this.cellSize, this.cellSize).width;
 			context.rect(position.x, position.y, this.width * tileSize, -this.height * tileSize);

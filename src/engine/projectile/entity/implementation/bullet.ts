@@ -1,20 +1,15 @@
+import { Derive } from "@ddd-ts/traits";
 import { Resources } from "../../../../renderer/resources";
-import { Ellipse, HitBox } from "../../../../shared/hitboxes";
+import { Ellipse, HitBox, THitbox } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
-import { Projectile } from "../projectile";
+import { TImageDrawable } from "../../../../shared/traits/drawable";
 
-export class Bullet extends Projectile {
-  draw(context: CanvasRenderingContext2D, position: Position): void {
-    const image = Resources.projectiles.bullet.resource.image;
-    const canvasPosition = this.getCanvasPosition(context, position);
-    const { width, height } = Resources.tower.green.size;
-    const size = this.getCanvasSize(context, width, height);
-    this.drawImage(context, size, canvasPosition, image);
-  }
-
-  type = "bullet" as const;
-  hitbox = new HitBox([[new Ellipse({ width: 1, height: 1 }), new Position({ x: 0, y: 0 })]]);
-  constructor(public baseSpeed: number = 2.8) {
-    super({});
-  }
+export class Bullet extends Derive(
+	THitbox(new HitBox([[new Ellipse({ width: 1, height: 1 }), new Position({ x: 0, y: 0 })]])),
+	TImageDrawable(Resources.projectiles.bullet.resource.image, Resources.projectiles.bullet.size, 3),
+) {
+	type = "bullet" as const;
+	constructor(public baseSpeed: number = 2.8) {
+		super({});
+	}
 }

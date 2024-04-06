@@ -1,7 +1,7 @@
 import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { BattleRocketProjectile } from "../../../projectile/battle/implementation/battle-rocket";
+import { BattleRocket } from "../../../projectile/battle/implementation/battle-rocket";
 import { BlueBattleTower } from "../../battle/implementation/battle-blue-tower";
 import { BlueTower } from "../../entity/implementation/blue-tower";
 import { TowerRecruit } from "../tower-recruit";
@@ -33,7 +33,7 @@ export class BlueTowerRecruit extends Derive(
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: Position, damage: number) {
-		return new BattleRocketProjectile(this.tower.projectile, position.clone(), hooks, target, damage);
+		return new BattleRocket(this.tower.projectile, position.clone(), hooks, target, damage);
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
