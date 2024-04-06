@@ -1,8 +1,8 @@
 import { Derive, implementsTrait } from "@ddd-ts/traits";
-import { AnyTowerRecruit, TowerRecruit } from "../../tower/recruit/tower-recruit";
+import { AnyTower, Tower } from "../../tower/recruit/tower-recruit";
 import { TTokenDrag } from "./token-drag";
-import { AnyBarrackRecruit } from "../../barrack/recruit/barrack-recruit";
-import { AnyPathTile } from "../../tile/entity/tile";
+import { AnyBarrack } from "../../barrack/recruit/barrack-recruit";
+import { AnyPathTile } from "../../tile/blueprint/tile";
 import { TokenHooks } from "../shop";
 import { Cell, Position } from "../../../shared/position";
 import { ArmyGrid } from "../../grid/grid";
@@ -10,7 +10,7 @@ import { TSynergy } from "../../../shared/traits/synergy";
 
 export class ArmyRecruitTokenDrag extends Derive(TTokenDrag) {
 	constructor(
-		public entity: AnyTowerRecruit | AnyBarrackRecruit | AnyPathTile,
+		public entity: AnyTower | AnyBarrack | AnyPathTile,
 		position: Position,
 		hooks: TokenHooks,
 	) {
@@ -45,7 +45,7 @@ export class ArmyRecruitTokenDrag extends Derive(TTokenDrag) {
 	}
 
 	getSynergies() {
-		if (implementsTrait(this.entity, TowerRecruit)) {
+		if (implementsTrait(this.entity, Tower)) {
 			if (implementsTrait(this.entity, TSynergy)) {
 				return this.entity.getSynergies();
 			}

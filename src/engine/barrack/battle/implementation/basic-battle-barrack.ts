@@ -1,10 +1,10 @@
 import { Cell, Position } from "../../../../shared/position";
-import { AnyRecruitUnit } from "../../../units/recruit/unit-recruit";
+import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Derive } from "@ddd-ts/traits";
 import { Cast, Caster } from "../../../../shared/traits/cast";
-import { BasicBarrackRecruit } from "../../recruit/implementation/basic-barrack-recruit";
+import { BasicBarrack } from "../../recruit/implementation/basic-barrack-recruit";
 import { HTImageDrawable, TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
@@ -22,13 +22,13 @@ export class BasicBattleBarrack extends Derive(
 	castCost: number;
 
 	constructor(
-		public readonly barrackRecruit: BasicBarrackRecruit,
+		public readonly barrackRecruit: BasicBarrack,
 		public readonly position: Position,
 		public readonly cell: Cell,
 		public spawnPosition: Position,
 		public readonly path: BattlePath,
 		public readonly hooks: BattleArmyHooks,
-		public readonly unitRecruit: AnyRecruitUnit,
+		public readonly unitRecruit: AnyUnit,
 	) {
 		super({
 			imageDrawable: barrackRecruit,

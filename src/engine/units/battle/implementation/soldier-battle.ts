@@ -2,7 +2,7 @@ import { Derive } from "@ddd-ts/traits";
 import { Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
-import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
+import { Soldier } from "../../recruit/implementation/soldier-recruit";
 import { PathFinder } from "../../../battle/path-finder";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
@@ -13,7 +13,7 @@ export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDr
 	pathFinder: PathFinder;
 
 	constructor(
-		recruit: SoldierRecruit,
+		recruit: Soldier,
 		public position: Position,
 		public enemyPath: BattlePath,
 		private hooks: BattleArmyHooks,

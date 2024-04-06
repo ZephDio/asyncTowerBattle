@@ -3,7 +3,7 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
-import { YellowTowerRecruit } from "../../recruit/implementation/yellow-tower-recruit";
+import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/status";
@@ -20,7 +20,7 @@ export class YellowBattleTower extends Derive(
 	HaveStats,
 ) {
 	constructor(
-		private readonly recruit: YellowTowerRecruit,
+		private readonly recruit: YellowTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: Position,
 		public readonly cell: Cell,

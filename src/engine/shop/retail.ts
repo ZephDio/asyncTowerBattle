@@ -1,16 +1,23 @@
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { Cell, Position } from "../../shared/position";
 import { Buyable } from "./shop";
-import { OrangeTower } from "../tower/entity/implementation/orange-tower";
-import { BlueTower } from "../tower/entity/implementation/blue-tower";
 import { Derive } from "@ddd-ts/traits";
 import { HitBox, Rectangle, TCollider, THitbox } from "../../shared/hitboxes";
 import { RetailGrid } from "../grid/retail-grid";
 import { ArmyGrid } from "../grid/grid";
-import { Dragon } from "../units/entity/implementation/dragon";
-import { WaveBarrack } from "../barrack/entity/implementation/wave-barrack";
-import { YellowTower } from "../tower/entity/implementation/yellow-tower";
-import { GreenTower } from "../tower/entity/implementation/green-tower";
+import { DragonBlueprint } from "../units/blueprint/implementation/dragon";
+import { OrangeTower } from "../tower/recruit/implementation/orange-tower-recruit";
+import { BlueTower } from "../tower/recruit/implementation/blue-tower-recruit";
+import { WaveBarrack } from "../barrack/recruit/implementation/wave-barrack-recruit";
+import { YellowTower } from "../tower/recruit/implementation/yellow-tower-recruit";
+import { GreenTower } from "../tower/recruit/implementation/green-tower-recruit";
+import { OrangeTowerBlueprint } from "../tower/blueprint/implementation/orange-tower";
+import { BlueTowerBlueprint } from "../tower/blueprint/implementation/blue-tower";
+import { WaveBarrackBlueprint } from "../barrack/blueprint/implementation/wave-barrack";
+import { Dragon } from "../units/recruit/implementation/dragon-recruit";
+import { YellowTowerBlueprint } from "../tower/blueprint/implementation/yellow-tower";
+import { GreenTowerBlueprint } from "../tower/blueprint/implementation/green-tower";
+import { PtiWrapRanch } from "../grid/inventory/unit-inventory";
 
 export type ShopItem = Buyable;
 export class Retail extends Derive(
@@ -40,12 +47,12 @@ export class Retail extends Derive(
 
 	async getRetailItems(): Promise<ShopItem[]> {
 		return [
-			Buyable.from(new OrangeTower({}), this.slots[0]!, 10),
-			Buyable.from(new BlueTower({}), this.slots[1]!, 10),
-			Buyable.from(new Dragon({}), this.slots[2]!, 10),
-			Buyable.from(new WaveBarrack({}), this.slots[3]!, 10),
-			Buyable.from(new YellowTower({}), this.slots[4]!, 10),
-			Buyable.from(new GreenTower({}), this.slots[5]!, 10),
+			Buyable.from(new OrangeTower(new OrangeTowerBlueprint({}), this.slots[0]!), 10),
+			Buyable.from(new BlueTower(new BlueTowerBlueprint({}), this.slots[1]!), 10),
+			Buyable.from(new PtiWrapRanch(new Dragon(new DragonBlueprint({})), this.slots[2]!), 10),
+			Buyable.from(new WaveBarrack(new WaveBarrackBlueprint({}), this.slots[3]!), 10),
+			Buyable.from(new YellowTower(new YellowTowerBlueprint({}), this.slots[4]!), 10),
+			Buyable.from(new GreenTower(new GreenTowerBlueprint({}), this.slots[5]!), 10),
 		];
 	}
 

@@ -1,13 +1,13 @@
-import { Dragon } from "./implementation/dragon";
-import { Soldier } from "./implementation/soldier";
+import { DragonBlueprint } from "./implementation/dragon";
+import { SoldierBlueprint } from "./implementation/soldier";
 
 export class UnitBuilder {
 	buildSoldier() {
-		return new Soldier({});
+		return new SoldierBlueprint({});
 	}
 
 	buildDragon() {
-		return new Dragon({});
+		return new DragonBlueprint({});
 	}
 }
 

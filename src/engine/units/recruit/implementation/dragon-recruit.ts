@@ -4,17 +4,17 @@ import { Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleDragon } from "../../battle/implementation/dragon-battle";
-import { Dragon } from "../../entity/implementation/dragon";
-import { UnitRecruit } from "../unit-recruit";
+import { DragonBlueprint } from "../../blueprint/implementation/dragon";
+import { Unit } from "../unit-recruit";
 import { HTImageDrawable } from "../../../../shared/traits/drawable";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class DragonRecruit extends Derive(HTHitbox, HTDamageDealer, UnitRecruit, HTImageDrawable) {
+export class Dragon extends Derive(HTHitbox, HTDamageDealer, Unit, HTImageDrawable) {
 	speed: number;
 	maxLife: number;
 	attackSpeed: number;
 	cost: number;
-	constructor(dragon: Dragon) {
+	constructor(dragon: DragonBlueprint) {
 		super({ imageDrawable: dragon, damageDealer: dragon, hitboxHolder: dragon });
 		this.maxLife = dragon.baseMaxLife;
 		this.speed = dragon.baseSpeed;

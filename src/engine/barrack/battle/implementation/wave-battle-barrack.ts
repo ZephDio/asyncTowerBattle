@@ -1,5 +1,5 @@
 import { Cell, Position } from "../../../../shared/position";
-import { AnyRecruitUnit } from "../../../units/recruit/unit-recruit";
+import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Derive } from "@ddd-ts/traits";
@@ -8,7 +8,7 @@ import { HTImageDrawable, TUnitPreviewHudRenderable } from "../../../../shared/t
 import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
 import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
-import { WaveBarrackRecruit } from "../../recruit/implementation/wave-barrack-recruit";
+import { WaveBarrack } from "../../recruit/implementation/wave-barrack-recruit";
 
 export class WaveBattleBarrack extends Derive(
 	TCollider,
@@ -25,13 +25,13 @@ export class WaveBattleBarrack extends Derive(
 	cycle = 0;
 
 	constructor(
-		public readonly barrackRecruit: WaveBarrackRecruit,
+		public readonly barrackRecruit: WaveBarrack,
 		public readonly position: Position,
 		public readonly cell: Cell,
 		public spawnPosition: Position,
 		public readonly path: BattlePath,
 		public readonly hooks: BattleArmyHooks,
-		public readonly unitRecruit: AnyRecruitUnit,
+		public readonly unitRecruit: AnyUnit,
 	) {
 		super({
 			imageDrawable: barrackRecruit,

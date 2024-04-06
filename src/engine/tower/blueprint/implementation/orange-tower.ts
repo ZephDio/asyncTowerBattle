@@ -3,12 +3,12 @@ import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
-import { OrangeTowerRecruit } from "../../recruit/implementation/orange-tower-recruit";
+import { OrangeTower } from "../../recruit/implementation/orange-tower-recruit";
 import { GridElement } from "../../../grid/grid";
 import { TSynergy } from "../../../../shared/traits/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class OrangeTower extends Derive(
+export class OrangeTowerBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.tower.orange.resource.image, Resources.tower.orange.size, 3),
 	TSynergy,
@@ -18,7 +18,7 @@ export class OrangeTower extends Derive(
 		return gridElement ? implementsTrait(gridElement, HTDamageDealer) : false;
 	};
 	toRecruit(cell: Cell) {
-		return new OrangeTowerRecruit(this, cell);
+		return new OrangeTower(this, cell);
 	}
 
 	projectile = undefined;

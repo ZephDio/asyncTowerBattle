@@ -4,7 +4,7 @@ import { Position } from "../../../../shared/position";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Explosion } from "../../../area-effect/implementation/explosion";
 import { PathFinder } from "../../../battle/path-finder";
-import { Rocket } from "../../entity/implementation/rocket";
+import { Rocket } from "../../blueprint/implementation/rocket";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 

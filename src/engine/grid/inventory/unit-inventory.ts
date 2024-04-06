@@ -5,7 +5,7 @@ import { Cell, Position } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { SynergyEffect } from "../grid-effects/synergy-effect";
 import { ArmyGrid, GridElement } from "../grid";
-import { AnyRecruitUnit } from "../../units/recruit/unit-recruit";
+import { AnyUnit } from "../../units/recruit/unit-recruit";
 import { HTHitbox, TGCollider } from "../../../shared/hitboxes";
 import { OverEffect } from "../grid-effects/over-effect";
 
@@ -13,7 +13,7 @@ const inventoryPosition = PercentToReal({ x: 78, y: 55 });
 
 export class PtiWrapRanch extends Derive(TGCollider, GridElement, TRenderable, HTImageDrawable, HTHitbox) {
 	constructor(
-		public unit: AnyRecruitUnit,
+		public unit: AnyUnit,
 		public cell: Cell,
 	) {
 		super({ imageDrawable: unit, hitboxHolder: unit });
@@ -48,7 +48,7 @@ export class UnitInventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 		}
 		return undefined;
 	}
-	addUnit(unit: AnyRecruitUnit) {
+	addUnit(unit: AnyUnit) {
 		const freeCell = this.getNextFreeCell();
 		if (!freeCell) throw new Error("No free cell in inventory");
 		const unitInventory = new PtiWrapRanch(unit, freeCell);

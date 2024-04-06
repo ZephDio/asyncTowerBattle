@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { Physic } from "../../../../shared/physic";
-import { BlueTowerRecruit } from "../../recruit/implementation/blue-tower-recruit";
+import { BlueTower } from "../../recruit/implementation/blue-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
@@ -18,7 +18,7 @@ export class BlueBattleTower extends Derive(
 	HaveStats,
 ) {
 	constructor(
-		private readonly recruit: BlueTowerRecruit,
+		private readonly recruit: BlueTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: Position,
 		public readonly cell: Cell,

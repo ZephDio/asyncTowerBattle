@@ -1,7 +1,7 @@
 import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
-import { ArmyFixture } from "./army/entity/army-fixtures";
+import { ArmyFixture } from "./army/army-fixtures";
 import { EconomyHooks, Shop } from "./shop/shop";
 
 export class Game {

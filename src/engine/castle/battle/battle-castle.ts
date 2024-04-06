@@ -1,5 +1,5 @@
-import { Castle } from "../entity/castle";
-import { CastleRecruit } from "../recruit/castle-recruit";
+import { CastleBlueprint } from "../blueprint/castle";
+import { Castle } from "../recruit/castle-recruit";
 import { Cell, Position } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
 import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
@@ -13,7 +13,7 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 	public maxLife: number;
 
 	constructor(
-		recruit: CastleRecruit<Castle>,
+		recruit: Castle<CastleBlueprint>,
 		public onDeath: () => void,
 		public cell: Cell,
 		public position: Position,
@@ -44,11 +44,11 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 		};
 	}
 
-	static toAllied(castleRecruit: CastleRecruit<Castle>, battleGrid: BattleGrid, onBattleOver: () => void) {
+	static toAllied(castleRecruit: Castle<CastleBlueprint>, battleGrid: BattleGrid, onBattleOver: () => void) {
 		return new BattleCastle(castleRecruit, onBattleOver, castleRecruit.cell, battleGrid.cellToReal(castleRecruit.cell));
 	}
 
-	static toEnemy(castleRecruit: CastleRecruit<Castle>, battleGrid: BattleGrid, onBattleOver: () => void) {
+	static toEnemy(castleRecruit: Castle<CastleBlueprint>, battleGrid: BattleGrid, onBattleOver: () => void) {
 		const flippedGridPosition = BattleGrid.flip(battleGrid, castleRecruit.cell);
 		return new BattleCastle(
 			castleRecruit,

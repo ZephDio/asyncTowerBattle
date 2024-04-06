@@ -3,11 +3,11 @@ import { HTHitbox } from "../../../shared/hitboxes";
 import { Cell, Position } from "../../../shared/position";
 import { ArmyGrid, GridElement } from "../../grid/grid";
 import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
-import { Castle } from "../entity/castle";
+import { CastleBlueprint } from "../blueprint/castle";
 import { BattleCastle } from "../battle/battle-castle";
 import { BattleGrid } from "../../grid/battle-grid";
 
-export class CastleRecruit<TB extends Castle> extends Derive(HTHitbox, HTImageDrawable, TRenderable, GridElement) {
+export class Castle<TB extends CastleBlueprint> extends Derive(HTHitbox, HTImageDrawable, TRenderable, GridElement) {
 	type: string = "castle";
 	cell: Cell;
 	maxLife: number;
@@ -20,7 +20,7 @@ export class CastleRecruit<TB extends Castle> extends Derive(HTHitbox, HTImageDr
 
 	clone() {
 		// TODO
-		return new CastleRecruit(new Castle({}));
+		return new Castle(new CastleBlueprint({}));
 	}
 
 	get position() {

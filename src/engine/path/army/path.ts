@@ -3,7 +3,7 @@ import { BattleGrid } from "../../grid/battle-grid";
 import { ArmyGrid } from "../../grid/grid";
 import { BattlePath } from "../battle/battle-path";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { AnyPathTile } from "../../tile/entity/tile";
+import { AnyPathTile } from "../../tile/blueprint/tile";
 import { Cell } from "../../../shared/position";
 
 export class ArmyPath {

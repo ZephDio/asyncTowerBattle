@@ -5,9 +5,9 @@ import { Position } from "../../../../shared/position";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/tdrawable";
-import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
+import { Soldier } from "../../recruit/implementation/soldier-recruit";
 
-export class Soldier extends Derive(
+export class SoldierBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 2, height: 2 }), new Position({ x: 0, y: 0 })]])),
 	TDrawable,
 	TImageDrawable(Resources.unit.soldier.resource.image, Resources.unit.soldier.size, 4),
@@ -21,6 +21,6 @@ export class Soldier extends Derive(
 	type = "soldier" as const;
 
 	toRecruit() {
-		return new SoldierRecruit(this);
+		return new Soldier(this);
 	}
 }

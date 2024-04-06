@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { Physic } from "../../../../shared/physic";
-import { GreenTowerRecruit } from "../../recruit/implementation/green-tower-recruit";
+import { GreenTower } from "../../recruit/implementation/green-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/cast";
@@ -20,7 +20,7 @@ export class GreenBattleTower extends Derive(
 ) {
 	target = null as null | AnyBattleUnit;
 	constructor(
-		private readonly recruit: GreenTowerRecruit,
+		private readonly recruit: GreenTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: Position,
 		public readonly cell: Cell,

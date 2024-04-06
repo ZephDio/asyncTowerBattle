@@ -3,7 +3,7 @@ import { PtiWrapRanch } from "../../grid/inventory/unit-inventory";
 import { TTokenDrag } from "./token-drag";
 import { Cell, Position } from "../../../shared/position";
 import { TokenHooks } from "../shop";
-import { BarrackRecruit } from "../../barrack/recruit/barrack-recruit";
+import { Barrack } from "../../barrack/recruit/barrack-recruit";
 import { ArmyGrid } from "../../grid/grid";
 
 export class UnitTokenDrag extends Derive(TTokenDrag) {
@@ -15,10 +15,10 @@ export class UnitTokenDrag extends Derive(TTokenDrag) {
 		super({ imageDrawable: entity, hooks, position });
 	}
 
-	isValid(cell: Cell): false | ImplementsTrait<typeof BarrackRecruit> {
+	isValid(cell: Cell): false | ImplementsTrait<typeof Barrack> {
 		const grid = this.hooks.armyHooks.getArmyGrid();
 		const recruit = grid.tiles.get(ArmyGrid.posToString(cell));
-		if (recruit && implementsTrait(recruit, BarrackRecruit)) {
+		if (recruit && implementsTrait(recruit, Barrack)) {
 			return recruit;
 		}
 		return false;

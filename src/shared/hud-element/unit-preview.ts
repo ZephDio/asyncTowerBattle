@@ -1,12 +1,12 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { TDrawable } from "../traits/tdrawable";
 import { Position } from "../position";
-import { BarrackRecruit } from "../../engine/barrack/recruit/barrack-recruit";
+import { Barrack } from "../../engine/barrack/recruit/barrack-recruit";
 import { AnyBattleBarrack } from "../../engine/barrack/battle/battle-barrack";
 
 export class UnitPreviewHud extends Derive(TDrawable) {
 	objective = 100;
-	constructor(public barrack: ImplementsTrait<typeof BarrackRecruit> | AnyBattleBarrack) {
+	constructor(public barrack: ImplementsTrait<typeof Barrack> | AnyBattleBarrack) {
 		super({});
 	}
 

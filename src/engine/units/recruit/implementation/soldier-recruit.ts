@@ -4,17 +4,17 @@ import { Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleSoldier } from "../../battle/implementation/soldier-battle";
-import { Soldier } from "../../entity/implementation/soldier";
-import { UnitRecruit } from "../unit-recruit";
+import { SoldierBlueprint } from "../../blueprint/implementation/soldier";
+import { Unit } from "../unit-recruit";
 import { HTImageDrawable } from "../../../../shared/traits/drawable";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 
-export class SoldierRecruit extends Derive(HTHitbox, UnitRecruit, HTImageDrawable, HTDamageDealer) {
+export class Soldier extends Derive(HTHitbox, Unit, HTImageDrawable, HTDamageDealer) {
 	speed: number;
 	maxLife: number;
 	attackSpeed: number;
 	cost: number;
-	constructor(soldier: Soldier) {
+	constructor(soldier: SoldierBlueprint) {
 		super({ imageDrawable: soldier, damageDealer: soldier, hitboxHolder: soldier });
 		this.maxLife = soldier.baseMaxLife;
 		this.speed = soldier.baseSpeed;

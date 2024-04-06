@@ -1,11 +1,11 @@
-import { CastleFixtures } from "../entity/castle-fixtures";
-import { CastleRecruit } from "./castle-recruit";
+import { CastleBlueprintFixtures } from "../blueprint/castle-fixtures";
+import { Castle } from "./castle-recruit";
 
-export class CastleRecruitFixture {
+export class CastleFixture {
 	static get allied() {
-		return new CastleRecruit(CastleFixtures.allied);
+		return new Castle(CastleBlueprintFixtures.allied);
 	}
 	static get enemy() {
-		return new CastleRecruit(CastleFixtures.enemy);
+		return new Castle(CastleBlueprintFixtures.enemy);
 	}
 }
