@@ -5,7 +5,6 @@ import { Position } from "../../../../shared/position";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/tdrawable";
-import { Soldier } from "../../recruit/implementation/soldier-recruit";
 
 export class SoldierBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 2, height: 2 }), new Position({ x: 0, y: 0 })]])),
@@ -20,7 +19,7 @@ export class SoldierBlueprint extends Derive(
 	cost = 75;
 	type = "soldier" as const;
 
-	toRecruit() {
-		return new Soldier(this);
-	}
+	// toRecruit() {
+	// 	return new Soldier(this);
+	// }
 }

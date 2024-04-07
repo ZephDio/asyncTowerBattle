@@ -4,11 +4,11 @@ import { AnyBarrack, Barrack } from "../barrack/recruit/barrack-recruit";
 import { CastleBlueprint } from "../castle/blueprint/castle";
 import { Castle } from "../castle/recruit/castle-recruit";
 import { ArmyGrid } from "../grid/grid";
-import { PtiWrapRanch, UnitInventory } from "../grid/inventory/unit-inventory";
+import { UnitInventory } from "../grid/inventory/unit-inventory";
 import { ArmyPath } from "../path/army/path";
 import { AnyPathTile, PathTile } from "../tile/blueprint/tile";
 import { AnyTower, Tower } from "../tower/recruit/tower-recruit";
-import { AnyUnit } from "../units/recruit/unit-recruit";
+import { AnyUnit, Unit } from "../units/recruit/unit-recruit";
 
 export class Army {
 	constructor(
@@ -50,9 +50,9 @@ export class Army {
 		}
 	}
 
-	addRecruit(recruit: AnyTower | AnyBarrack | AnyPathTile | PtiWrapRanch) {
-		if (recruit instanceof PtiWrapRanch) {
-			this.unitInventory.addUnit(recruit.unit);
+	addRecruit(recruit: AnyTower | AnyBarrack | AnyPathTile | AnyUnit) {
+		if (implementsTrait(recruit, Unit)) {
+			this.unitInventory.addUnit(recruit);
 			return;
 		}
 		this.grid.setElement(recruit);

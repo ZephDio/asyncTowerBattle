@@ -11,7 +11,6 @@ import { AnyBarrack } from "../barrack/recruit/barrack-recruit";
 import { HTHitbox, TGCollider } from "../../shared/hitboxes";
 import { GoldHud } from "../../shared/hud-element/gold-hud";
 import { StartBattleButton } from "../../shared/hud-element/start-battle-button";
-import { PtiWrapRanch } from "../grid/inventory/unit-inventory";
 import { TTokenDrag } from "./token-drag/token-drag";
 import { TGrid } from "../grid/tgrid";
 import { AnyUnit } from "../units/recruit/unit-recruit";
@@ -45,7 +44,7 @@ export type EconomyHooks = {
 	spendGold: (amount: number) => void;
 };
 
-export type AnyBuyable = AnyTower | PtiWrapRanch | AnyBarrack;
+export type AnyBuyable = AnyTower | AnyUnit | AnyBarrack;
 
 export class Buyable extends Derive(TGCollider, HTHitbox, TRenderable, HTImageDrawable, GridElement) {
 	drawPriority = 10;
@@ -104,8 +103,9 @@ export class Shop {
 		this.setHold(token);
 	}
 
-	setHoldFromUnitInventory(unit: PtiWrapRanch, position: Position) {
+	setHoldFromUnitInventory(unit: AnyUnit, position: Position) {
 		this.army.unitInventory.deleteElement(unit);
+		console.log(this.army.unitInventory);
 		const token = new UnitTokenDrag(unit, position, this.getTokenHooks());
 		this.setHold(token);
 	}

@@ -1,14 +1,14 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
-import { PtiWrapRanch } from "../../grid/inventory/unit-inventory";
 import { TTokenDrag } from "./token-drag";
 import { Cell, Position } from "../../../shared/position";
 import { TokenHooks } from "../shop";
 import { Barrack } from "../../barrack/recruit/barrack-recruit";
 import { ArmyGrid } from "../../grid/grid";
+import { AnyUnit } from "../../units/recruit/unit-recruit";
 
 export class UnitTokenDrag extends Derive(TTokenDrag) {
 	constructor(
-		public entity: PtiWrapRanch,
+		public entity: AnyUnit,
 		position: Position,
 		hooks: TokenHooks,
 	) {
@@ -34,18 +34,17 @@ export class UnitTokenDrag extends Derive(TTokenDrag) {
 				if (!recruit) {
 					throw new Error();
 				}
-				this.entity.cell.x = cell.x;
-				this.entity.cell.y = cell.y;
+				this.entity.cell = cell.clone();
 				if (recruit.unitRecruit) {
 					this.hooks.armyHooks.addUnit(recruit.unitRecruit);
 				}
-				recruit.setUnit(this.entity.unit);
+				recruit.setUnit(this.entity);
 				this.hooks.removeHold();
 				return;
 			}
 			throw new Error();
 		} catch {
-			this.hooks.armyHooks.addUnit(this.entity.unit);
+			this.hooks.armyHooks.addUnit(this.entity);
 			this.hooks.removeHold();
 		}
 	}

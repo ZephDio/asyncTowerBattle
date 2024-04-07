@@ -1,31 +1,17 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTImageDrawable, TGridDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { TGridDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { TGrid } from "../tgrid";
 import { Cell, Position } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { SynergyEffect } from "../grid-effects/synergy-effect";
-import { ArmyGrid, GridElement } from "../grid";
+import { ArmyGrid } from "../grid";
 import { AnyUnit } from "../../units/recruit/unit-recruit";
-import { HTHitbox, TGCollider } from "../../../shared/hitboxes";
 import { OverEffect } from "../grid-effects/over-effect";
 
 const inventoryPosition = PercentToReal({ x: 78, y: 55 });
 
-export class PtiWrapRanch extends Derive(TGCollider, GridElement, TRenderable, HTImageDrawable, HTHitbox) {
-	constructor(
-		public unit: AnyUnit,
-		public cell: Cell,
-	) {
-		super({ imageDrawable: unit, hitboxHolder: unit });
-	}
-
-	get position() {
-		return this.cell;
-	}
-}
-
 export class UnitInventory extends Derive(TRenderable, TGrid, TGridDrawable) {
-	tiles: Map<string, PtiWrapRanch> = new Map();
+	tiles: Map<string, AnyUnit> = new Map();
 	overEffect: OverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 	constructor(
@@ -42,6 +28,7 @@ export class UnitInventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 			for (let x = 0; x < this.width; x++) {
 				const cell = new Cell({ x, y });
 				if (!this.tiles.has(ArmyGrid.posToString(cell))) {
+					console.log("Found free cell", cell);
 					return cell;
 				}
 			}
@@ -51,8 +38,8 @@ export class UnitInventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	addUnit(unit: AnyUnit) {
 		const freeCell = this.getNextFreeCell();
 		if (!freeCell) throw new Error("No free cell in inventory");
-		const unitInventory = new PtiWrapRanch(unit, freeCell);
-		this.setElement(unitInventory);
+		unit.cell = freeCell.clone();
+		this.setElement(unit);
 	}
 
 	setOveredTile(cell: Cell | undefined) {

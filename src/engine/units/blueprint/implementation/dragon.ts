@@ -5,7 +5,6 @@ import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/tdrawable";
-import { Dragon } from "../../recruit/implementation/dragon-recruit";
 
 export class DragonBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new Position({ x: 0, y: 0 })]])),
@@ -20,7 +19,7 @@ export class DragonBlueprint extends Derive(
 	cost = 110;
 	type = "dragon" as const;
 
-	toRecruit() {
-		return new Dragon(this);
-	}
+	// toRecruit() {
+	// 	return new Dragon(this);
+	// }
 }

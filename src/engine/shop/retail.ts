@@ -17,8 +17,6 @@ import { WaveBarrackBlueprint } from "../barrack/blueprint/implementation/wave-b
 import { Dragon } from "../units/recruit/implementation/dragon-recruit";
 import { YellowTowerBlueprint } from "../tower/blueprint/implementation/yellow-tower";
 import { GreenTowerBlueprint } from "../tower/blueprint/implementation/green-tower";
-import { PtiWrapRanch } from "../grid/inventory/unit-inventory";
-
 export type ShopItem = Buyable;
 export class Retail extends Derive(
 	TCollider,
@@ -49,7 +47,7 @@ export class Retail extends Derive(
 		return [
 			Buyable.from(new OrangeTower(new OrangeTowerBlueprint({}), this.slots[0]!), 10),
 			Buyable.from(new BlueTower(new BlueTowerBlueprint({}), this.slots[1]!), 10),
-			Buyable.from(new PtiWrapRanch(new Dragon(new DragonBlueprint({})), this.slots[2]!), 10),
+			Buyable.from(new Dragon(new DragonBlueprint({}), this.slots[2]!), 10),
 			Buyable.from(new WaveBarrack(new WaveBarrackBlueprint({}), this.slots[3]!), 10),
 			Buyable.from(new YellowTower(new YellowTowerBlueprint({}), this.slots[4]!), 10),
 			Buyable.from(new GreenTower(new GreenTowerBlueprint({}), this.slots[5]!), 10),
