@@ -1,4 +1,3 @@
-import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattleBullet } from "../../../projectile/battle/implementation/battle-bullet";
@@ -7,21 +6,11 @@ import { GreenTowerBlueprint } from "../../blueprint/implementation/green-tower"
 import { Tower } from "../tower-recruit";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
-import { GridElement } from "../../../grid/grid";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 
-export class GreenTower extends Derive(
-	TGCollider,
-	HTHitbox,
-	HTDamageDealer,
-	Tower,
-	HTImageDrawable,
-	TRenderable,
-	GridElement,
-) {
+export class GreenTower extends Derive(HTDamageDealer, Tower) {
 	attackSpeed = 3;
 
 	constructor(

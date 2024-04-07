@@ -62,7 +62,7 @@ export class InputToIntentTranslator {
 			}
 
 			// UnitInventoryGrid
-			const uigrid = this.game.shop.army.unitInventory;
+			const uigrid = this.game.shop.army.inventory;
 			const uicell = uigrid.realPositionToGrid(position);
 			uigrid.setOveredTile(uicell);
 			if (uicell) {
@@ -76,19 +76,21 @@ export class InputToIntentTranslator {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			if (!state.hold) {
+				const grid = this.game.shop.determineGrid(position);
+				if (!grid) return;
 				for (const buyable of this.game.shop.retail.grid.getBuyables()) {
 					if (buyable.contains(position, this.game.shop.retail.grid)) {
 						return this.game.shop.setHoldFromRetail(buyable, position);
 					}
 				}
-				for (const gridElement of this.game.shop.army.getRecruits()) {
+				for (const gridElement of this.game.shop.army.grid.getRecruit()) {
 					if (gridElement.contains(position, this.game.shop.army.grid)) {
-						return this.game.shop.setHoldFromArmyRecruit(gridElement, position);
+						return this.game.shop.setHoldFromArmyRecruit(gridElement, position, grid);
 					}
 				}
-				for (const gridElement of this.game.shop.army.unitInventory.getUnits()) {
-					if (gridElement.contains(position, this.game.shop.army.unitInventory)) {
-						return this.game.shop.setHoldFromUnitInventory(gridElement, position);
+				for (const gridElement of this.game.shop.army.inventory.getRecruits()) {
+					if (gridElement.contains(position, this.game.shop.army.inventory)) {
+						return this.game.shop.setHoldFromArmyRecruit(gridElement, position, grid);
 					}
 				}
 			}

@@ -1,20 +1,20 @@
 import { Derive, implementsTrait } from "@ddd-ts/traits";
-import { AnyTower, Tower } from "../../tower/recruit/tower-recruit";
+import { Tower } from "../../tower/recruit/tower-recruit";
 import { TTokenDrag } from "./token-drag";
-import { AnyBarrack } from "../../barrack/recruit/barrack-recruit";
-import { AnyPathTile } from "../../tile/blueprint/tile";
 import { TokenHooks } from "../shop";
 import { Cell, Position } from "../../../shared/position";
 import { ArmyGrid } from "../../grid/grid";
 import { TSynergy } from "../../../shared/traits/synergy";
+import { AnyRecruit } from "../../../shared/traits/recruit";
 
-export class ArmyRecruitTokenDrag extends Derive(TTokenDrag) {
+export class RecruitTokenDrag extends Derive(TTokenDrag) {
 	constructor(
-		public entity: AnyTower | AnyBarrack | AnyPathTile,
+		public holded: AnyRecruit,
 		position: Position,
 		hooks: TokenHooks,
+		public onAbort: () => void,
 	) {
-		super({ imageDrawable: entity, hooks, position });
+		super({ imageDrawable: holded, hooks, position });
 	}
 
 	isValid(cell: Cell): boolean {
@@ -23,31 +23,20 @@ export class ArmyRecruitTokenDrag extends Derive(TTokenDrag) {
 	}
 
 	onRelease(position?: Position): void {
-		const grid = this.hooks.armyHooks.getArmyGrid();
 		try {
-			if (!position) throw new Error();
-			const cell = grid.realPositionToGrid(position);
-			if (cell) {
-				if (!this.isValid(cell)) {
-					throw new Error();
-				}
-				this.entity.cell.x = cell.x;
-				this.entity.cell.y = cell.y;
-				this.hooks.armyHooks.addRecruit(this.entity);
-				this.hooks.removeHold();
-				return;
-			}
-			throw new Error();
+			if (!position) throw new Error("Invalid position");
+			this.holded.moveRecruit(this.hooks, position);
+			this.hooks.removeHold();
 		} catch {
-			this.hooks.armyHooks.addRecruit(this.entity);
+			this.onAbort();
 			this.hooks.removeHold();
 		}
 	}
 
 	getSynergies() {
-		if (implementsTrait(this.entity, Tower)) {
-			if (implementsTrait(this.entity, TSynergy)) {
-				return this.entity.getSynergies();
+		if (implementsTrait(this.holded, Tower)) {
+			if (implementsTrait(this.holded, TSynergy)) {
+				return this.holded.getSynergies();
 			}
 		}
 		return undefined;

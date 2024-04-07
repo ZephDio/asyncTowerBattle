@@ -1,16 +1,12 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleDragon } from "../../battle/implementation/dragon-battle";
 import { DragonBlueprint } from "../../blueprint/implementation/dragon";
 import { Unit } from "../unit-recruit";
-import { HTImageDrawable } from "../../../../shared/traits/drawable";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
-import { GridElement } from "../../../grid/grid";
-
-export class Dragon extends Derive(TGCollider, HTHitbox, HTDamageDealer, Unit, HTImageDrawable, GridElement) {
+export class Dragon extends Derive(HTDamageDealer, Unit) {
 	speed: number;
 	maxLife: number;
 	attackSpeed: number;

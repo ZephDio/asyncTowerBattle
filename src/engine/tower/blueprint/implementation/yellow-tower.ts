@@ -9,8 +9,8 @@ import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
 import { GridElement } from "../../../grid/grid";
 import { TSynergy } from "../../../../shared/traits/synergy";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
-import { BasicPathTile } from "../../../tile/blueprint/implementation/basic-tile";
-import { SlowingPathTile } from "../../../tile/blueprint/implementation/slowing-tile";
+import { BasicPathTile } from "../../../tile/recruit/implementation/basic-tile";
+import { SlowingPathTile } from "../../../tile/recruit/implementation/slowing-tile";
 
 export class YellowTowerBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]])),

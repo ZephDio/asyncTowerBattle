@@ -6,26 +6,31 @@ import { TSynergy } from "../../../shared/traits/synergy";
 
 export class BuyableTokenDrag extends Derive(TTokenDrag) {
 	constructor(
-		public entity: Buyable,
+		public holded: Buyable,
 		position: Position,
 
 		hooks: TokenHooks,
+		public onAbort: () => void,
 	) {
-		super({ imageDrawable: entity, hooks, position });
+		super({ imageDrawable: holded, hooks, position });
 	}
 	onRelease(position?: Position): void {
 		try {
-			if (!position) throw new Error();
-			this.hooks.shopHooks.buy(this.entity, position);
+			if (!position) throw new Error("Invalid position");
+			if (!(this.hooks.economyHooks.getEconomy().gold >= 10)) {
+				throw new Error("Not enough gold");
+			}
+			this.holded.entity.moveRecruit(this.hooks, position);
+			this.hooks.shopHooks.buy(this.holded, position);
+			this.hooks.removeHold();
 		} catch {
-			this.hooks.shopHooks.addItem(this.entity);
+			this.onAbort();
 		}
-		this.hooks.removeHold();
 	}
 
 	getSynergies() {
-		if (implementsTrait(this.entity.entity, TSynergy)) {
-			return this.entity.entity.getSynergies();
+		if (implementsTrait(this.holded.entity, TSynergy)) {
+			return this.holded.entity.getSynergies();
 		}
 		return undefined;
 	}
