@@ -1,19 +1,24 @@
-import { Dragon } from "../entity/implementation/dragon";
-import { Soldier } from "../entity/implementation/soldier";
-import { UnitFixture } from "../entity/unit-fixtures";
-import { DragonRecruit } from "./implementation/dragon-recruit";
-import { SoldierRecruit } from "./implementation/soldier-recruit";
+import { Cell } from "../../../shared/position";
+import { DragonBlueprint } from "../blueprint/implementation/dragon";
+import { SoldierBlueprint } from "../blueprint/implementation/soldier";
+import { UnitFixture } from "../blueprint/unit-fixtures";
+import { Dragon } from "./implementation/dragon-recruit";
+import { Soldier } from "./implementation/soldier-recruit";
 
 export class UnitRecruitBuilder {
-	buildSoldier(soldier: Soldier) {
-		return new SoldierRecruit(soldier);
+	buildSoldier(soldier: SoldierBlueprint) {
+		return new Soldier(soldier, new Cell({ x: 0, y: 1 }));
 	}
-	buildDragon(dragon: Dragon) {
-		return new DragonRecruit(dragon);
+	buildDragon(dragon: DragonBlueprint) {
+		return new Dragon(dragon, new Cell({ x: 0, y: 0 }));
 	}
 }
 
 export class UnitRecruitFixture {
-	static soldier = new UnitRecruitBuilder().buildSoldier(UnitFixture.soldier);
-	static dragon = new UnitRecruitBuilder().buildDragon(UnitFixture.dragon);
+	static get soldier() {
+		return new UnitRecruitBuilder().buildSoldier(UnitFixture.soldier);
+	}
+	static get dragon() {
+		return new UnitRecruitBuilder().buildDragon(UnitFixture.dragon);
+	}
 }

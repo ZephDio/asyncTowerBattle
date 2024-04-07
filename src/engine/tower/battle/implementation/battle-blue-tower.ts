@@ -1,10 +1,10 @@
 import { Derive } from "@ddd-ts/traits";
 import { Physic } from "../../../../shared/physic";
-import { BlueTowerRecruit } from "../../recruit/implementation/blue-tower-recruit";
+import { BlueTower } from "../../recruit/implementation/blue-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
-import { Caster } from "../../../../shared/traits/cast";
+import { Cast, Caster } from "../../../../shared/traits/cast";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
 import { HTHitbox } from "../../../../shared/hitboxes";
@@ -18,7 +18,7 @@ export class BlueBattleTower extends Derive(
 	HaveStats,
 ) {
 	constructor(
-		private readonly recruit: BlueTowerRecruit,
+		private readonly recruit: BlueTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: Position,
 		public readonly cell: Cell,
@@ -53,16 +53,20 @@ export class BlueBattleTower extends Derive(
 			this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
 		) {
 			this.attack(this.target);
-			this.cast = null;
+			this.castInProgress = null;
 			return;
 		}
 		const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
 		this.setTarget(target);
 		if (this.target) {
 			this.attack(this.target);
-			this.cast = null;
+			this.castInProgress = null;
 			return;
 		}
+	}
+
+	casts(): void {
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
 	}
 
 	tick() {

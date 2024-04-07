@@ -1,9 +1,9 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
-import { Caster } from "../../../../shared/traits/cast";
+import { Cast, Caster } from "../../../../shared/traits/cast";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
-import { YellowTowerRecruit } from "../../recruit/implementation/yellow-tower-recruit";
+import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/status";
@@ -20,7 +20,7 @@ export class YellowBattleTower extends Derive(
 	HaveStats,
 ) {
 	constructor(
-		private readonly recruit: YellowTowerRecruit,
+		private readonly recruit: YellowTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: Position,
 		public readonly cell: Cell,
@@ -55,7 +55,7 @@ export class YellowBattleTower extends Derive(
 				this.hooks.addAreaEffect(areaEffects, this);
 			}
 		}
-		this.cast = null;
+		this.castInProgress = null;
 	}
 
 	isAlive() {
@@ -64,7 +64,11 @@ export class YellowBattleTower extends Derive(
 
 	onCastResolve(): void {
 		this.attack();
-		this.cast = null;
+		this.castInProgress = null;
+	}
+
+	casts(): void {
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
 	}
 
 	tick() {

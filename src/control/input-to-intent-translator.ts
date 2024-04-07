@@ -76,8 +76,8 @@ export class InputToIntentTranslator {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			if (!state.hold) {
-				for (const [buyable] of this.game.shop.retail.buyables) {
-					if (buyable.contains(position)) {
+				for (const buyable of this.game.shop.retail.grid.getBuyables()) {
+					if (buyable.contains(position, this.game.shop.retail.grid)) {
 						return this.game.shop.setHoldFromRetail(buyable, position);
 					}
 				}

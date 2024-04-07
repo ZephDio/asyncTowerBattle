@@ -2,7 +2,7 @@ import { Derive, implementsTrait } from "@ddd-ts/traits";
 import { TPhysics } from "../../../../shared/traits/physics";
 import { Cell, Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { OrangeTowerRecruit } from "../../recruit/implementation/orange-tower-recruit";
+import { OrangeTower } from "../../recruit/implementation/orange-tower-recruit";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { GridElement } from "../../../grid/grid";
 import { HaveStats, Stats } from "../../../stats/stats";
@@ -13,7 +13,7 @@ export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawabl
 	hasTriggered = false;
 
 	constructor(
-		recruit: OrangeTowerRecruit,
+		recruit: OrangeTower,
 		readonly hooks: BattleArmyHooks,
 		public readonly position: Position,
 		public readonly cell: Cell,

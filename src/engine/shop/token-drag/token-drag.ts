@@ -1,15 +1,15 @@
 import { Position } from "../../../shared/position";
-import { AnyTowerRecruit } from "../../tower/recruit/tower-recruit";
+import { AnyTower } from "../../tower/recruit/tower-recruit";
 import { Buyable, TokenHooks } from "../shop";
 import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
-import { AnyPathTile } from "../../tile/entity/tile";
-import { AnyBarrackRecruit } from "../../barrack/recruit/barrack-recruit";
-import { AnyBarrack } from "../../barrack/entity/barrack";
-import { PtiWrapRanch } from "../../grid/inventory/unit-inventory";
+import { AnyPathTile } from "../../tile/blueprint/tile";
+import { AnyBarrack } from "../../barrack/recruit/barrack-recruit";
+import { AnyBarrackBlueprint } from "../../barrack/blueprint/barrack";
 import { Subtrait } from "../../../../traits/traits";
 import { Synergy } from "../../../shared/traits/synergy";
+import { AnyUnit } from "../../units/recruit/unit-recruit";
 
-type Holdable = Buyable | AnyTowerRecruit | AnyPathTile | AnyBarrackRecruit | AnyBarrack | PtiWrapRanch;
+type Holdable = Buyable | AnyTower | AnyPathTile | AnyBarrack | AnyBarrackBlueprint | AnyUnit;
 
 export const TTokenDrag = Subtrait([TRenderable, HTImageDrawable], (base, Props) => {
 	abstract class ITokenDrag extends base {

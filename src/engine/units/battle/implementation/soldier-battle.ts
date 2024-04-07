@@ -2,9 +2,9 @@ import { Derive } from "@ddd-ts/traits";
 import { Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
-import { SoldierRecruit } from "../../recruit/implementation/soldier-recruit";
+import { Soldier } from "../../recruit/implementation/soldier-recruit";
 import { PathFinder } from "../../../battle/path-finder";
-import { Caster } from "../../../../shared/traits/cast";
+import { Cast, Caster } from "../../../../shared/traits/cast";
 import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
 import { HaveStats } from "../../../stats/stats";
 import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
@@ -13,7 +13,7 @@ export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDr
 	pathFinder: PathFinder;
 
 	constructor(
-		recruit: SoldierRecruit,
+		recruit: Soldier,
 		public position: Position,
 		public enemyPath: BattlePath,
 		private hooks: BattleArmyHooks,
@@ -35,7 +35,11 @@ export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDr
 
 	onCastResolve(): void {
 		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
-		this.cast = null;
+		this.castInProgress = null;
+	}
+
+	casts(): void {
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
 	}
 
 	isAlive() {

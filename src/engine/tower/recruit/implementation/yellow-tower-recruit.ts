@@ -1,23 +1,23 @@
 import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { TowerRecruit } from "../tower-recruit";
+import { Tower } from "../tower-recruit";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
-import { YellowTower } from "../../entity/implementation/yellow-tower";
+import { YellowTowerBlueprint } from "../../blueprint/implementation/yellow-tower";
 import { YellowBattleTower } from "../../battle/implementation/battle-yellow-tower";
 import { PoisonGround } from "../../../area-effect/implementation/poison-ground";
 import { HTSynergy } from "../../../../shared/traits/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { GridElement } from "../../../grid/grid";
 
-export class YellowTowerRecruit extends Derive(
+export class YellowTower extends Derive(
 	TGCollider,
 	HTHitbox,
 	HTDamageDealer,
-	TowerRecruit,
+	Tower,
 	HTSynergy,
 	HTImageDrawable,
 	TRenderable,
@@ -26,7 +26,7 @@ export class YellowTowerRecruit extends Derive(
 	attackSpeed = 0.8;
 
 	constructor(
-		public tower: YellowTower,
+		public tower: YellowTowerBlueprint,
 		public cell: Cell,
 	) {
 		super({ synergy: tower, damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
@@ -50,7 +50,7 @@ export class YellowTowerRecruit extends Derive(
 	}
 
 	clone() {
-		return new YellowTowerRecruit(new YellowTower({}), this.cell);
+		return new YellowTower(new YellowTowerBlueprint({}), this.cell);
 	}
 
 	get position(): Cell {

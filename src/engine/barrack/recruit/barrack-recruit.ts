@@ -1,24 +1,25 @@
-import { ImplementsTrait, Trait } from "@ddd-ts/traits";
+import { Trait } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattlePath } from "../../path/battle/battle-path";
-import { UnitRecruit } from "../../units/recruit/unit-recruit";
+import { AnyUnit } from "../../units/recruit/unit-recruit";
 import { AnyBattleBarrack } from "../battle/battle-barrack";
-import { BasicBarrackRecruit } from "./implementation/basic-barrack-recruit";
+import { BasicBarrack } from "./implementation/basic-barrack-recruit";
 import { BattleGrid } from "../../grid/battle-grid";
+import { WaveBarrack } from "./implementation/wave-barrack-recruit";
 
-export type AnyBarrackRecruit = BasicBarrackRecruit;
+export type AnyBarrack = BasicBarrack | WaveBarrack;
 
-export const BarrackRecruit = Trait((base) => {
-	abstract class BarrackRecruit extends base {
+export const Barrack = Trait((base) => {
+	abstract class IBarrack extends base {
 		abstract productionSpeed: number;
-		abstract unitRecruit: null | ImplementsTrait<typeof UnitRecruit>;
+		abstract unitRecruit: null | AnyUnit;
 
-		setUnit(unit: ImplementsTrait<typeof UnitRecruit>) {
+		setUnit(unit: AnyUnit) {
 			this.unitRecruit = unit;
 		}
 
 		abstract toAllied(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
 		abstract toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
 	}
-	return BarrackRecruit;
+	return IBarrack;
 });

@@ -1,4 +1,4 @@
-import { Army } from "../../army/entity/army";
+import { Army } from "../../army/army";
 import { AnyBattleTower } from "../../tower/battle/battle-tower";
 import { AnyBattleUnit } from "../../units/battle/battle-unit";
 import { BattleArmy } from "../../army/battle/battle-army";

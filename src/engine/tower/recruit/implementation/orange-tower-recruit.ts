@@ -2,8 +2,8 @@ import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { Cell } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { OrangeBattleTower } from "../../battle/implementation/battle-orange-tower";
-import { OrangeTower } from "../../entity/implementation/orange-tower";
-import { TowerRecruit } from "../tower-recruit";
+import { OrangeTowerBlueprint } from "../../blueprint/implementation/orange-tower";
+import { Tower } from "../tower-recruit";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
@@ -11,17 +11,17 @@ import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable
 import { HTSynergy } from "../../../../shared/traits/synergy";
 import { GridElement } from "../../../grid/grid";
 
-export class OrangeTowerRecruit extends Derive(
+export class OrangeTower extends Derive(
 	TGCollider,
 	HTHitbox,
-	TowerRecruit,
+	Tower,
 	HTSynergy,
 	HTImageDrawable,
 	TRenderable,
 	GridElement,
 ) {
 	constructor(
-		public tower: OrangeTower,
+		public tower: OrangeTowerBlueprint,
 		public cell: Cell,
 	) {
 		super({ synergy: tower, imageDrawable: tower, hitboxHolder: tower });
@@ -40,9 +40,9 @@ export class OrangeTowerRecruit extends Derive(
 		return new OrangeBattleTower(clone, hooks, position, cell);
 	}
 
-	clone(): OrangeTowerRecruit {
-		return new OrangeTowerRecruit(
-			new OrangeTower({}),
+	clone(): OrangeTower {
+		return new OrangeTower(
+			new OrangeTowerBlueprint({}),
 			new Cell({
 				x: this.cell.x,
 				y: this.cell.y,

@@ -48,7 +48,12 @@ export class BattleSummary {
 
 	getDrawables() {
 		return {
-			drawables: [this.battleVerdict],
+			drawables: [
+				this.battleVerdict,
+				...this.lastBattleState.units,
+				...this.lastBattleState.projectiles,
+				...this.lastBattleState.areaEffects,
+			],
 			grids: [this.lastBattleState.grid],
 		};
 	}

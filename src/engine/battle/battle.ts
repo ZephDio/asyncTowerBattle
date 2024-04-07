@@ -1,5 +1,5 @@
 import { BattleState } from "../../shared/gamestate";
-import { Army } from "../army/entity/army";
+import { Army } from "../army/army";
 import { Game } from "../game";
 import { Battlefield } from "./battlefield/battlefield";
 

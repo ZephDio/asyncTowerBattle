@@ -11,12 +11,18 @@ export class CasterCamembert extends Derive(TDrawable) {
 
 	drawPriority = 5;
 	draw(context: CanvasRenderingContext2D, position: Position): void {
-		if (!this.caster.cast) return;
+		if (!this.caster.castInProgress) return;
 		context.globalAlpha = 1;
 		const size = this.getCanvasSize(context, 2, 2);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		context.strokeStyle = "black";
 		//this.drawLine(context,canvasPosition.x,canvasPosition.y, canvasPosition.x +35, canvasPosition.y+35)
-		this.drawArc(context, canvasPosition.x, canvasPosition.y, size, this.caster.cast.progress / this.objective);
+		this.drawArc(
+			context,
+			canvasPosition.x,
+			canvasPosition.y,
+			size,
+			this.caster.castInProgress.progress / this.objective,
+		);
 	}
 }
