@@ -3,6 +3,7 @@ import { TTokenDrag } from "./token-drag";
 import { Buyable, TokenHooks } from "../shop";
 import { Position } from "../../../shared/position";
 import { TSynergy } from "../../../shared/traits/synergy";
+import { RetailGrid } from "../../grid/retail-grid";
 
 export class BuyableTokenDrag extends Derive(TTokenDrag) {
 	constructor(
@@ -19,6 +20,11 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 			if (!position) throw new Error("Invalid position");
 			if (!(this.hooks.economyHooks.getEconomy().gold >= 10)) {
 				throw new Error("Not enough gold");
+			}
+			const grid = this.hooks.shopHooks.determinateGrid(position);
+			console.log(grid);
+			if (grid instanceof RetailGrid) {
+				throw new Error("can't sell item in shop DHU");
 			}
 			this.holded.entity.moveRecruit(this.hooks, position);
 			this.hooks.shopHooks.buy(this.holded, position);
