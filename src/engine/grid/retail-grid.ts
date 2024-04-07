@@ -14,7 +14,7 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	constructor(
 		public position: Position = new Position(PercentToReal({ x: 5, y: 55 })),
-		public width: number = 9,
+		public width: number = 11,
 		public height: number = 5,
 		public cellSize: number = 4.5,
 	) {

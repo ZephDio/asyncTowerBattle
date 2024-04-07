@@ -1,6 +1,6 @@
 import { Cell } from "../../../shared/position";
-import { BasicPathTile } from "../../tile/blueprint/implementation/basic-tile";
-import { SlowingPathTile } from "../../tile/blueprint/implementation/slowing-tile";
+import { BasicPathTile } from "../../tile/recruit/implementation/basic-tile";
+import { SlowingPathTile } from "../../tile/recruit/implementation/slowing-tile";
 import { ArmyPath } from "./path";
 
 export class PathFixture {

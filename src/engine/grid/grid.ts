@@ -4,6 +4,7 @@ import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
 import { TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { OverEffect } from "./grid-effects/over-effect";
+import { AnyRecruit } from "../../shared/traits/recruit";
 
 export const GridElement = Subtrait([TRenderable], (base) => {
 	abstract class IGridElement extends base {
@@ -17,7 +18,7 @@ export const GridElement = Subtrait([TRenderable], (base) => {
 });
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
-	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();
+	tiles: Map<string, AnyRecruit> = new Map();
 	overEffect: OverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 
@@ -62,6 +63,11 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 				),
 			);
 		}
+	}
+
+	getRecruit() {
+		console.log(this.tiles.values());
+		return [...this.tiles.values()];
 	}
 
 	clearSynergiesTiles() {

@@ -1,4 +1,3 @@
-import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { Cell } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { OrangeBattleTower } from "../../battle/implementation/battle-orange-tower";
@@ -7,19 +6,8 @@ import { Tower } from "../tower-recruit";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { HTSynergy } from "../../../../shared/traits/synergy";
-import { GridElement } from "../../../grid/grid";
-
-export class OrangeTower extends Derive(
-	TGCollider,
-	HTHitbox,
-	Tower,
-	HTSynergy,
-	HTImageDrawable,
-	TRenderable,
-	GridElement,
-) {
+export class OrangeTower extends Derive(Tower, HTSynergy) {
 	constructor(
 		public tower: OrangeTowerBlueprint,
 		public cell: Cell,

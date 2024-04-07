@@ -4,7 +4,7 @@ import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable
 import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
 import { Cell, Position } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { BasicPathTile } from "../../blueprint/implementation/basic-tile";
+import { BasicPathTile } from "../../recruit/implementation/basic-tile";
 
 export class BasicBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
 	constructor(

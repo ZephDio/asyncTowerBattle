@@ -5,20 +5,11 @@ import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BasicBattleBarrack } from "../../battle/implementation/basic-battle-barrack";
 import { BasicBarrackBlueprint } from "../../blueprint/implementation/basic-barrack";
 import { Barrack } from "../barrack-recruit";
-import { HTImageDrawable, TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
+import { TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
 import { Cell } from "../../../../shared/position";
 import { BattleGrid } from "../../../grid/battle-grid";
-import { GridElement } from "../../../grid/grid";
-import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 
-export class BasicBarrack extends Derive(
-	TGCollider,
-	HTHitbox,
-	HTImageDrawable,
-	TUnitPreviewHudRenderable,
-	Barrack,
-	GridElement,
-) {
+export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	productionSpeed: number;
 
 	constructor(

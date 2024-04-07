@@ -32,8 +32,15 @@ export const TGrid = Trait((base) => {
 			this.tiles.set(ArmyGrid.posToString(gridElement.cell), gridElement);
 		}
 
+		getElement(cell: Cell) {
+			return this.tiles.get(ArmyGrid.posToString(cell));
+		}
+
 		deleteElement(gridElement: ImplementsTrait<typeof GridElement>) {
-			this.tiles.delete(ArmyGrid.posToString(gridElement.cell));
+			const foundElement = this.tiles.get(ArmyGrid.posToString(gridElement.cell));
+			if (gridElement === foundElement) {
+				this.tiles.delete(ArmyGrid.posToString(gridElement.cell));
+			}
 		}
 		getDrawables() {
 			return [...this.tiles.values(), ...this.synergiesEffects, ...(this.overEffect ? [this.overEffect] : [])];

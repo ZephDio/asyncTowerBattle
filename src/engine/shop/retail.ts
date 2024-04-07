@@ -17,6 +17,8 @@ import { WaveBarrackBlueprint } from "../barrack/blueprint/implementation/wave-b
 import { Dragon } from "../units/recruit/implementation/dragon-recruit";
 import { YellowTowerBlueprint } from "../tower/blueprint/implementation/yellow-tower";
 import { GreenTowerBlueprint } from "../tower/blueprint/implementation/green-tower";
+import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
+import { SlowingPathTile } from "../tile/recruit/implementation/slowing-tile";
 export type ShopItem = Buyable;
 export class Retail extends Derive(
 	TCollider,
@@ -29,6 +31,8 @@ export class Retail extends Derive(
 		new Cell({ x: 4, y: 3 }),
 		new Cell({ x: 6, y: 1 }),
 		new Cell({ x: 6, y: 3 }),
+		new Cell({ x: 8, y: 1 }),
+		new Cell({ x: 8, y: 3 }),
 	];
 	grid: RetailGrid;
 
@@ -51,6 +55,8 @@ export class Retail extends Derive(
 			Buyable.from(new WaveBarrack(new WaveBarrackBlueprint({}), this.slots[3]!), 10),
 			Buyable.from(new YellowTower(new YellowTowerBlueprint({}), this.slots[4]!), 10),
 			Buyable.from(new GreenTower(new GreenTowerBlueprint({}), this.slots[5]!), 10),
+			Buyable.from(new BasicPathTile(this.slots[6]!), 10),
+			Buyable.from(new SlowingPathTile(this.slots[7]!), 10),
 		];
 	}
 

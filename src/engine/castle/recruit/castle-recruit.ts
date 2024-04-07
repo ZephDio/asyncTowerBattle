@@ -1,13 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTHitbox } from "../../../shared/hitboxes";
 import { Cell, Position } from "../../../shared/position";
-import { ArmyGrid, GridElement } from "../../grid/grid";
-import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { ArmyGrid } from "../../grid/grid";
 import { CastleBlueprint } from "../blueprint/castle";
 import { BattleCastle } from "../battle/battle-castle";
 import { BattleGrid } from "../../grid/battle-grid";
+import { TRecruit } from "../../../shared/traits/recruit";
+import { TokenHooks } from "../../shop/shop";
 
-export class Castle<TB extends CastleBlueprint> extends Derive(HTHitbox, HTImageDrawable, TRenderable, GridElement) {
+export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive(TRecruit) {
 	type: string = "castle";
 	cell: Cell;
 	maxLife: number;
@@ -47,6 +47,10 @@ export class Castle<TB extends CastleBlueprint> extends Derive(HTHitbox, HTImage
 		const position = grid.cellToReal(cell);
 		const BC = new BattleCastle(clone, onDeath, cell, position);
 		return BC;
+	}
+
+	moveRecruit(_hooks: TokenHooks, _position: Position): void {
+		throw new Error("Cannot move castle");
 	}
 }
 

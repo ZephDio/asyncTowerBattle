@@ -4,22 +4,13 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BasicBattleBarrack } from "../../battle/implementation/basic-battle-barrack";
 import { Barrack } from "../barrack-recruit";
-import { HTImageDrawable, TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
+import { TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
 import { Cell } from "../../../../shared/position";
 import { BattleGrid } from "../../../grid/battle-grid";
-import { GridElement } from "../../../grid/grid";
-import { HTHitbox, TGCollider } from "../../../../shared/hitboxes";
 import { WaveBarrackBlueprint } from "../../blueprint/implementation/wave-barrack";
 import { WaveBattleBarrack } from "../../battle/implementation/wave-battle-barrack";
 
-export class WaveBarrack extends Derive(
-	TGCollider,
-	HTHitbox,
-	HTImageDrawable,
-	TUnitPreviewHudRenderable,
-	Barrack,
-	GridElement,
-) {
+export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	productionSpeed: number;
 
 	constructor(

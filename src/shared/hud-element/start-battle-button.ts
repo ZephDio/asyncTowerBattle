@@ -21,7 +21,7 @@ export class StartBattleButton extends Derive(
 		this.drawImage(context, size, canvasPosition, image);
 	}
 	public type = "startBattle";
-	public position = PercentToReal({ x: 50, y: 90 });
+	public position = PercentToReal({ x: 67, y: 90 });
 
 	size = { width: 12, height: 6 };
 }

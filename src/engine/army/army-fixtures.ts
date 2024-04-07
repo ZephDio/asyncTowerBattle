@@ -2,7 +2,7 @@ import { Cell } from "../../shared/position";
 import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-recruit-fixtures";
 import { CastleRecruitFixture } from "../castle/blueprint/castle";
 import { ArmyGrid } from "../grid/grid";
-import { UnitInventory } from "../grid/inventory/unit-inventory";
+import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFixture } from "../path/army/path-fixtures";
 import { TowerBlueprintFixtures } from "../tower/blueprint/tower-fixtures";
 import { AnyTower } from "../tower/recruit/tower-recruit";
@@ -22,10 +22,10 @@ export class ArmyFixture {
 		const path = PathFixture.defaultAllied;
 		const barracks = [BarrackRecruitFixtures.basicWithSoldier(4), BarrackRecruitFixtures.waveWithSoldier()] as any;
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier];
-		const unitInventory = new UnitInventory();
-		unitInInventory.map((e) => unitInventory.addUnit(e));
+		const unitInventory = new Inventory();
+		unitInInventory.map((e) => unitInventory.add(e));
 		[castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(castle, towers, path, grid, barracks, unitInInventory, unitInventory);
+		return new Army(castle, towers, path, barracks, grid, unitInventory);
 	}
 	static get enemy() {
 		const grid = new ArmyGrid();
@@ -42,7 +42,6 @@ export class ArmyFixture {
 			castle,
 			towers,
 			path,
-			grid,
 			//[]
 			[
 				BarrackRecruitFixtures.basicWithSoldier(4),
@@ -52,8 +51,8 @@ export class ArmyFixture {
 				// BarrackRecruitFixtures.basicWithDragon(20),
 				// BarrackRecruitFixtures.basicWithDragon(50),
 			],
-			[],
-			new UnitInventory(),
+			grid,
+			new Inventory(),
 		);
 	}
 }

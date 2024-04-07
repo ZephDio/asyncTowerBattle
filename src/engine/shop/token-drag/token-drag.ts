@@ -1,15 +1,11 @@
 import { Position } from "../../../shared/position";
-import { AnyTower } from "../../tower/recruit/tower-recruit";
 import { Buyable, TokenHooks } from "../shop";
 import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
-import { AnyPathTile } from "../../tile/blueprint/tile";
-import { AnyBarrack } from "../../barrack/recruit/barrack-recruit";
-import { AnyBarrackBlueprint } from "../../barrack/blueprint/barrack";
 import { Subtrait } from "../../../../traits/traits";
 import { Synergy } from "../../../shared/traits/synergy";
-import { AnyUnit } from "../../units/recruit/unit-recruit";
+import { AnyRecruit } from "../../../shared/traits/recruit";
 
-type Holdable = Buyable | AnyTower | AnyPathTile | AnyBarrack | AnyBarrackBlueprint | AnyUnit;
+type Holdable = Buyable | AnyRecruit;
 
 export const TTokenDrag = Subtrait([TRenderable, HTImageDrawable], (base, Props) => {
 	abstract class ITokenDrag extends base {
@@ -20,7 +16,7 @@ export const TTokenDrag = Subtrait([TRenderable, HTImageDrawable], (base, Props)
 			this.hooks = props.hooks;
 			this.position = props.position;
 		}
-		abstract entity: Holdable;
+		abstract holded: Holdable;
 		abstract onRelease(position?: Position): void;
 
 		abstract getSynergies(): Synergy | undefined;
