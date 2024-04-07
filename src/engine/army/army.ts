@@ -30,13 +30,13 @@ export class Army {
 		this.inventory.deleteElement(recruit);
 		this.grid.deleteElement(recruit);
 		if (implementsTrait(recruit, Tower)) {
-			this.towers.splice(this.towers.indexOf(recruit), 1);
+			this.towers = this.towers.filter((tower) => tower !== recruit);
 		}
 		if (implementsTrait(recruit, PathTile)) {
-			this.path.tiles.splice(this.path.tiles.indexOf(recruit), 1);
+			this.path.tiles = this.path.tiles.filter((tile) => tile !== recruit);
 		}
 		if (implementsTrait(recruit, Barrack)) {
-			this.barracks.splice(this.barracks.indexOf(recruit), 1);
+			this.barracks = this.barracks.filter((barrack) => barrack !== recruit);
 		}
 	}
 
