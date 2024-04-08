@@ -33,13 +33,13 @@ export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDr
 		return true;
 	}
 
-	onCastResolve(): void {
+	attackCastle(): void {
 		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
 		this.castInProgress = null;
 	}
 
 	casts(): void {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
+		this.castInProgress = new Cast(this, this.attackCastle.bind(this), 100);
 	}
 
 	isAlive() {

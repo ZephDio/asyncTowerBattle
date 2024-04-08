@@ -1,8 +1,9 @@
 import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { Position } from "./position";
 import { Physic } from "./physic";
-import { GridElement } from "../engine/grid/grid";
+
 import { TGrid } from "../engine/grid/tgrid";
+import { GridElement } from "./traits/grid-element";
 
 export class HitBox {
 	constructor(public hitShapes: [HitShapeType, Position][]) {}

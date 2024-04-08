@@ -7,6 +7,8 @@ import { GridHooks } from "../../grid/battle-grid";
 import { BattlePath } from "../../path/battle/battle-path";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 import { AnyBattleUnit } from "../../units/battle/battle-unit";
+import { HitBox } from "../../../shared/hitboxes";
+import { Position } from "../../../shared/position";
 export type BattleArmyHooks = {
 	addUnits: BattleArmy["addUnit"];
 	removeUnit: BattleArmy["removeUnit"];
@@ -16,6 +18,7 @@ export type BattleArmyHooks = {
 	removeAreaEffect: BattleArmy["removeAreaEffect"];
 	searchTarget: BattleArmy["searchTarget"];
 	searchEnemyInArea: BattleArmy["searchEnemyInArea"];
+	searchAlliesInArea: BattleArmy["searchAlliesInArea"];
 	gridHooks: GridHooks;
 };
 
@@ -65,6 +68,17 @@ export class BattleArmy {
 		this.areaEffects.delete(areaEffect);
 	}
 
+	searchAlliesInArea(areaPosition: Position, hitbox: HitBox): AnyBattleUnit[] {
+		const found: AnyBattleUnit[] = [];
+		for (const alliedUnit of this.units.keys()) {
+			if (alliedUnit.collides(hitbox, areaPosition)) {
+				found.push(alliedUnit);
+			}
+		}
+		return found;
+	}
+
+
 	getHooks(): BattleArmyHooks {
 		return {
 			addUnits: this.addUnit.bind(this),
@@ -75,6 +89,7 @@ export class BattleArmy {
 			removeAreaEffect: this.removeAreaEffect.bind(this),
 			searchTarget: this.searchTarget.bind(this),
 			searchEnemyInArea: this.searchEnemyInArea.bind(this),
+			searchAlliesInArea: this.searchAlliesInArea.bind(this),
 			gridHooks: this.gridHooks,
 		};
 	}

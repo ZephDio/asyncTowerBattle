@@ -12,8 +12,8 @@ export class Dragon extends Derive(HTDamageDealer, Unit) {
 	attackSpeed: number;
 	cost: number;
 	constructor(
-		dragon: DragonBlueprint,
 		public cell: Cell,
+		dragon: DragonBlueprint = new DragonBlueprint({}),
 	) {
 		super({ imageDrawable: dragon, damageDealer: dragon, hitboxHolder: dragon });
 		this.maxLife = dragon.baseMaxLife;

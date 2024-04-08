@@ -14,11 +14,12 @@ export class GreenTower extends Derive(HTDamageDealer, Tower) {
 	attackSpeed = 3;
 
 	constructor(
-		public tower: GreenTowerBlueprint,
 		public cell: Cell,
+		public tower: GreenTowerBlueprint = new GreenTowerBlueprint({}),
 	) {
 		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
 	}
+
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: Position, damage: number) {
 		return new BattleBullet(this.tower.projectile, position.clone(), hooks, target, damage);
@@ -38,7 +39,7 @@ export class GreenTower extends Derive(HTDamageDealer, Tower) {
 	}
 
 	clone() {
-		return new GreenTower(new GreenTowerBlueprint({}), this.cell);
+		return new GreenTower(this.cell.clone(), this.tower);
 	}
 
 	get position(): Cell {

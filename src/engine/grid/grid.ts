@@ -1,25 +1,20 @@
-import { Derive, ImplementsTrait, Subtrait } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell, Position } from "../../shared/position";
 import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
 import { TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
-import { OverEffect } from "./grid-effects/over-effect";
+import { HoverEffect } from "./grid-effects/hover-effect";
 import { AnyRecruit } from "../../shared/traits/recruit";
+import { Castle } from "../castle/recruit/castle-recruit";
+import { Tower } from "../tower/recruit/tower-recruit";
+import { Barrack } from "../barrack/recruit/barrack-recruit";
+import { GridElement } from "../../shared/traits/grid-element";
 
-export const GridElement = Subtrait([TRenderable], (base) => {
-	abstract class IGridElement extends base {
-		abstract cell: Cell;
 
-		getRealPosition(grid: ImplementsTrait<typeof TGrid>) {
-			return grid.cellToReal(this.cell);
-		}
-	}
-	return IGridElement;
-});
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
-	overEffect: OverEffect | undefined = undefined;
+	overEffect: HoverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 
 	constructor(
@@ -31,6 +26,22 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		super({});
 	}
 
+	get castle(){
+		const castle = [...this.tiles.values()].find((e): e is Castle => e instanceof Castle)
+		if(!castle){
+			throw new Error("Castle not found")
+		}
+		return castle
+	}
+
+	get towers(){
+		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Tower> => implementsTrait(e,Tower))
+	}
+
+	get barracks(){
+		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Barrack> => implementsTrait(e,Barrack))
+	}
+
 	getEnemyDoorCell() {
 		return new Cell({ x: 0, y: this.height - 1 });
 	}
@@ -39,7 +50,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			if (this.overEffect && ArmyGrid.posToString(cell) === ArmyGrid.posToString(this.overEffect?.cell)) {
 				return;
 			}
-			this.overEffect = new OverEffect(cell, this);
+			this.overEffect = new HoverEffect(cell, this);
 			return;
 		}
 		this.overEffect = undefined;
@@ -66,7 +77,6 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 
 	getRecruit() {
-		console.log(this.tiles.values());
 		return [...this.tiles.values()];
 	}
 

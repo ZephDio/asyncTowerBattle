@@ -1,4 +1,5 @@
 import { DragonBlueprint } from "./implementation/dragon";
+import { PriestBlueprint } from "./implementation/priest";
 import { SoldierBlueprint } from "./implementation/soldier";
 
 export class UnitBuilder {
@@ -9,9 +10,20 @@ export class UnitBuilder {
 	buildDragon() {
 		return new DragonBlueprint({});
 	}
+
+	buildPriest() {
+		return new PriestBlueprint({});
+	}
 }
 
 export class UnitFixture {
-	static soldier = new UnitBuilder().buildSoldier();
-	static dragon = new UnitBuilder().buildDragon();
+	static get soldier() {
+		return new UnitBuilder().buildSoldier();
+	} 
+	static get dragon(){
+		return new UnitBuilder().buildDragon();
+	} 
+	static get priest(){
+		return new UnitBuilder().buildPriest();
+	}
 }

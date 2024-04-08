@@ -1,13 +1,14 @@
 import { ImplementsTrait, Trait } from "@ddd-ts/traits";
-import { ArmyGrid, GridElement } from "./grid";
+import { ArmyGrid } from "./grid";
 import { Cell, Position } from "../../shared/position";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
-import { OverEffect } from "./grid-effects/over-effect";
+import { HoverEffect } from "./grid-effects/hover-effect";
+import { GridElement } from "../../shared/traits/grid-element";
 
 export const TGrid = Trait((base) => {
 	abstract class IGrid extends base {
 		abstract tiles: Map<string, ImplementsTrait<typeof GridElement>>;
-		abstract overEffect: OverEffect | undefined;
+		abstract overEffect: HoverEffect | undefined;
 		abstract synergiesEffects: SynergyEffect[];
 		public abstract width: number;
 		public abstract height: number;

@@ -5,14 +5,14 @@ import { Cell, Position } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { SynergyEffect } from "../grid-effects/synergy-effect";
 import { ArmyGrid } from "../grid";
-import { OverEffect } from "../grid-effects/over-effect";
+import { HoverEffect } from "../grid-effects/hover-effect";
 import { AnyRecruit } from "../../../shared/traits/recruit";
 
 const inventoryPosition = PercentToReal({ x: 78, y: 55 });
 
 export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
-	overEffect: OverEffect | undefined = undefined;
+	overEffect: HoverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 	constructor(
 		public position: Position = inventoryPosition,
@@ -28,7 +28,6 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 			for (let x = 0; x < this.width; x++) {
 				const cell = new Cell({ x, y });
 				if (!this.tiles.has(ArmyGrid.posToString(cell))) {
-					console.log("Found free cell", cell);
 					return cell;
 				}
 			}
@@ -44,7 +43,7 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	setOveredTile(cell: Cell | undefined) {
 		if (cell) {
-			this.overEffect = new OverEffect(cell, this);
+			this.overEffect = new HoverEffect(cell, this);
 			return;
 		}
 		this.overEffect = undefined;

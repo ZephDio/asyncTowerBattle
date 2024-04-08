@@ -1,9 +1,10 @@
 import { Position } from "../../../shared/position";
-import { Buyable, TokenHooks } from "../shop";
+import { TokenHooks } from "../shop";
 import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Subtrait } from "../../../../traits/traits";
 import { Synergy } from "../../../shared/traits/synergy";
 import { AnyRecruit } from "../../../shared/traits/recruit";
+import { Buyable } from "../buyable";
 
 type Holdable = Buyable | AnyRecruit;
 

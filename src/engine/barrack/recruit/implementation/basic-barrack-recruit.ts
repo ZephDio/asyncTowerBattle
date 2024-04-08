@@ -13,8 +13,8 @@ export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	productionSpeed: number;
 
 	constructor(
-		barrack: BasicBarrackBlueprint,
 		public cell: Cell,
+		barrack: BasicBarrackBlueprint = new BasicBarrackBlueprint({}),
 	) {
 		super({ imageDrawable: barrack, hitboxHolder: barrack });
 		this.productionSpeed = barrack.productionSpeed;

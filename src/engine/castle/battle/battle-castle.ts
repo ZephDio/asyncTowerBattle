@@ -5,8 +5,8 @@ import { BattleGrid } from "../../grid/battle-grid";
 import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { TPhysics } from "../../../shared/traits/physics";
-import { GridElement } from "../../grid/grid";
 import { HTHitbox } from "../../../shared/hitboxes";
+import { GridElement } from "../../../shared/traits/grid-element";
 
 export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement) {
 	public actualLife: number;

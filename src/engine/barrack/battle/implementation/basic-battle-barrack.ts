@@ -6,9 +6,9 @@ import { Derive } from "@ddd-ts/traits";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { BasicBarrack } from "../../recruit/implementation/basic-barrack-recruit";
 import { HTImageDrawable, TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
-import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
 import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
+import { GridElement } from "../../../../shared/traits/grid-element";
 
 export class BasicBattleBarrack extends Derive(
 	TCollider,

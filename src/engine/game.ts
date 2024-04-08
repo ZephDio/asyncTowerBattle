@@ -11,7 +11,7 @@ export class Game {
 	shop: null | Shop = null;
 	enemyArmy = ArmyFixture.enemy;
 	economy = {
-		gold: 120,
+		gold: 0,
 	};
 
 	constructor() {}

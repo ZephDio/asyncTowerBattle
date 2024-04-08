@@ -22,8 +22,6 @@ export const Caster = Subtrait([HaveStats], (base) => {
 	abstract class ICaster extends base {
 		castInProgress = null as null | Cast;
 
-		abstract onCastResolve(): void;
-
 		abstract casts(): void;
 
 		tickCast() {

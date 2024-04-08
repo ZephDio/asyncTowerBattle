@@ -27,6 +27,7 @@ export const Unit = Subtrait([TRecruit], (base) => {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.economyHooks.addGold(Math.round(10));
+				return
 			}
 			const cell = grid.realPositionToGrid(position);
 			if (!cell) throw new Error("Invalid cell");

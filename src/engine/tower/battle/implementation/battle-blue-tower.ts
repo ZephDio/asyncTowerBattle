@@ -5,10 +5,10 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, Position } from "../../../../shared/position";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
 import { Cast, Caster } from "../../../../shared/traits/cast";
-import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
 import { HTHitbox } from "../../../../shared/hitboxes";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
+import { GridElement } from "../../../../shared/traits/grid-element";
 export class BlueBattleTower extends Derive(
 	HTHitbox,
 	TCasterHudRenderable,

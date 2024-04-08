@@ -13,8 +13,8 @@ export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 	attackSpeed = 0.8;
 
 	constructor(
-		public tower: YellowTowerBlueprint,
 		public cell: Cell,
+		public tower: YellowTowerBlueprint = new YellowTowerBlueprint({}),
 	) {
 		super({ synergy: tower, damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
 	}
@@ -37,7 +37,7 @@ export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 	}
 
 	clone() {
-		return new YellowTower(new YellowTowerBlueprint({}), this.cell);
+		return new YellowTower(this.cell.clone(), this.tower);
 	}
 
 	get position(): Cell {

@@ -64,14 +64,24 @@ export const Resources = {
 		},
 		dragon: {
 			size: {
-				width: 3,
-				height: 3,
+				width: 3.3,
+				height: 3.3,
 			},
 			resource: {
 				image: createImage("/resources/units/dragon.png"),
 				shape: "ellipse",
 			},
 		},
+		priest: {
+			size: {
+				width: 2.5,
+				height: 2.5,
+			},
+			resource: {
+				image: createImage("/resources/units/priest.png"),
+				shape: "ellipse",
+			},
+		}
 	},
 	path: {
 		normal: {

@@ -6,7 +6,7 @@ import { Status } from "../../../../shared/traits/status";
 import { Stats } from "../../../stats/stats";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { SlowingPathTile } from "../../recruit/implementation/slowing-tile";
-import { GridElement } from "../../../grid/grid";
+import { GridElement } from "../../../../shared/traits/grid-element";
 
 export class SlowingBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
 	constructor(

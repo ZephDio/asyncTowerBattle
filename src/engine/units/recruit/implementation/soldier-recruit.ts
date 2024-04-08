@@ -12,8 +12,8 @@ export class Soldier extends Derive(Unit, HTDamageDealer) {
 	attackSpeed: number;
 	cost: number;
 	constructor(
-		soldier: SoldierBlueprint,
 		public cell: Cell,
+		soldier: SoldierBlueprint = new SoldierBlueprint({}),
 	) {
 		super({ imageDrawable: soldier, damageDealer: soldier, hitboxHolder: soldier });
 		this.maxLife = soldier.baseMaxLife;

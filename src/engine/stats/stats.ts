@@ -81,6 +81,11 @@ export class Stats {
 			this.onDeath();
 		}
 	}
+
+	heal(amount : number){
+		this._health = Math.min(this._maxHealth,this._health + amount)
+	}
+	
 	removeStatus(status: ImplementsTrait<typeof Status>) {
 		this.status.delete(status.key);
 	}

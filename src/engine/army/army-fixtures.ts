@@ -20,12 +20,17 @@ export class ArmyFixture {
 			//TowerEntityFixtures.topRightTower,
 		];
 		const path = PathFixture.defaultAllied;
-		const barracks = [BarrackRecruitFixtures.basicWithSoldier(4), BarrackRecruitFixtures.waveWithSoldier()] as any;
-		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier];
+		const barracks = [
+			BarrackRecruitFixtures.basicWithSoldier(4), 
+			BarrackRecruitFixtures.waveWithSoldier(),
+			BarrackRecruitFixtures.basicWithPriest(),
+		];
+		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
 		[castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(castle, towers, path, barracks, grid, unitInventory);
+		//return new Army(castle, towers, path, barracks, grid, unitInventory);
+		return new Army(path, grid, unitInventory);
 	}
 	static get enemy() {
 		const grid = new ArmyGrid();
@@ -36,21 +41,10 @@ export class ArmyFixture {
 		];
 		const castle = CastleRecruitFixture.enemy;
 		const path = PathFixture.defaultAllied;
-		[castle, ...towers, ...path.tiles].map((e) => grid.setElement(e));
-
+		const barracks = [BarrackRecruitFixtures.basicWithDragon(),BarrackRecruitFixtures.waveWithSoldier()];
+		[castle, ...towers, ...barracks, ...path.tiles].map((e) => grid.setElement(e));
 		return new Army(
-			castle,
-			towers,
 			path,
-			//[]
-			[
-				BarrackRecruitFixtures.basicWithSoldier(4),
-				BarrackRecruitFixtures.basicWithDragon(),
-				// BarrackRecruitFixtures.basicWithDragon(34),
-				// BarrackRecruitFixtures.basicWithDragon(25),
-				// BarrackRecruitFixtures.basicWithDragon(20),
-				// BarrackRecruitFixtures.basicWithDragon(50),
-			],
 			grid,
 			new Inventory(),
 		);
