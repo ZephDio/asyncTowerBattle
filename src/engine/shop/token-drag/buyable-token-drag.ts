@@ -19,7 +19,7 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 	onRelease(position?: Position): void {
 		try {
 			if (!position) throw new Error("Invalid position");
-			if (!(this.hooks.economyHooks.getEconomy().gold >= this.holded.price)) {
+			if (!(this.hooks.economyHooks.canPurchase(this.holded.price))) {
 				throw new Error("Not enough gold");
 			}
 			const grid = this.hooks.shopHooks.determinateGrid(position);

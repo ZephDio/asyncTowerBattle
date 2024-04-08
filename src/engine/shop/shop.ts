@@ -15,6 +15,7 @@ import { ArmyGrid } from "../grid/grid";
 import { AnyRecruit } from "../../shared/traits/recruit";
 import { Castle } from "../castle/recruit/castle-recruit";
 import { Buyable } from "./buyable";
+import { RefreshBellHud } from "../../shared/hud-element/refresh-bell-hud";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -39,6 +40,7 @@ export type TokenHooks = {
 };
 export type EconomyHooks = {
 	getEconomy: () => { gold: number };
+	canPurchase: (price: number) => boolean;
 	addGold: (amount: number) => void;
 	spendGold: (amount: number) => void;
 };
@@ -63,6 +65,13 @@ export class Shop {
 	buy(buyable: Buyable) {
 		this.economyHooks.spendGold(buyable.price);
 		this.retail.removeItem(buyable);
+	}
+
+	refresh() {
+		if(this.economyHooks.canPurchase(5)){
+			this.retail.refresh();
+			this.economyHooks.spendGold(5);
+		}
 	}
 
 	setHoldFromRetail(buyable: Buyable, position: Position) {
@@ -116,6 +125,7 @@ export class Shop {
 			grids: [this.army.grid, this.army.inventory, this.retail.grid],
 			drawables: [
 				new StartBattleButton({}),
+				new RefreshBellHud({}),
 				new GoldHud(this.economyHooks.getEconomy().gold),
 				...(this.hold ? [this.hold] : []),
 			],
@@ -149,7 +159,7 @@ export class Shop {
 			type: "shop",
 			retail: this.retail,
 			hold: this.hold,
-			hudElements: [new StartBattleButton({})],
+			hudElements: [new StartBattleButton({}), new RefreshBellHud({})],
 			towers: this.army.towers,
 			castle: this.army.castle,
 			path: this.army.path,

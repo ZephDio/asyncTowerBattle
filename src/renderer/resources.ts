@@ -186,6 +186,11 @@ export const Resources = {
 				image: createImage("/resources/button/start.png"),
 			},
 		},
+		bell: {
+			resource: {
+				image: createImage("/resources/button/bell.png"),
+			},
+		},
 		gold: {
 			resource: {
 				image: createImage("/resources/economy/gold.png"),

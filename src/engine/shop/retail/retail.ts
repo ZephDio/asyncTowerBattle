@@ -49,6 +49,7 @@ export class Retail extends Derive(
 		this.grid.tiles.set(ArmyGrid.posToString(buyable.cell), buyable);
 	}
 
+
 	async refresh() {
 		this.grid.tiles.clear();
 		const items = await this.getRetailItems();
