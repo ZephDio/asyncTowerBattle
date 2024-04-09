@@ -2,6 +2,7 @@ import { BlueTowerBlueprint } from "./implementation/blue-tower";
 import { GreenTowerBlueprint } from "./implementation/green-tower";
 import { OrangeTowerBlueprint } from "./implementation/orange-tower";
 import { YellowTowerBlueprint } from "./implementation/yellow-tower";
+import { ZappingTowerBlueprint } from "./implementation/zapping-tower";
 
 export class TowerBlueprintBuilder {
 	buildYellow() {
@@ -15,6 +16,9 @@ export class TowerBlueprintBuilder {
 	}
 	buildOrange() {
 		return new OrangeTowerBlueprint({});
+	}
+	buildZapping() {
+		return new ZappingTowerBlueprint({});
 	}
 }
 
@@ -31,5 +35,8 @@ export class TowerBlueprintFixtures {
 
 	static get yellow() {
 		return new TowerBlueprintBuilder().buildYellow();
+	}
+	static get zapping() {
+		return new TowerBlueprintBuilder().buildZapping();
 	}
 }

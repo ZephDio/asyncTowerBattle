@@ -1,7 +1,8 @@
 import { BattleRocket } from "./implementation/battle-rocket";
 import { BattleBullet } from "./implementation/battle-bullet";
+import { BattleSpark } from "./implementation/battle-spark";
 
-export type AnyBattleProjectile = BattleRocket | BattleBullet;
+export type AnyBattleProjectile = BattleRocket | BattleBullet | BattleSpark;
 
 // export abstract class BattleProjectile<PR extends AnyProjectile> extends Derive(TDrawable, TRenderable, HTHitbox) {
 // 	pathFinder: PathFinder;

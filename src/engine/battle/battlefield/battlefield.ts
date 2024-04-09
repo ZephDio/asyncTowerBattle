@@ -11,6 +11,10 @@ import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 
 export type SearchTarget = Battlefield["searchAlliedTowerTarget"] | Battlefield["searchEnemyTowerTarget"];
 export type SearchAreaForUnit = Battlefield["searchAlliesInArea"] | Battlefield["searchEnemiesInArea"];
+
+export type SearchClosestUnitFrom =
+	| Battlefield["searchClosestArrivingAlliedFrom"]
+	| Battlefield["searchClosestArrivingEnemyFrom"];
 export class Battlefield {
 	public alliedArmy: BattleArmy;
 	public enemyArmy: BattleArmy;
@@ -35,11 +39,13 @@ export class Battlefield {
 		const alliedBattleArmy = new BattleArmy(
 			this.searchAlliedTowerTarget.bind(this),
 			this.searchEnemiesInArea.bind(this),
+			this.searchClosestArrivingEnemyFrom.bind(this),
 			grid.getAlliedHooks(),
 		);
 		const enemyBattleArmy = new BattleArmy(
 			this.searchEnemyTowerTarget.bind(this),
 			this.searchAlliesInArea.bind(this),
+			this.searchClosestArrivingAlliedFrom.bind(this),
 			grid.getEnemyHooks(),
 		);
 		const enemyBattleCastle = enemyArmy.castle.toEnemy(grid, () => this.onBattleOver("victory"));
@@ -141,6 +147,32 @@ export class Battlefield {
 			}
 		}
 		return bestTarget[0];
+	}
+
+	searchClosestArrivingAlliedFrom(position: Position): AnyBattleUnit | undefined {
+		let closest: AnyBattleUnit | undefined = undefined;
+		let closestDistance = Infinity;
+		for (const alliedUnit of this.alliedArmy.units.keys()) {
+			const distance = Physic.getDistanceSqrd(position, alliedUnit.position);
+			if (distance < closestDistance && alliedUnit.position.x >= position.x && distance !== 0) {
+				closestDistance = distance;
+				closest = alliedUnit;
+			}
+		}
+		return closest;
+	}
+
+	searchClosestArrivingEnemyFrom(position: Position): AnyBattleUnit | undefined {
+		let closest: AnyBattleUnit | undefined = undefined;
+		let closestDistance = Infinity;
+		for (const enemyUnit of this.enemyArmy.units.keys()) {
+			const distance = Physic.getDistanceSqrd(position, enemyUnit.position);
+			if (distance < closestDistance && enemyUnit.position.x <= position.x && distance !== 0) {
+				closestDistance = distance;
+				closest = enemyUnit;
+			}
+		}
+		return closest;
 	}
 
 	tickBarracks() {

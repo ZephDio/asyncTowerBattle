@@ -50,6 +50,17 @@ export const Resources = {
 				color: "green",
 			},
 		},
+		purple: {
+			size: {
+				width: 5,
+				height: 8,
+			},
+			resource: {
+				image: createImage("/resources/towers/tower_purple.png"),
+				shape: "rectangle",
+				color: "green",
+			},
+		},
 	},
 	unit: {
 		soldier: {
@@ -81,7 +92,7 @@ export const Resources = {
 				image: createImage("/resources/units/priest.png"),
 				shape: "ellipse",
 			},
-		}
+		},
 	},
 	path: {
 		normal: {
@@ -125,6 +136,17 @@ export const Resources = {
 			size: {
 				width: 2.2,
 				height: 1.8,
+			},
+		},
+		spark: {
+			resource: {
+				image: createImage("/resources/projectiles/spark.png"),
+				shape: "rectangle",
+				color: "#3b3b3b",
+			},
+			size: {
+				width: 2.7,
+				height: 1.2,
 			},
 		},
 	},

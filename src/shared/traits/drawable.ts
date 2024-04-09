@@ -117,14 +117,13 @@ export const TPriceHudRenderable = Subtrait([THudRenderable, THasPrice], (base) 
 				...super.huds(),
 				{
 					hud: this.unitPreview,
-					position: new Position({ x: 0, y: -4.2}),
+					position: new Position({ x: 0, y: -4.2 }),
 				},
 			];
 		}
 	}
 	return IPriceHudRenderable;
 });
-
 
 export const TImageDrawable = (image: HTMLImageElement, size: { width: number; height: number }, priority: number) =>
 	Subtrait([TDrawable], (base) => {
@@ -149,7 +148,6 @@ export const TImageDrawable = (image: HTMLImageElement, size: { width: number; h
 		}
 		return TImageDrawable;
 	});
-
 export const HTImageDrawable = Subtrait([TImageDrawable(new Image(), { width: 0, height: 0 }, 0)], (base, Props) => {
 	return class HTImageDrawable extends base {
 		constructor(props: { imageDrawable: ImplementsTrait<ReturnType<typeof TImageDrawable>> } & typeof Props) {
@@ -195,4 +193,19 @@ export const TGridDrawable = Subtrait([TGrid, TDrawable], (base) => {
 		}
 	}
 	return IGridDrawable;
+});
+
+export const TSpreadRenderable = Subtrait([TRenderable], (base) => {
+	abstract class TSpreadRenderable extends base {
+		abstract spreading: boolean;
+		spreadPositions: Position[] = [];
+		override render(context: CanvasRenderingContext2D, grid?: ArmyGrid | BattleGrid): void {
+			super.render(context, grid);
+			// for (const position of this.spreadPositions) {
+			// 	console.log(position);
+			// 	this.drawLine(context, firstPos!.x, position.x, firstPos!.y, position.y);
+			// }
+		}
+	}
+	return TSpreadRenderable;
 });
