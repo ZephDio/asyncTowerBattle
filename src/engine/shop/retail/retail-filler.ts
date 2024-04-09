@@ -18,6 +18,7 @@ import { SoldierBlueprint } from "../../units/blueprint/implementation/soldier";
 import { AnyUnitBlueprint } from "../../units/blueprint/units";
 import { TRecruit } from "../../../shared/traits/recruit";
 import { ZappingTowerBlueprint } from "../../tower/blueprint/implementation/zapping-tower";
+import { FrostTowerBlueprint } from "../../tower/blueprint/implementation/frost-tower";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint = AnyTowerBlueprint | AnyPathTileBlueprint | AnyUnitBlueprint | AnyBarrackBlueprint;
@@ -30,6 +31,7 @@ const pool = [
 			BlueTowerBlueprint,
 			OrangeTowerBlueprint,
 			GreenTowerBlueprint,
+			FrostTowerBlueprint,
 		] as any,
 		share: 100,
 	},

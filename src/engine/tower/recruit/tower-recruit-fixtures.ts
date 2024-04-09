@@ -10,6 +10,8 @@ import { YellowTowerBlueprint } from "../blueprint/implementation/yellow-tower";
 import { YellowTower } from "./implementation/yellow-tower-recruit";
 import { ZappingTowerBlueprint } from "../blueprint/implementation/zapping-tower";
 import { ZappingTower } from "./implementation/zapping-tower-recruit";
+import { FrostTowerBlueprint } from "../blueprint/implementation/frost-tower";
+import { FrostTower } from "./implementation/frost-tower-recruit";
 
 export class TowerBuilder {
 	cell: Cell;
@@ -19,6 +21,9 @@ export class TowerBuilder {
 	}
 	buildBlue(tower?: BlueTowerBlueprint) {
 		return new BlueTower(this.cell, tower);
+	}
+	buildFrost(tower?: FrostTowerBlueprint) {
+		return new FrostTower(this.cell, tower);
 	}
 	buildGreen(tower?: GreenTowerBlueprint) {
 		return new GreenTower(this.cell, tower);

@@ -44,7 +44,6 @@ export class PoisonGround extends Derive(
 
 	draw(context: CanvasRenderingContext2D, position: Position): void {
 		context.globalAlpha = 0.18;
-
 		context.strokeStyle = "purple";
 		context.fillStyle = "purple";
 		context.lineWidth = 11;

@@ -64,7 +64,7 @@ export class Stats {
 	}
 
 	get attack() {
-		return this._attack * (this.basePercentStat.attack / 100);
+		return this._attack * Math.max(0, this.basePercentStat.attack / 100);
 	}
 
 	get movementSpeed() {
@@ -93,6 +93,7 @@ export class Stats {
 	addStatus(status: ImplementsTrait<typeof Status>) {
 		const alreadyAffected = this.status.get(status.key);
 		if (alreadyAffected) {
+			if (!status.stackable) return;
 			if (alreadyAffected.duration < status.duration) {
 				alreadyAffected.duration = status.duration;
 			}

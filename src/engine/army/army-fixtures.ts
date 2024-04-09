@@ -20,7 +20,7 @@ export class ArmyFixture {
 			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen(TowerBlueprintFixtures.green),
 			new TowerBuilder()
 				.celled(new Cell({ x: 7, y: 4 }))
-				.buildGreen(TowerBlueprintFixtures.green),
+				.buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];
 		const path = PathFixture.default;
@@ -35,10 +35,10 @@ export class ArmyFixture {
 		const grid = new ArmyGrid();
 		const castle = CastleRecruitFixture.allied;
 		const towers: AnyTower[] = [
-			TowerFixtures.middleZappingTower,
-			// new TowerBuilder()
-			// 	.celled(new Cell({ x: 4, y: 4 }))
-			// 	.buildGreen(TowerBlueprintFixtures.green),
+			//TowerFixtures.centerTower,
+			new TowerBuilder()
+				.celled(new Cell({ x: 7, y: 4 }))
+				.buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];
 		const path = PathFixture.default;
