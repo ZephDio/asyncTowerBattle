@@ -28,6 +28,17 @@ export const Resources = {
 				color: "blue",
 			},
 		},
+		frost: {
+			size: {
+				width: 5,
+				height: 8,
+			},
+			resource: {
+				image: createImage("/resources/towers/tower_frost.png"),
+				shape: "ellipse",
+				color: "blue",
+			},
+		},
 		green: {
 			size: {
 				width: 5,
@@ -147,6 +158,17 @@ export const Resources = {
 			size: {
 				width: 2.7,
 				height: 1.2,
+			},
+		},
+		frostSpike: {
+			resource: {
+				image: createImage("/resources/projectiles/frost_spike.png"),
+				shape: "rectangle",
+				color: "#3b3b3b",
+			},
+			size: {
+				width: 2.2,
+				height: 1.8,
 			},
 		},
 	},
