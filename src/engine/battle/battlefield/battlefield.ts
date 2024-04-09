@@ -1,5 +1,4 @@
 import { Army } from "../../army/army";
-import { AnyBattleTower } from "../../tower/battle/battle-tower";
 import { AnyBattleUnit } from "../../units/battle/battle-unit";
 import { BattleArmy } from "../../army/battle/battle-army";
 import { Battle } from "../battle";
@@ -9,7 +8,7 @@ import { Position } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 
-export type SearchTarget = Battlefield["searchAlliedTowerTarget"] | Battlefield["searchEnemyTowerTarget"];
+export type SearchTarget = Battlefield["searchAlliedUnitTarget"] | Battlefield["searchEnemyUnitTarget"];
 export type SearchAreaForUnit = Battlefield["searchAlliesInArea"] | Battlefield["searchEnemiesInArea"];
 export class Battlefield {
 	public alliedArmy: BattleArmy;
@@ -33,12 +32,12 @@ export class Battlefield {
 		const grid = BattleGrid.fuse(alliedArmy.grid, enemyArmy.grid);
 
 		const alliedBattleArmy = new BattleArmy(
-			this.searchAlliedTowerTarget.bind(this),
+			this.searchAlliedUnitTarget.bind(this),
 			this.searchEnemiesInArea.bind(this),
 			grid.getAlliedHooks(),
 		);
 		const enemyBattleArmy = new BattleArmy(
-			this.searchEnemyTowerTarget.bind(this),
+			this.searchEnemyUnitTarget.bind(this),
 			this.searchAlliesInArea.bind(this),
 			grid.getEnemyHooks(),
 		);
@@ -114,13 +113,10 @@ export class Battlefield {
 		return found;
 	}
 
-	searchAlliedTowerTarget(
-		tower: AnyBattleTower,
-		criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean,
-	) {
+	searchAlliedUnitTarget(position: Position, criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean) {
 		let bestTarget: [AnyBattleUnit | null, number] = [null, Infinity];
 		for (const enemyUnit of [...this.enemyArmy.units.keys()]) {
-			const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
+			const distanceSqrd = Physic.getDistanceSqrd(position, enemyUnit.position);
 			if (criteria(enemyUnit, distanceSqrd)) {
 				if (distanceSqrd < bestTarget[1]) {
 					bestTarget = [enemyUnit, distanceSqrd];
@@ -130,10 +126,10 @@ export class Battlefield {
 		return bestTarget[0];
 	}
 
-	searchEnemyTowerTarget(tower: AnyBattleTower, criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean) {
+	searchEnemyUnitTarget(position: Position, criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean) {
 		let bestTarget: [AnyBattleUnit | null, number] = [null, Infinity];
 		for (const enemyUnit of [...this.alliedArmy.units.keys()]) {
-			const distanceSqrd = Physic.getDistanceSqrd(tower.position, enemyUnit.position);
+			const distanceSqrd = Physic.getDistanceSqrd(position, enemyUnit.position);
 			if (criteria(enemyUnit, distanceSqrd)) {
 				if (distanceSqrd < bestTarget[1]) {
 					bestTarget = [enemyUnit, distanceSqrd];
@@ -142,6 +138,32 @@ export class Battlefield {
 		}
 		return bestTarget[0];
 	}
+
+	// searchClosestArrivingAlliedFrom(position: Position, range: number): AnyBattleUnit | undefined {
+	// 	let closest: AnyBattleUnit | undefined = undefined;
+	// 	let closestDistance = Infinity;
+	// 	for (const alliedUnit of this.alliedArmy.units.keys()) {
+	// 		const distance = Physic.getDistanceSqrd(position, alliedUnit.position);
+	// 		if (distance < closestDistance && alliedUnit.position.x >= position.x && distance !== 0 && distance < range) {
+	// 			closestDistance = distance;
+	// 			closest = alliedUnit;
+	// 		}
+	// 	}
+	// 	return closest;
+	// }
+
+	// searchClosestArrivingEnemyFrom(position: Position, range: number): AnyBattleUnit | undefined {
+	// 	let closest: AnyBattleUnit | undefined = undefined;
+	// 	let closestDistance = Infinity;
+	// 	for (const enemyUnit of this.enemyArmy.units.keys()) {
+	// 		const distance = Physic.getDistanceSqrd(position, enemyUnit.position);
+	// 		if (distance < closestDistance && distance !== 0 && distance < range) {
+	// 			closestDistance = distance;
+	// 			closest = enemyUnit;
+	// 		}
+	// 	}
+	// 	return closest;
+	// }
 
 	tickBarracks() {
 		for (const barrack of this.alliedArmy.barracks) {

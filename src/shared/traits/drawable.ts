@@ -148,7 +148,6 @@ export const TImageDrawable = (image: HTMLImageElement, size: { width: number; h
 		}
 		return TImageDrawable;
 	});
-
 export const HTImageDrawable = Subtrait([TImageDrawable(new Image(), { width: 0, height: 0 }, 0)], (base, Props) => {
 	return class HTImageDrawable extends base {
 		constructor(props: { imageDrawable: ImplementsTrait<ReturnType<typeof TImageDrawable>> } & typeof Props) {

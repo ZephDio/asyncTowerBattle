@@ -17,13 +17,20 @@ import { PriestBlueprint } from "../../units/blueprint/implementation/priest";
 import { SoldierBlueprint } from "../../units/blueprint/implementation/soldier";
 import { AnyUnitBlueprint } from "../../units/blueprint/units";
 import { TRecruit } from "../../../shared/traits/recruit";
+import { ZappingTowerBlueprint } from "../../tower/blueprint/implementation/zapping-tower";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint = AnyTowerBlueprint | AnyPathTileBlueprint | AnyUnitBlueprint | AnyBarrackBlueprint;
 // TODO trait blueprint
 const pool = [
 	{
-		value: [YellowTowerBlueprint, BlueTowerBlueprint, OrangeTowerBlueprint, GreenTowerBlueprint] as any,
+		value: [
+			ZappingTowerBlueprint,
+			YellowTowerBlueprint,
+			BlueTowerBlueprint,
+			OrangeTowerBlueprint,
+			GreenTowerBlueprint,
+		] as any,
 		share: 100,
 	},
 	{
