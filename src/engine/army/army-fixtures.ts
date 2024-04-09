@@ -35,10 +35,10 @@ export class ArmyFixture {
 		const grid = new ArmyGrid();
 		const castle = CastleRecruitFixture.allied;
 		const towers: AnyTower[] = [
-			//TowerFixtures.centerTower,
-			new TowerBuilder()
-				.celled(new Cell({ x: 4, y: 4 }))
-				.buildGreen(TowerBlueprintFixtures.green),
+			TowerFixtures.middleZappingTower,
+			// new TowerBuilder()
+			// 	.celled(new Cell({ x: 4, y: 4 }))
+			// 	.buildGreen(TowerBlueprintFixtures.green),
 			//TowerEntityFixtures.topRightTower,
 		];
 		const path = PathFixture.default;

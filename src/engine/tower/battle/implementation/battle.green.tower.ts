@@ -64,7 +64,7 @@ export class GreenBattleTower extends Derive(
 			this.attack(this.target);
 			return;
 		}
-		const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
+		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule);
 		this.setTarget(target);
 		if (this.target) {
 			this.attack(this.target);

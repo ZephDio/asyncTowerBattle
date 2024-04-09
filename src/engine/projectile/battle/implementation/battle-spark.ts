@@ -1,18 +1,21 @@
 import { Derive } from "@ddd-ts/traits";
 import { HTHitbox } from "../../../../shared/hitboxes";
 import { Position } from "../../../../shared/position";
-import { HTImageDrawable, TSpreadRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PathFinder } from "../../../battle/path-finder";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Spark } from "../../blueprint/implementation/spark";
+import { ArmyGrid } from "../../../grid/grid";
+import { BattleGrid } from "../../../grid/battle-grid";
 
-export class BattleSpark extends Derive(HTHitbox, HTImageDrawable, TSpreadRenderable) {
+export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
 	pathFinder: PathFinder;
 	speed: number;
-
-	bounce = 5;
 	spreading: boolean = false;
+
+	spreadingLifeSpan = 5;
+	touchedTargets: AnyBattleUnit[] = [];
 
 	constructor(
 		public projectile: Spark,
@@ -43,40 +46,63 @@ export class BattleSpark extends Derive(HTHitbox, HTImageDrawable, TSpreadRender
 	}
 
 	tick() {
+		if (this.spreading) {
+			this.spreadingLifeSpan--;
+			if (this.spreadingLifeSpan <= 0) {
+				this.hooks.removeProjectile(this);
+				return;
+			}
+			return;
+		}
 		this.followPath();
 	}
 
 	hit() {
 		this.target.takeDamage(this.damage);
-		this.spreadPositions.push(this.position.clone());
 		this.spread();
 	}
 
 	spread() {
 		this.spreading = true;
-		let lastTarget: AnyBattleUnit = this.target;
-		for (let i = 0; i < this.bounce; i++) {
-			const nextTarget = this.hooks.searchClosestArrivingEnemyUnitFrom(lastTarget.position);
+		this.touchedTargets.push(this.target);
+		let lastPosition = this.target.position;
+		for (let i = 0; i < 5; i++) {
+			const nextTarget = this.hooks.searchTarget(lastPosition, this.isValidSpreadTarget.bind(this));
 			if (!nextTarget) {
-				this.hooks.removeProjectile(this);
 				return;
 			}
-			if (nextTarget === lastTarget) {
-				continue;
-			}
-			lastTarget = nextTarget;
-			this.spreadPositions.push(lastTarget.position.clone());
-			nextTarget.takeDamage(this.damage / 2);
+			lastPosition = nextTarget.position;
+			this.touchedTargets.push(nextTarget);
+			nextTarget.takeDamage(this.damage / (2 + i * 0.7));
 		}
-		this.hooks.removeProjectile(this);
 	}
 
 	updateTheta(theta: number) {
 		this.angle = theta;
 	}
 
+	isValidSpreadTarget(target: AnyBattleUnit, distanceSqrd: number) {
+		const range = 9 * 9;
+		const alreadyTouched = this.touchedTargets.includes(target);
+		return distanceSqrd < range && target.isAlive() && distanceSqrd !== 0 && !alreadyTouched;
+	}
+
 	move(newPosition: Position) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
+	}
+
+	override render(context: CanvasRenderingContext2D, grid?: ArmyGrid | BattleGrid): void {
+		if (!this.touchedTargets[0]) {
+			super.render(context, grid);
+			return;
+		}
+		let lastPos = this.getCanvasPosition(context, this.touchedTargets[0].position);
+		for (const target of this.touchedTargets) {
+			context.strokeStyle = "blue";
+			const canvasPosition = this.getCanvasPosition(context, target.position);
+			this.drawLine(context, lastPos.x, lastPos.y, canvasPosition.x, canvasPosition.y);
+			lastPos = canvasPosition;
+		}
 	}
 }

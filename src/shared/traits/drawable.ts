@@ -194,18 +194,3 @@ export const TGridDrawable = Subtrait([TGrid, TDrawable], (base) => {
 	}
 	return IGridDrawable;
 });
-
-export const TSpreadRenderable = Subtrait([TRenderable], (base) => {
-	abstract class TSpreadRenderable extends base {
-		abstract spreading: boolean;
-		spreadPositions: Position[] = [];
-		override render(context: CanvasRenderingContext2D, grid?: ArmyGrid | BattleGrid): void {
-			super.render(context, grid);
-			// for (const position of this.spreadPositions) {
-			// 	console.log(position);
-			// 	this.drawLine(context, firstPos!.x, position.x, firstPos!.y, position.y);
-			// }
-		}
-	}
-	return TSpreadRenderable;
-});

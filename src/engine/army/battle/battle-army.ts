@@ -1,7 +1,7 @@
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { AnyBattleProjectile } from "../../projectile/battle/battle-projectile";
 import { AnyBattleTower } from "../../tower/battle/battle-tower";
-import { SearchAreaForUnit, SearchClosestUnitFrom, SearchTarget } from "../../battle/battlefield/battlefield";
+import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
 import { GridHooks } from "../../grid/battle-grid";
 import { BattlePath } from "../../path/battle/battle-path";
@@ -19,7 +19,6 @@ export type BattleArmyHooks = {
 	searchTarget: BattleArmy["searchTarget"];
 	searchEnemyInArea: BattleArmy["searchEnemyInArea"];
 	searchAlliesInArea: BattleArmy["searchAlliesInArea"];
-	searchClosestArrivingEnemyUnitFrom: BattleArmy["searchClosestEnemyUnitFrom"];
 	gridHooks: GridHooks;
 };
 
@@ -35,8 +34,6 @@ export class BattleArmy {
 	constructor(
 		public searchTarget: SearchTarget,
 		public searchEnemyInArea: SearchAreaForUnit,
-
-		public searchClosestEnemyUnitFrom: SearchClosestUnitFrom,
 		public gridHooks: GridHooks,
 	) {}
 
@@ -92,7 +89,6 @@ export class BattleArmy {
 			searchTarget: this.searchTarget.bind(this),
 			searchEnemyInArea: this.searchEnemyInArea.bind(this),
 			searchAlliesInArea: this.searchAlliesInArea.bind(this),
-			searchClosestArrivingEnemyUnitFrom: this.searchClosestEnemyUnitFrom.bind(this),
 			gridHooks: this.gridHooks,
 		};
 	}

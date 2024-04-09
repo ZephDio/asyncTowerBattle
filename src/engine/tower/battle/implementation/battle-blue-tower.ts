@@ -56,7 +56,7 @@ export class BlueBattleTower extends Derive(
 			this.castInProgress = null;
 			return;
 		}
-		const target = this.hooks.searchTarget(this, this.doesTargetMatchesRule);
+		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule);
 		this.setTarget(target);
 		if (this.target) {
 			this.attack(this.target);

@@ -11,7 +11,7 @@ import { Spark } from "../../../projectile/blueprint/implementation/spark";
 export class ZappingTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]])),
-	TDamageDealer(10),
+	TDamageDealer(15),
 	TImageDrawable(Resources.tower.purple.resource.image, Resources.tower.purple.size, 3),
 ) {
 	toRecruit(cell: Cell) {
