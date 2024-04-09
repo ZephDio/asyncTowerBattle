@@ -8,15 +8,14 @@ import { AnyPathTile, PathTile } from "../tile/recruit/tile";
 import { AnyTower, Tower } from "../tower/recruit/tower-recruit";
 import { Unit } from "../units/recruit/unit-recruit";
 import { AnyRecruit } from "../../shared/traits/recruit";
-import { Castle } from "../castle/recruit/castle-recruit";
 import { TGrid } from "../grid/tgrid";
 
 export class Army {
 	constructor(
-		public castle: Castle,
-		public towers: AnyTower[],
+		//public castle: Castle,
+		//public towers: AnyTower[],
 		public path: ArmyPath,
-		public barracks: AnyBarrack[],
+		//public barracks: AnyBarrack[],
 		public grid: ArmyGrid,
 		public inventory: Inventory,
 	) {}
@@ -29,15 +28,6 @@ export class Army {
 	removeRecruit(recruit: AnyRecruit) {
 		this.inventory.deleteElement(recruit);
 		this.grid.deleteElement(recruit);
-		if (implementsTrait(recruit, Tower)) {
-			this.towers = this.towers.filter((tower) => tower !== recruit);
-		}
-		if (implementsTrait(recruit, PathTile)) {
-			this.path.tiles = this.path.tiles.filter((tile) => tile !== recruit);
-		}
-		if (implementsTrait(recruit, Barrack)) {
-			this.barracks = this.barracks.filter((barrack) => barrack !== recruit);
-		}
 	}
 
 	addRecruit(recruit: AnyRecruit, grid: ImplementsTrait<typeof TGrid>) {
@@ -66,12 +56,21 @@ export class Army {
 		throw new Error("Invalid grid type");
 	}
 
+	get castle() {
+		return this.grid.castle
+	}
+	get towers() {
+		return this.grid.towers
+	}
+	get barracks() {
+		return this.grid.barracks
+	}
+
 	pushToInventory(recruit: AnyRecruit) {
 		this.inventory.add(recruit);
 	}
 
 	addTower(recruit: AnyTower) {
-		this.towers.push(recruit);
 		this.grid.setElement(recruit);
 	}
 
@@ -84,7 +83,6 @@ export class Army {
 		this.grid.setElement(tile);
 	}
 	addBarrack(barrack: AnyBarrack) {
-		this.barracks.push(barrack);
 		this.grid.setElement(barrack);
 	}
 }

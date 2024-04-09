@@ -1,11 +1,9 @@
 import { Cell, Position } from "../../shared/position";
 import { Army } from "../army/army";
 import { Game } from "../game";
-import { Retail } from "./retail";
+import { Retail } from "./retail/retail";
 import { ShopState } from "../../shared/gamestate";
-import { HTImageDrawable, TRenderable } from "../../shared/traits/drawable";
-import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { HTHitbox, TGCollider } from "../../shared/hitboxes";
+import { ImplementsTrait } from "@ddd-ts/traits";
 import { GoldHud } from "../../shared/hud-element/gold-hud";
 import { StartBattleButton } from "../../shared/hud-element/start-battle-button";
 import { TTokenDrag } from "./token-drag/token-drag";
@@ -13,8 +11,11 @@ import { TGrid } from "../grid/tgrid";
 import { AnyUnit } from "../units/recruit/unit-recruit";
 import { BuyableTokenDrag } from "./token-drag/buyable-token-drag";
 import { RecruitTokenDrag } from "./token-drag/army-recruit-token-drag";
-import { ArmyGrid, GridElement } from "../grid/grid";
+import { ArmyGrid } from "../grid/grid";
 import { AnyRecruit } from "../../shared/traits/recruit";
+import { Castle } from "../castle/recruit/castle-recruit";
+import { Buyable } from "./buyable";
+import { RefreshBellHud } from "../../shared/hud-element/refresh-bell-hud";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -39,29 +40,11 @@ export type TokenHooks = {
 };
 export type EconomyHooks = {
 	getEconomy: () => { gold: number };
+	canPurchase: (price: number) => boolean;
 	addGold: (amount: number) => void;
 	spendGold: (amount: number) => void;
 };
 
-export type AnyBuyable = AnyRecruit;
-
-export class Buyable extends Derive(TGCollider, HTHitbox, TRenderable, HTImageDrawable, GridElement) {
-	drawPriority = 10;
-	constructor(
-		public entity: AnyBuyable,
-		public cell: Cell,
-		public price: number,
-	) {
-		super({ imageDrawable: entity, hitboxHolder: entity });
-	}
-	get position() {
-		return this.cell;
-	}
-
-	static from(entity: AnyBuyable, price: number) {
-		return new Buyable(entity, entity.cell, price);
-	}
-}
 
 export class Shop {
 	public hold = null as null | ImplementsTrait<typeof TTokenDrag>;
@@ -84,6 +67,13 @@ export class Shop {
 		this.retail.removeItem(buyable);
 	}
 
+	refresh() {
+		if(this.economyHooks.canPurchase(5)){
+			this.retail.refresh();
+			this.economyHooks.spendGold(5);
+		}
+	}
+
 	setHoldFromRetail(buyable: Buyable, position: Position) {
 		this.retail.removeItem(buyable);
 		const onAbort = () => {
@@ -95,6 +85,7 @@ export class Shop {
 	}
 
 	setHoldFromArmyRecruit(recruit: AnyRecruit, position: Position, grid: ImplementsTrait<typeof TGrid>) {
+		if(recruit instanceof Castle) return
 		this.army.removeRecruit(recruit);
 
 		const onAbort = () => {
@@ -134,6 +125,7 @@ export class Shop {
 			grids: [this.army.grid, this.army.inventory, this.retail.grid],
 			drawables: [
 				new StartBattleButton({}),
+				new RefreshBellHud({}),
 				new GoldHud(this.economyHooks.getEconomy().gold),
 				...(this.hold ? [this.hold] : []),
 			],
@@ -167,7 +159,7 @@ export class Shop {
 			type: "shop",
 			retail: this.retail,
 			hold: this.hold,
-			hudElements: [new StartBattleButton({})],
+			hudElements: [new StartBattleButton({}), new RefreshBellHud({})],
 			towers: this.army.towers,
 			castle: this.army.castle,
 			path: this.army.path,

@@ -6,13 +6,15 @@ import { Resources } from "../../../../renderer/resources";
 
 import { Bullet } from "../../../projectile/blueprint/implementation/bullet";
 import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
-import { GridElement } from "../../../grid/grid";
 import { TSynergy } from "../../../../shared/traits/synergy";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { BasicPathTile } from "../../../tile/recruit/implementation/basic-tile";
 import { SlowingPathTile } from "../../../tile/recruit/implementation/slowing-tile";
+import { GridElement } from "../../../../shared/traits/grid-element";
+import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
 
 export class YellowTowerBlueprint extends Derive(
+	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]])),
 	TDamageDealer(6),
 	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, 3),
@@ -30,7 +32,7 @@ export class YellowTowerBlueprint extends Derive(
 	type = "yellow" as const;
 
 	toRecruit(cell: Cell) {
-		return new YellowTower(this, cell);
+		return new YellowTower(cell, this);
 	}
 
 	projectile = new Bullet();

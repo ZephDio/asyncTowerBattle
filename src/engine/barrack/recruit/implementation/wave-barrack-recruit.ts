@@ -14,8 +14,8 @@ export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	productionSpeed: number;
 
 	constructor(
-		barrack: WaveBarrackBlueprint,
 		public cell: Cell,
+		barrack: WaveBarrackBlueprint = new WaveBarrackBlueprint({}),
 	) {
 		super({ imageDrawable: barrack, hitboxHolder: barrack });
 		this.productionSpeed = barrack.productionSpeed;

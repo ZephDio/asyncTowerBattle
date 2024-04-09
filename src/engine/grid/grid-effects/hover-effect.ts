@@ -4,7 +4,7 @@ import { TRenderable } from "../../../shared/traits/drawable";
 import { TGrid } from "../tgrid";
 import { TDrawable } from "../../../shared/traits/tdrawable";
 
-export class OverEffect extends Derive(TDrawable, TRenderable) {
+export class HoverEffect extends Derive(TDrawable, TRenderable) {
 	drawPriority = 8;
 	size: number;
 	constructor(

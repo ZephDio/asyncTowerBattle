@@ -37,12 +37,12 @@ export class BattleDragon extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 		return this.stats.health > 0;
 	}
 
-	onCastResolve() {
+	attackCastle() {
 		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
 		this.castInProgress = null;
 	}
 	casts(): void {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
+		this.castInProgress = new Cast(this, this.attackCastle.bind(this), 100);
 	}
 
 	takeDamage(damage: number) {

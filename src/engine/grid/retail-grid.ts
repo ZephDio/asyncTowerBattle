@@ -1,15 +1,15 @@
 import { Derive } from "@ddd-ts/traits";
 import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
 import { TGrid } from "./tgrid";
-import { Buyable } from "../shop/shop";
-import { OverEffect } from "./grid-effects/over-effect";
+import { HoverEffect } from "./grid-effects/hover-effect";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { Position } from "../../shared/position";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
+import { Buyable } from "../shop/buyable";
 
 export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, Buyable> = new Map();
-	overEffect: OverEffect | undefined = undefined;
+	overEffect: HoverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 
 	constructor(

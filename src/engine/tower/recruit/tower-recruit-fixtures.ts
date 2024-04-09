@@ -16,16 +16,16 @@ export class TowerBuilder {
 		return this;
 	}
 	buildBlue(tower: BlueTowerBlueprint) {
-		return new BlueTower(tower, this.cell);
+		return new BlueTower(this.cell, tower);
 	}
 	buildGreen(tower: GreenTowerBlueprint) {
-		return new GreenTower(tower, this.cell);
+		return new GreenTower( this.cell, tower);
 	}
 	buildOrange(tower: OrangeTowerBlueprint) {
-		return new OrangeTower(tower, this.cell);
+		return new OrangeTower(this.cell, tower);
 	}
 	buildYellow(tower: YellowTowerBlueprint) {
-		return new YellowTower(tower, this.cell);
+		return new YellowTower(this.cell, tower);
 	}
 }
 

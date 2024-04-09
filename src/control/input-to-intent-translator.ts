@@ -4,6 +4,8 @@ import { Position } from "../shared/position";
 import { ArmyGrid } from "../engine/grid/grid";
 import { implementsTrait } from "@ddd-ts/traits";
 import { TSynergy } from "../shared/traits/synergy";
+import { StartBattleButton } from "../shared/hud-element/start-battle-button";
+import { RefreshBellHud } from "../shared/hud-element/refresh-bell-hud";
 
 export interface PlayerIntent {
 	intent: string;
@@ -24,8 +26,12 @@ export class InputToIntentTranslator {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			for (const hudElement of state.hudElements) {
-				if (hudElement.contains(position)) {
+				if (hudElement instanceof StartBattleButton && hudElement.contains(position) ) {
 					return this.game.handleShopQuit();
+				}
+				if(hudElement instanceof RefreshBellHud && hudElement.contains(position) ) {
+					this.game.shop.refresh();
+					return 
 				}
 			}
 		}

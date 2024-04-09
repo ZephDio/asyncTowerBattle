@@ -4,12 +4,12 @@ import { Cell, Position } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
 import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
-import { GridElement } from "../../../grid/grid";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/status";
 import { SlowingBattlePathTile } from "../../../tile/battle/implementation/slowing-battle-tile";
 import { BasicBattlePathTile } from "../../../tile/battle/implementation/basic-battle-tile";
 import { HTHitbox } from "../../../../shared/hitboxes";
+import { GridElement } from "../../../../shared/traits/grid-element";
 
 export class YellowBattleTower extends Derive(
 	HTHitbox,

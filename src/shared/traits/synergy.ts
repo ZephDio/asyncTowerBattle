@@ -1,6 +1,7 @@
 import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
-import { GridElement } from "../../engine/grid/grid";
+
 import { Cell } from "../position";
+import { GridElement } from "./grid-element";
 
 export type Synergy = {
 	patternEffect: Cell[];

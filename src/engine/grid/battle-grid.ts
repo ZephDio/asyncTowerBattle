@@ -8,12 +8,13 @@ import { ArmyGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
 import { TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
-import { OverEffect } from "./grid-effects/over-effect";
+import { HoverEffect } from "./grid-effects/hover-effect";
+
 
 export type BattleGridElement = AnyBattleTower | AnyBattleTile | BattleCastle;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();
-	overEffect: OverEffect | undefined = undefined;
+	overEffect: HoverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 	constructor(
 		public gridAllied: ArmyGrid,

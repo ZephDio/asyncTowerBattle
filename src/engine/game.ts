@@ -11,7 +11,7 @@ export class Game {
 	shop: null | Shop = null;
 	enemyArmy = ArmyFixture.enemy;
 	economy = {
-		gold: 120,
+		gold: 0,
 	};
 
 	constructor() {}
@@ -91,6 +91,7 @@ export class Game {
 			getEconomy: this.getEconomy.bind(this),
 			spendGold: this.spendGold.bind(this),
 			addGold: this.addGold.bind(this),
+			canPurchase: (price: number) => this.economy.gold >= price,
 		};
 	}
 }

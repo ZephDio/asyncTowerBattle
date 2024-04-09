@@ -5,10 +5,10 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { Derive } from "@ddd-ts/traits";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { HTImageDrawable, TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
-import { GridElement } from "../../../grid/grid";
 import { HaveStats } from "../../../stats/stats";
 import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
 import { WaveBarrack } from "../../recruit/implementation/wave-barrack-recruit";
+import { GridElement } from "../../../../shared/traits/grid-element";
 
 export class WaveBattleBarrack extends Derive(
 	TCollider,

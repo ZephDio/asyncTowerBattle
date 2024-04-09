@@ -9,6 +9,8 @@ import { TDrawable } from "./tdrawable";
 import { Caster } from "./cast";
 import { CasterCamembert } from "../hud-element/caster-camembert";
 import { UnitPreviewHud } from "../hud-element/unit-preview";
+import { PriceHud } from "../hud-element/price-hud";
+import { THasPrice } from "./has-price";
 
 export const TRenderable = Subtrait([TDrawable], (base) => {
 	abstract class IRenderable extends base {
@@ -106,6 +108,23 @@ export const TUnitPreviewHudRenderable = Subtrait([THudRenderable], (base) => {
 	}
 	return IUnitPreviewHudRenderable;
 });
+
+export const TPriceHudRenderable = Subtrait([THudRenderable, THasPrice], (base) => {
+	abstract class IPriceHudRenderable extends base {
+		unitPreview = new PriceHud(this);
+		override huds() {
+			return [
+				...super.huds(),
+				{
+					hud: this.unitPreview,
+					position: new Position({ x: 0, y: -4.2}),
+				},
+			];
+		}
+	}
+	return IPriceHudRenderable;
+});
+
 
 export const TImageDrawable = (image: HTMLImageElement, size: { width: number; height: number }, priority: number) =>
 	Subtrait([TDrawable], (base) => {

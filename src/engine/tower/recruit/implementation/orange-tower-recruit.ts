@@ -9,8 +9,8 @@ import { Derive } from "@ddd-ts/traits";
 import { HTSynergy } from "../../../../shared/traits/synergy";
 export class OrangeTower extends Derive(Tower, HTSynergy) {
 	constructor(
-		public tower: OrangeTowerBlueprint,
 		public cell: Cell,
+		public tower: OrangeTowerBlueprint = new OrangeTowerBlueprint({}),
 	) {
 		super({ synergy: tower, imageDrawable: tower, hitboxHolder: tower });
 	}
@@ -30,11 +30,8 @@ export class OrangeTower extends Derive(Tower, HTSynergy) {
 
 	clone(): OrangeTower {
 		return new OrangeTower(
-			new OrangeTowerBlueprint({}),
-			new Cell({
-				x: this.cell.x,
-				y: this.cell.y,
-			}),
+			this.cell.clone(),
+			this.tower,
 		);
 	}
 
