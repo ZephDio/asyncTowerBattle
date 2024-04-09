@@ -11,78 +11,75 @@ import { AnyRecruit } from "../../shared/traits/recruit";
 import { TGrid } from "../grid/tgrid";
 
 export class Army {
-  constructor(
-    //public castle: Castle,
-    //public towers: AnyTower[],
-    public path: ArmyPath,
-    //public barracks: AnyBarrack[],
-    public grid: ArmyGrid,
-    public inventory: Inventory
-  ) {}
+	constructor(
+		public path: ArmyPath,
+		public grid: ArmyGrid,
+		public inventory: Inventory,
+	) {}
 
-  isValidDestinationCell(cell: Cell) {
-    const cellString = ArmyGrid.posToString(cell);
-    return !this.grid.tiles.has(cellString);
-  }
+	isValidDestinationCell(cell: Cell) {
+		const cellString = ArmyGrid.posToString(cell);
+		return !this.grid.tiles.has(cellString);
+	}
 
-  removeRecruit(recruit: AnyRecruit) {
-    this.inventory.deleteElement(recruit);
-    this.grid.deleteElement(recruit);
-  }
+	removeRecruit(recruit: AnyRecruit) {
+		this.inventory.deleteElement(recruit);
+		this.grid.deleteElement(recruit);
+	}
 
-  addRecruit(recruit: AnyRecruit, grid: ImplementsTrait<typeof TGrid>) {
-    if (grid instanceof ArmyGrid) {
-      if (implementsTrait(recruit, Unit)) {
-        throw new Error("Cannot add unit to army grid");
-      }
-      if (implementsTrait(recruit, Tower)) {
-        this.addTower(recruit);
-        return;
-      }
-      if (implementsTrait(recruit, PathTile)) {
-        this.addTile(recruit);
-        return;
-      }
-      if (implementsTrait(recruit, Barrack)) {
-        this.addBarrack(recruit);
-        return;
-      }
-      return;
-    }
-    if (grid instanceof Inventory) {
-      this.addToInventory(recruit);
-      return;
-    }
-    throw new Error("Invalid grid type");
-  }
+	addRecruit(recruit: AnyRecruit, grid: ImplementsTrait<typeof TGrid>) {
+		if (grid instanceof ArmyGrid) {
+			if (implementsTrait(recruit, Unit)) {
+				throw new Error("Cannot add unit to army grid");
+			}
+			if (implementsTrait(recruit, Tower)) {
+				this.addTower(recruit);
+				return;
+			}
+			if (implementsTrait(recruit, PathTile)) {
+				this.addTile(recruit);
+				return;
+			}
+			if (implementsTrait(recruit, Barrack)) {
+				this.addBarrack(recruit);
+				return;
+			}
+			return;
+		}
+		if (grid instanceof Inventory) {
+			this.addToInventory(recruit);
+			return;
+		}
+		throw new Error("Invalid grid type");
+	}
 
-  get castle() {
-    return this.grid.castle;
-  }
-  get towers() {
-    return this.grid.towers;
-  }
-  get barracks() {
-    return this.grid.barracks;
-  }
+	get castle() {
+		return this.grid.castle;
+	}
+	get towers() {
+		return this.grid.towers;
+	}
+	get barracks() {
+		return this.grid.barracks;
+	}
 
-  pushToInventory(recruit: AnyRecruit) {
-    this.inventory.add(recruit);
-  }
+	pushToInventory(recruit: AnyRecruit) {
+		this.inventory.add(recruit);
+	}
 
-  addTower(recruit: AnyTower) {
-    this.grid.setElement(recruit);
-  }
+	addTower(recruit: AnyTower) {
+		this.grid.setElement(recruit);
+	}
 
-  addToInventory(recruit: AnyRecruit) {
-    this.inventory.setElement(recruit);
-  }
+	addToInventory(recruit: AnyRecruit) {
+		this.inventory.setElement(recruit);
+	}
 
-  addTile(tile: AnyPathTile) {
-    this.path.tiles.push(tile);
-    this.grid.setElement(tile);
-  }
-  addBarrack(barrack: AnyBarrack) {
-    this.grid.setElement(barrack);
-  }
+	addTile(tile: AnyPathTile) {
+		this.path.tiles.push(tile);
+		this.grid.setElement(tile);
+	}
+	addBarrack(barrack: AnyBarrack) {
+		this.grid.setElement(barrack);
+	}
 }

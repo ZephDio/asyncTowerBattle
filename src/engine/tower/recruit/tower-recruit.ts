@@ -10,31 +10,31 @@ import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 
 export const Tower = Subtrait([TRecruit], (base) => {
-  abstract class ITower extends base {
-    abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
-    abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
-    abstract clone(): ITower;
+	abstract class ITower extends base {
+		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
+		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
+		abstract clone(): ITower;
 
-    moveRecruit(hooks: TokenHooks, position: Position) {
-      const grid = hooks.shopPhaseHooks.shopHooks.determinateGrid(position);
-      if (!grid) throw new Error("Invalid grid");
-      if (grid instanceof RetailGrid) {
-        hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
-        return;
-      }
-      const cell = grid.realPositionToGrid(position);
-      if (!cell) throw new Error("Invalid cell");
-      const element = grid.getElement(cell);
-      if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-        if (element) throw new Error("already occupied cell");
-        this.cell = cell.clone();
-        hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
-        return;
-      }
-      throw new Error("No Case Matched");
-    }
-  }
-  return ITower;
+		moveRecruit(hooks: TokenHooks, position: Position) {
+			const grid = hooks.shopPhaseHooks.shopHooks.determinateGrid(position);
+			if (!grid) throw new Error("Invalid grid");
+			if (grid instanceof RetailGrid) {
+				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
+				return;
+			}
+			const cell = grid.realPositionToGrid(position);
+			if (!cell) throw new Error("Invalid cell");
+			const element = grid.getElement(cell);
+			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
+				if (element) throw new Error("already occupied cell");
+				this.cell = cell.clone();
+				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
+				return;
+			}
+			throw new Error("No Case Matched");
+		}
+	}
+	return ITower;
 });
 
 export type AnyTower = ImplementsTrait<typeof Tower>;

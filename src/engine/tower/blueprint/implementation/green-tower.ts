@@ -10,7 +10,7 @@ import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
 import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
 
 export class GreenTowerBlueprint extends Derive(
-	TShopBlueprint(10,10),
+	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.tower.green.resource.image, Resources.tower.green.size, 3),
 	TDamageDealer(10),
@@ -18,7 +18,7 @@ export class GreenTowerBlueprint extends Derive(
 	type = "green" as const;
 
 	toRecruit(cell: Cell) {
-		return new GreenTower(cell,this);
+		return new GreenTower(cell, this);
 	}
 	projectile = new Bullet();
 }

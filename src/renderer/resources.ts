@@ -81,7 +81,7 @@ export const Resources = {
 				image: createImage("/resources/units/priest.png"),
 				shape: "ellipse",
 			},
-		}
+		},
 	},
 	path: {
 		normal: {

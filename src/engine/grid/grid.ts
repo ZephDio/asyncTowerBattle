@@ -10,8 +10,6 @@ import { Tower } from "../tower/recruit/tower-recruit";
 import { Barrack } from "../barrack/recruit/barrack-recruit";
 import { GridElement } from "../../shared/traits/grid-element";
 
-
-
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
 	overEffect: HoverEffect | undefined = undefined;
@@ -26,20 +24,20 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		super({});
 	}
 
-	get castle(){
-		const castle = [...this.tiles.values()].find((e): e is Castle => e instanceof Castle)
-		if(!castle){
-			throw new Error("Castle not found")
+	get castle() {
+		const castle = [...this.tiles.values()].find((e): e is Castle => e instanceof Castle);
+		if (!castle) {
+			throw new Error("Castle not found");
 		}
-		return castle
+		return castle;
 	}
 
-	get towers(){
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Tower> => implementsTrait(e,Tower))
+	get towers() {
+		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Tower> => implementsTrait(e, Tower));
 	}
 
-	get barracks(){
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Barrack> => implementsTrait(e,Barrack))
+	get barracks() {
+		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Barrack> => implementsTrait(e, Barrack));
 	}
 
 	getEnemyDoorCell() {

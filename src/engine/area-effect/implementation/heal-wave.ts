@@ -30,7 +30,7 @@ export class HealWave extends Derive(
 		}
 		const allies = this.hooks.searchAlliesInArea(this.position, this.hitbox);
 		for (const ally of allies) {
-			ally.stats.heal(this.heal)
+			ally.stats.heal(this.heal);
 		}
 	}
 

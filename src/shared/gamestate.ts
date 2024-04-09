@@ -17,36 +17,36 @@ import { AnyBattleProjectile } from "../engine/projectile/battle/battle-projecti
 import { ArmyPath } from "../engine/path/army/path";
 
 export interface GameState {
-  type: string;
-  grid: ArmyGrid | BattleGrid;
+	type: string;
+	grid: ArmyGrid | BattleGrid;
 }
 
 export interface SummaryState extends GameState {
-  type: "summary";
-  battleVerdict: BattleVerdict;
+	type: "summary";
+	battleVerdict: BattleVerdict;
 }
 
 export interface BattleState extends GameState {
-  type: "battle";
-  castles: BattleCastle[];
-  towers: AnyBattleTower[];
-  paths: AnyBattleTile[];
-  grid: BattleGrid;
-  units: AnyBattleUnit[];
-  areaEffects: AreaEffect[];
-  projectiles: AnyBattleProjectile[];
+	type: "battle";
+	castles: BattleCastle[];
+	towers: AnyBattleTower[];
+	paths: AnyBattleTile[];
+	grid: BattleGrid;
+	units: AnyBattleUnit[];
+	areaEffects: AreaEffect[];
+	projectiles: AnyBattleProjectile[];
 }
 
 export interface ShopState extends GameState {
-  type: "shop";
-  retail: Retail;
+	type: "shop";
+	retail: Retail;
 
-  castle: Castle<CastleBlueprint>;
-  towers: ImplementsTrait<typeof Tower>[];
-  path: ArmyPath;
-  grid: ArmyGrid;
+	castle: Castle<CastleBlueprint>;
+	towers: ImplementsTrait<typeof Tower>[];
+	path: ArmyPath;
+	grid: ArmyGrid;
 
-  hold: ImplementsTrait<typeof TTokenDrag> | null;
+	hold: ImplementsTrait<typeof TTokenDrag> | null;
 
-  hudElements: HudElement[];
+	hudElements: HudElement[];
 }

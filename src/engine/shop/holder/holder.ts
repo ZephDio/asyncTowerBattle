@@ -15,92 +15,98 @@ import { AnyUnit } from "../../units/recruit/unit-recruit";
 import { Physic } from "../../../shared/physic";
 
 export type TokenHooks = {
-  shopPhaseHooks: ShopPhaseHooks;
-  holderHooks: {
-    removeHold: Holder["setNull"];
-  };
+	shopPhaseHooks: ShopPhaseHooks;
+	holderHooks: {
+		removeHold: Holder["setNull"];
+	};
 };
 
 export class Holder {
-  private _hold: null | ImplementsTrait<typeof TTokenDrag> = null;
-  constructor() {}
+	private _hold: null | ImplementsTrait<typeof TTokenDrag> = null;
+	constructor() {}
 
-  get hold() {
-    return this._hold;
-  }
+	get hold() {
+		return this._hold;
+	}
 
-  private setNull() {
-    this._hold = null;
-  }
+	private setNull() {
+		this._hold = null;
+	}
 
-  private setHold(token: ImplementsTrait<typeof TTokenDrag>) {
-    if (this._hold) {
-      this._hold.onRelease();
-    }
-    this._hold = token;
-  }
+	private setHold(token: ImplementsTrait<typeof TTokenDrag>) {
+		if (this._hold) {
+			this._hold.onRelease();
+		}
+		this._hold = token;
+	}
 
-  setHoldFromRetail(buyable: Buyable, retail: Retail, position: Position, hooks: ShopPhaseHooks) {
-    retail.removeItem(buyable);
-    const onAbort = () => {
-      retail.addItem(buyable);
-      this.setNull();
-    };
-    const token = new BuyableTokenDrag(buyable, position, this.getHooks(hooks), onAbort);
-    this.setHold(token);
-  }
+	setHoldFromRetail(buyable: Buyable, retail: Retail, position: Position, hooks: ShopPhaseHooks) {
+		retail.removeItem(buyable);
+		const onAbort = () => {
+			retail.addItem(buyable);
+			this.setNull();
+		};
+		const token = new BuyableTokenDrag(buyable, position, this.getHooks(hooks), onAbort);
+		this.setHold(token);
+	}
 
-  setHoldFromUnitInBarracks(recruit: AnyBarrack, unit: AnyUnit, hooks: TokenHooks, position: Position) {
-    recruit.setUnit(null);
-    const onAbort = () => {
-      recruit.setUnit(unit);
-      this.setNull();
-    };
-    const token = new RecruitTokenDrag(unit, position, hooks, onAbort);
-    this.setHold(token);
-    return;
-  }
+	setHoldFromUnitInBarracks(recruit: AnyBarrack, unit: AnyUnit, hooks: TokenHooks, position: Position) {
+		recruit.setUnit(null);
+		const onAbort = () => {
+			recruit.setUnit(unit);
+			this.setNull();
+		};
+		const token = new RecruitTokenDrag(unit, position, hooks, onAbort);
+		this.setHold(token);
+		return;
+	}
 
-  setHoldFromArmyRecruit(recruit: AnyRecruit, army: Army, position: Position, hooks: ShopPhaseHooks, grid: ImplementsTrait<typeof TGrid>) {
-    if (recruit instanceof Castle) return;
-    if (implementsTrait(recruit, Barrack)) {
-      if (recruit.unitRecruit) {
-        const barrackPosition = grid.cellToReal(recruit.cell);
-        const unitPosition = new Position({ x: barrackPosition.x, y: grid.cellToReal(recruit.cell).y + 1.8 });
-        const isClickingOnUnit = Physic.doCollide(unitPosition, recruit.unitRecruit.hitbox, position);
-        if (isClickingOnUnit) {
-          this.setHoldFromUnitInBarracks(recruit, recruit.unitRecruit, this.getHooks(hooks), position);
-          return;
-        }
-      }
-    }
-    army.removeRecruit(recruit);
-    const onAbort = () => {
-      army.addRecruit(recruit, grid);
-      this.setNull();
-    };
-    const token = new RecruitTokenDrag(recruit, position, this.getHooks(hooks), onAbort);
-    this.setHold(token);
-  }
+	setHoldFromArmyRecruit(
+		recruit: AnyRecruit,
+		army: Army,
+		position: Position,
+		hooks: ShopPhaseHooks,
+		grid: ImplementsTrait<typeof TGrid>,
+	) {
+		if (recruit instanceof Castle) return;
+		if (implementsTrait(recruit, Barrack)) {
+			if (recruit.unitRecruit) {
+				const barrackPosition = grid.cellToReal(recruit.cell);
+				const unitPosition = new Position({ x: barrackPosition.x, y: grid.cellToReal(recruit.cell).y + 1.8 });
+				const isClickingOnUnit = Physic.doCollide(unitPosition, recruit.unitRecruit.hitbox, position);
+				if (isClickingOnUnit) {
+					this.setHoldFromUnitInBarracks(recruit, recruit.unitRecruit, this.getHooks(hooks), position);
+					return;
+				}
+			}
+		}
+		army.removeRecruit(recruit);
+		const onAbort = () => {
+			army.addRecruit(recruit, grid);
+			this.setNull();
+		};
+		const token = new RecruitTokenDrag(recruit, position, this.getHooks(hooks), onAbort);
+		this.setHold(token);
+	}
 
-  exit() {
-    if (this._hold) {
-      this._hold.onRelease();
-    }
-  }
+	exit() {
+		if (this._hold) {
+			this._hold.onRelease();
+		}
+	}
 
-  moveHold(position: Position) {
-    if (this.hold) {
-      this.hold.position = position;
-    }
-  }
+	moveHold(position: Position) {
+		if (this.hold) {
+			this.hold.position = position;
+		}
+	}
 
-  getHooks(shopPhaseHooks: ShopPhaseHooks): TokenHooks {
-    return {
-      shopPhaseHooks,
-      holderHooks: {
-        removeHold: this.setNull.bind(this),
-      },
-    };
-  }
+	getHooks(shopPhaseHooks: ShopPhaseHooks): TokenHooks {
+		return {
+			shopPhaseHooks,
+			holderHooks: {
+				removeHold: this.setNull.bind(this),
+			},
+		};
+	}
 }

@@ -20,7 +20,6 @@ export class GreenTower extends Derive(HTDamageDealer, Tower) {
 		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
 	}
 
-
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: Position, damage: number) {
 		return new BattleBullet(this.tower.projectile, position.clone(), hooks, target, damage);
 	}

@@ -21,7 +21,7 @@ export class ArmyFixture {
 		];
 		const path = PathFixture.defaultAllied;
 		const barracks = [
-			BarrackRecruitFixtures.basicWithSoldier(4), 
+			BarrackRecruitFixtures.basicWithSoldier(4),
 			BarrackRecruitFixtures.waveWithSoldier(),
 			BarrackRecruitFixtures.basicWithPriest(),
 		];
@@ -41,12 +41,8 @@ export class ArmyFixture {
 		];
 		const castle = CastleRecruitFixture.enemy;
 		const path = PathFixture.defaultAllied;
-		const barracks = [BarrackRecruitFixtures.basicWithDragon(),BarrackRecruitFixtures.waveWithSoldier()];
+		const barracks = [BarrackRecruitFixtures.basicWithDragon(), BarrackRecruitFixtures.waveWithSoldier()];
 		[castle, ...towers, ...barracks, ...path.tiles].map((e) => grid.setElement(e));
-		return new Army(
-			path,
-			grid,
-			new Inventory(),
-		);
+		return new Army(path, grid, new Inventory());
 	}
 }
