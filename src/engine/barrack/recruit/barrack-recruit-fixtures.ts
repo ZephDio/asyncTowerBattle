@@ -71,6 +71,14 @@ export class BarrackRecruitFixtures {
 			.buildBasic();
 	}
 
+	static basicWithBerseker(speed?: number) {
+		return new BarrackRecruitBuilder()
+			.withProductionSpeed(speed)
+			.setUnit(UnitRecruitFixture.berseker)
+			.withCell(new Cell({ x: 1, y: 1 }))
+			.buildBasic();
+	}
+
 	static waveWithPriest(speed?: number) {
 		return new BarrackRecruitBuilder()
 			.withProductionSpeed(speed)
@@ -85,6 +93,13 @@ export class BarrackRecruitFixtures {
 			.setUnit(UnitRecruitFixture.dragon)
 			.withCell(new Cell({ x: 1, y: 1 }))
 			.buildWave();
+	}
+
+	static waveWithBerseker(speed?: number) {
+		return new BarrackRecruitBuilder()
+			.withProductionSpeed(speed)
+			.setUnit(UnitRecruitFixture.berseker)
+			.withCell(new Cell({ x: 1, y: 1 }));
 	}
 	static waveWithChoupisson(speed?: number) {
 		return new BarrackRecruitBuilder()
