@@ -6,16 +6,13 @@ import { ShopState } from "../../shared/gamestate";
 import { ImplementsTrait } from "@ddd-ts/traits";
 import { GoldHud } from "../../shared/hud-element/gold-hud";
 import { StartBattleButton } from "../../shared/hud-element/start-battle-button";
-import { TTokenDrag } from "./token-drag/token-drag";
 import { TGrid } from "../grid/tgrid";
 import { AnyUnit } from "../units/recruit/unit-recruit";
-import { BuyableTokenDrag } from "./token-drag/buyable-token-drag";
-import { RecruitTokenDrag } from "./token-drag/army-recruit-token-drag";
 import { ArmyGrid } from "../grid/grid";
 import { AnyRecruit } from "../../shared/traits/recruit";
-import { Castle } from "../castle/recruit/castle-recruit";
-import { Buyable } from "./buyable";
+import { Buyable } from "./retail/buyable";
 import { RefreshBellHud } from "../../shared/hud-element/refresh-bell-hud";
+import { Holder } from "./holder/holder";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -26,17 +23,16 @@ type ArmyHooks = {
 	addUnit: (unit: AnyUnit) => void;
 };
 
-type ShopHooks = {
+type RetailHooks = {
 	buy: (buyable: Buyable, position: Position) => void;
 	addItem: (buyable: Buyable) => void;
 	determinateGrid: (position: Position) => ImplementsTrait<typeof TGrid> | undefined;
 };
 
-export type TokenHooks = {
+export type ShopPhaseHooks = {
 	economyHooks: EconomyHooks;
 	armyHooks: ArmyHooks;
-	shopHooks: ShopHooks;
-	removeHold: () => void;
+	shopHooks: RetailHooks;
 };
 export type EconomyHooks = {
 	getEconomy: () => { gold: number };
@@ -45,10 +41,9 @@ export type EconomyHooks = {
 	spendGold: (amount: number) => void;
 };
 
-
-export class Shop {
-	public hold = null as null | ImplementsTrait<typeof TTokenDrag>;
+export class ShopPhase {
 	public retail = new Retail();
+	public holderControl = new Holder();
 	constructor(
 		public army: Army,
 		public onShopExit: Game["handleShopQuit"],
@@ -56,9 +51,7 @@ export class Shop {
 	) {}
 
 	exitShop() {
-		if (this.hold) {
-			this.hold.onRelease();
-		}
+		this.holderControl.exit();
 		this.onShopExit();
 	}
 
@@ -68,32 +61,18 @@ export class Shop {
 	}
 
 	refresh() {
-		if(this.economyHooks.canPurchase(5)){
+		if (this.economyHooks.canPurchase(5)) {
 			this.retail.refresh();
 			this.economyHooks.spendGold(5);
 		}
 	}
 
-	setHoldFromRetail(buyable: Buyable, position: Position) {
-		this.retail.removeItem(buyable);
-		const onAbort = () => {
-			this.retail.addItem(buyable);
-			this.hold = null;
-		};
-		const token = new BuyableTokenDrag(buyable, position, this.getTokenHooks(), onAbort);
-		this.setHold(token);
+	selectItemFromRetail(buyable: Buyable, position: Position) {
+		this.holderControl.setHoldFromRetail(buyable, this.retail, position, this.getTokenHooks());
 	}
 
 	setHoldFromArmyRecruit(recruit: AnyRecruit, position: Position, grid: ImplementsTrait<typeof TGrid>) {
-		if(recruit instanceof Castle) return
-		this.army.removeRecruit(recruit);
-
-		const onAbort = () => {
-			this.army.addRecruit(recruit, grid);
-			this.hold = null;
-		};
-		const token = new RecruitTokenDrag(recruit, position, this.getTokenHooks(), onAbort);
-		this.setHold(token);
+		this.holderControl.setHoldFromArmyRecruit(recruit, this.army, position, this.getTokenHooks(), grid);
 	}
 
 	determineGrid(position: Position) {
@@ -107,19 +86,6 @@ export class Shop {
 		return undefined;
 	}
 
-	moveHold(position: Position) {
-		if (this.hold) {
-			this.hold.position = position;
-		}
-	}
-
-	private setHold(token: ImplementsTrait<typeof TTokenDrag>) {
-		if (this.hold) {
-			this.hold.onRelease();
-		}
-		this.hold = token;
-	}
-
 	getDrawables() {
 		return {
 			grids: [this.army.grid, this.army.inventory, this.retail.grid],
@@ -127,12 +93,12 @@ export class Shop {
 				new StartBattleButton({}),
 				new RefreshBellHud({}),
 				new GoldHud(this.economyHooks.getEconomy().gold),
-				...(this.hold ? [this.hold] : []),
+				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
 		};
 	}
 
-	getTokenHooks(): TokenHooks {
+	getTokenHooks(): ShopPhaseHooks {
 		return {
 			economyHooks: this.economyHooks,
 			armyHooks: {
@@ -148,9 +114,6 @@ export class Shop {
 				addItem: this.retail.addItem.bind(this.retail),
 				determinateGrid: this.determineGrid.bind(this),
 			},
-			removeHold: () => {
-				this.hold = null;
-			},
 		};
 	}
 
@@ -158,7 +121,7 @@ export class Shop {
 		return {
 			type: "shop",
 			retail: this.retail,
-			hold: this.hold,
+			hold: this.holderControl.hold,
 			hudElements: [new StartBattleButton({}), new RefreshBellHud({})],
 			towers: this.army.towers,
 			castle: this.army.castle,

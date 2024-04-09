@@ -12,7 +12,7 @@ import { ImplementsTrait } from "@ddd-ts/traits";
 import { AnyBattleTower } from "../engine/tower/battle/battle-tower";
 import { AnyBattleTile } from "../engine/tile/battle/battle-tile";
 import { AnyBattleUnit } from "../engine/units/battle/battle-unit";
-import { TTokenDrag } from "../engine/shop/token-drag/token-drag";
+import { TTokenDrag } from "../engine/shop/holder/token-drag/token-drag";
 import { AnyBattleProjectile } from "../engine/projectile/battle/battle-projectile";
 import { ArmyPath } from "../engine/path/army/path";
 

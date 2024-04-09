@@ -5,7 +5,7 @@ import { HoverEffect } from "./grid-effects/hover-effect";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { Position } from "../../shared/position";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
-import { Buyable } from "../shop/buyable";
+import { Buyable } from "../shop/retail/buyable";
 
 export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, Buyable> = new Map();

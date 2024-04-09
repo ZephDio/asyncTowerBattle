@@ -5,7 +5,7 @@ import { HitBox, Rectangle, TCollider, THitbox } from "../../../shared/hitboxes"
 import { RetailGrid } from "../../grid/retail-grid";
 import { ArmyGrid } from "../../grid/grid";
 import { RetailFiller } from "./retail-filler";
-import { Buyable } from "../buyable";
+import { Buyable } from "./buyable";
 export type ShopItem = Buyable;
 export class Retail extends Derive(
 	TCollider,
@@ -22,7 +22,7 @@ export class Retail extends Derive(
 		new Cell({ x: 8, y: 3 }),
 	];
 	grid: RetailGrid;
-	retailFiller: RetailFiller = new RetailFiller();;
+	retailFiller: RetailFiller = new RetailFiller();
 	constructor() {
 		super({});
 		this.grid = new RetailGrid();
@@ -35,10 +35,10 @@ export class Retail extends Derive(
 	}
 
 	async getRetailItems(): Promise<ShopItem[]> {
-		const itemsAndPrice = this.retailFiller.getFreshItems(this.slots)
+		const itemsAndPrice = this.retailFiller.getFreshItems(this.slots);
 		return itemsAndPrice.map((itemAndPrice) => {
-			return Buyable.from(itemAndPrice.recruit,itemAndPrice.price);
-		})
+			return Buyable.from(itemAndPrice.recruit, itemAndPrice.price);
+		});
 	}
 
 	removeItem(buyable: Buyable) {
@@ -48,7 +48,6 @@ export class Retail extends Derive(
 	addItem(buyable: Buyable) {
 		this.grid.tiles.set(ArmyGrid.posToString(buyable.cell), buyable);
 	}
-
 
 	async refresh() {
 		this.grid.tiles.clear();

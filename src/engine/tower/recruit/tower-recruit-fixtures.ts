@@ -19,7 +19,7 @@ export class TowerBuilder {
 		return new BlueTower(this.cell, tower);
 	}
 	buildGreen(tower: GreenTowerBlueprint) {
-		return new GreenTower( this.cell, tower);
+		return new GreenTower(this.cell, tower);
 	}
 	buildOrange(tower: OrangeTowerBlueprint) {
 		return new OrangeTower(this.cell, tower);

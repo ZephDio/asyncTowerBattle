@@ -78,7 +78,6 @@ export class BattleArmy {
 		return found;
 	}
 
-
 	getHooks(): BattleArmyHooks {
 		return {
 			addUnits: this.addUnit.bind(this),

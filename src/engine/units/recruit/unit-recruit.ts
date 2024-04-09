@@ -4,11 +4,11 @@ import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattlePath } from "../../path/battle/battle-path";
 import { AnyBattleUnit } from "../battle/battle-unit";
 import { TRecruit } from "../../../shared/traits/recruit";
-import { TokenHooks } from "../../shop/shop";
 import { RetailGrid } from "../../grid/retail-grid";
 import { ArmyGrid } from "../../grid/grid";
 import { Barrack } from "../../barrack/recruit/barrack-recruit";
 import { Inventory } from "../../grid/inventory/unit-inventory";
+import { TokenHooks } from "../../shop/holder/holder";
 
 export type AnyUnit = ImplementsTrait<typeof Unit>;
 
@@ -23,11 +23,11 @@ export const Unit = Subtrait([TRecruit], (base) => {
 		abstract toBattle(position: Position, path: BattlePath, hooks: BattleArmyHooks): AnyBattleUnit;
 
 		moveRecruit(hooks: TokenHooks, position: Position) {
-			const grid = hooks.shopHooks.determinateGrid(position);
+			const grid = hooks.shopPhaseHooks.shopHooks.determinateGrid(position);
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
-				hooks.economyHooks.addGold(Math.round(10));
-				return
+				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
+				return;
 			}
 			const cell = grid.realPositionToGrid(position);
 			if (!cell) throw new Error("Invalid cell");
@@ -35,7 +35,7 @@ export const Unit = Subtrait([TRecruit], (base) => {
 			if (grid instanceof ArmyGrid) {
 				if (implementsTrait(element, Barrack)) {
 					if (element.unitRecruit) {
-						hooks.armyHooks.pushToInventory(element.unitRecruit);
+						hooks.shopPhaseHooks.armyHooks.pushToInventory(element.unitRecruit);
 					}
 					this.cell = cell.clone();
 					element.setUnit(this);
@@ -46,7 +46,7 @@ export const Unit = Subtrait([TRecruit], (base) => {
 			if (grid instanceof Inventory) {
 				if (element) throw new Error("already occupied cell");
 				this.cell = cell.clone();
-				hooks.armyHooks.addRecruit(this, grid);
+				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return;
 			}
 			throw new Error("Invalid grid");

@@ -63,7 +63,7 @@ export class BarrackRecruitFixtures {
 			.buildWave();
 	}
 
-	static basicWithPriest(speed?: number){
+	static basicWithPriest(speed?: number) {
 		return new BarrackRecruitBuilder()
 			.withProductionSpeed(speed)
 			.setUnit(UnitRecruitFixture.priest)

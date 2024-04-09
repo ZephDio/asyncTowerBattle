@@ -22,7 +22,7 @@ export class SoldierBlueprint extends Derive(
 	cost = 75;
 	type = "soldier" as const;
 
-	toRecruit(cell :Cell) {
-		return new Soldier(cell,this);
+	toRecruit(cell: Cell) {
+		return new Soldier(cell, this);
 	}
 }

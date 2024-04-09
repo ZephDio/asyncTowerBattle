@@ -14,6 +14,6 @@ export class WaveBarrackBlueprint extends Derive(
 	productionSpeed: number = 3.5;
 
 	toRecruit(cell: Cell) {
-		return new WaveBarrack(cell.clone(),this);
+		return new WaveBarrack(cell.clone(), this);
 	}
 }

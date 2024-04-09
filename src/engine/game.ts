@@ -2,13 +2,13 @@ import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
 import { ArmyFixture } from "./army/army-fixtures";
-import { EconomyHooks, Shop } from "./shop/shop";
+import { EconomyHooks, ShopPhase } from "./shop/shop";
 
 export class Game {
 	army = ArmyFixture.allied;
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
-	shop: null | Shop = null;
+	shop: null | ShopPhase = null;
 	enemyArmy = ArmyFixture.enemy;
 	economy = {
 		gold: 0,
@@ -61,7 +61,7 @@ export class Game {
 	}
 
 	startShop() {
-		this.shop = new Shop(this.army, this.handleShopQuit.bind(this), this.getEconomyHooks());
+		this.shop = new ShopPhase(this.army, this.handleShopQuit.bind(this), this.getEconomyHooks());
 		this.addGold(20);
 	}
 

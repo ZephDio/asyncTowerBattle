@@ -14,6 +14,6 @@ export class BasicBarrackBlueprint extends Derive(
 	productionSpeed: number = 3;
 
 	toRecruit(cell: Cell) {
-		return new BasicBarrack(cell.clone(),this);
+		return new BasicBarrack(cell.clone(), this);
 	}
 }

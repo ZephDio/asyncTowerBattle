@@ -117,14 +117,13 @@ export const TPriceHudRenderable = Subtrait([THudRenderable, THasPrice], (base) 
 				...super.huds(),
 				{
 					hud: this.unitPreview,
-					position: new Position({ x: 0, y: -4.2}),
+					position: new Position({ x: 0, y: -4.2 }),
 				},
 			];
 		}
 	}
 	return IPriceHudRenderable;
 });
-
 
 export const TImageDrawable = (image: HTMLImageElement, size: { width: number; height: number }, priority: number) =>
 	Subtrait([TDrawable], (base) => {
