@@ -74,7 +74,7 @@ export class InputToIntentTranslator {
 			// if (uicell) {
 			// }
 
-			// grid.clearSynergiesTiles();
+			grid.clearSynergiesTiles();
 		}
 	}
 
