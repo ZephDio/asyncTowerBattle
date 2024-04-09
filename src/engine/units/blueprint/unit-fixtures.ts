@@ -1,3 +1,4 @@
+import { BersekerBlueprint } from "./implementation/berseker";
 import { DragonBlueprint } from "./implementation/dragon";
 import { PriestBlueprint } from "./implementation/priest";
 import { SoldierBlueprint } from "./implementation/soldier";
@@ -14,6 +15,10 @@ export class UnitBuilder {
 	buildPriest() {
 		return new PriestBlueprint({});
 	}
+
+	buildBerseker() {
+		return new BersekerBlueprint({});
+	}
 }
 
 export class UnitFixture {
@@ -25,5 +30,8 @@ export class UnitFixture {
 	}
 	static get priest() {
 		return new UnitBuilder().buildPriest();
+	}
+	static get berseker() {
+		return new UnitBuilder().buildBerseker();
 	}
 }

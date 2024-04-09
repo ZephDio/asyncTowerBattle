@@ -42,7 +42,7 @@ export class ArmyFixture {
 			//TowerEntityFixtures.topRightTower,
 		];
 		const path = PathFixture.default;
-		const barracks = [BarrackRecruitFixtures.basicWithSoldier()];
+		const barracks = [BarrackRecruitFixtures.basicWithBerseker()];
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));

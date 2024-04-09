@@ -1,7 +1,9 @@
 import { Cell } from "../../../shared/position";
+import { BersekerBlueprint } from "../blueprint/implementation/berseker";
 import { DragonBlueprint } from "../blueprint/implementation/dragon";
 import { PriestBlueprint } from "../blueprint/implementation/priest";
 import { SoldierBlueprint } from "../blueprint/implementation/soldier";
+import { Berseker } from "./implementation/berseker-recruit";
 import { Dragon } from "./implementation/dragon-recruit";
 import { Priest } from "./implementation/priest-recruit";
 import { Soldier } from "./implementation/soldier-recruit";
@@ -16,6 +18,9 @@ export class UnitRecruitBuilder {
 	buildPriest(priest?: PriestBlueprint) {
 		return new Priest(new Cell({ x: 0, y: 2 }), priest);
 	}
+	buildBerseker(berseker?: BersekerBlueprint) {
+		return new Berseker(new Cell({ x: 0, y: 2 }), berseker);
+	}
 }
 
 export class UnitRecruitFixture {
@@ -27,5 +32,8 @@ export class UnitRecruitFixture {
 	}
 	static get priest() {
 		return new UnitRecruitBuilder().buildPriest();
+	}
+	static get berseker() {
+		return new UnitRecruitBuilder().buildBerseker();
 	}
 }

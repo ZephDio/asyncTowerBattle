@@ -51,6 +51,7 @@ export class BasicBattleBarrack extends Derive(
 	}
 
 	onCastResolve(): void {
+		console.log(this.unitRecruit.toBattle(this.spawnPosition.clone(), this.path, this.hooks));
 		this.hooks.addUnits(this.unitRecruit.toBattle(this.spawnPosition.clone(), this.path, this.hooks), this);
 		this.castInProgress = null;
 	}

@@ -104,6 +104,16 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		berseker: {
+			size: {
+				width: 3,
+				height: 4,
+			},
+			resource: {
+				image: createImage("/resources/units/berseker.png"),
+				shape: "ellipse",
+			},
+		},
 	},
 	path: {
 		normal: {

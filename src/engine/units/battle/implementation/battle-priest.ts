@@ -79,8 +79,4 @@ export class BattlePriest extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 		}
 		this.tickCast();
 	}
-
-	get realPosition() {
-		return this.position;
-	}
 }
