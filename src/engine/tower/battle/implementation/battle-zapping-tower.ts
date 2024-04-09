@@ -37,10 +37,6 @@ export class ZappingBattleTower extends Derive(
 		});
 	}
 
-	takeDamage(_damage: number): void {
-		return;
-	}
-
 	private attack(target: AnyBattleUnit) {
 		const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
 		this.hooks.addProjectile(projectile, this);

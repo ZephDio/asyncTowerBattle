@@ -8,6 +8,18 @@ export const HaveStats = Trait((base) => {
 			this.stats.addStatus(status);
 		}
 
+		removeStatus(status: ImplementsTrait<typeof Status>) {
+			this.stats.removeStatus(status);
+		}
+
+		takeDamage(damage: number) {
+			this.stats.takeDamage(damage);
+		}
+
+		heal(amount: number) {
+			this.stats.heal(amount);
+		}
+
 		constructor(props: {
 			maxHealth: number;
 			attack: number;

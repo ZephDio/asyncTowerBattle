@@ -1,5 +1,5 @@
 import { Cell } from "../../shared/position";
-import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-recruit-fixtures";
+import { BarrackRecruitBuilder, BarrackRecruitFixtures } from "../barrack/recruit/barrack-recruit-fixtures";
 import { CastleRecruitFixture } from "../castle/blueprint/castle";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
@@ -42,7 +42,12 @@ export class ArmyFixture {
 			//TowerEntityFixtures.topRightTower,
 		];
 		const path = PathFixture.default;
-		const barracks = [BarrackRecruitFixtures.basicWithSoldier()];
+		const barracks = [
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.choupisson)
+				.withCell(new Cell({ x: 1, y: 1 }))
+				.buildBasic(),
+		];
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
