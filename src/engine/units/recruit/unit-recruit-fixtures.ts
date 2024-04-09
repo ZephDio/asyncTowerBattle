@@ -1,7 +1,9 @@
 import { Cell } from "../../../shared/position";
+import { ChoupissonBlueprint } from "../blueprint/implementation/choupisson";
 import { DragonBlueprint } from "../blueprint/implementation/dragon";
 import { PriestBlueprint } from "../blueprint/implementation/priest";
 import { SoldierBlueprint } from "../blueprint/implementation/soldier";
+import { Choupisson } from "./implementation/choupisson-recruit";
 import { Dragon } from "./implementation/dragon-recruit";
 import { Priest } from "./implementation/priest-recruit";
 import { Soldier } from "./implementation/soldier-recruit";
@@ -16,6 +18,9 @@ export class UnitRecruitBuilder {
 	buildPriest(priest?: PriestBlueprint) {
 		return new Priest(new Cell({ x: 0, y: 2 }), priest);
 	}
+	buildChoupisson(choupisson?: ChoupissonBlueprint) {
+		return new Choupisson(new Cell({ x: 0, y: 2 }), choupisson);
+	}
 }
 
 export class UnitRecruitFixture {
@@ -27,5 +32,8 @@ export class UnitRecruitFixture {
 	}
 	static get priest() {
 		return new UnitRecruitBuilder().buildPriest();
+	}
+	static get choupisson() {
+		return new UnitRecruitBuilder().buildChoupisson();
 	}
 }

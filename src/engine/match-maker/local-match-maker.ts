@@ -35,10 +35,29 @@ const EnemyArmyFixtures = {
 			//TowerEntityFixtures.topRightTower,
 		];
 		const path = PathFixture.default;
-		const barracks = [BarrackRecruitFixtures.basicWithDragon(1), BarrackRecruitFixtures.waveWithSoldier()];
-		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
+		const barracks = [
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.choupisson)
+				.withCell(new Cell({ x: 1, y: 1 }))
+				.withProductionSpeed(3.2)
+				.buildWave(),
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.choupisson)
+				.withCell(new Cell({ x: 1, y: 2 }))
+				.withProductionSpeed(3.3)
+				.buildWave(),
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.choupisson)
+				.withCell(new Cell({ x: 0, y: 2 }))
+				.withProductionSpeed(3.4)
+				.buildWave(),
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.choupisson)
+				.withCell(new Cell({ x: 1, y: 0 }))
+				.withProductionSpeed(3.6)
+				.buildWave(),
+		];
 		const unitInventory = new Inventory();
-		unitInInventory.map((e) => unitInventory.add(e));
 		[castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
 		return new Army(path, grid, unitInventory);

@@ -58,10 +58,6 @@ export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDr
 		this.position.y = newPosition.y;
 	}
 
-	takeDamage(damage: number): void {
-		this.stats.takeDamage(damage);
-	}
-
 	tick() {
 		this.stats.tick();
 		if (!this.pathFinder.isArrived) {

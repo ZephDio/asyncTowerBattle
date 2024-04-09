@@ -84,6 +84,16 @@ export const Resources = {
 				image: createImage("/resources/units/soldier.png"),
 			},
 		},
+		choupisson: {
+			size: {
+				width: 3,
+				height: 3,
+			},
+			resource: {
+				image: createImage("/resources/units/choupisson.png"),
+				shape: "ellipse",
+			},
+		},
 		dragon: {
 			size: {
 				width: 3.3,
@@ -158,6 +168,17 @@ export const Resources = {
 			size: {
 				width: 2.7,
 				height: 1.2,
+			},
+		},
+		spine: {
+			resource: {
+				image: createImage("/resources/projectiles/spine.png"),
+				shape: "rectangle",
+				color: "#3b3b3b",
+			},
+			size: {
+				width: 2,
+				height: 0.9,
 			},
 		},
 		frostSpike: {

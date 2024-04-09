@@ -42,6 +42,13 @@ export class Physic {
 		};
 	}
 
+	static getNextPosition(position: Position, theta: number, speed: number) {
+		return new Position({
+			x: position.x + Math.cos(theta) * speed,
+			y: position.y + Math.sin(theta) * speed,
+		});
+	}
+
 	static getEllipseRadius(radiusWidth: number, radiusHeight: number, theta: number) {
 		return (
 			(radiusWidth * radiusHeight) /

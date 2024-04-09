@@ -28,7 +28,7 @@ export class BattleArmy {
 	path: BattlePath;
 	castle: BattleCastle;
 	barracks: AnyBattleBarrack[];
-	projectiles: Map<AnyBattleProjectile, AnyBattleTower> = new Map();
+	projectiles: Map<AnyBattleProjectile, any> = new Map();
 	towers: AnyBattleTower[];
 
 	constructor(
@@ -52,7 +52,7 @@ export class BattleArmy {
 		this.units.delete(entityRecruit);
 	}
 
-	addProjectile(projectile: AnyBattleProjectile, source: AnyBattleTower) {
+	addProjectile(projectile: AnyBattleProjectile, source: any) {
 		this.projectiles.set(projectile, source);
 	}
 
