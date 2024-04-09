@@ -36,10 +36,6 @@ export class YellowBattleTower extends Derive(
 		});
 	}
 
-	takeDamage(_damage: number): void {
-		return;
-	}
-
 	private attack() {
 		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(this.cell, [
 			new Cell({ x: 1, y: 0 }),

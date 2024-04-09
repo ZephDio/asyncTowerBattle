@@ -99,7 +99,13 @@ export class BarrackRecruitFixtures {
 		return new BarrackRecruitBuilder()
 			.withProductionSpeed(speed)
 			.setUnit(UnitRecruitFixture.berseker)
-			.withCell(new Cell({ x: 1, y: 1 }))
+			.withCell(new Cell({ x: 1, y: 1 }));
+	}
+	static waveWithChoupisson(speed?: number) {
+		return new BarrackRecruitBuilder()
+			.withProductionSpeed(speed)
+			.setUnit(UnitRecruitFixture.choupisson)
+			.withCell(new Cell({ x: 6, y: 5 }))
 			.buildWave();
 	}
 }

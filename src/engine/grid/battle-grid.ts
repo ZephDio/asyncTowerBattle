@@ -88,6 +88,32 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return founds;
 	}
 
+	getRelativeDirection(isEnemy: boolean) {
+		if (!isEnemy) {
+			return {
+				above: new Position({ x: 0, y: 1 }),
+				below: new Position({ x: 0, y: -1 }),
+				left: new Position({ x: -1, y: 0 }),
+				right: new Position({ x: 1, y: 0 }),
+			};
+		}
+		return {
+			above: new Position({ x: 0, y: -1 }),
+			below: new Position({ x: 0, y: 1 }),
+			left: new Position({ x: 1, y: 0 }),
+			right: new Position({ x: -1, y: 0 }),
+		};
+	}
+
+	getBoundaries() {
+		return {
+			minX: this.position.x,
+			minY: this.position.y,
+			maxX: this.position.x + this.width * this.cellSize,
+			maxY: this.position.y + this.height * this.cellSize,
+		};
+	}
+
 	getAlliedHooks(): GridHooks {
 		return {
 			getRealPosition: this.cellToReal.bind(this),
@@ -97,6 +123,8 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => {
 				return this.getRelativeNeighborsInBattle(cell, relativePositions, false);
 			},
+			getRelativeDirection: () => this.getRelativeDirection(false),
+			getBoundaries: () => this.getBoundaries(),
 		};
 	}
 
@@ -109,6 +137,8 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => {
 				return this.getRelativeNeighborsInBattle(cell, relativePositions, true);
 			},
+			getRelativeDirection: () => this.getRelativeDirection(true),
+			getBoundaries: () => this.getBoundaries(),
 		};
 	}
 
@@ -126,4 +156,6 @@ export type GridHooks = {
 	getRealPosition: (cell: Cell) => Position;
 	getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
 	getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
+	getRelativeDirection: () => { above: Position; below: Position; left: Position; right: Position };
+	getBoundaries: () => { minX: number; minY: number; maxX: number; maxY: number };
 };

@@ -45,10 +45,6 @@ export class BattleDragon extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 		this.castInProgress = new Cast(this, this.attackCastle.bind(this), 100);
 	}
 
-	takeDamage(damage: number) {
-		this.stats.takeDamage(damage);
-	}
-
 	followPath(): void {
 		if (this.canMove() && !this.pathFinder.isArrived) {
 			const newPosition = this.pathFinder.getNextPosition(this.position, this.stats.movementSpeed);
@@ -67,7 +63,6 @@ export class BattleDragon extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 			this.followPath();
 			return;
 		}
-
 		this.tickCast();
 	}
 
