@@ -5,7 +5,7 @@ import { CastleBlueprint } from "../blueprint/castle";
 import { BattleCastle } from "../battle/battle-castle";
 import { BattleGrid } from "../../grid/battle-grid";
 import { TRecruit } from "../../../shared/traits/recruit";
-import { TokenHooks } from "../../shop/shop";
+import { TokenHooks } from "../../shop/holder/holder";
 
 export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive(TRecruit) {
 	type: string = "castle";

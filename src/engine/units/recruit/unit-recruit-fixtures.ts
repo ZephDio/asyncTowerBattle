@@ -13,7 +13,7 @@ export class UnitRecruitBuilder {
 	buildDragon(dragon?: DragonBlueprint) {
 		return new Dragon(new Cell({ x: 0, y: 0 }), dragon);
 	}
-	buildPriest(priest?: PriestBlueprint){
+	buildPriest(priest?: PriestBlueprint) {
 		return new Priest(new Cell({ x: 0, y: 2 }), priest);
 	}
 }
@@ -25,7 +25,7 @@ export class UnitRecruitFixture {
 	static get dragon() {
 		return new UnitRecruitBuilder().buildDragon();
 	}
-	static get priest(){
+	static get priest() {
 		return new UnitRecruitBuilder().buildPriest();
 	}
 }

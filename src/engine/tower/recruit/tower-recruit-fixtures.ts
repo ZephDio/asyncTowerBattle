@@ -17,19 +17,19 @@ export class TowerBuilder {
 		this.cell = position;
 		return this;
 	}
-	buildBlue(tower: BlueTowerBlueprint) {
+	buildBlue(tower?: BlueTowerBlueprint) {
 		return new BlueTower(this.cell, tower);
 	}
-	buildGreen(tower: GreenTowerBlueprint) {
+	buildGreen(tower?: GreenTowerBlueprint) {
 		return new GreenTower(this.cell, tower);
 	}
-	buildOrange(tower: OrangeTowerBlueprint) {
+	buildOrange(tower?: OrangeTowerBlueprint) {
 		return new OrangeTower(this.cell, tower);
 	}
-	buildYellow(tower: YellowTowerBlueprint) {
+	buildYellow(tower?: YellowTowerBlueprint) {
 		return new YellowTower(this.cell, tower);
 	}
-	buildZapping(tower: ZappingTowerBlueprint) {
+	buildZapping(tower?: ZappingTowerBlueprint) {
 		return new ZappingTower(this.cell, tower);
 	}
 }

@@ -1,11 +1,12 @@
 import { Derive, implementsTrait } from "@ddd-ts/traits";
-import { Tower } from "../../tower/recruit/tower-recruit";
+import { Tower } from "../../../tower/recruit/tower-recruit";
 import { TTokenDrag } from "./token-drag";
-import { TokenHooks } from "../shop";
-import { Cell, Position } from "../../../shared/position";
-import { ArmyGrid } from "../../grid/grid";
-import { TSynergy } from "../../../shared/traits/synergy";
-import { AnyRecruit } from "../../../shared/traits/recruit";
+import { Cell, Position } from "../../../../shared/position";
+import { ArmyGrid } from "../../../grid/grid";
+import { TSynergy } from "../../../../shared/traits/synergy";
+import { AnyRecruit } from "../../../../shared/traits/recruit";
+import { THudRenderable } from "../../../../shared/traits/drawable";
+import { TokenHooks } from "../holder";
 
 export class RecruitTokenDrag extends Derive(TTokenDrag) {
 	constructor(
@@ -17,8 +18,15 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 		super({ imageDrawable: holded, hooks, position });
 	}
 
+	override huds() {
+		if (implementsTrait(this.holded, THudRenderable)) {
+			return this.holded.huds();
+		}
+		return [];
+	}
+
 	isValid(cell: Cell): boolean {
-		const grid = this.hooks.armyHooks.getArmyGrid();
+		const grid = this.hooks.shopPhaseHooks.armyHooks.getArmyGrid();
 		return !grid.tiles.has(ArmyGrid.posToString(cell));
 	}
 
@@ -26,10 +34,9 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 		try {
 			if (!position) throw new Error("Invalid position");
 			this.holded.moveRecruit(this.hooks, position);
-			this.hooks.removeHold();
+			this.hooks.holderHooks.removeHold();
 		} catch {
 			this.onAbort();
-			this.hooks.removeHold();
 		}
 	}
 

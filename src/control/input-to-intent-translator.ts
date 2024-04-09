@@ -26,12 +26,12 @@ export class InputToIntentTranslator {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			for (const hudElement of state.hudElements) {
-				if (hudElement instanceof StartBattleButton && hudElement.contains(position) ) {
+				if (hudElement instanceof StartBattleButton && hudElement.contains(position)) {
 					return this.game.handleShopQuit();
 				}
-				if(hudElement instanceof RefreshBellHud && hudElement.contains(position) ) {
+				if (hudElement instanceof RefreshBellHud && hudElement.contains(position)) {
 					this.game.shop.refresh();
-					return 
+					return;
 				}
 			}
 		}
@@ -40,8 +40,8 @@ export class InputToIntentTranslator {
 
 	translateMouseMoveInput(position: Position) {
 		if (this.game.shop) {
-			if (this.game.shop.hold) {
-				this.game.shop.moveHold(position);
+			if (this.game.shop.holderControl.hold) {
+				this.game.shop.holderControl.moveHold(position);
 			}
 
 			// ArmyGrid
@@ -49,8 +49,8 @@ export class InputToIntentTranslator {
 			const cell = grid.realPositionToGrid(position);
 			grid.setOveredTile(cell);
 			if (cell) {
-				if (this.game.shop.hold) {
-					const synergy = this.game.shop.hold.getSynergies();
+				if (this.game.shop.holderControl.hold) {
+					const synergy = this.game.shop.holderControl.hold.getSynergies();
 					if (synergy) {
 						grid.setSynergiesTiles(cell, synergy.patternEffect, synergy.isPatternActivated);
 						return;
@@ -68,11 +68,11 @@ export class InputToIntentTranslator {
 			}
 
 			// UnitInventoryGrid
-			const uigrid = this.game.shop.army.inventory;
-			const uicell = uigrid.realPositionToGrid(position);
-			uigrid.setOveredTile(uicell);
-			if (uicell) {
-			}
+			// const uigrid = this.game.shop.army.inventory;
+			// const uicell = uigrid.realPositionToGrid(position);
+			// uigrid.setOveredTile(uicell);
+			// if (uicell) {
+			// }
 
 			grid.clearSynergiesTiles();
 		}
@@ -86,7 +86,7 @@ export class InputToIntentTranslator {
 				if (!grid) return;
 				for (const buyable of this.game.shop.retail.grid.getBuyables()) {
 					if (buyable.contains(position, this.game.shop.retail.grid)) {
-						return this.game.shop.setHoldFromRetail(buyable, position);
+						return this.game.shop.selectItemFromRetail(buyable, position);
 					}
 				}
 				for (const gridElement of this.game.shop.army.grid.getRecruit()) {

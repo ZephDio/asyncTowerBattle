@@ -1,8 +1,8 @@
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { HTHitbox, TGCollider } from "../hitboxes";
 import { HTImageDrawable } from "./drawable";
-import { TokenHooks } from "../../engine/shop/shop";
 import { Position } from "../position";
+import { TokenHooks } from "../../engine/shop/holder/holder";
 
 export const TRecruit = Subtrait([TGCollider, HTHitbox, HTImageDrawable], (base) => {
 	abstract class IRecruit extends base {

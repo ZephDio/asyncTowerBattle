@@ -2,14 +2,17 @@ import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
 import { ArmyFixture } from "./army/army-fixtures";
-import { EconomyHooks, Shop } from "./shop/shop";
+import { EconomyHooks, ShopPhase } from "./shop/shop";
+import { LocalMatchMaker } from "./match-maker/local-match-maker";
+import { MatchMaker } from "./match-maker/match-maker";
 
 export class Game {
 	army = ArmyFixture.allied;
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
-	shop: null | Shop = null;
-	enemyArmy = ArmyFixture.enemy;
+	shop: null | ShopPhase = null;
+	round = 0;
+	matchMaker: MatchMaker = new LocalMatchMaker();
 	economy = {
 		gold: 0,
 	};
@@ -21,6 +24,8 @@ export class Game {
 		if (this.battleSummary) return this.getSummaryState();
 		return this.getShopState();
 	}
+
+	async getOpponent() {}
 
 	getBattleState() {
 		if (!this.battle) return {} as BattleState;
@@ -42,6 +47,7 @@ export class Game {
 		const lastBattleState = this.getBattleState();
 		this.startBattleSummary(lastBattleState, battleVerdict);
 		this.battle = null;
+		this.round++;
 	}
 
 	handleSummaryQuit() {
@@ -61,7 +67,7 @@ export class Game {
 	}
 
 	startShop() {
-		this.shop = new Shop(this.army, this.handleShopQuit.bind(this), this.getEconomyHooks());
+		this.shop = new ShopPhase(this.army, this.handleShopQuit.bind(this), this.getEconomyHooks());
 		this.addGold(20);
 	}
 
@@ -70,7 +76,7 @@ export class Game {
 	}
 
 	startBattle() {
-		this.battle = new Battle(this.army, this.enemyArmy, this.handleEndBattle.bind(this));
+		this.battle = new Battle(this.army, this.matchMaker.getOpponent(this.round), this.handleEndBattle.bind(this));
 		this.battle.start();
 	}
 

@@ -29,10 +29,7 @@ export class OrangeTower extends Derive(Tower, HTSynergy) {
 	}
 
 	clone(): OrangeTower {
-		return new OrangeTower(
-			this.cell.clone(),
-			this.tower,
-		);
+		return new OrangeTower(this.cell.clone(), this.tower);
 	}
 
 	get position(): Cell {

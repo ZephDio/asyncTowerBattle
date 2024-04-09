@@ -19,11 +19,11 @@ export class UnitBuilder {
 export class UnitFixture {
 	static get soldier() {
 		return new UnitBuilder().buildSoldier();
-	} 
-	static get dragon(){
+	}
+	static get dragon() {
 		return new UnitBuilder().buildDragon();
-	} 
-	static get priest(){
+	}
+	static get priest() {
 		return new UnitBuilder().buildPriest();
 	}
 }

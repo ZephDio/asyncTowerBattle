@@ -4,7 +4,7 @@ import { SlowingPathTile } from "../../tile/recruit/implementation/slowing-tile"
 import { ArmyPath } from "./path";
 
 export class PathFixture {
-	static get defaultAllied() {
+	static get default() {
 		return new ArmyPath([
 			new BasicPathTile(new Cell({ x: 0, y: 5 })),
 			new BasicPathTile(new Cell({ x: 0, y: 4 })),
@@ -27,8 +27,5 @@ export class PathFixture {
 			new BasicPathTile(new Cell({ x: 12, y: 3 })),
 			new BasicPathTile(new Cell({ x: 12, y: 4 })),
 		]);
-	}
-	static get defaultEnemy() {
-		return new ArmyPath([new BasicPathTile(new Cell({ x: 12, y: 6 }))]);
 	}
 }

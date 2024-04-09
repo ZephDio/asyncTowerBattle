@@ -43,17 +43,17 @@ export class BattlePriest extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 		this.castInProgress = null;
 	}
 
-	healWave(){
-		this.hooks.addAreaEffect(new HealWave(30,this.position,0.2,this.hooks),this)
+	healWave() {
+		this.hooks.addAreaEffect(new HealWave(30, this.position, 0.2, this.hooks), this);
 		this.castInProgress = null;
 	}
 
 	casts(): void {
-		if(this.pathFinder.isArrived){
+		if (this.pathFinder.isArrived) {
 			this.castInProgress = new Cast(this, this.attackCastle.bind(this), 100);
-			return
+			return;
 		}
-		this.castInProgress = new Cast(this, this.healWave.bind(this), 400)
+		this.castInProgress = new Cast(this, this.healWave.bind(this), 400);
 	}
 
 	takeDamage(damage: number) {

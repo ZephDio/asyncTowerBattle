@@ -23,6 +23,6 @@ export class PriestBlueprint extends Derive(
 	type = "priest" as const;
 
 	toRecruit(cell: Cell) {
-	 return new Priest(cell, this);
+		return new Priest(cell, this);
 	}
 }

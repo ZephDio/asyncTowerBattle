@@ -12,10 +12,7 @@ import { TGrid } from "../grid/tgrid";
 
 export class Army {
 	constructor(
-		//public castle: Castle,
-		//public towers: AnyTower[],
 		public path: ArmyPath,
-		//public barracks: AnyBarrack[],
 		public grid: ArmyGrid,
 		public inventory: Inventory,
 	) {}
@@ -57,13 +54,13 @@ export class Army {
 	}
 
 	get castle() {
-		return this.grid.castle
+		return this.grid.castle;
 	}
 	get towers() {
-		return this.grid.towers
+		return this.grid.towers;
 	}
 	get barracks() {
-		return this.grid.barracks
+		return this.grid.barracks;
 	}
 
 	pushToInventory(recruit: AnyRecruit) {
