@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleDragon } from "../../battle/implementation/dragon-battle";
@@ -27,7 +27,7 @@ export class Dragon extends Derive(HTDamageDealer, Unit) {
 	}
 	type = "dragon" as const;
 
-	toBattle(position: Position, path: BattlePath, hooks: BattleArmyHooks) {
+	toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks) {
 		return new BattleDragon(this, position, path, hooks);
 	}
 }

@@ -30,7 +30,7 @@ export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 		if (this.unitRecruit) {
 			return new WaveBattleBarrack(
 				this,
-				grid.cellToReal(this.position),
+				grid.cellToGrid(this.position),
 				this.cell.clone(),
 				path.enemyCastle.position,
 				path,
@@ -46,7 +46,7 @@ export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 			const newPosition = BattleGrid.flip(grid, this.position);
 			return new WaveBattleBarrack(
 				this,
-				grid.cellToReal(newPosition),
+				grid.cellToGrid(newPosition),
 				newPosition,
 				path.enemyCastle.position,
 				path,

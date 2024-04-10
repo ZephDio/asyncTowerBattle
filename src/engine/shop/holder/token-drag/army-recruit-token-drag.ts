@@ -1,17 +1,18 @@
-import { Derive, implementsTrait } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Tower } from "../../../tower/recruit/tower-recruit";
 import { TTokenDrag } from "./token-drag";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition, ScreenPosition } from "../../../../shared/position";
 import { ArmyGrid } from "../../../grid/grid";
 import { TSynergy } from "../../../../shared/traits/synergy";
 import { AnyRecruit } from "../../../../shared/traits/recruit";
 import { THudRenderable } from "../../../../shared/traits/drawable";
 import { TokenHooks } from "../holder";
+import { TGrid } from "../../../grid/tgrid";
 
 export class RecruitTokenDrag extends Derive(TTokenDrag) {
 	constructor(
 		public holded: AnyRecruit,
-		position: Position,
+		position: ScreenPosition,
 		hooks: TokenHooks,
 		public onAbort: () => void,
 	) {
@@ -30,10 +31,10 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 		return !grid.tiles.has(ArmyGrid.posToString(cell));
 	}
 
-	onRelease(position?: Position): void {
+	onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void {
 		try {
 			if (!position) throw new Error("Invalid position");
-			this.holded.moveRecruit(this.hooks, position);
+			this.holded.moveRecruit(this.hooks, position, grid);
 			this.hooks.holderHooks.removeHold();
 		} catch {
 			this.onAbort();

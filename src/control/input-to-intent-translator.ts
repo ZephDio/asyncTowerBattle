@@ -1,11 +1,13 @@
 import { Game } from "../engine/game";
 import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
-import { Position } from "../shared/position";
+import { ScreenPosition } from "../shared/position";
 import { ArmyGrid } from "../engine/grid/grid";
 import { implementsTrait } from "@ddd-ts/traits";
 import { TSynergy } from "../shared/traits/synergy";
 import { StartBattleButton } from "../shared/hud-element/start-battle-button";
 import { RefreshBellHud } from "../shared/hud-element/refresh-bell-hud";
+import { RetailGrid } from "../engine/grid/retail-grid";
+import { Inventory } from "../engine/grid/inventory/unit-inventory";
 
 export interface PlayerIntent {
 	intent: string;
@@ -18,7 +20,7 @@ export class InputToIntentTranslator {
 		this.game = this.renderer.game;
 	}
 
-	translateClickInput(position: Position): void {
+	translateClickInput(position: ScreenPosition): void {
 		if (this.game.battleSummary) {
 			this.game.battleSummary.quitSummary();
 			return;
@@ -38,7 +40,7 @@ export class InputToIntentTranslator {
 		return;
 	}
 
-	translateMouseMoveInput(position: Position) {
+	translateMouseMoveInput(position: ScreenPosition) {
 		if (this.game.shop) {
 			if (this.game.shop.holderControl.hold) {
 				this.game.shop.holderControl.moveHold(position);
@@ -46,7 +48,8 @@ export class InputToIntentTranslator {
 
 			// ArmyGrid
 			const grid = this.game.shop.army.grid;
-			const cell = grid.realPositionToGrid(position);
+			const gridPosition = grid.screenToGridPosition(position);
+			const cell = grid.gridPositionToCell(gridPosition);
 			grid.setOveredTile(cell);
 			if (cell) {
 				if (this.game.shop.holderControl.hold) {
@@ -78,35 +81,46 @@ export class InputToIntentTranslator {
 		}
 	}
 
-	translateMouseDownInput(position: Position) {
+	translateMouseDownInput(screenPosition: ScreenPosition) {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			if (!state.hold) {
-				const grid = this.game.shop.determineGrid(position);
+				const grid = this.game.shop.determineGrid(screenPosition);
 				if (!grid) return;
-				for (const buyable of this.game.shop.retail.grid.getBuyables()) {
-					if (buyable.contains(position, this.game.shop.retail.grid)) {
-						return this.game.shop.selectItemFromRetail(buyable, position);
+				if (grid instanceof RetailGrid) {
+					for (const buyable of this.game.shop.retail.grid.getBuyables()) {
+						const position = grid.screenToGridPosition(screenPosition);
+						if (buyable.contains(position, this.game.shop.retail.grid)) {
+							return this.game.shop.selectItemFromRetail(buyable, screenPosition);
+						}
 					}
 				}
-				for (const gridElement of this.game.shop.army.grid.getRecruit()) {
-					if (gridElement.contains(position, this.game.shop.army.grid)) {
-						return this.game.shop.setHoldFromArmyRecruit(gridElement, position, grid);
+				if (grid instanceof Inventory) {
+					for (const gridElement of this.game.shop.army.inventory.getRecruits()) {
+						const position = grid.screenToGridPosition(screenPosition);
+						if (gridElement.contains(position, this.game.shop.army.inventory)) {
+							return this.game.shop.setHoldFromArmyRecruit(gridElement, screenPosition, grid);
+						}
 					}
 				}
-				for (const gridElement of this.game.shop.army.inventory.getRecruits()) {
-					if (gridElement.contains(position, this.game.shop.army.inventory)) {
-						return this.game.shop.setHoldFromArmyRecruit(gridElement, position, grid);
+				if (grid instanceof ArmyGrid) {
+					for (const gridElement of this.game.shop.army.grid.getRecruit()) {
+						const position = grid.screenToGridPosition(screenPosition);
+						if (gridElement.contains(position, this.game.shop.army.grid)) {
+							return this.game.shop.setHoldFromArmyRecruit(gridElement, screenPosition, grid);
+						}
 					}
 				}
 			}
 		}
 	}
-	translateMouseReleaseInput(position: Position) {
+	translateMouseReleaseInput(screenPosition: ScreenPosition) {
 		if (this.game.shop) {
 			const state = this.game.shop.getState();
 			if (state.hold) {
-				state.hold.onRelease(position);
+				const grid = this.game.shop.determineGrid(screenPosition);
+				const gridPosition = grid?.screenToGridPosition(screenPosition);
+				state.hold.onRelease(gridPosition, grid);
 			}
 		}
 	}

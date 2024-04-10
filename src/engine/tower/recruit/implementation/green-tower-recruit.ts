@@ -1,4 +1,4 @@
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattleBullet } from "../../../projectile/battle/implementation/battle-bullet";
 import { GreenBattleTower } from "../../battle/implementation/battle.green.tower";
@@ -20,20 +20,20 @@ export class GreenTower extends Derive(HTDamageDealer, Tower) {
 		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
 	}
 
-	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: Position, damage: number) {
+	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {
 		return new BattleBullet(this.tower.projectile, position.clone(), hooks, target, damage);
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const clone = this.clone();
-		const position = grid.cellToReal(clone.cell);
+		const position = grid.cellToGrid(clone.cell);
 		return new GreenBattleTower(clone, hooks, position, clone.cell);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const clone = this.clone();
 		const cell = BattleGrid.flip(grid, clone.cell);
-		const position = grid.cellToReal(cell);
+		const position = grid.cellToGrid(cell);
 		return new GreenBattleTower(clone, hooks, position, cell);
 	}
 

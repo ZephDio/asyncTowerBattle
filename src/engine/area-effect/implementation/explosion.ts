@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { Ellipse, HitBox, TCollider, THitbox } from "../../../shared/hitboxes";
-import { Position } from "../../../shared/position";
+import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TRenderable } from "../../../shared/traits/drawable";
@@ -8,7 +8,7 @@ import { TDrawable } from "../../../shared/traits/tdrawable";
 
 export class Explosion extends Derive(
 	TCollider,
-	THitbox(new HitBox([[new Ellipse({ width: 1, height: 1 }), new Position({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Ellipse({ width: 1, height: 1 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TRenderable,
 ) {
@@ -16,7 +16,7 @@ export class Explosion extends Derive(
 	drawPriority = 5;
 	constructor(
 		public MaxSize: Size,
-		public position: Position,
+		public position: GridPosition,
 		public damage: number,
 		public hooks: BattleArmyHooks,
 	) {
@@ -43,7 +43,7 @@ export class Explosion extends Derive(
 		};
 	}
 
-	draw(context: CanvasRenderingContext2D, position: Position): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		context.strokeStyle = "red";
 		context.fillStyle = "transparent";
 		context.lineWidth = 11;

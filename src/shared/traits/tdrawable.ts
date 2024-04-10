@@ -1,12 +1,12 @@
 import { Trait } from "@ddd-ts/traits";
-import { Position } from "../position";
 import { Size } from "../size";
+import { ScreenPosition } from "../position";
 
 export const TDrawable = Trait((base) => {
 	abstract class IDrawable extends base {
 		abstract drawPriority: number;
 
-		abstract draw(context: CanvasRenderingContext2D, position: Position): void;
+		abstract draw(context: CanvasRenderingContext2D, position: ScreenPosition): void;
 
 		protected drawEllipse(context: CanvasRenderingContext2D, size: Size, position: { x: number; y: number }) {
 			context.beginPath();
@@ -19,7 +19,7 @@ export const TDrawable = Trait((base) => {
 			context.fillRect(position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);
 			context.stroke();
 		}
-		protected drawLines(context: CanvasRenderingContext2D, points: Position[]) {
+		protected drawLines(context: CanvasRenderingContext2D, points: ScreenPosition[]) {
 			context.beginPath();
 			for (const point of points) {
 				context.lineTo(point.x, point.y);
@@ -34,7 +34,7 @@ export const TDrawable = Trait((base) => {
 			context.stroke();
 		}
 
-		protected getCanvasPosition(context: CanvasRenderingContext2D, position: Position) {
+		protected getCanvasPosition(context: CanvasRenderingContext2D, position: ScreenPosition) {
 			const x = (context.canvas.width / 100) * position.x;
 			const y = context.canvas.height - (context.canvas.width / 100) * position.y; // !
 			return { x, y };

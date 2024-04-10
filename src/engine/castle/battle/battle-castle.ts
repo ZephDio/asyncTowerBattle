@@ -1,6 +1,6 @@
 import { CastleBlueprint } from "../blueprint/castle";
 import { Castle } from "../recruit/castle-recruit";
-import { Cell, Position } from "../../../shared/position";
+import { Cell, GridPosition } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
 import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
@@ -16,7 +16,7 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 		recruit: Castle<CastleBlueprint>,
 		public onDeath: () => void,
 		public cell: Cell,
-		public position: Position,
+		public position: GridPosition,
 	) {
 		super({ imageDrawable: recruit, hitboxHolder: recruit });
 		this.actualLife = recruit.maxLife;
@@ -36,16 +36,8 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 
 	tick() {}
 
-	toSerialized(): SerializedBattleCastle {
-		return {
-			type: "castle" as const,
-			cell: this.cell,
-			position: this.position,
-		};
-	}
-
 	static toAllied(castleRecruit: Castle<CastleBlueprint>, battleGrid: BattleGrid, onBattleOver: () => void) {
-		return new BattleCastle(castleRecruit, onBattleOver, castleRecruit.cell, battleGrid.cellToReal(castleRecruit.cell));
+		return new BattleCastle(castleRecruit, onBattleOver, castleRecruit.cell, battleGrid.cellToGrid(castleRecruit.cell));
 	}
 
 	static toEnemy(castleRecruit: Castle<CastleBlueprint>, battleGrid: BattleGrid, onBattleOver: () => void) {
@@ -54,13 +46,7 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 			castleRecruit,
 			onBattleOver,
 			flippedGridPosition,
-			battleGrid.cellToReal(flippedGridPosition),
+			battleGrid.cellToGrid(flippedGridPosition),
 		);
 	}
 }
-
-export type SerializedBattleCastle = {
-	type: string;
-	cell: Cell;
-	position: Position;
-};

@@ -2,7 +2,7 @@ import { Derive } from "@ddd-ts/traits";
 import { Physic } from "../../../../shared/physic";
 import { BlueTower } from "../../recruit/implementation/blue-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { HaveStats } from "../../../stats/stats";
@@ -20,7 +20,7 @@ export class BlueBattleTower extends Derive(
 	constructor(
 		private readonly recruit: BlueTower,
 		private readonly hooks: BattleArmyHooks,
-		public readonly position: Position,
+		public readonly position: GridPosition,
 		public readonly cell: Cell,
 	) {
 		super({

@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { HTHitbox } from "../../../../shared/hitboxes";
-import { Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PathFinder } from "../../../battle/path-finder";
@@ -13,7 +13,7 @@ export class BattleBullet extends Derive(TRenderable, HTHitbox, HTImageDrawable)
 
 	constructor(
 		public projectile: Bullet,
-		public position: Position,
+		public position: GridPosition,
 		public hooks: BattleArmyHooks,
 		public target: AnyBattleUnit,
 		public damage: number,
@@ -52,7 +52,7 @@ export class BattleBullet extends Derive(TRenderable, HTHitbox, HTImageDrawable)
 		this.angle = theta;
 	}
 
-	move(newPosition: Position) {
+	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 	}

@@ -1,7 +1,7 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { Position } from "../position";
 import { TDrawable } from "../traits/tdrawable";
 import { HaveStats } from "../../engine/stats/stats";
+import { ScreenPosition } from "../position";
 
 export class LifeBar extends Derive(TDrawable) {
 	drawPriority = 3;
@@ -9,7 +9,7 @@ export class LifeBar extends Derive(TDrawable) {
 		super({});
 	}
 
-	draw(context: CanvasRenderingContext2D, position: Position): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		if (this.entity.stats.health === this.entity.stats.maxHealth) return;
 		context.globalAlpha = 1;
 		context.fillStyle = "red";
@@ -25,7 +25,7 @@ export class LifeBar extends Derive(TDrawable) {
 				width: size.width * lifeProportion,
 				height: size.height,
 			},
-			new Position({
+			new ScreenPosition({
 				x: canvasPosition.x - lifeProportion - (size.width / 2) * (1 - lifeProportion),
 				y: canvasPosition.y,
 			}),

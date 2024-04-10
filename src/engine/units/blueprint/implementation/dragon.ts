@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
@@ -10,7 +10,7 @@ import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
 
 export class DragonBlueprint extends Derive(
 	TShopBlueprint(15, 7),
-	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new Position({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TImageDrawable(Resources.unit.dragon.resource.image, Resources.unit.dragon.size, 3),
 	TDamageDealer(3),

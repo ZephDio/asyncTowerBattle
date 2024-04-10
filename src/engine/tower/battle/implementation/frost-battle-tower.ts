@@ -1,7 +1,7 @@
 import { Derive } from "@ddd-ts/traits";
 import { Physic } from "../../../../shared/physic";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { HaveStats } from "../../../stats/stats";
@@ -20,7 +20,7 @@ export class FrostBattleTower extends Derive(
 	constructor(
 		private readonly recruit: FrostTower,
 		private readonly hooks: BattleArmyHooks,
-		public readonly position: Position,
+		public readonly position: GridPosition,
 		public readonly cell: Cell,
 	) {
 		super({
@@ -35,7 +35,7 @@ export class FrostBattleTower extends Derive(
 	}
 
 	private attack(target: AnyBattleUnit) {
-		const IceSpikeSpawnLocation = new Position({ x: target.position.x, y: target.position.y + 9 });
+		const IceSpikeSpawnLocation = new GridPosition({ x: target.position.x, y: target.position.y + 9 });
 		const projectile = this.recruit.getProjectile(this.hooks, target, IceSpikeSpawnLocation, this.stats.attack);
 		this.hooks.addProjectile(projectile, this);
 	}

@@ -1,5 +1,4 @@
 import { Derive } from "@ddd-ts/traits";
-import { Position } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
@@ -9,13 +8,14 @@ import { HaveStats } from "../../../stats/stats";
 import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
 import { Priest } from "../../recruit/implementation/priest-recruit";
 import { HealWave } from "../../../area-effect/implementation/heal-wave";
+import { GridPosition } from "../../../../shared/position";
 
 export class BattlePriest extends Derive(HTHitbox, TCollider, Caster, HTImageDrawable, TLifeBarRenderable, HaveStats) {
 	pathFinder: PathFinder;
 
 	constructor(
 		recruit: Priest,
-		public position: Position,
+		public position: GridPosition,
 		public enemyPath: BattlePath,
 		private hooks: BattleArmyHooks,
 	) {
@@ -63,7 +63,7 @@ export class BattlePriest extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 		}
 	}
 
-	move(newPosition: Position) {
+	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 	}

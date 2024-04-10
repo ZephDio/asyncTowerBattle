@@ -8,7 +8,7 @@ import { BattlePath } from "../../path/battle/battle-path";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 import { AnyBattleUnit } from "../../units/battle/battle-unit";
 import { HitBox } from "../../../shared/hitboxes";
-import { Position } from "../../../shared/position";
+import { GridPosition } from "../../../shared/position";
 import { AnyBattleTile } from "../../tile/battle/battle-tile";
 export type BattleArmyHooks = {
 	addUnits: BattleArmy["addUnit"];
@@ -77,7 +77,7 @@ export class BattleArmy {
 		this.areaEffects.delete(areaEffect);
 	}
 
-	searchAlliesInArea(areaPosition: Position, hitbox: HitBox): AnyBattleUnit[] {
+	searchAlliesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
 		const found: AnyBattleUnit[] = [];
 		for (const alliedUnit of this.units.keys()) {
 			if (alliedUnit.collides(hitbox, areaPosition)) {

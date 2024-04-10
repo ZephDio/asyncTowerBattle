@@ -14,8 +14,8 @@ import { AnyBattleTile } from "../engine/tile/battle/battle-tile";
 import { AnyBattleUnit } from "../engine/units/battle/battle-unit";
 import { TTokenDrag } from "../engine/shop/holder/token-drag/token-drag";
 import { AnyBattleProjectile } from "../engine/projectile/battle/battle-projectile";
-import { Position } from "./position";
 import { BattlePath } from "../engine/path/battle/battle-path";
+import { GridPosition } from "./position";
 
 export interface GameState {
 	type: string;
@@ -45,7 +45,7 @@ export interface ShopState extends GameState {
 
 	castle: Castle<CastleBlueprint>;
 	towers: ImplementsTrait<typeof Tower>[];
-	path: Position[] | null;
+	path: GridPosition[] | null;
 	grid: ArmyGrid;
 
 	hold: ImplementsTrait<typeof TTokenDrag> | null;

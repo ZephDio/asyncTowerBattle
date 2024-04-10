@@ -20,13 +20,13 @@ export class SlowingPathTile extends Derive(TRecruit, PathTile) {
 	// }
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
-		const position = grid.cellToReal(this.cell.clone());
+		const position = grid.cellToGrid(this.cell.clone());
 		return new SlowingBattlePathTile(this, this.cell, position, hooks);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const position = grid.cellToReal(cell.clone());
+		const position = grid.cellToGrid(cell.clone());
 		return new SlowingBattlePathTile(this, cell, position, hooks);
 	}
 }

@@ -1,12 +1,13 @@
 import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
-import { Position } from "./position";
 import { Physic } from "./physic";
 
 import { TGrid } from "../engine/grid/tgrid";
 import { GridElement } from "./traits/grid-element";
+import { GridPosition, ScreenPosition } from "./position";
 
+type RelativePosition = GridPosition | ScreenPosition;
 export class HitBox {
-	constructor(public hitShapes: [HitShapeType, Position][]) {}
+	constructor(public hitShapes: [HitShapeType, RelativePosition][]) {}
 
 	clone() {
 		return new HitBox(this.hitShapes.map(([shape, position]) => [shape.clone(), position.clone()]));
@@ -59,13 +60,13 @@ export const HTHitbox = Subtrait([THitbox(new HitBox([]))], (base, Param) => {
 
 export const TCollider = Subtrait([THitbox(new HitBox([]))], (base) => {
 	abstract class ICollider extends base {
-		abstract position: Position;
+		abstract position: RelativePosition;
 
-		contains(point: Position) {
+		contains(point: RelativePosition) {
 			return Physic.doCollide(this.position, this.hitbox, point);
 		}
 
-		collides(hitbox: HitBox, position: Position) {
+		collides(hitbox: HitBox, position: RelativePosition) {
 			return Physic.doCollide(position, hitbox, this.position);
 		}
 
@@ -79,11 +80,11 @@ export const TCollider = Subtrait([THitbox(new HitBox([]))], (base) => {
 
 export const TGCollider = Subtrait([GridElement, THitbox(new HitBox([]))], (base) => {
 	abstract class IGCollider extends base {
-		contains(point: Position, grid: ImplementsTrait<typeof TGrid>) {
+		contains(point: GridPosition, grid: ImplementsTrait<typeof TGrid>) {
 			return Physic.doCollide(this.getRealPosition(grid), this.hitbox, point);
 		}
 
-		collides(hitbox: HitBox, position: Position, grid: ImplementsTrait<typeof TGrid>) {
+		collides(hitbox: HitBox, position: GridPosition, grid: ImplementsTrait<typeof TGrid>) {
 			return Physic.doCollide(position, hitbox, this.getRealPosition(grid));
 		}
 

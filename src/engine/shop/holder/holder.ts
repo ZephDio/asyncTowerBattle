@@ -3,7 +3,7 @@ import { TTokenDrag } from "./token-drag/token-drag";
 import { ShopPhaseHooks } from "../shop";
 import { Retail } from "../retail/retail";
 import { Buyable } from "../retail/buyable";
-import { Position } from "../../../shared/position";
+import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BuyableTokenDrag } from "./token-drag/buyable-token-drag";
 import { AnyRecruit } from "../../../shared/traits/recruit";
 import { Army } from "../../army/army";
@@ -40,7 +40,7 @@ export class Holder {
 		this._hold = token;
 	}
 
-	setHoldFromRetail(buyable: Buyable, retail: Retail, position: Position, hooks: ShopPhaseHooks) {
+	setHoldFromRetail(buyable: Buyable, retail: Retail, position: ScreenPosition, hooks: ShopPhaseHooks) {
 		retail.removeItem(buyable);
 		const onAbort = () => {
 			retail.addItem(buyable);
@@ -50,7 +50,7 @@ export class Holder {
 		this.setHold(token);
 	}
 
-	setHoldFromUnitInBarracks(recruit: AnyBarrack, unit: AnyUnit, hooks: TokenHooks, position: Position) {
+	setHoldFromUnitInBarracks(recruit: AnyBarrack, unit: AnyUnit, hooks: TokenHooks, position: ScreenPosition) {
 		recruit.setUnit(null);
 		const onAbort = () => {
 			recruit.setUnit(unit);
@@ -64,16 +64,17 @@ export class Holder {
 	setHoldFromArmyRecruit(
 		recruit: AnyRecruit,
 		army: Army,
-		position: Position,
+		position: ScreenPosition,
 		hooks: ShopPhaseHooks,
 		grid: ImplementsTrait<typeof TGrid>,
 	) {
 		if (recruit instanceof Castle) return;
 		if (implementsTrait(recruit, Barrack)) {
 			if (recruit.unitRecruit) {
-				const barrackPosition = grid.cellToReal(recruit.cell);
-				const unitPosition = new Position({ x: barrackPosition.x, y: grid.cellToReal(recruit.cell).y + 1.8 });
-				const isClickingOnUnit = Physic.doCollide(unitPosition, recruit.unitRecruit.hitbox, position);
+				const barrackPosition = grid.cellToGrid(recruit.cell);
+				const unitPosition = new GridPosition({ x: barrackPosition.x, y: grid.cellToGrid(recruit.cell).y + 1.8 });
+				const screenPosition = grid.screenToGridPosition(position);
+				const isClickingOnUnit = Physic.doCollide(unitPosition, recruit.unitRecruit.hitbox, screenPosition);
 				if (isClickingOnUnit) {
 					this.setHoldFromUnitInBarracks(recruit, recruit.unitRecruit, this.getHooks(hooks), position);
 					return;
@@ -95,7 +96,7 @@ export class Holder {
 		}
 	}
 
-	moveHold(position: Position) {
+	moveHold(position: ScreenPosition) {
 		if (this.hold) {
 			this.hold.position = position;
 		}

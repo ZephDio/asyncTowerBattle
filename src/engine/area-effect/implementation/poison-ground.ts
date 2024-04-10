@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { Ellipse, HitBox, TCollider, THitbox } from "../../../shared/hitboxes";
-import { Position } from "../../../shared/position";
+import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TRenderable } from "../../../shared/traits/drawable";
 import { Poisoned } from "../../tower/battle/implementation/battle-yellow-tower";
@@ -10,14 +10,14 @@ export class PoisonGround extends Derive(
 	TDrawable,
 	TRenderable,
 	TCollider,
-	THitbox(new HitBox([[new Ellipse({ width: 4.9, height: 4.9 }), new Position({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Ellipse({ width: 4.9, height: 4.9 }), new GridPosition({ x: 0, y: 0 })]])),
 ) {
 	type = "poison-ground" as const;
 	drawPriority = 5;
 	clock = 0;
 	constructor(
 		public maxDuration: number,
-		public position: Position,
+		public position: GridPosition,
 		public damage: number,
 		public hooks: BattleArmyHooks,
 	) {
@@ -42,7 +42,7 @@ export class PoisonGround extends Derive(
 		};
 	}
 
-	draw(context: CanvasRenderingContext2D, position: Position): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		context.globalAlpha = 0.18;
 		context.strokeStyle = "purple";
 		context.fillStyle = "purple";

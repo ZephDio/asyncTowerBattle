@@ -1,19 +1,61 @@
-export class Position {
+export class GridPosition {
 	x: number;
 	y: number;
-	type = "position";
+	type = "gridPosition" as const;
 
 	constructor(param: { x: number; y: number }) {
 		this.x = param.x;
 		this.y = param.y;
 	}
 
-	add(other: Position) {
-		return new Position({ x: this.x + other.x, y: this.y + other.y });
+	checkReferential(other: GridPosition | ScreenPosition) {
+		if (other instanceof ScreenPosition) {
+			throw new Error("Both positions must be of the same type");
+		}
+	}
+
+	add(other: GridPosition) {
+		return new GridPosition({ x: this.x + other.x, y: this.y + other.y });
+	}
+
+	substract(other: GridPosition) {
+		return new ScreenPosition({ x: this.x - other.x, y: this.y - other.y });
 	}
 
 	clone() {
-		return new Position({ x: this.x, y: this.y });
+		return new GridPosition({ x: this.x, y: this.y });
+	}
+}
+
+export class ScreenPosition {
+	x: number;
+	y: number;
+	type = "screenPosition" as const;
+
+	constructor(param: { x: number; y: number }) {
+		this.x = param.x;
+		this.y = param.y;
+	}
+
+	checkReferential(other: GridPosition | ScreenPosition) {
+		if (other instanceof GridPosition) {
+			throw new Error("Both positions must be of the same type");
+		}
+	}
+
+	add(other: ScreenPosition | GridPosition) {
+		if (other instanceof GridPosition) {
+			return new ScreenPosition({ x: this.x + other.x, y: this.y + other.y });
+		}
+		return new ScreenPosition({ x: this.x + other.x, y: this.y + other.y });
+	}
+
+	substract(other: ScreenPosition) {
+		return new ScreenPosition({ x: this.x - other.x, y: this.y - other.y });
+	}
+
+	clone() {
+		return new ScreenPosition({ x: this.x, y: this.y });
 	}
 }
 

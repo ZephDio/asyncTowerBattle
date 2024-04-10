@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { HTHitbox } from "../../../../shared/hitboxes";
-import { Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { Explosion } from "../../../area-effect/implementation/explosion";
 import { PathFinder } from "../../../battle/path-finder";
@@ -14,13 +14,13 @@ export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable)
 
 	constructor(
 		public projectile: Rocket,
-		public position: Position,
+		public position: GridPosition,
 		public hooks: BattleArmyHooks,
 		public target: AnyBattleUnit,
 		public damage: number,
 	) {
 		super({ hitboxHolder: projectile, imageDrawable: projectile });
-		this.pathFinder = new PathFinder([new Position({ x: this.target.position.x, y: this.target.position.y })]);
+		this.pathFinder = new PathFinder([new GridPosition({ x: this.target.position.x, y: this.target.position.y })]);
 		this.speed = this.projectile.baseSpeed;
 		const theta = this.pathFinder.getOrientation(this.position);
 		this.updateTheta(theta);
@@ -48,7 +48,7 @@ export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable)
 		this.angle = theta;
 	}
 
-	move(newPosition: Position) {
+	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 	}
@@ -62,7 +62,7 @@ export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable)
 		this.hooks.addAreaEffect(
 			new Explosion(
 				{ width: 10, height: 10 },
-				new Position({ x: this.position.x, y: this.position.y }),
+				new GridPosition({ x: this.position.x, y: this.position.y }),
 				this.damage,
 				this.hooks,
 			),

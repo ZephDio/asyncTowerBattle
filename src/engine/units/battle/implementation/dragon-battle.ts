@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
@@ -14,7 +14,7 @@ export class BattleDragon extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 
 	constructor(
 		recruit: Dragon,
-		public position: Position,
+		public position: GridPosition,
 		public enemyPath: BattlePath,
 		private hooks: BattleArmyHooks,
 	) {
@@ -52,7 +52,7 @@ export class BattleDragon extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 		}
 	}
 
-	move(newPosition: Position) {
+	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 	}
@@ -64,9 +64,5 @@ export class BattleDragon extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 			return;
 		}
 		this.tickCast();
-	}
-
-	get realPosition() {
-		return this.position;
 	}
 }

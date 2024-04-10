@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
 import { HaveStats } from "../../../stats/stats";
@@ -23,7 +23,7 @@ export class ZappingBattleTower extends Derive(
 	constructor(
 		private readonly recruit: ZappingTower,
 		private readonly hooks: BattleArmyHooks,
-		public readonly position: Position,
+		public readonly position: GridPosition,
 		public readonly cell: Cell,
 	) {
 		super({

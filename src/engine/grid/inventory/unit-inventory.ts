@@ -1,21 +1,21 @@
 import { Derive } from "@ddd-ts/traits";
 import { TGridDrawable, TRenderable } from "../../../shared/traits/drawable";
 import { TGrid } from "../tgrid";
-import { Cell, Position } from "../../../shared/position";
+import { Cell, ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { SynergyEffect } from "../grid-effects/synergy-effect";
 import { ArmyGrid } from "../grid";
 import { HoverEffect } from "../grid-effects/hover-effect";
 import { AnyRecruit } from "../../../shared/traits/recruit";
 
-const inventoryPosition = PercentToReal({ x: 78, y: 55 });
+const inventoryPosition = new ScreenPosition(PercentToReal({ x: 78, y: 55 }));
 
 export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
 	overEffect: HoverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 	constructor(
-		public position: Position = inventoryPosition,
+		public position: ScreenPosition = inventoryPosition,
 		public width: number = 4,
 		public height: number = 5,
 		public cellSize: number = 4.9,

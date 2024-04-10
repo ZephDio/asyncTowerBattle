@@ -1,13 +1,12 @@
-import { Derive } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { HTHitbox } from "../../../../shared/hitboxes";
-import { Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PathFinder } from "../../../battle/path-finder";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Spark } from "../../blueprint/implementation/spark";
-import { ArmyGrid } from "../../../grid/grid";
-import { BattleGrid } from "../../../grid/battle-grid";
+import { TGrid } from "../../../grid/tgrid";
 
 export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
 	pathFinder: PathFinder;
@@ -19,7 +18,7 @@ export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable) 
 
 	constructor(
 		public projectile: Spark,
-		public position: Position,
+		public position: GridPosition,
 		public hooks: BattleArmyHooks,
 		public target: AnyBattleUnit,
 		public damage: number,
@@ -87,20 +86,23 @@ export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable) 
 		return distanceSqrd < range && target.isAlive() && distanceSqrd !== 0 && !alreadyTouched;
 	}
 
-	move(newPosition: Position) {
+	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 	}
 
-	override render(context: CanvasRenderingContext2D, grid?: ArmyGrid | BattleGrid): void {
+	override render(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid>): void {
+		if (!grid) return;
 		if (!this.touchedTargets[0]) {
 			super.render(context, grid);
 			return;
 		}
-		let lastPos = this.getCanvasPosition(context, this.touchedTargets[0].position);
+		const screenPosition = grid?.gridToScreenPosition(this.touchedTargets[0].position);
+		let lastPos = this.getCanvasPosition(context, screenPosition);
 		for (const target of this.touchedTargets) {
 			context.strokeStyle = "blue";
-			const canvasPosition = this.getCanvasPosition(context, target.position);
+			const targetScreenPosition = grid?.gridToScreenPosition(target.position);
+			const canvasPosition = this.getCanvasPosition(context, targetScreenPosition);
 			this.drawLine(context, lastPos.x, lastPos.y, canvasPosition.x, canvasPosition.y);
 			lastPos = canvasPosition;
 		}

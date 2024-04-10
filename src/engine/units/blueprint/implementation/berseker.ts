@@ -1,7 +1,7 @@
 import { Derive } from "@ddd-ts/traits";
 import { Ellipse, HitBox, THitbox } from "../../../../shared/hitboxes";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
-import { Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { Resources } from "../../../../renderer/resources";
 import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
 import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
@@ -10,7 +10,7 @@ import { TDrawable } from "../../../../shared/traits/tdrawable";
 
 export class BersekerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
-	THitbox(new HitBox([[new Ellipse({ width: 2, height: 3 }), new Position({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Ellipse({ width: 2, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TImageDrawable(Resources.unit.berseker.resource.image, Resources.unit.berseker.size, 3),
 	TDamageDealer(1),

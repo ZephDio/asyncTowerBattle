@@ -37,25 +37,25 @@ const EnemyArmyFixtures = {
 		const tiles = PathFixture.default;
 		const barracks = [
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.choupisson)
+				.setUnit(UnitRecruitFixture.dragon)
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.withProductionSpeed(3.2)
 				.buildWave(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.choupisson)
-				.withCell(new Cell({ x: 1, y: 2 }))
-				.withProductionSpeed(3.3)
-				.buildWave(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.choupisson)
-				.withCell(new Cell({ x: 0, y: 2 }))
-				.withProductionSpeed(3.4)
-				.buildWave(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.choupisson)
-				.withCell(new Cell({ x: 1, y: 0 }))
-				.withProductionSpeed(3.6)
-				.buildWave(),
+			// new BarrackRecruitBuilder()
+			// 	.setUnit(UnitRecruitFixture.choupisson)
+			// 	.withCell(new Cell({ x: 1, y: 2 }))
+			// 	.withProductionSpeed(3.3)
+			// 	.buildWave(),
+			// new BarrackRecruitBuilder()
+			// 	.setUnit(UnitRecruitFixture.choupisson)
+			// 	.withCell(new Cell({ x: 0, y: 2 }))
+			// 	.withProductionSpeed(3.4)
+			// 	.buildWave(),
+			// new BarrackRecruitBuilder()
+			// 	.setUnit(UnitRecruitFixture.choupisson)
+			// 	.withCell(new Cell({ x: 1, y: 0 }))
+			// 	.withProductionSpeed(3.6)
+			// 	.buildWave(),
 		];
 		const unitInventory = new Inventory();
 		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));

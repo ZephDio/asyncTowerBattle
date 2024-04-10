@@ -1,6 +1,6 @@
 import { Derive, implementsTrait } from "@ddd-ts/traits";
 import { TPhysics } from "../../../../shared/traits/physics";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { OrangeTower } from "../../recruit/implementation/orange-tower-recruit";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
@@ -15,13 +15,13 @@ export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawabl
 	constructor(
 		recruit: OrangeTower,
 		readonly hooks: BattleArmyHooks,
-		public readonly position: Position,
+		public readonly position: GridPosition,
 		public readonly cell: Cell,
 	) {
 		super({ imageDrawable: recruit, hitboxHolder: recruit });
 	}
 
-	get realPosition(): Position {
+	get realPosition(): GridPosition {
 		return this.position;
 	}
 

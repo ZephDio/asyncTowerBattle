@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { HTHitbox } from "../../../../shared/hitboxes";
-import { Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
@@ -15,10 +15,10 @@ export class BattleSpine extends Derive(TRenderable, HTHitbox, HTImageDrawable) 
 
 	constructor(
 		public projectile: Spine,
-		public position: Position,
+		public position: GridPosition,
 		public hooks: BattleArmyHooks,
 		public damage: number,
-		public vector: Position,
+		public vector: GridPosition,
 	) {
 		super({ hitboxHolder: projectile, imageDrawable: projectile });
 		this.angle = Physic.getTheta(this.position, this.position.add(this.vector));
@@ -56,7 +56,7 @@ export class BattleSpine extends Derive(TRenderable, HTHitbox, HTImageDrawable) 
 		touched.takeDamage(this.damage);
 	}
 
-	move(newPosition: Position) {
+	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 	}

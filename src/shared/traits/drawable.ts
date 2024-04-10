@@ -1,7 +1,5 @@
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
-import { BattleGrid } from "../../engine/grid/battle-grid";
-import { ArmyGrid } from "../../engine/grid/grid";
-import { Cell, Position } from "../position";
+import { Cell, GridPosition, ScreenPosition } from "../position";
 
 import { TGrid } from "../../engine/grid/tgrid";
 import { LifeBar } from "../hud-element/lifebar";
@@ -14,18 +12,25 @@ import { THasPrice } from "./has-price";
 
 export const TRenderable = Subtrait([TDrawable], (base) => {
 	abstract class IRenderable extends base {
-		abstract get position(): Position | Cell;
+		abstract get position(): ScreenPosition | GridPosition | Cell;
 
 		render(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid>) {
 			if (this.position instanceof Cell) {
 				if (!grid) {
-					throw new Error("Grid is required to render cell position");
+					throw new Error("Grid is required to render");
 				}
-				const realPosition = grid.cellToReal(this.position);
-				return this.draw(context, realPosition);
+				const gridPosition = grid.cellToGrid(this.position);
+				const screenPosition = grid.gridToScreenPosition(gridPosition);
+				return this.draw(context, screenPosition);
 			}
-
-			return this.draw(context, this.position);
+			if (this.position instanceof GridPosition) {
+				if (!grid) {
+					throw new Error("Grid is required to render");
+				}
+				const screenPosition = grid.gridToScreenPosition(this.position);
+				return this.draw(context, screenPosition);
+			}
+			if (this.position instanceof ScreenPosition) return this.draw(context, this.position);
 		}
 	}
 	return IRenderable;
@@ -35,23 +40,34 @@ export const THudRenderable = Subtrait([TRenderable], (base) => {
 	abstract class IHudRenderable extends base {
 		huds(): {
 			hud: ImplementsTrait<typeof TDrawable>;
-			position: Position;
+			position: GridPosition;
 		}[] {
 			return [];
 		}
 
-		override render(context: CanvasRenderingContext2D, grid?: ArmyGrid | BattleGrid): void {
+		override render(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid>): void {
 			super.render(context, grid);
 			for (const { hud, position } of this.huds()) {
 				if (this.position instanceof Cell) {
 					if (!grid) {
 						throw new Error("Grid is required to render cell position");
 					}
-					const realPosition = grid.cellToReal(this.position).add(position);
-					hud.draw(context, realPosition);
-					return;
+					const gridPosition = grid.cellToGrid(this.position).add(position);
+					const worldPosition = grid.gridToScreenPosition(gridPosition);
+					hud.draw(context, worldPosition);
 				}
-				hud.draw(context, this.position.add(position));
+				if (this.position instanceof ScreenPosition) {
+					const worldPosition = this.position.add(position);
+					hud.draw(context, worldPosition);
+				}
+				if (this.position instanceof GridPosition) {
+					if (!grid) {
+						throw new Error("Grid is required to render cell position");
+					}
+					const worldPosition = this.position.add(position);
+					const screenPosition = grid.gridToScreenPosition(worldPosition);
+					hud.draw(context, screenPosition);
+				}
 			}
 		}
 	}
@@ -66,7 +82,7 @@ export const TLifeBarRenderable = Subtrait([THudRenderable, Caster], (base) => {
 				...super.huds(),
 				{
 					hud: this.lifeBar,
-					position: new Position({ x: 0, y: 2.5 }),
+					position: new GridPosition({ x: 0, y: 2.5 }),
 				},
 			];
 		}
@@ -83,7 +99,7 @@ export const TCasterHudRenderable = Subtrait([THudRenderable, Caster], (base) =>
 					...super.huds(),
 					{
 						hud: this.casterCamembert,
-						position: new Position({ x: 0, y: 2.5 }),
+						position: new GridPosition({ x: 0, y: 2.5 }),
 					},
 				];
 			}
@@ -101,7 +117,7 @@ export const TUnitPreviewHudRenderable = Subtrait([THudRenderable], (base) => {
 				...super.huds(),
 				{
 					hud: this.unitPreview,
-					position: new Position({ x: 0, y: 1.8 }),
+					position: new GridPosition({ x: 0, y: 1.8 }),
 				},
 			];
 		}
@@ -117,7 +133,7 @@ export const TPriceHudRenderable = Subtrait([THudRenderable, THasPrice], (base) 
 				...super.huds(),
 				{
 					hud: this.unitPreview,
-					position: new Position({ x: 0, y: -4.2 }),
+					position: new GridPosition({ x: 0, y: -4.2 }),
 				},
 			];
 		}
@@ -139,7 +155,7 @@ export const TImageDrawable = (image: HTMLImageElement, size: { width: number; h
 				return this.drawable.priority;
 			}
 
-			draw(context: CanvasRenderingContext2D, position: Position): void {
+			draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 				const { width, height } = this.drawable.size;
 				const size = this.getCanvasSize(context, width, height);
 				const canvasPosition = this.getCanvasPosition(context, position);

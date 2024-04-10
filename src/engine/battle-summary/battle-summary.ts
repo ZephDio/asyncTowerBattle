@@ -3,7 +3,7 @@ import { BattleState, SummaryState } from "../../shared/gamestate";
 import { TRenderable } from "../../shared/traits/drawable";
 import { Game } from "../game";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
-import { Position } from "../../shared/position";
+import { ScreenPosition } from "../../shared/position";
 import { Resources } from "../../renderer/resources";
 import { TDrawable } from "../../shared/traits/tdrawable";
 
@@ -14,7 +14,7 @@ export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 
 	drawPriority = 5;
 
-	draw(context: CanvasRenderingContext2D, position: Position): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		const image = Resources.verdict[this.verdict].resource.image;
 		const { width, height } = Resources.verdict[this.verdict].size;
 		const size = this.getCanvasSize(context, width, height);
@@ -48,13 +48,17 @@ export class BattleSummary {
 
 	getDrawables() {
 		return {
-			drawables: [
-				this.battleVerdict,
-				...this.lastBattleState.units,
-				...this.lastBattleState.projectiles,
-				...this.lastBattleState.areaEffects,
+			renderables: [this.battleVerdict],
+			grids: [
+				{
+					grid: this.lastBattleState.grid,
+					drawables: [
+						...this.lastBattleState.units,
+						...this.lastBattleState.projectiles,
+						...this.lastBattleState.areaEffects,
+					],
+				},
 			],
-			grids: [this.lastBattleState.grid],
 		};
 	}
 
