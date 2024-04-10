@@ -1,5 +1,5 @@
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
-import { Cell, Position } from "../../../shared/position";
+import { Position } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { AnyBattleTile } from "../battle/battle-tile";
 import { TRecruit } from "../../../shared/traits/recruit";
@@ -7,13 +7,15 @@ import { RetailGrid } from "../../grid/retail-grid";
 import { ArmyGrid } from "../../grid/grid";
 import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
+import { BattleGrid } from "../../grid/battle-grid";
 
 export const PathTile = Subtrait([TRecruit], (base) => {
 	abstract class IPathTile extends base {
 		get position() {
 			return this.cell;
 		}
-		abstract toBattle(cell: Cell, position: Position, hooks: BattleArmyHooks): AnyBattleTile;
+		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTile;
+		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTile;
 
 		moveRecruit(hooks: TokenHooks, position: Position) {
 			const grid = hooks.shopPhaseHooks.shopHooks.determinateGrid(position);
@@ -31,6 +33,10 @@ export const PathTile = Subtrait([TRecruit], (base) => {
 				return;
 			}
 			throw new Error("No Case Matched");
+		}
+
+		toHash() {
+			return this.cell.toHash() + this.constructor.name;
 		}
 	}
 	return IPathTile;

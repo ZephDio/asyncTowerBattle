@@ -45,11 +45,11 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		const gridElements = [
 			...alliedArmy.towers,
 			alliedArmy.castle,
-			...alliedArmy.path.tiles,
+			...alliedArmy.tiles,
 			...enemyArmy.towers,
 			...alliedArmy.barracks,
 			enemyArmy.castle,
-			...enemyArmy.path.tiles,
+			...enemyArmy.tiles,
 			...enemyArmy.barracks,
 		];
 		for (const gridElement of gridElements) {

@@ -17,6 +17,7 @@
     "vite": "^5.2.6"
   },
   "dependencies": {
-    "@ddd-ts/traits": "file:./traits"
+    "@ddd-ts/traits": "file:./traits",
+    "ts-node": "^10.9.2"
   }
 }
