@@ -125,8 +125,8 @@ export class ShopPhase {
 			hudElements: [new StartBattleButton({}), new RefreshBellHud({})],
 			towers: this.army.towers,
 			castle: this.army.castle,
-			path: this.army.path,
 			grid: this.army.grid,
+			path: this.army.isPathValid(),
 		} as ShopState;
 	}
 }

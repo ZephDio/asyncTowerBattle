@@ -23,13 +23,13 @@ export class ArmyFixture {
 				.buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];
-		const path = PathFixture.default;
+		const tiles = PathFixture.default;
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
-		[castle, ...towers, ...path.tiles].map((e) => grid.setElement(e));
+		[castle, ...towers, ...tiles].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
-		return new Army(path, grid, unitInventory);
+		return new Army(grid, unitInventory);
 	}
 	static get allied() {
 		const grid = new ArmyGrid();
@@ -41,14 +41,14 @@ export class ArmyFixture {
 				.buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];
-		const path = PathFixture.default;
+		const tiles = PathFixture.default;
 		const barracks = [BarrackRecruitFixtures.basicWithBerseker()];
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
-		[castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
+		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
-		return new Army(path, grid, unitInventory);
+		return new Army(grid, unitInventory);
 	}
 	static get enemy() {
 		const grid = new ArmyGrid();
@@ -58,10 +58,10 @@ export class ArmyFixture {
 			new TowerBuilder().celled(new Cell({ x: 4, y: 3 })).buildZapping(TowerBlueprintFixtures.zapping),
 		];
 		const castle = CastleRecruitFixture.enemy;
-		const path = PathFixture.default;
+		const tiles = PathFixture.default;
 		const barracks = [BarrackRecruitFixtures.basicWithDragon(), BarrackRecruitFixtures.waveWithSoldier()];
-		[castle, ...towers, ...barracks, ...path.tiles].map((e) => grid.setElement(e));
-		return new Army(path, grid, new Inventory());
+		[castle, ...towers, ...barracks, ...tiles].map((e) => grid.setElement(e));
+		return new Army(grid, new Inventory());
 	}
 }
 

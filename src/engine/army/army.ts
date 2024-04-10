@@ -3,16 +3,16 @@ import { Cell } from "../../shared/position";
 import { AnyBarrack, Barrack } from "../barrack/recruit/barrack-recruit";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
-import { ArmyPath } from "../path/army/path";
 import { AnyPathTile, PathTile } from "../tile/recruit/tile";
 import { AnyTower, Tower } from "../tower/recruit/tower-recruit";
 import { Unit } from "../units/recruit/unit-recruit";
-import { AnyRecruit } from "../../shared/traits/recruit";
+import { AnyRecruit, TRecruit } from "../../shared/traits/recruit";
 import { TGrid } from "../grid/tgrid";
+import { BattlePath } from "../path/battle/battle-path";
 
 export class Army {
 	constructor(
-		public path: ArmyPath,
+		//public path: ArmyPath,
 		public grid: ArmyGrid,
 		public inventory: Inventory,
 	) {}
@@ -32,16 +32,8 @@ export class Army {
 			if (implementsTrait(recruit, Unit)) {
 				throw new Error("Cannot add unit to army grid");
 			}
-			if (implementsTrait(recruit, Tower)) {
-				this.addTower(recruit);
-				return;
-			}
-			if (implementsTrait(recruit, PathTile)) {
-				this.addTile(recruit);
-				return;
-			}
-			if (implementsTrait(recruit, Barrack)) {
-				this.addBarrack(recruit);
+			if (implementsTrait(recruit, TRecruit)) {
+				this.addToGrid(recruit);
 				return;
 			}
 			return;
@@ -63,23 +55,41 @@ export class Army {
 		return this.grid.barracks;
 	}
 
+	get pathTiles() {
+		return this.grid.pathTiles;
+	}
+
+	get path() {
+		const from = this.grid.getEnemyDoorCell();
+		const to = this.castle.cell.down();
+		return BattlePath.chainTiles(from, to, this.pathTiles);
+	}
+
+	isPathValid() {
+		try {
+			return this.path;
+		} catch (e) {
+			return null;
+		}
+	}
+
 	pushToInventory(recruit: AnyRecruit) {
 		this.inventory.add(recruit);
 	}
 
-	addTower(recruit: AnyTower) {
-		this.grid.setElement(recruit);
-	}
+	// addTower(recruit: AnyTower) {
+	// 	this.grid.setElement(recruit);
+	// }
 
 	addToInventory(recruit: AnyRecruit) {
 		this.inventory.setElement(recruit);
 	}
 
-	addTile(tile: AnyPathTile) {
-		this.path.tiles.push(tile);
-		this.grid.setElement(tile);
+	addToGrid(recruit: AnyRecruit) {
+		this.grid.setElement(recruit);
 	}
-	addBarrack(barrack: AnyBarrack) {
-		this.grid.setElement(barrack);
-	}
+
+	// addBarrack(barrack: AnyBarrack) {
+	// 	this.grid.setElement(barrack);
+	// }
 }

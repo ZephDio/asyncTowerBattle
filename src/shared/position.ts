@@ -41,6 +41,10 @@ export class Cell {
 		});
 	}
 
+	toHash() {
+		return this.x.toString() + this.y.toString();
+	}
+
 	isAdjascentTo(other: Cell) {
 		return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) === 1;
 	}

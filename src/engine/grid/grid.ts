@@ -9,6 +9,7 @@ import { Castle } from "../castle/recruit/castle-recruit";
 import { Tower } from "../tower/recruit/tower-recruit";
 import { Barrack } from "../barrack/recruit/barrack-recruit";
 import { GridElement } from "../../shared/traits/grid-element";
+import { PathTile } from "../tile/recruit/tile";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
@@ -38,6 +39,10 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	get barracks() {
 		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Barrack> => implementsTrait(e, Barrack));
+	}
+
+	get pathTiles() {
+		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof PathTile> => implementsTrait(e, PathTile));
 	}
 
 	getEnemyDoorCell() {

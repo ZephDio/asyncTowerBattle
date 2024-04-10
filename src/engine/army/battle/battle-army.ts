@@ -9,6 +9,7 @@ import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 import { AnyBattleUnit } from "../../units/battle/battle-unit";
 import { HitBox } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
+import { AnyBattleTile } from "../../tile/battle/battle-tile";
 export type BattleArmyHooks = {
 	addUnits: BattleArmy["addUnit"];
 	removeUnit: BattleArmy["removeUnit"];
@@ -30,6 +31,7 @@ export class BattleArmy {
 	barracks: AnyBattleBarrack[];
 	projectiles: Map<AnyBattleProjectile, any> = new Map();
 	towers: AnyBattleTower[];
+	tiles: AnyBattleTile[];
 
 	constructor(
 		public searchTarget: SearchTarget,
@@ -37,11 +39,18 @@ export class BattleArmy {
 		public gridHooks: GridHooks,
 	) {}
 
-	init(castle: BattleCastle, path: BattlePath, towers: AnyBattleTower[], barracks: AnyBattleBarrack[]) {
+	init(
+		castle: BattleCastle,
+		path: BattlePath,
+		towers: AnyBattleTower[],
+		barracks: AnyBattleBarrack[],
+		tiles: AnyBattleTile[],
+	) {
 		this.castle = castle;
 		this.path = path;
 		this.towers = towers;
 		this.barracks = barracks;
+		this.tiles = tiles;
 	}
 
 	addUnit(entityRecruit: AnyBattleUnit, battleBarrack: AnyBattleBarrack) {

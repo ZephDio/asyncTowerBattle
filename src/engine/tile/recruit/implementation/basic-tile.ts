@@ -4,6 +4,7 @@ import { BasicBattlePathTile } from "../../battle/implementation/basic-battle-ti
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PathTile } from "../tile";
 import { BasicTileBlueprint } from "../../blueprint/implementation/basic-path-blueprint";
+import { BattleGrid } from "../../../grid/battle-grid";
 
 export class BasicPathTile extends Derive(PathTile) {
 	constructor(
@@ -14,6 +15,17 @@ export class BasicPathTile extends Derive(PathTile) {
 	}
 
 	toBattle(cell: Cell, position: Position, hooks: BattleArmyHooks) {
+		return new BasicBattlePathTile(this, cell, position, hooks);
+	}
+
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
+		const position = grid.cellToReal(this.cell);
+		return new BasicBattlePathTile(this, this.cell, position, hooks);
+	}
+
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
+		const cell = BattleGrid.flip(grid, this.cell);
+		const position = grid.cellToReal(cell);
 		return new BasicBattlePathTile(this, cell, position, hooks);
 	}
 }

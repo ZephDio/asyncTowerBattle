@@ -7,6 +7,7 @@ import { HitBox } from "../../../shared/hitboxes";
 import { Position } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
+import { BattlePath } from "../../path/battle/battle-path";
 
 export type SearchTarget = Battlefield["searchAlliedUnitTarget"] | Battlefield["searchEnemyUnitTarget"];
 export type SearchAreaForUnit = Battlefield["searchAlliesInArea"] | Battlefield["searchEnemiesInArea"];
@@ -43,20 +44,13 @@ export class Battlefield {
 		);
 		const enemyBattleCastle = enemyArmy.castle.toEnemy(grid, () => this.onBattleOver("victory"));
 		const alliedBattleCastle = alliedArmy.castle.toAllied(grid, () => this.onBattleOver("defeat"));
-		const alliedBattlePath = alliedArmy.path.toAllied(
-			grid,
-			alliedArmy.grid,
-			alliedBattleCastle,
-			enemyBattleCastle,
-			alliedBattleArmy.getHooks(),
+		const alliedBattleTiles = alliedArmy.pathTiles.map((pathTile) =>
+			pathTile.toAllied(grid, alliedBattleArmy.getHooks()),
 		);
-		const enemyBattlePath = enemyArmy.path.toEnemy(
-			grid,
-			alliedArmy.grid,
-			enemyBattleCastle,
-			alliedBattleCastle,
-			enemyBattleArmy.getHooks(),
-		);
+		const enemyBattleTiles = enemyArmy.pathTiles.map((pathTile) => pathTile.toEnemy(grid, alliedBattleArmy.getHooks()));
+		const alliedBattlePath = BattlePath.toAllied(grid, alliedArmy.path, alliedBattleCastle, enemyBattleCastle);
+		const enemyBattlePath = BattlePath.toEnemy(grid, enemyArmy.path, enemyBattleCastle, alliedBattleCastle);
+
 		const enemyBattleTowers = enemyArmy.towers.map((tower) => tower.toEnemy(grid, enemyBattleArmy.getHooks()));
 		const alliedBattleTowers = alliedArmy.towers.map((tower) => tower.toAllied(grid, alliedBattleArmy.getHooks()));
 		const enemyBattleBarracks = enemyArmy.barracks
@@ -65,8 +59,14 @@ export class Battlefield {
 		const alliedBattleBarrack = alliedArmy.barracks
 			.map((barrack) => barrack.toAllied(grid, enemyBattlePath, alliedBattleArmy.getHooks()))
 			.filter((b): b is AnyBattleBarrack => b !== undefined);
-		alliedBattleArmy.init(alliedBattleCastle, alliedBattlePath, alliedBattleTowers, alliedBattleBarrack);
-		enemyBattleArmy.init(enemyBattleCastle, enemyBattlePath, enemyBattleTowers, enemyBattleBarracks);
+		alliedBattleArmy.init(
+			alliedBattleCastle,
+			alliedBattlePath,
+			alliedBattleTowers,
+			alliedBattleBarrack,
+			alliedBattleTiles,
+		);
+		enemyBattleArmy.init(enemyBattleCastle, enemyBattlePath, enemyBattleTowers, enemyBattleBarracks, enemyBattleTiles);
 		grid.initElements(alliedBattleArmy, enemyBattleArmy);
 		return {
 			alliedBattleArmy: alliedBattleArmy,
@@ -81,7 +81,7 @@ export class Battlefield {
 		this.tickUnits();
 		this.tickTowers();
 		this.tickAreaEffects();
-		this.tickPath();
+		this.tickPathTiles();
 	}
 
 	tickTowers() {
@@ -138,33 +138,6 @@ export class Battlefield {
 		}
 		return bestTarget[0];
 	}
-
-	// searchClosestArrivingAlliedFrom(position: Position, range: number): AnyBattleUnit | undefined {
-	// 	let closest: AnyBattleUnit | undefined = undefined;
-	// 	let closestDistance = Infinity;
-	// 	for (const alliedUnit of this.alliedArmy.units.keys()) {
-	// 		const distance = Physic.getDistanceSqrd(position, alliedUnit.position);
-	// 		if (distance < closestDistance && alliedUnit.position.x >= position.x && distance !== 0 && distance < range) {
-	// 			closestDistance = distance;
-	// 			closest = alliedUnit;
-	// 		}
-	// 	}
-	// 	return closest;
-	// }
-
-	// searchClosestArrivingEnemyFrom(position: Position, range: number): AnyBattleUnit | undefined {
-	// 	let closest: AnyBattleUnit | undefined = undefined;
-	// 	let closestDistance = Infinity;
-	// 	for (const enemyUnit of this.enemyArmy.units.keys()) {
-	// 		const distance = Physic.getDistanceSqrd(position, enemyUnit.position);
-	// 		if (distance < closestDistance && distance !== 0 && distance < range) {
-	// 			closestDistance = distance;
-	// 			closest = enemyUnit;
-	// 		}
-	// 	}
-	// 	return closest;
-	// }
-
 	tickBarracks() {
 		for (const barrack of this.alliedArmy.barracks) {
 			barrack.tick();
@@ -174,9 +147,13 @@ export class Battlefield {
 		}
 	}
 
-	tickPath() {
-		this.alliedArmy.path.tick();
-		this.enemyArmy.path.tick();
+	tickPathTiles() {
+		for (const tile of this.alliedArmy.tiles) {
+			tile.tick();
+		}
+		for (const tile of this.enemyArmy.tiles) {
+			tile.tick();
+		}
 	}
 
 	tickUnits() {

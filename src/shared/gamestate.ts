@@ -14,7 +14,8 @@ import { AnyBattleTile } from "../engine/tile/battle/battle-tile";
 import { AnyBattleUnit } from "../engine/units/battle/battle-unit";
 import { TTokenDrag } from "../engine/shop/holder/token-drag/token-drag";
 import { AnyBattleProjectile } from "../engine/projectile/battle/battle-projectile";
-import { ArmyPath } from "../engine/path/army/path";
+import { Position } from "./position";
+import { BattlePath } from "../engine/path/battle/battle-path";
 
 export interface GameState {
 	type: string;
@@ -30,11 +31,12 @@ export interface BattleState extends GameState {
 	type: "battle";
 	castles: BattleCastle[];
 	towers: AnyBattleTower[];
-	paths: AnyBattleTile[];
 	grid: BattleGrid;
 	units: AnyBattleUnit[];
 	areaEffects: AreaEffect[];
 	projectiles: AnyBattleProjectile[];
+	tiles: AnyBattleTile[];
+	path: BattlePath;
 }
 
 export interface ShopState extends GameState {
@@ -43,7 +45,7 @@ export interface ShopState extends GameState {
 
 	castle: Castle<CastleBlueprint>;
 	towers: ImplementsTrait<typeof Tower>[];
-	path: ArmyPath;
+	path: Position[] | null;
 	grid: ArmyGrid;
 
 	hold: ImplementsTrait<typeof TTokenDrag> | null;

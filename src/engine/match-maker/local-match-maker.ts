@@ -34,7 +34,7 @@ const EnemyArmyFixtures = {
 				.buildGreen(),
 			//TowerEntityFixtures.topRightTower,
 		];
-		const path = PathFixture.default;
+		const tiles = PathFixture.default;
 		const barracks = [
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.choupisson)
@@ -58,9 +58,8 @@ const EnemyArmyFixtures = {
 				.buildWave(),
 		];
 		const unitInventory = new Inventory();
-		[castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
-		//return new Army(castle, towers, path, barracks, grid, unitInventory);
-		return new Army(path, grid, unitInventory);
+		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
+		return new Army(grid, unitInventory);
 	},
 	1: () => {
 		const grid = new ArmyGrid();
@@ -74,9 +73,9 @@ const EnemyArmyFixtures = {
 			BarrackRecruitFixtures.waveWithDragon(),
 			BarrackRecruitFixtures.basicWithPriest(),
 		];
-		const path = PathFixture.default;
-		[castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(path, grid, new Inventory());
+		const tiles = PathFixture.default;
+		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
+		return new Army(grid, new Inventory());
 	},
 	2: () => {
 		const grid = new ArmyGrid();
@@ -102,9 +101,9 @@ const EnemyArmyFixtures = {
 				.withProductionSpeed(3.1)
 				.buildWave(),
 		];
-		const path = PathFixture.default;
-		[castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(path, grid, new Inventory());
+		const tiles = PathFixture.default;
+		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
+		return new Army(grid, new Inventory());
 	},
 	3: () => {
 		const grid = new ArmyGrid();
@@ -136,9 +135,9 @@ const EnemyArmyFixtures = {
 				.withProductionSpeed(3.1)
 				.buildWave(),
 		];
-		const path = PathFixture.default;
-		[castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(path, grid, new Inventory());
+		const tiles = PathFixture.default;
+		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
+		return new Army(grid, new Inventory());
 	},
 	4: () => {
 		const grid = new ArmyGrid();
@@ -176,9 +175,9 @@ const EnemyArmyFixtures = {
 				.withProductionSpeed(3.9)
 				.buildWave(),
 		];
-		const path = PathFixture.default;
-		[castle, ...towers, ...path.tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(path, grid, new Inventory());
+		const tiles = PathFixture.default;
+		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
+		return new Army(grid, new Inventory());
 	},
 };
 
