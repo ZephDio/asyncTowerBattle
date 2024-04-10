@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Unit } from "../unit-recruit";
@@ -27,7 +27,7 @@ export class Priest extends Derive(Unit, HTDamageDealer) {
 	}
 	type = "priest" as const;
 
-	toBattle(position: Position, path: BattlePath, hooks: BattleArmyHooks) {
+	toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks) {
 		return new BattlePriest(this, position, path, hooks);
 	}
 }

@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { BasicBattlePathTile } from "../../battle/implementation/basic-battle-tile";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PathTile } from "../tile";
@@ -14,18 +14,18 @@ export class BasicPathTile extends Derive(PathTile) {
 		super({ hitboxHolder: tile, imageDrawable: tile });
 	}
 
-	toBattle(cell: Cell, position: Position, hooks: BattleArmyHooks) {
+	toBattle(cell: Cell, position: GridPosition, hooks: BattleArmyHooks) {
 		return new BasicBattlePathTile(this, cell, position, hooks);
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
-		const position = grid.cellToReal(this.cell);
+		const position = grid.cellToGrid(this.cell);
 		return new BasicBattlePathTile(this, this.cell, position, hooks);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const position = grid.cellToReal(cell);
+		const position = grid.cellToGrid(cell);
 		return new BasicBattlePathTile(this, cell, position, hooks);
 	}
 }

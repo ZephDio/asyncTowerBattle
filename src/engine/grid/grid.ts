@@ -1,5 +1,5 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
-import { Cell, Position } from "../../shared/position";
+import { Cell, ScreenPosition } from "../../shared/position";
 import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
 import { TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
@@ -19,7 +19,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	constructor(
 		public width: number = 13,
 		public height: number = 6,
-		public position: Position = new Position({ x: 2, y: 1.5 }),
+		public position: ScreenPosition = new ScreenPosition({ x: 2, y: 1.5 }),
 		public cellSize = 4.9,
 	) {
 		super({});

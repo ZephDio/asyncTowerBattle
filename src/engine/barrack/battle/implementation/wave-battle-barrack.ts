@@ -1,4 +1,4 @@
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
@@ -26,9 +26,9 @@ export class WaveBattleBarrack extends Derive(
 
 	constructor(
 		public readonly barrackRecruit: WaveBarrack,
-		public readonly position: Position,
+		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public spawnPosition: Position,
+		public spawnPosition: GridPosition,
 		public readonly path: BattlePath,
 		public readonly hooks: BattleArmyHooks,
 		public readonly unitRecruit: AnyUnit,

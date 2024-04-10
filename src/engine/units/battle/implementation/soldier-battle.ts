@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Soldier } from "../../recruit/implementation/soldier-recruit";
@@ -14,7 +14,7 @@ export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDr
 
 	constructor(
 		recruit: Soldier,
-		public position: Position,
+		public position: GridPosition,
 		public enemyPath: BattlePath,
 		private hooks: BattleArmyHooks,
 	) {
@@ -53,7 +53,7 @@ export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDr
 		}
 	}
 
-	move(newPosition: Position) {
+	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 	}

@@ -1,10 +1,7 @@
 import { ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell } from "../../shared/position";
-import { AnyBarrack, Barrack } from "../barrack/recruit/barrack-recruit";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
-import { AnyPathTile, PathTile } from "../tile/recruit/tile";
-import { AnyTower, Tower } from "../tower/recruit/tower-recruit";
 import { Unit } from "../units/recruit/unit-recruit";
 import { AnyRecruit, TRecruit } from "../../shared/traits/recruit";
 import { TGrid } from "../grid/tgrid";

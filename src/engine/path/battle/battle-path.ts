@@ -1,11 +1,11 @@
 import { MemorizePath } from "../../../shared/decorators/path-memorize";
-import { Cell, Position } from "../../../shared/position";
+import { Cell, GridPosition } from "../../../shared/position";
 import { BattleCastle } from "../../castle/battle/battle-castle";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyPathTile } from "../../tile/recruit/tile";
 export class BattlePath {
 	constructor(
-		public pathTileNodes: Position[],
+		public pathTileNodes: GridPosition[],
 		public alliedCastle: BattleCastle,
 		public enemyCastle: BattleCastle,
 	) {}
@@ -15,14 +15,14 @@ export class BattlePath {
 	}
 
 	static toAllied(grid: BattleGrid, cells: Cell[], alliedCastle: BattleCastle, enemyCastle: BattleCastle) {
-		const pathTileNodes = cells.map((cell) => grid.cellToReal(cell));
+		const pathTileNodes = cells.map((cell) => grid.cellToGrid(cell));
 		return new BattlePath(pathTileNodes, alliedCastle, enemyCastle);
 	}
 
 	static toEnemy(grid: BattleGrid, cells: Cell[], alliedCastle: BattleCastle, enemyCastle: BattleCastle) {
 		const pathTileNodes = cells.map((cell) => {
 			const flipped = BattleGrid.flip(grid, cell);
-			const position = grid.cellToReal(flipped);
+			const position = grid.cellToGrid(flipped);
 			return position;
 		});
 		return new BattlePath(pathTileNodes, alliedCastle, enemyCastle);

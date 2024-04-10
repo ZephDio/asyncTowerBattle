@@ -1,9 +1,8 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { TDrawable } from "../traits/tdrawable";
-import { Position } from "../position";
 import { Barrack } from "../../engine/barrack/recruit/barrack-recruit";
 import { AnyBattleBarrack } from "../../engine/barrack/battle/battle-barrack";
-
+import { ScreenPosition } from "../position";
 export class UnitPreviewHud extends Derive(TDrawable) {
 	objective = 100;
 	constructor(public barrack: ImplementsTrait<typeof Barrack> | AnyBattleBarrack) {
@@ -11,7 +10,7 @@ export class UnitPreviewHud extends Derive(TDrawable) {
 	}
 
 	drawPriority = 8;
-	draw(context: CanvasRenderingContext2D, position: Position): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		const recruit = this.barrack.unitRecruit;
 		if (!recruit) return;
 		context.globalAlpha = 1;

@@ -1,5 +1,5 @@
 import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { Rocket } from "../../../projectile/blueprint/implementation/rocket";
 import { TImageDrawable } from "../../../../shared/traits/drawable";
 import { Resources } from "../../../../renderer/resources";
@@ -10,7 +10,7 @@ import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
 
 export class BlueTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
-	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new Position({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDamageDealer(7),
 	TImageDrawable(Resources.tower.blue.resource.image, Resources.tower.blue.size, 3),
 ) {

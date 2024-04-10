@@ -4,7 +4,7 @@ import { BattleArmy } from "../../army/battle/battle-army";
 import { Battle } from "../battle";
 import { Physic } from "../../../shared/physic";
 import { HitBox } from "../../../shared/hitboxes";
-import { Position } from "../../../shared/position";
+import { GridPosition } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 import { BattlePath } from "../../path/battle/battle-path";
@@ -93,9 +93,10 @@ export class Battlefield {
 		}
 	}
 
-	searchEnemiesInArea(areaPosition: Position, hitbox: HitBox): AnyBattleUnit[] {
+	searchEnemiesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
 		const found: AnyBattleUnit[] = [];
 		for (const enemyUnit of this.enemyArmy.units.keys()) {
+			console.log("enemyUnit", enemyUnit, "hitbox", hitbox, "areaPosition", areaPosition);
 			if (enemyUnit.collides(hitbox, areaPosition)) {
 				found.push(enemyUnit);
 			}
@@ -103,7 +104,7 @@ export class Battlefield {
 		return found;
 	}
 
-	searchAlliesInArea(areaPosition: Position, hitbox: HitBox): AnyBattleUnit[] {
+	searchAlliesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
 		const found: AnyBattleUnit[] = [];
 		for (const alliedUnit of this.alliedArmy.units.keys()) {
 			if (alliedUnit.collides(hitbox, areaPosition)) {
@@ -113,7 +114,10 @@ export class Battlefield {
 		return found;
 	}
 
-	searchAlliedUnitTarget(position: Position, criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean) {
+	searchAlliedUnitTarget(
+		position: GridPosition,
+		criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean,
+	) {
 		let bestTarget: [AnyBattleUnit | null, number] = [null, Infinity];
 		for (const enemyUnit of [...this.enemyArmy.units.keys()]) {
 			const distanceSqrd = Physic.getDistanceSqrd(position, enemyUnit.position);
@@ -126,7 +130,7 @@ export class Battlefield {
 		return bestTarget[0];
 	}
 
-	searchEnemyUnitTarget(position: Position, criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean) {
+	searchEnemyUnitTarget(position: GridPosition, criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean) {
 		let bestTarget: [AnyBattleUnit | null, number] = [null, Infinity];
 		for (const enemyUnit of [...this.alliedArmy.units.keys()]) {
 			const distanceSqrd = Physic.getDistanceSqrd(position, enemyUnit.position);

@@ -1,5 +1,5 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { Cell, Position } from "../../../shared/position";
+import { Cell, ScreenPosition } from "../../../shared/position";
 import { TRenderable } from "../../../shared/traits/drawable";
 import { TGrid } from "../tgrid";
 import { TDrawable } from "../../../shared/traits/tdrawable";
@@ -9,13 +9,13 @@ export class HoverEffect extends Derive(TDrawable, TRenderable) {
 	size: number;
 	constructor(
 		public cell: Cell,
-		grid: ImplementsTrait<typeof TGrid>,
+		public grid: ImplementsTrait<typeof TGrid>,
 	) {
 		super({});
 		this.size = grid.cellSize;
 	}
 
-	draw(context: CanvasRenderingContext2D, position: Position): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		context.globalAlpha = 0.3;
 		context.fillStyle = "yellow";
 		const { width, height } = this.getCanvasSize(context, this.size, this.size);

@@ -1,4 +1,4 @@
-import { Cell, Position } from "../../shared/position";
+import { Cell, ScreenPosition } from "../../shared/position";
 import { Army } from "../army/army";
 import { Game } from "../game";
 import { Retail } from "./retail/retail";
@@ -24,9 +24,9 @@ type ArmyHooks = {
 };
 
 type RetailHooks = {
-	buy: (buyable: Buyable, position: Position) => void;
+	buy: (buyable: Buyable) => void;
 	addItem: (buyable: Buyable) => void;
-	determinateGrid: (position: Position) => ImplementsTrait<typeof TGrid> | undefined;
+	determinateGrid: (position: ScreenPosition) => ImplementsTrait<typeof TGrid> | undefined;
 };
 
 export type ShopPhaseHooks = {
@@ -67,18 +67,19 @@ export class ShopPhase {
 		}
 	}
 
-	selectItemFromRetail(buyable: Buyable, position: Position) {
+	selectItemFromRetail(buyable: Buyable, position: ScreenPosition) {
 		this.holderControl.setHoldFromRetail(buyable, this.retail, position, this.getTokenHooks());
 	}
 
-	setHoldFromArmyRecruit(recruit: AnyRecruit, position: Position, grid: ImplementsTrait<typeof TGrid>) {
+	setHoldFromArmyRecruit(recruit: AnyRecruit, position: ScreenPosition, grid: ImplementsTrait<typeof TGrid>) {
 		this.holderControl.setHoldFromArmyRecruit(recruit, this.army, position, this.getTokenHooks(), grid);
 	}
 
-	determineGrid(position: Position) {
+	determineGrid(position: ScreenPosition) {
 		const grids = [this.army.grid, this.army.inventory, this.retail.grid];
 		for (const grid of grids) {
-			const cell = grid.realPositionToGrid(position);
+			const gridPosition = grid.screenToGridPosition(position);
+			const cell = grid.gridPositionToCell(gridPosition);
 			if (cell) {
 				return grid;
 			}
@@ -88,8 +89,21 @@ export class ShopPhase {
 
 	getDrawables() {
 		return {
-			grids: [this.army.grid, this.army.inventory, this.retail.grid],
-			drawables: [
+			grids: [
+				{
+					grid: this.army.grid,
+					drawables: [],
+				},
+				{
+					grid: this.army.inventory,
+					drawables: [],
+				},
+				{
+					grid: this.retail.grid,
+					drawables: [],
+				},
+			],
+			renderables: [
 				new StartBattleButton({}),
 				new RefreshBellHud({}),
 				new GoldHud(this.economyHooks.getEconomy().gold),

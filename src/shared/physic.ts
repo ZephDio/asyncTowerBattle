@@ -1,30 +1,32 @@
 import { Ellipse, HitBox, Rectangle } from "./hitboxes";
-import { Position } from "./position";
+import { GridPosition, ScreenPosition } from "./position";
 export interface Recruit {
 	type: string;
 	hitbox: HitBox;
 }
 
+type Position = GridPosition | ScreenPosition;
+
 export class Physic {
-	static getDistance(positionA: Position, positionB: Position) {
+	static getDistance<T extends GridPosition | ScreenPosition>(positionA: T, positionB: T) {
 		const differentialX = positionA.x - positionB.x;
 		const differentialY = positionA.y - positionB.y;
 		return Math.sqrt(differentialX ** 2 + differentialY ** 2);
 	}
 
-	static getDistanceSqrd(positionA: Position, positionB: Position) {
+	static getDistanceSqrd<T extends GridPosition | ScreenPosition>(positionA: T, positionB: T) {
 		const differentialX = positionA.x - positionB.x;
 		const differentialY = positionA.y - positionB.y;
 		return differentialX ** 2 + differentialY ** 2;
 	}
 
-	static getTheta(positionA: Position, positionB: Position) {
+	static getTheta<T extends GridPosition | ScreenPosition>(positionA: T, positionB: T) {
 		const differentialX = positionB.x - positionA.x;
 		const differentialY = positionB.y - positionA.y;
 		return Math.atan2(differentialY, differentialX);
 	}
 
-	static getVector(positionA: Position, positionB: Position) {
+	static getVector<T extends GridPosition | ScreenPosition>(positionA: T, positionB: T) {
 		const differentialX = positionA.x - positionB.x;
 		const differentialY = positionA.y - positionB.y;
 		const distanceSquared = differentialX ** 2 + differentialY ** 2;
@@ -33,7 +35,10 @@ export class Physic {
 		return { distance, theta };
 	}
 
-	static getVectorSqrd(positionA: Position, positionB: Position) {
+	static getVectorSqrd<T extends GridPosition | ScreenPosition>(positionA: T, positionB: T) {
+		if (!(typeof positionA === typeof positionB)) {
+			throw new Error("Both positions must be of the same type");
+		}
 		const differentialX = positionA.x - positionB.x;
 		const differentialY = positionA.y - positionB.y;
 		return {
@@ -42,8 +47,8 @@ export class Physic {
 		};
 	}
 
-	static getNextPosition(position: Position, theta: number, speed: number) {
-		return new Position({
+	static getNextPosition(position: GridPosition, theta: number, speed: number) {
+		return new GridPosition({
 			x: position.x + Math.cos(theta) * speed,
 			y: position.y + Math.sin(theta) * speed,
 		});
@@ -65,13 +70,13 @@ export class Physic {
 		);
 	}
 
-	static getNextPositionAndOrientation(position: Position, destination: Position, speed: number) {
+	static getNextPositionAndOrientation(position: GridPosition, destination: GridPosition, speed: number) {
 		const theta = Physic.getTheta(position, destination);
-		const nextPosition = new Position({
+		const nextPosition = new GridPosition({
 			x: position.x + Math.cos(theta) * speed,
 			y: position.y + Math.sin(theta) * speed,
 		});
-		const differential = Physic.getDistanceSqrd(destination, position);
+		const differential = Physic.getDistanceSqrd<GridPosition>(destination, position);
 
 		if (differential < speed * speed) {
 			return [destination, theta] as const;
@@ -79,9 +84,9 @@ export class Physic {
 		return [nextPosition, theta] as const;
 	}
 
-	static doCollide(entityPosition: Position, hitbox: HitBox, point: Position) {
+	static doCollide<T extends GridPosition | ScreenPosition>(entityPosition: T, hitbox: HitBox, point: Position) {
 		for (const [shape, shapeRelativePosition] of hitbox.hitShapes) {
-			const shapePosition = new Position({
+			const shapePosition = new GridPosition({
 				x: entityPosition.x + shapeRelativePosition.x,
 				y: entityPosition.y + shapeRelativePosition.y,
 			});
@@ -99,19 +104,19 @@ export class Physic {
 		return false;
 	}
 
-	static doHitboxesCollide(
-		elementPosition: Position,
+	static doHitboxesCollide<T extends GridPosition | ScreenPosition>(
+		elementPosition: T,
 		hitbox: HitBox,
-		otherElementPosition: Position,
+		otherElementPosition: T,
 		otherHitBox: HitBox,
 	) {
 		for (const [shape, position] of hitbox.hitShapes) {
-			const shapePosition = new Position({
+			const shapePosition = new GridPosition({
 				x: elementPosition.x + position.x,
 				y: elementPosition.y + position.y,
 			});
 			for (const [otherShape, otherShapeRelativePosition] of otherHitBox.hitShapes) {
-				const otherShapePosition = new Position({
+				const otherShapePosition = new GridPosition({
 					x: otherElementPosition.x + otherShapeRelativePosition.x,
 					y: otherElementPosition.y + otherShapeRelativePosition.y,
 				});

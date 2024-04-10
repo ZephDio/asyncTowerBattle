@@ -1,14 +1,14 @@
 import { Physic } from "../../shared/physic";
-import { Position } from "../../shared/position";
+import { GridPosition } from "../../shared/position";
 
 export class PathFinder {
 	public isArrived = false;
 	constructor(
-		public destinations: Position[],
+		public destinations: GridPosition[],
 		public progress: number = 0,
 	) {}
 
-	getOrientation(entityPosition: Position) {
+	getOrientation(entityPosition: GridPosition) {
 		this.updateNextDestination(entityPosition);
 		const destination = this.getNextDestination();
 		if (!destination) throw new Error("No next destination");
@@ -17,7 +17,7 @@ export class PathFinder {
 		return theta;
 	}
 
-	getNextPositionAndOrientation(position: Position, speed: number) {
+	getNextPositionAndOrientation(position: GridPosition, speed: number) {
 		this.updateNextDestination(position);
 		const destination = this.getNextDestination();
 		if (!destination) throw new Error("No next destination");
@@ -25,7 +25,7 @@ export class PathFinder {
 		return [nextPosition, theta] as const;
 	}
 
-	getNextPosition(position: Position, speed: number) {
+	getNextPosition(position: GridPosition, speed: number) {
 		this.updateNextDestination(position);
 		const destination = this.getNextDestination();
 		if (!destination) throw new Error("No next destination");
@@ -36,7 +36,7 @@ export class PathFinder {
 		return this.destinations[this.progress];
 	}
 
-	updateNextDestination(entityPosition: Position) {
+	updateNextDestination(entityPosition: GridPosition) {
 		const reached = this.destinationReached(entityPosition);
 		if (reached) {
 			if (this.progress < this.destinations.length - 1) {
@@ -47,7 +47,7 @@ export class PathFinder {
 		}
 	}
 
-	destinationReached(entityPosition: Position) {
+	destinationReached(entityPosition: GridPosition) {
 		const destination = this.getNextDestination();
 		if (!destination) return false;
 		const distance = Physic.getDistanceSqrd(entityPosition, destination);

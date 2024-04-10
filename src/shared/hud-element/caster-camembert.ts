@@ -1,16 +1,18 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { TDrawable } from "../traits/tdrawable";
-import { Position } from "../position";
 import { Caster } from "../traits/cast";
+import {  ScreenPosition } from "../position";
 
 export class CasterCamembert extends Derive(TDrawable) {
 	objective = 100;
-	constructor(public caster: ImplementsTrait<typeof Caster>) {
+	constructor(
+		public caster: ImplementsTrait<typeof Caster>,
+	) {
 		super({});
 	}
 
 	drawPriority = 5;
-	draw(context: CanvasRenderingContext2D, position: Position): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		if (!this.caster.castInProgress) return;
 		context.globalAlpha = 1;
 		const size = this.getCanvasSize(context, 2, 2);

@@ -1,4 +1,4 @@
-import { Cell, Position } from "../../../../shared/position";
+import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Tower } from "../tower-recruit";
 import { AnyBattleTower } from "../../battle/battle-tower";
@@ -19,20 +19,20 @@ export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 		super({ synergy: tower, damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
 	}
 
-	getAreaEffect(hooks: BattleArmyHooks, position: Position, damage: number) {
+	getAreaEffect(hooks: BattleArmyHooks, position: GridPosition, damage: number) {
 		return new PoisonGround(80, position, damage, hooks);
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const clone = this.clone();
-		const position = grid.cellToReal(clone.cell);
+		const position = grid.cellToGrid(clone.cell);
 		return new YellowBattleTower(clone, hooks, position, clone.cell);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const clone = this.clone();
 		const cell = BattleGrid.flip(grid, clone.cell);
-		const position = grid.cellToReal(cell);
+		const position = grid.cellToGrid(cell);
 		return new YellowBattleTower(clone, hooks, position, cell);
 	}
 

@@ -1,34 +1,35 @@
-import { Derive, implementsTrait } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { TTokenDrag } from "./token-drag";
-import { Position } from "../../../../shared/position";
+import { GridPosition, ScreenPosition } from "../../../../shared/position";
 import { TSynergy } from "../../../../shared/traits/synergy";
 import { RetailGrid } from "../../../grid/retail-grid";
 import { Buyable } from "../../retail/buyable";
 import { TokenHooks } from "../holder";
+import { TGrid } from "../../../grid/tgrid";
 
 export class BuyableTokenDrag extends Derive(TTokenDrag) {
 	constructor(
 		public holded: Buyable,
-		position: Position,
+
+		position: ScreenPosition,
 
 		hooks: TokenHooks,
 		public onAbort: () => void,
 	) {
 		super({ imageDrawable: holded, hooks, position });
 	}
-	onRelease(position?: Position): void {
+	onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void {
 		try {
 			if (!position) throw new Error("Invalid position");
 			if (!this.hooks.shopPhaseHooks.economyHooks.canPurchase(this.holded.price)) {
 				throw new Error("Not enough gold");
 			}
-			const grid = this.hooks.shopPhaseHooks.shopHooks.determinateGrid(position);
-
+			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				throw new Error("can't sell item in shop DHU");
 			}
-			this.holded.entity.moveRecruit(this.hooks, position);
-			this.hooks.shopPhaseHooks.shopHooks.buy(this.holded, position);
+			this.holded.entity.moveRecruit(this.hooks, position, grid);
+			this.hooks.shopPhaseHooks.shopHooks.buy(this.holded);
 			this.hooks.holderHooks.removeHold();
 		} catch {
 			this.onAbort();

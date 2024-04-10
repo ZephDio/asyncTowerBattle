@@ -8,7 +8,7 @@ export const GridElement = Subtrait([TRenderable], (base) => {
 		abstract cell: Cell;
 
 		getRealPosition(grid: ImplementsTrait<typeof TGrid>) {
-			return grid.cellToReal(this.cell);
+			return grid.cellToGrid(this.cell);
 		}
 	}
 	return IGridElement;

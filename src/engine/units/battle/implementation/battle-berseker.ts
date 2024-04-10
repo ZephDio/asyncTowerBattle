@@ -5,7 +5,7 @@ import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/d
 import { HaveStats, Stats } from "../../../stats/stats";
 import { PathFinder } from "../../../battle/path-finder";
 import { BattlePath } from "../../../path/battle/battle-path";
-import { Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Berseker } from "../../recruit/implementation/berseker-recruit";
 import { Status } from "../../../../shared/traits/status";
@@ -21,7 +21,7 @@ export class BattleBerseker extends Derive(
 	pathFinder: PathFinder;
 	constructor(
 		recruit: Berseker,
-		public position: Position,
+		public position: GridPosition,
 		public enemyPath: BattlePath,
 
 		private hooks: BattleArmyHooks,
@@ -53,7 +53,7 @@ export class BattleBerseker extends Derive(
 			return;
 		}
 	}
-	move(newPosition: Position) {
+	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 	}
@@ -66,7 +66,6 @@ export class BattleBerseker extends Derive(
 	}
 
 	tick() {
-		console.log(this.castInProgress);
 		this.stats.tick();
 		if (this.stats.health <= this.stats.maxHealth / 2) {
 			this.addStatus(new Enraged({}));

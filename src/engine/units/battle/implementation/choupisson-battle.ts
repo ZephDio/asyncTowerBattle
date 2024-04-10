@@ -1,4 +1,4 @@
-import { Position } from "../../../../shared/position";
+import { GridPosition } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/cast";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
@@ -23,7 +23,7 @@ export class BattleChoupisson extends Derive(
 
 	constructor(
 		recruit: Choupisson,
-		public position: Position,
+		public position: GridPosition,
 		public enemyPath: BattlePath,
 		private hooks: BattleArmyHooks,
 	) {
@@ -78,7 +78,7 @@ export class BattleChoupisson extends Derive(
 		}
 	}
 
-	move(newPosition: Position) {
+	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
 	}

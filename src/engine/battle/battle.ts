@@ -38,13 +38,18 @@ export class Battle {
 
 	getDrawables() {
 		return {
-			drawables: [
-				...this.battlefield.alliedArmy.areaEffects.keys(),
-				...this.battlefield.enemyArmy.areaEffects.keys(),
-				...this.battlefield.units,
-				...this.battlefield.projectiles,
+			renderables: [],
+			grids: [
+				{
+					grid: this.battlefield.grid,
+					drawables: [
+						...this.battlefield.alliedArmy.areaEffects.keys(),
+						...this.battlefield.enemyArmy.areaEffects.keys(),
+						...this.battlefield.units,
+						...this.battlefield.projectiles,
+					],
+				},
 			],
-			grids: [this.battlefield.grid],
 		};
 	}
 

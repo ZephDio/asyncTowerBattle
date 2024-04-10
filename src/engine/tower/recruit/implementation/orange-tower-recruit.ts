@@ -17,14 +17,14 @@ export class OrangeTower extends Derive(Tower, HTSynergy) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const clone = this.clone();
-		const position = grid.cellToReal(clone.cell);
+		const position = grid.cellToGrid(clone.cell);
 		return new OrangeBattleTower(clone, hooks, position, clone.cell);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const clone = this.clone();
 		const cell = BattleGrid.flip(grid, clone.cell);
-		const position = grid.cellToReal(cell);
+		const position = grid.cellToGrid(cell);
 		return new OrangeBattleTower(clone, hooks, position, cell);
 	}
 

@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cell, Position } from "../../shared/position";
+import { Cell, GridPosition, ScreenPosition } from "../../shared/position";
 import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
 import { BattleArmy } from "../army/battle/battle-army";
 import { BattleCastle } from "../castle/battle/battle-castle";
@@ -20,7 +20,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		public gridEnemy: ArmyGrid,
 		public width: number,
 		public height: number,
-		public position: Position = new Position({ x: 2, y: 1.5 }),
+		public position = new ScreenPosition({ x: 2, y: 1.5 }),
 		public cellSize = 4.9,
 	) {
 		super({});
@@ -91,17 +91,17 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	getRelativeDirection(isEnemy: boolean) {
 		if (!isEnemy) {
 			return {
-				above: new Position({ x: 0, y: 1 }),
-				below: new Position({ x: 0, y: -1 }),
-				left: new Position({ x: -1, y: 0 }),
-				right: new Position({ x: 1, y: 0 }),
+				above: new GridPosition({ x: 0, y: 1 }),
+				below: new GridPosition({ x: 0, y: -1 }),
+				left: new GridPosition({ x: -1, y: 0 }),
+				right: new GridPosition({ x: 1, y: 0 }),
 			};
 		}
 		return {
-			above: new Position({ x: 0, y: -1 }),
-			below: new Position({ x: 0, y: 1 }),
-			left: new Position({ x: 1, y: 0 }),
-			right: new Position({ x: -1, y: 0 }),
+			above: new GridPosition({ x: 0, y: -1 }),
+			below: new GridPosition({ x: 0, y: 1 }),
+			left: new GridPosition({ x: 1, y: 0 }),
+			right: new GridPosition({ x: -1, y: 0 }),
 		};
 	}
 
@@ -116,7 +116,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	getAlliedHooks(): GridHooks {
 		return {
-			getRealPosition: this.cellToReal.bind(this),
+			getRealPosition: this.cellToGrid.bind(this),
 			getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => {
 				return this.getRelativeNeighborsInArmy(cell, relativePositions, false);
 			},
@@ -130,7 +130,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	getEnemyHooks(): GridHooks {
 		return {
-			getRealPosition: this.cellToReal.bind(this),
+			getRealPosition: this.cellToGrid.bind(this),
 			getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => {
 				return this.getRelativeNeighborsInArmy(cell, relativePositions, true);
 			},
@@ -153,9 +153,9 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 }
 
 export type GridHooks = {
-	getRealPosition: (cell: Cell) => Position;
+	getRealPosition: (cell: Cell) => GridPosition;
 	getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
 	getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
-	getRelativeDirection: () => { above: Position; below: Position; left: Position; right: Position };
+	getRelativeDirection: () => { above: GridPosition; below: GridPosition; left: GridPosition; right: GridPosition };
 	getBoundaries: () => { minX: number; minY: number; maxX: number; maxY: number };
 };

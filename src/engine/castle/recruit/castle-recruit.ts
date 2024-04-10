@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cell, Position } from "../../../shared/position";
+import { Cell, GridPosition } from "../../../shared/position";
 import { ArmyGrid } from "../../grid/grid";
 import { CastleBlueprint } from "../blueprint/castle";
 import { BattleCastle } from "../battle/battle-castle";
@@ -31,25 +31,25 @@ export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive
 		return {
 			type: this.type,
 			cell: this.cell,
-			position: grid.cellToReal(this.cell),
+			position: grid.cellToGrid(this.cell),
 		};
 	}
 
 	toAllied(grid: BattleGrid, onDeath: () => void): BattleCastle {
 		const clone = this.clone();
-		const position = grid.cellToReal(clone.cell);
+		const position = grid.cellToGrid(clone.cell);
 		return new BattleCastle(clone, onDeath, clone.cell, position);
 	}
 
 	toEnemy(grid: BattleGrid, onDeath: () => void): BattleCastle {
 		const clone = this.clone();
 		const cell = BattleGrid.flip(grid, clone.cell);
-		const position = grid.cellToReal(cell);
+		const position = grid.cellToGrid(cell);
 		const BC = new BattleCastle(clone, onDeath, cell, position);
 		return BC;
 	}
 
-	moveRecruit(_hooks: TokenHooks, _position: Position): void {
+	moveRecruit(_hooks: TokenHooks, _position: GridPosition): void {
 		throw new Error("Cannot move castle");
 	}
 }
@@ -57,5 +57,5 @@ export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive
 export type SerializedCastleRecruit = {
 	type: string;
 	cell: Cell;
-	position: Position;
+	position: GridPosition;
 };

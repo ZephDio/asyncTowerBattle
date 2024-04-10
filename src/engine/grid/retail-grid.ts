@@ -3,7 +3,7 @@ import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
 import { TGrid } from "./tgrid";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
-import { Position } from "../../shared/position";
+import { ScreenPosition } from "../../shared/position";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { Buyable } from "../shop/retail/buyable";
 
@@ -13,7 +13,7 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	synergiesEffects: SynergyEffect[] = [];
 
 	constructor(
-		public position: Position = new Position(PercentToReal({ x: 5, y: 55 })),
+		public position = new ScreenPosition(PercentToReal({ x: 5, y: 55 })),
 		public width: number = 11,
 		public height: number = 5,
 		public cellSize: number = 4.5,

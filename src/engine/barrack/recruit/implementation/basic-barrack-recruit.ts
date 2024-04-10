@@ -29,7 +29,7 @@ export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 		if (this.unitRecruit) {
 			return new BasicBattleBarrack(
 				this,
-				grid.cellToReal(this.position),
+				grid.cellToGrid(this.position),
 				this.cell.clone(),
 				path.enemyCastle.position,
 				path,
@@ -45,7 +45,7 @@ export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 			const newPosition = BattleGrid.flip(grid, this.position);
 			return new BasicBattleBarrack(
 				this,
-				grid.cellToReal(newPosition),
+				grid.cellToGrid(newPosition),
 				newPosition,
 				path.enemyCastle.position,
 				path,
