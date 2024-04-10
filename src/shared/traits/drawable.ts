@@ -21,16 +21,16 @@ export const TRenderable = Subtrait([TDrawable], (base) => {
 				}
 				const gridPosition = grid.cellToGrid(this.position);
 				const screenPosition = grid.gridToScreenPosition(gridPosition);
-				return this.draw(context, screenPosition);
+				return this.draw(context, screenPosition, grid.cellSize);
 			}
 			if (this.position instanceof GridPosition) {
 				if (!grid) {
 					throw new Error("Grid is required to render");
 				}
 				const screenPosition = grid.gridToScreenPosition(this.position);
-				return this.draw(context, screenPosition);
+				return this.draw(context, screenPosition, grid.cellSize);
 			}
-			if (this.position instanceof ScreenPosition) return this.draw(context, this.position);
+			if (this.position instanceof ScreenPosition) return this.draw(context, this.position, 4.9);
 		}
 	}
 	return IRenderable;
@@ -54,19 +54,21 @@ export const THudRenderable = Subtrait([TRenderable], (base) => {
 					}
 					const gridPosition = grid.cellToGrid(this.position).add(position);
 					const worldPosition = grid.gridToScreenPosition(gridPosition);
-					hud.draw(context, worldPosition);
+					hud.draw(context, worldPosition, grid.cellSize);
 				}
 				if (this.position instanceof ScreenPosition) {
+					if(this.constructor.name === "BasicBarrack") console.log("gridcell");
 					const worldPosition = this.position.add(position);
-					hud.draw(context, worldPosition);
+					hud.draw(context, worldPosition, 4.9);
 				}
 				if (this.position instanceof GridPosition) {
 					if (!grid) {
 						throw new Error("Grid is required to render cell position");
 					}
+				if(this.constructor.name === "BasicBarrack") console.log("gridcell",grid.cellSize);
 					const worldPosition = this.position.add(position);
 					const screenPosition = grid.gridToScreenPosition(worldPosition);
-					hud.draw(context, screenPosition);
+					hud.draw(context, screenPosition, grid.cellSize);
 				}
 			}
 		}
@@ -155,9 +157,10 @@ export const TImageDrawable = (image: HTMLImageElement, size: { width: number; h
 				return this.drawable.priority;
 			}
 
-			draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
+			draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
 				const { width, height } = this.drawable.size;
-				const size = this.getCanvasSize(context, width, height);
+				const scale = cellSize / 4.9;
+				const size = this.getCanvasSize(context, width, height, scale);
 				const canvasPosition = this.getCanvasPosition(context, position);
 				this.drawImage(context, size, canvasPosition, this.drawable.image, this.angle);
 			}

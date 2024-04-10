@@ -9,12 +9,12 @@ export class LifeBar extends Derive(TDrawable) {
 		super({});
 	}
 
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition , cellSize : number): void {
 		if (this.entity.stats.health === this.entity.stats.maxHealth) return;
 		context.globalAlpha = 1;
 		context.fillStyle = "red";
 		context.strokeStyle = "cyan";
-		const size = this.getCanvasSize(context, 3, 0.5);
+		const size = this.getCanvasSize(context, 3, 0.5, (cellSize / 4.9));
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawRectangle(context, size, canvasPosition);
 		context.fillStyle = "green";

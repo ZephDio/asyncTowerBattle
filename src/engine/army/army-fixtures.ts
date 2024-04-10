@@ -37,7 +37,7 @@ export class ArmyFixture {
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
-				.celled(new Cell({ x: 7, y: 4 }))
+				.celled(new Cell({ x: 0, y: 1 }))
 				.buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];

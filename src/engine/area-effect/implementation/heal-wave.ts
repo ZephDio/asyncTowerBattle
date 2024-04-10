@@ -41,14 +41,15 @@ export class HealWave extends Derive(
 		};
 	}
 
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
 		context.globalAlpha = 0.18;
 
 		context.strokeStyle = "green";
 		context.fillStyle = "lime";
 		context.lineWidth = 11;
+		const scale = cellSize / 4.9;
 		const size = this.getCanvasSize(context, this.size.width, this.size.height);
 		const canvasPosition = this.getCanvasPosition(context, position);
-		this.drawEllipse(context, size, canvasPosition);
+		this.drawEllipse(context, size, canvasPosition, scale);
 	}
 }

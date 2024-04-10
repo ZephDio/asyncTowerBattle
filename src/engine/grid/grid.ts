@@ -10,6 +10,7 @@ import { Tower } from "../tower/recruit/tower-recruit";
 import { Barrack } from "../barrack/recruit/barrack-recruit";
 import { GridElement } from "../../shared/traits/grid-element";
 import { PathTile } from "../tile/recruit/tile";
+import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
@@ -19,7 +20,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	constructor(
 		public width: number = 13,
 		public height: number = 6,
-		public position: ScreenPosition = new ScreenPosition({ x: 2, y: 1.5 }),
+		public position: ScreenPosition = PercentToReal({ x: 3, y: 2 }),
 		public cellSize = 4.9,
 	) {
 		super({});

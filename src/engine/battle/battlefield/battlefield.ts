@@ -96,7 +96,6 @@ export class Battlefield {
 	searchEnemiesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
 		const found: AnyBattleUnit[] = [];
 		for (const enemyUnit of this.enemyArmy.units.keys()) {
-			console.log("enemyUnit", enemyUnit, "hitbox", hitbox, "areaPosition", areaPosition);
 			if (enemyUnit.collides(hitbox, areaPosition)) {
 				found.push(enemyUnit);
 			}

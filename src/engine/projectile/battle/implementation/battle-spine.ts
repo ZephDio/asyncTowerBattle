@@ -22,7 +22,6 @@ export class BattleSpine extends Derive(TRenderable, HTHitbox, HTImageDrawable) 
 	) {
 		super({ hitboxHolder: projectile, imageDrawable: projectile });
 		this.angle = Physic.getTheta(this.position, this.position.add(this.vector));
-		console.log(this.angle);
 		this.speed = this.projectile.baseSpeed;
 		this.boundaries = this.hooks.gridHooks.getBoundaries();
 	}
