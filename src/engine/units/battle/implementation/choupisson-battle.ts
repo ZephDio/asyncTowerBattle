@@ -55,15 +55,13 @@ export class BattleChoupisson extends Derive(
 	}
 
 	override takeDamage(damage: number) {
-		const vector = this.hooks.gridHooks.getRelativeDirection().below;
-		const left = this.hooks.gridHooks.getRelativeDirection().left;
+		const { below, left, right } = this.hooks.gridHooks.getRelativeDirection();
 		left.x = left.x * 0.25;
-		const right = this.hooks.gridHooks.getRelativeDirection().right;
 		right.x = right.x * 0.25;
-		const vectorLeft = vector.add(left);
-		const vectorRight = vector.add(right);
+		const vectorLeft = below.add(left);
+		const vectorRight = below.add(right);
 		const spines = [
-			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 1.7, vector),
+			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 1.7, below),
 			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 1.7, vectorLeft),
 			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 1.7, vectorRight),
 		];

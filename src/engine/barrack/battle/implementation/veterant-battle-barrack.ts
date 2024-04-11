@@ -1,0 +1,85 @@
+import { Cell, GridPosition } from "../../../../shared/position";
+import { AnyUnit } from "../../../units/recruit/unit-recruit";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { BattlePath } from "../../../path/battle/battle-path";
+import { Derive } from "@ddd-ts/traits";
+import { Cast, Caster } from "../../../../shared/traits/cast";
+import { BasicBarrack } from "../../recruit/implementation/basic-barrack-recruit";
+import { HTImageDrawable, TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
+import { HaveStats, Stats } from "../../../stats/stats";
+import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
+import { GridElement } from "../../../../shared/traits/grid-element";
+import { Status } from "../../../../shared/traits/status";
+
+export class VeterantBattleBarrack extends Derive(
+	TCollider,
+	HTHitbox,
+	Caster,
+	HTImageDrawable,
+	TUnitPreviewHudRenderable,
+	GridElement,
+	HaveStats,
+) {
+	castCost: number;
+
+	constructor(
+		public readonly barrackRecruit: BasicBarrack,
+		public readonly position: GridPosition,
+		public readonly cell: Cell,
+		public spawnPosition: GridPosition,
+		public readonly path: BattlePath,
+		public readonly hooks: BattleArmyHooks,
+		public readonly unitRecruit: AnyUnit,
+	) {
+		super({
+			imageDrawable: barrackRecruit,
+			maxHealth: NaN,
+			attack: NaN,
+			movementSpeed: NaN,
+			castSpeed: barrackRecruit.productionSpeed,
+			onDeath: () => {},
+			hitboxHolder: barrackRecruit,
+		});
+		this.castCost = unitRecruit.cost;
+	}
+
+	tick() {
+		super.tickCast();
+	}
+
+	casts(): void {
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost * 1.75);
+	}
+
+	onCastResolve(): void {
+		const unit = this.unitRecruit.toBattle(this.spawnPosition.clone(), this.path, this.hooks);
+		const buff = new VeterantBuff();
+		unit.addStatus(buff);
+		buff.tick();
+		this.hooks.addUnits(unit, this);
+		this.castInProgress = null;
+	}
+}
+export class VeterantBuff extends Derive(Status) {
+	key = "veterant";
+	clock = 0;
+	duration = Infinity;
+	stats: Stats;
+	hasTriggered = false;
+
+	constructor() {
+		super({});
+	}
+	tick() {
+		this.clock++;
+		if (this.hasTriggered) return;
+		this.stats.basePercentStat.movementSpeed -= 10;
+		this.stats.basePercentStat.attack += 20;
+		this.stats.addMaxHealth(100, true);
+		this.hasTriggered = true;
+	}
+
+	onRemove() {
+		this.stats.removeStatus(this);
+	}
+}

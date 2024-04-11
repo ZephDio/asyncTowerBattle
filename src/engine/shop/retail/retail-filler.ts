@@ -21,6 +21,7 @@ import { ZappingTowerBlueprint } from "../../tower/blueprint/implementation/zapp
 import { FrostTowerBlueprint } from "../../tower/blueprint/implementation/frost-tower";
 import { BersekerBlueprint } from "../../units/blueprint/implementation/berseker";
 import { ChoupissonBlueprint } from "../../units/blueprint/implementation/choupisson";
+import { VeterantBarrackBlueprint } from "../../barrack/blueprint/implementation/veteran-barrack";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint = AnyTowerBlueprint | AnyPathTileBlueprint | AnyUnitBlueprint | AnyBarrackBlueprint;
@@ -38,7 +39,7 @@ const pool = [
 		share: 100,
 	},
 	{
-		value: [BasicBarrackBlueprint, WaveBarrackBlueprint] as any,
+		value: [BasicBarrackBlueprint, WaveBarrackBlueprint, VeterantBarrackBlueprint] as any,
 		share: 60,
 	},
 	{

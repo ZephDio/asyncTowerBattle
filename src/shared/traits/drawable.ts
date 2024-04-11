@@ -57,7 +57,6 @@ export const THudRenderable = Subtrait([TRenderable], (base) => {
 					hud.draw(context, worldPosition, grid.cellSize);
 				}
 				if (this.position instanceof ScreenPosition) {
-					if(this.constructor.name === "BasicBarrack") console.log("gridcell");
 					const worldPosition = this.position.add(position);
 					hud.draw(context, worldPosition, 4.9);
 				}
@@ -65,7 +64,6 @@ export const THudRenderable = Subtrait([TRenderable], (base) => {
 					if (!grid) {
 						throw new Error("Grid is required to render cell position");
 					}
-				if(this.constructor.name === "BasicBarrack") console.log("gridcell",grid.cellSize);
 					const worldPosition = this.position.add(position);
 					const screenPosition = grid.gridToScreenPosition(worldPosition);
 					hud.draw(context, screenPosition, grid.cellSize);
