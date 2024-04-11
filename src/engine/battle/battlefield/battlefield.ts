@@ -47,7 +47,7 @@ export class Battlefield {
 		const alliedBattleTiles = alliedArmy.pathTiles.map((pathTile) =>
 			pathTile.toAllied(grid, alliedBattleArmy.getHooks()),
 		);
-		const enemyBattleTiles = enemyArmy.pathTiles.map((pathTile) => pathTile.toEnemy(grid, alliedBattleArmy.getHooks()));
+		const enemyBattleTiles = enemyArmy.pathTiles.map((pathTile) => pathTile.toEnemy(grid, enemyBattleArmy.getHooks()));
 		const alliedBattlePath = BattlePath.toAllied(grid, alliedArmy.path, alliedBattleCastle, enemyBattleCastle);
 		const enemyBattlePath = BattlePath.toEnemy(grid, enemyArmy.path, enemyBattleCastle, alliedBattleCastle);
 

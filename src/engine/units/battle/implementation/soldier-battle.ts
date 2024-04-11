@@ -30,6 +30,9 @@ export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDr
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
 	canMove() {
+		if (this.stats.status.has("stunned")) {
+			return false;
+		}
 		return true;
 	}
 

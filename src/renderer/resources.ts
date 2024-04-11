@@ -134,6 +134,10 @@ export const Resources = {
 			resource: "#C4A484",
 			image: createImage("/resources/path/slowing.png"),
 		},
+		trap: {
+			resource: "#C4A484",
+			image: createImage("/resources/path/trap.png"),
+		},
 	},
 	castle: {
 		size: {
