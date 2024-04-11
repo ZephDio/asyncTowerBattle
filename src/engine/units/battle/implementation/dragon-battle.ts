@@ -5,11 +5,9 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Dragon } from "../../recruit/implementation/dragon-recruit";
 import { PathFinder } from "../../../battle/path-finder";
-import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
-import { HaveStats } from "../../../stats/stats";
-import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
+import { TBattleUnit } from "../battle-unit";
 
-export class BattleDragon extends Derive(HTHitbox, TCollider, Caster, HTImageDrawable, TLifeBarRenderable, HaveStats) {
+export class BattleDragon extends Derive(TBattleUnit, Caster) {
 	pathFinder: PathFinder;
 
 	constructor(
@@ -31,10 +29,6 @@ export class BattleDragon extends Derive(HTHitbox, TCollider, Caster, HTImageDra
 	}
 	canMove() {
 		return true;
-	}
-
-	isAlive() {
-		return this.stats.health > 0;
 	}
 
 	attackCastle() {

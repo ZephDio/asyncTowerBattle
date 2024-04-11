@@ -7,7 +7,27 @@ import { GridPosition, ScreenPosition } from "./position";
 
 type RelativePosition = GridPosition | ScreenPosition;
 export class HitBox {
+	HBsize = 1;
 	constructor(public hitShapes: [HitShapeType, RelativePosition][]) {}
+
+	scale(size: number) {
+		const multiplier = size / this.HBsize;
+		this.HBsize = size;
+		this.hitShapes.forEach(([shape, relativePosition]) => {
+			console.log(shape);
+			if (shape instanceof Rectangle) {
+				shape.w *= multiplier;
+				shape.h *= multiplier;
+			}
+			if (shape instanceof Ellipse) {
+				shape.rx *= multiplier;
+				shape.ry *= multiplier;
+			}
+			relativePosition.x *= multiplier;
+			relativePosition.y *= multiplier;
+		});
+		//console.log(this.hitShapes[0]);
+	}
 
 	clone() {
 		return new HitBox(this.hitShapes.map(([shape, position]) => [shape.clone(), position.clone()]));
@@ -70,8 +90,8 @@ export const TCollider = Subtrait([THitbox(new HitBox([]))], (base) => {
 			return Physic.doCollide(position, hitbox, this.position);
 		}
 
-		intersects(other: ImplementsTrait<typeof TCollider>) {
-			return Physic.doHitboxesCollide(this.position, this.hitbox, other.position, other.hitbox);
+		intersects(position: RelativePosition, hitbox: HitBox) {
+			return Physic.doHitboxesCollide(this.position, this.hitbox, position, hitbox);
 		}
 	}
 

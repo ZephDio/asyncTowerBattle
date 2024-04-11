@@ -2,11 +2,11 @@ import { Derive } from "@ddd-ts/traits";
 import { Ellipse, HitBox, TCollider, THitbox } from "../../../shared/hitboxes";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { TRenderable } from "../../../shared/traits/drawable";
 import { TDrawable } from "../../../shared/traits/tdrawable";
 import { Physic } from "../../../shared/physic";
 import { Status } from "../../../shared/traits/status";
 import { Stats } from "../../stats/stats";
+import { TRenderable } from "../../../shared/traits/trenderable";
 
 export class FrostNova extends Derive(
 	TCollider,

@@ -4,7 +4,7 @@ import { Cell, GridPosition, ScreenPosition } from "../../shared/position";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { GridElement } from "../../shared/traits/grid-element";
-import { TRenderable } from "../../shared/traits/drawable";
+import { TRenderable } from "../../shared/traits/trenderable";
 
 export const TGrid = Trait((base) => {
 	abstract class IGrid extends base {

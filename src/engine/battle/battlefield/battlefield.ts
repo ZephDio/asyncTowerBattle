@@ -96,7 +96,7 @@ export class Battlefield {
 	searchEnemiesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
 		const found: AnyBattleUnit[] = [];
 		for (const enemyUnit of this.enemyArmy.units.keys()) {
-			if (enemyUnit.collides(hitbox, areaPosition)) {
+			if (enemyUnit.intersects(areaPosition, hitbox)) {
 				found.push(enemyUnit);
 			}
 		}
@@ -106,7 +106,7 @@ export class Battlefield {
 	searchAlliesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
 		const found: AnyBattleUnit[] = [];
 		for (const alliedUnit of this.alliedArmy.units.keys()) {
-			if (alliedUnit.collides(hitbox, areaPosition)) {
+			if (alliedUnit.intersects(areaPosition, hitbox)) {
 				found.push(alliedUnit);
 			}
 		}

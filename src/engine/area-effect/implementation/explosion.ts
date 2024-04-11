@@ -3,8 +3,8 @@ import { Ellipse, HitBox, TCollider, THitbox } from "../../../shared/hitboxes";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { TRenderable } from "../../../shared/traits/drawable";
 import { TDrawable } from "../../../shared/traits/tdrawable";
+import { TRenderable } from "../../../shared/traits/trenderable";
 
 export class Explosion extends Derive(
 	TCollider,

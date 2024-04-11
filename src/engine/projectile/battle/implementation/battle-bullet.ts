@@ -1,11 +1,12 @@
 import { Derive } from "@ddd-ts/traits";
 import { HTHitbox } from "../../../../shared/hitboxes";
 import { GridPosition } from "../../../../shared/position";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable } from "../../../../shared/traits/drawable";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PathFinder } from "../../../battle/path-finder";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Bullet } from "../../blueprint/implementation/bullet";
+import { TRenderable } from "../../../../shared/traits/trenderable";
 
 export class BattleBullet extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
 	pathFinder: PathFinder;

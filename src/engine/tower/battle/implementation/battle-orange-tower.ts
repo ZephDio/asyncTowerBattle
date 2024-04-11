@@ -3,11 +3,12 @@ import { TPhysics } from "../../../../shared/traits/physics";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { OrangeTower } from "../../recruit/implementation/orange-tower-recruit";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable } from "../../../../shared/traits/drawable";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/status";
 import { HTHitbox } from "../../../../shared/hitboxes";
 import { GridElement } from "../../../../shared/traits/grid-element";
+import { TRenderable } from "../../../../shared/traits/trenderable";
 
 export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement) {
 	hasTriggered = false;

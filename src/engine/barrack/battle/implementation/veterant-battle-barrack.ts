@@ -48,14 +48,14 @@ export class VeterantBattleBarrack extends Derive(
 	}
 
 	casts(): void {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost * 1.75);
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost);
 	}
 
 	onCastResolve(): void {
 		const unit = this.unitRecruit.toBattle(this.spawnPosition.clone(), this.path, this.hooks);
 		const buff = new VeterantBuff();
 		unit.addStatus(buff);
-		buff.tick();
+		unit.addSize(55);
 		this.hooks.addUnits(unit, this);
 		this.castInProgress = null;
 	}

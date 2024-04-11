@@ -1,11 +1,12 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleState, SummaryState } from "../../shared/gamestate";
-import { TRenderable } from "../../shared/traits/drawable";
+
 import { Game } from "../game";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { ScreenPosition } from "../../shared/position";
 import { Resources } from "../../renderer/resources";
 import { TDrawable } from "../../shared/traits/tdrawable";
+import { TRenderable } from "../../shared/traits/trenderable";
 
 export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 	constructor(public verdict: "victory" | "defeat") {

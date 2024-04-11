@@ -9,32 +9,38 @@ import { CasterCamembert } from "../hud-element/caster-camembert";
 import { UnitPreviewHud } from "../hud-element/unit-preview";
 import { PriceHud } from "../hud-element/price-hud";
 import { THasPrice } from "./has-price";
+import { TRenderable } from "./trenderable";
 
-export const TRenderable = Subtrait([TDrawable], (base) => {
-	abstract class IRenderable extends base {
-		abstract get position(): ScreenPosition | GridPosition | Cell;
+// export const TRenderable = Subtrait([TDrawable], (base) => {
+// 	abstract class IRenderable extends base {
+// 		abstract get position(): ScreenPosition | GridPosition | Cell;
 
-		render(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid>) {
-			if (this.position instanceof Cell) {
-				if (!grid) {
-					throw new Error("Grid is required to render");
-				}
-				const gridPosition = grid.cellToGrid(this.position);
-				const screenPosition = grid.gridToScreenPosition(gridPosition);
-				return this.draw(context, screenPosition, grid.cellSize);
-			}
-			if (this.position instanceof GridPosition) {
-				if (!grid) {
-					throw new Error("Grid is required to render");
-				}
-				const screenPosition = grid.gridToScreenPosition(this.position);
-				return this.draw(context, screenPosition, grid.cellSize);
-			}
-			if (this.position instanceof ScreenPosition) return this.draw(context, this.position, 4.9);
-		}
-	}
-	return IRenderable;
-});
+// 		render(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid>) {
+// 			//let elementScale = implementsTrait(this, TSizable) ? this.sizeScale : 1;
+// 			if (this.position instanceof Cell) {
+// 				if (!grid) {
+// 					throw new Error("Grid is required to render");
+// 				}
+// 				const gridPosition = grid.cellToGrid(this.position);
+// 				const screenPosition = grid.gridToScreenPosition(gridPosition);
+// 				const scale = (grid.cellSize / 4.9) * 1;
+// 				return this.draw(context, screenPosition, scale);
+// 			}
+// 			if (this.position instanceof GridPosition) {
+// 				if (!grid) {
+// 					throw new Error("Grid is required to render");
+// 				}
+// 				const scale = grid.cellSize / 4.9;
+// 				const screenPosition = grid.gridToScreenPosition(this.position);
+// 				return this.draw(context, screenPosition, scale);
+// 			}
+// 			if (this.position instanceof ScreenPosition) {
+// 				return this.draw(context, this.position, 4.9);
+// 			}
+// 		}
+// 	}
+// 	return IRenderable;
+// });
 
 export const THudRenderable = Subtrait([TRenderable], (base) => {
 	abstract class IHudRenderable extends base {
@@ -155,9 +161,8 @@ export const TImageDrawable = (image: HTMLImageElement, size: { width: number; h
 				return this.drawable.priority;
 			}
 
-			draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
+			draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 				const { width, height } = this.drawable.size;
-				const scale = cellSize / 4.9;
 				const size = this.getCanvasSize(context, width, height, scale);
 				const canvasPosition = this.getCanvasPosition(context, position);
 				this.drawImage(context, size, canvasPosition, this.drawable.image, this.angle);

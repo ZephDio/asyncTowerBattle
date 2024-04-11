@@ -2,11 +2,12 @@ import { CastleBlueprint } from "../blueprint/castle";
 import { Castle } from "../recruit/castle-recruit";
 import { Cell, GridPosition } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
-import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { HTImageDrawable } from "../../../shared/traits/drawable";
 import { Derive } from "@ddd-ts/traits";
 import { TPhysics } from "../../../shared/traits/physics";
 import { HTHitbox } from "../../../shared/hitboxes";
 import { GridElement } from "../../../shared/traits/grid-element";
+import { TRenderable } from "../../../shared/traits/trenderable";
 
 export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement) {
 	public actualLife: number;

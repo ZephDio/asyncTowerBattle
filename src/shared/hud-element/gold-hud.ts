@@ -1,10 +1,11 @@
 import { Resources } from "../../renderer/resources";
 import { Derive } from "@ddd-ts/traits";
-import { TRenderable } from "../traits/drawable";
+
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { TDrawable } from "../traits/tdrawable";
 import { HitBox, Rectangle, TCollider, THitbox } from "../hitboxes";
 import { ScreenPosition } from "../position";
+import { TRenderable } from "../traits/trenderable";
 
 export class GoldHud extends Derive(
 	TCollider,

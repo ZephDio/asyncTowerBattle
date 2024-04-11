@@ -11,7 +11,7 @@ export class VeterantBarrackBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.barracks.veterant.resource.image, Resources.barracks.veterant.size, 2),
 ) {
-	productionSpeed: number = 3.5;
+	productionSpeed: number = 1.6;
 
 	toRecruit(cell: Cell) {
 		return new VeterantBarrack(cell.clone(), this);

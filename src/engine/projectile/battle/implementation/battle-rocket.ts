@@ -1,12 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
 import { HTHitbox } from "../../../../shared/hitboxes";
 import { GridPosition } from "../../../../shared/position";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable } from "../../../../shared/traits/drawable";
 import { Explosion } from "../../../area-effect/implementation/explosion";
 import { PathFinder } from "../../../battle/path-finder";
 import { Rocket } from "../../blueprint/implementation/rocket";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
+import { TRenderable } from "../../../../shared/traits/trenderable";
 
 export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable) {
 	pathFinder: PathFinder;
