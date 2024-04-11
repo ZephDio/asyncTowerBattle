@@ -3,6 +3,7 @@ import { UnitRecruitFixture } from "../../units/recruit/unit-recruit-fixtures";
 import { BasicBarrack } from "../recruit/implementation/basic-barrack-recruit";
 import { Cell } from "../../../shared/position";
 import { WaveBarrack } from "./implementation/wave-barrack-recruit";
+import { VeterantBarrack } from "./implementation/veterant-barrack-recruit";
 
 export class BarrackRecruitBuilder {
 	productionSpeed: number | undefined;
@@ -35,6 +36,13 @@ export class BarrackRecruitBuilder {
 		if (this.unit) waveBarrackRecruit.setUnit(this.unit);
 		if (this.productionSpeed) waveBarrackRecruit.productionSpeed = this.productionSpeed;
 		return waveBarrackRecruit;
+	}
+
+	buildVeterant() {
+		const veterantBarrackRecruit = new VeterantBarrack(this.cell);
+		if (this.unit) veterantBarrackRecruit.unitRecruit = this.unit;
+		if (this.productionSpeed) veterantBarrackRecruit.productionSpeed = this.productionSpeed;
+		return veterantBarrackRecruit;
 	}
 }
 
@@ -107,5 +115,13 @@ export class BarrackRecruitFixtures {
 			.setUnit(UnitRecruitFixture.choupisson)
 			.withCell(new Cell({ x: 6, y: 5 }))
 			.buildWave();
+	}
+
+	static veterantWithDragon(speed?: number) {
+		return new BarrackRecruitBuilder()
+			.withProductionSpeed(speed)
+			.setUnit(UnitRecruitFixture.dragon)
+			.withCell(new Cell({ x: 6, y: 0 }))
+			.buildVeterant();
 	}
 }

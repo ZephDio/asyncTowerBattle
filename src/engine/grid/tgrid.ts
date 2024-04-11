@@ -17,35 +17,28 @@ export const TGrid = Trait((base) => {
 		public abstract cellSize: number;
 		cellToGrid(cell: Cell) {
 			return new GridPosition({
-				x: (cell.x + 0.5) * this.cellSize,
-				y: (cell.y + 0.5) * this.cellSize,
+				x: (cell.x + 0.5) * 4.9,
+				y: (cell.y + 0.5) * 4.9,
 			});
 		}
 
-		// cellToScreen(cell: Cell) {
-		// 	return new ScreenPosition({
-		// 		x: this.position.x + (cell.x + 0.5) * this.cellSize,
-		// 		y: this.position.y + (cell.y + 0.5) * this.cellSize,
-		// 	});
-		// }
-
 		screenToGridPosition(position: ScreenPosition) {
 			return new GridPosition({
-				x: position.x - this.position.x,
-				y: position.y - this.position.y,
+				x: (position.x - this.position.x) / (this.cellSize / 4.9),
+				y: (position.y - this.position.y) / (this.cellSize / 4.9),
 			});
 		}
 
 		gridToScreenPosition(position: GridPosition) {
 			return new ScreenPosition({
-				x: this.position.x + position.x,
-				y: this.position.y + position.y,
+				x: this.position.x + position.x * (this.cellSize / 4.9),
+				y: this.position.y + position.y * (this.cellSize / 4.9),
 			});
 		}
 
 		gridPositionToCell(position: GridPosition) {
-			const x = Math.round(position.x / this.cellSize - 0.5);
-			const y = Math.round(position.y / this.cellSize - 0.5);
+			const x = Math.floor(position.x / 4.9);
+			const y = Math.floor(position.y / 4.9);
 			if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
 				return undefined;
 			}

@@ -30,7 +30,6 @@ export class BattlePath {
 
 	@MemorizePath()
 	static chainTiles(from: Cell, to: Cell, tiles: AnyPathTile[]) {
-		console.log("chainTiles");
 		const remaining = new Set(tiles);
 
 		const firstTile = tiles.find((tile) => tile.cell.equals(from));

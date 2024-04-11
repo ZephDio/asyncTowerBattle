@@ -84,12 +84,9 @@ export class Physic {
 		return [nextPosition, theta] as const;
 	}
 
-	static doCollide<T extends GridPosition | ScreenPosition>(entityPosition: T, hitbox: HitBox, point: Position) {
+	static doCollide<T extends GridPosition | ScreenPosition>(entityPosition: T, hitbox: HitBox, point: T) {
 		for (const [shape, shapeRelativePosition] of hitbox.hitShapes) {
-			const shapePosition = new GridPosition({
-				x: entityPosition.x + shapeRelativePosition.x,
-				y: entityPosition.y + shapeRelativePosition.y,
-			});
+			const shapePosition = entityPosition.add(shapeRelativePosition as GridPosition) as T; // TODO
 			if (shape instanceof Rectangle) {
 				const x1 = shapePosition.x - shape.w / 2;
 				const y1 = shapePosition.y - shape.h / 2;

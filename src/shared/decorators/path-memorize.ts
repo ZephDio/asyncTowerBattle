@@ -34,14 +34,3 @@ export const MemorizePath = () => {
 	};
 };
 
-class A {
-	bonjour = "bonjour";
-	cul(a: any) {
-		return a;
-	}
-}
-
-const a = new A();
-//const b = new A();
-
-console.log(a.cul(1));

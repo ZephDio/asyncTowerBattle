@@ -6,11 +6,16 @@ export const TDrawable = Trait((base) => {
 	abstract class IDrawable extends base {
 		abstract drawPriority: number;
 
-		abstract draw(context: CanvasRenderingContext2D, position: ScreenPosition): void;
+		abstract draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void;
 
-		protected drawEllipse(context: CanvasRenderingContext2D, size: Size, position: { x: number; y: number }) {
+		protected drawEllipse(
+			context: CanvasRenderingContext2D,
+			size: Size,
+			position: { x: number; y: number },
+			scale: number = 1,
+		) {
 			context.beginPath();
-			context.ellipse(position.x, position.y, size.width / 2, size.height / 2, 0, 0, 2 * Math.PI);
+			context.ellipse(position.x, position.y, (size.width / 2) * scale, (size.height / 2) * scale, 0, 0, 2 * Math.PI);
 			context.fill();
 			context.stroke();
 		}
@@ -36,7 +41,7 @@ export const TDrawable = Trait((base) => {
 
 		protected getCanvasPosition(context: CanvasRenderingContext2D, position: ScreenPosition) {
 			const x = (context.canvas.width / 100) * position.x;
-			const y = context.canvas.height - (context.canvas.width / 100) * position.y; // !
+			const y = context.canvas.height - (context.canvas.width / 100) * position.y;
 			return { x, y };
 		}
 
@@ -48,9 +53,9 @@ export const TDrawable = Trait((base) => {
 			context.stroke();
 		}
 
-		protected getCanvasSize(context: CanvasRenderingContext2D, width: number, height: number) {
-			const cWidth = (context.canvas.width / 100) * width;
-			const cHeight = (context.canvas.width / 100) * height;
+		protected getCanvasSize(context: CanvasRenderingContext2D, width: number, height: number, scale: number = 1) {
+			const cWidth = (context.canvas.width / 100) * width * scale;
+			const cHeight = (context.canvas.width / 100) * height * scale;
 			return { width: cWidth, height: cHeight };
 		}
 

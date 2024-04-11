@@ -42,12 +42,10 @@ export class Stats {
 
 	private _castSpeed: number;
 
-	public basePercentStat: {
-		attack: number;
-		movementSpeed: number;
-	} = {
+	public basePercentStat = {
 		attack: 100,
 		movementSpeed: 100,
+		maxHealth: 100,
 	};
 
 	public status: Map<string, ImplementsTrait<typeof Status>> = new Map();
@@ -72,7 +70,7 @@ export class Stats {
 	}
 
 	get maxHealth() {
-		return this._maxHealth;
+		return this._maxHealth * Math.max(0, this.basePercentStat.maxHealth / 100);
 	}
 
 	get attack() {
@@ -80,7 +78,7 @@ export class Stats {
 	}
 
 	get movementSpeed() {
-		return this._movementSpeed * (this.basePercentStat.movementSpeed / 100);
+		return this._movementSpeed * Math.max(0, this.basePercentStat.movementSpeed / 100);
 	}
 
 	get castSpeed() {
@@ -94,8 +92,27 @@ export class Stats {
 		}
 	}
 
+	addMaxHealth(amount: number, percent: boolean = false) {
+		const rawGain = percent ? amount * (this._maxHealth / 100) : amount;
+		if (percent) {
+			this.basePercentStat.maxHealth += amount;
+			this._health += rawGain;
+			return;
+		}
+		this.basePercentStat.maxHealth += rawGain;
+		this._health += rawGain;
+	}
+
+	// modifyBaseMovementSpeed(amount: number) {
+	// 	this._movementSpeed += amount;
+	// }
+
+	// modifyBaseAttack(amount: number) {
+	// 	this._attack += amount;
+	// }
+
 	heal(amount: number) {
-		this._health = Math.min(this._maxHealth, this._health + amount);
+		this._health = Math.min(this.maxHealth, this._health + amount);
 	}
 
 	removeStatus(status: ImplementsTrait<typeof Status>) {

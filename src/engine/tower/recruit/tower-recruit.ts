@@ -17,7 +17,6 @@ export const Tower = Subtrait([TRecruit], (base) => {
 		abstract clone(): ITower;
 
 		moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
-			console.log(grid);
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));

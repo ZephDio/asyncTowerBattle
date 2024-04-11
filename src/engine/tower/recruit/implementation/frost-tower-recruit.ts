@@ -1,4 +1,4 @@
-import { Cell, GridPosition } from "../../../../shared/position";
+import { Cell, GridPosition, ScreenPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Tower } from "../tower-recruit";
 import { BattleGrid } from "../../../grid/battle-grid";
@@ -45,4 +45,12 @@ export class FrostTower extends Derive(HTDamageDealer, Tower) {
 	get position(): Cell {
 		return this.cell;
 	}
+
+	override 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
+				const { width, height } = this.drawable.size;
+				const scale = cellSize / 4.9;
+				const size = this.getCanvasSize(context, width, height, scale);
+				const canvasPosition = this.getCanvasPosition(context, position);
+				this.drawImage(context, size, canvasPosition, this.drawable.image, this.angle);
+			}
 }

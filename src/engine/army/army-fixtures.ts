@@ -37,12 +37,12 @@ export class ArmyFixture {
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
-				.celled(new Cell({ x: 7, y: 4 }))
+				.celled(new Cell({ x: 0, y: 1 }))
 				.buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];
 		const tiles = PathFixture.default;
-		const barracks = [BarrackRecruitFixtures.basicWithBerseker()];
+		const barracks = [BarrackRecruitFixtures.veterantWithDragon()];
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
