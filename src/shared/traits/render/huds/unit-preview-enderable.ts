@@ -1,6 +1,6 @@
 import { Subtrait } from "@ddd-ts/traits";
 import { GridPosition } from "../../../position";
-import { UnitPreviewHud } from "../../../hud-element/unit-preview";
+import { UnitPreviewHud } from "../../../hud-element/entity-hud/unit-preview";
 import { THudRenderable } from "./hud-renderable";
 
 export const TUnitPreviewHudRenderable = Subtrait([THudRenderable], (base) => {

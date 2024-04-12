@@ -34,6 +34,7 @@ export class BattleDragon extends Derive(TBattleUnit, Caster) {
 	attackCastle() {
 		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
 		this.castInProgress = null;
+		this.hooks.removeUnit(this);
 	}
 	casts(): void {
 		this.castInProgress = new Cast(this, this.attackCastle.bind(this), 100);

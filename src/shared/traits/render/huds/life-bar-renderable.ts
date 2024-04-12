@@ -1,6 +1,6 @@
 import { Subtrait } from "@ddd-ts/traits";
 import { GridPosition } from "../../../position";
-import { LifeBar } from "../../../hud-element/lifebar";
+import { LifeBar } from "../../../hud-element/entity-hud/lifebar";
 import { Caster } from "../../engine/cast";
 import { THudRenderable } from "./hud-renderable";
 

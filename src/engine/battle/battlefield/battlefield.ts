@@ -15,6 +15,7 @@ export class Battlefield {
 	public alliedArmy: BattleArmy;
 	public enemyArmy: BattleArmy;
 	public grid: BattleGrid;
+
 	constructor(
 		alliedArmy: Army,
 		enemyArmy: Army,

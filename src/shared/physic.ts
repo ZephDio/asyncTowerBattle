@@ -123,6 +123,7 @@ export class Physic {
 					if (x1 < x2 + otherShape.w && x1 + shape.w > x2 && y1 < y2 + otherShape.h && y1 + shape.h > y2) {
 						return true;
 					}
+					continue;
 				}
 				if (shape instanceof Ellipse && otherShape instanceof Ellipse) {
 					// check for circle collision
@@ -131,7 +132,10 @@ export class Physic {
 					const distance = Math.sqrt(dx * dx + dy * dy);
 
 					// Check if the distance is less than the sum of the radii
-					return distance < shape.rx + otherShape.rx && distance < shape.rx + otherShape.ry;
+					if (distance < shape.rx + otherShape.rx && distance < shape.rx + otherShape.ry) {
+						return true;
+					}
+					continue;
 				}
 				if (shape instanceof Rectangle && otherShape instanceof Ellipse) {
 					// Calculate the top-left corner of the rectangle
@@ -154,7 +158,10 @@ export class Physic {
 					const COLLISION_THRESHOLD = 1;
 
 					// Check if the distance is less than or equal to COLLISION_THRESHOLD
-					return distance <= COLLISION_THRESHOLD;
+					if (distance <= COLLISION_THRESHOLD) {
+						return true;
+					}
+					continue;
 				}
 				if (shape instanceof Ellipse && otherShape instanceof Rectangle) {
 					// check for circle square collision
@@ -177,7 +184,10 @@ export class Physic {
 					const COLLISION_THRESHOLD = 1;
 
 					// Check if the distance is less than or equal to COLLISION_THRESHOLD
-					return distance <= COLLISION_THRESHOLD;
+					if (distance <= COLLISION_THRESHOLD) {
+						return true;
+					}
+					continue;
 				}
 			}
 		}

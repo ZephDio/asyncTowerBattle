@@ -34,6 +34,7 @@ export class BattleSoldier extends Derive(TBattleUnit, Caster) {
 	attackCastle(): void {
 		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
 		this.castInProgress = null;
+		this.hooks.removeUnit(this);
 	}
 
 	casts(): void {

@@ -1,9 +1,10 @@
 import { Derive } from "@ddd-ts/traits";
 import { Rectangle } from "./hitbox/shapes/rectangle";
 import { THitbox } from "./traits/engine/core/THitbox";
-import { HitBox } from "./hitbox/hitboxe";
+
 import { GridPosition } from "./position";
 import { TCollider } from "./traits/engine/core/TCollider";
+import { HitBox } from "./hitbox/hitboxe";
 import { Ellipse } from "./hitbox/shapes/ellipse";
 
 describe("TCollider", () => {

@@ -282,5 +282,14 @@ export const Resources = {
 				image: createImage("/resources/economy/gold.png"),
 			},
 		},
+		speedButton: {
+			resource: {
+				image: {
+					timesOne: createImage("/resources/button/buttonone.png"),
+					timesTwo: createImage("/resources/button/buttontwo.png"),
+					timesThree: createImage("/resources/button/buttonthree.png"),
+				},
+			},
+		},
 	},
 } as const;

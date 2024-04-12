@@ -9,12 +9,17 @@ import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { Poisoned } from "../../tower/battle/implementation/battle-yellow-tower";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
+import { STANDARD_CELL_SIZE } from "../../grid/tgrid";
 
 export class PoisonGround extends Derive(
 	TDrawable,
 	TRenderable,
 	TCollider,
-	THitbox(new HitBox([[new Ellipse({ width: 4.9, height: 4.9 }), new GridPosition({ x: 0, y: 0 })]])),
+	THitbox(
+		new HitBox([
+			[new Ellipse({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE }), new GridPosition({ x: 0, y: 0 })],
+		]),
+	),
 ) {
 	type = "poison-ground" as const;
 	drawPriority = 5;

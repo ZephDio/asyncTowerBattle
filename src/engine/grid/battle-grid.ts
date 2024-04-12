@@ -21,8 +21,8 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		public gridEnemy: ArmyGrid,
 		public width: number,
 		public height: number,
-		public position = new ScreenPosition({ x: 2, y: 1.5 }),
-		public cellSize = 4.9,
+		public cellSize = 5,
+		public position = new ScreenPosition({ x: 15, y: 0.5 }),
 	) {
 		super({});
 	}
@@ -31,14 +31,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		if (gridAllied.width !== gridEnemy.width || gridAllied.height !== gridEnemy.height) {
 			throw new Error("cannot fuse grid with different grid size");
 		}
-		const battleGrid = new BattleGrid(
-			gridAllied,
-			gridEnemy,
-			gridAllied.width,
-			gridAllied.height + gridEnemy.height,
-			gridAllied.position,
-			gridAllied.cellSize,
-		);
+		const battleGrid = new BattleGrid(gridAllied, gridEnemy, gridAllied.width, gridAllied.height + gridEnemy.height);
 		return battleGrid;
 	}
 

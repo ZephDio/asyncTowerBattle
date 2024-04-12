@@ -1,6 +1,6 @@
 import { Subtrait } from "@ddd-ts/traits";
 import { GridPosition } from "../../../position";
-import { PriceHud } from "../../../hud-element/price-hud";
+import { PriceHud } from "../../../hud-element/entity-hud/price-hud";
 import { THasPrice } from "../../engine/has-price";
 import { THudRenderable } from "./hud-renderable";
 

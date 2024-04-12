@@ -6,7 +6,7 @@ export const TDrawable = Trait((base) => {
 	abstract class IDrawable extends base {
 		abstract drawPriority: number;
 
-		abstract draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void;
+		abstract draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void;
 
 		protected drawEllipse(
 			context: CanvasRenderingContext2D,
@@ -20,6 +20,7 @@ export const TDrawable = Trait((base) => {
 			context.stroke();
 		}
 		protected drawRectangle(context: CanvasRenderingContext2D, size: Size, position: { x: number; y: number }) {
+			context.beginPath();
 			context.strokeRect(position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);
 			context.fillRect(position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);
 			context.stroke();
@@ -46,6 +47,7 @@ export const TDrawable = Trait((base) => {
 		}
 
 		protected drawArc(context: CanvasRenderingContext2D, x: number, y: number, size: Size, ratio: number) {
+			context.beginPath();
 			const from = -157 / 100; // -Math.PI /2
 			const to = (-157 + 628 * ratio) / 100; // -Math.PI / 2 * (1 - ratio) + ratio * (Math.PI * 2 - Math.PI / 2);
 			context.beginPath();

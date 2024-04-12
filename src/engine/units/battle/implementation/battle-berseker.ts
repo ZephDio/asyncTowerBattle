@@ -36,6 +36,7 @@ export class BattleBerseker extends Derive(TBattleUnit, Caster) {
 	attackCastle() {
 		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
 		this.castInProgress = null;
+		this.hooks.removeUnit(this);
 	}
 	casts() {
 		if (this.pathFinder.isArrived) {

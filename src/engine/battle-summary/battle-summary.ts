@@ -16,6 +16,7 @@ export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 	drawPriority = 5;
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
+		context.globalAlpha = 1;
 		const image = Resources.verdict[this.verdict].resource.image;
 		const { width, height } = Resources.verdict[this.verdict].size;
 		const size = this.getCanvasSize(context, width, height);
@@ -49,7 +50,7 @@ export class BattleSummary {
 
 	getDrawables() {
 		return {
-			renderables: [this.battleVerdict],
+			renderables: [this.battleVerdict, ...this.lastBattleState.hudElements],
 			grids: [
 				{
 					grid: this.lastBattleState.grid,

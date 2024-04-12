@@ -10,6 +10,7 @@ import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { FrostBattleTower } from "../../battle/implementation/frost-battle-tower";
 import { FrostTowerBlueprint } from "../../blueprint/implementation/frost-tower";
 import { BattleFrostSpike } from "../../../projectile/battle/implementation/battle-frost-spike";
+import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 
 export class FrostTower extends Derive(HTDamageDealer, Tower) {
 	attackSpeed = 1.2;
@@ -48,7 +49,7 @@ export class FrostTower extends Derive(HTDamageDealer, Tower) {
 
 	override draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
 		const { width, height } = this.drawable.size;
-		const scale = cellSize / 4.9;
+		const scale = cellSize / STANDARD_CELL_SIZE;
 		const size = this.getCanvasSize(context, width, height, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawImage(context, size, canvasPosition, this.drawable.image, this.angle);
