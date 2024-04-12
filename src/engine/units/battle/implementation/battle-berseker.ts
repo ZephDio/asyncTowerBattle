@@ -1,23 +1,15 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
-import { Cast, Caster } from "../../../../shared/traits/cast";
-import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
-import { HaveStats, Stats } from "../../../stats/stats";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
+import { Stats } from "../../../stats/stats";
 import { PathFinder } from "../../../battle/path-finder";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Berseker } from "../../recruit/implementation/berseker-recruit";
-import { Status } from "../../../../shared/traits/status";
+import { Status } from "../../../../shared/traits/engine/status";
+import { TBattleUnit } from "../battle-unit";
 
-export class BattleBerseker extends Derive(
-	HTHitbox,
-	TCollider,
-	Caster,
-	HTImageDrawable,
-	TLifeBarRenderable,
-	HaveStats,
-) {
+export class BattleBerseker extends Derive(TBattleUnit, Caster) {
 	pathFinder: PathFinder;
 	constructor(
 		recruit: Berseker,
@@ -40,9 +32,7 @@ export class BattleBerseker extends Derive(
 	canMove() {
 		return true;
 	}
-	isAlive() {
-		return this.stats.health > 0;
-	}
+
 	attackCastle() {
 		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
 		this.castInProgress = null;

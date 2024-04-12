@@ -3,7 +3,7 @@ import { CanvasRenderer } from "../renderer/implementation/canvas-renderer";
 import { ScreenPosition } from "../shared/position";
 import { ArmyGrid } from "../engine/grid/grid";
 import { implementsTrait } from "@ddd-ts/traits";
-import { TSynergy } from "../shared/traits/synergy";
+import { TSynergy } from "../shared/traits/engine/synergy";
 import { StartBattleButton } from "../shared/hud-element/start-battle-button";
 import { RefreshBellHud } from "../shared/hud-element/refresh-bell-hud";
 import { RetailGrid } from "../engine/grid/retail-grid";

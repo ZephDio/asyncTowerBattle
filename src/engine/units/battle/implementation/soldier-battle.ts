@@ -4,12 +4,10 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Soldier } from "../../recruit/implementation/soldier-recruit";
 import { PathFinder } from "../../../battle/path-finder";
-import { Cast, Caster } from "../../../../shared/traits/cast";
-import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
-import { HaveStats } from "../../../stats/stats";
-import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
+import { TBattleUnit } from "../battle-unit";
 
-export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDrawable, TLifeBarRenderable, HaveStats) {
+export class BattleSoldier extends Derive(TBattleUnit, Caster) {
 	pathFinder: PathFinder;
 
 	constructor(
@@ -40,10 +38,6 @@ export class BattleSoldier extends Derive(HTHitbox, TCollider, Caster, HTImageDr
 
 	casts(): void {
 		this.castInProgress = new Cast(this, this.attackCastle.bind(this), 100);
-	}
-
-	isAlive() {
-		return this.stats.health > 0;
 	}
 
 	followPath(): void {

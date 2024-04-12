@@ -1,12 +1,13 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { HTHitbox } from "../../../../shared/hitboxes";
+import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridPosition } from "../../../../shared/position";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PathFinder } from "../../../battle/path-finder";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Spark } from "../../blueprint/implementation/spark";
 import { TGrid } from "../../../grid/tgrid";
+import { TRenderable } from "../../../../shared/traits/render/renderable";
 
 export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
 	pathFinder: PathFinder;

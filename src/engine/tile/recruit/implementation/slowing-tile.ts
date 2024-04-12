@@ -3,7 +3,7 @@ import { Cell } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { SlowingBattlePathTile } from "../../battle/implementation/slowing-battle-tile";
 import { PathTile } from "../tile";
-import { TRecruit } from "../../../../shared/traits/recruit";
+import { TRecruit } from "../../../../shared/traits/engine/recruit";
 import { SlowingTileBlueprint } from "../../blueprint/implementation/slowing-tile-blueprint";
 import { BattleGrid } from "../../../grid/battle-grid";
 

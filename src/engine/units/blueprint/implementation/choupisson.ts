@@ -1,11 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
-import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
+import { HitBox } from "../../../../shared/hitbox/hitboxe";
+import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
+import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
-import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
-import { TDrawable } from "../../../../shared/traits/tdrawable";
-import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
+import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
+import { TDrawable } from "../../../../shared/traits/render/drawable";
+import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Choupisson } from "../../recruit/implementation/choupisson-recruit";
 
 export class ChoupissonBlueprint extends Derive(

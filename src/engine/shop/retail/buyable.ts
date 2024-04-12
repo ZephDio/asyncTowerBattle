@@ -1,10 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTHitbox, TGCollider } from "../../../shared/hitboxes";
-import { HTImageDrawable, TPriceHudRenderable, TRenderable } from "../../../shared/traits/drawable";
-import { GridElement } from "../../../shared/traits/grid-element";
+import { TGCollider } from "../../../shared/traits/engine/core/TGCollider";
+import { HTHitbox } from "../../../shared/traits/engine/core/THitbox";
+import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
+import { TPriceHudRenderable } from "../../../shared/traits/render/huds/price-renderable";
+import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { Cell } from "../../../shared/position";
-import { AnyRecruit } from "../../../shared/traits/recruit";
-import { THasPrice } from "../../../shared/traits/has-price";
+import { AnyRecruit } from "../../../shared/traits/engine/recruit";
+import { THasPrice } from "../../../shared/traits/engine/has-price";
+import { TRenderable } from "../../../shared/traits/render/renderable";
 
 export type AnyBuyable = AnyRecruit;
 

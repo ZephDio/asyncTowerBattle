@@ -2,7 +2,7 @@ import { AnyBattleTower } from "../battle/battle-tower";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattleGrid } from "../../grid/battle-grid";
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
-import { TRecruit } from "../../../shared/traits/recruit";
+import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { GridPosition } from "../../../shared/position";
 import { RetailGrid } from "../../grid/retail-grid";
 import { ArmyGrid } from "../../grid/grid";

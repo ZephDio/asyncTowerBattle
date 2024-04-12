@@ -1,9 +1,10 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, ScreenPosition } from "../../../shared/position";
-import { TRenderable } from "../../../shared/traits/drawable";
+
 import { ArmyGrid } from "../grid";
-import { TDrawable } from "../../../shared/traits/tdrawable";
-import { GridElement } from "../../../shared/traits/grid-element";
+import { TDrawable } from "../../../shared/traits/render/drawable";
+import { GridElement } from "../../../shared/traits/engine/core/grid-element";
+import { TRenderable } from "../../../shared/traits/render/renderable";
 
 export class SynergyEffect extends Derive(TDrawable, TRenderable) {
 	drawPriority = 8;

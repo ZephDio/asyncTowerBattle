@@ -1,10 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
-import { HitBox, Rectangle, TCollider, THitbox } from "../hitboxes";
-import { TDrawable } from "../traits/tdrawable";
-import { TRenderable } from "../traits/drawable";
+import { HitBox } from "../hitbox/hitboxe";
+import { Rectangle } from "../hitbox/shapes/rectangle";
+import { TCollider } from "../traits/engine/core/TCollider";
+import { TDrawable } from "../traits/render/drawable";
 import { ScreenPosition } from "../position";
 import { Resources } from "../../renderer/resources";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
+import { TRenderable } from "../traits/render/renderable";
+import { THitbox } from "../traits/engine/core/THitbox";
 
 export class RefreshBellHud extends Derive(
 	TCollider,

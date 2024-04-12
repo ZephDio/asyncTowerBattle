@@ -1,15 +1,16 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { Cast, Caster } from "../../../../shared/traits/cast";
-import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { TCasterHudRenderable } from "../../../../shared/traits/render/huds/caster-camembert-renderable";
 import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
 import { HaveStats, Stats } from "../../../stats/stats";
-import { Status } from "../../../../shared/traits/status";
+import { Status } from "../../../../shared/traits/engine/status";
 import { SlowingBattlePathTile } from "../../../tile/battle/implementation/slowing-battle-tile";
 import { BasicBattlePathTile } from "../../../tile/battle/implementation/basic-battle-tile";
-import { HTHitbox } from "../../../../shared/hitboxes";
-import { GridElement } from "../../../../shared/traits/grid-element";
+import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
+import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 
 export class YellowBattleTower extends Derive(
 	HTHitbox,

@@ -1,7 +1,7 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { TDrawable } from "../traits/tdrawable";
+import { TDrawable } from "../traits/render/drawable";
 import { Resources } from "../../renderer/resources";
-import { THasPrice } from "../traits/has-price";
+import { THasPrice } from "../traits/engine/has-price";
 import { ScreenPosition } from "../position";
 
 export class PriceHud extends Derive(TDrawable) {
@@ -14,7 +14,7 @@ export class PriceHud extends Derive(TDrawable) {
 		context.fillStyle = "yellow";
 		const image = Resources.hudElement.gold.resource.image;
 		const canvasPosition = this.getCanvasPosition(context, position);
-		const size = this.getCanvasSize(context, 1.9, 1.9, (cellSize / 4.9));
+		const size = this.getCanvasSize(context, 1.9, 1.9, cellSize / 4.9);
 		const text = this.buyable.price.toString();
 		const textPosition = this.getCanvasPosition(context, new ScreenPosition({ x: position.x, y: position.y - 0.6 }));
 		context.font = `${size.height}px Arial`;

@@ -8,7 +8,7 @@ import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
 
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 
 export class BlueTower extends Derive(HTDamageDealer, Tower) {

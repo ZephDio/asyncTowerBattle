@@ -3,12 +3,13 @@ import { Physic } from "../../../../shared/physic";
 import { BlueTower } from "../../recruit/implementation/blue-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
-import { Cast, Caster } from "../../../../shared/traits/cast";
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { TCasterHudRenderable } from "../../../../shared/traits/render/huds/caster-camembert-renderable";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { HaveStats } from "../../../stats/stats";
-import { HTHitbox } from "../../../../shared/hitboxes";
+import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
-import { GridElement } from "../../../../shared/traits/grid-element";
+import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 export class BlueBattleTower extends Derive(
 	HTHitbox,
 	TCasterHudRenderable,

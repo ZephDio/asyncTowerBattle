@@ -1,24 +1,15 @@
 import { GridPosition } from "../../../../shared/position";
-import { Cast, Caster } from "../../../../shared/traits/cast";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";
-import { HTImageDrawable, TLifeBarRenderable } from "../../../../shared/traits/drawable";
-import { HaveStats } from "../../../stats/stats";
-import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
 import { Derive } from "@ddd-ts/traits";
 import { Choupisson } from "../../recruit/implementation/choupisson-recruit";
 import { BattleSpine } from "../../../projectile/battle/implementation/battle-spine";
 import { Spine } from "../../../projectile/blueprint/implementation/spine";
+import { TBattleUnit } from "../battle-unit";
 
-export class BattleChoupisson extends Derive(
-	HTHitbox,
-	TCollider,
-	Caster,
-	HTImageDrawable,
-	TLifeBarRenderable,
-	HaveStats,
-) {
+export class BattleChoupisson extends Derive(TBattleUnit, Caster) {
 	pathFinder: PathFinder;
 
 	constructor(
@@ -40,10 +31,6 @@ export class BattleChoupisson extends Derive(
 	}
 	canMove() {
 		return true;
-	}
-
-	isAlive() {
-		return this.stats.health > 0;
 	}
 
 	attackCastle() {

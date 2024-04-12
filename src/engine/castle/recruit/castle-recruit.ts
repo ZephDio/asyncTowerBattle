@@ -4,7 +4,7 @@ import { ArmyGrid } from "../../grid/grid";
 import { CastleBlueprint } from "../blueprint/castle";
 import { BattleCastle } from "../battle/battle-castle";
 import { BattleGrid } from "../../grid/battle-grid";
-import { TRecruit } from "../../../shared/traits/recruit";
+import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { TokenHooks } from "../../shop/holder/holder";
 
 export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive(TRecruit) {

@@ -1,13 +1,15 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
-import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
+import { HitBox } from "../../../../shared/hitbox/hitboxe";
+import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
+import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { OrangeTower } from "../../recruit/implementation/orange-tower-recruit";
-import { TSynergy } from "../../../../shared/traits/synergy";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
-import { GridElement } from "../../../../shared/traits/grid-element";
-import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
+import { TSynergy } from "../../../../shared/traits/engine/synergy";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
+import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
+import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 
 export class OrangeTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),

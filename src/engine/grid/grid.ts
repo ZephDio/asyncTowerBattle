@@ -1,16 +1,17 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell, ScreenPosition } from "../../shared/position";
-import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
+import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
-import { AnyRecruit } from "../../shared/traits/recruit";
+import { AnyRecruit } from "../../shared/traits/engine/recruit";
 import { Castle } from "../castle/recruit/castle-recruit";
 import { Tower } from "../tower/recruit/tower-recruit";
 import { Barrack } from "../barrack/recruit/barrack-recruit";
-import { GridElement } from "../../shared/traits/grid-element";
+import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { PathTile } from "../tile/recruit/tile";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
+import { TRenderable } from "../../shared/traits/render/renderable";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();

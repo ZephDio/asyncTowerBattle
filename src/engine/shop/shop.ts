@@ -9,7 +9,7 @@ import { StartBattleButton } from "../../shared/hud-element/start-battle-button"
 import { TGrid } from "../grid/tgrid";
 import { AnyUnit } from "../units/recruit/unit-recruit";
 import { ArmyGrid } from "../grid/grid";
-import { AnyRecruit } from "../../shared/traits/recruit";
+import { AnyRecruit } from "../../shared/traits/engine/recruit";
 import { Buyable } from "./retail/buyable";
 import { RefreshBellHud } from "../../shared/hud-element/refresh-bell-hud";
 import { Holder } from "./holder/holder";

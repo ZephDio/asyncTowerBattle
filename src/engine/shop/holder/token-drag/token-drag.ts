@@ -1,8 +1,9 @@
 import { GridPosition, ScreenPosition } from "../../../../shared/position";
-import { HTImageDrawable, THudRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { THudRenderable } from "../../../../shared/traits/render/huds/hud-renderable";
 import { ImplementsTrait, Subtrait } from "../../../../../traits/traits";
-import { Synergy } from "../../../../shared/traits/synergy";
-import { AnyRecruit } from "../../../../shared/traits/recruit";
+import { Synergy } from "../../../../shared/traits/engine/synergy";
+import { AnyRecruit } from "../../../../shared/traits/engine/recruit";
 import { Buyable } from "../../retail/buyable";
 import { TokenHooks } from "../holder";
 import { TGrid } from "../../../grid/tgrid";

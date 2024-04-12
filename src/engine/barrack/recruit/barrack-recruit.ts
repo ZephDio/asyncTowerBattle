@@ -4,7 +4,7 @@ import { BattlePath } from "../../path/battle/battle-path";
 import { AnyUnit } from "../../units/recruit/unit-recruit";
 import { AnyBattleBarrack } from "../battle/battle-barrack";
 import { BattleGrid } from "../../grid/battle-grid";
-import { TRecruit } from "../../../shared/traits/recruit";
+import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { RetailGrid } from "../../grid/retail-grid";
 import { GridPosition } from "../../../shared/position";
 import { ArmyGrid } from "../../grid/grid";

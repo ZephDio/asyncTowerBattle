@@ -7,7 +7,7 @@ import { GridHooks } from "../../grid/battle-grid";
 import { BattlePath } from "../../path/battle/battle-path";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 import { AnyBattleUnit } from "../../units/battle/battle-unit";
-import { HitBox } from "../../../shared/hitboxes";
+import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { GridPosition } from "../../../shared/position";
 import { AnyBattleTile } from "../../tile/battle/battle-tile";
 export type BattleArmyHooks = {

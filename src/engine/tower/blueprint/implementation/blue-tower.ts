@@ -1,12 +1,14 @@
-import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
+import { HitBox } from "../../../../shared/hitbox/hitboxe";
+import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
+import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Rocket } from "../../../projectile/blueprint/implementation/rocket";
-import { TImageDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { BlueTower } from "../../recruit/implementation/blue-tower-recruit";
-import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Derive } from "../../../../../traits/traits";
-import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
+import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 
 export class BlueTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),

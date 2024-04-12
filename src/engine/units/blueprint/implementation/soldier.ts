@@ -1,12 +1,14 @@
 import { Derive } from "@ddd-ts/traits";
 import { Resources } from "../../../../renderer/resources";
-import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
+import { HitBox } from "../../../../shared/hitbox/hitboxe";
+import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
+import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/drawable";
-import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
-import { TDrawable } from "../../../../shared/traits/tdrawable";
+import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
+import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { Soldier } from "../../recruit/implementation/soldier-recruit";
-import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
+import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 
 export class SoldierBlueprint extends Derive(
 	TShopBlueprint(10, 10),

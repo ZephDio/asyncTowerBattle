@@ -6,7 +6,7 @@ import { GreenTowerBlueprint } from "../../blueprint/implementation/green-tower"
 import { Tower } from "../tower-recruit";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 

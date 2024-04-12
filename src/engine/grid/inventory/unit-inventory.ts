@@ -1,12 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
-import { TGridDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { TGridDrawable } from "../../../shared/traits/render/grid-renderable";
 import { TGrid } from "../tgrid";
 import { Cell, ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { SynergyEffect } from "../grid-effects/synergy-effect";
 import { ArmyGrid } from "../grid";
 import { HoverEffect } from "../grid-effects/hover-effect";
-import { AnyRecruit } from "../../../shared/traits/recruit";
+import { AnyRecruit } from "../../../shared/traits/engine/recruit";
+import { TRenderable } from "../../../shared/traits/render/renderable";
 
 const inventoryPosition = new ScreenPosition(PercentToReal({ x: 78, y: 55 }));
 

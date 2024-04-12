@@ -3,9 +3,9 @@ import { Tower } from "../../../tower/recruit/tower-recruit";
 import { TTokenDrag } from "./token-drag";
 import { Cell, GridPosition, ScreenPosition } from "../../../../shared/position";
 import { ArmyGrid } from "../../../grid/grid";
-import { TSynergy } from "../../../../shared/traits/synergy";
-import { AnyRecruit } from "../../../../shared/traits/recruit";
-import { THudRenderable } from "../../../../shared/traits/drawable";
+import { TSynergy } from "../../../../shared/traits/engine/synergy";
+import { AnyRecruit } from "../../../../shared/traits/engine/recruit";
+import { THudRenderable } from "../../../../shared/traits/render/huds/hud-renderable";
 import { TokenHooks } from "../holder";
 import { TGrid } from "../../../grid/tgrid";
 

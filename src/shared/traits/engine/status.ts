@@ -1,5 +1,5 @@
 import { Trait } from "@ddd-ts/traits";
-import { Stats } from "../../engine/stats/stats";
+import { Stats } from "../../../engine/stats/stats";
 
 export const Status = Trait((base) => {
 	abstract class Status extends base {
