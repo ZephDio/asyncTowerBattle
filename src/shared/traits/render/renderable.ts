@@ -1,7 +1,7 @@
 import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
 import { TDrawable } from "./drawable";
 import { Cell, GridPosition, ScreenPosition } from "../../position";
-import { TGrid } from "../../../engine/grid/tgrid";
+import { STANDARD_CELL_SIZE, TGrid } from "../../../engine/grid/tgrid";
 import { TSizable } from "../engine/core/sizable";
 
 export const TRenderable = Subtrait([TDrawable], (base) => {
@@ -16,14 +16,14 @@ export const TRenderable = Subtrait([TDrawable], (base) => {
 				}
 				const gridPosition = grid.cellToGrid(this.position);
 				const screenPosition = grid.gridToScreenPosition(gridPosition);
-				const scale = (grid.cellSize / 4.9) * elementScale;
+				const scale = (grid.cellSize / STANDARD_CELL_SIZE) * elementScale;
 				return this.draw(context, screenPosition, scale);
 			}
 			if (this.position instanceof GridPosition) {
 				if (!grid) {
 					throw new Error("Grid is required to render");
 				}
-				const scale = (grid.cellSize / 4.9) * elementScale;
+				const scale = (grid.cellSize / STANDARD_CELL_SIZE) * elementScale;
 				const screenPosition = grid.gridToScreenPosition(this.position);
 				return this.draw(context, screenPosition, scale);
 			}

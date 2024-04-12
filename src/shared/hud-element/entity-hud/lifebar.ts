@@ -1,7 +1,7 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { TDrawable } from "../traits/render/drawable";
-import { HaveStats } from "../../engine/stats/stats";
-import { ScreenPosition } from "../position";
+import { TDrawable } from "../../traits/render/drawable";
+import { HaveStats } from "../../../engine/stats/stats";
+import { ScreenPosition } from "../../position";
 
 export class LifeBar extends Derive(TDrawable) {
 	drawPriority = 3;

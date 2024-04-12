@@ -1,7 +1,7 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell, ScreenPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
-import { TGrid } from "./tgrid";
+import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { AnyRecruit } from "../../shared/traits/engine/recruit";
@@ -22,7 +22,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		public width: number = 13,
 		public height: number = 6,
 		public position: ScreenPosition = PercentToReal({ x: 3, y: 2 }),
-		public cellSize = 4.9,
+		public cellSize = STANDARD_CELL_SIZE,
 	) {
 		super({});
 	}

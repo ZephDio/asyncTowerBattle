@@ -16,6 +16,7 @@ export class CasterCamembert extends Derive(TDrawable) {
 		const size = this.getCanvasSize(context, 2, 2, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		context.strokeStyle = "black";
+		context.lineWidth = 3;
 		//this.drawLine(context,canvasPosition.x,canvasPosition.y, canvasPosition.x +35, canvasPosition.y+35)
 		this.drawArc(
 			context,

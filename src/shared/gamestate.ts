@@ -37,6 +37,7 @@ export interface BattleState extends GameState {
 	projectiles: AnyBattleProjectile[];
 	tiles: AnyBattleTile[];
 	path: BattlePath;
+	hudElements: HudElement[];
 }
 
 export interface ShopState extends GameState {

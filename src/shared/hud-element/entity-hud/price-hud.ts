@@ -1,8 +1,8 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { TDrawable } from "../traits/render/drawable";
-import { Resources } from "../../renderer/resources";
-import { THasPrice } from "../traits/engine/has-price";
-import { ScreenPosition } from "../position";
+import { TDrawable } from "../../traits/render/drawable";
+import { Resources } from "../../../renderer/resources";
+import { THasPrice } from "../../traits/engine/has-price";
+import { ScreenPosition } from "../../position";
 
 export class PriceHud extends Derive(TDrawable) {
 	override drawPriority: 4;

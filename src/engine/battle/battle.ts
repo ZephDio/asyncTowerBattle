@@ -1,4 +1,8 @@
+import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { BattleState } from "../../shared/gamestate";
+import { BattleClockHud } from "../../shared/hud-element/battle/battle-clock";
+import { ButtonSpeedHUD } from "../../shared/hud-element/battle/button-speed";
+import { CastleLifeBar } from "../../shared/hud-element/battle/castle-life-bar";
 import { Army } from "../army/army";
 import { Game } from "../game";
 import { Battlefield } from "./battlefield/battlefield";
@@ -7,12 +11,22 @@ export class Battle {
 	battlefield: Battlefield;
 	isOver = false;
 
+	gameSpeed = 30;
+	alliedCastleLifeBar: CastleLifeBar;
+	enemyCastleLifeBar: CastleLifeBar;
+	battleClock: BattleClockHud;
+
+	timer = { clock: 0 };
+
 	constructor(
 		public alliedArmy: Army,
 		public enemyArmy: Army,
 		public onBattleOver: Game["handleEndBattle"],
 	) {
 		this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy, this.handleBattleOver.bind(this));
+		this.alliedCastleLifeBar = new CastleLifeBar(this.battlefield.alliedArmy.castle, PercentToReal({ x: 85, y: 45 }));
+		this.enemyCastleLifeBar = new CastleLifeBar(this.battlefield.enemyArmy.castle, PercentToReal({ x: 9, y: 55 }));
+		this.battleClock = new BattleClockHud(this.timer);
 	}
 
 	start() {
@@ -21,12 +35,13 @@ export class Battle {
 				if (this.isOver) return;
 				this.tick();
 				loop();
-			}, 30);
+			}, this.gameSpeed);
 		};
 		loop();
 	}
 
 	tick() {
+		this.timer.clock++;
 		this.battlefield.tick();
 	}
 
@@ -36,9 +51,20 @@ export class Battle {
 		this.onBattleOver(battleVerdict);
 	}
 
+	changeSpeed(speed: number) {
+		this.gameSpeed = 30 / speed;
+	}
+
 	getDrawables() {
 		return {
-			renderables: [],
+			renderables: [
+				new ButtonSpeedHUD(1, PercentToReal({ x: 3, y: 95 })),
+				new ButtonSpeedHUD(2, PercentToReal({ x: 7.5, y: 95 })),
+				new ButtonSpeedHUD(3, PercentToReal({ x: 12, y: 95 })),
+				this.alliedCastleLifeBar,
+				this.enemyCastleLifeBar,
+				this.battleClock,
+			],
 			grids: [
 				{
 					grid: this.battlefield.grid,
@@ -64,6 +90,14 @@ export class Battle {
 			areaEffects: [...this.battlefield.areaEffects],
 			grid: this.battlefield.grid,
 			path: this.battlefield.alliedArmy.path,
+			hudElements: [
+				new ButtonSpeedHUD(1, PercentToReal({ x: 3, y: 95 })),
+				new ButtonSpeedHUD(2, PercentToReal({ x: 7.5, y: 95 })),
+				new ButtonSpeedHUD(3, PercentToReal({ x: 12, y: 95 })),
+				this.alliedCastleLifeBar,
+				this.enemyCastleLifeBar,
+				this.battleClock,
+			],
 		};
 		return battleState;
 	}

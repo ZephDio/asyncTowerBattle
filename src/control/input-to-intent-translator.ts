@@ -8,6 +8,7 @@ import { StartBattleButton } from "../shared/hud-element/start-battle-button";
 import { RefreshBellHud } from "../shared/hud-element/refresh-bell-hud";
 import { RetailGrid } from "../engine/grid/retail-grid";
 import { Inventory } from "../engine/grid/inventory/unit-inventory";
+import { ButtonSpeedHUD } from "../shared/hud-element/battle/button-speed";
 
 export interface PlayerIntent {
 	intent: string;
@@ -34,6 +35,18 @@ export class InputToIntentTranslator {
 				if (hudElement instanceof RefreshBellHud && hudElement.contains(position)) {
 					this.game.shop.refresh();
 					return;
+				}
+			}
+		}
+
+		if (this.game.battle) {
+			const state = this.game.battle.getState();
+			if (state.hudElements) {
+				for (const hudElement of state.hudElements) {
+					console.log(hudElement);
+					if (hudElement instanceof ButtonSpeedHUD && hudElement.contains(position)) {
+						return this.game.battle.changeSpeed(hudElement.speed);
+					}
 				}
 			}
 		}

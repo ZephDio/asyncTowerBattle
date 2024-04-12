@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { TGridDrawable } from "../../../shared/traits/render/grid-renderable";
-import { TGrid } from "../tgrid";
+import { STANDARD_CELL_SIZE, TGrid } from "../tgrid";
 import { Cell, ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { SynergyEffect } from "../grid-effects/synergy-effect";
@@ -19,7 +19,7 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 		public position: ScreenPosition = inventoryPosition,
 		public width: number = 4,
 		public height: number = 5,
-		public cellSize: number = 4.9,
+		public cellSize: number = STANDARD_CELL_SIZE,
 	) {
 		super({});
 	}
