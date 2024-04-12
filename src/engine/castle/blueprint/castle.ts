@@ -5,7 +5,11 @@ import { Resources } from "../../../renderer/resources";
 import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../shared/traits/engine/core/THitbox";
+<<<<<<< HEAD
 import { Cell, GridPosition } from "../../../shared/position";
+=======
+import { GridPosition } from "../../../shared/position";
+>>>>>>> 7539970 (file(feat): reorganized file tree)
 
 export class CastleBlueprint extends Derive(
 	TImageDrawable(Resources.castle.resource.image, Resources.castle.size, 3),

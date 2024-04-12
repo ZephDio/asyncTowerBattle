@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cell, GridPosition } from "../../shared/position";
+import { Cell, GridPosition, ScreenPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { BattleArmy } from "../army/battle/battle-army";
 import { BattleCastle } from "../castle/battle/battle-castle";
@@ -23,16 +23,22 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		width: number,
 		height: number,
 		cellSize = 5,
-		screenPosition = PercentToReal({ x: 50, y: 50}),
+		screenPosition = PercentToReal({ x: 50, y: 50 }),
 	) {
-		super({ width , height, cellSize, position: screenPosition});
+		super({ width, height, cellSize, position: screenPosition });
 	}
 
 	static fuse(gridAllied: ArmyGrid, gridEnemy: ArmyGrid): BattleGrid {
 		if (gridAllied.width !== gridEnemy.width || gridAllied.height !== gridEnemy.height) {
 			throw new Error("cannot fuse grid with different grid size");
 		}
-		const battleGrid = new BattleGrid(gridAllied, gridEnemy, gridAllied.width, gridAllied.height + gridEnemy.height, gridAllied.cellSize);
+		const battleGrid = new BattleGrid(
+			gridAllied,
+			gridEnemy,
+			gridAllied.width,
+			gridAllied.height + gridEnemy.height,
+			gridAllied.cellSize,
+		);
 		return battleGrid;
 	}
 

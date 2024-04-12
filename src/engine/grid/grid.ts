@@ -25,7 +25,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		public screenPosition: ScreenPosition = PercentToReal({ x: 35, y: 28 }),
 		cellSize = STANDARD_CELL_SIZE,
 	) {
-		super({ width , height , cellSize , position: screenPosition });
+		super({ width, height, cellSize, position: screenPosition });
 	}
 
 	get castle() {
@@ -86,8 +86,8 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return [...this.tiles.values()];
 	}
 
-	getCastleCell(){
-		return new Cell({ x: 0, y: this.height - 1});
+	getCastleCell() {
+		return new Cell({ x: 0, y: this.height - 1 });
 	}
 
 	clearSynergiesTiles() {
@@ -97,14 +97,13 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return `${cell.x}|${cell.y}`;
 	}
 
-	roundTwo(){
-		this.width = 8
-		this.height = 5
-		this.cellSize = 5.5
+	roundTwo() {
+		this.width = 8;
+		this.height = 5;
+		this.cellSize = 5.5;
 		this.translate();
-		[
-			new BasicPathTile(new Cell({ x: 6, y: 4 })),
-			new BasicPathTile(new Cell({ x: 7, y: 4 })),
-		].forEach((pathTile) => this.setElement(pathTile));
+		[new BasicPathTile(new Cell({ x: 6, y: 4 })), new BasicPathTile(new Cell({ x: 7, y: 4 }))].forEach((pathTile) =>
+			this.setElement(pathTile),
+		);
 	}
 }
