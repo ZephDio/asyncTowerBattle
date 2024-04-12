@@ -20,13 +20,13 @@ export class GoldHud extends Derive(
 		super({});
 	}
 	drawPriority: 5;
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		context.globalAlpha = 1;
 		context.fillStyle = "yellow";
 		const image = Resources.hudElement.gold.resource.image;
 		const unitPosition = this.getCanvasPosition(context, new ScreenPosition({ x: position.x - 5, y: position.y - 1 }));
 		const canvasPosition = this.getCanvasPosition(context, position);
-		const size = this.getCanvasSize(context, this.size.width, this.size.height);
+		const size = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		const text = this.gold.toString();
 		context.font = `${size.height}px Arial`;
 		const textWidth = context.measureText(text).width;

@@ -10,10 +10,10 @@ export class CasterCamembert extends Derive(TDrawable) {
 	}
 
 	drawPriority = 5;
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		if (!this.caster.castInProgress) return;
 		context.globalAlpha = 1;
-		const size = this.getCanvasSize(context, 2, 2, cellSize / 4.9);
+		const size = this.getCanvasSize(context, 2, 2, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		context.strokeStyle = "black";
 		//this.drawLine(context,canvasPosition.x,canvasPosition.y, canvasPosition.x +35, canvasPosition.y+35)

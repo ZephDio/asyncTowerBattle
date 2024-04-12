@@ -10,11 +10,11 @@ export class UnitPreviewHud extends Derive(TDrawable) {
 	}
 
 	drawPriority = 8;
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		const recruit = this.barrack.unitRecruit;
 		if (!recruit) return;
 		context.globalAlpha = 1;
-		const size = this.getCanvasSize(context, recruit.drawable.size.width, recruit.drawable.size.height, cellSize / 4.9);
+		const size = this.getCanvasSize(context, recruit.drawable.size.width, recruit.drawable.size.height, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawImage(context, size, canvasPosition, recruit.drawable.image);
 	}
