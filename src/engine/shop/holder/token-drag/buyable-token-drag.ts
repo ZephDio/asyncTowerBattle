@@ -1,7 +1,7 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { TTokenDrag } from "./token-drag";
 import { GridPosition, ScreenPosition } from "../../../../shared/position";
-import { TSynergy } from "../../../../shared/traits/synergy";
+import { TSynergy } from "../../../../shared/traits/engine/synergy";
 import { RetailGrid } from "../../../grid/retail-grid";
 import { Buyable } from "../../retail/buyable";
 import { TokenHooks } from "../holder";

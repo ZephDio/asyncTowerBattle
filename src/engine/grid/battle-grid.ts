@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition, ScreenPosition } from "../../shared/position";
-import { TGridDrawable } from "../../shared/traits/drawable";
+import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { BattleArmy } from "../army/battle/battle-army";
 import { BattleCastle } from "../castle/battle/battle-castle";
 import { AnyBattleTower } from "../tower/battle/battle-tower";
@@ -9,7 +9,7 @@ import { AnyBattleTile } from "../tile/battle/battle-tile";
 import { TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
-import { TRenderable } from "../../shared/traits/trenderable";
+import { TRenderable } from "../../shared/traits/render/renderable";
 
 export type BattleGridElement = AnyBattleTower | AnyBattleTile | BattleCastle;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {

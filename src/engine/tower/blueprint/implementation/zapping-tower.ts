@@ -1,9 +1,11 @@
 import { Derive } from "@ddd-ts/traits";
-import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
-import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
+import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
+import { HitBox } from "../../../../shared/hitbox/hitboxe";
+import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
+import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
-import { TImageDrawable } from "../../../../shared/traits/drawable";
+import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
+import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { ZappingTower } from "../../recruit/implementation/zapping-tower-recruit";
 import { Spark } from "../../../projectile/blueprint/implementation/spark";

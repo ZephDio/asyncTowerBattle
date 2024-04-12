@@ -1,17 +1,19 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
+import { HitBox } from "../../../../shared/hitbox/hitboxe";
+import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
+import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 
 import { Bullet } from "../../../projectile/blueprint/implementation/bullet";
 import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
-import { TSynergy } from "../../../../shared/traits/synergy";
-import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { TSynergy } from "../../../../shared/traits/engine/synergy";
+import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { BasicPathTile } from "../../../tile/recruit/implementation/basic-tile";
 import { SlowingPathTile } from "../../../tile/recruit/implementation/slowing-tile";
-import { GridElement } from "../../../../shared/traits/grid-element";
-import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
+import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
+import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 
 export class YellowTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),

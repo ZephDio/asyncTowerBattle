@@ -5,7 +5,7 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleSoldier } from "../../battle/implementation/soldier-battle";
 import { SoldierBlueprint } from "../../blueprint/implementation/soldier";
 import { Unit } from "../unit-recruit";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 export class Soldier extends Derive(Unit, HTDamageDealer) {
 	speed: number;
 	maxLife: number;

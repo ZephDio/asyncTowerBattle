@@ -4,7 +4,7 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BasicBattleBarrack } from "../../battle/implementation/basic-battle-barrack";
 import { Barrack } from "../barrack-recruit";
-import { TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
+import { TUnitPreviewHudRenderable } from "../../../../shared/traits/render/huds/unit-preview-enderable";
 import { Cell } from "../../../../shared/position";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { WaveBarrackBlueprint } from "../../blueprint/implementation/wave-barrack";

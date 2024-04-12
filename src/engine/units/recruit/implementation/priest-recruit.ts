@@ -3,7 +3,7 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Unit } from "../unit-recruit";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { PriestBlueprint } from "../../blueprint/implementation/priest";
 import { BattlePriest } from "../../battle/implementation/battle-priest";
 export class Priest extends Derive(Unit, HTDamageDealer) {

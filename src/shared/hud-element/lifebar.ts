@@ -1,5 +1,5 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { TDrawable } from "../traits/tdrawable";
+import { TDrawable } from "../traits/render/drawable";
 import { HaveStats } from "../../engine/stats/stats";
 import { ScreenPosition } from "../position";
 

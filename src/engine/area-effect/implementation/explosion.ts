@@ -1,10 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
-import { Ellipse, HitBox, TCollider, THitbox } from "../../../shared/hitboxes";
+import { HitBox } from "../../../shared/hitbox/hitboxe";
+import { Ellipse } from "../../../shared/hitbox/shapes/ellipse";
+import { TCollider } from "../../../shared/traits/engine/core/TCollider";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { Size } from "../../../shared/size";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { TDrawable } from "../../../shared/traits/tdrawable";
-import { TRenderable } from "../../../shared/traits/trenderable";
+import { TDrawable } from "../../../shared/traits/render/drawable";
+import { TRenderable } from "../../../shared/traits/render/renderable";
+import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 
 export class Explosion extends Derive(
 	TCollider,
@@ -43,12 +46,11 @@ export class Explosion extends Derive(
 		};
 	}
 
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		context.strokeStyle = "red";
 		context.fillStyle = "transparent";
 		context.lineWidth = 11;
 		context.globalAlpha = 1;
-		const scale = cellSize / 4.9;
 		const size = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawEllipse(context, size, canvasPosition, scale);

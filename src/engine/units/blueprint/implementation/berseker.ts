@@ -1,12 +1,14 @@
 import { Derive } from "@ddd-ts/traits";
-import { Ellipse, HitBox, THitbox } from "../../../../shared/hitboxes";
-import { TImageDrawable } from "../../../../shared/traits/drawable";
+import { HitBox } from "../../../../shared/hitbox/hitboxe";
+import { Ellipse } from "../../../../shared/hitbox/shapes/ellipse";
+import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
+import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { GridPosition } from "../../../../shared/position";
 import { Resources } from "../../../../renderer/resources";
-import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
-import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
+import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Berseker } from "../../recruit/implementation/berseker-recruit";
-import { TDrawable } from "../../../../shared/traits/tdrawable";
+import { TDrawable } from "../../../../shared/traits/render/drawable";
 
 export class BersekerBlueprint extends Derive(
 	TShopBlueprint(10, 10),

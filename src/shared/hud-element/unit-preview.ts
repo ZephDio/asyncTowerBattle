@@ -1,5 +1,5 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
-import { TDrawable } from "../traits/tdrawable";
+import { TDrawable } from "../traits/render/drawable";
 import { Barrack } from "../../engine/barrack/recruit/barrack-recruit";
 import { AnyBattleBarrack } from "../../engine/barrack/battle/battle-barrack";
 import { ScreenPosition } from "../position";
@@ -10,11 +10,11 @@ export class UnitPreviewHud extends Derive(TDrawable) {
 	}
 
 	drawPriority = 8;
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize : number): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
 		const recruit = this.barrack.unitRecruit;
 		if (!recruit) return;
 		context.globalAlpha = 1;
-		const size = this.getCanvasSize(context, recruit.drawable.size.width, recruit.drawable.size.height, (cellSize / 4.9) );
+		const size = this.getCanvasSize(context, recruit.drawable.size.width, recruit.drawable.size.height, cellSize / 4.9);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawImage(context, size, canvasPosition, recruit.drawable.image);
 	}

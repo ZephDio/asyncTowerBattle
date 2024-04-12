@@ -1,8 +1,8 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, ScreenPosition } from "../../../shared/position";
 import { TGrid } from "../tgrid";
-import { TDrawable } from "../../../shared/traits/tdrawable";
-import { TRenderable } from "../../../shared/traits/trenderable";
+import { TDrawable } from "../../../shared/traits/render/drawable";
+import { TRenderable } from "../../../shared/traits/render/renderable";
 
 export class HoverEffect extends Derive(TDrawable, TRenderable) {
 	drawPriority = 8;

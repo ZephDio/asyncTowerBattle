@@ -5,7 +5,7 @@ import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
 
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { FrostBattleTower } from "../../battle/implementation/frost-battle-tower";
 import { FrostTowerBlueprint } from "../../blueprint/implementation/frost-tower";
@@ -46,11 +46,11 @@ export class FrostTower extends Derive(HTDamageDealer, Tower) {
 		return this.cell;
 	}
 
-	override 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
-				const { width, height } = this.drawable.size;
-				const scale = cellSize / 4.9;
-				const size = this.getCanvasSize(context, width, height, scale);
-				const canvasPosition = this.getCanvasPosition(context, position);
-				this.drawImage(context, size, canvasPosition, this.drawable.image, this.angle);
-			}
+	override draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
+		const { width, height } = this.drawable.size;
+		const scale = cellSize / 4.9;
+		const size = this.getCanvasSize(context, width, height, scale);
+		const canvasPosition = this.getCanvasPosition(context, position);
+		this.drawImage(context, size, canvasPosition, this.drawable.image, this.angle);
+	}
 }

@@ -1,5 +1,5 @@
 import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
-import { HitBox } from "./hitboxes";
+import { HitBox } from "../../../hitbox/hitboxe";
 
 export const THitbox = (hitbox: HitBox) =>
 	Trait((base) => {

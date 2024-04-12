@@ -4,7 +4,7 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Soldier } from "../../recruit/implementation/soldier-recruit";
 import { PathFinder } from "../../../battle/path-finder";
-import { Cast, Caster } from "../../../../shared/traits/cast";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { TBattleUnit } from "../battle-unit";
 
 export class BattleSoldier extends Derive(TBattleUnit, Caster) {

@@ -1,13 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTHitbox } from "../../../../shared/hitboxes";
+import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridPosition } from "../../../../shared/position";
-import { HTImageDrawable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PathFinder } from "../../../battle/path-finder";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { FrostSpike } from "../../blueprint/implementation/frost-spike";
 import { FrostNova } from "../../../area-effect/implementation/frost-nova";
-import { TRenderable } from "../../../../shared/traits/trenderable";
+import { TRenderable } from "../../../../shared/traits/render/renderable";
 
 export class BattleFrostSpike extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
 	pathFinder: PathFinder;

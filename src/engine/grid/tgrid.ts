@@ -3,8 +3,8 @@ import { ArmyGrid } from "./grid";
 import { Cell, GridPosition, ScreenPosition } from "../../shared/position";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
-import { GridElement } from "../../shared/traits/grid-element";
-import { TRenderable } from "../../shared/traits/trenderable";
+import { GridElement } from "../../shared/traits/engine/core/grid-element";
+import { TRenderable } from "../../shared/traits/render/renderable";
 
 export const TGrid = Trait((base) => {
 	abstract class IGrid extends base {

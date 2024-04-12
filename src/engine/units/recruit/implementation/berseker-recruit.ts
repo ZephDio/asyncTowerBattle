@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Unit } from "../unit-recruit";
 import { BersekerBlueprint } from "../../blueprint/implementation/berseker";
 import { Cell, GridPosition } from "../../../../shared/position";

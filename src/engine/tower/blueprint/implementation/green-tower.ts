@@ -1,13 +1,15 @@
 import { Derive } from "@ddd-ts/traits";
-import { HitBox, Rectangle, THitbox } from "../../../../shared/hitboxes";
+import { HitBox } from "../../../../shared/hitbox/hitboxe";
+import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
+import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 
 import { Bullet } from "../../../projectile/blueprint/implementation/bullet";
 import { GreenTower } from "../../recruit/implementation/green-tower-recruit";
-import { TDamageDealer } from "../../../../shared/traits/damage-dealer";
-import { TShopBlueprint } from "../../../../shared/traits/shop-blueprint";
+import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
+import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 
 export class GreenTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),

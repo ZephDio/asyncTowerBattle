@@ -1,5 +1,5 @@
 import { Trait, implementsTrait } from "@ddd-ts/traits";
-import { HTHitbox } from "../hitboxes";
+import { HTHitbox } from "./THitbox";
 
 export const TSizable = Trait((base) => {
 	abstract class ISizable extends base {
@@ -7,7 +7,6 @@ export const TSizable = Trait((base) => {
 
 		addSize(size: number) {
 			this.sizeScale += size;
-			console.log(this);
 			if (implementsTrait(this, HTHitbox)) {
 				this.hitbox.scale(this.sizeScale);
 			}

@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cast, Caster } from "../../../../shared/traits/cast";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";

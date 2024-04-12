@@ -1,5 +1,5 @@
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
-import { HaveStats } from "../../engine/stats/stats";
+import { HaveStats } from "../../../engine/stats/stats";
 
 export class Cast {
 	progress = 0;

@@ -5,7 +5,7 @@ import { Retail } from "../retail/retail";
 import { Buyable } from "../retail/buyable";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BuyableTokenDrag } from "./token-drag/buyable-token-drag";
-import { AnyRecruit } from "../../../shared/traits/recruit";
+import { AnyRecruit } from "../../../shared/traits/engine/recruit";
 import { Army } from "../../army/army";
 import { TGrid } from "../../grid/tgrid";
 import { Castle } from "../../castle/recruit/castle-recruit";

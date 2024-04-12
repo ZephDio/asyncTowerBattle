@@ -7,8 +7,8 @@ import { Derive } from "@ddd-ts/traits";
 import { YellowTowerBlueprint } from "../../blueprint/implementation/yellow-tower";
 import { YellowBattleTower } from "../../battle/implementation/battle-yellow-tower";
 import { PoisonGround } from "../../../area-effect/implementation/poison-ground";
-import { HTSynergy } from "../../../../shared/traits/synergy";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTSynergy } from "../../../../shared/traits/engine/synergy";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 	attackSpeed = 0.8;
 

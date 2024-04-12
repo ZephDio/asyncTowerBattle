@@ -1,8 +1,10 @@
 import { Derive } from "@ddd-ts/traits";
 import { Resources } from "../../../../renderer/resources";
-import { Ellipse, HitBox, THitbox } from "../../../../shared/hitboxes";
+import { HitBox } from "../../../../shared/hitbox/hitboxe";
+import { Ellipse } from "../../../../shared/hitbox/shapes/ellipse";
+import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/drawable";
+import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 
 export class Bullet extends Derive(
 	THitbox(new HitBox([[new Ellipse({ width: 1, height: 1 }), new GridPosition({ x: 0, y: 0 })]])),

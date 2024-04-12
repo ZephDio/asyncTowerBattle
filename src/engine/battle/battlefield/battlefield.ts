@@ -3,7 +3,7 @@ import { AnyBattleUnit } from "../../units/battle/battle-unit";
 import { BattleArmy } from "../../army/battle/battle-army";
 import { Battle } from "../battle";
 import { Physic } from "../../../shared/physic";
-import { HitBox } from "../../../shared/hitboxes";
+import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { GridPosition } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";

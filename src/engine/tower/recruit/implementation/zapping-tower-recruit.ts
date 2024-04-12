@@ -4,7 +4,7 @@ import { Tower } from "../tower-recruit";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { ZappingTowerBlueprint } from "../../blueprint/implementation/zapping-tower";
 import { ZappingBattleTower } from "../../battle/implementation/battle-zapping-tower";
 import { BattleSpark } from "../../../projectile/battle/implementation/battle-spark";

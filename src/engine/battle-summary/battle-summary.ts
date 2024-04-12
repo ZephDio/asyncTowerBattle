@@ -5,8 +5,8 @@ import { Game } from "../game";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { ScreenPosition } from "../../shared/position";
 import { Resources } from "../../renderer/resources";
-import { TDrawable } from "../../shared/traits/tdrawable";
-import { TRenderable } from "../../shared/traits/trenderable";
+import { TDrawable } from "../../shared/traits/render/drawable";
+import { TRenderable } from "../../shared/traits/render/renderable";
 
 export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 	constructor(public verdict: "victory" | "defeat") {

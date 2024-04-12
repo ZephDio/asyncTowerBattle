@@ -5,7 +5,7 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleDragon } from "../../battle/implementation/dragon-battle";
 import { DragonBlueprint } from "../../blueprint/implementation/dragon";
 import { Unit } from "../unit-recruit";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 export class Dragon extends Derive(HTDamageDealer, Unit) {
 	speed: number;
 	maxLife: number;

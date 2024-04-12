@@ -1,12 +1,12 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cast, Caster } from "../../../../shared/traits/cast";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { Stats } from "../../../stats/stats";
 import { PathFinder } from "../../../battle/path-finder";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Berseker } from "../../recruit/implementation/berseker-recruit";
-import { Status } from "../../../../shared/traits/status";
+import { Status } from "../../../../shared/traits/engine/status";
 import { TBattleUnit } from "../battle-unit";
 
 export class BattleBerseker extends Derive(TBattleUnit, Caster) {

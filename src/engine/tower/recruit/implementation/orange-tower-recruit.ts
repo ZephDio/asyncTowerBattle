@@ -6,7 +6,7 @@ import { Tower } from "../tower-recruit";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
-import { HTSynergy } from "../../../../shared/traits/synergy";
+import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 export class OrangeTower extends Derive(Tower, HTSynergy) {
 	constructor(
 		public cell: Cell,

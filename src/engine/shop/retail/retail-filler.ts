@@ -16,7 +16,7 @@ import { DragonBlueprint } from "../../units/blueprint/implementation/dragon";
 import { PriestBlueprint } from "../../units/blueprint/implementation/priest";
 import { SoldierBlueprint } from "../../units/blueprint/implementation/soldier";
 import { AnyUnitBlueprint } from "../../units/blueprint/units";
-import { TRecruit } from "../../../shared/traits/recruit";
+import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { ZappingTowerBlueprint } from "../../tower/blueprint/implementation/zapping-tower";
 import { FrostTowerBlueprint } from "../../tower/blueprint/implementation/frost-tower";
 import { BersekerBlueprint } from "../../units/blueprint/implementation/berseker";

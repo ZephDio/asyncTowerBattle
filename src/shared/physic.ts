@@ -1,4 +1,6 @@
-import { Ellipse, HitBox, Rectangle } from "./hitboxes";
+import { HitBox } from "./hitbox/hitboxe";
+import { Ellipse } from "./hitbox/shapes/ellipse";
+import { Rectangle } from "./hitbox/shapes/rectangle";
 import { GridPosition, ScreenPosition } from "./position";
 export interface Recruit {
 	type: string;
@@ -108,15 +110,9 @@ export class Physic {
 		otherHitBox: HitBox,
 	) {
 		for (const [shape, position] of hitbox.hitShapes) {
-			const shapePosition = new GridPosition({
-				x: elementPosition.x + position.x,
-				y: elementPosition.y + position.y,
-			});
+			const shapePosition = elementPosition.add(position as GridPosition) as T;
 			for (const [otherShape, otherShapeRelativePosition] of otherHitBox.hitShapes) {
-				const otherShapePosition = new GridPosition({
-					x: otherElementPosition.x + otherShapeRelativePosition.x,
-					y: otherElementPosition.y + otherShapeRelativePosition.y,
-				});
+				const otherShapePosition = otherElementPosition.add(otherShapeRelativePosition as GridPosition) as T;
 				if (shape instanceof Rectangle && otherShape instanceof Rectangle) {
 					// check for square collision
 					const x1 = shapePosition.x - shape.w / 2;

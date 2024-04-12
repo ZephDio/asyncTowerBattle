@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { GridPosition } from "../../../../shared/position";
-import { Cast, Caster } from "../../../../shared/traits/cast";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Dragon } from "../../recruit/implementation/dragon-recruit";

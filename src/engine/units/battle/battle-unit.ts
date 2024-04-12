@@ -1,12 +1,14 @@
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
-import { HTHitbox, TCollider } from "../../../shared/hitboxes";
-import { HTImageDrawable, TLifeBarRenderable } from "../../../shared/traits/drawable";
+import { TCollider } from "../../../shared/traits/engine/core/TCollider";
+import { HTHitbox } from "../../../shared/traits/engine/core/THitbox";
+import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
+import { TLifeBarRenderable } from "../../../shared/traits/render/huds/life-bar-renderable";
 import { HaveStats } from "../../stats/stats";
 import { GridPosition } from "../../../shared/position";
-import { TSizable } from "../../../shared/traits/sizable";
+import { TSizable } from "../../../shared/traits/engine/core/sizable";
 
 export const TBattleUnit = Subtrait(
-	[HTHitbox, TCollider, HTImageDrawable, TSizable, TLifeBarRenderable, HaveStats],
+	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, HaveStats],
 	(base) => {
 		abstract class IBattleUnit extends base {
 			isAlive() {

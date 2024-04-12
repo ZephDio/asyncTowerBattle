@@ -1,15 +1,15 @@
-import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
-import { TDrawable } from "./tdrawable";
-import { Cell, GridPosition, ScreenPosition } from "../position";
-import { TGrid } from "../../engine/grid/tgrid";
+import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
+import { TDrawable } from "./drawable";
+import { Cell, GridPosition, ScreenPosition } from "../../position";
+import { TGrid } from "../../../engine/grid/tgrid";
+import { TSizable } from "../engine/core/sizable";
 
 export const TRenderable = Subtrait([TDrawable], (base) => {
 	abstract class IRenderable extends base {
 		abstract get position(): ScreenPosition | GridPosition | Cell;
 
 		render(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid>) {
-			/* @ts-ignore */ // TODO: Fix TS error
-			let elementScale = this.sizeScale ? this.sizeScale : 1;
+			let elementScale = implementsTrait(this, TSizable) ? this.sizeScale : 1;
 			if (this.position instanceof Cell) {
 				if (!grid) {
 					throw new Error("Grid is required to render");

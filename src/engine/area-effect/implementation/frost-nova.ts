@@ -1,12 +1,15 @@
 import { Derive } from "@ddd-ts/traits";
-import { Ellipse, HitBox, TCollider, THitbox } from "../../../shared/hitboxes";
+import { HitBox } from "../../../shared/hitbox/hitboxe";
+import { Ellipse } from "../../../shared/hitbox/shapes/ellipse";
+import { TCollider } from "../../../shared/traits/engine/core/TCollider";
+import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { TDrawable } from "../../../shared/traits/tdrawable";
+import { TDrawable } from "../../../shared/traits/render/drawable";
 import { Physic } from "../../../shared/physic";
-import { Status } from "../../../shared/traits/status";
+import { Status } from "../../../shared/traits/engine/status";
 import { Stats } from "../../stats/stats";
-import { TRenderable } from "../../../shared/traits/trenderable";
+import { TRenderable } from "../../../shared/traits/render/renderable";
 
 export class FrostNova extends Derive(
 	TCollider,
@@ -47,12 +50,11 @@ export class FrostNova extends Derive(
 		};
 	}
 
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		context.globalAlpha = 0.18;
 		context.strokeStyle = "cyan";
 		context.fillStyle = "cyan";
 		context.lineWidth = 11;
-		const scale = cellSize / 4.9;
 		const size = this.getCanvasSize(context, this.size.width, this.size.height);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawEllipse(context, size, canvasPosition, scale);

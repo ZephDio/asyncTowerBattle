@@ -1,6 +1,6 @@
 import { Trait } from "@ddd-ts/traits";
-import { Size } from "../size";
-import { ScreenPosition } from "../position";
+import { Size } from "../../size";
+import { ScreenPosition } from "../../position";
 
 export const TDrawable = Trait((base) => {
 	abstract class IDrawable extends base {
