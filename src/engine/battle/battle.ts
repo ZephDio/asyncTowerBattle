@@ -1,4 +1,5 @@
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
+import { RenderableState } from "../../renderer/renderer";
 import { BattleState } from "../../shared/gamestate";
 import { BattleClockHud } from "../../shared/hud-element/battle/battle-clock";
 import { ButtonSpeedHUD } from "../../shared/hud-element/battle/button-speed";
@@ -25,7 +26,7 @@ export class Battle {
 	) {
 		this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy, this.handleBattleOver.bind(this));
 		this.alliedCastleLifeBar = new CastleLifeBar(this.battlefield.alliedArmy.castle, true, this.battlefield.grid);
-		this.enemyCastleLifeBar = new CastleLifeBar(this.battlefield.enemyArmy.castle, false,this.battlefield.grid);
+		this.enemyCastleLifeBar = new CastleLifeBar(this.battlefield.enemyArmy.castle, false, this.battlefield.grid);
 		this.battleClock = new BattleClockHud(this.timer);
 	}
 
@@ -55,7 +56,7 @@ export class Battle {
 		this.gameSpeed = 30 / speed;
 	}
 
-	getDrawables() {
+	getDrawables(): RenderableState {
 		return {
 			renderables: [
 				new ButtonSpeedHUD(1, PercentToReal({ x: 3, y: 95 })),
