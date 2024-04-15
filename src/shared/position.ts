@@ -83,6 +83,7 @@ export class Cell {
 		});
 	}
 
+
 	toHash() {
 		return this.x.toString() + this.y.toString();
 	}

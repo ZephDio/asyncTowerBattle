@@ -5,7 +5,7 @@ import { Resources } from "../../../renderer/resources";
 import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../shared/traits/engine/core/THitbox";
-import { GridPosition } from "../../../shared/position";
+import { Cell, GridPosition } from "../../../shared/position";
 
 export class CastleBlueprint extends Derive(
 	TImageDrawable(Resources.castle.resource.image, Resources.castle.size, 3),
@@ -16,9 +16,20 @@ export class CastleBlueprint extends Derive(
 
 export class CastleRecruitFixture {
 	static get allied() {
-		return new Castle(new CastleBlueprint({}));
+		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 5 }));
 	}
 	static get enemy() {
-		return new Castle(new CastleBlueprint({}));
+		return new Castle(new CastleBlueprint({}),new Cell({ x: 0, y: 5 }));
 	}
+}
+
+export class CastleFactory{
+	static get default(){
+		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 3 }));
+	}
+
+	static get round2(){
+		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 4 }));
+	}
+	
 }

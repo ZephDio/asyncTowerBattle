@@ -12,6 +12,7 @@ import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { PathTile } from "../tile/recruit/tile";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { TRenderable } from "../../shared/traits/render/renderable";
+import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
@@ -19,12 +20,12 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	synergiesEffects: SynergyEffect[] = [];
 
 	constructor(
-		public width: number = 13,
-		public height: number = 6,
-		public position: ScreenPosition = PercentToReal({ x: 3, y: 2 }),
-		public cellSize = STANDARD_CELL_SIZE,
+		width: number = 13,
+		height: number = 6,
+		public screenPosition: ScreenPosition = PercentToReal({ x: 35, y: 28 }),
+		cellSize = STANDARD_CELL_SIZE,
 	) {
-		super({});
+		super({ width , height , cellSize , position: screenPosition });
 	}
 
 	get castle() {
@@ -48,7 +49,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 
 	getEnemyDoorCell() {
-		return new Cell({ x: 0, y: this.height - 1 });
+		return new Cell({ x: this.width - 1, y: this.height - 1 });
 	}
 	setOveredTile(cell: Cell | undefined) {
 		if (cell) {
@@ -85,10 +86,25 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return [...this.tiles.values()];
 	}
 
+	getCastleCell(){
+		return new Cell({ x: 0, y: this.height - 1});
+	}
+
 	clearSynergiesTiles() {
 		this.synergiesEffects = [];
 	}
 	static posToString(cell: Cell) {
 		return `${cell.x}|${cell.y}`;
+	}
+
+	roundTwo(){
+		this.width = 8
+		this.height = 5
+		this.cellSize = 5.5
+		this.translate();
+		[
+			new BasicPathTile(new Cell({ x: 6, y: 4 })),
+			new BasicPathTile(new Cell({ x: 7, y: 4 })),
+		].forEach((pathTile) => this.setElement(pathTile));
 	}
 }

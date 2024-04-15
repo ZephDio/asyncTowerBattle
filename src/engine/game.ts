@@ -1,23 +1,27 @@
 import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
-import { ArmyFixture } from "./army/army-fixtures";
+import { ArmyFactory } from "./army/army-fixtures";
 import { EconomyHooks, ShopPhase } from "./shop/shop";
 import { LocalMatchMaker } from "./match-maker/local-match-maker";
 import { MatchMaker } from "./match-maker/match-maker";
+import { RoundsTracker } from "./rounds/tracker";
 
 export class Game {
-	army = ArmyFixture.allied;
+	//army = ArmyFixture.allied;
+	army = ArmyFactory.default
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
 	shop: null | ShopPhase = null;
-	round = 0;
+	rounds = new RoundsTracker(this.army)
 	matchMaker: MatchMaker = new LocalMatchMaker();
 	economy = {
-		gold: 0,
+		gold: 70,
 	};
 
-	constructor() {}
+	constructor() {
+
+	}
 
 	async getState(): Promise<GameState> {
 		if (this.battle) return this.getBattleState();
@@ -47,7 +51,7 @@ export class Game {
 		const lastBattleState = this.getBattleState();
 		this.startBattleSummary(lastBattleState, battleVerdict);
 		this.battle = null;
-		this.round++;
+		this.rounds.update()
 	}
 
 	handleSummaryQuit() {
@@ -76,7 +80,7 @@ export class Game {
 	}
 
 	startBattle() {
-		this.battle = new Battle(this.army, this.matchMaker.getOpponent(this.round), this.handleEndBattle.bind(this));
+		this.battle = new Battle(this.army, this.matchMaker.getOpponent(this.rounds.round), this.handleEndBattle.bind(this));
 		this.battle.start();
 	}
 

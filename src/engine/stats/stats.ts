@@ -35,7 +35,7 @@ export const HaveStats = Trait((base) => {
 });
 
 export class Stats {
-	private _health: number;
+	public _health: number;
 	private _maxHealth: number;
 	private _attack: number;
 	private _movementSpeed: number;

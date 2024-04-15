@@ -29,6 +29,8 @@ export class BattleBerseker extends Derive(TBattleUnit, Caster) {
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
+
+
 	canMove() {
 		return true;
 	}
@@ -37,6 +39,7 @@ export class BattleBerseker extends Derive(TBattleUnit, Caster) {
 		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
 		this.castInProgress = null;
 		this.hooks.removeUnit(this);
+		this.stats._health = 0
 	}
 	casts() {
 		if (this.pathFinder.isArrived) {

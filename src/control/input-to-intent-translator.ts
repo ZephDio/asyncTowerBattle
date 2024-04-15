@@ -43,7 +43,6 @@ export class InputToIntentTranslator {
 			const state = this.game.battle.getState();
 			if (state.hudElements) {
 				for (const hudElement of state.hudElements) {
-					console.log(hudElement);
 					if (hudElement instanceof ButtonSpeedHUD && hudElement.contains(position)) {
 						return this.game.battle.changeSpeed(hudElement.speed);
 					}

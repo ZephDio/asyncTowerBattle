@@ -9,18 +9,16 @@ import { TokenHooks } from "../../shop/holder/holder";
 
 export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive(TRecruit) {
 	type: string = "castle";
-	cell: Cell;
 	maxLife: number;
 
-	constructor(castle: TB) {
+	constructor(castle: TB,public cell : Cell) {
 		super({ imageDrawable: castle, hitboxHolder: castle });
-		this.cell = new Cell({ x: 12, y: 5 });
 		this.maxLife = castle.maxLife;
 	}
 
 	clone() {
 		// TODO
-		return new Castle(new CastleBlueprint({}));
+		return new Castle(new CastleBlueprint({}), this.cell);
 	}
 
 	get position() {

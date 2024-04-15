@@ -1,9 +1,9 @@
 import { Cell } from "../../shared/position";
 import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-recruit-fixtures";
-import { CastleRecruitFixture } from "../castle/blueprint/castle";
+import { CastleFactory, CastleRecruitFixture } from "../castle/blueprint/castle";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
-import { PathFixture } from "../path/army/path-fixtures";
+import { PathFactory, PathFixture } from "../path/army/path-fixtures";
 import { TowerBlueprintFixtures } from "../tower/blueprint/tower-fixtures";
 import { AnyTower } from "../tower/recruit/tower-recruit";
 import { TowerBuilder, TowerFixtures } from "../tower/recruit/tower-recruit-fixtures";
@@ -62,6 +62,18 @@ export class ArmyFixture {
 		const barracks = [BarrackRecruitFixtures.basicWithDragon(), BarrackRecruitFixtures.waveWithSoldier()];
 		[castle, ...towers, ...barracks, ...tiles].map((e) => grid.setElement(e));
 		return new Army(grid, new Inventory());
+	}
+}
+
+export class ArmyFactory {
+	static get default(){
+		const grid = new ArmyGrid( 6, 4 , undefined, 7);
+		const castle = CastleFactory.default;
+		const tiles = PathFactory.default;
+		const unitInventory = new Inventory();
+		[castle, ...tiles].map((e) => grid.setElement(e));
+		//return new Army(castle, towers, path, barracks, grid, unitInventory);
+		return new Army(grid, unitInventory);
 	}
 }
 
