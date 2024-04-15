@@ -116,7 +116,7 @@ export class InputToIntentTranslator {
 					}
 				}
 				if (grid instanceof ArmyGrid) {
-					for (const gridElement of this.game.shop.army.grid.getRecruit()) {
+					for (const gridElement of this.game.shop.army.grid.getRecruits()) {
 						const position = grid.screenToGridPosition(screenPosition);
 						if (gridElement.contains(position, this.game.shop.army.grid)) {
 							return this.game.shop.setHoldFromArmyRecruit(gridElement, screenPosition, grid);
