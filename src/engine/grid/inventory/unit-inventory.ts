@@ -9,19 +9,18 @@ import { HoverEffect } from "../grid-effects/hover-effect";
 import { AnyRecruit } from "../../../shared/traits/engine/recruit";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 
-const inventoryPosition = new ScreenPosition(PercentToReal({ x: 78, y: 55 }));
 
 export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
 	overEffect: HoverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 	constructor(
-		public position: ScreenPosition = inventoryPosition,
-		public width: number = 4,
-		public height: number = 5,
-		public cellSize: number = STANDARD_CELL_SIZE,
+		screenPosition : ScreenPosition = PercentToReal({ x: 85, y: 75 }),
+		width: number = 4,
+		height: number = 5,
+		cellSize: number = STANDARD_CELL_SIZE,
 	) {
-		super({});
+		super({ cellSize, height, width , position: screenPosition});
 	}
 
 	getNextFreeCell() {

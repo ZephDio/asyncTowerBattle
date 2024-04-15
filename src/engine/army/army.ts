@@ -52,6 +52,7 @@ export class Army {
 		return this.grid.barracks;
 	}
 
+
 	get pathTiles() {
 		return this.grid.pathTiles;
 	}

@@ -52,7 +52,6 @@ export class HealWave extends Derive(
 		context.lineWidth = 11;
 		const size = this.getCanvasSize(context, this.size.width, this.size.height);
 		const canvasPosition = this.getCanvasPosition(context, position);
-		console.log(context.strokeStyle);
 		this.drawEllipse(context, size, canvasPosition, scale);
 	}
 }

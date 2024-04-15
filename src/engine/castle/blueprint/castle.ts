@@ -22,3 +22,14 @@ export class CastleRecruitFixture {
 		return new Castle(new CastleBlueprint({}),new Cell({ x: 0, y: 5 }));
 	}
 }
+
+export class CastleFactory{
+	static get default(){
+		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 3 }));
+	}
+
+	static get round2(){
+		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 4 }));
+	}
+	
+}

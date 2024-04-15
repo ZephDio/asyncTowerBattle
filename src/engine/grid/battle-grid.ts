@@ -1,15 +1,16 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cell, GridPosition, ScreenPosition } from "../../shared/position";
+import { Cell, GridPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { BattleArmy } from "../army/battle/battle-army";
 import { BattleCastle } from "../castle/battle/battle-castle";
 import { AnyBattleTower } from "../tower/battle/battle-tower";
 import { ArmyGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
-import { TGrid } from "./tgrid";
+import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { TRenderable } from "../../shared/traits/render/renderable";
+import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 
 export type BattleGridElement = AnyBattleTower | AnyBattleTile | BattleCastle;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
@@ -19,19 +20,19 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	constructor(
 		public gridAllied: ArmyGrid,
 		public gridEnemy: ArmyGrid,
-		public width: number,
-		public height: number,
-		public cellSize = 5,
-		public position = new ScreenPosition({ x: 15, y: 0.5 }),
+		width: number,
+		height: number,
+		cellSize = 5,
+		screenPosition = PercentToReal({ x: 50, y: 50}),
 	) {
-		super({});
+		super({ width , height, cellSize, position: screenPosition});
 	}
 
 	static fuse(gridAllied: ArmyGrid, gridEnemy: ArmyGrid): BattleGrid {
 		if (gridAllied.width !== gridEnemy.width || gridAllied.height !== gridEnemy.height) {
 			throw new Error("cannot fuse grid with different grid size");
 		}
-		const battleGrid = new BattleGrid(gridAllied, gridEnemy, gridAllied.width, gridAllied.height + gridEnemy.height);
+		const battleGrid = new BattleGrid(gridAllied, gridEnemy, gridAllied.width, gridAllied.height + gridEnemy.height, gridAllied.cellSize);
 		return battleGrid;
 	}
 
@@ -101,10 +102,10 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	getBoundaries() {
 		return {
-			minX: this.position.x,
-			minY: this.position.y,
-			maxX: this.position.x + this.width * this.cellSize,
-			maxY: this.position.y + this.height * this.cellSize,
+			minX: 0,
+			minY: 0,
+			maxX: this.width * STANDARD_CELL_SIZE,
+			maxY: this.height * STANDARD_CELL_SIZE,
 		};
 	}
 

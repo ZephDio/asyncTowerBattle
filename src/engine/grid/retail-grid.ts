@@ -14,12 +14,12 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	synergiesEffects: SynergyEffect[] = [];
 
 	constructor(
-		public position = new ScreenPosition(PercentToReal({ x: 7, y: 55 })),
-		public width: number = 11,
-		public height: number = 5,
-		public cellSize: number = 4,
+		screenPosition = new ScreenPosition(PercentToReal({ x: 35, y: 72 })),
+		width: number = 11,
+		height: number = 5,
+		cellSize: number = 4,
 	) {
-		super({});
+		super({ width , height , cellSize, position: screenPosition });
 	}
 
 	getBuyables() {

@@ -10,13 +10,28 @@ export const STANDARD_CELL_SIZE = 4.9;
 
 export const TGrid = Trait((base) => {
 	abstract class IGrid extends base {
+		public centerPosition: ScreenPosition;
+		public bottomLeftCornerPosition: ScreenPosition;
+		public width: number;
+		public height: number;
+		public cellSize: number;
+		constructor(props : { position : ScreenPosition, width : number, height : number, cellSize : number }){
+			super(props)
+			this.centerPosition = props.position
+			this.width = props.width
+			this.height = props.height
+			this.cellSize = props.cellSize
+			this.updateCornerPosition()
+		}
 		abstract tiles: Map<string, ImplementsTrait<typeof GridElement>>;
 		abstract overEffect: HoverEffect | undefined;
 		abstract synergiesEffects: SynergyEffect[];
-		public abstract width: number;
-		public abstract height: number;
-		public abstract position: ScreenPosition;
-		public abstract cellSize: number;
+
+
+		get position(){
+			return this.bottomLeftCornerPosition
+		}
+
 		cellToGrid(cell: Cell) {
 			return new GridPosition({
 				x: (cell.x + 0.5) * STANDARD_CELL_SIZE,
@@ -63,6 +78,23 @@ export const TGrid = Trait((base) => {
 		}
 		getDrawables(): ImplementsTrait<typeof TRenderable>[] {
 			return [...this.tiles.values(), ...this.synergiesEffects, ...(this.overEffect ? [this.overEffect] : [])];
+		}
+
+		translate(){
+			const translated = new Map()
+			this.tiles.forEach((gridElement) => {
+				gridElement.cell = gridElement.cell.up()
+				translated.set(ArmyGrid.posToString(gridElement.cell),gridElement)
+				this.tiles = translated
+			})
+			this.updateCornerPosition()
+		}
+
+		updateCornerPosition(){
+			this.bottomLeftCornerPosition = new ScreenPosition({
+				x : this.centerPosition.x - (( this.width * this.cellSize ) / 2),
+				y : this.centerPosition.y - (( this.height * this.cellSize) / 2)
+			})
 		}
 	}
 	return IGrid;
