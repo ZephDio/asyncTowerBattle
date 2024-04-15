@@ -48,7 +48,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 
 	getEnemyDoorCell() {
-		return new Cell({ x: 0, y: this.height - 1 });
+		return new Cell({ x: this.width - 1, y: this.height - 1 });
 	}
 	setOveredTile(cell: Cell | undefined) {
 		if (cell) {
@@ -83,6 +83,10 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	getRecruit() {
 		return [...this.tiles.values()];
+	}
+
+	getCastleCell(){
+		return new Cell({ x: 0, y: this.height - 1});
 	}
 
 	clearSynergiesTiles() {

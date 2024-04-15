@@ -1,16 +1,24 @@
-import { Derive } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { TDrawable } from "../../traits/render/drawable";
 import { ScreenPosition } from "../../position";
 import { BattleCastle } from "../../../engine/castle/battle/battle-castle";
 import { TRenderable } from "../../traits/render/renderable";
+import { TGrid } from "../../../engine/grid/tgrid";
 
 export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 	drawPriority = 3;
+	position : ScreenPosition
 	constructor(
 		private castle: BattleCastle,
-		public position: ScreenPosition,
+		allied: boolean,
+		grid : ImplementsTrait<typeof TGrid>
 	) {
 		super({});
+		if(allied) {
+			this.position = grid.gridToScreenPosition(castle.position).add(new ScreenPosition({x: -8, y: 0}));
+			return
+		}
+		this.position = grid.gridToScreenPosition(castle.position).add(new ScreenPosition({x: 8, y: 0}));
 	}
 
 	override draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {

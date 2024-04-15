@@ -5,7 +5,6 @@ import { SlowingPathTile } from "../../tile/recruit/implementation/slowing-tile"
 export class PathFixture {
 	static get default() {
 		return [
-			new BasicPathTile(new Cell({ x: 0, y: 5 })),
 			new BasicPathTile(new Cell({ x: 0, y: 4 })),
 			new SlowingPathTile(new Cell({ x: 0, y: 3 })),
 			new SlowingPathTile(new Cell({ x: 1, y: 3 })),
@@ -25,6 +24,7 @@ export class PathFixture {
 			new BasicPathTile(new Cell({ x: 11, y: 3 })),
 			new BasicPathTile(new Cell({ x: 12, y: 3 })),
 			new BasicPathTile(new Cell({ x: 12, y: 4 })),
+			new BasicPathTile(new Cell({ x: 12, y: 5 })),
 		];
 	}
 }

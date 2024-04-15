@@ -24,8 +24,8 @@ export class Battle {
 		public onBattleOver: Game["handleEndBattle"],
 	) {
 		this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy, this.handleBattleOver.bind(this));
-		this.alliedCastleLifeBar = new CastleLifeBar(this.battlefield.alliedArmy.castle, PercentToReal({ x: 85, y: 45 }));
-		this.enemyCastleLifeBar = new CastleLifeBar(this.battlefield.enemyArmy.castle, PercentToReal({ x: 9, y: 55 }));
+		this.alliedCastleLifeBar = new CastleLifeBar(this.battlefield.alliedArmy.castle, true, this.battlefield.grid);
+		this.enemyCastleLifeBar = new CastleLifeBar(this.battlefield.enemyArmy.castle, false,this.battlefield.grid);
 		this.battleClock = new BattleClockHud(this.timer);
 	}
 
