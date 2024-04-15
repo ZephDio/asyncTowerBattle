@@ -15,21 +15,20 @@ export const TGrid = Trait((base) => {
 		public width: number;
 		public height: number;
 		public cellSize: number;
-		constructor(props : { position : ScreenPosition, width : number, height : number, cellSize : number }){
-			super(props)
-			this.centerPosition = props.position
-			this.width = props.width
-			this.height = props.height
-			this.cellSize = props.cellSize
-			this.updateCornerPosition()
+		constructor(props: { position: ScreenPosition; width: number; height: number; cellSize: number }) {
+			super(props);
+			this.centerPosition = props.position;
+			this.width = props.width;
+			this.height = props.height;
+			this.cellSize = props.cellSize;
+			this.updateCornerPosition();
 		}
 		abstract tiles: Map<string, ImplementsTrait<typeof GridElement>>;
 		abstract overEffect: HoverEffect | undefined;
 		abstract synergiesEffects: SynergyEffect[];
 
-
-		get position(){
-			return this.bottomLeftCornerPosition
+		get position() {
+			return this.bottomLeftCornerPosition;
 		}
 
 		cellToGrid(cell: Cell) {
@@ -80,21 +79,21 @@ export const TGrid = Trait((base) => {
 			return [...this.tiles.values(), ...this.synergiesEffects, ...(this.overEffect ? [this.overEffect] : [])];
 		}
 
-		translate(){
-			const translated = new Map()
+		translate() {
+			const translated = new Map();
 			this.tiles.forEach((gridElement) => {
-				gridElement.cell = gridElement.cell.up()
-				translated.set(ArmyGrid.posToString(gridElement.cell),gridElement)
-				this.tiles = translated
-			})
-			this.updateCornerPosition()
+				gridElement.cell = gridElement.cell.up();
+				translated.set(ArmyGrid.posToString(gridElement.cell), gridElement);
+				this.tiles = translated;
+			});
+			this.updateCornerPosition();
 		}
 
-		updateCornerPosition(){
+		updateCornerPosition() {
 			this.bottomLeftCornerPosition = new ScreenPosition({
-				x : this.centerPosition.x - (( this.width * this.cellSize ) / 2),
-				y : this.centerPosition.y - (( this.height * this.cellSize) / 2)
-			})
+				x: this.centerPosition.x - (this.width * this.cellSize) / 2,
+				y: this.centerPosition.y - (this.height * this.cellSize) / 2,
+			});
 		}
 	}
 	return IGrid;

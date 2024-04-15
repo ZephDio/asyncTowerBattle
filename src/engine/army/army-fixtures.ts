@@ -1,6 +1,7 @@
 import { Cell } from "../../shared/position";
 import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-recruit-fixtures";
 import { CastleFactory, CastleRecruitFixture } from "../castle/blueprint/castle";
+import { Rock } from "../environment/rock";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
@@ -46,7 +47,8 @@ export class ArmyFixture {
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
-		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
+		const environment = [new Rock(new Cell({ x: 0, y: 0 }))];
+		[castle, ...towers, ...tiles, ...barracks, ...environment].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
 		return new Army(grid, unitInventory);
 	}
@@ -66,8 +68,8 @@ export class ArmyFixture {
 }
 
 export class ArmyFactory {
-	static get default(){
-		const grid = new ArmyGrid( 6, 4 , undefined, 7);
+	static get default() {
+		const grid = new ArmyGrid(6, 4, undefined, 7);
 		const castle = CastleFactory.default;
 		const tiles = PathFactory.default;
 		const unitInventory = new Inventory();

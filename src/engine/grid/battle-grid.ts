@@ -1,4 +1,4 @@
-import { Derive } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { BattleArmy } from "../army/battle/battle-army";
@@ -11,8 +11,13 @@ import { SynergyEffect } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { TRenderable } from "../../shared/traits/render/renderable";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
+import { TEnvironmentElement } from "../environment/environment";
 
-export type BattleGridElement = AnyBattleTower | AnyBattleTile | BattleCastle;
+export type BattleGridElement =
+	| AnyBattleTower
+	| AnyBattleTile
+	| BattleCastle
+	| ImplementsTrait<typeof TEnvironmentElement>;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();
 	overEffect: HoverEffect | undefined = undefined;
@@ -23,20 +28,30 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		width: number,
 		height: number,
 		cellSize = 5,
-		screenPosition = PercentToReal({ x: 50, y: 50}),
+		screenPosition = PercentToReal({ x: 50, y: 50 }),
 	) {
-		super({ width , height, cellSize, position: screenPosition});
+		super({ width, height, cellSize, position: screenPosition });
 	}
 
 	static fuse(gridAllied: ArmyGrid, gridEnemy: ArmyGrid): BattleGrid {
 		if (gridAllied.width !== gridEnemy.width || gridAllied.height !== gridEnemy.height) {
 			throw new Error("cannot fuse grid with different grid size");
 		}
-		const battleGrid = new BattleGrid(gridAllied, gridEnemy, gridAllied.width, gridAllied.height + gridEnemy.height, gridAllied.cellSize);
+		const battleGrid = new BattleGrid(
+			gridAllied,
+			gridEnemy,
+			gridAllied.width,
+			gridAllied.height + gridEnemy.height,
+			gridAllied.cellSize,
+		);
 		return battleGrid;
 	}
 
-	initElements(alliedArmy: BattleArmy, enemyArmy: BattleArmy) {
+	initElements(
+		alliedArmy: BattleArmy,
+		enemyArmy: BattleArmy,
+		environmentElements: ImplementsTrait<typeof TEnvironmentElement>[],
+	) {
 		const gridElements = [
 			...alliedArmy.towers,
 			alliedArmy.castle,
@@ -46,6 +61,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			enemyArmy.castle,
 			...enemyArmy.tiles,
 			...enemyArmy.barracks,
+			...environmentElements,
 		];
 		for (const gridElement of gridElements) {
 			this.setElement(gridElement);

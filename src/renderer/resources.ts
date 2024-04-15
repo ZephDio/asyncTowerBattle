@@ -135,6 +135,26 @@ export const Resources = {
 			image: createImage("/resources/path/slowing.png"),
 		},
 	},
+	environment: {
+		rock: {
+			resource: {
+				image: createImage("/resources/environment/rock.png"),
+				shape: "ellipse",
+				color: "#3b3b3b",
+			},
+			size: {
+				width: 4.9,
+				height: 4.9,
+			},
+		},
+		// tree: {
+		// 	resource: {
+		// 		image: createImage("/resources/environment/tree.png"),
+		// 		shape: "ellipse",
+		// 		color: "#3b3b3b",
+		// 	},
+		// },
+	},
 	castle: {
 		size: {
 			width: 7,

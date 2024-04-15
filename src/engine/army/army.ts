@@ -57,6 +57,10 @@ export class Army {
 		return this.grid.pathTiles;
 	}
 
+	get environment() {
+		return this.grid.environment;
+	}
+
 	get path() {
 		const from = this.grid.getEnemyDoorCell();
 		const to = this.castle.cell.down();

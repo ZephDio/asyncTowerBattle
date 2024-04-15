@@ -68,7 +68,7 @@ export class Battlefield {
 			alliedBattleTiles,
 		);
 		enemyBattleArmy.init(enemyBattleCastle, enemyBattlePath, enemyBattleTowers, enemyBattleBarracks, enemyBattleTiles);
-		grid.initElements(alliedBattleArmy, enemyBattleArmy);
+		grid.initElements(alliedBattleArmy, enemyBattleArmy, [...alliedArmy.environment, ...enemyArmy.environment]);
 		return {
 			alliedBattleArmy: alliedBattleArmy,
 			enemyBattleArmy: enemyBattleArmy,
@@ -197,5 +197,9 @@ export class Battlefield {
 
 	get areaEffects() {
 		return [...this.alliedArmy.areaEffects.keys(), ...this.enemyArmy.areaEffects.keys()];
+	}
+
+	get environment() {
+		return this.grid;
 	}
 }
