@@ -14,7 +14,7 @@ export class BattleClockHud extends Derive(TRenderable, TDrawable) {
 	}
 
 	get deciSeconds() {
-		return Math.floor(this.timer.clock * 0.3) % 10;
+		return Math.floor(this.timer.clock * 0.33) % 10;
 	}
 
 	get realDeciSeconds() {
