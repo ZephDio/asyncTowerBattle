@@ -73,7 +73,8 @@ export class ArmyFactory {
 		const castle = CastleFactory.default;
 		const tiles = PathFactory.default;
 		const unitInventory = new Inventory();
-		[castle, ...tiles].map((e) => grid.setElement(e));
+		const environments = [new Rock(new Cell({ x: 1, y: 2 })), new Rock(new Cell({ x: 3, y: 3 }))];
+		[castle, ...environments, ...tiles].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
 		return new Army(grid, unitInventory);
 	}
