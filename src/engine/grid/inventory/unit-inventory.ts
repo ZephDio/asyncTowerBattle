@@ -11,7 +11,7 @@ import { TRenderable } from "../../../shared/traits/render/renderable";
 
 export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
-	overEffect: HoverEffect | undefined = undefined;
+	overEffect: HoverEffect | null = null;
 	synergiesEffects: SynergyEffect[] = [];
 	constructor(
 		screenPosition: ScreenPosition = PercentToReal({ x: 85, y: 25 }),
@@ -40,12 +40,12 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 		this.setElement(recruit);
 	}
 
-	setOveredTile(cell: Cell | undefined) {
+	setOveredTile(cell: Cell | null) {
 		if (cell) {
 			this.overEffect = new HoverEffect(cell, this);
 			return;
 		}
-		this.overEffect = undefined;
+		this.overEffect = null;
 	}
 
 	getRecruits() {

@@ -24,7 +24,7 @@ export const TGrid = Trait((base) => {
 			this.updateCornerPosition();
 		}
 		abstract tiles: Map<string, ImplementsTrait<typeof GridElement>>;
-		abstract overEffect: HoverEffect | undefined;
+		abstract overEffect: HoverEffect | null;
 		abstract synergiesEffects: SynergyEffect[];
 
 		get position() {

@@ -20,7 +20,7 @@ export type BattleGridElement =
 	| ImplementsTrait<typeof TEnvironmentElement>;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();
-	overEffect: HoverEffect | undefined = undefined;
+	overEffect: HoverEffect | null = null;
 	synergiesEffects: SynergyEffect[] = [];
 	constructor(
 		public gridAllied: ArmyGrid,

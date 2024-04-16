@@ -10,12 +10,14 @@ import { HaveStats } from "../../../stats/stats";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
+import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 
 export class GreenBattleTower extends Derive(
 	HTHitbox,
 	TCasterHudRenderable,
 	Caster,
 	HTImageDrawable,
+	HTDescriptor,
 	GridElement,
 	HaveStats,
 ) {
@@ -34,6 +36,7 @@ export class GreenBattleTower extends Derive(
 			castSpeed: recruit.attackSpeed,
 			onDeath: () => {},
 			hitboxHolder: recruit,
+			descriptor: recruit,
 		});
 	}
 

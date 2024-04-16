@@ -23,6 +23,7 @@ export class Battle {
 		public alliedArmy: Army,
 		public enemyArmy: Army,
 		public onBattleOver: Game["handleEndBattle"],
+		public setDescriptionHud: Game["setDescriptionHud"],
 	) {
 		this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy, this.handleBattleOver.bind(this));
 		this.alliedCastleLifeBar = new CastleLifeBar(this.battlefield.alliedArmy.castle, true, this.battlefield.grid);
