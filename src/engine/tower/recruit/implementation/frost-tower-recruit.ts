@@ -11,7 +11,6 @@ import { FrostBattleTower } from "../../battle/implementation/frost-battle-tower
 import { FrostTowerBlueprint } from "../../blueprint/implementation/frost-tower";
 import { BattleFrostSpike } from "../../../projectile/battle/implementation/battle-frost-spike";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
-
 export class FrostTower extends Derive(HTDamageDealer, Tower) {
 	attackSpeed = 1.2;
 
@@ -19,7 +18,7 @@ export class FrostTower extends Derive(HTDamageDealer, Tower) {
 		public cell: Cell,
 		public tower = new FrostTowerBlueprint({}),
 	) {
-		super({ imageDrawable: tower, damageDealer: tower, hitboxHolder: tower });
+		super({ imageDrawable: tower, damageDealer: tower, hitboxHolder: tower, descriptor: tower });
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {

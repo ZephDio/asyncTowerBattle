@@ -16,7 +16,7 @@ export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 		public cell: Cell,
 		public tower: YellowTowerBlueprint = new YellowTowerBlueprint({}),
 	) {
-		super({ synergy: tower, damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
+		super({ synergy: tower, damageDealer: tower, imageDrawable: tower, hitboxHolder: tower, descriptor: tower });
 	}
 
 	getAreaEffect(hooks: BattleArmyHooks, position: GridPosition, damage: number) {

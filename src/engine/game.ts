@@ -1,27 +1,31 @@
 import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
-import { ArmyFactory } from "./army/army-fixtures";
+import { ArmyFixture } from "./army/army-fixtures";
 import { EconomyHooks, ShopPhase } from "./shop/shop";
 import { LocalMatchMaker } from "./match-maker/local-match-maker";
 import { MatchMaker } from "./match-maker/match-maker";
 import { RoundsTracker } from "./rounds/tracker";
+import { DescriptionHud, TDescriptor } from "../shared/traits/render/huds/item-descriptor";
+import { RenderableState } from "../renderer/renderer";
+import { ImplementsTrait } from "@ddd-ts/traits";
+import { TRenderable } from "../shared/traits/render/renderable";
 
 export class Game {
 	//army = ArmyFixture.allied;
-	army = ArmyFactory.default
+	army = ArmyFixture.pacifist;
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
 	shop: null | ShopPhase = null;
-	rounds = new RoundsTracker(this.army)
+	rounds = new RoundsTracker(this.army);
+
+	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new LocalMatchMaker();
 	economy = {
 		gold: 70,
 	};
 
-	constructor() {
-
-	}
+	constructor() {}
 
 	async getState(): Promise<GameState> {
 		if (this.battle) return this.getBattleState();
@@ -51,7 +55,7 @@ export class Game {
 		const lastBattleState = this.getBattleState();
 		this.startBattleSummary(lastBattleState, battleVerdict);
 		this.battle = null;
-		this.rounds.update()
+		this.rounds.update();
 	}
 
 	handleSummaryQuit() {
@@ -65,9 +69,19 @@ export class Game {
 	}
 
 	getRenderState() {
-		if (this.battle) return this.battle.getDrawables();
-		if (this.battleSummary) return this.battleSummary.getDrawables();
-		return this.shop!.getDrawables();
+		let state = null as null | RenderableState;
+		if (this.battle) {
+			state = this.battle.getDrawables();
+		}
+		if (this.battleSummary) {
+			state = this.battleSummary.getDrawables();
+		}
+		if (this.shop) {
+			state = this.shop!.getDrawables();
+		}
+		if (!state) throw new Error("No state found");
+		if (this.descriptionHud) state!.renderables.push(this.descriptionHud);
+		return state;
 	}
 
 	startShop() {
@@ -80,7 +94,11 @@ export class Game {
 	}
 
 	startBattle() {
-		this.battle = new Battle(this.army, this.matchMaker.getOpponent(this.rounds.round), this.handleEndBattle.bind(this));
+		this.battle = new Battle(
+			this.army,
+			this.matchMaker.getOpponent(this.rounds.round),
+			this.handleEndBattle.bind(this),
+		);
 		this.battle.start();
 	}
 

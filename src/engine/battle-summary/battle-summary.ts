@@ -7,6 +7,7 @@ import { ScreenPosition } from "../../shared/position";
 import { Resources } from "../../renderer/resources";
 import { TDrawable } from "../../shared/traits/render/drawable";
 import { TRenderable } from "../../shared/traits/render/renderable";
+import { RenderableState } from "../../renderer/renderer";
 
 export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 	constructor(public verdict: "victory" | "defeat") {
@@ -48,7 +49,7 @@ export class BattleSummary {
 		return summaryState;
 	}
 
-	getDrawables() {
+	getDrawables(): RenderableState {
 		return {
 			renderables: [this.battleVerdict, ...this.lastBattleState.hudElements],
 			grids: [

@@ -14,7 +14,7 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	overEffect: HoverEffect | undefined = undefined;
 	synergiesEffects: SynergyEffect[] = [];
 	constructor(
-		screenPosition: ScreenPosition = PercentToReal({ x: 85, y: 75 }),
+		screenPosition: ScreenPosition = PercentToReal({ x: 85, y: 25 }),
 		width: number = 4,
 		height: number = 5,
 		cellSize: number = STANDARD_CELL_SIZE,

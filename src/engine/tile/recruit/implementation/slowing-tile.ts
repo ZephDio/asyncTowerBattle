@@ -12,7 +12,7 @@ export class SlowingPathTile extends Derive(TRecruit, PathTile) {
 		public cell: Cell,
 		public tile: SlowingTileBlueprint = new SlowingTileBlueprint({}),
 	) {
-		super({ hitboxHolder: tile, imageDrawable: tile });
+		super({ hitboxHolder: tile, imageDrawable: tile, descriptor: tile });
 	}
 
 	// toBattle(cell: Cell, position: Position, hooks: BattleArmyHooks) {

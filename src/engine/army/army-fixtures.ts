@@ -7,24 +7,26 @@ import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
 import { TowerBlueprintFixtures } from "../tower/blueprint/tower-fixtures";
 import { AnyTower } from "../tower/recruit/tower-recruit";
-import { TowerBuilder, TowerFixtures } from "../tower/recruit/tower-recruit-fixtures";
+import { TowerBuilder } from "../tower/recruit/tower-recruit-fixtures";
 import { UnitRecruitFixture } from "../units/recruit/unit-recruit-fixtures";
 import { Army } from "./army";
 
 export class ArmyFixture {
 	static get pacifist() {
-		const grid = new ArmyGrid();
-		const castle = CastleRecruitFixture.allied;
+		const grid = new ArmyGrid(6, 4, undefined, 7);
+		const castle = CastleFactory.default;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
-			TowerFixtures.centerTower,
-			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen(TowerBlueprintFixtures.green),
+			//TowerFixtures.centerTower,
 			new TowerBuilder()
-				.celled(new Cell({ x: 7, y: 4 }))
-				.buildFrost(),
+				.celled(new Cell({ x: 3, y: 3 }))
+				.buildGreen(TowerBlueprintFixtures.green),
+			// new TowerBuilder()
+			// 	.celled(new Cell({ x: 7, y: 4 }))
+			// 	.buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];
-		const tiles = PathFixture.default;
+		const tiles = PathFactory.default;
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));

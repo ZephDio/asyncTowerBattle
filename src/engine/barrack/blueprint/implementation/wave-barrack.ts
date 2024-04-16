@@ -7,13 +7,19 @@ import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { WaveBarrack } from "../../recruit/implementation/wave-barrack-recruit";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
+import { BarrackDescription, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 
 export class WaveBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 10),
+	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.barracks.wave.resource.image, Resources.barracks.wave.size, 2),
 ) {
 	productionSpeed: number = 3.5;
+
+	description = new BarrackDescription("Wave Barrack", ["A barrack that", "spawn unit 3 by 3"], {
+		"production speed": "3.5",
+	});
 
 	toRecruit(cell: Cell) {
 		return new WaveBarrack(cell.clone(), this);

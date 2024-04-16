@@ -11,8 +11,11 @@ export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive
 	type: string = "castle";
 	maxLife: number;
 
-	constructor(castle: TB,public cell : Cell) {
-		super({ imageDrawable: castle, hitboxHolder: castle });
+	constructor(
+		castle: TB,
+		public cell: Cell,
+	) {
+		super({ imageDrawable: castle, hitboxHolder: castle, descriptor: castle });
 		this.maxLife = castle.maxLife;
 	}
 
