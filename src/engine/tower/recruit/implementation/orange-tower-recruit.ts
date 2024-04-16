@@ -12,7 +12,7 @@ export class OrangeTower extends Derive(Tower, HTSynergy) {
 		public cell: Cell,
 		public tower: OrangeTowerBlueprint = new OrangeTowerBlueprint({}),
 	) {
-		super({ synergy: tower, imageDrawable: tower, hitboxHolder: tower });
+		super({ synergy: tower, imageDrawable: tower, hitboxHolder: tower, descriptor: tower });
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {

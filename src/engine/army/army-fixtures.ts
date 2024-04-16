@@ -7,7 +7,7 @@ import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
 import { TowerBlueprintFixtures } from "../tower/blueprint/tower-fixtures";
 import { AnyTower } from "../tower/recruit/tower-recruit";
-import { TowerBuilder, TowerFixtures } from "../tower/recruit/tower-recruit-fixtures";
+import { TowerBuilder } from "../tower/recruit/tower-recruit-fixtures";
 import { UnitRecruitFixture } from "../units/recruit/unit-recruit-fixtures";
 import { Army } from "./army";
 
@@ -19,7 +19,7 @@ export class ArmyFixture {
 			//TowerFixtures.centerTower,
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
-				.celled(new Cell({ x: 4, y: 4 }))
+				.celled(new Cell({ x: 3, y: 3 }))
 				.buildGreen(TowerBlueprintFixtures.green),
 			// new TowerBuilder()
 			// 	.celled(new Cell({ x: 7, y: 4 }))

@@ -9,11 +9,13 @@ import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { Soldier } from "../../recruit/implementation/soldier-recruit";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
+import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 
 export class SoldierBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 2, height: 2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
+	TDescriptor,
 	TImageDrawable(Resources.unit.soldier.resource.image, Resources.unit.soldier.size, 4),
 	TDamageDealer(1),
 ) {
@@ -22,8 +24,13 @@ export class SoldierBlueprint extends Derive(
 	attackSpeed = 5;
 
 	cost = 75;
-	type = "soldier" as const;
 
+	description = new UnitDescription("Soldier", ["A lame unit", "that doesn't do", "anything special"], {
+		health: "6",
+		damage: "1",
+		"move speed": "0.32",
+		"production cost": "75",
+	});
 	toRecruit(cell: Cell) {
 		return new Soldier(cell, this);
 	}

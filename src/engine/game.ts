@@ -1,7 +1,7 @@
 import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
-import { ArmyFactory, ArmyFixture } from "./army/army-fixtures";
+import { ArmyFixture } from "./army/army-fixtures";
 import { EconomyHooks, ShopPhase } from "./shop/shop";
 import { LocalMatchMaker } from "./match-maker/local-match-maker";
 import { MatchMaker } from "./match-maker/match-maker";
@@ -87,10 +87,6 @@ export class Game {
 	startShop() {
 		this.shop = new ShopPhase(this.army, this.handleShopQuit.bind(this), this.getEconomyHooks());
 		this.addGold(20);
-		const tower = this.shop.army.towers[0] as unknown as ImplementsTrait<typeof TDescriptor> &
-			ImplementsTrait<typeof TRenderable>;
-		console.log(tower);
-		this.descriptionHud = new DescriptionHud(tower, this.shop.army.grid);
 	}
 
 	startBattleSummary(lastBattleState: BattleState, battleVerdict: "victory" | "defeat") {

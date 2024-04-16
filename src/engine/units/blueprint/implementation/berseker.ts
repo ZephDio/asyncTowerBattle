@@ -9,19 +9,32 @@ import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint"
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Berseker } from "../../recruit/implementation/berseker-recruit";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
+import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 
 export class BersekerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Ellipse({ width: 2, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
+	TDescriptor,
 	TImageDrawable(Resources.unit.berseker.resource.image, Resources.unit.berseker.size, 3),
-	TDamageDealer(1),
+	TDamageDealer(2),
 ) {
-	baseMaxLife = 30;
+	baseMaxLife = 35;
 	baseSpeed = 0.25;
 	attackSpeed = 4;
 
 	cost = 160;
+
+	description = new UnitDescription(
+		"Berseker",
+		["A unit that enrage", "while damaged under", "half health gaining", "attack damage and", "movement speed"],
+		{
+			health: "35",
+			damage: "2",
+			"move speed": "0.25",
+			"production cost": "160",
+		},
+	);
 
 	toRecruit(cell: any) {
 		return new Berseker(cell, this);

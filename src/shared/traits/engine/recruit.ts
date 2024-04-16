@@ -5,8 +5,9 @@ import { TokenHooks } from "../../../engine/shop/holder/holder";
 import { GridPosition } from "../../position";
 import { TGrid } from "../../../engine/grid/tgrid";
 import { HTHitbox } from "./core/THitbox";
+import { HTDescriptor } from "../render/huds/item-descriptor";
 
-export const TRecruit = Subtrait([TGCollider, HTHitbox, HTImageDrawable], (base) => {
+export const TRecruit = Subtrait([TGCollider, HTHitbox, HTDescriptor, HTImageDrawable], (base) => {
 	abstract class IRecruit extends base {
 		abstract moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void;
 	}

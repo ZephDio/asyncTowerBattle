@@ -15,7 +15,7 @@ export class Priest extends Derive(Unit, HTDamageDealer) {
 		public cell: Cell,
 		priest: PriestBlueprint = new PriestBlueprint({}),
 	) {
-		super({ imageDrawable: priest, damageDealer: priest, hitboxHolder: priest });
+		super({ imageDrawable: priest, damageDealer: priest, hitboxHolder: priest, descriptor: priest });
 		this.maxLife = priest.baseMaxLife;
 		this.speed = priest.baseSpeed;
 		this.attackSpeed = priest.attackSpeed;

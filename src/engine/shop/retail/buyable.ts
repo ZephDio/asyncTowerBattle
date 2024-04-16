@@ -8,6 +8,7 @@ import { Cell } from "../../../shared/position";
 import { AnyRecruit } from "../../../shared/traits/engine/recruit";
 import { THasPrice } from "../../../shared/traits/engine/has-price";
 import { TRenderable } from "../../../shared/traits/render/renderable";
+import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 
 export type AnyBuyable = AnyRecruit;
 
@@ -15,6 +16,7 @@ export class Buyable extends Derive(
 	THasPrice,
 	TGCollider,
 	HTHitbox,
+	HTDescriptor,
 	TPriceHudRenderable,
 	TRenderable,
 	HTImageDrawable,
@@ -26,7 +28,7 @@ export class Buyable extends Derive(
 		public cell: Cell,
 		price: number,
 	) {
-		super({ imageDrawable: entity, hitboxHolder: entity });
+		super({ imageDrawable: entity, hitboxHolder: entity, descriptor: entity });
 		this.price = price;
 	}
 	get position() {

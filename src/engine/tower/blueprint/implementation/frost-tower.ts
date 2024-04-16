@@ -9,16 +9,24 @@ import { Derive } from "../../../../../traits/traits";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { FrostTower } from "../../recruit/implementation/frost-tower-recruit";
 import { FrostSpike } from "../../../projectile/blueprint/implementation/frost-spike";
+import { TDescriptor, TowerDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 
 export class FrostTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDamageDealer(4),
+	TDescriptor,
 	TImageDrawable(Resources.tower.frost.resource.image, Resources.tower.blue.size, 3),
 ) {
 	toRecruit(cell: Cell) {
 		return new FrostTower(cell, this);
 	}
+
+	description = new TowerDescription(
+		"Frost Tower",
+		["Makes an enormous", "frost boulder that", "falls and explodes on", "enemies, slowing them"],
+		{ damage: "4", range: "20", "cast speed": "1", "cast cost": "10" },
+	);
 	type = "frost" as const;
 	projectile = new FrostSpike();
 }

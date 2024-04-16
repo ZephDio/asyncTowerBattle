@@ -9,9 +9,8 @@ import { Derive } from "@ddd-ts/traits";
 import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
-import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 
-export class GreenTower extends Derive(HTDamageDealer, HTDescriptor, Tower) {
+export class GreenTower extends Derive(HTDamageDealer, Tower) {
 	attackSpeed = 3;
 
 	constructor(

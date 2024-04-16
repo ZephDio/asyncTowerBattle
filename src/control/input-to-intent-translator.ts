@@ -9,6 +9,7 @@ import { RefreshBellHud } from "../shared/hud-element/refresh-bell-hud";
 import { RetailGrid } from "../engine/grid/retail-grid";
 import { Inventory } from "../engine/grid/inventory/unit-inventory";
 import { ButtonSpeedHUD } from "../shared/hud-element/battle/button-speed";
+import { DescriptionHud, TDescriptor } from "../shared/traits/render/huds/item-descriptor";
 
 export interface PlayerIntent {
 	intent: string;
@@ -53,43 +54,70 @@ export class InputToIntentTranslator {
 	}
 
 	translateMouseMoveInput(position: ScreenPosition) {
+		let clear = false;
 		if (this.game.shop) {
 			if (this.game.shop.holderControl.hold) {
 				this.game.shop.holderControl.moveHold(position);
 			}
 
+			const grid = this.game.shop.determineGrid(position);
 			// ArmyGrid
-			const grid = this.game.shop.army.grid;
-			const gridPosition = grid.screenToGridPosition(position);
-			const cell = grid.gridPositionToCell(gridPosition);
-			grid.setOveredTile(cell);
-			if (cell) {
-				if (this.game.shop.holderControl.hold) {
-					const synergy = this.game.shop.holderControl.hold.getSynergies();
-					if (synergy) {
-						grid.setSynergiesTiles(cell, synergy.patternEffect, synergy.isPatternActivated);
-						return;
-					}
-				} else {
-					const gridElement = grid.tiles.get(ArmyGrid.posToString(cell));
-					if (gridElement) {
-						if (implementsTrait(gridElement, TSynergy)) {
-							const synergy = gridElement.getSynergies();
-							grid.setSynergiesTiles(gridElement.cell, synergy.patternEffect, synergy.isPatternActivated);
-							return;
+			// const grid = this.game.shop.army.grid;
+			if (grid) {
+				const gridPosition = grid.screenToGridPosition(position);
+				const cell = grid.gridPositionToCell(gridPosition);
+				if (grid instanceof ArmyGrid) {
+					grid.setOveredTile(cell);
+					if (cell) {
+						if (this.game.shop.holderControl.hold) {
+							const synergy = this.game.shop.holderControl.hold.getSynergies();
+							if (synergy) {
+								grid.setSynergiesTiles(cell, synergy.patternEffect, synergy.isPatternActivated);
+								clear = true;
+							}
+						} else {
+							const gridElement = grid.tiles.get(ArmyGrid.posToString(cell));
+							if (gridElement) {
+								if (implementsTrait(gridElement, TDescriptor)) {
+									this.game.descriptionHud = new DescriptionHud(gridElement, grid);
+									clear = true;
+								} else {
+									this.game.descriptionHud = null;
+								}
+								if (implementsTrait(gridElement, TSynergy)) {
+									const synergy = gridElement.getSynergies();
+									grid.setSynergiesTiles(gridElement.cell, synergy.patternEffect, synergy.isPatternActivated);
+									clear = true;
+								}
+							}
 						}
 					}
 				}
+				if (grid instanceof Inventory) {
+					grid.setOveredTile(cell);
+					if (cell) {
+						if (this.game.shop.holderControl.hold) {
+						} else {
+							const gridElement = grid.tiles.get(ArmyGrid.posToString(cell));
+							if (gridElement) {
+								if (implementsTrait(gridElement, TDescriptor)) {
+									this.game.descriptionHud = new DescriptionHud(gridElement, grid);
+								} else {
+									this.game.descriptionHud = null;
+								}
+							}
+						}
+					}
+				}
+			} else {
+				this.game.army.grid.setOveredTile(undefined);
+				this.game.army.inventory.setOveredTile(undefined);
+				this.game.descriptionHud = null;
 			}
-
-			// UnitInventoryGrid
-			// const uigrid = this.game.shop.army.inventory;
-			// const uicell = uigrid.realPositionToGrid(position);
+			// const uicell = uigrid.gridPositionToCell(position);
 			// uigrid.setOveredTile(uicell);
 			// if (uicell) {
 			// }
-
-			grid.clearSynergiesTiles();
 		}
 	}
 

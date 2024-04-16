@@ -2,6 +2,9 @@ import { Derive, ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { TRenderable } from "../renderable";
 import { TGrid } from "../../../../engine/grid/tgrid";
 import { Cell, GridPosition, ScreenPosition } from "../../../position";
+import { Tower } from "../../../../engine/tower/recruit/tower-recruit";
+import { Unit } from "../../../../engine/units/recruit/unit-recruit";
+import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
 
 export const TDescriptor = Trait((base) => {
 	abstract class IDescriptor extends base {
@@ -27,6 +30,9 @@ export class DescriptionHud extends Derive(TRenderable) {
 	drawPriority: 9;
 	position: ScreenPosition;
 	titlePosition: ScreenPosition;
+	linesPosition: ScreenPosition[];
+
+	extraLines: Record<string, string>;
 	constructor(
 		public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>,
 		grid: ImplementsTrait<typeof TGrid>,
@@ -34,17 +40,26 @@ export class DescriptionHud extends Derive(TRenderable) {
 		super({});
 		this.position = this.getPosition(grid);
 		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 10 }));
+		this.extraLines = this.item.description.extraLines ?? {};
+		this.linesPosition = this.getLinesPositions();
 	}
 
 	getPosition(grid: ImplementsTrait<typeof TGrid>) {
-		let position = this.item.position;
-		if (position instanceof Cell) {
-			position = grid.cellToGrid(position);
+		return PercentToReal({ x: 66.3, y: 50 });
+	}
+
+	getLinesPositions() {
+		const positions = [];
+		let i = 0;
+		for (const [_] of Object.entries(this.extraLines)) {
+			i++;
+			positions.push(this.titlePosition.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.1) })));
 		}
-		if (position instanceof GridPosition) {
-			position = grid.gridToScreenPosition(position);
-		}
-		return position.add(new ScreenPosition({ x: 10, y: 0 }));
+		this.item.description.description.forEach(() => {
+			i++;
+			positions.push(this.titlePosition.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.8) })));
+		});
+		return positions;
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
@@ -54,19 +69,77 @@ export class DescriptionHud extends Derive(TRenderable) {
 		context.lineWidth = 3;
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawRectangle(context, size, canvasPosition);
+		// Title
 		const titlePosition = this.getCanvasPosition(context, this.titlePosition);
-		const text = this.item.description.name;
-		const fontSize = this.getCanvasSize(context, 14, 2, scale);
-		context.font = `${fontSize.height}px title`;
+		const title = this.item.description.name;
+		const titleFontSize = this.getCanvasSize(context, 14, 2, scale);
+		context.font = `${titleFontSize.height}px title`;
 		context.textAlign = "center";
 		context.fillStyle = "#000000";
-		context.fillText(text, titlePosition.x, titlePosition.y, fontSize.width);
+		context.fillText(title, titlePosition.x, titlePosition.y, titleFontSize.width);
+		// Description lines
+		const lines = [...Object.entries(this.extraLines)];
+		const description = this.item.description.description;
+		const descriptionFontSize = this.getCanvasSize(context, 14, 1.6, scale);
+		context.font = `${descriptionFontSize.height}px text`;
+		context.textAlign = "left";
+		const linesPosition = lines.map((_, index) =>
+			this.getCanvasPosition(context, this.linesPosition[index] as ScreenPosition),
+		);
+		const descriptionPositions = description.map((_, index) =>
+			this.getCanvasPosition(context, this.linesPosition[index + lines.length] as ScreenPosition),
+		);
+		lines.forEach(([key, value], index) => {
+			const linePosition = linesPosition[index];
+			if (!linePosition) return;
+			context.fillText(`${key}: ${value}`, linePosition.x, linePosition.y, descriptionFontSize.width);
+		});
+		description.forEach((line, index) => {
+			const descriptionPosition = descriptionPositions[index];
+			if (!descriptionPosition) return;
+			context.fillText(line, descriptionPosition.x, descriptionPosition.y, descriptionFontSize.width);
+		});
 	}
 }
 
 export class Description {
 	constructor(
 		public name: string,
-		public description: string,
+		public description: string[],
+
+		public extraLines?: Record<string, string>,
 	) {}
+}
+
+export type TowerLinesDescription = {
+	damage: string;
+	"cast speed": string;
+	"cast cost": string;
+	range: string;
+};
+export class TowerDescription extends Description {
+	constructor(name: string, description: string[], extraLines: TowerLinesDescription) {
+		super(name, description, extraLines);
+	}
+}
+
+export type UnitLinesDescription = {
+	health: string;
+	damage: string;
+	"move speed": string;
+	"production cost": string;
+};
+export class UnitDescription extends Description {
+	constructor(name: string, description: string[], extraLines: UnitLinesDescription) {
+		super(name, description, extraLines);
+	}
+}
+
+export type BarrackLinesDescription = {
+	"production speed": string;
+};
+export class BarrackDescription extends Description {
+	constructor(name: string, description: string[], extraLines: BarrackLinesDescription) {
+		super(name, description, extraLines);
+	}
 }

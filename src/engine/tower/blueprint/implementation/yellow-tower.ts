@@ -6,7 +6,6 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 
-import { Bullet } from "../../../projectile/blueprint/implementation/bullet";
 import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
 import { TSynergy } from "../../../../shared/traits/engine/synergy";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
@@ -14,11 +13,13 @@ import { BasicPathTile } from "../../../tile/recruit/implementation/basic-tile";
 import { SlowingPathTile } from "../../../tile/recruit/implementation/slowing-tile";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
+import { TDescriptor, TowerDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 
 export class YellowTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDamageDealer(6),
+	TDescriptor,
 	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, 3),
 	TSynergy,
 ) {
@@ -31,11 +32,12 @@ export class YellowTowerBlueprint extends Derive(
 	isPatternActivated = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		return gridElement ? gridElement instanceof BasicPathTile || gridElement instanceof SlowingPathTile : false;
 	};
-	type = "yellow" as const;
-
+	description = new TowerDescription(
+		"Poison Sentinel",
+		["This tower make", "some poison puddles", "on path around it"],
+		{ damage: "6 per tick", range: "5", "cast speed": "0.8", "cast cost": "100" },
+	);
 	toRecruit(cell: Cell) {
 		return new YellowTower(cell, this);
 	}
-
-	projectile = new Bullet();
 }
