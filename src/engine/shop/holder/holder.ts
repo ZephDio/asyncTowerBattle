@@ -83,6 +83,7 @@ export class Holder {
 		}
 		army.removeRecruit(recruit);
 		const onAbort = () => {
+			console.log("abort");
 			army.addRecruit(recruit, grid);
 			this.setNull();
 		};

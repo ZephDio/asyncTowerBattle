@@ -1,4 +1,4 @@
-import { ImplementsTrait, Trait } from "@ddd-ts/traits";
+import { ImplementsTrait, Trait, implementsTrait } from "@ddd-ts/traits";
 import { ArmyGrid } from "./grid";
 import { Cell, GridPosition, ScreenPosition } from "../../shared/position";
 import { SynergyEffect } from "./grid-effects/synergy-effect";
@@ -61,23 +61,27 @@ export const TGrid = Trait((base) => {
 			return new Cell({ x: x, y: y });
 		}
 
+		checkCondition(gridElement: ImplementsTrait<typeof GridElement>, cell: Cell) {
+			const cells = gridElement.gridShape.getOccupiedCellsFrom(cell);
+			for (const cell of cells) {
+				if (cell.x < 0 || cell.x >= this.width || cell.y < 0 || cell.y >= this.height) {
+					return false;
+				}
+			}
+			for (const cell of cells) {
+				const found = this.getElement(cell);
+				if (found) {
+					return false;
+				}
+			}
+			return true;
+		}
+
 		setElement(gridElement: ImplementsTrait<typeof GridElement>) {
 			const cells = gridElement.gridShape.getOccupiedCellsFrom(gridElement.cell);
 			for (const cell of cells) {
-				if (cell.x < 0 || cell.x >= this.width || cell.y < 0 || cell.y >= this.height) {
-					throw new Error("Element out of grid");
-				}
-			}
-			cells.forEach((cell) => {
-				const found = this.getElement(cell);
-				if (found) {
-					throw new Error(`Element already occupied cell : ${cell.toString()}`);
-				}
-			});
-			cells.forEach((cell) => {
 				this.tiles.set(ArmyGrid.posToString(cell), gridElement);
-			});
-			//this.tiles.set(ArmyGrid.posToString(gridElement.cell), gridElement);
+			}
 		}
 
 		getElement(cell: Cell) {
@@ -85,9 +89,12 @@ export const TGrid = Trait((base) => {
 		}
 
 		deleteElement(gridElement: ImplementsTrait<typeof GridElement>) {
-			const foundElement = this.tiles.get(ArmyGrid.posToString(gridElement.cell));
-			if (gridElement === foundElement) {
-				this.tiles.delete(ArmyGrid.posToString(gridElement.cell));
+			const cells = gridElement.gridShape.getOccupiedCellsFrom(gridElement.cell);
+			for (const cell of cells) {
+				const foundElement = this.tiles.get(ArmyGrid.posToString(cell));
+				if (gridElement === foundElement) {
+					this.tiles.delete(ArmyGrid.posToString(cell));
+				}
 			}
 		}
 		getDrawables(): ImplementsTrait<typeof TRenderable>[] {

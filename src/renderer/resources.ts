@@ -52,8 +52,8 @@ export const Resources = {
 		},
 		yellow: {
 			size: {
-				width: 5,
-				height: 16,
+				width: 13,
+				height: 5,
 			},
 			resource: {
 				image: createImage("/resources/towers/tower_yellow.png"),

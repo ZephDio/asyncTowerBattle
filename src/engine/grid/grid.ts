@@ -38,21 +38,33 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 
 	get towers() {
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Tower> => implementsTrait(e, Tower));
+		const set = new Set(
+			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Tower> => implementsTrait(e, Tower)),
+		);
+		return [...set.values()];
 	}
 
 	get barracks() {
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Barrack> => implementsTrait(e, Barrack));
+		const set = new Set(
+			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Barrack> => implementsTrait(e, Barrack)),
+		);
+		return [...set.values()];
 	}
 
 	get pathTiles() {
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof PathTile> => implementsTrait(e, PathTile));
+		const set = new Set(
+			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof PathTile> => implementsTrait(e, PathTile)),
+		);
+		return [...set.values()];
 	}
 
 	get environment() {
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof TEnvironmentElement> =>
-			implementsTrait(e, TEnvironmentElement),
+		const set = new Set(
+			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof TEnvironmentElement> =>
+				implementsTrait(e, TEnvironmentElement),
+			),
 		);
+		return [...set.values()];
 	}
 
 	getEnemyDoorCell() {

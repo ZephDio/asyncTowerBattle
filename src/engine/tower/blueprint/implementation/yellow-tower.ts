@@ -23,12 +23,7 @@ export class YellowTowerBlueprint extends Derive(
 	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, 3),
 	TSynergy,
 ) {
-	patternEffect = [
-		new Cell({ x: 0, y: 1 }),
-		new Cell({ x: 0, y: -1 }),
-		new Cell({ x: 1, y: 0 }),
-		new Cell({ x: -1, y: 0 }),
-	];
+	patternEffect = [new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 })];
 	isPatternActivated = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		return gridElement ? gridElement instanceof BasicPathTile || gridElement instanceof SlowingPathTile : false;
 	};
