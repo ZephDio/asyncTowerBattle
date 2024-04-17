@@ -34,7 +34,6 @@ export const Tower = Subtrait([TRecruit], (base) => {
 				if (!condition) throw new Error("Invalid condition");
 				this.cell = cell.clone();
 				this.setOrientation(orientation);
-				console.log(this.gridShape.getOccupiedCellsFrom(this.cell, this.orientation));
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return;
 			}

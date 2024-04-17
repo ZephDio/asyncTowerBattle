@@ -26,13 +26,14 @@ export class GreenTower extends Derive(HTDamageDealer, Tower) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const position = grid.cellToGrid(this.cell);
-		return new GreenBattleTower(this, hooks, position, this.cell);
+		return new GreenBattleTower(this, hooks, position, this.cell, this.orientation);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		return new GreenBattleTower(this, hooks, position, cell);
+		const orientation = this.orientation + Math.PI;
+		return new GreenBattleTower(this, hooks, position, cell, orientation);
 	}
 
 	get position(): Cell {

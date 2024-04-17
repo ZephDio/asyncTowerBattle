@@ -8,7 +8,6 @@ import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { TokenHooks } from "../../shop/holder/holder";
 
 export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive(TRecruit) {
-	type: string = "castle";
 	maxLife: number;
 
 	constructor(
@@ -19,34 +18,20 @@ export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive
 		this.maxLife = castle.maxLife;
 	}
 
-	clone() {
-		// TODO
-		return new Castle(new CastleBlueprint({}), this.cell);
-	}
-
 	get position() {
 		return this.cell;
 	}
 
-	toSerialized(grid: ArmyGrid): SerializedCastleRecruit {
-		return {
-			type: this.type,
-			cell: this.cell,
-			position: grid.cellToGrid(this.cell),
-		};
-	}
-
 	toAllied(grid: BattleGrid, onDeath: () => void): BattleCastle {
-		const clone = this.clone();
-		const position = grid.cellToGrid(clone.cell);
-		return new BattleCastle(clone, onDeath, clone.cell, position);
+		const position = grid.cellToGrid(this.cell);
+		return new BattleCastle(this, onDeath, this.cell, position, this.orientation);
 	}
 
 	toEnemy(grid: BattleGrid, onDeath: () => void): BattleCastle {
-		const clone = this.clone();
-		const cell = BattleGrid.flip(grid, clone.cell);
+		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const BC = new BattleCastle(clone, onDeath, cell, position);
+		const orientation = this.orientation + Math.PI;
+		const BC = new BattleCastle(this, onDeath, cell, position, orientation);
 		return BC;
 	}
 

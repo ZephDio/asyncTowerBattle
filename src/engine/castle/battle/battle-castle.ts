@@ -18,10 +18,14 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 		public onDeath: () => void,
 		public cell: Cell,
 		public position: GridPosition,
+
+		public override orientation: number,
 	) {
 		super({ imageDrawable: recruit, hitboxHolder: recruit });
 		this.actualLife = recruit.maxLife;
 		this.maxLife = recruit.maxLife;
+		this.angle = this.orientation;
+		this.gridShape = recruit.gridShape;
 	}
 
 	override takeDamage(damage: number): void {
@@ -36,18 +40,4 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 	}
 
 	tick() {}
-
-	static toAllied(castleRecruit: Castle<CastleBlueprint>, battleGrid: BattleGrid, onBattleOver: () => void) {
-		return new BattleCastle(castleRecruit, onBattleOver, castleRecruit.cell, battleGrid.cellToGrid(castleRecruit.cell));
-	}
-
-	static toEnemy(castleRecruit: Castle<CastleBlueprint>, battleGrid: BattleGrid, onBattleOver: () => void) {
-		const flippedGridPosition = BattleGrid.flip(battleGrid, castleRecruit.cell);
-		return new BattleCastle(
-			castleRecruit,
-			onBattleOver,
-			flippedGridPosition,
-			battleGrid.cellToGrid(flippedGridPosition),
-		);
-	}
 }

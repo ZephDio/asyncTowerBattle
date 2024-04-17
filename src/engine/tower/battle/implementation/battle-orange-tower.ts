@@ -18,8 +18,11 @@ export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawabl
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
+		public override orientation: number,
 	) {
 		super({ imageDrawable: recruit, hitboxHolder: recruit });
+		this.angle = this.orientation;
+		this.gridShape = recruit.gridShape;
 	}
 
 	get realPosition(): GridPosition {
@@ -28,12 +31,11 @@ export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawabl
 
 	tick() {
 		if (!this.hasTriggered) {
-			console.log(this.recruit.patternEffect.getRelativeCells(this.recruit.orientation));
-			console.log(this.recruit.orientation);
 			const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
 				this.cell,
 				this.recruit.patternEffect.getRelativeCells(this.recruit.orientation),
 			);
+			console.log("neighbors", neighbors);
 			for (const neighbor of neighbors) {
 				if (implementsTrait(neighbor, HaveStats)) {
 					neighbor.addStatus(new OrangeTowerBuff({}));

@@ -35,6 +35,7 @@ export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 				path,
 				hooks,
 				this.unitRecruit,
+				this.orientation,
 			);
 		}
 		return undefined;
@@ -43,6 +44,7 @@ export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
 		if (this.unitRecruit) {
 			const newPosition = BattleGrid.flip(grid, this.position);
+			const orientation = this.orientation + Math.PI;
 			return new BasicBattleBarrack(
 				this,
 				grid.cellToGrid(newPosition),
@@ -51,6 +53,7 @@ export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 				path,
 				hooks,
 				this.unitRecruit,
+				orientation,
 			);
 		}
 		return undefined;

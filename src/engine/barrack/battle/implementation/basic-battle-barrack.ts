@@ -31,6 +31,8 @@ export class BasicBattleBarrack extends Derive(
 		public readonly path: BattlePath,
 		public readonly hooks: BattleArmyHooks,
 		public readonly unitRecruit: AnyUnit,
+
+		public override orientation: number,
 	) {
 		super({
 			imageDrawable: barrackRecruit,
@@ -42,6 +44,8 @@ export class BasicBattleBarrack extends Derive(
 			hitboxHolder: barrackRecruit,
 		});
 		this.castCost = unitRecruit.cost;
+		this.angle = this.orientation;
+		this.gridShape = barrackRecruit.gridShape;
 	}
 
 	tick() {
