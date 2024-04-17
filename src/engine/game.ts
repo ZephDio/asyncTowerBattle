@@ -1,17 +1,18 @@
 import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
-import { ArmyFixture } from "./army/army-fixtures";
+import { ArmyFactory } from "./army/army-fixtures";
 import { EconomyHooks, ShopPhase } from "./shop/shop";
 import { LocalMatchMaker } from "./match-maker/local-match-maker";
 import { MatchMaker } from "./match-maker/match-maker";
 import { RoundsTracker } from "./rounds/tracker";
 import { DescriptionHud } from "../shared/traits/render/huds/item-descriptor";
 import { RenderableState } from "../renderer/renderer";
+import { BattleRandomSeed } from "./battle/battle-random-seed";
 
 export class Game {
 	//army = ArmyFixture.allied;
-	army = ArmyFixture.pacifist;
+	army = ArmyFactory.default;
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
 	shop: null | ShopPhase = null;
@@ -97,9 +98,11 @@ export class Game {
 	}
 
 	startBattle() {
+		const { army ,  randomSeed } = this.matchMaker.getOpponent(this.rounds.round)
 		this.battle = new Battle(
 			this.army,
-			this.matchMaker.getOpponent(this.rounds.round),
+			army,
+			new BattleRandomSeed(randomSeed),
 			this.handleEndBattle.bind(this),
 			this.setDescriptionHud.bind(this),
 		);

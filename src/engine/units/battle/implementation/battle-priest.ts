@@ -18,6 +18,7 @@ export class BattlePriest extends Derive(TBattleUnit, Caster) {
 		private hooks: BattleArmyHooks,
 	) {
 		super({
+			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: recruit.maxLife,
 			attack: recruit.attackDamage,

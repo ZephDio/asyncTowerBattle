@@ -32,6 +32,7 @@ export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable], (base, Pro
 			}
 			return this.holded.gridShape.getOccupiedCellsFrom(cell, this.orientation);
 		}
+
 		rotate() {
 			this.orientation = (this.orientation - Math.PI / 2) % (2 * Math.PI);
 			this.angle = this.orientation;

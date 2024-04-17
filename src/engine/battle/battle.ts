@@ -6,6 +6,7 @@ import { ButtonSpeedHUD } from "../../shared/hud-element/battle/button-speed";
 import { CastleLifeBar } from "../../shared/hud-element/battle/castle-life-bar";
 import { Army } from "../army/army";
 import { Game } from "../game";
+import { BattleRandomSeed } from "./battle-random-seed";
 import { Battlefield } from "./battlefield/battlefield";
 
 export class Battle {
@@ -22,10 +23,16 @@ export class Battle {
 	constructor(
 		public alliedArmy: Army,
 		public enemyArmy: Army,
+		public randomSeed: BattleRandomSeed,
 		public onBattleOver: Game["handleEndBattle"],
 		public setDescriptionHud: Game["setDescriptionHud"],
 	) {
-		this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy, this.handleBattleOver.bind(this));
+		this.battlefield = new Battlefield(
+			this.alliedArmy, 
+			this.enemyArmy, 
+			this.handleBattleOver.bind(this),
+			() => this.randomSeed.random()
+			);
 		this.alliedCastleLifeBar = new CastleLifeBar(this.battlefield.alliedArmy.castle, true, this.battlefield.grid);
 		this.enemyCastleLifeBar = new CastleLifeBar(this.battlefield.enemyArmy.castle, false, this.battlefield.grid);
 		this.battleClock = new BattleClockHud(this.timer);

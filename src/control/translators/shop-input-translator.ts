@@ -30,7 +30,7 @@ export class ShopInputToIntentTranslator {
 			return;
 		}
 		if (eventType === "right-click") {
-			this.handleMouseRightClick(shop);
+			this.handleMouseRightClick(shop, focus, screenPosition);
 		}
 	}
 
@@ -81,6 +81,7 @@ export class ShopInputToIntentTranslator {
 			return;
 		}
 		if (focus.cell && focus.grid instanceof ArmyGrid) {
+			focus.grid.clearSynergiesTiles();
 			focus.grid.setOveredTile([focus.cell]);
 			if (shop.holderControl.hold) {
 				const patternEffect = shop.holderControl.hold.getPatternEffect();
@@ -167,9 +168,14 @@ export class ShopInputToIntentTranslator {
 		shop.holderControl.hold.onRelease(gridPosition, focus.grid);
 	}
 
-	handleMouseRightClick(shop: ShopPhase) {
+	handleMouseRightClick(
+		shop: ShopPhase,
+		focus: ReturnType<ShopInputToIntentTranslator["determinateFocus"]>,
+		screenPosition: ScreenPosition,
+	) {
 		if (shop.holderControl.hold) {
 			shop.holderControl.hold.rotate();
+			this.handleMouseMove(shop, focus, screenPosition);
 		}
 	}
 

@@ -14,6 +14,7 @@ import { TRenderable } from "../../shared/traits/render/renderable";
 import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
 import { TRecruit } from "../../shared/traits/engine/recruit";
 import { TEnvironmentElement } from "../environment/environment";
+import { Totem } from "../totem/recruit/totem-recruit";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();
@@ -54,6 +55,13 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	get pathTiles() {
 		const set = new Set(
 			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof PathTile> => implementsTrait(e, PathTile)),
+		);
+		return [...set.values()];
+	}
+
+	get totems() {
+		const set = new Set(
+			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Totem> => implementsTrait(e, Totem)),
 		);
 		return [...set.values()];
 	}

@@ -30,6 +30,7 @@ export class GreenBattleTower extends Derive(
 		public override orientation: number,
 	) {
 		super({
+			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
 			attack: recruit.attackDamage,
@@ -48,6 +49,7 @@ export class GreenBattleTower extends Derive(
 		const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
 		this.hooks.addProjectile(projectile, this);
 		this.castInProgress = null;
+		this.callSubscribers()
 	}
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
 		return enemyUnit.isAlive() && distanceSqrd < 20 * 20;

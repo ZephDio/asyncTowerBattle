@@ -1,7 +1,6 @@
 import { Cell, GridPosition } from "../../../../shared/position";
 import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { BattlePath } from "../../../path/battle/battle-path";
 import { Derive } from "@ddd-ts/traits";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BasicBarrack } from "../../recruit/implementation/basic-barrack-recruit";
@@ -28,13 +27,13 @@ export class VeterantBattleBarrack extends Derive(
 		public readonly barrackRecruit: BasicBarrack,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public spawnPosition: GridPosition,
-		public readonly path: BattlePath,
+
 		public readonly hooks: BattleArmyHooks,
 		public readonly unitRecruit: AnyUnit,
 		public override orientation: number,
 	) {
 		super({
+			casterRecruit: barrackRecruit,
 			imageDrawable: barrackRecruit,
 			maxHealth: NaN,
 			attack: NaN,
@@ -57,12 +56,15 @@ export class VeterantBattleBarrack extends Derive(
 	}
 
 	onCastResolve(): void {
-		const unit = this.unitRecruit.toBattle(this.spawnPosition.clone(), this.path, this.hooks);
+		const path = this.hooks.getEnemyPath();
+		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
+		const unit = this.unitRecruit.toBattle(spawnPoint, path, this.hooks);
 		const buff = new VeterantBuff();
 		unit.addStatus(buff);
 		unit.addSize(0.3);
 		this.hooks.addUnits(unit, this);
 		this.castInProgress = null;
+		this.callSubscribers();
 	}
 }
 export class VeterantBuff extends Derive(Status) {

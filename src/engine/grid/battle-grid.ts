@@ -53,15 +53,17 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		environmentElements: ImplementsTrait<typeof TEnvironmentElement>[],
 	) {
 		const gridElements = [
-			...alliedArmy.towers,
 			alliedArmy.castle,
+			...alliedArmy.towers,
 			...alliedArmy.tiles,
-			...enemyArmy.towers,
 			...alliedArmy.barracks,
+			...alliedArmy.totems,
 			enemyArmy.castle,
+			...enemyArmy.towers,
 			...enemyArmy.tiles,
 			...enemyArmy.barracks,
 			...environmentElements,
+			...enemyArmy.totems,
 		];
 		for (const gridElement of gridElements) {
 			this.setElement(gridElement);

@@ -20,6 +20,7 @@ export class Battlefield {
 		alliedArmy: Army,
 		enemyArmy: Army,
 		public onBattleOver: Battle["handleBattleOver"],
+		public random: () => number,
 	) {
 		const { alliedBattleArmy, enemyBattleArmy, battleGrid } = this.init(alliedArmy, enemyArmy);
 		this.alliedArmy = alliedBattleArmy;
@@ -33,41 +34,59 @@ export class Battlefield {
 	): { alliedBattleArmy: BattleArmy; enemyBattleArmy: BattleArmy; battleGrid: BattleGrid } {
 		const grid = BattleGrid.fuse(alliedArmy.grid, enemyArmy.grid);
 
+		const enemyBattleCastle = enemyArmy.castle.toEnemy(grid, () => this.onBattleOver("victory"));
+		const alliedBattleCastle = alliedArmy.castle.toAllied(grid, () => this.onBattleOver("defeat"));
+
+		const alliedBattlePath = BattlePath.toAllied(grid, alliedArmy.path, alliedBattleCastle, enemyBattleCastle);
+		const enemyBattlePath = BattlePath.toEnemy(grid, enemyArmy.path, enemyBattleCastle, alliedBattleCastle);
 		const alliedBattleArmy = new BattleArmy(
 			this.searchAlliedUnitTarget.bind(this),
 			this.searchEnemiesInArea.bind(this),
+			this.random.bind(this),
+			() => enemyBattlePath,
+			() => enemyBattleCastle,
 			grid.getAlliedHooks(),
 		);
 		const enemyBattleArmy = new BattleArmy(
 			this.searchEnemyUnitTarget.bind(this),
 			this.searchAlliesInArea.bind(this),
+			this.random.bind(this),
+			() => alliedBattlePath,
+			() => alliedBattleCastle,
 			grid.getEnemyHooks(),
 		);
-		const enemyBattleCastle = enemyArmy.castle.toEnemy(grid, () => this.onBattleOver("victory"));
-		const alliedBattleCastle = alliedArmy.castle.toAllied(grid, () => this.onBattleOver("defeat"));
 		const alliedBattleTiles = alliedArmy.pathTiles.map((pathTile) =>
 			pathTile.toAllied(grid, alliedBattleArmy.getHooks()),
 		);
 		const enemyBattleTiles = enemyArmy.pathTiles.map((pathTile) => pathTile.toEnemy(grid, alliedBattleArmy.getHooks()));
-		const alliedBattlePath = BattlePath.toAllied(grid, alliedArmy.path, alliedBattleCastle, enemyBattleCastle);
-		const enemyBattlePath = BattlePath.toEnemy(grid, enemyArmy.path, enemyBattleCastle, alliedBattleCastle);
 
 		const enemyBattleTowers = enemyArmy.towers.map((tower) => tower.toEnemy(grid, enemyBattleArmy.getHooks()));
 		const alliedBattleTowers = alliedArmy.towers.map((tower) => tower.toAllied(grid, alliedBattleArmy.getHooks()));
 		const enemyBattleBarracks = enemyArmy.barracks
-			.map((barrack) => barrack.toEnemy(grid, alliedBattlePath, enemyBattleArmy.getHooks()))
+			.map((barrack) => barrack.toEnemy(grid, enemyBattleArmy.getHooks()))
 			.filter((b): b is AnyBattleBarrack => b !== undefined);
 		const alliedBattleBarrack = alliedArmy.barracks
-			.map((barrack) => barrack.toAllied(grid, enemyBattlePath, alliedBattleArmy.getHooks()))
+			.map((barrack) => barrack.toAllied(grid, alliedBattleArmy.getHooks()))
 			.filter((b): b is AnyBattleBarrack => b !== undefined);
+		const alliedBattleTotem = alliedArmy.totems.map((totem) => totem.toAllied(grid, alliedBattleArmy.getHooks()));
+		const enemyBattleTotem = enemyArmy.totems.map((totem) => totem.toEnemy(grid, enemyBattleArmy.getHooks()));
+
 		alliedBattleArmy.init(
 			alliedBattleCastle,
 			alliedBattlePath,
 			alliedBattleTowers,
 			alliedBattleBarrack,
 			alliedBattleTiles,
+			alliedBattleTotem,
 		);
-		enemyBattleArmy.init(enemyBattleCastle, enemyBattlePath, enemyBattleTowers, enemyBattleBarracks, enemyBattleTiles);
+		enemyBattleArmy.init(
+			enemyBattleCastle,
+			enemyBattlePath,
+			enemyBattleTowers,
+			enemyBattleBarracks,
+			enemyBattleTiles,
+			enemyBattleTotem,
+		);
 		grid.initElements(alliedBattleArmy, enemyBattleArmy, [...alliedArmy.environment, ...enemyArmy.environment]);
 		return {
 			alliedBattleArmy: alliedBattleArmy,
@@ -81,17 +100,9 @@ export class Battlefield {
 		this.tickProjectiles();
 		this.tickUnits();
 		this.tickTowers();
+		this.tickTotems();
 		this.tickAreaEffects();
 		this.tickPathTiles();
-	}
-
-	tickTowers() {
-		for (const tower of this.alliedArmy.towers) {
-			tower.tick();
-		}
-		for (const tower of this.enemyArmy.towers) {
-			tower.tick();
-		}
 	}
 
 	searchEnemiesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
@@ -142,6 +153,25 @@ export class Battlefield {
 		}
 		return bestTarget[0];
 	}
+
+	tickTowers() {
+		for (const tower of this.alliedArmy.towers) {
+			tower.tick();
+		}
+		for (const tower of this.enemyArmy.towers) {
+			tower.tick();
+		}
+	}
+
+	tickTotems() {
+		for (const totem of this.alliedArmy.totems) {
+			totem.tick();
+		}
+		for (const totem of this.enemyArmy.totems) {
+			totem.tick();
+		}
+	}
+
 	tickBarracks() {
 		for (const barrack of this.alliedArmy.barracks) {
 			barrack.tick();

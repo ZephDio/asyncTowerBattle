@@ -42,6 +42,9 @@ export class Army {
 		throw new Error("Invalid grid type");
 	}
 
+	get totems() {
+		return this.grid.totems;
+	}
 	get castle() {
 		return this.grid.castle;
 	}
@@ -51,7 +54,6 @@ export class Army {
 	get barracks() {
 		return this.grid.barracks;
 	}
-
 
 	get pathTiles() {
 		return this.grid.pathTiles;

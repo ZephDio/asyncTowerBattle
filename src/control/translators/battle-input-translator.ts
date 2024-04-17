@@ -12,6 +12,7 @@ export class BattleInputToIntentTranslator {
 		const focus = this.determinateFocus(screenPosition, state);
 		if (!focus) {
 			battle.setDescriptionHud(null);
+			return
 		}
 		if (focus instanceof ButtonSpeedHUD && eventType === "down") {
 			return battle.changeSpeed(focus.speed);

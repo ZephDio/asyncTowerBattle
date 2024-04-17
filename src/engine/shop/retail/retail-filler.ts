@@ -9,7 +9,6 @@ import { SlowingTileBlueprint } from "../../tile/blueprint/implementation/slowin
 import { AnyPathTileBlueprint } from "../../tile/blueprint/tile";
 import { BlueTowerBlueprint } from "../../tower/blueprint/implementation/blue-tower";
 import { GreenTowerBlueprint } from "../../tower/blueprint/implementation/green-tower";
-import { OrangeTowerBlueprint } from "../../tower/blueprint/implementation/orange-tower";
 import { YellowTowerBlueprint } from "../../tower/blueprint/implementation/yellow-tower";
 import { AnyTowerBlueprint } from "../../tower/blueprint/tower";
 import { DragonBlueprint } from "../../units/blueprint/implementation/dragon";
@@ -22,32 +21,37 @@ import { FrostTowerBlueprint } from "../../tower/blueprint/implementation/frost-
 import { BersekerBlueprint } from "../../units/blueprint/implementation/berseker";
 import { ChoupissonBlueprint } from "../../units/blueprint/implementation/choupisson";
 import { VeterantBarrackBlueprint } from "../../barrack/blueprint/implementation/veteran-barrack";
+import { AnyTotemBlueprint } from "../../totem/blueprint/totem";
+import { OrangeTotemBlueprint } from "../../totem/blueprint/implementation/orange-totem";
+import { GobelinPortalBlueprint } from "../../totem/blueprint/implementation/gobelin-portal";
 
 export type Constructor<C> = { new (...args: any[]): C };
-type AnyBlueprint = AnyTowerBlueprint | AnyPathTileBlueprint | AnyUnitBlueprint | AnyBarrackBlueprint;
+type AnyBlueprint =
+	| AnyTowerBlueprint
+	| AnyPathTileBlueprint
+	| AnyUnitBlueprint
+	| AnyBarrackBlueprint
+	| AnyTotemBlueprint;
 // TODO trait blueprint
 const pool = [
 	{
-		value: [
-			ZappingTowerBlueprint,
-			YellowTowerBlueprint,
-			BlueTowerBlueprint,
-			OrangeTowerBlueprint,
-			GreenTowerBlueprint,
-			FrostTowerBlueprint,
-		] as any,
-		share: 100,
-	},
-	{
-		value: [BasicBarrackBlueprint, WaveBarrackBlueprint, VeterantBarrackBlueprint] as any,
-		share: 60,
-	},
-	{
-		value: [BasicTileBlueprint, SlowingTileBlueprint] as any,
+		value: [OrangeTotemBlueprint, GobelinPortalBlueprint] as any,
 		share: 35,
 	},
 	{
-		value: [SoldierBlueprint, DragonBlueprint, PriestBlueprint, BersekerBlueprint, ChoupissonBlueprint] as any,
+		value: [ZappingTowerBlueprint, YellowTowerBlueprint, BlueTowerBlueprint, GreenTowerBlueprint, FrostTowerBlueprint],
+		share: 100,
+	},
+	{
+		value: [BasicBarrackBlueprint, WaveBarrackBlueprint, VeterantBarrackBlueprint],
+		share: 60,
+	},
+	{
+		value: [BasicTileBlueprint, SlowingTileBlueprint],
+		share: 35,
+	},
+	{
+		value: [SoldierBlueprint, DragonBlueprint, PriestBlueprint, BersekerBlueprint, ChoupissonBlueprint],
 		share: 50,
 	},
 ];

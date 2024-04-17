@@ -1,5 +1,4 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
-import { Tower } from "../../../tower/recruit/tower-recruit";
 import { TTokenDrag } from "./token-drag";
 import { Cell, GridPosition, ScreenPosition } from "../../../../shared/position";
 import { ArmyGrid } from "../../../grid/grid";
@@ -42,10 +41,8 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 	}
 
 	getPatternEffect() {
-		if (implementsTrait(this.holded, Tower)) {
-			if (implementsTrait(this.holded, TSynergy)) {
-				return this.holded.patternEffect;
-			}
+		if (implementsTrait(this.holded, TSynergy)) {
+			return this.holded.patternEffect;
 		}
 		return undefined;
 	}
