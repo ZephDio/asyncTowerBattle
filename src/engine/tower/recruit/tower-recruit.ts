@@ -14,9 +14,13 @@ export const Tower = Subtrait([TRecruit], (base) => {
 	abstract class ITower extends base {
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
-		abstract clone(): ITower;
 
-		moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
+		moveRecruit(
+			hooks: TokenHooks,
+			gridPosition: GridPosition,
+			orientation: number,
+			grid?: ImplementsTrait<typeof TGrid>,
+		) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
@@ -24,10 +28,13 @@ export const Tower = Subtrait([TRecruit], (base) => {
 			}
 			const cell = grid.gridPositionToCell(gridPosition);
 			if (!cell) throw new Error("Invalid cell");
-			const element = grid.getElement(cell);
+
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				if (element) throw new Error("already occupied cell");
+				const condition = grid.checkCondition(this, cell, orientation);
+				if (!condition) throw new Error("Invalid condition");
 				this.cell = cell.clone();
+				this.setOrientation(orientation);
+				console.log(this.gridShape.getOccupiedCellsFrom(this.cell, this.orientation));
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return;
 			}

@@ -24,20 +24,14 @@ export class ZappingTower extends Derive(HTDamageDealer, Tower) {
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const position = grid.cellToGrid(clone.cell);
-		return new ZappingBattleTower(clone, hooks, position, clone.cell);
+		const position = grid.cellToGrid(this.cell);
+		return new ZappingBattleTower(this, hooks, position, this.cell);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const cell = BattleGrid.flip(grid, clone.cell);
+		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		return new ZappingBattleTower(clone, hooks, position, cell);
-	}
-
-	clone() {
-		return new ZappingTower(this.cell.clone(), this.tower);
+		return new ZappingBattleTower(this, hooks, position, cell);
 	}
 
 	get position(): Cell {

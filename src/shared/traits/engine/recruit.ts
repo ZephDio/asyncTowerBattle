@@ -6,10 +6,17 @@ import { GridPosition } from "../../position";
 import { TGrid } from "../../../engine/grid/tgrid";
 import { HTHitbox } from "./core/THitbox";
 import { HTDescriptor } from "../render/huds/item-descriptor";
+import { GridShape } from "./core/grid-element";
 
 export const TRecruit = Subtrait([TGCollider, HTHitbox, HTDescriptor, HTImageDrawable], (base) => {
 	abstract class IRecruit extends base {
-		abstract moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void;
+		override gridShape = new GridShape();
+		abstract moveRecruit(
+			hooks: TokenHooks,
+			gridPosition: GridPosition,
+			orientation: number,
+			grid?: ImplementsTrait<typeof TGrid>,
+		): void;
 	}
 	return IRecruit;
 });

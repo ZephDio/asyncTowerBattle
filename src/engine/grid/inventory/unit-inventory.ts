@@ -3,7 +3,7 @@ import { TGridDrawable } from "../../../shared/traits/render/grid-renderable";
 import { STANDARD_CELL_SIZE, TGrid } from "../tgrid";
 import { Cell, ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
-import { SynergyEffect } from "../grid-effects/synergy-effect";
+import { SynergyEffectHud } from "../grid-effects/synergy-effect";
 import { ArmyGrid } from "../grid";
 import { HoverEffect } from "../grid-effects/hover-effect";
 import { AnyRecruit } from "../../../shared/traits/engine/recruit";
@@ -11,8 +11,8 @@ import { TRenderable } from "../../../shared/traits/render/renderable";
 
 export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
-	overEffect: HoverEffect | null = null;
-	synergiesEffects: SynergyEffect[] = [];
+	hoverEffect: HoverEffect[] = [];
+	synergiesEffects: SynergyEffectHud[] = [];
 	constructor(
 		screenPosition: ScreenPosition = PercentToReal({ x: 85, y: 25 }),
 		width: number = 4,
@@ -40,12 +40,13 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 		this.setElement(recruit);
 	}
 
-	setOveredTile(cell: Cell | null) {
-		if (cell) {
-			this.overEffect = new HoverEffect(cell, this);
-			return;
+	setOveredTile(cells: Cell[] | null) {
+		this.hoverEffect = [];
+		if (cells && cells.length > 0) {
+			for (const cell of cells) {
+				this.hoverEffect.push(new HoverEffect(cell, this));
+			}
 		}
-		this.overEffect = null;
 	}
 
 	getRecruits() {

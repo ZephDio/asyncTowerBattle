@@ -9,8 +9,10 @@ import { YellowBattleTower } from "../../battle/implementation/battle-yellow-tow
 import { PoisonGround } from "../../../area-effect/implementation/poison-ground";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
+import { GridShape } from "../../../../shared/traits/engine/core/grid-element";
 export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 	attackSpeed = 0.8;
+	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 1, y: 0 })]);
 
 	constructor(
 		public cell: Cell,
@@ -24,23 +26,17 @@ export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const position = grid.cellToGrid(clone.cell);
-		return new YellowBattleTower(clone, hooks, position, clone.cell);
+		const position = grid.cellToGrid(this.cell);
+		return new YellowBattleTower(this, hooks, position, this.cell);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const cell = BattleGrid.flip(grid, clone.cell);
+		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		return new YellowBattleTower(clone, hooks, position, cell);
+		return new YellowBattleTower(this, hooks, position, cell);
 	}
 
-	clone() {
-		return new YellowTower(this.cell.clone(), this.tower);
-	}
-
-	get position(): Cell {
-		return this.cell;
+	get position() {
+		return this.gridShape.getCenterPosition(this.cell, this.orientation);
 	}
 }

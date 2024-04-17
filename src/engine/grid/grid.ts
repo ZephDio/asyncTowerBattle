@@ -2,7 +2,7 @@ import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell, ScreenPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
-import { SynergyEffect } from "./grid-effects/synergy-effect";
+import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { Castle } from "../castle/recruit/castle-recruit";
 import { Tower } from "../tower/recruit/tower-recruit";
@@ -17,8 +17,8 @@ import { TEnvironmentElement } from "../environment/environment";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();
-	overEffect = null as null | HoverEffect;
-	synergiesEffects: SynergyEffect[] = [];
+	hoverEffect: HoverEffect[] = [];
+	synergiesEffects: SynergyEffectHud[] = [];
 
 	constructor(
 		width: number = 13,
@@ -38,35 +38,45 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 
 	get towers() {
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Tower> => implementsTrait(e, Tower));
+		const set = new Set(
+			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Tower> => implementsTrait(e, Tower)),
+		);
+		return [...set.values()];
 	}
 
 	get barracks() {
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Barrack> => implementsTrait(e, Barrack));
+		const set = new Set(
+			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof Barrack> => implementsTrait(e, Barrack)),
+		);
+		return [...set.values()];
 	}
 
 	get pathTiles() {
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof PathTile> => implementsTrait(e, PathTile));
+		const set = new Set(
+			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof PathTile> => implementsTrait(e, PathTile)),
+		);
+		return [...set.values()];
 	}
 
 	get environment() {
-		return [...this.tiles.values()].filter((e): e is ImplementsTrait<typeof TEnvironmentElement> =>
-			implementsTrait(e, TEnvironmentElement),
+		const set = new Set(
+			[...this.tiles.values()].filter((e): e is ImplementsTrait<typeof TEnvironmentElement> =>
+				implementsTrait(e, TEnvironmentElement),
+			),
 		);
+		return [...set.values()];
 	}
 
 	getEnemyDoorCell() {
 		return new Cell({ x: this.width - 1, y: this.height - 1 });
 	}
-	setOveredTile(cell: Cell | null) {
-		if (cell) {
-			if (this.overEffect && ArmyGrid.posToString(cell) === ArmyGrid.posToString(this.overEffect?.cell)) {
-				return;
+	setOveredTile(cells: Cell[] | null) {
+		this.hoverEffect = [];
+		if (cells && cells.length > 0) {
+			for (const cell of cells) {
+				this.hoverEffect.push(new HoverEffect(cell, this));
 			}
-			this.overEffect = new HoverEffect(cell, this);
-			return;
 		}
-		this.overEffect = null;
 	}
 
 	setSynergiesTiles(
@@ -75,16 +85,13 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		isActivated: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean,
 	) {
 		this.clearSynergiesTiles();
-		for (const synergyCell of relativeCellsSynergies) {
+		for (const relativeCell of relativeCellsSynergies) {
+			const synergyCell = new Cell({
+				x: cell.x + relativeCell.x,
+				y: cell.y + relativeCell.y,
+			});
 			this.synergiesEffects.push(
-				new SynergyEffect(
-					new Cell({
-						x: cell.x + synergyCell.x,
-						y: cell.y + synergyCell.y,
-					}),
-					this,
-					isActivated,
-				),
+				new SynergyEffectHud(synergyCell, this, isActivated(this.tiles.get(ArmyGrid.posToString(synergyCell)))),
 			);
 		}
 	}

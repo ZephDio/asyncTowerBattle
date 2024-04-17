@@ -1,7 +1,7 @@
 import { HitBox } from "./hitbox/hitboxe";
 import { Ellipse } from "./hitbox/shapes/ellipse";
 import { Rectangle } from "./hitbox/shapes/rectangle";
-import { GridPosition, ScreenPosition } from "./position";
+import { Cell, GridPosition, ScreenPosition } from "./position";
 export interface Recruit {
 	type: string;
 	hitbox: HitBox;
@@ -35,6 +35,13 @@ export class Physic {
 		const distance = Math.sqrt(distanceSquared);
 		const theta = Math.atan2(differentialY, differentialX);
 		return { distance, theta };
+	}
+
+	static getProjectionCellsFromOrientation(cell: Cell, orientation: number) {
+		return new Cell({
+			x: Math.round(cell.x * Math.cos(orientation) - cell.y * Math.sin(orientation)),
+			y: Math.round(cell.x * Math.sin(orientation) + cell.y * Math.cos(orientation)),
+		});
 	}
 
 	static getVectorSqrd<T extends GridPosition | ScreenPosition>(positionA: T, positionB: T) {

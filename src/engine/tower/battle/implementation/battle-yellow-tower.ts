@@ -38,12 +38,10 @@ export class YellowBattleTower extends Derive(
 	}
 
 	private attack() {
-		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(this.cell, [
-			new Cell({ x: 1, y: 0 }),
-			new Cell({ x: -1, y: 0 }),
-			new Cell({ x: 0, y: 1 }),
-			new Cell({ x: 0, y: -1 }),
-		]);
+		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
+			this.cell,
+			this.recruit.patternEffect.getRelativeCells(this.recruit.orientation),
+		);
 
 		for (const neighbor of neighbors) {
 			if (neighbor instanceof BasicBattlePathTile || neighbor instanceof SlowingBattlePathTile) {

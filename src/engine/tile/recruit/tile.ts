@@ -18,17 +18,23 @@ export const PathTile = Subtrait([TRecruit], (base) => {
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTile;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTile;
 
-		moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
+		moveRecruit(
+			hooks: TokenHooks,
+			gridPosition: GridPosition,
+			orientation: number,
+			grid?: ImplementsTrait<typeof TGrid>,
+		) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				throw new Error("cannot sell tile");
 			}
 			const cell = grid.gridPositionToCell(gridPosition);
 			if (!cell) throw new Error("Invalid cell");
-			const element = grid.getElement(cell);
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				if (element) throw new Error("already occupied cell");
+				const condition = grid.checkCondition(this, cell, orientation);
+				if (!condition) throw new Error("Invalid condition");
 				this.cell = cell.clone();
+				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return;
 			}

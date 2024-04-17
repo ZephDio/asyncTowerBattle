@@ -16,7 +16,7 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 		hooks: TokenHooks,
 		public onAbort: () => void,
 	) {
-		super({ imageDrawable: holded, hooks, position });
+		super({ imageDrawable: holded, hooks, position, orientation: holded.orientation });
 	}
 	onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void {
 		try {
@@ -28,7 +28,7 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 			if (grid instanceof RetailGrid) {
 				throw new Error("can't sell item in shop DHU");
 			}
-			this.holded.entity.moveRecruit(this.hooks, position, grid);
+			this.holded.entity.moveRecruit(this.hooks, position, this.orientation, grid);
 			this.hooks.shopPhaseHooks.shopHooks.buy(this.holded);
 			this.hooks.holderHooks.removeHold();
 		} catch {
@@ -36,9 +36,9 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 		}
 	}
 
-	getSynergies() {
+	getPatternEffect() {
 		if (implementsTrait(this.holded.entity, TSynergy)) {
-			return this.holded.entity.getSynergies();
+			return this.holded.entity.patternEffect;
 		}
 		return undefined;
 	}
