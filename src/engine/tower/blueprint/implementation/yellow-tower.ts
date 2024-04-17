@@ -17,7 +17,7 @@ import { TDescriptor, TowerDescription } from "../../../../shared/traits/render/
 
 export class YellowTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
-	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Rectangle({ width: 4, height: 10 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDamageDealer(6),
 	TDescriptor,
 	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, 3),

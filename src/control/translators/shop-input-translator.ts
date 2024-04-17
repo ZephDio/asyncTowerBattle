@@ -2,7 +2,7 @@ import { ArmyGrid } from "../../engine/grid/grid";
 import { ShopPhase } from "../../engine/shop/shop";
 import { RefreshBellHud } from "../../shared/hud-element/refresh-bell-hud";
 import { StartBattleButton } from "../../shared/hud-element/start-battle-button";
-import { Cell, ScreenPosition } from "../../shared/position";
+import { ScreenPosition } from "../../shared/position";
 import { MouseEventType } from "../mouse-event-handler";
 import { ShopState } from "../../shared/gamestate";
 import { implementsTrait } from "@ddd-ts/traits";
