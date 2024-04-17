@@ -17,7 +17,7 @@ import { TEnvironmentElement } from "../environment/environment";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();
-	overEffect: HoverEffect | undefined = undefined;
+	overEffect = null as null | HoverEffect;
 	synergiesEffects: SynergyEffect[] = [];
 
 	constructor(
@@ -58,7 +58,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	getEnemyDoorCell() {
 		return new Cell({ x: this.width - 1, y: this.height - 1 });
 	}
-	setOveredTile(cell: Cell | undefined) {
+	setOveredTile(cell: Cell | null) {
 		if (cell) {
 			if (this.overEffect && ArmyGrid.posToString(cell) === ArmyGrid.posToString(this.overEffect?.cell)) {
 				return;
@@ -66,7 +66,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			this.overEffect = new HoverEffect(cell, this);
 			return;
 		}
-		this.overEffect = undefined;
+		this.overEffect = null;
 	}
 
 	setSynergiesTiles(

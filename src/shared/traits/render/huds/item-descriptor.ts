@@ -1,9 +1,6 @@
 import { Derive, ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { TRenderable } from "../renderable";
-import { TGrid } from "../../../../engine/grid/tgrid";
-import { Cell, GridPosition, ScreenPosition } from "../../../position";
-import { Tower } from "../../../../engine/tower/recruit/tower-recruit";
-import { Unit } from "../../../../engine/units/recruit/unit-recruit";
+import { ScreenPosition } from "../../../position";
 import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
 
 export const TDescriptor = Trait((base) => {
@@ -33,18 +30,15 @@ export class DescriptionHud extends Derive(TRenderable) {
 	linesPosition: ScreenPosition[];
 
 	extraLines: Record<string, string>;
-	constructor(
-		public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>,
-		grid: ImplementsTrait<typeof TGrid>,
-	) {
+	constructor(public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>) {
 		super({});
-		this.position = this.getPosition(grid);
+		this.position = this.getPosition();
 		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 10 }));
 		this.extraLines = this.item.description.extraLines ?? {};
 		this.linesPosition = this.getLinesPositions();
 	}
 
-	getPosition(grid: ImplementsTrait<typeof TGrid>) {
+	getPosition() {
 		return PercentToReal({ x: 66.3, y: 50 });
 	}
 

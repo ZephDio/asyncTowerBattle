@@ -6,10 +6,8 @@ import { EconomyHooks, ShopPhase } from "./shop/shop";
 import { LocalMatchMaker } from "./match-maker/local-match-maker";
 import { MatchMaker } from "./match-maker/match-maker";
 import { RoundsTracker } from "./rounds/tracker";
-import { DescriptionHud, TDescriptor } from "../shared/traits/render/huds/item-descriptor";
+import { DescriptionHud } from "../shared/traits/render/huds/item-descriptor";
 import { RenderableState } from "../renderer/renderer";
-import { ImplementsTrait } from "@ddd-ts/traits";
-import { TRenderable } from "../shared/traits/render/renderable";
 
 export class Game {
 	//army = ArmyFixture.allied;
@@ -85,7 +83,12 @@ export class Game {
 	}
 
 	startShop() {
-		this.shop = new ShopPhase(this.army, this.handleShopQuit.bind(this), this.getEconomyHooks());
+		this.shop = new ShopPhase(
+			this.army,
+			this.handleShopQuit.bind(this),
+			this.setDescriptionHud.bind(this),
+			this.getEconomyHooks(),
+		);
 		this.addGold(20);
 	}
 
@@ -98,6 +101,7 @@ export class Game {
 			this.army,
 			this.matchMaker.getOpponent(this.rounds.round),
 			this.handleEndBattle.bind(this),
+			this.setDescriptionHud.bind(this),
 		);
 		this.battle.start();
 	}
@@ -112,6 +116,10 @@ export class Game {
 
 	addGold(amount: number) {
 		this.economy.gold += amount;
+	}
+
+	setDescriptionHud(descriptionHud: DescriptionHud | null) {
+		this.descriptionHud = descriptionHud;
 	}
 
 	getEconomyHooks(): EconomyHooks {

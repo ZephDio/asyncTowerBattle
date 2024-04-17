@@ -16,6 +16,7 @@ import { TTokenDrag } from "../engine/shop/holder/token-drag/token-drag";
 import { AnyBattleProjectile } from "../engine/projectile/battle/battle-projectile";
 import { BattlePath } from "../engine/path/battle/battle-path";
 import { GridPosition } from "./position";
+import { Inventory } from "../engine/grid/inventory/unit-inventory";
 
 export interface GameState {
 	type: string;
@@ -52,4 +53,6 @@ export interface ShopState extends GameState {
 	hold: ImplementsTrait<typeof TTokenDrag> | null;
 
 	hudElements: HudElement[];
+
+	inventory: Inventory;
 }

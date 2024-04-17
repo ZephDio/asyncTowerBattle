@@ -10,7 +10,7 @@ import { TRenderable } from "../../shared/traits/render/renderable";
 
 export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, Buyable> = new Map();
-	overEffect: HoverEffect | undefined = undefined;
+	overEffect: HoverEffect | null = null;
 	synergiesEffects: SynergyEffect[] = [];
 
 	constructor(
@@ -19,7 +19,7 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		height: number = 5,
 		cellSize: number = 4,
 	) {
-		super({ width , height , cellSize, position: screenPosition });
+		super({ width, height, cellSize, position: screenPosition });
 	}
 
 	getBuyables() {

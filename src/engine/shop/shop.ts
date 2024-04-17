@@ -47,6 +47,8 @@ export class ShopPhase {
 	constructor(
 		public army: Army,
 		public onShopExit: Game["handleShopQuit"],
+
+		public setDescriptionHud: Game["setDescriptionHud"],
 		public economyHooks: EconomyHooks,
 	) {}
 
@@ -141,6 +143,7 @@ export class ShopPhase {
 			castle: this.army.castle,
 			grid: this.army.grid,
 			path: this.army.isPathValid(),
+			inventory: this.army.inventory,
 		} as ShopState;
 	}
 }
