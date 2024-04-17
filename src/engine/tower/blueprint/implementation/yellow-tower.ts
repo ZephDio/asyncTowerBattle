@@ -14,6 +14,7 @@ import { SlowingPathTile } from "../../../tile/recruit/implementation/slowing-ti
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, TowerDescription } from "../../../../shared/traits/render/huds/item-descriptor";
+import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 
 export class YellowTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -23,10 +24,14 @@ export class YellowTowerBlueprint extends Derive(
 	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, 3),
 	TSynergy,
 ) {
-	patternEffect = [new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 })];
-	isPatternActivated = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
+	//patternEffect = [new Cell({ x: 0, y: -1 }), new Cell({ x: -1, y: 0 }), new Cell({ x: 0, y: 1 })];
+	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		return gridElement ? gridElement instanceof BasicPathTile || gridElement instanceof SlowingPathTile : false;
 	};
+	patternEffect = new PatternEffect(
+		[new Cell({ x: 0, y: -1 }), new Cell({ x: -1, y: 0 }), new Cell({ x: 0, y: 1 })],
+		this.patternCondition.bind(this),
+	);
 	description = new TowerDescription(
 		"Poison Sentinel",
 		["This tower make", "some poison puddles", "on path around it"],

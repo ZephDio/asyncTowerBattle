@@ -11,6 +11,7 @@ import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 
 export class OrangeTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -19,10 +20,13 @@ export class OrangeTowerBlueprint extends Derive(
 	TImageDrawable(Resources.tower.orange.resource.image, Resources.tower.orange.size, 3),
 	TSynergy,
 ) {
-	patternEffect: Cell[] = [new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })];
-	isPatternActivated = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
+	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		return gridElement ? implementsTrait(gridElement, HTDamageDealer) : false;
 	};
+	patternEffect = new PatternEffect(
+		[new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 })],
+		this.patternCondition.bind(this),
+	);
 	toRecruit(cell: Cell) {
 		return new OrangeTower(cell, this);
 	}

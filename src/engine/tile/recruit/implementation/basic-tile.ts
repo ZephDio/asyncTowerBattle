@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cell, GridPosition } from "../../../../shared/position";
+import { Cell } from "../../../../shared/position";
 import { BasicBattlePathTile } from "../../battle/implementation/basic-battle-tile";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { PathTile } from "../tile";
@@ -12,10 +12,6 @@ export class BasicPathTile extends Derive(PathTile) {
 		public tile: BasicTileBlueprint = new BasicTileBlueprint({}),
 	) {
 		super({ hitboxHolder: tile, imageDrawable: tile, descriptor: tile });
-	}
-
-	toBattle(cell: Cell, position: GridPosition, hooks: BattleArmyHooks) {
-		return new BasicBattlePathTile(this, cell, position, hooks);
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {

@@ -16,7 +16,7 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 		hooks: TokenHooks,
 		public onAbort: () => void,
 	) {
-		super({ imageDrawable: holded, hooks, position });
+		super({ imageDrawable: holded, hooks, position, orientation: holded.orientation });
 	}
 
 	override huds() {
@@ -34,7 +34,7 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 	onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void {
 		try {
 			if (!position) throw new Error("Invalid position");
-			this.holded.moveRecruit(this.hooks, position, grid);
+			this.holded.moveRecruit(this.hooks, position, this.orientation, grid);
 			this.hooks.holderHooks.removeHold();
 		} catch {
 			console.log("abort");
@@ -42,10 +42,10 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 		}
 	}
 
-	getSynergies() {
+	getPatternEffect() {
 		if (implementsTrait(this.holded, Tower)) {
 			if (implementsTrait(this.holded, TSynergy)) {
-				return this.holded.getSynergies();
+				return this.holded.patternEffect;
 			}
 		}
 		return undefined;

@@ -7,7 +7,7 @@ import { AnyBattleTower } from "../tower/battle/battle-tower";
 import { ArmyGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
 import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
-import { SynergyEffect } from "./grid-effects/synergy-effect";
+import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { TRenderable } from "../../shared/traits/render/renderable";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
@@ -20,8 +20,8 @@ export type BattleGridElement =
 	| ImplementsTrait<typeof TEnvironmentElement>;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();
-	overEffect: HoverEffect | null = null;
-	synergiesEffects: SynergyEffect[] = [];
+	hoverEffect: HoverEffect[];
+	synergiesEffects: SynergyEffectHud[] = [];
 	constructor(
 		public gridAllied: ArmyGrid,
 		public gridEnemy: ArmyGrid,

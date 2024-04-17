@@ -11,7 +11,12 @@ import { GridShape } from "./core/grid-element";
 export const TRecruit = Subtrait([TGCollider, HTHitbox, HTDescriptor, HTImageDrawable], (base) => {
 	abstract class IRecruit extends base {
 		override gridShape = new GridShape();
-		abstract moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void;
+		abstract moveRecruit(
+			hooks: TokenHooks,
+			gridPosition: GridPosition,
+			orientation: number,
+			grid?: ImplementsTrait<typeof TGrid>,
+		): void;
 	}
 	return IRecruit;
 });

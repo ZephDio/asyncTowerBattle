@@ -29,6 +29,9 @@ export class ShopInputToIntentTranslator {
 			this.handleMouseUp(shop, focus, screenPosition);
 			return;
 		}
+		if (eventType === "right-click") {
+			this.handleMouseRightClick(shop);
+		}
 	}
 
 	handleMouseDown(
@@ -74,22 +77,36 @@ export class ShopInputToIntentTranslator {
 			shop.setDescriptionHud(null);
 			shop.army.grid.clearSynergiesTiles();
 			shop.army.grid.setOveredTile(null);
-			shop.army.inventory.setOveredTile(null);
+			shop.army.inventory.setOveredTile([]);
 			return;
 		}
 		if (focus.cell && focus.grid instanceof ArmyGrid) {
-			focus.grid.setOveredTile(focus.cell);
+			focus.grid.setOveredTile([focus.cell]);
 			if (shop.holderControl.hold) {
-				const synergy = shop.holderControl.hold.getSynergies();
-				if (synergy) {
-					focus.grid.setSynergiesTiles(focus.cell, synergy.patternEffect, synergy.isPatternActivated);
+				const patternEffect = shop.holderControl.hold.getPatternEffect();
+				if (patternEffect) {
+					focus.grid.setSynergiesTiles(
+						focus.cell,
+						patternEffect.getRelativeCells(shop.holderControl.hold.orientation),
+						patternEffect.patternCondition,
+					);
 				}
+				const projectionCells = shop.holderControl.hold.getProjectionCells(focus.cell);
+				focus.grid.setOveredTile(projectionCells);
 				return;
 			}
 			if (focus.element) {
 				if (implementsTrait(focus.element, TSynergy)) {
-					const synergy = focus.element.getSynergies();
-					focus.grid.setSynergiesTiles(focus.cell, synergy.patternEffect, synergy.isPatternActivated);
+					const patternEffect = focus.element.patternEffect;
+					const condition = patternEffect.patternCondition;
+					focus.grid.setOveredTile([
+						...focus.element.gridShape.getOccupiedCellsFrom(focus.element.cell, focus.element.orientation),
+					]);
+					focus.grid.setSynergiesTiles(
+						focus.element.cell,
+						patternEffect.getRelativeCells(focus.element.orientation),
+						condition,
+					);
 				}
 				if (implementsTrait(focus.element, TDescriptor)) {
 					shop.setDescriptionHud(new DescriptionHud(focus.element));
@@ -101,11 +118,14 @@ export class ShopInputToIntentTranslator {
 			shop.army.inventory.setOveredTile(null);
 		}
 		if (focus.cell && focus.grid instanceof Inventory) {
-			focus.grid.setOveredTile(focus.cell);
+			focus.grid.setOveredTile([focus.cell]);
 			if (shop.holderControl.hold) {
 				return;
 			}
 			if (focus.element) {
+				focus.grid.setOveredTile([
+					...focus.element.gridShape.getOccupiedCellsFrom(focus.element.cell, focus.element.orientation),
+				]);
 				if (implementsTrait(focus.element, TDescriptor)) {
 					shop.setDescriptionHud(new DescriptionHud(focus.element));
 				}
@@ -145,6 +165,12 @@ export class ShopInputToIntentTranslator {
 		}
 		const gridPosition = focus.grid.screenToGridPosition(screenPosition);
 		shop.holderControl.hold.onRelease(gridPosition, focus.grid);
+	}
+
+	handleMouseRightClick(shop: ShopPhase) {
+		if (shop.holderControl.hold) {
+			shop.holderControl.hold.rotate();
+		}
 	}
 
 	determinateFocus(shop: ShopPhase, state: ShopState, screenPosition: ScreenPosition) {

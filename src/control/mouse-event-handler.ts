@@ -2,16 +2,27 @@ import { CanvasRenderer, PercentToReal } from "../renderer/implementation/canvas
 import { ScreenPosition } from "../shared/position";
 import { InputToIntent } from "./input-to-intent-translator";
 
-export type MouseEventType = "down" | "up" | "move";
+export type MouseEventType = "down" | "up" | "move" | "right-click";
 
 export class MouseEventHandler {
 	constructor(
 		private readonly renderer: CanvasRenderer,
 		private readonly inputToIntentTranslator: InputToIntent,
 	) {
-		window.addEventListener("mousedown", (event) => this.onMouseEvent(event, "down"));
-		window.addEventListener("mouseup", (event) => this.onMouseEvent(event, "up"));
+		window.addEventListener("mousedown", (event) => {
+			if (event.button === 2) return;
+			this.onMouseEvent(event, "down");
+		});
+
+		window.addEventListener("mouseup", (event) => {
+			if (event.button === 2) return;
+			this.onMouseEvent(event, "up");
+		});
 		window.addEventListener("mousemove", (event) => this.onMouseEvent(event, "move"));
+		window.addEventListener("contextmenu", (event) => {
+			event.preventDefault();
+			this.onMouseEvent(event, "right-click");
+		});
 	}
 
 	onMouseEvent(event: MouseEvent, type: MouseEventType) {

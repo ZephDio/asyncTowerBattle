@@ -1,7 +1,7 @@
-import { ImplementsTrait, Trait, implementsTrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Trait } from "@ddd-ts/traits";
 import { ArmyGrid } from "./grid";
 import { Cell, GridPosition, ScreenPosition } from "../../shared/position";
-import { SynergyEffect } from "./grid-effects/synergy-effect";
+import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { TRenderable } from "../../shared/traits/render/renderable";
@@ -24,8 +24,8 @@ export const TGrid = Trait((base) => {
 			this.updateCornerPosition();
 		}
 		abstract tiles: Map<string, ImplementsTrait<typeof GridElement>>;
-		abstract overEffect: HoverEffect | null;
-		abstract synergiesEffects: SynergyEffect[];
+		abstract hoverEffect: HoverEffect[] | null;
+		abstract synergiesEffects: SynergyEffectHud[];
 
 		get position() {
 			return this.bottomLeftCornerPosition;
@@ -61,8 +61,8 @@ export const TGrid = Trait((base) => {
 			return new Cell({ x: x, y: y });
 		}
 
-		checkCondition(gridElement: ImplementsTrait<typeof GridElement>, cell: Cell) {
-			const cells = gridElement.gridShape.getOccupiedCellsFrom(cell);
+		checkCondition(gridElement: ImplementsTrait<typeof GridElement>, cell: Cell, orientation: number) {
+			const cells = gridElement.gridShape.getOccupiedCellsFrom(cell, orientation);
 			for (const cell of cells) {
 				if (cell.x < 0 || cell.x >= this.width || cell.y < 0 || cell.y >= this.height) {
 					return false;
@@ -78,7 +78,7 @@ export const TGrid = Trait((base) => {
 		}
 
 		setElement(gridElement: ImplementsTrait<typeof GridElement>) {
-			const cells = gridElement.gridShape.getOccupiedCellsFrom(gridElement.cell);
+			const cells = gridElement.gridShape.getOccupiedCellsFrom(gridElement.cell, gridElement.orientation);
 			for (const cell of cells) {
 				this.tiles.set(ArmyGrid.posToString(cell), gridElement);
 			}
@@ -89,7 +89,7 @@ export const TGrid = Trait((base) => {
 		}
 
 		deleteElement(gridElement: ImplementsTrait<typeof GridElement>) {
-			const cells = gridElement.gridShape.getOccupiedCellsFrom(gridElement.cell);
+			const cells = gridElement.gridShape.getOccupiedCellsFrom(gridElement.cell, gridElement.orientation);
 			for (const cell of cells) {
 				const foundElement = this.tiles.get(ArmyGrid.posToString(cell));
 				if (gridElement === foundElement) {
@@ -98,14 +98,17 @@ export const TGrid = Trait((base) => {
 			}
 		}
 		getDrawables(): ImplementsTrait<typeof TRenderable>[] {
-			return [...this.tiles.values(), ...this.synergiesEffects, ...(this.overEffect ? [this.overEffect] : [])];
+			return [...this.tiles.values(), ...this.synergiesEffects, ...(this.hoverEffect ? [...this.hoverEffect] : [])];
 		}
 
 		translate() {
 			const translated = new Map();
-			this.tiles.forEach((gridElement) => {
+			const set = new Set([...this.tiles.values()]);
+			[...set.values()].forEach((gridElement) => {
 				gridElement.cell = gridElement.cell.up();
-				translated.set(ArmyGrid.posToString(gridElement.cell), gridElement);
+				for (const cell of gridElement.gridShape.getOccupiedCellsFrom(gridElement.cell, gridElement.orientation)) {
+					translated.set(ArmyGrid.posToString(cell), gridElement);
+				}
 				this.tiles = translated;
 			});
 			this.updateCornerPosition();

@@ -26,20 +26,14 @@ export class BlueTower extends Derive(HTDamageDealer, Tower) {
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const position = grid.cellToGrid(clone.cell);
-		return new BlueBattleTower(clone, hooks, position, clone.cell);
+		const position = grid.cellToGrid(this.cell);
+		return new BlueBattleTower(this, hooks, position, this.cell);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const cell = BattleGrid.flip(grid, clone.cell);
+		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		return new BlueBattleTower(clone, hooks, position, cell);
-	}
-
-	clone() {
-		return new BlueTower(this.cell.clone(), this.tower);
+		return new BlueBattleTower(this, hooks, position, cell);
 	}
 
 	get position(): Cell {

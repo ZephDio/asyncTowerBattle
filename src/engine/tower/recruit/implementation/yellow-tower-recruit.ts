@@ -26,23 +26,17 @@ export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const position = grid.cellToGrid(clone.cell);
-		return new YellowBattleTower(clone, hooks, position, clone.cell);
+		const position = grid.cellToGrid(this.cell);
+		return new YellowBattleTower(this, hooks, position, this.cell);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const cell = BattleGrid.flip(grid, clone.cell);
+		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		return new YellowBattleTower(clone, hooks, position, cell);
-	}
-
-	clone() {
-		return new YellowTower(this.cell.clone(), this.tower);
+		return new YellowBattleTower(this, hooks, position, cell);
 	}
 
 	get position() {
-		return this.gridShape.getCenterPosition(this.cell);
+		return this.gridShape.getCenterPosition(this.cell, this.orientation);
 	}
 }

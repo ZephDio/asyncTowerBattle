@@ -26,7 +26,7 @@ export const Barrack = Subtrait([TRecruit], (base) => {
 		abstract toAllied(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
 		abstract toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
 
-		moveRecruit(hooks: TokenHooks, position: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
+		moveRecruit(hooks: TokenHooks, position: GridPosition, orientation: number, grid?: ImplementsTrait<typeof TGrid>) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
@@ -37,10 +37,10 @@ export const Barrack = Subtrait([TRecruit], (base) => {
 			}
 			const cell = grid.gridPositionToCell(position);
 			if (!cell) throw new Error("Invalid cell");
-			const element = grid.getElement(cell);
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				if (element) throw new Error("already occupied cell");
+				grid.checkCondition(this, cell, orientation);
 				this.cell = cell.clone();
+				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return;
 			}

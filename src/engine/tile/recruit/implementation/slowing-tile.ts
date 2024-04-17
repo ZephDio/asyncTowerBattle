@@ -15,10 +15,6 @@ export class SlowingPathTile extends Derive(TRecruit, PathTile) {
 		super({ hitboxHolder: tile, imageDrawable: tile, descriptor: tile });
 	}
 
-	// toBattle(cell: Cell, position: Position, hooks: BattleArmyHooks) {
-	// 	return new SlowingBattlePathTile(this, cell, position, hooks);
-	// }
-
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const position = grid.cellToGrid(this.cell.clone());
 		return new SlowingBattlePathTile(this, this.cell, position, hooks);

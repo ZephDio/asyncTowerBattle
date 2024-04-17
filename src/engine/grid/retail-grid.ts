@@ -2,7 +2,7 @@ import { Derive } from "@ddd-ts/traits";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { TGrid } from "./tgrid";
 import { HoverEffect } from "./grid-effects/hover-effect";
-import { SynergyEffect } from "./grid-effects/synergy-effect";
+import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { ScreenPosition } from "../../shared/position";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { Buyable } from "../shop/retail/buyable";
@@ -11,7 +11,7 @@ import { TRenderable } from "../../shared/traits/render/renderable";
 export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, Buyable> = new Map();
 	overEffect: HoverEffect | null = null;
-	synergiesEffects: SynergyEffect[] = [];
+	synergiesEffects: SynergyEffectHud[] = [];
 
 	constructor(
 		screenPosition = new ScreenPosition(PercentToReal({ x: 35, y: 72 })),

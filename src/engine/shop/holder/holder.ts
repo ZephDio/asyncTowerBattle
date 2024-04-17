@@ -23,10 +23,14 @@ export type TokenHooks = {
 
 export class Holder {
 	private _hold: null | ImplementsTrait<typeof TTokenDrag> = null;
-	constructor() {}
 
 	get hold() {
 		return this._hold;
+	}
+
+	get orientation() {
+		if (!this._hold) return 0;
+		return this._hold.orientation;
 	}
 
 	private setNull() {
@@ -83,7 +87,6 @@ export class Holder {
 		}
 		army.removeRecruit(recruit);
 		const onAbort = () => {
-			console.log("abort");
 			army.addRecruit(recruit, grid);
 			this.setNull();
 		};
