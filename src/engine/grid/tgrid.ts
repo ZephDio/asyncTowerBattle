@@ -62,7 +62,22 @@ export const TGrid = Trait((base) => {
 		}
 
 		setElement(gridElement: ImplementsTrait<typeof GridElement>) {
-			this.tiles.set(ArmyGrid.posToString(gridElement.cell), gridElement);
+			const cells = gridElement.gridShape.getOccupiedCellsFrom(gridElement.cell);
+			for (const cell of cells) {
+				if (cell.x < 0 || cell.x >= this.width || cell.y < 0 || cell.y >= this.height) {
+					throw new Error("Element out of grid");
+				}
+			}
+			cells.forEach((cell) => {
+				const found = this.getElement(cell);
+				if (found) {
+					throw new Error(`Element already occupied cell : ${cell.toString()}`);
+				}
+			});
+			cells.forEach((cell) => {
+				this.tiles.set(ArmyGrid.posToString(cell), gridElement);
+			});
+			//this.tiles.set(ArmyGrid.posToString(gridElement.cell), gridElement);
 		}
 
 		getElement(cell: Cell) {

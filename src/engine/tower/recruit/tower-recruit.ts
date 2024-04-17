@@ -24,9 +24,7 @@ export const Tower = Subtrait([TRecruit], (base) => {
 			}
 			const cell = grid.gridPositionToCell(gridPosition);
 			if (!cell) throw new Error("Invalid cell");
-			const element = grid.getElement(cell);
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				if (element) throw new Error("already occupied cell");
 				this.cell = cell.clone();
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return;
