@@ -37,7 +37,6 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 			this.holded.moveRecruit(this.hooks, position, this.orientation, grid);
 			this.hooks.holderHooks.removeHold();
 		} catch {
-			console.log("abort");
 			this.onAbort();
 		}
 	}

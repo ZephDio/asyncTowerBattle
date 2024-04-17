@@ -15,7 +15,6 @@ export class GridShape {
 		});
 	}
 	getOccupiedCellsFrom(cell: Cell, orientation: number) {
-		console.log("vectors", this.getVectorialCells(orientation));
 		return this.getVectorialCells(orientation).map((c) => c.add(cell));
 	}
 

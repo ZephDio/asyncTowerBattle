@@ -23,6 +23,7 @@ export class BlueBattleTower extends Derive(
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
+		public override orientation: number,
 	) {
 		super({
 			hitboxHolder: recruit,
@@ -33,6 +34,9 @@ export class BlueBattleTower extends Derive(
 			castSpeed: recruit.attackSpeed,
 			onDeath: () => {},
 		});
+
+		this.angle = this.orientation;
+		this.gridShape = recruit.gridShape;
 	}
 
 	private attack(target: AnyBattleUnit) {

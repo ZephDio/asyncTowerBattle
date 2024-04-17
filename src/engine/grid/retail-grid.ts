@@ -9,8 +9,8 @@ import { Buyable } from "../shop/retail/buyable";
 import { TRenderable } from "../../shared/traits/render/renderable";
 
 export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
+	override hoverEffect: HoverEffect[] | null;
 	tiles: Map<string, Buyable> = new Map();
-	overEffect: HoverEffect | null = null;
 	synergiesEffects: SynergyEffectHud[] = [];
 
 	constructor(

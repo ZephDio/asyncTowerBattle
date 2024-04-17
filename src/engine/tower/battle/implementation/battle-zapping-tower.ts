@@ -26,6 +26,7 @@ export class ZappingBattleTower extends Derive(
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
+		public override orientation: number,
 	) {
 		super({
 			imageDrawable: recruit,
@@ -36,6 +37,9 @@ export class ZappingBattleTower extends Derive(
 			onDeath: () => {},
 			hitboxHolder: recruit,
 		});
+
+		this.angle = this.orientation;
+		this.gridShape = recruit.gridShape;
 	}
 
 	private attack(target: AnyBattleUnit) {

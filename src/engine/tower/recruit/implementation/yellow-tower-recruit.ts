@@ -27,13 +27,14 @@ export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const position = grid.cellToGrid(this.cell);
-		return new YellowBattleTower(this, hooks, position, this.cell);
+		return new YellowBattleTower(this, hooks, position, this.cell, this.orientation);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		return new YellowBattleTower(this, hooks, position, cell);
+		const orientation = this.orientation + Math.PI;
+		return new YellowBattleTower(this, hooks, position, cell, orientation);
 	}
 
 	get position() {
