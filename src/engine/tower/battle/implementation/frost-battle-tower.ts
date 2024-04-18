@@ -26,6 +26,7 @@ export class FrostBattleTower extends Derive(
 		public override orientation: number,
 	) {
 		super({
+			casterRecruit: recruit,
 			hitboxHolder: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
@@ -43,6 +44,8 @@ export class FrostBattleTower extends Derive(
 		const IceSpikeSpawnLocation = new GridPosition({ x: target.position.x, y: target.position.y + 9 });
 		const projectile = this.recruit.getProjectile(this.hooks, target, IceSpikeSpawnLocation, this.stats.attack);
 		this.hooks.addProjectile(projectile, this);
+		this.castInProgress = null;	
+		this.callSubscribers()
 	}
 
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
@@ -59,14 +62,12 @@ export class FrostBattleTower extends Derive(
 			this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
 		) {
 			this.attack(this.target);
-			this.castInProgress = null;
 			return;
 		}
 		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule);
 		this.setTarget(target);
 		if (this.target) {
 			this.attack(this.target);
-			this.castInProgress = null;
 			return;
 		}
 	}

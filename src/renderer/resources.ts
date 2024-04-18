@@ -6,17 +6,6 @@ function createImage(src: string): HTMLImageElement {
 
 export const Resources = {
 	tower: {
-		orange: {
-			size: {
-				width: 5,
-				height: 8,
-			},
-			resource: {
-				image: createImage("/resources/towers/tower_red.png"),
-				shape: "ellipse",
-				color: "orange",
-			},
-		},
 		blue: {
 			size: {
 				width: 5,
@@ -73,6 +62,30 @@ export const Resources = {
 			},
 		},
 	},
+	totem: {
+		orange: {
+			size: {
+				width: 5,
+				height: 8,
+			},
+			resource: {
+				image: createImage("/resources/totem/orange-totem.png"),
+				shape: "ellipse",
+				color: "orange",
+			},
+		},
+		gobelinportal: {
+			size: {
+				width: 5,
+				height: 5,
+			},
+			resource: {
+				image: createImage("/resources/totem/gobelin-portal.png"),
+				shape: "ellipse",
+				color: "orange",
+			},
+		},
+	},
 	unit: {
 		soldier: {
 			size: {
@@ -121,6 +134,16 @@ export const Resources = {
 			},
 			resource: {
 				image: createImage("/resources/units/berseker.png"),
+				shape: "ellipse",
+			},
+		},
+		gobelin: {
+			size: {
+				width: 2.8,
+				height: 2.8,
+			},
+			resource: {
+				image: createImage("/resources/units/gobelin.png"),
 				shape: "ellipse",
 			},
 		},

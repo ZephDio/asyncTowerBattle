@@ -1,26 +1,25 @@
 import { Cell } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { OrangeBattleTower } from "../../battle/implementation/battle-orange-tower";
-import { OrangeTowerBlueprint } from "../../blueprint/implementation/orange-tower";
-import { Tower } from "../tower-recruit";
 import { BattleGrid } from "../../../grid/battle-grid";
-import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
-export class OrangeTower extends Derive(Tower, HTSynergy) {
+import { Totem } from "../totem-recruit";
+import { OrangeTotemBlueprint } from "../../blueprint/implementation/orange-totem";
+export class OrangeTotem extends Derive(Totem, HTSynergy) {
 	constructor(
 		public cell: Cell,
-		public tower: OrangeTowerBlueprint = new OrangeTowerBlueprint({}),
+		public totem: OrangeTotemBlueprint = new OrangeTotemBlueprint({}),
 	) {
-		super({ synergy: tower, imageDrawable: tower, hitboxHolder: tower, descriptor: tower });
+		super({ synergy: totem, imageDrawable: totem, hitboxHolder: totem, descriptor: totem });
 	}
 
-	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const position = grid.cellToGrid(this.cell);
 		return new OrangeBattleTower(this, hooks, position, this.cell, this.orientation);
 	}
 
-	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
 		const orientation = this.orientation + Math.PI;

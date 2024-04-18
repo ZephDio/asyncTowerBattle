@@ -1,6 +1,5 @@
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { BattlePath } from "../../path/battle/battle-path";
 import { AnyUnit } from "../../units/recruit/unit-recruit";
 import { AnyBattleBarrack } from "../battle/battle-barrack";
 import { BattleGrid } from "../../grid/battle-grid";
@@ -11,10 +10,11 @@ import { ArmyGrid } from "../../grid/grid";
 import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { TGrid } from "../../grid/tgrid";
+import { RecruitCaster } from "../../../shared/traits/engine/cast";
 
 export type AnyBarrack = ImplementsTrait<typeof Barrack>;
 
-export const Barrack = Subtrait([TRecruit], (base) => {
+export const Barrack = Subtrait([TRecruit, RecruitCaster], (base) => {
 	abstract class IBarrack extends base {
 		abstract productionSpeed: number;
 		abstract unitRecruit: null | AnyUnit;
@@ -23,8 +23,8 @@ export const Barrack = Subtrait([TRecruit], (base) => {
 			this.unitRecruit = unit;
 		}
 
-		abstract toAllied(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
-		abstract toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
+		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
+		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
 
 		moveRecruit(hooks: TokenHooks, position: GridPosition, orientation: number, grid?: ImplementsTrait<typeof TGrid>) {
 			if (!grid) throw new Error("Invalid grid");

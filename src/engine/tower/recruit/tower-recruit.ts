@@ -9,8 +9,10 @@ import { ArmyGrid } from "../../grid/grid";
 import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { TGrid } from "../../grid/tgrid";
+import { HTDamageDealer } from "../../../shared/traits/engine/damage-dealer";
+import { RecruitCaster } from "../../../shared/traits/engine/cast";
 
-export const Tower = Subtrait([TRecruit], (base) => {
+export const Tower = Subtrait([HTDamageDealer,RecruitCaster, TRecruit], (base) => {
 	abstract class ITower extends base {
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;

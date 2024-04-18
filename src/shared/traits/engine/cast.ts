@@ -1,4 +1,4 @@
-import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { HaveStats } from "../../../engine/stats/stats";
 
 export class Cast {
@@ -18,11 +18,21 @@ export class Cast {
 	}
 }
 
-export const Caster = Subtrait([HaveStats], (base) => {
+export const Caster = Subtrait([HaveStats], (base, _props) => {
 	abstract class ICaster extends base {
+		constructor(props: { casterRecruit: ImplementsTrait<typeof RecruitCaster> } & typeof _props) {
+			super(props);
+		}
 		castInProgress = null as null | Cast;
+		subscribers: Set<{ subscriber: any; callback: () => void }> = new Set();
 
 		abstract casts(): void;
+
+		callSubscribers() {
+			for (const { callback } of this.subscribers) {
+				callback();
+			}
+		}
 
 		tickCast() {
 			if (this.castInProgress) {
@@ -34,7 +44,18 @@ export const Caster = Subtrait([HaveStats], (base) => {
 		get castSpeed() {
 			return this.stats.castSpeed;
 		}
+
+		subscribeOnCast(subscriber: any, callback: () => void) {
+			this.subscribers.add({ subscriber, callback });
+		}
 	}
 
 	return ICaster;
+});
+
+export const RecruitCaster = Trait((base) => {
+	abstract class IRecruitCaster extends base {
+		instantiateCaster = true;
+	}
+	return IRecruitCaster;
 });

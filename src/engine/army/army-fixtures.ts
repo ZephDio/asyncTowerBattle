@@ -5,6 +5,7 @@ import { Rock } from "../environment/rock";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
+import { TotemBuilder } from "../totem/recruit/totem-recruit-fixtures";
 import { TowerBlueprintFixtures } from "../tower/blueprint/tower-fixtures";
 import { AnyTower } from "../tower/recruit/tower-recruit";
 import { TowerBuilder } from "../tower/recruit/tower-recruit-fixtures";
@@ -44,13 +45,14 @@ export class ArmyFixture {
 				.buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];
+		const totems = [new TotemBuilder().celled(new Cell({ x : 3 , y :2})).buildOrange()]
 		const tiles = PathFixture.default;
 		const barracks = [BarrackRecruitFixtures.veterantWithDragon()];
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
 		const environment = [new Rock(new Cell({ x: 0, y: 0 }))];
-		[castle, ...towers, ...tiles, ...barracks, ...environment].map((e) => grid.setElement(e));
+		[castle, ...towers, ...tiles, ...totems, ...barracks, ...environment].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
 		return new Army(grid, unitInventory);
 	}
@@ -58,8 +60,10 @@ export class ArmyFixture {
 		const grid = new ArmyGrid();
 		const towers = [
 			new TowerBuilder().celled(new Cell({ x: 5, y: 5 })).buildBlue(TowerBlueprintFixtures.blue),
-			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildOrange(TowerBlueprintFixtures.orange),
-			new TowerBuilder().celled(new Cell({ x: 4, y: 3 })).buildZapping(TowerBlueprintFixtures.zapping),
+			//new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildOrange(TowerBlueprintFixtures.orange),
+			new TowerBuilder()
+				.celled(new Cell({ x: 4, y: 3 }))
+				.buildZapping(TowerBlueprintFixtures.zapping),
 		];
 		const castle = CastleRecruitFixture.enemy;
 		const tiles = PathFixture.default;

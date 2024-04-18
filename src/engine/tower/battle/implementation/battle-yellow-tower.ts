@@ -29,6 +29,7 @@ export class YellowBattleTower extends Derive(
 		public override orientation: number,
 	) {
 		super({
+			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
 			attack: recruit.attackDamage,
@@ -64,6 +65,7 @@ export class YellowBattleTower extends Derive(
 	onCastResolve(): void {
 		this.attack();
 		this.castInProgress = null;
+		this.callSubscribers()
 	}
 
 	casts(): void {
@@ -85,6 +87,7 @@ export class Poisoned extends Derive(Status) {
 	constructor(public damage: number) {
 		super({});
 	}
+	
 	tick() {
 		this.clock++;
 		if (this.clock >= this.duration) {

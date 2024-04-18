@@ -1,7 +1,6 @@
 import { CastleBlueprint } from "../blueprint/castle";
 import { Castle } from "../recruit/castle-recruit";
 import { Cell, GridPosition } from "../../../shared/position";
-import { BattleGrid } from "../../grid/battle-grid";
 import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { Derive } from "@ddd-ts/traits";
 import { TPhysics } from "../../../shared/traits/engine/core/physics";

@@ -2,7 +2,7 @@ import { Derive, implementsTrait } from "@ddd-ts/traits";
 import { TPhysics } from "../../../../shared/traits/engine/core/physics";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { OrangeTower } from "../../recruit/implementation/orange-tower-recruit";
+import { OrangeTotem } from "../../recruit/implementation/orange-tower-recruit";
 import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
@@ -14,7 +14,7 @@ export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawabl
 	hasTriggered = false;
 
 	constructor(
-		public recruit: OrangeTower,
+		public recruit: OrangeTotem,
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
@@ -35,7 +35,6 @@ export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawabl
 				this.cell,
 				this.recruit.patternEffect.getRelativeCells(this.recruit.orientation),
 			);
-			console.log("neighbors", neighbors);
 			for (const neighbor of neighbors) {
 				if (implementsTrait(neighbor, HaveStats)) {
 					neighbor.addStatus(new OrangeTowerBuff({}));

@@ -25,15 +25,15 @@ export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 		return new PoisonGround(80, position, damage, hooks);
 	}
 
-	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const position = grid.cellToGrid(this.cell);
+	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
+		const position = this.gridShape.getCenterPosition(this.cell, this.orientation);
 		return new YellowBattleTower(this, hooks, position, this.cell, this.orientation);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const position = grid.cellToGrid(cell);
 		const orientation = this.orientation + Math.PI;
+		const position = this.gridShape.getCenterPosition(cell, orientation);
 		return new YellowBattleTower(this, hooks, position, cell, orientation);
 	}
 

@@ -29,6 +29,7 @@ export class ZappingBattleTower extends Derive(
 		public override orientation: number,
 	) {
 		super({
+			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
 			attack: recruit.attackDamage,
@@ -46,6 +47,7 @@ export class ZappingBattleTower extends Derive(
 		const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
 		this.hooks.addProjectile(projectile, this);
 		this.castInProgress = null;
+		this.callSubscribers()
 	}
 
 	isAlive() {

@@ -1,6 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../shared/position";
-import { ArmyGrid } from "../../grid/grid";
 import { CastleBlueprint } from "../blueprint/castle";
 import { BattleCastle } from "../battle/battle-castle";
 import { BattleGrid } from "../../grid/battle-grid";

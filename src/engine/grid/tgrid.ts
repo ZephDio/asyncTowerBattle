@@ -79,7 +79,6 @@ export const TGrid = Trait((base) => {
 
 		setElement(gridElement: ImplementsTrait<typeof GridElement>) {
 			const cells = gridElement.gridShape.getOccupiedCellsFrom(gridElement.cell, gridElement.orientation);
-			console.log(gridElement, cells);
 			for (const cell of cells) {
 				this.tiles.set(ArmyGrid.posToString(cell), gridElement);
 			}

@@ -24,7 +24,7 @@ export class LocalMatchMaker extends MatchMaker {
 ArmyFixture;
 const EnemyArmyFixtures = {
 	1: () => {
-		const grid = new ArmyGrid(6,4, undefined,7);
+		const grid = new ArmyGrid(6, 4, undefined, 7);
 		const castle = CastleFactory.default;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -42,16 +42,12 @@ const EnemyArmyFixtures = {
 		];
 		const unitInventory = new Inventory();
 		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(grid, unitInventory);
+		return { army : new Army(grid, unitInventory), randomSeed : 123456};
 	},
 	2: () => {
-		const grid = new ArmyGrid(8,5);
+		const grid = new ArmyGrid(8, 5);
 		const castle = CastleFactory.round2;
-		const towers = [
-			new TowerBuilder()
-			.celled(new Cell({ x: 3, y: 2 }))
-				.buildGreen(),
-		];
+		const towers = [new TowerBuilder().celled(new Cell({ x: 3, y: 2 })).buildGreen()];
 		const barracks = [
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.dragon)
@@ -60,17 +56,13 @@ const EnemyArmyFixtures = {
 				.buildWave(),
 		];
 		const tiles = PathFactory.round2;
-		[castle, ...towers, ...barracks,...tiles].map((e) => grid.setElement(e));
-		return new Army(grid, new Inventory());
+		[castle, ...towers, ...barracks, ...tiles].map((e) => grid.setElement(e));
+		return { army : new Army(grid, new Inventory()), randomSeed : 123456};
 	},
 	3: () => {
-		const grid = new ArmyGrid(8,5, undefined,7);
+		const grid = new ArmyGrid(8, 5, undefined, 7);
 		const castle = CastleFactory.round2;
-		const towers = [
-			new TowerBuilder()
-				.celled(new Cell({ x: 4, y: 4 }))
-				.buildGreen(),
-		];
+		const towers = [new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen()];
 		const barracks = [
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.dragon)
@@ -80,16 +72,18 @@ const EnemyArmyFixtures = {
 		];
 		const tiles = PathFactory.round2;
 		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(grid, new Inventory());
+		return { army : new Army(grid, new Inventory()), randomSeed : 123456};
 	},
 	4: () => {
-		const grid =new ArmyGrid(8,5, undefined,7);
+		const grid = new ArmyGrid(8, 5, undefined, 7);
 		const castle = CastleFactory.round2;
 		const towers = [
 			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildYellow(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen(),
-			new TowerBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
-			new TowerBuilder().celled(new Cell({ x: 3, y: 5 })).buildBlue(),
+			//new TotemBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
+			new TowerBuilder()
+				.celled(new Cell({ x: 3, y: 5 }))
+				.buildBlue(),
 		];
 		const barracks = [
 			new BarrackRecruitBuilder()
@@ -114,17 +108,19 @@ const EnemyArmyFixtures = {
 		];
 		const tiles = PathFactory.round2;
 		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(grid, new Inventory());
+		return { army : new Army(grid, new Inventory()), randomSeed : 123456};
 	},
 	5: () => {
-		const grid = new ArmyGrid(8,5, undefined,7);
+		const grid = new ArmyGrid(8, 5, undefined, 7);
 		const castle = CastleFactory.round2;
 		const towers = [
 			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildYellow(),
 			new TowerBuilder().celled(new Cell({ x: 5, y: 2 })).buildYellow(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen(),
-			new TowerBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
-			new TowerBuilder().celled(new Cell({ x: 3, y: 5 })).buildBlue(),
+			//new TowerBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
+			new TowerBuilder()
+				.celled(new Cell({ x: 3, y: 5 }))
+				.buildBlue(),
 		];
 		const barracks = [
 			new BarrackRecruitBuilder()
@@ -154,7 +150,7 @@ const EnemyArmyFixtures = {
 		];
 		const tiles = PathFactory.round2;
 		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(grid, new Inventory());
+		return { army : new Army(grid, new Inventory()), randomSeed : 123456};
 	},
 };
 
