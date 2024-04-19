@@ -2,21 +2,28 @@ import { AnyBattleTower } from "../battle/battle-tower";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattleGrid } from "../../grid/battle-grid";
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
-import { TRecruit } from "../../../shared/traits/recruit";
+import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { GridPosition } from "../../../shared/position";
 import { RetailGrid } from "../../grid/retail-grid";
 import { ArmyGrid } from "../../grid/grid";
 import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { TGrid } from "../../grid/tgrid";
+import { HTDamageDealer } from "../../../shared/traits/engine/damage-dealer";
+import { RecruitCaster } from "../../../shared/traits/engine/cast";
+import { HTFoodConsumer } from "../../../shared/traits/engine/food-consumer";
 
-export const Tower = Subtrait([TRecruit], (base) => {
+export const Tower = Subtrait([HTDamageDealer, RecruitCaster, TRecruit, HTFoodConsumer], (base) => {
 	abstract class ITower extends base {
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
-		abstract clone(): ITower;
 
-		moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
+		moveRecruit(
+			hooks: TokenHooks,
+			gridPosition: GridPosition,
+			orientation: number,
+			grid?: ImplementsTrait<typeof TGrid>,
+		) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
@@ -24,10 +31,12 @@ export const Tower = Subtrait([TRecruit], (base) => {
 			}
 			const cell = grid.gridPositionToCell(gridPosition);
 			if (!cell) throw new Error("Invalid cell");
-			const element = grid.getElement(cell);
+
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				if (element) throw new Error("already occupied cell");
+				const condition = grid.checkCondition(this, cell, orientation);
+				if (!condition) throw new Error("Invalid condition");
 				this.cell = cell.clone();
+				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return;
 			}

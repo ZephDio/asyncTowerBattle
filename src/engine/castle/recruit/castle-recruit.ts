@@ -1,51 +1,39 @@
 import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../shared/position";
-import { ArmyGrid } from "../../grid/grid";
 import { CastleBlueprint } from "../blueprint/castle";
 import { BattleCastle } from "../battle/battle-castle";
 import { BattleGrid } from "../../grid/battle-grid";
-import { TRecruit } from "../../../shared/traits/recruit";
+import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { TokenHooks } from "../../shop/holder/holder";
+import { FoodHooks } from "../../food/battle-food-economy";
+import { RecruitCaster } from "../../../shared/traits/engine/cast";
 
-export class Castle<TB extends CastleBlueprint = CastleBlueprint> extends Derive(TRecruit) {
-	type: string = "castle";
-	cell: Cell;
+export class Castle extends Derive(TRecruit, RecruitCaster) {
 	maxLife: number;
-
-	constructor(castle: TB) {
-		super({ imageDrawable: castle, hitboxHolder: castle });
-		this.cell = new Cell({ x: 12, y: 5 });
+	castSpeed: number;
+	constructor(
+		castle: CastleBlueprint,
+		public cell: Cell,
+	) {
+		super({ imageDrawable: castle, hitboxHolder: castle, descriptor: castle });
 		this.maxLife = castle.maxLife;
-	}
-
-	clone() {
-		// TODO
-		return new Castle(new CastleBlueprint({}));
+		this.castSpeed = castle.castSpeed;
 	}
 
 	get position() {
 		return this.cell;
 	}
 
-	toSerialized(grid: ArmyGrid): SerializedCastleRecruit {
-		return {
-			type: this.type,
-			cell: this.cell,
-			position: grid.cellToGrid(this.cell),
-		};
+	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleCastle {
+		const position = grid.cellToGrid(this.cell);
+		return new BattleCastle(this, onDeath, this.cell.clone(), position, this.orientation, foodHooks);
 	}
 
-	toAllied(grid: BattleGrid, onDeath: () => void): BattleCastle {
-		const clone = this.clone();
-		const position = grid.cellToGrid(clone.cell);
-		return new BattleCastle(clone, onDeath, clone.cell, position);
-	}
-
-	toEnemy(grid: BattleGrid, onDeath: () => void): BattleCastle {
-		const clone = this.clone();
-		const cell = BattleGrid.flip(grid, clone.cell);
+	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleCastle {
+		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const BC = new BattleCastle(clone, onDeath, cell, position);
+		const orientation = this.orientation + Math.PI;
+		const BC = new BattleCastle(this, onDeath, cell, position, orientation, foodHooks);
 		return BC;
 	}
 

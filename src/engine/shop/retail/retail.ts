@@ -1,7 +1,10 @@
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { Cell, GridPosition } from "../../../shared/position";
 import { Derive } from "@ddd-ts/traits";
-import { HitBox, Rectangle, TCollider, THitbox } from "../../../shared/hitboxes";
+import { HitBox } from "../../../shared/hitbox/hitboxe";
+import { Rectangle } from "../../../shared/hitbox/shapes/rectangle";
+import { TCollider } from "../../../shared/traits/engine/core/TCollider";
+import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { RetailGrid } from "../../grid/retail-grid";
 import { ArmyGrid } from "../../grid/grid";
 import { RetailFiller } from "./retail-filler";

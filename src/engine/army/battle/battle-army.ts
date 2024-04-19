@@ -7,10 +7,14 @@ import { GridHooks } from "../../grid/battle-grid";
 import { BattlePath } from "../../path/battle/battle-path";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 import { AnyBattleUnit } from "../../units/battle/battle-unit";
-import { HitBox } from "../../../shared/hitboxes";
+import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { GridPosition } from "../../../shared/position";
 import { AnyBattleTile } from "../../tile/battle/battle-tile";
+import { AnyBattleTotem } from "../../totem/battle/battle-totem";
+import { BattleFoodEconomy, FoodHooks } from "../../food/battle-food-economy";
+
 export type BattleArmyHooks = {
+	random: () => number;
 	addUnits: BattleArmy["addUnit"];
 	removeUnit: BattleArmy["removeUnit"];
 	addProjectile: BattleArmy["addProjectile"];
@@ -20,6 +24,11 @@ export type BattleArmyHooks = {
 	searchTarget: BattleArmy["searchTarget"];
 	searchEnemyInArea: BattleArmy["searchEnemyInArea"];
 	searchAlliesInArea: BattleArmy["searchAlliesInArea"];
+	getEnemyPath: BattleArmy["getEnemyPath"];
+	getEnemyCastle: BattleArmy["getEnemyCastle"];
+	getAlliedCastle: () => BattleCastle;
+	alliedFoodHooks: FoodHooks;
+	enemyFoodHooks: FoodHooks;
 	gridHooks: GridHooks;
 };
 
@@ -33,9 +42,16 @@ export class BattleArmy {
 	towers: AnyBattleTower[];
 	tiles: AnyBattleTile[];
 
+	totems: AnyBattleTotem[];
+
 	constructor(
+		public foodEconomy: BattleFoodEconomy,
 		public searchTarget: SearchTarget,
 		public searchEnemyInArea: SearchAreaForUnit,
+		public random: () => number,
+		public getEnemyPath: () => BattlePath,
+		public getEnemyCastle: () => BattleCastle,
+		public enemyFoodHooks: FoodHooks,
 		public gridHooks: GridHooks,
 	) {}
 
@@ -45,16 +61,18 @@ export class BattleArmy {
 		towers: AnyBattleTower[],
 		barracks: AnyBattleBarrack[],
 		tiles: AnyBattleTile[],
+		totems: AnyBattleTotem[],
 	) {
 		this.castle = castle;
 		this.path = path;
 		this.towers = towers;
 		this.barracks = barracks;
 		this.tiles = tiles;
+		this.totems = totems;
 	}
 
-	addUnit(entityRecruit: AnyBattleUnit, battleBarrack: AnyBattleBarrack) {
-		this.units.set(entityRecruit, battleBarrack);
+	addUnit(entityRecruit: AnyBattleUnit, source: any) {
+		this.units.set(entityRecruit, source);
 	}
 
 	removeUnit(entityRecruit: AnyBattleUnit) {
@@ -89,6 +107,7 @@ export class BattleArmy {
 
 	getHooks(): BattleArmyHooks {
 		return {
+			random: this.random.bind(this),
 			addUnits: this.addUnit.bind(this),
 			removeUnit: this.removeUnit.bind(this),
 			addProjectile: this.addProjectile.bind(this),
@@ -98,6 +117,11 @@ export class BattleArmy {
 			searchTarget: this.searchTarget.bind(this),
 			searchEnemyInArea: this.searchEnemyInArea.bind(this),
 			searchAlliesInArea: this.searchAlliesInArea.bind(this),
+			getEnemyPath: this.getEnemyPath.bind(this),
+			getEnemyCastle: this.getEnemyCastle.bind(this),
+			getAlliedCastle: () => this.castle,
+			alliedFoodHooks: this.foodEconomy.getHooks(),
+			enemyFoodHooks: this.enemyFoodHooks,
 			gridHooks: this.gridHooks,
 		};
 	}

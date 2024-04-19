@@ -1,12 +1,15 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
+
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { Status } from "../../../../shared/traits/status";
+import { Status } from "../../../../shared/traits/engine/status";
 import { Stats } from "../../../stats/stats";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { SlowingPathTile } from "../../recruit/implementation/slowing-tile";
-import { GridElement } from "../../../../shared/traits/grid-element";
+import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
+import { TRenderable } from "../../../../shared/traits/render/renderable";
+import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 
 export class SlowingBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
 	constructor(

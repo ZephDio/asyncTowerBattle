@@ -8,7 +8,7 @@ import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
 
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 
 export class BlueTower extends Derive(HTDamageDealer, Tower) {
@@ -18,7 +18,7 @@ export class BlueTower extends Derive(HTDamageDealer, Tower) {
 		public cell: Cell,
 		public tower: BlueTowerBlueprint = new BlueTowerBlueprint({}),
 	) {
-		super({ imageDrawable: tower, damageDealer: tower, hitboxHolder: tower });
+		super({ imageDrawable: tower, damageDealer: tower, hitboxHolder: tower, descriptor: tower, foodConsumer: tower });
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {
@@ -26,20 +26,15 @@ export class BlueTower extends Derive(HTDamageDealer, Tower) {
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const position = grid.cellToGrid(clone.cell);
-		return new BlueBattleTower(clone, hooks, position, clone.cell);
+		const position = grid.cellToGrid(this.cell);
+		return new BlueBattleTower(this, hooks, position, this.cell, this.orientation);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const cell = BattleGrid.flip(grid, clone.cell);
+		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		return new BlueBattleTower(clone, hooks, position, cell);
-	}
-
-	clone() {
-		return new BlueTower(this.cell.clone(), this.tower);
+		const orientation = this.orientation + Math.PI;
+		return new BlueBattleTower(this, hooks, position, cell, orientation);
 	}
 
 	get position(): Cell {

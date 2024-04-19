@@ -1,5 +1,5 @@
 import { ImplementsTrait, Trait } from "@ddd-ts/traits";
-import { Status } from "../../shared/traits/status";
+import { Status } from "../../shared/traits/engine/status";
 
 export const HaveStats = Trait((base) => {
 	abstract class HaveStats extends base {
@@ -20,15 +20,29 @@ export const HaveStats = Trait((base) => {
 			this.stats.heal(amount);
 		}
 
+		die() {
+			this.stats.die();
+		}
+
 		constructor(props: {
 			maxHealth: number;
 			attack: number;
 			movementSpeed: number;
+			attackSpeed: number;
 			castSpeed: number;
+			foodCost: number;
 			onDeath: () => void;
 		}) {
 			super(props);
-			this.stats = new Stats(props.maxHealth, props.attack, props.movementSpeed, props.castSpeed, props.onDeath);
+			this.stats = new Stats(
+				props.maxHealth,
+				props.attack,
+				props.movementSpeed,
+				props.castSpeed,
+				props.attackSpeed,
+				props.foodCost,
+				props.onDeath,
+			);
 		}
 	}
 	return HaveStats;
@@ -39,25 +53,26 @@ export class Stats {
 	private _maxHealth: number;
 	private _attack: number;
 	private _movementSpeed: number;
-
+	private _foodCost: number;
 	private _castSpeed: number;
+	private _attackSpeed: number;
 
-	public basePercentStat: {
-		attack: number;
-		movementSpeed: number;
-	} = {
+	public basePercentStat = {
 		attack: 100,
 		movementSpeed: 100,
+		maxHealth: 100,
+		foodCost: 100,
 	};
 
 	public status: Map<string, ImplementsTrait<typeof Status>> = new Map();
-	attackSpeed: number;
 
 	constructor(
 		maxHealth: number,
 		attack: number,
 		speed: number,
 		castSpeed: number,
+		attackSpeed: number,
+		foodCost: number,
 		public onDeath: () => void,
 	) {
 		this._health = maxHealth;
@@ -65,6 +80,8 @@ export class Stats {
 		this._attack = attack;
 		this._movementSpeed = speed;
 		this._castSpeed = castSpeed;
+		this._attackSpeed = attackSpeed;
+		this._foodCost = foodCost;
 	}
 
 	get health() {
@@ -72,7 +89,7 @@ export class Stats {
 	}
 
 	get maxHealth() {
-		return this._maxHealth;
+		return this._maxHealth * Math.max(0, this.basePercentStat.maxHealth / 100);
 	}
 
 	get attack() {
@@ -80,11 +97,19 @@ export class Stats {
 	}
 
 	get movementSpeed() {
-		return this._movementSpeed * (this.basePercentStat.movementSpeed / 100);
+		return this._movementSpeed * Math.max(0, this.basePercentStat.movementSpeed / 100);
 	}
 
 	get castSpeed() {
 		return this._castSpeed;
+	}
+
+	get attackSpeed() {
+		return this._attackSpeed;
+	}
+
+	get foodCost() {
+		return this._foodCost * Math.max(0, this.basePercentStat.foodCost / 100);
 	}
 
 	takeDamage(damage: number) {
@@ -94,8 +119,24 @@ export class Stats {
 		}
 	}
 
+	addMaxHealth(amount: number, percent: boolean = false) {
+		const rawGain = percent ? amount * (this._maxHealth / 100) : amount;
+		if (percent) {
+			this.basePercentStat.maxHealth += amount;
+			this._health += rawGain;
+			return;
+		}
+		this.basePercentStat.maxHealth += rawGain;
+		this._health += rawGain;
+	}
+
 	heal(amount: number) {
-		this._health = Math.min(this._maxHealth, this._health + amount);
+		this._health = Math.min(this.maxHealth, this._health + amount);
+	}
+
+	die() {
+		this._health = 0;
+		this.onDeath();
 	}
 
 	removeStatus(status: ImplementsTrait<typeof Status>) {

@@ -5,7 +5,7 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleSoldier } from "../../battle/implementation/soldier-battle";
 import { SoldierBlueprint } from "../../blueprint/implementation/soldier";
 import { Unit } from "../unit-recruit";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 export class Soldier extends Derive(Unit, HTDamageDealer) {
 	speed: number;
 	maxLife: number;
@@ -15,7 +15,13 @@ export class Soldier extends Derive(Unit, HTDamageDealer) {
 		public cell: Cell,
 		soldier: SoldierBlueprint = new SoldierBlueprint({}),
 	) {
-		super({ imageDrawable: soldier, damageDealer: soldier, hitboxHolder: soldier });
+		super({
+			imageDrawable: soldier,
+			damageDealer: soldier,
+			hitboxHolder: soldier,
+			descriptor: soldier,
+			foodConsumer: soldier,
+		});
 		this.maxLife = soldier.baseMaxLife;
 		this.speed = soldier.baseSpeed;
 		this.attackSpeed = soldier.attackSpeed;
@@ -25,7 +31,6 @@ export class Soldier extends Derive(Unit, HTDamageDealer) {
 	get position() {
 		return this.cell;
 	}
-	type = "soldier" as const;
 
 	toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks) {
 		return new BattleSoldier(this, position, path, hooks);

@@ -1,24 +1,25 @@
 import { Derive } from "@ddd-ts/traits";
-import { TGridDrawable, TRenderable } from "../../shared/traits/drawable";
+import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { TGrid } from "./tgrid";
 import { HoverEffect } from "./grid-effects/hover-effect";
-import { SynergyEffect } from "./grid-effects/synergy-effect";
+import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { ScreenPosition } from "../../shared/position";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { Buyable } from "../shop/retail/buyable";
+import { TRenderable } from "../../shared/traits/render/renderable";
 
 export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
+	override hoverEffect: HoverEffect[] | null;
 	tiles: Map<string, Buyable> = new Map();
-	overEffect: HoverEffect | undefined = undefined;
-	synergiesEffects: SynergyEffect[] = [];
+	synergiesEffects: SynergyEffectHud[] = [];
 
 	constructor(
-		public position = new ScreenPosition(PercentToReal({ x: 7, y: 55 })),
-		public width: number = 11,
-		public height: number = 5,
-		public cellSize: number = 4,
+		screenPosition = new ScreenPosition(PercentToReal({ x: 35, y: 72 })),
+		width: number = 11,
+		height: number = 5,
+		cellSize: number = 4,
 	) {
-		super({});
+		super({ width, height, cellSize, position: screenPosition });
 	}
 
 	getBuyables() {

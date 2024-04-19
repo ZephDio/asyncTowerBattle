@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Unit } from "../unit-recruit";
 import { BersekerBlueprint } from "../../blueprint/implementation/berseker";
 import { Cell, GridPosition } from "../../../../shared/position";
@@ -16,7 +16,13 @@ export class Berseker extends Derive(Unit, HTDamageDealer) {
 		public cell: Cell,
 		berseker: BersekerBlueprint = new BersekerBlueprint({}),
 	) {
-		super({ imageDrawable: berseker, damageDealer: berseker, hitboxHolder: berseker });
+		super({
+			imageDrawable: berseker,
+			damageDealer: berseker,
+			hitboxHolder: berseker,
+			descriptor: berseker,
+			foodConsumer: berseker,
+		});
 		this.maxLife = berseker.baseMaxLife;
 		this.speed = berseker.baseSpeed;
 		this.attackSpeed = berseker.attackSpeed;

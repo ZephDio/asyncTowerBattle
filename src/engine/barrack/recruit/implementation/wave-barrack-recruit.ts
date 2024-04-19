@@ -1,23 +1,23 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { BattlePath } from "../../../path/battle/battle-path";
 import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BasicBattleBarrack } from "../../battle/implementation/basic-battle-barrack";
 import { Barrack } from "../barrack-recruit";
-import { TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
+import { TUnitPreviewHudRenderable } from "../../../../shared/traits/render/huds/unit-preview-enderable";
 import { Cell } from "../../../../shared/position";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { WaveBarrackBlueprint } from "../../blueprint/implementation/wave-barrack";
 import { WaveBattleBarrack } from "../../battle/implementation/wave-battle-barrack";
+import { HTFoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
-export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
+export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack, HTFoodConsumer) {
 	productionSpeed: number;
 
 	constructor(
 		public cell: Cell,
 		barrack: WaveBarrackBlueprint = new WaveBarrackBlueprint({}),
 	) {
-		super({ imageDrawable: barrack, hitboxHolder: barrack });
+		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, foodConsumer: barrack });
 		this.productionSpeed = barrack.productionSpeed;
 	}
 	unitRecruit: null | AnyUnit;
@@ -26,32 +26,31 @@ export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 		return this.cell;
 	}
 
-	toAllied(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
 		if (this.unitRecruit) {
 			return new WaveBattleBarrack(
 				this,
 				grid.cellToGrid(this.position),
 				this.cell.clone(),
-				path.enemyCastle.position,
-				path,
 				hooks,
 				this.unitRecruit,
+				this.orientation,
 			);
 		}
 		return undefined;
 	}
 
-	toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
 		if (this.unitRecruit) {
 			const newPosition = BattleGrid.flip(grid, this.position);
+			const orientation = this.orientation + Math.PI;
 			return new WaveBattleBarrack(
 				this,
 				grid.cellToGrid(newPosition),
 				newPosition,
-				path.enemyCastle.position,
-				path,
 				hooks,
 				this.unitRecruit,
+				orientation,
 			);
 		}
 		return undefined;

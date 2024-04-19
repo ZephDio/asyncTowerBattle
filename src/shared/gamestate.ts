@@ -6,7 +6,6 @@ import { Retail } from "../engine/shop/retail/retail";
 import { Castle } from "../engine/castle/recruit/castle-recruit";
 import { AreaEffect } from "../engine/area-effect/area-effect";
 import { ArmyGrid } from "../engine/grid/grid";
-import { CastleBlueprint } from "../engine/castle/blueprint/castle";
 import { BattleGrid } from "../engine/grid/battle-grid";
 import { ImplementsTrait } from "@ddd-ts/traits";
 import { AnyBattleTower } from "../engine/tower/battle/battle-tower";
@@ -16,6 +15,7 @@ import { TTokenDrag } from "../engine/shop/holder/token-drag/token-drag";
 import { AnyBattleProjectile } from "../engine/projectile/battle/battle-projectile";
 import { BattlePath } from "../engine/path/battle/battle-path";
 import { GridPosition } from "./position";
+import { Inventory } from "../engine/grid/inventory/unit-inventory";
 
 export interface GameState {
 	type: string;
@@ -37,13 +37,14 @@ export interface BattleState extends GameState {
 	projectiles: AnyBattleProjectile[];
 	tiles: AnyBattleTile[];
 	path: BattlePath;
+	hudElements: HudElement[];
 }
 
 export interface ShopState extends GameState {
 	type: "shop";
 	retail: Retail;
 
-	castle: Castle<CastleBlueprint>;
+	castle: Castle;
 	towers: ImplementsTrait<typeof Tower>[];
 	path: GridPosition[] | null;
 	grid: ArmyGrid;
@@ -51,4 +52,6 @@ export interface ShopState extends GameState {
 	hold: ImplementsTrait<typeof TTokenDrag> | null;
 
 	hudElements: HudElement[];
+
+	inventory: Inventory;
 }

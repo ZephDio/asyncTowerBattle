@@ -5,7 +5,7 @@ import { Retail } from "../retail/retail";
 import { Buyable } from "../retail/buyable";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BuyableTokenDrag } from "./token-drag/buyable-token-drag";
-import { AnyRecruit } from "../../../shared/traits/recruit";
+import { AnyRecruit } from "../../../shared/traits/engine/recruit";
 import { Army } from "../../army/army";
 import { TGrid } from "../../grid/tgrid";
 import { Castle } from "../../castle/recruit/castle-recruit";
@@ -23,10 +23,14 @@ export type TokenHooks = {
 
 export class Holder {
 	private _hold: null | ImplementsTrait<typeof TTokenDrag> = null;
-	constructor() {}
 
 	get hold() {
 		return this._hold;
+	}
+
+	get orientation() {
+		if (!this._hold) return 0;
+		return this._hold.orientation;
 	}
 
 	private setNull() {

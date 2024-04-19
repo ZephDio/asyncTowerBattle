@@ -1,26 +1,25 @@
 import { Derive } from "@ddd-ts/traits";
-import { TGridDrawable, TRenderable } from "../../../shared/traits/drawable";
-import { TGrid } from "../tgrid";
+import { TGridDrawable } from "../../../shared/traits/render/grid-renderable";
+import { STANDARD_CELL_SIZE, TGrid } from "../tgrid";
 import { Cell, ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
-import { SynergyEffect } from "../grid-effects/synergy-effect";
+import { SynergyEffectHud } from "../grid-effects/synergy-effect";
 import { ArmyGrid } from "../grid";
 import { HoverEffect } from "../grid-effects/hover-effect";
-import { AnyRecruit } from "../../../shared/traits/recruit";
-
-const inventoryPosition = new ScreenPosition(PercentToReal({ x: 78, y: 55 }));
+import { AnyRecruit } from "../../../shared/traits/engine/recruit";
+import { TRenderable } from "../../../shared/traits/render/renderable";
 
 export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
-	overEffect: HoverEffect | undefined = undefined;
-	synergiesEffects: SynergyEffect[] = [];
+	hoverEffect: HoverEffect[] = [];
+	synergiesEffects: SynergyEffectHud[] = [];
 	constructor(
-		public position: ScreenPosition = inventoryPosition,
-		public width: number = 4,
-		public height: number = 5,
-		public cellSize: number = 4.9,
+		screenPosition: ScreenPosition = PercentToReal({ x: 85, y: 25 }),
+		width: number = 4,
+		height: number = 5,
+		cellSize: number = STANDARD_CELL_SIZE,
 	) {
-		super({});
+		super({ cellSize, height, width, position: screenPosition });
 	}
 
 	getNextFreeCell() {
@@ -41,12 +40,13 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 		this.setElement(recruit);
 	}
 
-	setOveredTile(cell: Cell | undefined) {
-		if (cell) {
-			this.overEffect = new HoverEffect(cell, this);
-			return;
+	setOveredTile(cells: Cell[] | null) {
+		this.hoverEffect = [];
+		if (cells && cells.length > 0) {
+			for (const cell of cells) {
+				this.hoverEffect.push(new HoverEffect(cell, this));
+			}
 		}
-		this.overEffect = undefined;
 	}
 
 	getRecruits() {

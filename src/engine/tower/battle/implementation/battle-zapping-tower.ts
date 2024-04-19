@@ -1,11 +1,12 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { Cast, Caster } from "../../../../shared/traits/cast";
-import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { TCasterHudRenderable } from "../../../../shared/traits/render/huds/caster-camembert-renderable";
 import { HaveStats } from "../../../stats/stats";
-import { HTHitbox } from "../../../../shared/hitboxes";
-import { GridElement } from "../../../../shared/traits/grid-element";
+import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
+import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { ZappingTower } from "../../recruit/implementation/zapping-tower-recruit";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Physic } from "../../../../shared/physic";
@@ -25,22 +26,32 @@ export class ZappingBattleTower extends Derive(
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
+		public override orientation: number,
 	) {
 		super({
+			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
 			attack: recruit.attackDamage,
 			movementSpeed: NaN,
 			castSpeed: recruit.attackSpeed,
+			attackSpeed: NaN,
+			foodCost: recruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: recruit,
 		});
+
+		this.angle = this.orientation;
+		this.gridShape = recruit.gridShape;
 	}
 
 	private attack(target: AnyBattleUnit) {
-		const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
-		this.hooks.addProjectile(projectile, this);
-		this.castInProgress = null;
+		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
+		if (sucess) {
+			const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
+			this.hooks.addProjectile(projectile, this);
+		}
+		this.finishCast(sucess);
 	}
 
 	isAlive() {

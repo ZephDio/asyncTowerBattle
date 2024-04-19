@@ -1,11 +1,12 @@
 import { Derive } from "@ddd-ts/traits";
-import { HTHitbox } from "../../../../shared/hitboxes";
+import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridPosition } from "../../../../shared/position";
-import { HTImageDrawable, TRenderable } from "../../../../shared/traits/drawable";
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Spine } from "../../blueprint/implementation/spine";
 import { Physic } from "../../../../shared/physic";
+import { TRenderable } from "../../../../shared/traits/render/renderable";
 
 export class BattleSpine extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
 	speed: number;

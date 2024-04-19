@@ -4,7 +4,7 @@ import { Tower } from "../tower-recruit";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
-import { HTDamageDealer } from "../../../../shared/traits/damage-dealer";
+import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { ZappingTowerBlueprint } from "../../blueprint/implementation/zapping-tower";
 import { ZappingBattleTower } from "../../battle/implementation/battle-zapping-tower";
 import { BattleSpark } from "../../../projectile/battle/implementation/battle-spark";
@@ -16,7 +16,7 @@ export class ZappingTower extends Derive(HTDamageDealer, Tower) {
 		public cell: Cell,
 		public tower: ZappingTowerBlueprint = new ZappingTowerBlueprint({}),
 	) {
-		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower });
+		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower, descriptor: tower, foodConsumer: tower });
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {
@@ -24,20 +24,15 @@ export class ZappingTower extends Derive(HTDamageDealer, Tower) {
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const position = grid.cellToGrid(clone.cell);
-		return new ZappingBattleTower(clone, hooks, position, clone.cell);
+		const position = grid.cellToGrid(this.cell);
+		return new ZappingBattleTower(this, hooks, position, this.cell, this.orientation);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const clone = this.clone();
-		const cell = BattleGrid.flip(grid, clone.cell);
+		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		return new ZappingBattleTower(clone, hooks, position, cell);
-	}
-
-	clone() {
-		return new ZappingTower(this.cell.clone(), this.tower);
+		const orientation = this.orientation + Math.PI;
+		return new ZappingBattleTower(this, hooks, position, cell, orientation);
 	}
 
 	get position(): Cell {

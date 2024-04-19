@@ -1,13 +1,13 @@
 import { Cell } from "../../shared/position";
 import { Army } from "../army/army";
 import { ArmyFixture } from "../army/army-fixtures";
-import { BarrackRecruitBuilder, BarrackRecruitFixtures } from "../barrack/recruit/barrack-recruit-fixtures";
-import { CastleRecruitFixture } from "../castle/blueprint/castle";
+import { BarrackRecruitBuilder } from "../barrack/recruit/barrack-recruit-fixtures";
+import { CastleFactory } from "../castle/blueprint/castle";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
-import { PathFixture } from "../path/army/path-fixtures";
+import { PathFactory } from "../path/army/path-fixtures";
 import { AnyTower } from "../tower/recruit/tower-recruit";
-import { TowerBuilder, TowerFixtures } from "../tower/recruit/tower-recruit-fixtures";
+import { TowerBuilder } from "../tower/recruit/tower-recruit-fixtures";
 import { UnitRecruitFixture } from "../units/recruit/unit-recruit-fixtures";
 import { MatchMaker } from "./match-maker";
 
@@ -23,96 +23,67 @@ export class LocalMatchMaker extends MatchMaker {
 
 ArmyFixture;
 const EnemyArmyFixtures = {
-	0: () => {
-		const grid = new ArmyGrid();
-		const castle = CastleRecruitFixture.allied;
+	1: () => {
+		const grid = new ArmyGrid(7, 5, undefined, 6.3);
+		const castle = CastleFactory.default;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
-			TowerFixtures.centerTower,
 			new TowerBuilder()
-				.celled(new Cell({ x: 4, y: 4 }))
+				.celled(new Cell({ x: 3, y: 2 }))
 				.buildGreen(),
-			//TowerEntityFixtures.topRightTower,
 		];
-		const tiles = PathFixture.default;
+		const tiles = PathFactory.default;
 		const barracks = [
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.dragon)
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.withProductionSpeed(3.2)
 				.buildWave(),
-			// new BarrackRecruitBuilder()
-			// 	.setUnit(UnitRecruitFixture.choupisson)
-			// 	.withCell(new Cell({ x: 1, y: 2 }))
-			// 	.withProductionSpeed(3.3)
-			// 	.buildWave(),
-			// new BarrackRecruitBuilder()
-			// 	.setUnit(UnitRecruitFixture.choupisson)
-			// 	.withCell(new Cell({ x: 0, y: 2 }))
-			// 	.withProductionSpeed(3.4)
-			// 	.buildWave(),
-			// new BarrackRecruitBuilder()
-			// 	.setUnit(UnitRecruitFixture.choupisson)
-			// 	.withCell(new Cell({ x: 1, y: 0 }))
-			// 	.withProductionSpeed(3.6)
-			// 	.buildWave(),
 		];
 		const unitInventory = new Inventory();
 		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(grid, unitInventory);
-	},
-	1: () => {
-		const grid = new ArmyGrid();
-		const castle = CastleRecruitFixture.enemy;
-		const towers = [
-			new TowerBuilder().celled(new Cell({ x: 3, y: 1 })).buildYellow(),
-			new TowerBuilder().celled(new Cell({ x: 4, y: 3 })).buildGreen(),
-		];
-		const barracks = [
-			BarrackRecruitFixtures.basicWithSoldier(4),
-			BarrackRecruitFixtures.waveWithDragon(),
-			BarrackRecruitFixtures.basicWithPriest(),
-		];
-		const tiles = PathFixture.default;
-		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(grid, new Inventory());
+		return { army: new Army(grid, unitInventory), randomSeed: 123456 };
 	},
 	2: () => {
-		const grid = new ArmyGrid();
-		const castle = CastleRecruitFixture.enemy;
-		const towers = [
-			new TowerBuilder().celled(new Cell({ x: 3, y: 1 })).buildYellow(),
-			new TowerBuilder().celled(new Cell({ x: 4, y: 3 })).buildGreen(),
-			new TowerBuilder().celled(new Cell({ x: 3, y: 0 })).buildOrange(),
-		];
+		const grid = new ArmyGrid(8, 6);
+		const castle = CastleFactory.round2;
+		const towers = [new TowerBuilder().celled(new Cell({ x: 3, y: 2 })).buildGreen()];
 		const barracks = [
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.priest)
-				.withCell(new Cell({ x: 10, y: 0 }))
-				.buildBasic(),
-			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.dragon)
-				.withCell(new Cell({ x: 11, y: 0 }))
-				.withProductionSpeed(3.5)
-				.buildWave(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.dragon)
-				.withCell(new Cell({ x: 12, y: 0 }))
-				.withProductionSpeed(3.1)
+				.withCell(new Cell({ x: 1, y: 1 }))
+				.withProductionSpeed(3.2)
 				.buildWave(),
 		];
-		const tiles = PathFixture.default;
-		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(grid, new Inventory());
+		const tiles = PathFactory.round2;
+		[castle, ...towers, ...barracks, ...tiles].map((e) => grid.setElement(e));
+		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
 	},
 	3: () => {
-		const grid = new ArmyGrid();
-		const castle = CastleRecruitFixture.enemy;
+		const grid = new ArmyGrid(8, 6);
+		const castle = CastleFactory.round2;
+		const towers = [new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen()];
+		const barracks = [
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.dragon)
+				.withCell(new Cell({ x: 1, y: 1 }))
+				.withProductionSpeed(3.2)
+				.buildWave(),
+		];
+		const tiles = PathFactory.round2;
+		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
+		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
+	},
+	4: () => {
+		const grid = new ArmyGrid(8, 6);
+		const castle = CastleFactory.round2;
 		const towers = [
 			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildYellow(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen(),
-			new TowerBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
-			new TowerBuilder().celled(new Cell({ x: 3, y: 5 })).buildBlue(),
+			//new TotemBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
+			new TowerBuilder()
+				.celled(new Cell({ x: 3, y: 5 }))
+				.buildBlue(),
 		];
 		const barracks = [
 			new BarrackRecruitBuilder()
@@ -135,19 +106,21 @@ const EnemyArmyFixtures = {
 				.withProductionSpeed(3.1)
 				.buildWave(),
 		];
-		const tiles = PathFixture.default;
+		const tiles = PathFactory.round2;
 		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(grid, new Inventory());
+		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
 	},
-	4: () => {
-		const grid = new ArmyGrid();
-		const castle = CastleRecruitFixture.enemy;
+	5: () => {
+		const grid = new ArmyGrid(8, 6);
+		const castle = CastleFactory.round2;
 		const towers = [
 			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildYellow(),
 			new TowerBuilder().celled(new Cell({ x: 5, y: 2 })).buildYellow(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen(),
-			new TowerBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
-			new TowerBuilder().celled(new Cell({ x: 3, y: 5 })).buildBlue(),
+			//new TowerBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
+			new TowerBuilder()
+				.celled(new Cell({ x: 3, y: 5 }))
+				.buildBlue(),
 		];
 		const barracks = [
 			new BarrackRecruitBuilder()
@@ -175,9 +148,9 @@ const EnemyArmyFixtures = {
 				.withProductionSpeed(3.9)
 				.buildWave(),
 		];
-		const tiles = PathFixture.default;
+		const tiles = PathFactory.round2;
 		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return new Army(grid, new Inventory());
+		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
 	},
 };
 

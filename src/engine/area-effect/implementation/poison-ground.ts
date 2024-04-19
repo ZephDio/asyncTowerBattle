@@ -1,16 +1,25 @@
 import { Derive } from "@ddd-ts/traits";
-import { Ellipse, HitBox, TCollider, THitbox } from "../../../shared/hitboxes";
+import { HitBox } from "../../../shared/hitbox/hitboxe";
+import { Ellipse } from "../../../shared/hitbox/shapes/ellipse";
+import { TCollider } from "../../../shared/traits/engine/core/TCollider";
+import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { TRenderable } from "../../../shared/traits/drawable";
+
 import { Poisoned } from "../../tower/battle/implementation/battle-yellow-tower";
-import { TDrawable } from "../../../shared/traits/tdrawable";
+import { TDrawable } from "../../../shared/traits/render/drawable";
+import { TRenderable } from "../../../shared/traits/render/renderable";
+import { STANDARD_CELL_SIZE } from "../../grid/tgrid";
 
 export class PoisonGround extends Derive(
 	TDrawable,
 	TRenderable,
 	TCollider,
-	THitbox(new HitBox([[new Ellipse({ width: 4.9, height: 4.9 }), new GridPosition({ x: 0, y: 0 })]])),
+	THitbox(
+		new HitBox([
+			[new Ellipse({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE }), new GridPosition({ x: 0, y: 0 })],
+		]),
+	),
 ) {
 	type = "poison-ground" as const;
 	drawPriority = 5;
@@ -42,12 +51,11 @@ export class PoisonGround extends Derive(
 		};
 	}
 
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition, cellSize: number): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		context.globalAlpha = 0.18;
 		context.strokeStyle = "purple";
 		context.fillStyle = "purple";
 		context.lineWidth = 11;
-		const scale = cellSize / 4.9;
 		const size = this.getCanvasSize(context, this.size.width, this.size.height);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawEllipse(context, size, canvasPosition, scale);

@@ -1,0 +1,19 @@
+import { Derive } from "@ddd-ts/traits";
+import { TImageDrawable } from "../../shared/traits/render/image-drawable";
+import { Resources } from "../../renderer/resources";
+import { TEnvironmentElement } from "./environment";
+import { Cell } from "../../shared/position";
+
+export class Forest extends Derive(
+	TEnvironmentElement,
+	TImageDrawable(Resources.environment.forest.resource.image, Resources.environment.forest.size, 3),
+) {
+	type = "forest" as const;
+	constructor(public cell: Cell) {
+		super({});
+	}
+
+	get position() {
+		return this.cell;
+	}
+}

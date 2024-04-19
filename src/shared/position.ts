@@ -83,6 +83,31 @@ export class Cell {
 		});
 	}
 
+	left() {
+		return new Cell({
+			x: this.x - 1,
+			y: this.y,
+		});
+	}
+
+	right() {
+		return new Cell({
+			x: this.x + 1,
+			y: this.y,
+		});
+	}
+
+	surrounding() {
+		return [this.up(), this.down(), this.left(), this.right()];
+	}
+
+	add(other: Cell) {
+		return new Cell({
+			x: this.x + other.x,
+			y: this.y + other.y,
+		});
+	}
+
 	toHash() {
 		return this.x.toString() + this.y.toString();
 	}

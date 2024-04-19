@@ -1,20 +1,20 @@
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { BattlePath } from "../../path/battle/battle-path";
 import { AnyUnit } from "../../units/recruit/unit-recruit";
 import { AnyBattleBarrack } from "../battle/battle-barrack";
 import { BattleGrid } from "../../grid/battle-grid";
-import { TRecruit } from "../../../shared/traits/recruit";
+import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { RetailGrid } from "../../grid/retail-grid";
 import { GridPosition } from "../../../shared/position";
 import { ArmyGrid } from "../../grid/grid";
 import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { TGrid } from "../../grid/tgrid";
+import { RecruitCaster } from "../../../shared/traits/engine/cast";
 
 export type AnyBarrack = ImplementsTrait<typeof Barrack>;
 
-export const Barrack = Subtrait([TRecruit], (base) => {
+export const Barrack = Subtrait([TRecruit, RecruitCaster], (base) => {
 	abstract class IBarrack extends base {
 		abstract productionSpeed: number;
 		abstract unitRecruit: null | AnyUnit;
@@ -23,10 +23,10 @@ export const Barrack = Subtrait([TRecruit], (base) => {
 			this.unitRecruit = unit;
 		}
 
-		abstract toAllied(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
-		abstract toEnemy(grid: BattleGrid, path: BattlePath, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
+		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
+		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
 
-		moveRecruit(hooks: TokenHooks, position: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
+		moveRecruit(hooks: TokenHooks, position: GridPosition, orientation: number, grid?: ImplementsTrait<typeof TGrid>) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
@@ -37,10 +37,10 @@ export const Barrack = Subtrait([TRecruit], (base) => {
 			}
 			const cell = grid.gridPositionToCell(position);
 			if (!cell) throw new Error("Invalid cell");
-			const element = grid.getElement(cell);
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				if (element) throw new Error("already occupied cell");
+				grid.checkCondition(this, cell, orientation);
 				this.cell = cell.clone();
+				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return;
 			}

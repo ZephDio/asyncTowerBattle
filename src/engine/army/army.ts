@@ -3,15 +3,17 @@ import { Cell } from "../../shared/position";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { Unit } from "../units/recruit/unit-recruit";
-import { AnyRecruit, TRecruit } from "../../shared/traits/recruit";
+import { AnyRecruit, TRecruit } from "../../shared/traits/engine/recruit";
 import { TGrid } from "../grid/tgrid";
 import { BattlePath } from "../path/battle/battle-path";
-
+import { ArmyFoodEconomy } from "../food/food-economy";
 export class Army {
 	constructor(
 		//public path: ArmyPath,
 		public grid: ArmyGrid,
 		public inventory: Inventory,
+
+		public foodEconomy = new ArmyFoodEconomy(),
 	) {}
 
 	isValidDestinationCell(cell: Cell) {
@@ -42,6 +44,9 @@ export class Army {
 		throw new Error("Invalid grid type");
 	}
 
+	get totems() {
+		return this.grid.totems;
+	}
 	get castle() {
 		return this.grid.castle;
 	}
@@ -54,6 +59,10 @@ export class Army {
 
 	get pathTiles() {
 		return this.grid.pathTiles;
+	}
+
+	get environment() {
+		return this.grid.environment;
 	}
 
 	get path() {

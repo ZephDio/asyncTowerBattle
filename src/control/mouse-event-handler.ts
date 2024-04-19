@@ -1,41 +1,53 @@
 import { CanvasRenderer, PercentToReal } from "../renderer/implementation/canvas-renderer";
 import { ScreenPosition } from "../shared/position";
-import { InputToIntentTranslator } from "./input-to-intent-translator";
+import { InputToIntent } from "./input-to-intent-translator";
+
+export type MouseEventType = "down" | "up" | "move" | "right-click";
 
 export class MouseEventHandler {
 	constructor(
 		private readonly renderer: CanvasRenderer,
-		private readonly inputToIntentTranslator: InputToIntentTranslator,
+		private readonly inputToIntentTranslator: InputToIntent,
 	) {
-		window.addEventListener("click", (event) => this.onClick(event));
-		window.addEventListener("mousedown", (event) => this.onMouseDown(event));
-		window.addEventListener("mouseup", (event) => this.onMouseUp(event));
-		window.addEventListener("mousemove", (event) => this.onMouseMove(event));
+		window.addEventListener("mousedown", (event) => {
+			if (event.button === 2) return;
+			this.onMouseEvent(event, "down");
+		});
+
+		window.addEventListener("mouseup", (event) => {
+			if (event.button === 2) return;
+			this.onMouseEvent(event, "up");
+		});
+		window.addEventListener("mousemove", (event) => this.onMouseEvent(event, "move"));
+		window.addEventListener("contextmenu", (event) => {
+			event.preventDefault();
+			this.onMouseEvent(event, "right-click");
+		});
 	}
 
-	onMouseDown(event: MouseEvent) {
+	onMouseEvent(event: MouseEvent, type: MouseEventType) {
 		const mousePosition = { x: event.x, y: event.y };
 		const relativePosition = this.pixelPositionToRelative(mousePosition);
-		this.inputToIntentTranslator.translateMouseDownInput(relativePosition);
+		this.inputToIntentTranslator.handle(relativePosition, type);
 	}
 
-	onMouseMove(event: MouseEvent) {
-		const mousePosition = { x: event.x, y: event.y };
-		const relativePosition = this.pixelPositionToRelative(mousePosition);
-		this.inputToIntentTranslator.translateMouseMoveInput(relativePosition);
-	}
+	// onMouseMove(event: MouseEvent) {
+	// 	const mousePosition = { x: event.x, y: event.y };
+	// 	const relativePosition = this.pixelPositionToRelative(mousePosition);
+	// 	this.inputToIntentTranslator.translateMouseMoveInput(relativePosition);
+	// }
 
-	onClick(event: MouseEvent): void {
-		const mousePosition = { x: event.x, y: event.y };
-		const relativePosition = this.pixelPositionToRelative(mousePosition);
-		this.inputToIntentTranslator.translateClickInput(relativePosition);
-	}
+	// onClick(event: MouseEvent): void {
+	// 	const mousePosition = { x: event.x, y: event.y };
+	// 	const relativePosition = this.pixelPositionToRelative(mousePosition);
+	// 	this.inputToIntentTranslator.translateClickInput(relativePosition);
+	// }
 
-	onMouseUp(event: MouseEvent): any {
-		const mousePosition = { x: event.x, y: event.y };
-		const relativePosition = this.pixelPositionToRelative(mousePosition);
-		this.inputToIntentTranslator.translateMouseReleaseInput(relativePosition);
-	}
+	// onMouseUp(event: MouseEvent): any {
+	// 	const mousePosition = { x: event.x, y: event.y };
+	// 	const relativePosition = this.pixelPositionToRelative(mousePosition);
+	// 	this.inputToIntentTranslator.translateMouseReleaseInput(relativePosition);
+	// }
 
 	pixelPositionToRelative(position: { x: number; y: number }) {
 		const { offsetLeft, offsetTop } = this.renderer.canvas;

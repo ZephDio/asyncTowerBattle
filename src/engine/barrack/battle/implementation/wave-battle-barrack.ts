@@ -1,14 +1,15 @@
 import { Cell, GridPosition } from "../../../../shared/position";
 import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { BattlePath } from "../../../path/battle/battle-path";
 import { Derive } from "@ddd-ts/traits";
-import { Cast, Caster } from "../../../../shared/traits/cast";
-import { HTImageDrawable, TUnitPreviewHudRenderable } from "../../../../shared/traits/drawable";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { TUnitPreviewHudRenderable } from "../../../../shared/traits/render/huds/unit-preview-enderable";
 import { HaveStats } from "../../../stats/stats";
-import { HTHitbox, TCollider } from "../../../../shared/hitboxes";
+import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
+import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { WaveBarrack } from "../../recruit/implementation/wave-barrack-recruit";
-import { GridElement } from "../../../../shared/traits/grid-element";
+import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 
 export class WaveBattleBarrack extends Derive(
 	TCollider,
@@ -28,21 +29,25 @@ export class WaveBattleBarrack extends Derive(
 		public readonly barrackRecruit: WaveBarrack,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public spawnPosition: GridPosition,
-		public readonly path: BattlePath,
 		public readonly hooks: BattleArmyHooks,
 		public readonly unitRecruit: AnyUnit,
+		public override orientation: number,
 	) {
 		super({
+			casterRecruit: barrackRecruit,
 			imageDrawable: barrackRecruit,
 			maxHealth: NaN,
 			attack: NaN,
 			movementSpeed: NaN,
 			castSpeed: barrackRecruit.productionSpeed,
+			attackSpeed: NaN,
+			foodCost: barrackRecruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 		});
 		this.castCost = unitRecruit.cost;
+		this.angle = this.orientation;
+		this.gridShape = barrackRecruit.gridShape;
 	}
 
 	tick() {
@@ -56,7 +61,12 @@ export class WaveBattleBarrack extends Derive(
 	}
 
 	onCastResolve(): void {
-		this.hooks.addUnits(this.unitRecruit.toBattle(this.spawnPosition.clone(), this.path, this.hooks), this);
-		this.castInProgress = null;
+		const path = this.hooks.getEnemyPath();
+		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
+		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
+		if (sucess) {
+			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
+		}
+		this.finishCast(sucess);
 	}
 }

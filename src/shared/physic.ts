@@ -1,5 +1,7 @@
-import { Ellipse, HitBox, Rectangle } from "./hitboxes";
-import { GridPosition, ScreenPosition } from "./position";
+import { HitBox } from "./hitbox/hitboxe";
+import { Ellipse } from "./hitbox/shapes/ellipse";
+import { Rectangle } from "./hitbox/shapes/rectangle";
+import { Cell, GridPosition, ScreenPosition } from "./position";
 export interface Recruit {
 	type: string;
 	hitbox: HitBox;
@@ -33,6 +35,13 @@ export class Physic {
 		const distance = Math.sqrt(distanceSquared);
 		const theta = Math.atan2(differentialY, differentialX);
 		return { distance, theta };
+	}
+
+	static getProjectionCellsFromOrientation(cell: Cell, orientation: number) {
+		return new Cell({
+			x: Math.round(cell.x * Math.cos(orientation) - cell.y * Math.sin(orientation)),
+			y: Math.round(cell.x * Math.sin(orientation) + cell.y * Math.cos(orientation)),
+		});
 	}
 
 	static getVectorSqrd<T extends GridPosition | ScreenPosition>(positionA: T, positionB: T) {
@@ -108,15 +117,9 @@ export class Physic {
 		otherHitBox: HitBox,
 	) {
 		for (const [shape, position] of hitbox.hitShapes) {
-			const shapePosition = new GridPosition({
-				x: elementPosition.x + position.x,
-				y: elementPosition.y + position.y,
-			});
+			const shapePosition = elementPosition.add(position as GridPosition) as T;
 			for (const [otherShape, otherShapeRelativePosition] of otherHitBox.hitShapes) {
-				const otherShapePosition = new GridPosition({
-					x: otherElementPosition.x + otherShapeRelativePosition.x,
-					y: otherElementPosition.y + otherShapeRelativePosition.y,
-				});
+				const otherShapePosition = otherElementPosition.add(otherShapeRelativePosition as GridPosition) as T;
 				if (shape instanceof Rectangle && otherShape instanceof Rectangle) {
 					// check for square collision
 					const x1 = shapePosition.x - shape.w / 2;
@@ -127,6 +130,7 @@ export class Physic {
 					if (x1 < x2 + otherShape.w && x1 + shape.w > x2 && y1 < y2 + otherShape.h && y1 + shape.h > y2) {
 						return true;
 					}
+					continue;
 				}
 				if (shape instanceof Ellipse && otherShape instanceof Ellipse) {
 					// check for circle collision
@@ -135,7 +139,10 @@ export class Physic {
 					const distance = Math.sqrt(dx * dx + dy * dy);
 
 					// Check if the distance is less than the sum of the radii
-					return distance < shape.rx + otherShape.rx && distance < shape.rx + otherShape.ry;
+					if (distance < shape.rx + otherShape.rx && distance < shape.rx + otherShape.ry) {
+						return true;
+					}
+					continue;
 				}
 				if (shape instanceof Rectangle && otherShape instanceof Ellipse) {
 					// Calculate the top-left corner of the rectangle
@@ -158,7 +165,10 @@ export class Physic {
 					const COLLISION_THRESHOLD = 1;
 
 					// Check if the distance is less than or equal to COLLISION_THRESHOLD
-					return distance <= COLLISION_THRESHOLD;
+					if (distance <= COLLISION_THRESHOLD) {
+						return true;
+					}
+					continue;
 				}
 				if (shape instanceof Ellipse && otherShape instanceof Rectangle) {
 					// check for circle square collision
@@ -181,7 +191,10 @@ export class Physic {
 					const COLLISION_THRESHOLD = 1;
 
 					// Check if the distance is less than or equal to COLLISION_THRESHOLD
-					return distance <= COLLISION_THRESHOLD;
+					if (distance <= COLLISION_THRESHOLD) {
+						return true;
+					}
+					continue;
 				}
 			}
 		}

@@ -1,52 +1,56 @@
-import { CastleBlueprint } from "../blueprint/castle";
 import { Castle } from "../recruit/castle-recruit";
 import { Cell, GridPosition } from "../../../shared/position";
-import { BattleGrid } from "../../grid/battle-grid";
-import { HTImageDrawable, TRenderable } from "../../../shared/traits/drawable";
+import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { Derive } from "@ddd-ts/traits";
-import { TPhysics } from "../../../shared/traits/physics";
-import { HTHitbox } from "../../../shared/hitboxes";
-import { GridElement } from "../../../shared/traits/grid-element";
+import { TPhysics } from "../../../shared/traits/engine/core/physics";
+import { HTHitbox } from "../../../shared/traits/engine/core/THitbox";
+import { GridElement } from "../../../shared/traits/engine/core/grid-element";
+import { TRenderable } from "../../../shared/traits/render/renderable";
+import { FoodHooks } from "../../food/battle-food-economy";
+import { Cast, Caster } from "../../../shared/traits/engine/cast";
 
-export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement) {
+export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement, Caster) {
 	public actualLife: number;
 	public maxLife: number;
 
 	constructor(
-		recruit: Castle<CastleBlueprint>,
+		recruit: Castle,
 		public onDeath: () => void,
 		public cell: Cell,
 		public position: GridPosition,
+		public override orientation: number,
+		public foodHooks: FoodHooks,
 	) {
-		super({ imageDrawable: recruit, hitboxHolder: recruit });
-		this.actualLife = recruit.maxLife;
-		this.maxLife = recruit.maxLife;
-	}
-
-	override takeDamage(damage: number): void {
-		this.actualLife = this.actualLife - damage;
-		if (!this.isAlive()) {
-			this.onDeath();
-		}
+		super({
+			imageDrawable: recruit,
+			hitboxHolder: recruit,
+			casterRecruit: recruit,
+			maxHealth: recruit.maxLife,
+			attack: NaN,
+			movementSpeed: NaN,
+			castSpeed: recruit.castSpeed,
+			attackSpeed: NaN,
+			foodCost: NaN,
+			onDeath: () => this.onDeath(),
+		});
+		this.angle = this.orientation;
+		this.gridShape = recruit.gridShape;
 	}
 
 	isAlive() {
 		return this.actualLife > 0;
 	}
 
-	tick() {}
-
-	static toAllied(castleRecruit: Castle<CastleBlueprint>, battleGrid: BattleGrid, onBattleOver: () => void) {
-		return new BattleCastle(castleRecruit, onBattleOver, castleRecruit.cell, battleGrid.cellToGrid(castleRecruit.cell));
+	casts() {
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 64);
 	}
 
-	static toEnemy(castleRecruit: Castle<CastleBlueprint>, battleGrid: BattleGrid, onBattleOver: () => void) {
-		const flippedGridPosition = BattleGrid.flip(battleGrid, castleRecruit.cell);
-		return new BattleCastle(
-			castleRecruit,
-			onBattleOver,
-			flippedGridPosition,
-			battleGrid.cellToGrid(flippedGridPosition),
-		);
+	onCastResolve() {
+		this.foodHooks.addFood(4);
+		this.finishCast(true);
+	}
+
+	tick() {
+		this.tickCast();
 	}
 }

@@ -6,17 +6,6 @@ function createImage(src: string): HTMLImageElement {
 
 export const Resources = {
 	tower: {
-		orange: {
-			size: {
-				width: 5,
-				height: 8,
-			},
-			resource: {
-				image: createImage("/resources/towers/tower_red.png"),
-				shape: "ellipse",
-				color: "orange",
-			},
-		},
 		blue: {
 			size: {
 				width: 5,
@@ -52,8 +41,8 @@ export const Resources = {
 		},
 		yellow: {
 			size: {
-				width: 5,
-				height: 8,
+				width: 13,
+				height: 5,
 			},
 			resource: {
 				image: createImage("/resources/towers/tower_yellow.png"),
@@ -70,6 +59,40 @@ export const Resources = {
 				image: createImage("/resources/towers/tower_purple.png"),
 				shape: "rectangle",
 				color: "green",
+			},
+		},
+	},
+	totem: {
+		orange: {
+			size: {
+				width: 5,
+				height: 8,
+			},
+			resource: {
+				image: createImage("/resources/totem/orange-totem.png"),
+				shape: "ellipse",
+				color: "orange",
+			},
+		},
+		cropsfield: {
+			size: {
+				width: 5,
+				height: 5,
+			},
+			resource: {
+				image: createImage("/resources/totem/crops-field.png"),
+				shape: "ellipse",
+			},
+		},
+		gobelinportal: {
+			size: {
+				width: 5,
+				height: 5,
+			},
+			resource: {
+				image: createImage("/resources/totem/gobelin-portal.png"),
+				shape: "ellipse",
+				color: "orange",
 			},
 		},
 	},
@@ -124,6 +147,16 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		gobelin: {
+			size: {
+				width: 2.8,
+				height: 2.8,
+			},
+			resource: {
+				image: createImage("/resources/units/gobelin.png"),
+				shape: "ellipse",
+			},
+		},
 	},
 	path: {
 		normal: {
@@ -137,6 +170,30 @@ export const Resources = {
 		trap: {
 			resource: "#C4A484",
 			image: createImage("/resources/path/trap.png"),
+		},
+	},
+	environment: {
+		rock: {
+			resource: {
+				image: createImage("/resources/environment/rock.png"),
+				shape: "ellipse",
+				color: "#3b3b3b",
+			},
+			size: {
+				width: 4.9,
+				height: 4.9,
+			},
+		},
+		forest: {
+			resource: {
+				image: createImage("/resources/environment/forest.png"),
+				shape: "ellipse",
+				color: "#3b3b3b",
+			},
+			size: {
+				width: 4.9,
+				height: 4.9,
+			},
 		},
 	},
 	castle: {
@@ -224,7 +281,7 @@ export const Resources = {
 			resource: {
 				image: createImage("/resources/house/house_blue.png"),
 				shape: "rectangle",
-				color: "green",
+				color: "blue",
 			},
 		},
 		wave: {
@@ -235,7 +292,18 @@ export const Resources = {
 			resource: {
 				image: createImage("/resources/house/house_red.png"),
 				shape: "rectangle",
-				color: "green",
+				color: "red",
+			},
+		},
+		veterant: {
+			size: {
+				width: 5,
+				height: 8,
+			},
+			resource: {
+				image: createImage("/resources/house/house_yellow.png"),
+				shape: "rectangle",
+				color: "yellow",
 			},
 		},
 	},
@@ -273,6 +341,15 @@ export const Resources = {
 		gold: {
 			resource: {
 				image: createImage("/resources/economy/gold.png"),
+			},
+		},
+		speedButton: {
+			resource: {
+				image: {
+					timesOne: createImage("/resources/button/buttonone.png"),
+					timesTwo: createImage("/resources/button/buttontwo.png"),
+					timesThree: createImage("/resources/button/buttonthree.png"),
+				},
 			},
 		},
 	},

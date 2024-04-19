@@ -3,18 +3,21 @@ import { Physic } from "../../../../shared/physic";
 import { GreenTower } from "../../recruit/implementation/green-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { Cast, Caster } from "../../../../shared/traits/cast";
-import { HTImageDrawable, TCasterHudRenderable } from "../../../../shared/traits/drawable";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
+import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { TCasterHudRenderable } from "../../../../shared/traits/render/huds/caster-camembert-renderable";
 import { HaveStats } from "../../../stats/stats";
-import { HTHitbox } from "../../../../shared/hitboxes";
+import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
-import { GridElement } from "../../../../shared/traits/grid-element";
+import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
+import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 
 export class GreenBattleTower extends Derive(
 	HTHitbox,
 	TCasterHudRenderable,
 	Caster,
 	HTImageDrawable,
+	HTDescriptor,
 	GridElement,
 	HaveStats,
 ) {
@@ -24,22 +27,33 @@ export class GreenBattleTower extends Derive(
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
+		public override orientation: number,
 	) {
 		super({
+			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
 			attack: recruit.attackDamage,
 			movementSpeed: NaN,
+			attackSpeed: NaN,
 			castSpeed: recruit.attackSpeed,
+			foodCost: recruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: recruit,
+			descriptor: recruit,
 		});
+
+		this.angle = this.orientation;
+		this.gridShape = recruit.gridShape;
 	}
 
 	private attack(target: AnyBattleUnit) {
-		const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
-		this.hooks.addProjectile(projectile, this);
-		this.castInProgress = null;
+		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
+		if (sucess) {
+			const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
+			this.hooks.addProjectile(projectile, this);
+		}
+		this.finishCast(sucess);
 	}
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
 		return enemyUnit.isAlive() && distanceSqrd < 20 * 20;

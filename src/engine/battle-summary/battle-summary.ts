@@ -1,11 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleState, SummaryState } from "../../shared/gamestate";
-import { TRenderable } from "../../shared/traits/drawable";
+
 import { Game } from "../game";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { ScreenPosition } from "../../shared/position";
 import { Resources } from "../../renderer/resources";
-import { TDrawable } from "../../shared/traits/tdrawable";
+import { TDrawable } from "../../shared/traits/render/drawable";
+import { TRenderable } from "../../shared/traits/render/renderable";
+import { RenderableState } from "../../renderer/renderer";
 
 export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 	constructor(public verdict: "victory" | "defeat") {
@@ -15,6 +17,7 @@ export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 	drawPriority = 5;
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
+		context.globalAlpha = 1;
 		const image = Resources.verdict[this.verdict].resource.image;
 		const { width, height } = Resources.verdict[this.verdict].size;
 		const size = this.getCanvasSize(context, width, height);
@@ -46,9 +49,9 @@ export class BattleSummary {
 		return summaryState;
 	}
 
-	getDrawables() {
+	getDrawables(): RenderableState {
 		return {
-			renderables: [this.battleVerdict],
+			renderables: [this.battleVerdict, ...this.lastBattleState.hudElements],
 			grids: [
 				{
 					grid: this.lastBattleState.grid,
