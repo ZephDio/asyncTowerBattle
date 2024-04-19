@@ -6,7 +6,8 @@ import { Unit } from "../unit-recruit";
 import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { PriestBlueprint } from "../../blueprint/implementation/priest";
 import { BattlePriest } from "../../battle/implementation/battle-priest";
-export class Priest extends Derive(Unit, HTDamageDealer) {
+import { RecruitCaster } from "../../../../shared/traits/engine/cast";
+export class Priest extends Derive(Unit, RecruitCaster, HTDamageDealer) {
 	speed: number;
 	maxLife: number;
 	attackSpeed: number;
@@ -15,7 +16,13 @@ export class Priest extends Derive(Unit, HTDamageDealer) {
 		public cell: Cell,
 		priest: PriestBlueprint = new PriestBlueprint({}),
 	) {
-		super({ imageDrawable: priest, damageDealer: priest, hitboxHolder: priest, descriptor: priest });
+		super({
+			imageDrawable: priest,
+			damageDealer: priest,
+			hitboxHolder: priest,
+			descriptor: priest,
+			foodConsumer: priest,
+		});
 		this.maxLife = priest.baseMaxLife;
 		this.speed = priest.baseSpeed;
 		this.attackSpeed = priest.attackSpeed;

@@ -6,7 +6,6 @@ import { Retail } from "../engine/shop/retail/retail";
 import { Castle } from "../engine/castle/recruit/castle-recruit";
 import { AreaEffect } from "../engine/area-effect/area-effect";
 import { ArmyGrid } from "../engine/grid/grid";
-import { CastleBlueprint } from "../engine/castle/blueprint/castle";
 import { BattleGrid } from "../engine/grid/battle-grid";
 import { ImplementsTrait } from "@ddd-ts/traits";
 import { AnyBattleTower } from "../engine/tower/battle/battle-tower";
@@ -45,7 +44,7 @@ export interface ShopState extends GameState {
 	type: "shop";
 	retail: Retail;
 
-	castle: Castle<CastleBlueprint>;
+	castle: Castle;
 	towers: ImplementsTrait<typeof Tower>[];
 	path: GridPosition[] | null;
 	grid: ArmyGrid;

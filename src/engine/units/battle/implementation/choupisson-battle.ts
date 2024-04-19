@@ -1,5 +1,4 @@
 import { GridPosition } from "../../../../shared/position";
-import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";
@@ -9,22 +8,23 @@ import { BattleSpine } from "../../../projectile/battle/implementation/battle-sp
 import { Spine } from "../../../projectile/blueprint/implementation/spine";
 import { TBattleUnit } from "../battle-unit";
 
-export class BattleChoupisson extends Derive(TBattleUnit, Caster) {
+export class BattleChoupisson extends Derive(TBattleUnit) {
 	pathFinder: PathFinder;
 
 	constructor(
 		recruit: Choupisson,
 		public position: GridPosition,
 		public enemyPath: BattlePath,
-		private hooks: BattleArmyHooks,
+		public hooks: BattleArmyHooks,
 	) {
 		super({
-			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: recruit.maxLife,
 			attack: recruit.attackDamage,
 			movementSpeed: recruit.speed,
+			attackSpeed: recruit.attackSpeed,
 			castSpeed: recruit.attackSpeed,
+			foodCost: recruit.foodCost,
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
 		});
@@ -32,16 +32,6 @@ export class BattleChoupisson extends Derive(TBattleUnit, Caster) {
 	}
 	canMove() {
 		return true;
-	}
-
-	attackCastle() {
-		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
-		this.castInProgress = null;
-		this.hooks.removeUnit(this);
-		this.stats._health = 0
-	}
-	casts(): void {
-		this.castInProgress = new Cast(this, this.attackCastle.bind(this), 100);
 	}
 
 	override takeDamage(damage: number) {
@@ -57,31 +47,5 @@ export class BattleChoupisson extends Derive(TBattleUnit, Caster) {
 		];
 		spines.forEach((spine) => this.hooks.addProjectile(spine, this));
 		this.stats.takeDamage(damage);
-	}
-
-	followPath(): void {
-		if (this.canMove() && !this.pathFinder.isArrived) {
-			const newPosition = this.pathFinder.getNextPosition(this.position, this.stats.movementSpeed);
-			this.move(newPosition);
-		}
-	}
-
-	move(newPosition: GridPosition) {
-		this.position.x = newPosition.x;
-		this.position.y = newPosition.y;
-	}
-
-	tick() {
-		this.stats.tick();
-		if (!this.pathFinder.isArrived) {
-			this.followPath();
-			return;
-		}
-
-		this.tickCast();
-	}
-
-	get realPosition() {
-		return this.position;
 	}
 }

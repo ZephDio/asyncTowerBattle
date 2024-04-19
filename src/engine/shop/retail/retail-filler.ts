@@ -24,6 +24,7 @@ import { VeterantBarrackBlueprint } from "../../barrack/blueprint/implementation
 import { AnyTotemBlueprint } from "../../totem/blueprint/totem";
 import { OrangeTotemBlueprint } from "../../totem/blueprint/implementation/orange-totem";
 import { GobelinPortalBlueprint } from "../../totem/blueprint/implementation/gobelin-portal";
+import { CropsFieldBlueprint } from "../../totem/blueprint/implementation/crops-field";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint =
@@ -35,7 +36,7 @@ type AnyBlueprint =
 // TODO trait blueprint
 const pool = [
 	{
-		value: [OrangeTotemBlueprint, GobelinPortalBlueprint] as any,
+		value: [OrangeTotemBlueprint, GobelinPortalBlueprint, CropsFieldBlueprint] as any,
 		share: 35,
 	},
 	{

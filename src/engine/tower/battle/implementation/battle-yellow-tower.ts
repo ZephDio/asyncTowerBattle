@@ -35,7 +35,9 @@ export class YellowBattleTower extends Derive(
 			attack: recruit.attackDamage,
 			movementSpeed: NaN,
 			castSpeed: recruit.attackSpeed,
+			attackSpeed: NaN,
 			onDeath: () => {},
+			foodCost: recruit.foodCost,
 			hitboxHolder: recruit,
 		});
 		this.angle = this.orientation;
@@ -55,7 +57,7 @@ export class YellowBattleTower extends Derive(
 				this.hooks.addAreaEffect(areaEffects, this);
 			}
 		}
-		this.castInProgress = null;
+		this.finishCast();
 	}
 
 	isAlive() {
@@ -64,8 +66,7 @@ export class YellowBattleTower extends Derive(
 
 	onCastResolve(): void {
 		this.attack();
-		this.castInProgress = null;
-		this.callSubscribers()
+		this.finishCast();
 	}
 
 	casts(): void {
@@ -87,7 +88,7 @@ export class Poisoned extends Derive(Status) {
 	constructor(public damage: number) {
 		super({});
 	}
-	
+
 	tick() {
 		this.clock++;
 		if (this.clock >= this.duration) {

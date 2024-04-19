@@ -15,6 +15,8 @@ export class CastleBlueprint extends Derive(
 ) {
 	maxLife = 20;
 
+	castSpeed = 1;
+
 	description = new Description(
 		"Castle",
 		["A castle that", "you must protect !", "Builds Tower to protect", "yourself and barracks", "to slay your enemies"],

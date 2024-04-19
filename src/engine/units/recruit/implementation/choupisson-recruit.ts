@@ -15,7 +15,13 @@ export class Choupisson extends Derive(HTDamageDealer, Unit) {
 		public cell: Cell,
 		blueprint: ChoupissonBlueprint = new ChoupissonBlueprint({}),
 	) {
-		super({ imageDrawable: blueprint, damageDealer: blueprint, hitboxHolder: blueprint, descriptor: blueprint });
+		super({
+			imageDrawable: blueprint,
+			damageDealer: blueprint,
+			hitboxHolder: blueprint,
+			descriptor: blueprint,
+			foodConsumer: blueprint,
+		});
 		this.maxLife = blueprint.baseMaxLife;
 		this.speed = blueprint.baseSpeed;
 		this.attackSpeed = blueprint.attackSpeed;

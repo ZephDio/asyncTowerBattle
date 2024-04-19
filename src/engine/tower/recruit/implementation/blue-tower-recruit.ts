@@ -18,7 +18,7 @@ export class BlueTower extends Derive(HTDamageDealer, Tower) {
 		public cell: Cell,
 		public tower: BlueTowerBlueprint = new BlueTowerBlueprint({}),
 	) {
-		super({ imageDrawable: tower, damageDealer: tower, hitboxHolder: tower, descriptor: tower });
+		super({ imageDrawable: tower, damageDealer: tower, hitboxHolder: tower, descriptor: tower, foodConsumer: tower });
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {

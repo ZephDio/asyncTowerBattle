@@ -17,14 +17,14 @@ export class BlueBattleTower extends Derive(
 	HTImageDrawable,
 	GridElement,
 	HaveStats,
+) {
+	constructor(
+		private readonly recruit: BlueTower,
+		private readonly hooks: BattleArmyHooks,
+		public readonly position: GridPosition,
+		public readonly cell: Cell,
+		public override orientation: number,
 	) {
-		constructor(
-			private readonly recruit: BlueTower,
-			private readonly hooks: BattleArmyHooks,
-			public readonly position: GridPosition,
-			public readonly cell: Cell,
-			public override orientation: number,
-			) {
 		super({
 			casterRecruit: recruit,
 			hitboxHolder: recruit,
@@ -33,19 +33,20 @@ export class BlueBattleTower extends Derive(
 			attack: recruit.attackDamage,
 			movementSpeed: NaN,
 			castSpeed: recruit.attackSpeed,
+			attackSpeed: NaN,
+			foodCost: recruit.foodCost,
 			onDeath: () => {},
 		});
 
 		this.angle = this.orientation;
 		this.gridShape = recruit.gridShape;
 	}
-	
+
 	target = null as null | AnyBattleUnit;
 	private attack(target: AnyBattleUnit) {
 		const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
 		this.hooks.addProjectile(projectile, this);
-		this.castInProgress = null;
-		this.callSubscribers()
+		this.finishCast();
 	}
 
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
@@ -62,7 +63,7 @@ export class BlueBattleTower extends Derive(
 			this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
 		) {
 			this.attack(this.target);
-			
+
 			return;
 		}
 		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule);

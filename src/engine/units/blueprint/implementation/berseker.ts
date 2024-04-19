@@ -10,6 +10,7 @@ import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Berseker } from "../../recruit/implementation/berseker-recruit";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
+import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class BersekerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -18,10 +19,13 @@ export class BersekerBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(Resources.unit.berseker.resource.image, Resources.unit.berseker.size, 3),
 	TDamageDealer(2),
+	FoodConsumer,
 ) {
 	baseMaxLife = 35;
 	baseSpeed = 0.25;
 	attackSpeed = 4;
+
+	foodCost = 1;
 
 	cost = 160;
 

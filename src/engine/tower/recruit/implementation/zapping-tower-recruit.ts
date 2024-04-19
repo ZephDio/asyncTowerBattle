@@ -16,7 +16,7 @@ export class ZappingTower extends Derive(HTDamageDealer, Tower) {
 		public cell: Cell,
 		public tower: ZappingTowerBlueprint = new ZappingTowerBlueprint({}),
 	) {
-		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower, descriptor: tower });
+		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower, descriptor: tower, foodConsumer: tower });
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {

@@ -15,7 +15,7 @@ export class Dragon extends Derive(HTDamageDealer, Unit) {
 		public cell: Cell,
 		dragon: DragonBlueprint = new DragonBlueprint({}),
 	) {
-		super({ imageDrawable: dragon, damageDealer: dragon, hitboxHolder: dragon, descriptor: dragon });
+		super({ imageDrawable: dragon, damageDealer: dragon, hitboxHolder: dragon, descriptor: dragon, foodConsumer: dragon });
 		this.maxLife = dragon.baseMaxLife;
 		this.speed = dragon.baseSpeed;
 		this.attackSpeed = dragon.attackSpeed;

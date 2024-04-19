@@ -32,7 +32,9 @@ export class FrostBattleTower extends Derive(
 			maxHealth: NaN,
 			attack: recruit.attackDamage,
 			movementSpeed: NaN,
+			foodCost: recruit.foodCost,
 			castSpeed: recruit.attackSpeed,
+			attackSpeed: NaN,
 			onDeath: () => {},
 		});
 
@@ -44,8 +46,7 @@ export class FrostBattleTower extends Derive(
 		const IceSpikeSpawnLocation = new GridPosition({ x: target.position.x, y: target.position.y + 9 });
 		const projectile = this.recruit.getProjectile(this.hooks, target, IceSpikeSpawnLocation, this.stats.attack);
 		this.hooks.addProjectile(projectile, this);
-		this.castInProgress = null;	
-		this.callSubscribers()
+		this.finishCast();
 	}
 
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {

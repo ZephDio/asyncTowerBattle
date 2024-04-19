@@ -10,6 +10,7 @@ import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { Priest } from "../../recruit/implementation/priest-recruit";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
+import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class PriestBlueprint extends Derive(
 	TShopBlueprint(20, 6),
@@ -18,10 +19,13 @@ export class PriestBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(Resources.unit.priest.resource.image, Resources.unit.priest.size, 4),
 	TDamageDealer(0.5),
+	FoodConsumer,
 ) {
 	baseMaxLife = 22;
 	baseSpeed = 0.16;
 	attackSpeed = 4;
+
+	foodCost = 1;
 
 	cost = 160;
 

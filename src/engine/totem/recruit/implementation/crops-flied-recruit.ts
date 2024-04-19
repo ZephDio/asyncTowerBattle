@@ -1,0 +1,34 @@
+import { Derive } from "@ddd-ts/traits";
+import { Totem } from "../totem-recruit";
+import { RecruitCaster } from "../../../../shared/traits/engine/cast";
+import { CropsFieldBlueprint } from "../../blueprint/implementation/crops-field";
+import { BattleGrid } from "../../../grid/battle-grid";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { Cell } from "../../../../shared/position";
+import { BattleCropsField } from "../../battle/implementation/battle-crops-field";
+
+export class CropsField extends Derive(Totem, RecruitCaster) {
+	castSpeed = 3;
+	constructor(
+		public blueprint: CropsFieldBlueprint,
+		public cell: Cell,
+	) {
+		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint });
+	}
+
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
+		const position = grid.cellToGrid(this.cell);
+		return new BattleCropsField(this, hooks, position, this.cell, this.orientation);
+	}
+
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
+		const cell = BattleGrid.flip(grid, this.cell);
+		const position = grid.cellToGrid(cell);
+		const orientation = this.orientation + Math.PI;
+		return new BattleCropsField(this, hooks, position, cell, orientation);
+	}
+
+	get position() {
+		return this.cell;
+	}
+}

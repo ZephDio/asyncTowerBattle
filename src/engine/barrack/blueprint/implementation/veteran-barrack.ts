@@ -8,14 +8,18 @@ import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { VeterantBarrack } from "../../recruit/implementation/veterant-barrack-recruit";
 import { BarrackDescription, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class VeterantBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 6),
 	TDescriptor,
+	FoodConsumer,
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.barracks.veterant.resource.image, Resources.barracks.veterant.size, 2),
 ) {
 	productionSpeed: number = 1.6;
+
+	foodCost = 5;
 
 	description = new BarrackDescription(
 		"Veterant Barrack",

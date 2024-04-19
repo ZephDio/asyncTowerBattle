@@ -10,7 +10,8 @@ import { AnyBattleUnit } from "../../units/battle/battle-unit";
 import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { GridPosition } from "../../../shared/position";
 import { AnyBattleTile } from "../../tile/battle/battle-tile";
-import { AnyBattleTotem } from "../../totem/battle/battle-tower";
+import { AnyBattleTotem } from "../../totem/battle/battle-totem";
+import { BattleFoodEconomy, FoodHooks } from "../../food/battle-food-economy";
 
 export type BattleArmyHooks = {
 	random: () => number;
@@ -26,6 +27,8 @@ export type BattleArmyHooks = {
 	getEnemyPath: BattleArmy["getEnemyPath"];
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
 	getAlliedCastle: () => BattleCastle;
+	alliedFoodHooks: FoodHooks;
+	enemyFoodHooks: FoodHooks;
 	gridHooks: GridHooks;
 };
 
@@ -42,11 +45,13 @@ export class BattleArmy {
 	totems: AnyBattleTotem[];
 
 	constructor(
+		public foodEconomy: BattleFoodEconomy,
 		public searchTarget: SearchTarget,
 		public searchEnemyInArea: SearchAreaForUnit,
 		public random: () => number,
 		public getEnemyPath: () => BattlePath,
 		public getEnemyCastle: () => BattleCastle,
+		public enemyFoodHooks: FoodHooks,
 		public gridHooks: GridHooks,
 	) {}
 
@@ -115,6 +120,8 @@ export class BattleArmy {
 			getEnemyPath: this.getEnemyPath.bind(this),
 			getEnemyCastle: this.getEnemyCastle.bind(this),
 			getAlliedCastle: () => this.castle,
+			alliedFoodHooks: this.foodEconomy.getHooks(),
+			enemyFoodHooks: this.enemyFoodHooks,
 			gridHooks: this.gridHooks,
 		};
 	}

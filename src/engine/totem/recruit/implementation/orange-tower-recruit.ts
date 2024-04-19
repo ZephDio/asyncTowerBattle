@@ -1,6 +1,6 @@
 import { Cell } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { OrangeBattleTower } from "../../battle/implementation/battle-orange-tower";
+import { OrangeBattleTower } from "../../battle/implementation/battle-orange-totem";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";

@@ -39,6 +39,8 @@ export class VeterantBattleBarrack extends Derive(
 			attack: NaN,
 			movementSpeed: NaN,
 			castSpeed: barrackRecruit.productionSpeed,
+			attackSpeed: NaN,
+			foodCost: barrackRecruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 		});
@@ -63,8 +65,7 @@ export class VeterantBattleBarrack extends Derive(
 		unit.addStatus(buff);
 		unit.addSize(0.3);
 		this.hooks.addUnits(unit, this);
-		this.castInProgress = null;
-		this.callSubscribers();
+		this.finishCast();
 	}
 }
 export class VeterantBuff extends Derive(Status) {

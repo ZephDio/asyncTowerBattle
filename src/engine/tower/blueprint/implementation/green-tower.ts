@@ -11,11 +11,13 @@ import { GreenTower } from "../../recruit/implementation/green-tower-recruit";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, TowerDescription } from "../../../../shared/traits/render/huds/item-descriptor";
+import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class GreenTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
+	FoodConsumer,
 	TImageDrawable(Resources.tower.green.resource.image, Resources.tower.green.size, 3),
 	TDamageDealer(10),
 ) {
@@ -25,7 +27,8 @@ export class GreenTowerBlueprint extends Derive(
 		"cast speed": "3",
 		"cast cost": "100",
 	});
-	type = "green" as const;
+
+	foodCost = 2;
 
 	toRecruit(cell: Cell) {
 		return new GreenTower(cell, this);

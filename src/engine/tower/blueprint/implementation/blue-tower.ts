@@ -10,17 +10,20 @@ import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Derive } from "../../../../../traits/traits";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TowerDescription, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class BlueTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	TDamageDealer(7),
+	FoodConsumer,
 	TImageDrawable(Resources.tower.blue.resource.image, Resources.tower.blue.size, 3),
 ) {
 	toRecruit(cell: Cell) {
 		return new BlueTower(cell, this);
 	}
+	foodCost = 2;
 
 	description = new TowerDescription("Blue Tower", ["A tower that shoots", "missile that explode", "in an area"], {
 		damage: "7",

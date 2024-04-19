@@ -10,6 +10,7 @@ import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { Soldier } from "../../recruit/implementation/soldier-recruit";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
+import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class SoldierBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -18,11 +19,13 @@ export class SoldierBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(Resources.unit.soldier.resource.image, Resources.unit.soldier.size, 4),
 	TDamageDealer(1),
+	FoodConsumer,
 ) {
 	baseMaxLife = 6;
 	baseSpeed = 0.32;
 	attackSpeed = 5;
 
+	foodCost = 1;
 	cost = 75;
 
 	description = new UnitDescription("Soldier", ["A lame unit", "that doesn't do", "anything special"], {

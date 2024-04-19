@@ -74,6 +74,16 @@ export const Resources = {
 				color: "orange",
 			},
 		},
+		cropsfield: {
+			size: {
+				width: 5,
+				height: 5,
+			},
+			resource: {
+				image: createImage("/resources/totem/crops-field.png"),
+				shape: "ellipse",
+			},
+		},
 		gobelinportal: {
 			size: {
 				width: 5,

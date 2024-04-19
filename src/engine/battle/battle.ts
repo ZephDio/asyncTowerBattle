@@ -1,6 +1,7 @@
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { RenderableState } from "../../renderer/renderer";
 import { BattleState } from "../../shared/gamestate";
+import { FoodBarHud } from "../../shared/hud-element/army-food-bar";
 import { BattleClockHud } from "../../shared/hud-element/battle/battle-clock";
 import { ButtonSpeedHUD } from "../../shared/hud-element/battle/button-speed";
 import { CastleLifeBar } from "../../shared/hud-element/battle/castle-life-bar";
@@ -16,6 +17,8 @@ export class Battle {
 	gameSpeed = 30;
 	alliedCastleLifeBar: CastleLifeBar;
 	enemyCastleLifeBar: CastleLifeBar;
+	alliedFoodBar: FoodBarHud;
+	enemyFoodBar: FoodBarHud;
 	battleClock: BattleClockHud;
 
 	timer = { clock: 0 };
@@ -27,14 +30,13 @@ export class Battle {
 		public onBattleOver: Game["handleEndBattle"],
 		public setDescriptionHud: Game["setDescriptionHud"],
 	) {
-		this.battlefield = new Battlefield(
-			this.alliedArmy, 
-			this.enemyArmy, 
-			this.handleBattleOver.bind(this),
-			() => this.randomSeed.random()
-			);
+		this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy, this.handleBattleOver.bind(this), () =>
+			this.randomSeed.random(),
+		);
 		this.alliedCastleLifeBar = new CastleLifeBar(this.battlefield.alliedArmy.castle, true, this.battlefield.grid);
 		this.enemyCastleLifeBar = new CastleLifeBar(this.battlefield.enemyArmy.castle, false, this.battlefield.grid);
+		this.alliedFoodBar = new FoodBarHud(this.battlefield.alliedArmy.foodEconomy, PercentToReal({ x: 5, y: 50 }));
+		this.enemyFoodBar = new FoodBarHud(this.battlefield.enemyArmy.foodEconomy, PercentToReal({ x: 95, y: 50 }));
 		this.battleClock = new BattleClockHud(this.timer);
 	}
 
@@ -72,6 +74,8 @@ export class Battle {
 				new ButtonSpeedHUD(3, PercentToReal({ x: 12, y: 95 })),
 				this.alliedCastleLifeBar,
 				this.enemyCastleLifeBar,
+				this.alliedFoodBar,
+				this.enemyFoodBar,
 				this.battleClock,
 			],
 			grids: [
