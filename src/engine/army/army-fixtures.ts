@@ -1,7 +1,6 @@
 import { Cell } from "../../shared/position";
 import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-recruit-fixtures";
 import { CastleFactory, CastleRecruitFixture } from "../castle/blueprint/castle";
-import { Rock } from "../environment/rock";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
@@ -16,17 +15,7 @@ export class ArmyFixture {
 	static get pacifist() {
 		const grid = new ArmyGrid(6, 4, undefined, 7);
 		const castle = CastleFactory.default;
-		const towers: AnyTower[] = [
-			//TowerFixtures.centerTower,
-			//TowerFixtures.centerTower,
-			new TowerBuilder()
-				.celled(new Cell({ x: 3, y: 3 }))
-				.buildGreen(TowerBlueprintFixtures.green),
-			// new TowerBuilder()
-			// 	.celled(new Cell({ x: 7, y: 4 }))
-			// 	.buildFrost(),
-			//TowerEntityFixtures.topRightTower,
-		];
+		const towers: AnyTower[] = [];
 		const tiles = PathFactory.default;
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
@@ -36,8 +25,8 @@ export class ArmyFixture {
 		return new Army(grid, unitInventory);
 	}
 	static get allied() {
-		const grid = new ArmyGrid();
-		const castle = CastleRecruitFixture.allied;
+		const grid = new ArmyGrid(7, 5);
+		const castle = CastleFactory.default;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
@@ -46,13 +35,12 @@ export class ArmyFixture {
 			//TowerEntityFixtures.topRightTower,
 		];
 		const totems = [new TotemBuilder().celled(new Cell({ x: 3, y: 2 })).buildOrange()];
-		const tiles = PathFixture.default;
+		const tiles = PathFactory.default;
 		const barracks = [BarrackRecruitFixtures.veterantWithDragon()];
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
-		const environment = [new Rock(new Cell({ x: 0, y: 0 }))];
-		[castle, ...towers, ...tiles, ...totems, ...barracks, ...environment].map((e) => grid.setElement(e));
+		[castle, ...towers, ...tiles, ...totems, ...barracks].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
 		return new Army(grid, unitInventory);
 	}

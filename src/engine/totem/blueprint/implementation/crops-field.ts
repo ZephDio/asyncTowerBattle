@@ -23,6 +23,6 @@ export class CropsFieldBlueprint extends Derive(
 	description = new Description("Crops Field", ["A field to grow crops"]);
 
 	toRecruit(cell: Cell) {
-		return new CropsField(this, cell);
+		return new CropsField(cell, this);
 	}
 }

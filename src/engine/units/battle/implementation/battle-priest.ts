@@ -38,10 +38,6 @@ export class BattlePriest extends Derive(TBattleUnit, Caster) {
 	}
 
 	casts(): void {
-		if (this.pathFinder.isArrived) {
-			this.castInProgress = new Cast(this, this.attackCastle.bind(this), 100);
-			return;
-		}
 		this.castInProgress = new Cast(this, this.healWave.bind(this), 400);
 	}
 

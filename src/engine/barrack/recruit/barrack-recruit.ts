@@ -38,7 +38,8 @@ export const Barrack = Subtrait([TRecruit, RecruitCaster], (base) => {
 			const cell = grid.gridPositionToCell(position);
 			if (!cell) throw new Error("Invalid cell");
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				grid.checkCondition(this, cell, orientation);
+				const condition = grid.checkCondition(this, cell, orientation);
+				if (!condition) throw new Error("Invalid condition");
 				this.cell = cell.clone();
 				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);

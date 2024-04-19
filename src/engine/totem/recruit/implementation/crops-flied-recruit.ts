@@ -10,8 +10,8 @@ import { BattleCropsField } from "../../battle/implementation/battle-crops-field
 export class CropsField extends Derive(Totem, RecruitCaster) {
 	castSpeed = 3;
 	constructor(
-		public blueprint: CropsFieldBlueprint,
 		public cell: Cell,
+		public blueprint: CropsFieldBlueprint = new CropsFieldBlueprint({}),
 	) {
 		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint });
 	}

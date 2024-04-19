@@ -21,7 +21,7 @@ export class BersekerBlueprint extends Derive(
 	TDamageDealer(2),
 	FoodConsumer,
 ) {
-	baseMaxLife = 35;
+	baseMaxLife = 22;
 	baseSpeed = 0.25;
 	attackSpeed = 4;
 
@@ -33,7 +33,7 @@ export class BersekerBlueprint extends Derive(
 		"Berseker",
 		["A unit that enrage", "while damaged under", "half health gaining", "attack damage and", "movement speed"],
 		{
-			health: "35",
+			health: "22",
 			damage: "2",
 			"move speed": "0.25",
 			"production cost": "160",
