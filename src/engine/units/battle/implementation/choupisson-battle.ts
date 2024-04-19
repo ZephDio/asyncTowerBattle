@@ -30,12 +30,6 @@ export class BattleChoupisson extends Derive(TBattleUnit) {
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
-	canMove() {
-		if (this.stats.status.has("stunned")) {
-			return false;
-		}
-		return true;
-	}
 
 	override takeDamage(damage: number) {
 		const { below, left, right } = this.hooks.gridHooks.getRelativeDirection();

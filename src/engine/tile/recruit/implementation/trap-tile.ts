@@ -11,7 +11,7 @@ export class TrapPathTile extends Derive(PathTile) {
 		public cell: Cell,
 		public tile: TrapTileBlueprint = new TrapTileBlueprint({}),
 	) {
-		super({ hitboxHolder: tile, imageDrawable: tile });
+		super({ hitboxHolder: tile, imageDrawable: tile, descriptor: tile });
 	}
 
 	toBattle(cell: Cell, position: GridPosition, hooks: BattleArmyHooks) {

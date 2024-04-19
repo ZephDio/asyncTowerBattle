@@ -28,7 +28,4 @@ export class BattleGobelin extends Derive(TBattleUnit) {
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
-	canMove() {
-		return true;
-	}
 }

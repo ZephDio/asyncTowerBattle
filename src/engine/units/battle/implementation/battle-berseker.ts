@@ -31,12 +31,6 @@ export class BattleBerseker extends Derive(TBattleUnit) {
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
 
-	canMove() {
-		if (this.stats.status.has("stunned")) {
-			return false;
-		}
-		return true;
-	}
 	override tick() {
 		super.tick();
 		if (this.stats.health <= this.stats.maxHealth / 2) {

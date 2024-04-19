@@ -139,6 +139,9 @@ export class Stats {
 		this.onDeath();
 	}
 
+	canMove() {
+		return !this.status.has("stunned");
+	}
 	removeStatus(status: ImplementsTrait<typeof Status>) {
 		this.status.delete(status.key);
 	}

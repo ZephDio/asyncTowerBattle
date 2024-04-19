@@ -22,8 +22,10 @@ export const TBattleUnit = Subtrait(
 
 			abstract pathFinder: PathFinder;
 
-			abstract canMove(): boolean;
 			action = null as null | Action;
+			canMove() {
+				return this.stats.canMove();
+			}
 			isAlive() {
 				return this.stats.health > 0;
 			}
@@ -38,6 +40,7 @@ export const TBattleUnit = Subtrait(
 				if (this.action === null) {
 					this.action = new Action(this.stats.attackSpeed, () => {
 						this.attackCastle();
+						this.action = null;
 					});
 					return;
 				}

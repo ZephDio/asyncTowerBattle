@@ -28,10 +28,4 @@ export class BattleSoldier extends Derive(TBattleUnit) {
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
-	canMove() {
-		if (this.stats.status.has("stunned")) {
-			return false;
-		}
-		return true;
-	}
 }

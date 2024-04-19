@@ -31,12 +31,6 @@ export class BattlePriest extends Derive(TBattleUnit, Caster) {
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
-	canMove() {
-		if (this.stats.status.has("stunned")) {
-			return false;
-		}
-		return true;
-	}
 
 	healWave() {
 		this.hooks.addAreaEffect(new HealWave(30, this.position, 0.2, this.hooks), this);

@@ -25,6 +25,7 @@ import { AnyTotemBlueprint } from "../../totem/blueprint/totem";
 import { OrangeTotemBlueprint } from "../../totem/blueprint/implementation/orange-totem";
 import { GobelinPortalBlueprint } from "../../totem/blueprint/implementation/gobelin-portal";
 import { CropsFieldBlueprint } from "../../totem/blueprint/implementation/crops-field";
+import { TrapTileBlueprint } from "../../tile/blueprint/implementation/trap-tile-blueprint";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint =
@@ -48,7 +49,7 @@ const pool = [
 		share: 60,
 	},
 	{
-		value: [BasicTileBlueprint, SlowingTileBlueprint],
+		value: [BasicTileBlueprint, SlowingTileBlueprint, TrapTileBlueprint],
 		share: 35,
 	},
 	{
