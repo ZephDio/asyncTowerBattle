@@ -11,6 +11,7 @@ import { SlowingBattlePathTile } from "../../../tile/battle/implementation/slowi
 import { BasicBattlePathTile } from "../../../tile/battle/implementation/basic-battle-tile";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
+import { TrapBattlePathTile } from "../../../tile/battle/implementation/trap-battle-tle";
 
 export class YellowBattleTower extends Derive(
 	HTHitbox,
@@ -51,12 +52,21 @@ export class YellowBattleTower extends Derive(
 		);
 		let sucess: boolean = false;
 		if (
-			neighbors.some((neighbor) => neighbor instanceof BasicBattlePathTile || neighbor instanceof SlowingBattlePathTile)
+			neighbors.some(
+				(neighbor) =>
+					neighbor instanceof BasicBattlePathTile ||
+					neighbor instanceof SlowingBattlePathTile ||
+					neighbor instanceof TrapBattlePathTile,
+			)
 		) {
 			sucess = this.hooks.alliedFoodHooks.consumeFood(this.recruit.foodCost);
 			if (sucess) {
 				for (const neighbor of neighbors) {
-					if (neighbor instanceof BasicBattlePathTile || neighbor instanceof SlowingBattlePathTile) {
+					if (
+						neighbor instanceof BasicBattlePathTile ||
+						neighbor instanceof SlowingBattlePathTile ||
+						neighbor instanceof TrapBattlePathTile
+					) {
 						const position = this.hooks.gridHooks.getRealPosition(neighbor.cell);
 						const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.stats.attack);
 						this.hooks.addAreaEffect(areaEffects, this);
