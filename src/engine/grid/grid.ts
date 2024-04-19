@@ -124,11 +124,9 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	roundTwo() {
 		this.width = 8;
-		this.height = 5;
-		this.cellSize = 5.5;
+		this.height = 6;
+		this.cellSize = STANDARD_CELL_SIZE;
 		this.translate();
-		[new BasicPathTile(new Cell({ x: 6, y: 4 })), new BasicPathTile(new Cell({ x: 7, y: 4 }))].forEach((pathTile) =>
-			this.setElement(pathTile),
-		);
+		[new BasicPathTile(new Cell({ x: 7, y: 5 }))].forEach((pathTile) => this.setElement(pathTile));
 	}
 }

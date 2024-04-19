@@ -29,9 +29,10 @@ export class PathFixture {
 	}
 }
 
-export class PathFactory{
+export class PathFactory {
 	static get default() {
 		return [
+			new BasicPathTile(new Cell({ x: 0, y: 3 })),
 			new BasicPathTile(new Cell({ x: 0, y: 2 })),
 			new BasicPathTile(new Cell({ x: 0, y: 1 })),
 			new BasicPathTile(new Cell({ x: 0, y: 0 })),
@@ -40,13 +41,16 @@ export class PathFactory{
 			new BasicPathTile(new Cell({ x: 3, y: 0 })),
 			new BasicPathTile(new Cell({ x: 4, y: 0 })),
 			new BasicPathTile(new Cell({ x: 5, y: 0 })),
-			new BasicPathTile(new Cell({ x: 5, y: 1 })),
-			new BasicPathTile(new Cell({ x: 5, y: 2 })),
-			new BasicPathTile(new Cell({ x: 5, y: 3 })),
+			new BasicPathTile(new Cell({ x: 6, y: 0 })),
+			new BasicPathTile(new Cell({ x: 6, y: 1 })),
+			new BasicPathTile(new Cell({ x: 6, y: 2 })),
+			new BasicPathTile(new Cell({ x: 6, y: 3 })),
+			new BasicPathTile(new Cell({ x: 6, y: 4 })),
 		];
 	}
 	static get round2() {
 		return [
+			new BasicPathTile(new Cell({ x: 0, y: 4 })),
 			new BasicPathTile(new Cell({ x: 0, y: 3 })),
 			new BasicPathTile(new Cell({ x: 0, y: 2 })),
 			new BasicPathTile(new Cell({ x: 0, y: 1 })),
@@ -62,6 +66,7 @@ export class PathFactory{
 			new BasicPathTile(new Cell({ x: 6, y: 3 })),
 			new BasicPathTile(new Cell({ x: 7, y: 3 })),
 			new BasicPathTile(new Cell({ x: 7, y: 4 })),
+			new BasicPathTile(new Cell({ x: 7, y: 5 })),
 		];
 	}
 }

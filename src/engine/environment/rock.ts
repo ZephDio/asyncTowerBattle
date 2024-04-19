@@ -8,6 +8,7 @@ export class Rock extends Derive(
 	TEnvironmentElement,
 	TImageDrawable(Resources.environment.rock.resource.image, Resources.environment.rock.size, 3),
 ) {
+	type = "rock" as const;
 	constructor(public cell: Cell) {
 		super({});
 	}
