@@ -60,11 +60,14 @@ export class VeterantBattleBarrack extends Derive(
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
-		const unit = this.unitRecruit.toBattle(spawnPoint, path, this.hooks);
-		const buff = new VeterantBuff();
-		unit.addStatus(buff);
-		unit.addSize(0.3);
-		this.hooks.addUnits(unit, this);
+		const succes = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
+		if (succes) {
+			const unit = this.unitRecruit.toBattle(spawnPoint, path, this.hooks);
+			const buff = new VeterantBuff();
+			unit.addStatus(buff);
+			unit.addSize(0.3);
+			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
+		}
 		this.finishCast();
 	}
 }

@@ -63,7 +63,10 @@ export class WaveBattleBarrack extends Derive(
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
-		this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
-		this.finishCast();
+		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
+		if (sucess) {
+			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
+		}
+		this.finishCast(sucess);
 	}
 }

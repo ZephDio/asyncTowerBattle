@@ -63,6 +63,6 @@ export class BasicBattleBarrack extends Derive(
 		if (succes) {
 			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
 		}
-		this.finishCast();
+		this.finishCast(succes);
 	}
 }

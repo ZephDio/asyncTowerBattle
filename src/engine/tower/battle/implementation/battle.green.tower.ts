@@ -48,9 +48,12 @@ export class GreenBattleTower extends Derive(
 	}
 
 	private attack(target: AnyBattleUnit) {
-		const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
-		this.hooks.addProjectile(projectile, this);
-		this.finishCast();
+		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
+		if (sucess) {
+			const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
+			this.hooks.addProjectile(projectile, this);
+		}
+		this.finishCast(sucess);
 	}
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
 		return enemyUnit.isAlive() && distanceSqrd < 20 * 20;

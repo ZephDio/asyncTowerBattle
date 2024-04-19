@@ -36,8 +36,8 @@ export const Caster = Subtrait([HaveStats], (base, _props) => {
 			}
 		}
 
-		finishCast() {
-			this.callSubscribers();
+		finishCast(sucess: boolean = true) {
+			if (sucess) this.callSubscribers();
 			this.castInProgress = null;
 		}
 

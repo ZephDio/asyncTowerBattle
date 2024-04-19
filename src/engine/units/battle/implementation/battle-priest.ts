@@ -37,7 +37,7 @@ export class BattlePriest extends Derive(TBattleUnit, Caster) {
 
 	healWave() {
 		this.hooks.addAreaEffect(new HealWave(30, this.position, 0.2, this.hooks), this);
-		this.castInProgress = null;
+		this.finishCast();
 	}
 
 	casts(): void {

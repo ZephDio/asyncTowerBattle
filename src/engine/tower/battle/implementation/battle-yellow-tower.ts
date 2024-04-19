@@ -49,15 +49,22 @@ export class YellowBattleTower extends Derive(
 			this.cell,
 			this.recruit.patternEffect.getRelativeCells(this.recruit.orientation),
 		);
-
-		for (const neighbor of neighbors) {
-			if (neighbor instanceof BasicBattlePathTile || neighbor instanceof SlowingBattlePathTile) {
-				const position = this.hooks.gridHooks.getRealPosition(neighbor.cell);
-				const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.stats.attack);
-				this.hooks.addAreaEffect(areaEffects, this);
+		let sucess: boolean = false;
+		if (
+			neighbors.some((neighbor) => neighbor instanceof BasicBattlePathTile || neighbor instanceof SlowingBattlePathTile)
+		) {
+			sucess = this.hooks.alliedFoodHooks.consumeFood(this.recruit.foodCost);
+			if (sucess) {
+				for (const neighbor of neighbors) {
+					if (neighbor instanceof BasicBattlePathTile || neighbor instanceof SlowingBattlePathTile) {
+						const position = this.hooks.gridHooks.getRealPosition(neighbor.cell);
+						const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.stats.attack);
+						this.hooks.addAreaEffect(areaEffects, this);
+					}
+				}
 			}
 		}
-		this.finishCast();
+		this.finishCast(sucess);
 	}
 
 	isAlive() {

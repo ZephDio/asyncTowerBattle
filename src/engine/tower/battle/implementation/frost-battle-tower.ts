@@ -43,10 +43,13 @@ export class FrostBattleTower extends Derive(
 	}
 
 	private attack(target: AnyBattleUnit) {
-		const IceSpikeSpawnLocation = new GridPosition({ x: target.position.x, y: target.position.y + 9 });
-		const projectile = this.recruit.getProjectile(this.hooks, target, IceSpikeSpawnLocation, this.stats.attack);
-		this.hooks.addProjectile(projectile, this);
-		this.finishCast();
+		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
+		if (sucess) {
+			const IceSpikeSpawnLocation = new GridPosition({ x: target.position.x, y: target.position.y + 9 });
+			const projectile = this.recruit.getProjectile(this.hooks, target, IceSpikeSpawnLocation, this.stats.attack);
+			this.hooks.addProjectile(projectile, this);
+		}
+		this.finishCast(sucess);
 	}
 
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {

@@ -47,7 +47,7 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 
 	onCastResolve() {
 		this.foodHooks.addFood(4);
-		this.finishCast();
+		this.finishCast(true);
 	}
 
 	tick() {
