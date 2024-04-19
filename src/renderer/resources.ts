@@ -157,6 +157,16 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		fox: {
+			size: {
+				width: 3,
+				height: 2,
+			},
+			resource: {
+				image: createImage("/resources/units/fox.png"),
+				shape: "ellipse",
+			},
+		},
 	},
 	path: {
 		normal: {

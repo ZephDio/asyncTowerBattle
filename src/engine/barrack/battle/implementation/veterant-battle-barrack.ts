@@ -66,7 +66,7 @@ export class VeterantBattleBarrack extends Derive(
 			const buff = new VeterantBuff();
 			unit.addStatus(buff);
 			unit.addSize(0.3);
-			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
+			this.hooks.addUnits(unit, this);
 		}
 		this.finishCast();
 	}

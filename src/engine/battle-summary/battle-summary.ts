@@ -51,16 +51,16 @@ export class BattleSummary {
 
 	getDrawables(): RenderableState {
 		return {
-			renderables: [this.battleVerdict, ...this.lastBattleState.hudElements],
+			renderables: [this.battleVerdict], // ...this.lastBattleState.hudElements
 			grids: [
-				{
-					grid: this.lastBattleState.grid,
-					drawables: [
-						...this.lastBattleState.units,
-						...this.lastBattleState.projectiles,
-						...this.lastBattleState.areaEffects,
-					],
-				},
+				// {
+				// 	grid: this.lastBattleState.grid,
+				// 	drawables: [
+				// 		...this.lastBattleState.units,
+				// 		...this.lastBattleState.projectiles,
+				// 		...this.lastBattleState.areaEffects,
+				// 	],
+				// },
 			],
 		};
 	}

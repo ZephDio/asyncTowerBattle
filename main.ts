@@ -18,7 +18,7 @@ const getChildWalk = Subtrait([Walk], (base) => {
 	return IChildWalk;
 });
 
-class A extends Derive(Walk, getChildWalk) {
+class A extends Derive(getChildWalk) {
 	constructor(child: B) {
 		super(child);
 	}

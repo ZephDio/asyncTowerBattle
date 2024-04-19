@@ -121,7 +121,7 @@ export class BarrackRecruitFixtures {
 		return new BarrackRecruitBuilder()
 			.withProductionSpeed(speed)
 			.setUnit(UnitRecruitFixture.dragon)
-			.withCell(new Cell({ x: 6, y: 0 }))
+			.withCell(new Cell({ x: 2, y: 1 }))
 			.buildVeterant();
 	}
 }

@@ -21,7 +21,7 @@ export class Game {
 	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new LocalMatchMaker();
 	economy = {
-		gold: 70,
+		gold: 99999,
 	};
 
 	constructor() {
