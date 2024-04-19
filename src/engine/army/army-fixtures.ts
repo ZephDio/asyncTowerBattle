@@ -45,7 +45,7 @@ export class ArmyFixture {
 				.buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];
-		const totems = [new TotemBuilder().celled(new Cell({ x : 3 , y :2})).buildOrange()]
+		const totems = [new TotemBuilder().celled(new Cell({ x: 3, y: 2 })).buildOrange()];
 		const tiles = PathFixture.default;
 		const barracks = [BarrackRecruitFixtures.veterantWithDragon()];
 		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
@@ -75,12 +75,11 @@ export class ArmyFixture {
 
 export class ArmyFactory {
 	static get default() {
-		const grid = new ArmyGrid(6, 4, undefined, 7);
+		const grid = new ArmyGrid(7, 5, undefined, 6.0);
 		const castle = CastleFactory.default;
 		const tiles = PathFactory.default;
 		const unitInventory = new Inventory();
-		const environments = [new Rock(new Cell({ x: 1, y: 2 })), new Rock(new Cell({ x: 3, y: 3 }))];
-		[castle, ...environments, ...tiles].map((e) => grid.setElement(e));
+		[castle, ...tiles].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
 		return new Army(grid, unitInventory);
 	}

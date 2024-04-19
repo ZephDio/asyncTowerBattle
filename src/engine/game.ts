@@ -9,9 +9,9 @@ import { RoundsTracker } from "./rounds/tracker";
 import { DescriptionHud } from "../shared/traits/render/huds/item-descriptor";
 import { RenderableState } from "../renderer/renderer";
 import { BattleRandomSeed } from "./battle/battle-random-seed";
+import { EnvironmentGeneration } from "./environment/env-generation";
 
 export class Game {
-	//army = ArmyFixture.allied;
 	army = ArmyFactory.default;
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
@@ -24,15 +24,16 @@ export class Game {
 		gold: 70,
 	};
 
-	constructor() {}
+	constructor() {
+		const envGenerator = new EnvironmentGeneration();
+		envGenerator.generateEnvironment(this.army.grid, 0);
+	}
 
 	async getState(): Promise<GameState> {
 		if (this.battle) return this.getBattleState();
 		if (this.battleSummary) return this.getSummaryState();
 		return this.getShopState();
 	}
-
-	async getOpponent() {}
 
 	getBattleState() {
 		if (!this.battle) return {} as BattleState;
@@ -98,7 +99,7 @@ export class Game {
 	}
 
 	startBattle() {
-		const { army ,  randomSeed } = this.matchMaker.getOpponent(this.rounds.round)
+		const { army, randomSeed } = this.matchMaker.getOpponent(this.rounds.round);
 		this.battle = new Battle(
 			this.army,
 			army,

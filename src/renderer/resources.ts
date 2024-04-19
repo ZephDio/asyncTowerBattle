@@ -170,13 +170,17 @@ export const Resources = {
 				height: 4.9,
 			},
 		},
-		// tree: {
-		// 	resource: {
-		// 		image: createImage("/resources/environment/tree.png"),
-		// 		shape: "ellipse",
-		// 		color: "#3b3b3b",
-		// 	},
-		// },
+		forest: {
+			resource: {
+				image: createImage("/resources/environment/forest.png"),
+				shape: "ellipse",
+				color: "#3b3b3b",
+			},
+			size: {
+				width: 4.9,
+				height: 4.9,
+			},
+		},
 	},
 	castle: {
 		size: {

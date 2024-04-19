@@ -35,10 +35,10 @@ export class CastleRecruitFixture {
 
 export class CastleFactory {
 	static get default() {
-		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 3 }));
+		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 4 }));
 	}
 
 	static get round2() {
-		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 4 }));
+		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 5 }));
 	}
 }
