@@ -1,16 +1,18 @@
 import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { HaveStats } from "../../../engine/stats/stats";
+import { Action } from "../../action";
 
-export class Cast {
-	progress = 0;
+export class Cast extends Action {
 	constructor(
 		private readonly caster: ImplementsTrait<typeof Caster>,
-		private readonly resolve: () => void,
 
+		resolve: () => void,
 		private readonly castCost: number,
-	) {}
+	) {
+		super(castCost, resolve);
+	}
 
-	tick() {
+	override tick() {
 		this.progress += this.caster.castSpeed;
 		if (this.progress >= this.castCost) {
 			this.resolve();
@@ -32,6 +34,11 @@ export const Caster = Subtrait([HaveStats], (base, _props) => {
 			for (const { callback } of this.subscribers) {
 				callback();
 			}
+		}
+
+		finishCast(sucess: boolean = true) {
+			if (sucess) this.callSubscribers();
+			this.castInProgress = null;
 		}
 
 		tickCast() {

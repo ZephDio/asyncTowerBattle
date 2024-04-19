@@ -34,31 +34,46 @@ export class Battlefield {
 	): { alliedBattleArmy: BattleArmy; enemyBattleArmy: BattleArmy; battleGrid: BattleGrid } {
 		const grid = BattleGrid.fuse(alliedArmy.grid, enemyArmy.grid);
 
-		const enemyBattleCastle = enemyArmy.castle.toEnemy(grid, () => this.onBattleOver("victory"));
-		const alliedBattleCastle = alliedArmy.castle.toAllied(grid, () => this.onBattleOver("defeat"));
+		const alliedFoodEconomy = alliedArmy.foodEconomy.toBattle();
+		const enemyFoodEconomy = enemyArmy.foodEconomy.toBattle();
+
+		const enemyBattleCastle = enemyArmy.castle.toEnemy(
+			grid,
+			() => this.onBattleOver("victory"),
+			enemyFoodEconomy.getHooks(),
+		);
+		const alliedBattleCastle = alliedArmy.castle.toAllied(
+			grid,
+			() => this.onBattleOver("defeat"),
+			alliedFoodEconomy.getHooks(),
+		);
 
 		const alliedBattlePath = BattlePath.toAllied(grid, alliedArmy.path, alliedBattleCastle, enemyBattleCastle);
 		const enemyBattlePath = BattlePath.toEnemy(grid, enemyArmy.path, enemyBattleCastle, alliedBattleCastle);
 		const alliedBattleArmy = new BattleArmy(
+			alliedFoodEconomy,
 			this.searchAlliedUnitTarget.bind(this),
 			this.searchEnemiesInArea.bind(this),
 			this.random.bind(this),
 			() => enemyBattlePath,
 			() => enemyBattleCastle,
+			enemyFoodEconomy.getHooks(),
 			grid.getAlliedHooks(),
 		);
 		const enemyBattleArmy = new BattleArmy(
+			enemyFoodEconomy,
 			this.searchEnemyUnitTarget.bind(this),
 			this.searchAlliesInArea.bind(this),
 			this.random.bind(this),
 			() => alliedBattlePath,
 			() => alliedBattleCastle,
+			alliedFoodEconomy.getHooks(),
 			grid.getEnemyHooks(),
 		);
 		const alliedBattleTiles = alliedArmy.pathTiles.map((pathTile) =>
 			pathTile.toAllied(grid, alliedBattleArmy.getHooks()),
 		);
-		const enemyBattleTiles = enemyArmy.pathTiles.map((pathTile) => pathTile.toEnemy(grid, alliedBattleArmy.getHooks()));
+		const enemyBattleTiles = enemyArmy.pathTiles.map((pathTile) => pathTile.toEnemy(grid, enemyBattleArmy.getHooks()));
 
 		const enemyBattleTowers = enemyArmy.towers.map((tower) => tower.toEnemy(grid, enemyBattleArmy.getHooks()));
 		const alliedBattleTowers = alliedArmy.towers.map((tower) => tower.toAllied(grid, alliedBattleArmy.getHooks()));
@@ -103,6 +118,7 @@ export class Battlefield {
 		this.tickTotems();
 		this.tickAreaEffects();
 		this.tickPathTiles();
+		this.tickCastles();
 	}
 
 	searchEnemiesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
@@ -161,6 +177,11 @@ export class Battlefield {
 		for (const tower of this.enemyArmy.towers) {
 			tower.tick();
 		}
+	}
+
+	tickCastles() {
+		this.alliedArmy.castle.tick();
+		this.enemyArmy.castle.tick();
 	}
 
 	tickTotems() {

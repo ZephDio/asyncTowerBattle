@@ -6,12 +6,14 @@ import { Unit } from "../units/recruit/unit-recruit";
 import { AnyRecruit, TRecruit } from "../../shared/traits/engine/recruit";
 import { TGrid } from "../grid/tgrid";
 import { BattlePath } from "../path/battle/battle-path";
-
+import { ArmyFoodEconomy } from "../food/food-economy";
 export class Army {
 	constructor(
 		//public path: ArmyPath,
 		public grid: ArmyGrid,
 		public inventory: Inventory,
+
+		public foodEconomy = new ArmyFoodEconomy(),
 	) {}
 
 	isValidDestinationCell(cell: Cell) {

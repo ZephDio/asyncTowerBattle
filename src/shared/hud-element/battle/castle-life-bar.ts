@@ -7,18 +7,18 @@ import { TGrid } from "../../../engine/grid/tgrid";
 
 export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 	drawPriority = 3;
-	position : ScreenPosition
+	position: ScreenPosition;
 	constructor(
 		private castle: BattleCastle,
 		allied: boolean,
-		grid : ImplementsTrait<typeof TGrid>
+		grid: ImplementsTrait<typeof TGrid>,
 	) {
 		super({});
-		if(allied) {
-			this.position = grid.gridToScreenPosition(castle.position).add(new ScreenPosition({x: -8, y: 0}));
-			return
+		if (allied) {
+			this.position = grid.gridToScreenPosition(castle.position).add(new ScreenPosition({ x: -8, y: 0 }));
+			return;
 		}
-		this.position = grid.gridToScreenPosition(castle.position).add(new ScreenPosition({x: 8, y: 0}));
+		this.position = grid.gridToScreenPosition(castle.position).add(new ScreenPosition({ x: 8, y: 0 }));
 	}
 
 	override draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
@@ -30,7 +30,7 @@ export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawRectangle(context, size, canvasPosition);
 		context.fillStyle = "green";
-		const lifeProportion = this.castle.actualLife / this.castle.maxLife;
+		const lifeProportion = this.castle.stats.health / this.castle.stats.maxHealth;
 		this.drawRectangle(
 			context,
 			{

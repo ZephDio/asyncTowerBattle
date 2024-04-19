@@ -6,6 +6,7 @@ import { CastleFactory } from "../castle/blueprint/castle";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory } from "../path/army/path-fixtures";
+import { TotemBuilder } from "../totem/recruit/totem-recruit-fixtures";
 import { AnyTower } from "../tower/recruit/tower-recruit";
 import { TowerBuilder } from "../tower/recruit/tower-recruit-fixtures";
 import { UnitRecruitFixture } from "../units/recruit/unit-recruit-fixtures";
@@ -13,8 +14,8 @@ import { MatchMaker } from "./match-maker";
 
 export class LocalMatchMaker extends MatchMaker {
 	getOpponent(round: number) {
-		if (round > 4) {
-			return EnemyArmyFixtures[4]();
+		if (round > 5) {
+			return EnemyArmyFixtures[5]();
 		}
 		const key = round as keyof typeof EnemyArmyFixtures;
 		return EnemyArmyFixtures[key]();
@@ -31,125 +32,172 @@ const EnemyArmyFixtures = {
 			new TowerBuilder()
 				.celled(new Cell({ x: 3, y: 2 }))
 				.buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
 		];
+		//const environment = [new Rock(new Cell({ x: 2, y: 2 })), new Rock(new Cell({ x: 3, y: 4 }))];
 		const tiles = PathFactory.default;
 		const barracks = [
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.dragon)
 				.withCell(new Cell({ x: 1, y: 1 }))
-				.withProductionSpeed(3.2)
 				.buildWave(),
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.berseker)
+				.withCell(new Cell({ x: 3, y: 1 }))
+				.buildVeterant(),
 		];
+		const totems = [new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField()];
 		const unitInventory = new Inventory();
-		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
+		[castle, ...towers, ...tiles, ...totems, ...barracks].map((e) => grid.setElement(e));
 		return { army: new Army(grid, unitInventory), randomSeed: 123456 };
 	},
 	2: () => {
 		const grid = new ArmyGrid(8, 6);
 		const castle = CastleFactory.round2;
-		const towers = [new TowerBuilder().celled(new Cell({ x: 3, y: 2 })).buildGreen()];
+		const towers: AnyTower[] = [
+			//TowerFixtures.centerTower,
+			new TowerBuilder()
+				.celled(new Cell({ x: 3, y: 3 }))
+				.buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
+		];
 		const barracks = [
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.dragon)
 				.withCell(new Cell({ x: 1, y: 1 }))
-				.withProductionSpeed(3.2)
 				.buildWave(),
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.berseker)
+				.withCell(new Cell({ x: 3, y: 1 }))
+				.buildVeterant(),
 		];
 		const tiles = PathFactory.round2;
-		[castle, ...towers, ...barracks, ...tiles].map((e) => grid.setElement(e));
+		const totems = [
+			new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
+		];
+		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
 		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
 	},
 	3: () => {
 		const grid = new ArmyGrid(8, 6);
 		const castle = CastleFactory.round2;
-		const towers = [new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen()];
+		const towers: AnyTower[] = [
+			//TowerFixtures.centerTower,
+			new TowerBuilder()
+				.celled(new Cell({ x: 3, y: 3 }))
+				.buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
+		];
+		const barracks = [
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.dragon)
+				.withCell(new Cell({ x: 1, y: 1 }))
+				.buildWave(),
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.berseker)
+				.withCell(new Cell({ x: 3, y: 1 }))
+				.buildVeterant(),
+
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.priest)
+				.withCell(new Cell({ x: 6, y: 1 }))
+				.buildBasic(),
+		];
+		const tiles = PathFactory.round2;
+		const totems = [
+			new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 4 })).buildCropsField(),
+
+			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
+		];
+		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
+		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
+	},
+	4: () => {
+		const grid = new ArmyGrid(8, 6);
+		const castle = CastleFactory.round2;
+		const towers: AnyTower[] = [
+			//TowerFixtures.centerTower,
+			new TowerBuilder()
+				.celled(new Cell({ x: 3, y: 3 }))
+				.buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
+			new TowerBuilder()
+				.celled(new Cell({ x: 2, y: 1 }))
+				.buildBlue(),
+			//new TotemBuilder()
+		];
+		const barracks = [
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.dragon)
+				.withCell(new Cell({ x: 1, y: 1 }))
+				.buildWave(),
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.berseker)
+				.withCell(new Cell({ x: 3, y: 1 }))
+				.buildVeterant(),
+
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.priest)
+				.withCell(new Cell({ x: 6, y: 1 }))
+				.buildBasic(),
+		];
+		const tiles = PathFactory.round2;
+		const totems = [
+			new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 4 })).buildCropsField(),
+
+			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
+		];
+		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
+		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
+	},
+	5: () => {
+		const grid = new ArmyGrid(8, 6);
+		const castle = CastleFactory.round2;
+		const towers: AnyTower[] = [
+			//TowerFixtures.centerTower,
+			new TowerBuilder()
+				.celled(new Cell({ x: 3, y: 3 }))
+				.buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
+			new TowerBuilder().celled(new Cell({ x: 6, y: 2 })).buildBlue(),
+			new TowerBuilder()
+				.celled(new Cell({ x: 2, y: 1 }))
+				.buildZapping(),
+			//new TotemBuilder()
+		];
 		const barracks = [
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.dragon)
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.withProductionSpeed(3.2)
 				.buildWave(),
-		];
-		const tiles = PathFactory.round2;
-		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
-	},
-	4: () => {
-		const grid = new ArmyGrid(8, 6);
-		const castle = CastleFactory.round2;
-		const towers = [
-			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildYellow(),
-			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen(),
-			//new TotemBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
-			new TowerBuilder()
-				.celled(new Cell({ x: 3, y: 5 }))
-				.buildBlue(),
-		];
-		const barracks = [
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.berseker)
+				.withCell(new Cell({ x: 3, y: 1 }))
+				.withProductionSpeed(3.2)
+				.buildVeterant(),
+
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.priest)
-				.withCell(new Cell({ x: 10, y: 0 }))
+				.withCell(new Cell({ x: 6, y: 1 }))
+				.withProductionSpeed(3.2)
 				.buildBasic(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.soldier)
-				.withCell(new Cell({ x: 9, y: 0 }))
-				.withProductionSpeed(5)
-				.buildBasic(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.dragon)
-				.withCell(new Cell({ x: 11, y: 0 }))
-				.withProductionSpeed(3.5)
-				.buildWave(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.dragon)
-				.withCell(new Cell({ x: 12, y: 0 }))
-				.withProductionSpeed(3.1)
-				.buildWave(),
 		];
 		const tiles = PathFactory.round2;
-		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
-		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
-	},
-	5: () => {
-		const grid = new ArmyGrid(8, 6);
-		const castle = CastleFactory.round2;
-		const towers = [
-			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildYellow(),
-			new TowerBuilder().celled(new Cell({ x: 5, y: 2 })).buildYellow(),
-			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildGreen(),
-			//new TowerBuilder().celled(new Cell({ x: 3, y: 4 })).buildOrange(),
-			new TowerBuilder()
-				.celled(new Cell({ x: 3, y: 5 }))
-				.buildBlue(),
+		const totems = [
+			new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 4 })).buildCropsField(),
+
+			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
 		];
-		const barracks = [
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.priest)
-				.withCell(new Cell({ x: 10, y: 0 }))
-				.buildBasic(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.soldier)
-				.withCell(new Cell({ x: 9, y: 0 }))
-				.withProductionSpeed(5)
-				.buildBasic(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.dragon)
-				.withCell(new Cell({ x: 11, y: 0 }))
-				.withProductionSpeed(3.5)
-				.buildWave(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.dragon)
-				.withCell(new Cell({ x: 12, y: 0 }))
-				.withProductionSpeed(3.1)
-				.buildWave(),
-			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.priest)
-				.withCell(new Cell({ x: 8, y: 0 }))
-				.withProductionSpeed(3.9)
-				.buildWave(),
-		];
-		const tiles = PathFactory.round2;
-		[castle, ...towers, ...tiles, ...barracks].map((e) => grid.setElement(e));
+		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
 		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
 	},
 };

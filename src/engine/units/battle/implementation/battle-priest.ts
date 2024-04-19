@@ -15,7 +15,7 @@ export class BattlePriest extends Derive(TBattleUnit, Caster) {
 		recruit: Priest,
 		public position: GridPosition,
 		public enemyPath: BattlePath,
-		private hooks: BattleArmyHooks,
+		public hooks: BattleArmyHooks,
 	) {
 		super({
 			casterRecruit: recruit,
@@ -23,53 +23,26 @@ export class BattlePriest extends Derive(TBattleUnit, Caster) {
 			maxHealth: recruit.maxLife,
 			attack: recruit.attackDamage,
 			movementSpeed: recruit.speed,
-			castSpeed: recruit.attackSpeed,
+			attackSpeed: recruit.attackSpeed,
+			castSpeed: NaN,
+			foodCost: recruit.foodCost,
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
-	canMove() {
-		return true;
-	}
-
-	attackCastle() {
-		this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
-		this.castInProgress = null;
-		this.hooks.removeUnit(this);
-		this.stats._health = 0
-	}
 
 	healWave() {
 		this.hooks.addAreaEffect(new HealWave(30, this.position, 0.2, this.hooks), this);
-		this.castInProgress = null;
+		this.finishCast();
 	}
 
 	casts(): void {
-		if (this.pathFinder.isArrived) {
-			this.castInProgress = new Cast(this, this.attackCastle.bind(this), 100);
-			return;
-		}
 		this.castInProgress = new Cast(this, this.healWave.bind(this), 400);
 	}
 
-	followPath(): void {
-		if (this.canMove() && !this.pathFinder.isArrived) {
-			const newPosition = this.pathFinder.getNextPosition(this.position, this.stats.movementSpeed);
-			this.move(newPosition);
-		}
-	}
-
-	move(newPosition: GridPosition) {
-		this.position.x = newPosition.x;
-		this.position.y = newPosition.y;
-	}
-
-	tick() {
-		this.stats.tick();
-		if (!this.pathFinder.isArrived) {
-			this.followPath();
-		}
+	override tick() {
+		super.tick();
 		this.tickCast();
 	}
 }

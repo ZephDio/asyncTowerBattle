@@ -10,11 +10,11 @@ import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { GridPosition } from "../../../shared/position";
 import { TGrid } from "../../grid/tgrid";
-import { RecruitCaster } from "../../../shared/traits/engine/cast";
+import { HTFoodConsumer } from "../../../shared/traits/engine/food-consumer";
 
 export type AnyUnit = ImplementsTrait<typeof Unit>;
 
-export const Unit = Subtrait([TRecruit, RecruitCaster], (base) => {
+export const Unit = Subtrait([TRecruit, HTFoodConsumer], (base) => {
 	abstract class IUnit extends base {
 		abstract maxLife: number;
 		abstract speed: number;

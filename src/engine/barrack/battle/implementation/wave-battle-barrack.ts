@@ -40,6 +40,8 @@ export class WaveBattleBarrack extends Derive(
 			attack: NaN,
 			movementSpeed: NaN,
 			castSpeed: barrackRecruit.productionSpeed,
+			attackSpeed: NaN,
+			foodCost: barrackRecruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 		});
@@ -61,8 +63,10 @@ export class WaveBattleBarrack extends Derive(
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
-		this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
-		this.castInProgress = null;
-		this.callSubscribers();
+		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
+		if (sucess) {
+			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
+		}
+		this.finishCast(sucess);
 	}
 }

@@ -10,6 +10,7 @@ import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Choupisson } from "../../recruit/implementation/choupisson-recruit";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class ChoupissonBlueprint extends Derive(
 	TShopBlueprint(15, 7),
@@ -18,10 +19,13 @@ export class ChoupissonBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(Resources.unit.choupisson.resource.image, Resources.unit.choupisson.size, 3),
 	TDamageDealer(3),
+	FoodConsumer,
 ) {
 	baseMaxLife = 18;
 	baseSpeed = 0.25;
 	attackSpeed = 4;
+
+	foodCost = 1;
 
 	cost = 110;
 

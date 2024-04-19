@@ -74,6 +74,16 @@ export const Resources = {
 				color: "orange",
 			},
 		},
+		cropsfield: {
+			size: {
+				width: 5,
+				height: 5,
+			},
+			resource: {
+				image: createImage("/resources/totem/crops-field.png"),
+				shape: "ellipse",
+			},
+		},
 		gobelinportal: {
 			size: {
 				width: 5,
@@ -147,6 +157,16 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		fox: {
+			size: {
+				width: 3,
+				height: 2,
+			},
+			resource: {
+				image: createImage("/resources/units/fox.png"),
+				shape: "ellipse",
+			},
+		},
 	},
 	path: {
 		normal: {
@@ -156,6 +176,10 @@ export const Resources = {
 		slowing: {
 			resource: "#C4A484",
 			image: createImage("/resources/path/slowing.png"),
+		},
+		trap: {
+			resource: "#C4A484",
+			image: createImage("/resources/path/trap.png"),
 		},
 	},
 	environment: {

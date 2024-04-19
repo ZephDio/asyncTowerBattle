@@ -16,7 +16,13 @@ export class Berseker extends Derive(Unit, HTDamageDealer) {
 		public cell: Cell,
 		berseker: BersekerBlueprint = new BersekerBlueprint({}),
 	) {
-		super({ imageDrawable: berseker, damageDealer: berseker, hitboxHolder: berseker, descriptor: berseker });
+		super({
+			imageDrawable: berseker,
+			damageDealer: berseker,
+			hitboxHolder: berseker,
+			descriptor: berseker,
+			foodConsumer: berseker,
+		});
 		this.maxLife = berseker.baseMaxLife;
 		this.speed = berseker.baseSpeed;
 		this.attackSpeed = berseker.attackSpeed;

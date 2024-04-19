@@ -8,7 +8,7 @@ import { ArmyGrid } from "../../grid/grid";
 import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { TGrid } from "../../grid/tgrid";
-import { AnyBattleTotem } from "../battle/battle-tower";
+import { AnyBattleTotem } from "../battle/battle-totem";
 
 export const Totem = Subtrait([TRecruit], (base) => {
 	abstract class ITotem extends base {
@@ -43,4 +43,4 @@ export const Totem = Subtrait([TRecruit], (base) => {
 	return ITotem;
 });
 
-export type AnyTower = ImplementsTrait<typeof Totem>;
+export type AnyTotem = ImplementsTrait<typeof Totem>;

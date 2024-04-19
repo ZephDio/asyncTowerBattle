@@ -38,6 +38,8 @@ export class BasicBattleBarrack extends Derive(
 			attack: NaN,
 			movementSpeed: NaN,
 			castSpeed: barrackRecruit.productionSpeed,
+			attackSpeed: NaN,
+			foodCost: barrackRecruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 		});
@@ -57,8 +59,10 @@ export class BasicBattleBarrack extends Derive(
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
-		this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
-		this.castInProgress = null;
-		this.callSubscribers();
+		const succes = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
+		if (succes) {
+			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
+		}
+		this.finishCast(succes);
 	}
 }

@@ -10,17 +10,21 @@ import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint"
 import { FrostTower } from "../../recruit/implementation/frost-tower-recruit";
 import { FrostSpike } from "../../../projectile/blueprint/implementation/frost-spike";
 import { TDescriptor, TowerDescription } from "../../../../shared/traits/render/huds/item-descriptor";
+import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class FrostTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDamageDealer(4),
+	FoodConsumer,
 	TDescriptor,
 	TImageDrawable(Resources.tower.frost.resource.image, Resources.tower.blue.size, 3),
 ) {
 	toRecruit(cell: Cell) {
 		return new FrostTower(cell, this);
 	}
+
+	foodCost = 2;
 
 	description = new TowerDescription(
 		"Frost Tower",

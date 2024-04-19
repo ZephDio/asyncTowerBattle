@@ -15,16 +15,19 @@ import { GridElement } from "../../../../shared/traits/engine/core/grid-element"
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, TowerDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
+import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class YellowTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 10 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDamageDealer(6),
 	TDescriptor,
+	FoodConsumer,
 	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, 3),
 	TSynergy,
 ) {
-	//patternEffect = [new Cell({ x: 0, y: -1 }), new Cell({ x: -1, y: 0 }), new Cell({ x: 0, y: 1 })];
+	foodCost = 2;
+
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		return gridElement ? gridElement instanceof BasicPathTile || gridElement instanceof SlowingPathTile : false;
 	};

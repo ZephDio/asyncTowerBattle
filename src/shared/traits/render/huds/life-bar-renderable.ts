@@ -1,10 +1,10 @@
 import { Subtrait } from "@ddd-ts/traits";
 import { GridPosition } from "../../../position";
 import { LifeBar } from "../../../hud-element/entity-hud/lifebar";
-import { Caster } from "../../engine/cast";
 import { THudRenderable } from "./hud-renderable";
+import { HaveStats } from "../../../../engine/stats/stats";
 
-export const TLifeBarRenderable = Subtrait([THudRenderable, Caster], (base) => {
+export const TLifeBarRenderable = Subtrait([THudRenderable, HaveStats], (base) => {
 	abstract class ILifeBarRenderable extends base {
 		lifeBar = new LifeBar(this);
 		override huds() {
