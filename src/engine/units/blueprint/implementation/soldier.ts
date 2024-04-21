@@ -25,7 +25,7 @@ export class SoldierBlueprint extends Derive(
 	baseSpeed = 0.32;
 	attackSpeed = 5;
 
-	foodCost = 1;
+	foodCost = 0.6;
 	cost = 75;
 
 	description = new UnitDescription("Soldier", ["A lame unit", "that doesn't do", "anything special"], {

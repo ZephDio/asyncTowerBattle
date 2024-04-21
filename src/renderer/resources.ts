@@ -362,5 +362,15 @@ export const Resources = {
 				},
 			},
 		},
+		slider: {
+			resource: {
+				image: createImage("/resources/button/slider.png"),
+			},
+		},
+		cursor: {
+			resource: {
+				image: createImage("/resources/button/cursor.png"),
+			},
+		},
 	},
 } as const;

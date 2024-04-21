@@ -25,7 +25,7 @@ export class PriestBlueprint extends Derive(
 	baseSpeed = 0.16;
 	attackSpeed = 4;
 
-	foodCost = 1;
+	foodCost = 1.3;
 
 	cost = 160;
 

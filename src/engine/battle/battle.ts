@@ -5,6 +5,7 @@ import { FoodBarHud } from "../../shared/hud-element/army-food-bar";
 import { BattleClockHud } from "../../shared/hud-element/battle/battle-clock";
 import { ButtonSpeedHUD } from "../../shared/hud-element/battle/button-speed";
 import { CastleLifeBar } from "../../shared/hud-element/battle/castle-life-bar";
+import { SliderBattleSpeed } from "../../shared/hud-element/battle/slider-speed";
 import { Army } from "../army/army";
 import { Game } from "../game";
 import { BattleRandomSeed } from "./battle-random-seed";
@@ -14,12 +15,13 @@ export class Battle {
 	battlefield: Battlefield;
 	isOver = false;
 
-	gameSpeed = 30;
+	gameSpeed = 31.25;
 	alliedCastleLifeBar: CastleLifeBar;
 	enemyCastleLifeBar: CastleLifeBar;
 	alliedFoodBar: FoodBarHud;
 	enemyFoodBar: FoodBarHud;
 	battleClock: BattleClockHud;
+	speedCursor: SliderBattleSpeed;
 
 	timer = { clock: 0 };
 
@@ -38,15 +40,20 @@ export class Battle {
 		this.alliedFoodBar = new FoodBarHud(this.battlefield.alliedArmy.foodEconomy, PercentToReal({ x: 5, y: 50 }));
 		this.enemyFoodBar = new FoodBarHud(this.battlefield.enemyArmy.foodEconomy, PercentToReal({ x: 95, y: 50 }));
 		this.battleClock = new BattleClockHud(this.timer);
+		this.speedCursor = new SliderBattleSpeed(PercentToReal({ x: 8, y: 80 }), this.changeSpeed.bind(this));
 	}
 
 	start() {
 		const loop = () => {
 			setTimeout(() => {
+				if (!this.gameSpeed) {
+					loop();
+					return;
+				}
 				if (this.isOver) return;
 				this.tick();
 				loop();
-			}, this.gameSpeed);
+			}, this.gameSpeed ?? 31.25);
 		};
 		loop();
 	}
@@ -63,7 +70,11 @@ export class Battle {
 	}
 
 	changeSpeed(speed: number) {
-		this.gameSpeed = 30 / speed;
+		if (speed === 0) {
+			this.gameSpeed = 0;
+			return;
+		}
+		this.gameSpeed = 31.25 / speed;
 	}
 
 	getDrawables(): RenderableState {
@@ -77,6 +88,7 @@ export class Battle {
 				this.alliedFoodBar,
 				this.enemyFoodBar,
 				this.battleClock,
+				this.speedCursor,
 			],
 			grids: [
 				{
@@ -110,6 +122,7 @@ export class Battle {
 				this.alliedCastleLifeBar,
 				this.enemyCastleLifeBar,
 				this.battleClock,
+				this.speedCursor,
 			],
 		};
 		return battleState;

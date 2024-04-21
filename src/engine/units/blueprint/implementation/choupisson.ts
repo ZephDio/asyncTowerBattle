@@ -18,14 +18,14 @@ export class ChoupissonBlueprint extends Derive(
 	TDrawable,
 	TDescriptor,
 	TImageDrawable(Resources.unit.choupisson.resource.image, Resources.unit.choupisson.size, 3),
-	TDamageDealer(3),
+	TDamageDealer(1.5),
 	FoodConsumer,
 ) {
 	baseMaxLife = 18;
 	baseSpeed = 0.25;
 	attackSpeed = 4;
 
-	foodCost = 1;
+	foodCost = 1.25;
 
 	cost = 110;
 

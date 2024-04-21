@@ -16,6 +16,7 @@ import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint"
 import { TDescriptor, TowerDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
+import { TrapPathTile } from "../../../tile/recruit/implementation/trap-tile";
 
 export class YellowTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -29,7 +30,11 @@ export class YellowTowerBlueprint extends Derive(
 	foodCost = 2;
 
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
-		return gridElement ? gridElement instanceof BasicPathTile || gridElement instanceof SlowingPathTile : false;
+		return gridElement
+			? gridElement instanceof BasicPathTile ||
+					gridElement instanceof SlowingPathTile ||
+					gridElement instanceof TrapPathTile
+			: false;
 	};
 	patternEffect = new PatternEffect(
 		[new Cell({ x: 0, y: -1 }), new Cell({ x: -1, y: 0 }), new Cell({ x: 0, y: 1 })],

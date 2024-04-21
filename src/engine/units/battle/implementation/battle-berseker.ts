@@ -47,13 +47,13 @@ export class Enraged extends Derive(Status) {
 	didTrigger = false;
 	tick() {
 		if (this.didTrigger) return;
-		this.stats.basePercentStat.movementSpeed += 50;
+		this.stats.basePercentStat.movementSpeed += 30;
 		this.stats.basePercentStat.attack += 25;
 		this.didTrigger = true;
 	}
 
 	onRemove() {
-		this.stats.basePercentStat.movementSpeed -= 50;
+		this.stats.basePercentStat.movementSpeed -= 30;
 		this.stats.basePercentStat.attack -= 25;
 
 		this.stats.removeStatus(this);
