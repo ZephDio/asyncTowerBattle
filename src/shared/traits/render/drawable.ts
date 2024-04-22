@@ -71,7 +71,7 @@ export const TDrawable = Trait((base) => {
 			if (theta !== undefined) {
 				context.save();
 				context.translate(position.x, position.y);
-				context.rotate((-theta - Math.PI/2)); // canvas rotate clockwise
+				context.rotate(-theta); // canvas rotate clockwise
 				context.drawImage(image, -size.width / 2, -size.height / 2, size.width, size.height);
 				context.restore();
 				return;

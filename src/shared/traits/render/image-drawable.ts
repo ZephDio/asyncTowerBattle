@@ -15,14 +15,14 @@ export type HTMLImageElementAsset = {
 export const TImageDrawable = (image: HTMLImageElement | HTMLImageElementAsset, size: { width: number; height: number }, priority: number) =>
 	Subtrait([TDrawable], (base) => {
 		abstract class TImageDrawable extends base {
-			angle: number = 3 * Math.PI/2;
+			angle: number = 0
 			drawable = {
 				image: image,
 				size: size,
 				priority: priority,
 			};
 
-			getSize(){
+			getProportion(){
 				if(this.drawable.image instanceof HTMLImageElement){
 					return this.drawable.size
 				}
@@ -41,11 +41,11 @@ export const TImageDrawable = (image: HTMLImageElement | HTMLImageElementAsset, 
 
 			getView(){
 				const assets = this.drawable.image
-				const angle = (this.angle + 2 * Math.PI) % 2 * Math.PI
-				const threshold = Math.PI / 2
 				if(assets instanceof HTMLImageElement){
 					return assets
 				}
+				const angle = (this.angle + 2 * Math.PI) % 2 * Math.PI
+				const threshold = Math.PI / 2
 				if (angle <= 0 +0.1) {
 					return assets.backView;
 				} 
@@ -69,7 +69,7 @@ export const TImageDrawable = (image: HTMLImageElement | HTMLImageElementAsset, 
 			}
 
 			draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
-				const { width, height } = this.getSize();
+				const { width, height } = this.getProportion();
 				const size = this.getCanvasSize(context, width, height, scale);
 				const canvasPosition = this.getCanvasPosition(context, position);
 				const image = this.getView()

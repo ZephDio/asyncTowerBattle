@@ -89,6 +89,21 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		windmill: {
+			size: {
+				width: 6.4,
+				height: 6.4,
+			},
+			resource: {
+				image: {
+						frontView : createImage("/resources/totem/windmill/front-view.png"),
+						backView : createImage("/resources/totem/windmill/back-view.png"),
+						leftView : createImage("/resources/totem/windmill/left-view.png"),
+						rightView : createImage("/resources/totem/windmill/right-view.png"),
+				},
+				shape: "ellipse",
+			},
+		},
 		gobelinportal: {
 			size: {
 				width: 5,

@@ -29,7 +29,7 @@ export class Holder {
 	}
 
 	get orientation() {
-		if (!this._hold) return 3*Math.PI / 2;
+		if (!this._hold) return 0;
 		return this._hold.orientation;
 	}
 

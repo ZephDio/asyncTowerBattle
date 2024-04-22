@@ -7,7 +7,6 @@ import { TImageDrawable } from "../../../../shared/traits/render/image-drawable"
 import { Resources } from "../../../../renderer/resources";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
-import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { BattleGobelin } from "../../battle/implementation/battle-gobelin";
@@ -16,7 +15,6 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 
 export class GobelinBlueprint extends Derive(
-	TShopBlueprint(15, 7),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
