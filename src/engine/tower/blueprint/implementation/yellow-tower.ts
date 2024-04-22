@@ -37,7 +37,7 @@ export class YellowTowerBlueprint extends Derive(
 			: false;
 	};
 	patternEffect = new PatternEffect(
-		[new Cell({ x: 0, y: -1 }), new Cell({ x: -1, y: 0 }), new Cell({ x: 0, y: 1 })],
+		[new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 })],
 		this.patternCondition.bind(this),
 	);
 	description = new TowerDescription(

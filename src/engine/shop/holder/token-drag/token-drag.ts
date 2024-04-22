@@ -34,7 +34,7 @@ export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable], (base, Pro
 		}
 
 		rotate() {
-			this.orientation = (this.orientation - Math.PI / 2) % (2 * Math.PI);
+			this.orientation = ((Math.PI * 2) + (this.orientation - Math.PI / 2)) % (2 * Math.PI);
 			this.angle = this.orientation;
 		}
 	}
