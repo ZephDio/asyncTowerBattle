@@ -38,9 +38,9 @@ export class BattleChoupisson extends Derive(TBattleUnit) {
 		const vectorLeft = below.add(left);
 		const vectorRight = below.add(right);
 		const spines = [
-			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 1.7, below),
-			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 1.7, vectorLeft),
-			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 1.7, vectorRight),
+			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 3, below),
+			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 3, vectorLeft),
+			new BattleSpine(new Spine(), this.position.clone(), this.hooks, this.stats.attack * 3, vectorRight),
 		];
 		spines.forEach((spine) => this.hooks.addProjectile(spine, this));
 		this.stats.takeDamage(damage);

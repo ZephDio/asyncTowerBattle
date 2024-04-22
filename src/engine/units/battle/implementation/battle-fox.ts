@@ -29,9 +29,6 @@ export class BattleFox extends Derive(TBattleUnit, Caster) {
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
-	canMove() {
-		return true;
-	}
 
 	eatOpponentFood() {
 		this.hooks.enemyFoodHooks.removeFood(this.stats.attack * 2);

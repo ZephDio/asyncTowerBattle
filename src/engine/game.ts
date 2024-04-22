@@ -21,7 +21,7 @@ export class Game {
 	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new LocalMatchMaker();
 	economy = {
-		gold: 99999,
+		gold: 70,
 	};
 
 	constructor() {
@@ -91,7 +91,7 @@ export class Game {
 			this.setDescriptionHud.bind(this),
 			this.getEconomyHooks(),
 		);
-		this.addGold(20);
+		this.addGold(20 + 5 * this.rounds.round);
 	}
 
 	startBattleSummary(lastBattleState: BattleState, battleVerdict: "victory" | "defeat") {

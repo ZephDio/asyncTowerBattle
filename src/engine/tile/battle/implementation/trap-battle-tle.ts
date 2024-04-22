@@ -60,7 +60,7 @@ export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement,
 export class Stunned extends Derive(Status) {
 	key = "stunned";
 	clock = 0;
-	duration = 64;
+	duration = 32;
 	stats: Stats;
 	didTrigger = false;
 	tick() {

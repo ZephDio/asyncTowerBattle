@@ -24,7 +24,7 @@ export class BattlePriest extends Derive(TBattleUnit, Caster) {
 			attack: recruit.attackDamage,
 			movementSpeed: recruit.speed,
 			attackSpeed: recruit.attackSpeed,
-			castSpeed: NaN,
+			castSpeed: recruit.castSpeed,
 			foodCost: recruit.foodCost,
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
@@ -33,7 +33,7 @@ export class BattlePriest extends Derive(TBattleUnit, Caster) {
 	}
 
 	healWave() {
-		this.hooks.addAreaEffect(new HealWave(30, this.position, 0.2, this.hooks), this);
+		this.hooks.addAreaEffect(new HealWave(35, this.position, 0.2, this.hooks), this);
 		this.finishCast();
 	}
 
