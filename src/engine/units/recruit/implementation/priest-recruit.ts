@@ -12,6 +12,7 @@ export class Priest extends Derive(Unit, RecruitCaster, HTDamageDealer) {
 	maxLife: number;
 	attackSpeed: number;
 	cost: number;
+	castSpeed :number
 	constructor(
 		public cell: Cell,
 		priest: PriestBlueprint = new PriestBlueprint({}),
@@ -26,6 +27,7 @@ export class Priest extends Derive(Unit, RecruitCaster, HTDamageDealer) {
 		this.maxLife = priest.baseMaxLife;
 		this.speed = priest.baseSpeed;
 		this.attackSpeed = priest.attackSpeed;
+		this.castSpeed = priest.attackSpeed
 		this.cost = priest.cost;
 	}
 

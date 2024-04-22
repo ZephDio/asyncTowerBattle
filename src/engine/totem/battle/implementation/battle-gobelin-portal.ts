@@ -45,7 +45,7 @@ export class BattleGobelinPortal extends Derive(HTHitbox, TPhysics, HTImageDrawa
 
     gobelinSpawn(){
 		const out = this.hooks.random()
-		if(out > 0.5) return
+		if(out > 0.3) return
 		const position = this.hooks.getAlliedCastle().position.clone()
 		const path = this.hooks.getEnemyPath()
         this.hooks.addUnits(this.portal.recruit.toBattle(position,path,this.hooks), this)

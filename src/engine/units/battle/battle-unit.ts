@@ -15,6 +15,7 @@ export const TBattleUnit = Subtrait(
 	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, HaveStats],
 	(base) => {
 		abstract class IBattleUnit extends base {
+			hunger = 0
 			clock: number = 0;
 			abstract override position: GridPosition;
 			abstract enemyPath: BattlePath;
@@ -69,9 +70,11 @@ export const TBattleUnit = Subtrait(
 				const succes = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 				if (succes) {
 					this.stats.heal(1);
+					this.hunger = Math.max(this.hunger--,0)
 					return;
 				}
-				this.stats.takeDamage(1);
+				this.stats.takeDamage(this.hunger);
+				this.hunger++
 			}
 		}
 		return IBattleUnit;

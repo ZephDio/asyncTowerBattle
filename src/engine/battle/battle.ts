@@ -3,7 +3,6 @@ import { RenderableState } from "../../renderer/renderer";
 import { BattleState } from "../../shared/gamestate";
 import { FoodBarHud } from "../../shared/hud-element/army-food-bar";
 import { BattleClockHud } from "../../shared/hud-element/battle/battle-clock";
-import { ButtonSpeedHUD } from "../../shared/hud-element/battle/button-speed";
 import { CastleLifeBar } from "../../shared/hud-element/battle/castle-life-bar";
 import { SliderBattleSpeed } from "../../shared/hud-element/battle/slider-speed";
 import { Army } from "../army/army";
@@ -40,7 +39,7 @@ export class Battle {
 		this.alliedFoodBar = new FoodBarHud(this.battlefield.alliedArmy.foodEconomy, PercentToReal({ x: 5, y: 50 }));
 		this.enemyFoodBar = new FoodBarHud(this.battlefield.enemyArmy.foodEconomy, PercentToReal({ x: 95, y: 50 }));
 		this.battleClock = new BattleClockHud(this.timer);
-		this.speedCursor = new SliderBattleSpeed(PercentToReal({ x: 8, y: 80 }), this.changeSpeed.bind(this));
+		this.speedCursor = new SliderBattleSpeed(PercentToReal({ x: 10, y: 96 }), this.changeSpeed.bind(this));
 	}
 
 	start() {
@@ -80,9 +79,6 @@ export class Battle {
 	getDrawables(): RenderableState {
 		return {
 			renderables: [
-				new ButtonSpeedHUD(1, PercentToReal({ x: 3, y: 95 })),
-				new ButtonSpeedHUD(2, PercentToReal({ x: 7.5, y: 95 })),
-				new ButtonSpeedHUD(3, PercentToReal({ x: 12, y: 95 })),
 				this.alliedCastleLifeBar,
 				this.enemyCastleLifeBar,
 				this.alliedFoodBar,
@@ -116,9 +112,6 @@ export class Battle {
 			grid: this.battlefield.grid,
 			path: this.battlefield.alliedArmy.path,
 			hudElements: [
-				new ButtonSpeedHUD(1, PercentToReal({ x: 3, y: 95 })),
-				new ButtonSpeedHUD(2, PercentToReal({ x: 7.5, y: 95 })),
-				new ButtonSpeedHUD(3, PercentToReal({ x: 12, y: 95 })),
 				this.alliedCastleLifeBar,
 				this.enemyCastleLifeBar,
 				this.battleClock,

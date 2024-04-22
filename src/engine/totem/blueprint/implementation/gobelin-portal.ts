@@ -20,7 +20,7 @@ export class GobelinPortalBlueprint extends Derive(
 	TImageDrawable(Resources.totem.gobelinportal.resource.image, Resources.totem.gobelinportal.size, 3),
 	TSynergy,
 ){
-	description = new Description("Golbelin Portal", ["On ▣ trigger :"," 50% chance to", "generate a goblin"]);
+	description = new Description("Golbelin Portal", ["On ▣ trigger :","30% chance to", "generate a goblin"]);
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		if(!gridElement) return false
 		return implementsTrait(gridElement, RecruitCaster) || implementsTrait(gridElement, Caster);

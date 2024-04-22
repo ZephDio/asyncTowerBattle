@@ -6,9 +6,10 @@ import { TRenderable } from "../../traits/render/renderable";
 
 export class BattleClockHud extends Derive(TRenderable, TDrawable) {
 	override drawPriority = 8;
+	size = { width : 5 , height : 3}
 	constructor(
 		public timer: { clock: number },
-		public position = PercentToReal({ x: 3, y: 87 }),
+		public position = PercentToReal({ x: 6, y: 87 }),
 	) {
 		super({});
 	}
@@ -32,9 +33,10 @@ export class BattleClockHud extends Derive(TRenderable, TDrawable) {
 		return Math.floor(this.realSeconds / 60);
 	}
 
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition, _scale: number): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		context.fillStyle = "black";
-		context.font = "45px Arial";
+		const size = this.getCanvasSize(context,this.size.width, this.size.height, scale)
+		context.font = `${size.height}px Arial`;
 		const canvasPosition = this.getCanvasPosition(context, position);
 		context.fillText(
 			`${this.minutes.toString()}:${this.seconds.toString().padStart(2, "0")}.${this.deciSeconds.toString()}`,

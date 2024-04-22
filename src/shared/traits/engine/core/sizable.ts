@@ -10,7 +10,6 @@ export const TSizable = Trait((base) => {
 			if (implementsTrait(this, HTHitbox)) {
 				this.hitbox.scale(this.sizeScale);
 			}
-			console.log(this.sizeScale);
 		}
 
 		setSize(size: number) {

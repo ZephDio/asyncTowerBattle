@@ -1,5 +1,4 @@
 import { BattleClockHud } from "./battle/battle-clock";
-import { ButtonSpeedHUD } from "./battle/button-speed";
 import { CastleLifeBar } from "./battle/castle-life-bar";
 import { SliderBattleSpeed } from "./battle/slider-speed";
 import { GoldHud } from "./gold-hud";
@@ -10,7 +9,6 @@ export type HudElement =
 	| StartBattleButton
 	| GoldHud
 	| RefreshBellHud
-	| ButtonSpeedHUD
 	| CastleLifeBar
 	| BattleClockHud
 	| SliderBattleSpeed;

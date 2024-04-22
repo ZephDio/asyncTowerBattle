@@ -1,6 +1,5 @@
 import { implementsTrait } from "@ddd-ts/traits";
 import { Battle } from "../../engine/battle/battle";
-import { ButtonSpeedHUD } from "../../shared/hud-element/battle/button-speed";
 import { ScreenPosition } from "../../shared/position";
 import { MouseEventType } from "../mouse-event-handler";
 import { DescriptionHud, TDescriptor } from "../../shared/traits/render/huds/item-descriptor";
@@ -21,9 +20,6 @@ export class BattleInputToIntentTranslator {
 			battle.setDescriptionHud(null);
 			return;
 		}
-		if (focus instanceof ButtonSpeedHUD && eventType === "down") {
-			return battle.changeSpeed(focus.speed);
-		}
 		if (focus instanceof SliderBattleSpeed && eventType === "down") {
 			battle.speedCursor.focused = true;
 			return battle.speedCursor.moveCursor(screenPosition);
@@ -35,9 +31,6 @@ export class BattleInputToIntentTranslator {
 
 	determinateFocus(screenPosition: ScreenPosition, state: BattleState) {
 		for (const hudElement of state.hudElements) {
-			if (hudElement instanceof ButtonSpeedHUD && hudElement.contains(screenPosition)) {
-				return hudElement;
-			}
 			if (hudElement instanceof SliderBattleSpeed && hudElement.contains(screenPosition)) {
 				return hudElement;
 			}
