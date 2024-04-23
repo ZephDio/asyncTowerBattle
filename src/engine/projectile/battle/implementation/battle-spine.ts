@@ -7,8 +7,9 @@ import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Spine } from "../../blueprint/implementation/spine";
 import { Physic } from "../../../../shared/physic";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class BattleSpine extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
+export class BattleSpine extends Derive(TRenderable, HTHitbox, HTImageDrawable, Orientable) {
 	speed: number;
 	touchedTargets: AnyBattleUnit[] = [];
 
@@ -22,7 +23,7 @@ export class BattleSpine extends Derive(TRenderable, HTHitbox, HTImageDrawable) 
 		public vector: GridPosition,
 	) {
 		super({ hitboxHolder: projectile, imageDrawable: projectile });
-		this.angle = Physic.getTheta(this.position, this.position.add(this.vector));
+		this.setOrientation(Physic.getTheta(this.position, this.position.add(this.vector)));
 		this.speed = this.projectile.baseSpeed;
 		this.boundaries = this.hooks.gridHooks.getBoundaries();
 	}
@@ -32,7 +33,7 @@ export class BattleSpine extends Derive(TRenderable, HTHitbox, HTImageDrawable) 
 	}
 
 	followPath(): void {
-		this.move(Physic.getNextPosition(this.position, this.angle, this.speed));
+		this.move(Physic.getNextPosition(this.position, this.orientation, this.speed));
 		const found = this.hooks.searchEnemyInArea(this.position, this.hitbox)[0];
 		if (found) {
 			this.hit(found);

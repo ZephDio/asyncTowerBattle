@@ -1,12 +1,47 @@
-import { BlueBattleTower } from "./implementation/battle-blue-tower";
-import { YellowBattleTower } from "./implementation/battle-yellow-tower";
-import { ZappingBattleTower } from "./implementation/battle-zapping-tower";
-import { GreenBattleTower } from "./implementation/battle.green.tower";
-import { FrostBattleTower } from "./implementation/frost-battle-tower";
+import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
+import { HTHitbox } from "../../../shared/traits/engine/core/THitbox";
+import { TCasterHudRenderable } from "../../../shared/traits/render/huds/caster-camembert-renderable";
+import { Cast, Caster } from "../../../shared/traits/engine/cast";
+import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
+import { GridElement } from "../../../shared/traits/engine/core/grid-element";
+import { HaveStats } from "../../stats/stats";
+import { Orientable } from "../../../shared/traits/engine/core/orientable";
+import { Tower } from "../recruit/tower-recruit";
 
-export type AnyBattleTower =
-	| BlueBattleTower
-	| GreenBattleTower
-	| YellowBattleTower
-	| ZappingBattleTower
-	| FrostBattleTower;
+export type AnyBattleTower = ImplementsTrait<typeof BattleTower>;
+
+export const BattleTower = Subtrait([
+	HTHitbox,
+	TCasterHudRenderable,
+	Caster,
+	HTImageDrawable,
+	GridElement,
+	HaveStats,
+	Orientable], (base, Props) => {
+		abstract class BattleTower extends base {
+
+			constructor(props: { orientation : number , recruit : ImplementsTrait<typeof Tower>} & typeof Props){
+				super(props)
+				this.setOrientation(props.orientation);
+				this.gridShape = props.recruit.gridShape;
+			}
+		
+		abstract onCastResolve(): void;
+
+		tick() {
+			this.stats.tick();
+			this.tickCast();
+		}
+
+
+		isAlive() {
+			return true;
+		}
+
+		casts(): void {
+			this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
+		}
+	}
+	return BattleTower;
+
+})

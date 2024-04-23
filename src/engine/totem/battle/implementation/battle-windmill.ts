@@ -12,8 +12,9 @@ import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
 import { Caster } from "../../../../shared/traits/engine/cast";
 import { Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class BattleWindmill extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, HTSynergy,TFoodTag) {
+export class BattleWindmill extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, HTSynergy,TFoodTag, Orientable) {
     hasTriggered = false;
 	foodProduction: number = 5;
 	constructor(
@@ -21,14 +22,14 @@ export class BattleWindmill extends Derive(HTHitbox, TPhysics, HTImageDrawable, 
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public override orientation: number,
+		orientation: number,
 	) {
 		super({
 			imageDrawable: windmill,
 			hitboxHolder: windmill,
             synergy: windmill,
 		});
-		this.angle = this.orientation;
+		this.setOrientation(orientation);
 		this.gridShape = windmill.gridShape;
 	}
 

@@ -1,10 +1,10 @@
-import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 
 import { Cell, GridPosition } from "../../../position";
 import { STANDARD_CELL_SIZE, TGrid } from "../../../../engine/grid/tgrid";
 import { TRenderable } from "../../render/renderable";
 import { Physic } from "../../../physic";
-import { HTImageDrawable } from "../../render/image-drawable";
+import { Orientable } from "./orientable";
 
 export class GridShape {
 	constructor(public cells: Cell[] = [new Cell({ x: 0, y: 0 })]) {}
@@ -32,19 +32,12 @@ export class GridShape {
 	}
 }
 
-export const GridElement = Subtrait([TRenderable], (base) => {
+export const GridElement = Subtrait([TRenderable, Orientable], (base) => {
 	abstract class IGridElement extends base {
 		gridShape: GridShape = new GridShape();
 
-		orientation = 0
 		abstract cell: Cell;
 
-		setOrientation(orientation: number) {
-			this.orientation = orientation;
-			if (implementsTrait(this, HTImageDrawable)) {
-				this.angle = orientation;
-			}
-		}
 		getRealPosition(grid: ImplementsTrait<typeof TGrid>) {
 			return grid.cellToGrid(this.cell);
 		}

@@ -1,7 +1,8 @@
-import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
 import { ScreenPosition } from "../../position";
 
 import { TDrawable } from "./drawable";
+import { Orientable } from "../engine/core/orientable";
 
 
 
@@ -15,18 +16,17 @@ export type HTMLImageElementAsset = {
 export const TImageDrawable = (image: HTMLImageElement | HTMLImageElementAsset, size: { width: number; height: number }, priority: number) =>
 	Subtrait([TDrawable], (base) => {
 		abstract class TImageDrawable extends base {
-			angle: number = 0
 			drawable = {
 				image: image,
 				size: size,
 				priority: priority,
 			};
 
-			getProportion(){
+			getProportion(orientation : number){
 				if(this.drawable.image instanceof HTMLImageElement){
 					return this.drawable.size
 				}
-				const angle = (this.angle + 2 * Math.PI) % 2 * Math.PI
+				const angle = (orientation + 2 * Math.PI) % 2 * Math.PI
 				if(angle % Math.PI > 0 && angle % Math.PI < Math.PI/2){
 					return {
 						width: this.drawable.size.height,
@@ -39,12 +39,12 @@ export const TImageDrawable = (image: HTMLImageElement | HTMLImageElementAsset, 
 				}
 			}
 
-			getView(){
+			getView(orientation : number){
 				const assets = this.drawable.image
 				if(assets instanceof HTMLImageElement){
 					return assets
 				}
-				const angle = (this.angle + 2 * Math.PI) % 2 * Math.PI
+				const angle = (orientation + 2 * Math.PI) % 2 * Math.PI
 				const threshold = Math.PI / 2
 				if (angle <= 0 +0.1) {
 					return assets.backView;
@@ -69,12 +69,13 @@ export const TImageDrawable = (image: HTMLImageElement | HTMLImageElementAsset, 
 			}
 
 			draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
-				const { width, height } = this.getProportion();
+				const orientation = implementsTrait(this, Orientable) ? this.orientation : 0;
+				const { width, height } = this.getProportion(orientation);
 				const size = this.getCanvasSize(context, width, height, scale);
 				const canvasPosition = this.getCanvasPosition(context, position);
-				const image = this.getView()
+				const image = this.getView(orientation)
 				if(this.drawable.image instanceof HTMLImageElement){
-					this.drawImage(context, size, canvasPosition, image, this.angle);
+					this.drawImage(context, size, canvasPosition, image, orientation);
 					return
 				}
 				this.drawImage(context, size, canvasPosition, image);

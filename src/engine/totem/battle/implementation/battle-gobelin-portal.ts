@@ -8,8 +8,9 @@ import { GridElement } from "../../../../shared/traits/engine/core/grid-element"
 import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { Caster } from "../../../../shared/traits/engine/cast";
 import { GobelinPortal } from "../../recruit/implementation/gobelin-totem-recruit";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class BattleGobelinPortal extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement) {
+export class BattleGobelinPortal extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, Orientable) {
 	hasTriggered = false;
 
 	constructor(
@@ -17,10 +18,10 @@ export class BattleGobelinPortal extends Derive(HTHitbox, TPhysics, HTImageDrawa
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public override orientation: number,
+		orientation : number
 	) {
 		super({ imageDrawable: portal, hitboxHolder: portal });
-		this.angle = this.orientation;
+		this.setOrientation(orientation);
 		this.gridShape = portal.gridShape;
 	}
 

@@ -2,30 +2,22 @@ import { Derive } from "@ddd-ts/traits";
 import { Physic } from "../../../../shared/physic";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { TCasterHudRenderable } from "../../../../shared/traits/render/huds/caster-camembert-renderable";
-import { Cast, Caster } from "../../../../shared/traits/engine/cast";
-import { HaveStats } from "../../../stats/stats";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { FrostTower } from "../../recruit/implementation/frost-tower-recruit";
+import { BattleTower } from "../battle-tower";
 export class FrostBattleTower extends Derive(
-	HTHitbox,
-	TCasterHudRenderable,
-	Caster,
-	HTImageDrawable,
-	GridElement,
-	HaveStats,
+	BattleTower
 ) {
 	constructor(
 		private readonly recruit: FrostTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public override orientation: number,
+		orientation: number
 	) {
 		super({
+			recruit,
+			orientation,
 			casterRecruit: recruit,
 			hitboxHolder: recruit,
 			imageDrawable: recruit,
@@ -37,9 +29,6 @@ export class FrostBattleTower extends Derive(
 			attackSpeed: NaN,
 			onDeath: () => {},
 		});
-
-		this.angle = this.orientation;
-		this.gridShape = recruit.gridShape;
 	}
 
 	private attack(target: AnyBattleUnit) {
@@ -51,11 +40,11 @@ export class FrostBattleTower extends Derive(
 		}
 		this.finishCast(sucess);
 	}
-
+	
+	target = null as null | AnyBattleUnit;
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
 		return enemyUnit.isAlive() && distanceSqrd < 20 * 20;
 	}
-	target = null as null | AnyBattleUnit;
 	setTarget(enemyUnit: AnyBattleUnit | null) {
 		this.target = enemyUnit;
 	}
@@ -76,12 +65,4 @@ export class FrostBattleTower extends Derive(
 		}
 	}
 
-	casts(): void {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
-	}
-
-	tick() {
-		this.stats.tick();
-		super.tickCast();
-	}
 }

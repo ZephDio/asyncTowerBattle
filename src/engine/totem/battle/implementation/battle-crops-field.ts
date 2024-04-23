@@ -9,15 +9,16 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class BattleCropsField extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, Caster, TFoodTag) {
+export class BattleCropsField extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, Caster, TFoodTag, Orientable) {
 	foodProduction: number = 5;
 	constructor(
 		public cropsField: CropsField,
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public override orientation: number,
+		orientation: number,
 	) {
 		super({
 			imageDrawable: cropsField,
@@ -31,7 +32,7 @@ export class BattleCropsField extends Derive(HTHitbox, TPhysics, HTImageDrawable
 			foodCost: NaN,
 			onDeath: () => {},
 		});
-		this.angle = this.orientation;
+		this.setOrientation(orientation);
 		this.gridShape = cropsField.gridShape;
 	}
 

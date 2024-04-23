@@ -11,6 +11,7 @@ import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { Status } from "../../../../shared/traits/engine/status";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
 export class VeterantBattleBarrack extends Derive(
 	TCollider,
@@ -20,6 +21,7 @@ export class VeterantBattleBarrack extends Derive(
 	TUnitPreviewHudRenderable,
 	GridElement,
 	HaveStats,
+	Orientable
 ) {
 	castCost: number;
 
@@ -30,7 +32,7 @@ export class VeterantBattleBarrack extends Derive(
 
 		public readonly hooks: BattleArmyHooks,
 		public readonly unitRecruit: AnyUnit,
-		public override orientation: number,
+		override _orientation: number
 	) {
 		super({
 			casterRecruit: barrackRecruit,
@@ -45,7 +47,6 @@ export class VeterantBattleBarrack extends Derive(
 			hitboxHolder: barrackRecruit,
 		});
 		this.castCost = unitRecruit.cost;
-		this.angle = this.orientation;
 		this.gridShape = barrackRecruit.gridShape;
 	}
 

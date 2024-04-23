@@ -8,8 +8,9 @@ import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { FoodHooks } from "../../food/battle-food-economy";
 import { Cast, Caster } from "../../../shared/traits/engine/cast";
+import { Orientable } from "../../../shared/traits/engine/core/orientable";
 
-export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement, Caster) {
+export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement, Caster, Orientable) {
 	public actualLife: number;
 	public maxLife: number;
 
@@ -18,7 +19,7 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 		public onDeath: () => void,
 		public cell: Cell,
 		public position: GridPosition,
-		public override orientation: number,
+		orientation: number,
 		public foodHooks: FoodHooks,
 	) {
 		super({
@@ -33,8 +34,9 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 			foodCost: NaN,
 			onDeath: () => this.onDeath(),
 		});
-		this.angle = this.orientation;
 		this.gridShape = recruit.gridShape;
+		this.setOrientation(orientation);
+		console.log(this.foodHooks)
 	}
 
 	isAlive() {

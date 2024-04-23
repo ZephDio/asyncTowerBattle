@@ -9,8 +9,9 @@ import { Status } from "../../../../shared/traits/engine/status";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement) {
+export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, Orientable) {
 	hasTriggered = false;
 
 	constructor(
@@ -18,10 +19,10 @@ export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawabl
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public override orientation: number,
+		orientation: number,
 	) {
 		super({ imageDrawable: recruit, hitboxHolder: recruit });
-		this.angle = this.orientation;
+		this.setOrientation(orientation);
 		this.gridShape = recruit.gridShape;
 	}
 

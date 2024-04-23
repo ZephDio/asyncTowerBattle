@@ -1,35 +1,27 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { Cast, Caster } from "../../../../shared/traits/engine/cast";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { TCasterHudRenderable } from "../../../../shared/traits/render/huds/caster-camembert-renderable";
 import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
-import { HaveStats, Stats } from "../../../stats/stats";
+import { Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
 import { SlowingBattlePathTile } from "../../../tile/battle/implementation/slowing-battle-tile";
 import { BasicBattlePathTile } from "../../../tile/battle/implementation/basic-battle-tile";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { TrapBattlePathTile } from "../../../tile/battle/implementation/trap-battle-tle";
+import { BattleTower } from "../battle-tower";
 
 export class YellowBattleTower extends Derive(
-	HTHitbox,
-	TCasterHudRenderable,
-	Caster,
-	HTImageDrawable,
-	GridElement,
-	HaveStats,
+	BattleTower
 ) {
 	constructor(
 		private readonly recruit: YellowTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-
-		public override orientation: number,
+		orientation : number
 	) {
 		super({
+			orientation,
+			recruit,
 			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
@@ -41,8 +33,8 @@ export class YellowBattleTower extends Derive(
 			foodCost: recruit.foodCost,
 			hitboxHolder: recruit,
 		});
-		this.angle = this.orientation;
 		this.gridShape = recruit.gridShape;
+		this.setOrientation(orientation);
 	}
 
 	private attack() {
@@ -76,24 +68,11 @@ export class YellowBattleTower extends Derive(
 		}
 		this.finishCast(sucess);
 	}
-
-	isAlive() {
-		return true;
-	}
-
 	onCastResolve(): void {
 		this.attack();
 		this.finishCast();
 	}
 
-	casts(): void {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
-	}
-
-	tick() {
-		this.tickCast();
-		this.stats.tick();
-	}
 }
 
 export class Poisoned extends Derive(Status) {

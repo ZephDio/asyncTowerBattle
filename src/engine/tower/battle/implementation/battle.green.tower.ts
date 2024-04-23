@@ -3,23 +3,13 @@ import { Physic } from "../../../../shared/physic";
 import { GreenTower } from "../../recruit/implementation/green-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { Cast, Caster } from "../../../../shared/traits/engine/cast";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { TCasterHudRenderable } from "../../../../shared/traits/render/huds/caster-camembert-renderable";
-import { HaveStats } from "../../../stats/stats";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import { BattleTower } from "../battle-tower";
 
 export class GreenBattleTower extends Derive(
-	HTHitbox,
-	TCasterHudRenderable,
-	Caster,
-	HTImageDrawable,
+	BattleTower,
 	HTDescriptor,
-	GridElement,
-	HaveStats,
 ) {
 	target = null as null | AnyBattleUnit;
 	constructor(
@@ -27,9 +17,11 @@ export class GreenBattleTower extends Derive(
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public override orientation: number,
+		orientation: number
 	) {
 		super({
+			orientation,
+			recruit,
 			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
@@ -43,8 +35,6 @@ export class GreenBattleTower extends Derive(
 			descriptor: recruit,
 		});
 
-		this.angle = this.orientation;
-		this.gridShape = recruit.gridShape;
 	}
 
 	private attack(target: AnyBattleUnit) {
@@ -55,16 +45,15 @@ export class GreenBattleTower extends Derive(
 		}
 		this.finishCast(sucess);
 	}
+
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
 		return enemyUnit.isAlive() && distanceSqrd < 20 * 20;
 	}
+
 	setTarget(enemyUnit: AnyBattleUnit | null) {
 		this.target = enemyUnit;
 	}
 
-	isAlive() {
-		return true;
-	}
 
 	onCastResolve(): void {
 		if (
@@ -82,12 +71,4 @@ export class GreenBattleTower extends Derive(
 		}
 	}
 
-	casts(): void {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
-	}
-
-	tick() {
-		this.tickCast();
-		this.stats.tick();
-	}
 }

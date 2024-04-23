@@ -8,8 +8,9 @@ import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { FrostSpike } from "../../blueprint/implementation/frost-spike";
 import { FrostNova } from "../../../area-effect/implementation/frost-nova";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class BattleFrostSpike extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
+export class BattleFrostSpike extends Derive(TRenderable, HTHitbox, HTImageDrawable,Orientable) {
 	pathFinder: PathFinder;
 	speed: number;
 
@@ -33,7 +34,7 @@ export class BattleFrostSpike extends Derive(TRenderable, HTHitbox, HTImageDrawa
 		if (this.canMove() && !this.pathFinder.isArrived) {
 			const [nextPosition, theta] = this.pathFinder.getNextPositionAndOrientation(this.position, this.speed);
 
-			this.updateTheta(theta);
+			this.setOrientation(theta);
 			this.move(nextPosition);
 		}
 		if (this.pathFinder.isArrived) {
@@ -52,10 +53,6 @@ export class BattleFrostSpike extends Derive(TRenderable, HTHitbox, HTImageDrawa
 	}
 
 	
-	updateTheta(theta: number) {
-		this.angle = theta;
-	}
-
 	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;
