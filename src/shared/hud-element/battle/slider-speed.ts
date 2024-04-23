@@ -6,7 +6,7 @@ import { Rectangle } from "../../hitbox/shapes/rectangle";
 import { GridPosition, ScreenPosition } from "../../position";
 import { TRenderable } from "../../traits/render/renderable";
 import { Resources } from "../../../renderer/resources";
-import { TImageDrawable } from "../../traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../traits/render/image-drawable";
 import { TGrid } from "../../../engine/grid/tgrid";
 import { Size } from "../../size";
 
@@ -36,7 +36,7 @@ export class SliderBattleSpeed extends Derive(
 	TImageDrawable(Resources.hudElement.slider.resource.image, { width: 16, height: 1.8 }, 8),
 	TRenderable,
 ) {
-	override drawPriority = 8;
+	override drawPriority = DrawPriority.HUD;
 	size = { width: 16, height: 2.5 };
 
 	focused: boolean = false;
@@ -84,6 +84,7 @@ export class SliderBattleSpeed extends Derive(
 	}
 
 	override render(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid> | undefined): void {
+		context.globalAlpha = 1;
 		super.render(context, grid);
 		this.cursor.render(context, grid);
 		this.speedIndicator.render(context,grid)
@@ -107,7 +108,7 @@ class Cursor extends Derive(
 
 class SpeedIndicator extends Derive(TRenderable){
 
-	drawPriority = 9
+	drawPriority = DrawPriority.HUD;
 	constructor(public position : ScreenPosition, public size :Size,public getSpeed : () => number){
 		super({})
 	}

@@ -2,9 +2,10 @@ import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { TDrawable } from "../../traits/render/drawable";
 import { HaveStats } from "../../../engine/stats/stats";
 import { ScreenPosition } from "../../position";
+import { DrawPriority } from "../../traits/render/image-drawable";
 
 export class LifeBar extends Derive(TDrawable) {
-	drawPriority = 3;
+	drawPriority = DrawPriority.HUD;
 	constructor(private entity: ImplementsTrait<typeof HaveStats>) {
 		super({});
 	}

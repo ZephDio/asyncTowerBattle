@@ -2,6 +2,7 @@ import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { TDrawable } from "../traits/render/drawable";
 import { Caster } from "../traits/engine/cast";
 import { ScreenPosition } from "../position";
+import { DrawPriority } from "../traits/render/image-drawable";
 
 export class CasterCamembert extends Derive(TDrawable) {
 	objective = 100;
@@ -9,7 +10,7 @@ export class CasterCamembert extends Derive(TDrawable) {
 		super({});
 	}
 
-	drawPriority = 5;
+	drawPriority = DrawPriority.HUD;
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		if (!this.caster.castInProgress) return;
 		context.globalAlpha = 1;

@@ -36,6 +36,7 @@ export class CanvasRenderer implements Renderer {
 			grid.render(this.context);
 			const gridElementDrawables = grid.getDrawables();
 			[...gridElementDrawables, ...drawables]
+				.sort((drawableA, drawableB) => drawableB.position.y - drawableA.position.y)
 				.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
 				.map((drawable) => drawable.render(this.context, grid));
 		}

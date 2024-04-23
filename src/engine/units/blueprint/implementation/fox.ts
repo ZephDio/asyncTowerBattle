@@ -6,7 +6,7 @@ import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Resources } from "../../../../renderer/resources";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
@@ -17,7 +17,7 @@ export class FoxBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
-	TImageDrawable(Resources.unit.fox.resource.image, Resources.unit.fox.size, 3),
+	TImageDrawable(Resources.unit.fox.resource.image, Resources.unit.fox.size, DrawPriority.NormalGridElement),
 	TDamageDealer(1.5),
 	FoodConsumer,
 ) {

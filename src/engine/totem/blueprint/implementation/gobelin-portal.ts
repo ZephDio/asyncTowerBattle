@@ -5,7 +5,7 @@ import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { TSynergy } from "../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
@@ -17,7 +17,7 @@ export class GobelinPortalBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(Resources.totem.gobelinportal.resource.image, Resources.totem.gobelinportal.size, 3),
+	TImageDrawable(Resources.totem.gobelinportal.resource.image, Resources.totem.gobelinportal.size, DrawPriority.NormalGridElement),
 	TSynergy,
 ){
 	description = new Description("Golbelin Portal", ["On ▣ trigger :","30% chance to", "generate a goblin"]);

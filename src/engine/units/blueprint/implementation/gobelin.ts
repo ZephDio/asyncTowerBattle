@@ -3,7 +3,7 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
@@ -19,7 +19,7 @@ export class GobelinBlueprint extends Derive(
 	TDrawable,
 	TDescriptor,
 	RecruitCaster,
-	TImageDrawable(Resources.unit.gobelin.resource.image, Resources.unit.gobelin.size, 3),
+	TImageDrawable(Resources.unit.gobelin.resource.image, Resources.unit.gobelin.size, DrawPriority.NormalGridElement),
 	TDamageDealer(1),
 	FoodConsumer,
 ) {

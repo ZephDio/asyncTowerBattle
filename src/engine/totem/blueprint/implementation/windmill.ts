@@ -5,7 +5,7 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { TSynergy } from "../../../../shared/traits/engine/synergy";
@@ -22,7 +22,7 @@ export class WindmillBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(Resources.totem.windmill.resource.image, Resources.totem.windmill.size, 3),
+	TImageDrawable(Resources.totem.windmill.resource.image, Resources.totem.windmill.size, DrawPriority.NormalGridElement),
     TSynergy,
     TFoodTag
 ) {

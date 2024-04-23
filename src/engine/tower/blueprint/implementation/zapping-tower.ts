@@ -5,7 +5,7 @@ import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { ZappingTower } from "../../recruit/implementation/zapping-tower-recruit";
 import { Spark } from "../../../projectile/blueprint/implementation/spark";
@@ -18,7 +18,7 @@ export class ZappingTowerBlueprint extends Derive(
 	TDamageDealer(15),
 	TDescriptor,
 	FoodConsumer,
-	TImageDrawable(Resources.tower.purple.resource.image, Resources.tower.purple.size, 3),
+	TImageDrawable(Resources.tower.purple.resource.image, Resources.tower.purple.size, DrawPriority.NormalGridElement),
 ) {
 	toRecruit(cell: Cell) {
 		return new ZappingTower(cell, this);

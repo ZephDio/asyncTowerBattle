@@ -25,6 +25,7 @@ export class ArmyResume extends Derive(BannerBackground){
     }
 
     draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number){
+        context.globalAlpha = 1;
         const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);
         const canvasPosition = this.getCanvasPosition(context, position);
         this.drawBanner(context,canvasSize,canvasPosition)

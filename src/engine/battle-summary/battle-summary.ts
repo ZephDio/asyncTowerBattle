@@ -8,13 +8,14 @@ import { Resources } from "../../renderer/resources";
 import { TDrawable } from "../../shared/traits/render/drawable";
 import { TRenderable } from "../../shared/traits/render/renderable";
 import { RenderableState } from "../../renderer/renderer";
+import { DrawPriority } from "../../shared/traits/render/image-drawable";
 
 export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 	constructor(public verdict: "victory" | "defeat") {
 		super({});
 	}
 
-	drawPriority = 5;
+	drawPriority = DrawPriority.HUD;
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		context.globalAlpha = 1;

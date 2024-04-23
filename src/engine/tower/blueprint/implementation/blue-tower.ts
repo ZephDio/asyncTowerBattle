@@ -3,7 +3,7 @@ import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Rocket } from "../../../projectile/blueprint/implementation/rocket";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { BlueTower } from "../../recruit/implementation/blue-tower-recruit";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
@@ -18,7 +18,7 @@ export class BlueTowerBlueprint extends Derive(
 	TDescriptor,
 	TDamageDealer(7),
 	FoodConsumer,
-	TImageDrawable(Resources.tower.blue.resource.image, Resources.tower.blue.size, 3),
+	TImageDrawable(Resources.tower.blue.resource.image, Resources.tower.blue.size, DrawPriority.NormalGridElement),
 ) {
 	toRecruit(cell: Cell) {
 		return new BlueTower(cell, this);

@@ -3,7 +3,7 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 
 import { Bullet } from "../../../projectile/blueprint/implementation/bullet";
@@ -18,7 +18,7 @@ export class GreenTowerBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	FoodConsumer,
-	TImageDrawable(Resources.tower.green.resource.image, Resources.tower.green.size, 3),
+	TImageDrawable(Resources.tower.green.resource.image, Resources.tower.green.size, DrawPriority.NormalGridElement),
 	TDamageDealer(10),
 ) {
 	description = new TowerDescription("Green Tower", ["A tower that shoots", "auto-guided fast", "bullets"], {

@@ -4,9 +4,10 @@ import { ScreenPosition } from "../../../position";
 import { BattleFoodEconomy } from "../../../../engine/food/battle-food-economy";
 import { TRenderable } from "../../../traits/render/renderable";
 import { Resources } from "../../../../renderer/resources";
+import { DrawPriority } from "../../../traits/render/image-drawable";
 
 export class FoodBarHud extends Derive(TRenderable, TDrawable) {
-	drawPriority = 3;
+	drawPriority = DrawPriority.HUD;
 	foodIcon = Resources.hudElement.icons.food.image
 	constructor(
 		private economy: BattleFoodEconomy,

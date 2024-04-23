@@ -4,9 +4,10 @@ import { ScreenPosition } from "../../../position";
 import { BattleCastle } from "../../../../engine/castle/battle/battle-castle";
 import { TRenderable } from "../../../traits/render/renderable";
 import { Resources } from "../../../../renderer/resources";
+import { DrawPriority } from "../../../traits/render/image-drawable";
 
 export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
-	drawPriority = 3;
+	drawPriority = DrawPriority.HUD;
 	healthIcon = Resources.hudElement.icons.health.image
 	constructor(
 		private castle: BattleCastle,

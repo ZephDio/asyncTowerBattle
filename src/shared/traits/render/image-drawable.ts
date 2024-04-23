@@ -4,6 +4,16 @@ import { ScreenPosition } from "../../position";
 import { TDrawable } from "./drawable";
 import { Orientable } from "../engine/core/orientable";
 
+export enum DrawPriority {
+	BackGroundScreen = 0,
+	BackGroundGrid = 1,
+	CarpetStyleGridElement = 2,
+	NormalGridElement = 3,
+	FlyingGridElement = 4,
+	HUD = 5,
+	HoverHUD = 6,
+	Menu = 7,
+}
 
 
 export type HTMLImageElementAsset = {
