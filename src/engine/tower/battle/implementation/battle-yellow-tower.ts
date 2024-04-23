@@ -32,6 +32,7 @@ export class YellowBattleTower extends Derive(
 			onDeath: () => {},
 			foodCost: recruit.foodCost,
 			hitboxHolder: recruit,
+			descriptor: recruit,
 		});
 		this.gridShape = recruit.gridShape;
 		this.setOrientation(orientation);

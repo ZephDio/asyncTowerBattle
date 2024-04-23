@@ -1,16 +1,11 @@
 import { Derive, implementsTrait } from "@ddd-ts/traits";
-import { TPhysics } from "../../../../shared/traits/engine/core/physics";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
-import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { Caster } from "../../../../shared/traits/engine/cast";
 import { GobelinPortal } from "../../recruit/implementation/gobelin-totem-recruit";
-import { Orientable } from "../../../../shared/traits/engine/core/orientable";
+import { BattleTotem } from "../battle-totem";
 
-export class BattleGobelinPortal extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, Orientable) {
+export class BattleGobelinPortal extends Derive(BattleTotem) {
 	hasTriggered = false;
 
 	constructor(
@@ -18,15 +13,10 @@ export class BattleGobelinPortal extends Derive(HTHitbox, TPhysics, HTImageDrawa
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation : number
+		override _orientation: number,
 	) {
 		super({ imageDrawable: portal, hitboxHolder: portal });
-		this.setOrientation(orientation);
 		this.gridShape = portal.gridShape;
-	}
-
-	get realPosition(): GridPosition {
-		return this.position;
 	}
 
 	tick() {
@@ -51,13 +41,5 @@ export class BattleGobelinPortal extends Derive(HTHitbox, TPhysics, HTImageDrawa
 		const path = this.hooks.getEnemyPath()
         this.hooks.addUnits(this.portal.recruit.toBattle(position,path,this.hooks), this)
     }
-
-	isAlive(): boolean {
-		return true;
-	}
-
-	takeDamage(_damage: number): void {
-		return;
-	}
 }
 

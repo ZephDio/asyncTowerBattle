@@ -28,6 +28,7 @@ export class FrostBattleTower extends Derive(
 			castSpeed: recruit.attackSpeed,
 			attackSpeed: NaN,
 			onDeath: () => {},
+			descriptor: recruit,
 		});
 	}
 
@@ -39,6 +40,10 @@ export class FrostBattleTower extends Derive(
 			this.hooks.addProjectile(projectile, this);
 		}
 		this.finishCast(sucess);
+	}
+
+	sucessAttack(){
+
 	}
 	
 	target = null as null | AnyBattleUnit;

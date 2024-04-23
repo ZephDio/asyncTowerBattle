@@ -28,6 +28,7 @@ export class BlueBattleTower extends Derive(
 			attackSpeed: NaN,
 			foodCost: recruit.foodCost,
 			onDeath: () => {},
+			descriptor: recruit,
 		});
 	}
 

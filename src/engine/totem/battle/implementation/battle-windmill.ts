@@ -1,9 +1,4 @@
 import { Derive, implementsTrait } from "@ddd-ts/traits";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
-import { TPhysics } from "../../../../shared/traits/engine/core/physics";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { TRenderable } from "../../../../shared/traits/render/renderable";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Windmill } from "../../recruit/implementation/windmill";
@@ -12,9 +7,9 @@ import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
 import { Caster } from "../../../../shared/traits/engine/cast";
 import { Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
-import { Orientable } from "../../../../shared/traits/engine/core/orientable";
+import { BattleTotem } from "../battle-totem";
 
-export class BattleWindmill extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, HTSynergy,TFoodTag, Orientable) {
+export class BattleWindmill extends Derive(BattleTotem, HTSynergy,TFoodTag) {
     hasTriggered = false;
 	foodProduction: number = 5;
 	constructor(
@@ -22,14 +17,13 @@ export class BattleWindmill extends Derive(HTHitbox, TPhysics, HTImageDrawable, 
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation: number,
+		override _orientation: number,
 	) {
 		super({
 			imageDrawable: windmill,
 			hitboxHolder: windmill,
             synergy: windmill,
 		});
-		this.setOrientation(orientation);
 		this.gridShape = windmill.gridShape;
 	}
 
@@ -52,20 +46,11 @@ export class BattleWindmill extends Derive(HTHitbox, TPhysics, HTImageDrawable, 
         }
 	}
 
-	isAlive(): boolean {
-		return true;
-	}
-
-
 	incrementFood() {
 		this.hooks.alliedFoodHooks.addFood(this.foodProduction);
 	}
 
 
-
-	takeDamage(_damage: number): void {
-		return;
-	}
 }
 
 export class WindmillBuff extends Derive(Status){

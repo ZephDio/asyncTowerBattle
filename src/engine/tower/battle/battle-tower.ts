@@ -7,6 +7,7 @@ import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { HaveStats } from "../../stats/stats";
 import { Orientable } from "../../../shared/traits/engine/core/orientable";
 import { Tower } from "../recruit/tower-recruit";
+import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 
 export type AnyBattleTower = ImplementsTrait<typeof BattleTower>;
 
@@ -17,7 +18,8 @@ export const BattleTower = Subtrait([
 	HTImageDrawable,
 	GridElement,
 	HaveStats,
-	Orientable], (base, Props) => {
+	Orientable,
+	HTDescriptor], (base, Props) => {
 		abstract class BattleTower extends base {
 
 			constructor(props: { orientation : number , recruit : ImplementsTrait<typeof Tower>} & typeof Props){

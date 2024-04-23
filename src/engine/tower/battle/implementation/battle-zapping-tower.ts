@@ -31,6 +31,7 @@ export class ZappingBattleTower extends Derive(
 			foodCost: recruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: recruit,
+			descriptor: recruit,
 		});
 
 		this.setOrientation(orientation);

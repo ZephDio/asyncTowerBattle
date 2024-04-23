@@ -2,25 +2,12 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Derive } from "@ddd-ts/traits";
-import { Cast, Caster } from "../../../../shared/traits/engine/cast";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { TUnitPreviewHudRenderable } from "../../../../shared/traits/render/huds/unit-preview-enderable";
-import { HaveStats } from "../../../stats/stats";
-import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
+import { Cast } from "../../../../shared/traits/engine/cast";
 import { WaveBarrack } from "../../recruit/implementation/wave-barrack-recruit";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
-import { Orientable } from "../../../../shared/traits/engine/core/orientable";
+import { BattleBarrack } from "../battle-barrack";
 
 export class WaveBattleBarrack extends Derive(
-	TCollider,
-	HTHitbox,
-	Caster,
-	HTImageDrawable,
-	TUnitPreviewHudRenderable,
-	GridElement,
-	HaveStats,
-	Orientable
+	BattleBarrack
 ) {
 	castCost: number;
 
@@ -46,16 +33,15 @@ export class WaveBattleBarrack extends Derive(
 			foodCost: barrackRecruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
+			descriptor: barrackRecruit,
 		});
 		this.castCost = unitRecruit.cost;
 		this.gridShape = barrackRecruit.gridShape;
 	}
 
-	tick() {
-		super.tickCast();
-	}
+	
 
-	casts(): void {
+	override casts(): void {
 		const cycle = this.cycles[this.cycle % this.cycles.length] as number;
 		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost * cycle);
 		this.cycle += 1;
