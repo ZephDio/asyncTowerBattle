@@ -3,9 +3,10 @@ import { Cell, ScreenPosition } from "../../../shared/position";
 import { TGrid } from "../tgrid";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
+import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 
 export class HoverEffect extends Derive(TDrawable, TRenderable) {
-	drawPriority = 8;
+	drawPriority = DrawPriority.HUD;
 	size: number;
 	constructor(
 		public cell: Cell,

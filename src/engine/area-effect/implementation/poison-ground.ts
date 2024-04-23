@@ -10,6 +10,7 @@ import { Poisoned } from "../../tower/battle/implementation/battle-yellow-tower"
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { STANDARD_CELL_SIZE } from "../../grid/tgrid";
+import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 
 export class PoisonGround extends Derive(
 	TDrawable,
@@ -22,7 +23,7 @@ export class PoisonGround extends Derive(
 	),
 ) {
 	type = "poison-ground" as const;
-	drawPriority = 5;
+	drawPriority = DrawPriority.CarpetStyleGridElement;
 	clock = 0;
 	constructor(
 		public maxDuration: number,
@@ -59,5 +60,6 @@ export class PoisonGround extends Derive(
 		const size = this.getCanvasSize(context, this.size.width, this.size.height);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawEllipse(context, size, canvasPosition, scale);
+		context.globalAlpha = 1;
 	}
 }

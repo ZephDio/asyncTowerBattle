@@ -4,7 +4,7 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { Priest } from "../../recruit/implementation/priest-recruit";
@@ -17,7 +17,7 @@ export class PriestBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 1.8, height: 2.2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
-	TImageDrawable(Resources.unit.priest.resource.image, Resources.unit.priest.size, 4),
+	TImageDrawable(Resources.unit.priest.resource.image, Resources.unit.priest.size, DrawPriority.NormalGridElement),
 	TDamageDealer(0.5),
 	FoodConsumer,
 ) {

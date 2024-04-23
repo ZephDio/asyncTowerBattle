@@ -3,9 +3,10 @@ import { ScreenPosition } from "../../position";
 import { TDrawable } from "../../traits/render/drawable";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { TRenderable } from "../../traits/render/renderable";
+import { DrawPriority } from "../../traits/render/image-drawable";
 
 export class BattleClockHud extends Derive(TRenderable, TDrawable) {
-	override drawPriority = 8;
+	override drawPriority = DrawPriority.HUD;
 	size = { width : 5 , height : 3}
 	constructor(
 		public timer: { clock: number },

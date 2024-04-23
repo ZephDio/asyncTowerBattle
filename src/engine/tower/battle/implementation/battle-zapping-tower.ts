@@ -1,23 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { Cast, Caster } from "../../../../shared/traits/engine/cast";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { TCasterHudRenderable } from "../../../../shared/traits/render/huds/caster-camembert-renderable";
-import { HaveStats } from "../../../stats/stats";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { ZappingTower } from "../../recruit/implementation/zapping-tower-recruit";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Physic } from "../../../../shared/physic";
+import { BattleTower } from "../battle-tower";
 
 export class ZappingBattleTower extends Derive(
-	HTHitbox,
-	TCasterHudRenderable,
-	Caster,
-	HTImageDrawable,
-	GridElement,
-	HaveStats,
+	BattleTower
 ) {
 	target = null as null | AnyBattleUnit;
 
@@ -26,9 +16,11 @@ export class ZappingBattleTower extends Derive(
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public override orientation: number,
+		orientation: number
 	) {
 		super({
+			recruit,
+			orientation,
 			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
@@ -39,9 +31,10 @@ export class ZappingBattleTower extends Derive(
 			foodCost: recruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: recruit,
+			descriptor: recruit,
 		});
 
-		this.angle = this.orientation;
+		this.setOrientation(orientation);
 		this.gridShape = recruit.gridShape;
 	}
 
@@ -52,10 +45,6 @@ export class ZappingBattleTower extends Derive(
 			this.hooks.addProjectile(projectile, this);
 		}
 		this.finishCast(sucess);
-	}
-
-	isAlive() {
-		return true;
 	}
 
 	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
@@ -80,14 +69,5 @@ export class ZappingBattleTower extends Derive(
 
 	setTarget(enemyUnit: AnyBattleUnit | null) {
 		this.target = enemyUnit;
-	}
-
-	casts(): void {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
-	}
-
-	tick() {
-		this.tickCast();
-		this.stats.tick();
 	}
 }

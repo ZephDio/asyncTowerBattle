@@ -2,7 +2,7 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Derive } from "../../../../../traits/traits";
@@ -18,7 +18,7 @@ export class FrostTowerBlueprint extends Derive(
 	TDamageDealer(4),
 	FoodConsumer,
 	TDescriptor,
-	TImageDrawable(Resources.tower.frost.resource.image, Resources.tower.blue.size, 3),
+	TImageDrawable(Resources.tower.frost.resource.image, Resources.tower.blue.size, DrawPriority.NormalGridElement),
 ) {
 	toRecruit(cell: Cell) {
 		return new FrostTower(cell, this);

@@ -3,7 +3,7 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { OrangeTotem } from "../../recruit/implementation/orange-tower-recruit";
 import { TSynergy } from "../../../../shared/traits/engine/synergy";
@@ -17,7 +17,7 @@ export class OrangeTotemBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(Resources.totem.orange.resource.image, Resources.totem.orange.size, 3),
+	TImageDrawable(Resources.totem.orange.resource.image, Resources.totem.orange.size, DrawPriority.NormalGridElement),
 	TSynergy,
 ) {
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
@@ -30,6 +30,6 @@ export class OrangeTotemBlueprint extends Derive(
 	toRecruit(cell: Cell) {
 		return new OrangeTotem(cell, this);
 	}
-	description = new Description("Boost Tower", ["A tower that boosts", "damage of nearby", "towers by 30%"]);
+	description = new Description("Enrage Totem", ["A totem that boosts", "damage of ▣ towers", "by 30%"]);
 	projectile = undefined;
 }

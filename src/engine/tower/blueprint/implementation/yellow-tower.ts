@@ -3,7 +3,7 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 
 import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
@@ -24,7 +24,7 @@ export class YellowTowerBlueprint extends Derive(
 	TDamageDealer(6),
 	TDescriptor,
 	FoodConsumer,
-	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, 3),
+	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, DrawPriority.NormalGridElement),
 	TSynergy,
 ) {
 	foodCost = 2;

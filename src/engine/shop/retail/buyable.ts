@@ -1,7 +1,7 @@
 import { Derive } from "@ddd-ts/traits";
 import { TGCollider } from "../../../shared/traits/engine/core/TGCollider";
 import { HTHitbox } from "../../../shared/traits/engine/core/THitbox";
-import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
+import { DrawPriority, HTImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { TPriceHudRenderable } from "../../../shared/traits/render/huds/price-renderable";
 import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { Cell } from "../../../shared/position";
@@ -22,7 +22,7 @@ export class Buyable extends Derive(
 	HTImageDrawable,
 	GridElement,
 ) {
-	drawPriority = 10;
+	drawPriority = DrawPriority.NormalGridElement;
 	constructor(
 		public entity: AnyBuyable,
 		public cell: Cell,

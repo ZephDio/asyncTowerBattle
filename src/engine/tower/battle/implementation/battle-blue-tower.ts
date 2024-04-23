@@ -3,29 +3,21 @@ import { Physic } from "../../../../shared/physic";
 import { BlueTower } from "../../recruit/implementation/blue-tower-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { TCasterHudRenderable } from "../../../../shared/traits/render/huds/caster-camembert-renderable";
-import { Cast, Caster } from "../../../../shared/traits/engine/cast";
-import { HaveStats } from "../../../stats/stats";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
+import { BattleTower } from "../battle-tower";
 export class BlueBattleTower extends Derive(
-	HTHitbox,
-	TCasterHudRenderable,
-	Caster,
-	HTImageDrawable,
-	GridElement,
-	HaveStats,
+	BattleTower
 ) {
 	constructor(
 		private readonly recruit: BlueTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public override orientation: number,
+		orientation : number
 	) {
 		super({
+			recruit,
+			orientation,
 			casterRecruit: recruit,
 			hitboxHolder: recruit,
 			imageDrawable: recruit,
@@ -36,10 +28,8 @@ export class BlueBattleTower extends Derive(
 			attackSpeed: NaN,
 			foodCost: recruit.foodCost,
 			onDeath: () => {},
+			descriptor: recruit,
 		});
-
-		this.angle = this.orientation;
-		this.gridShape = recruit.gridShape;
 	}
 
 	target = null as null | AnyBattleUnit;
@@ -77,12 +67,4 @@ export class BlueBattleTower extends Derive(
 		}
 	}
 
-	casts(): void {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
-	}
-
-	tick() {
-		this.stats.tick();
-		super.tickCast();
-	}
 }

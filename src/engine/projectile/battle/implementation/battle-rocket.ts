@@ -8,8 +8,9 @@ import { Rocket } from "../../blueprint/implementation/rocket";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable) {
+export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable, Orientable) {
 	pathFinder: PathFinder;
 	speed: number;
 
@@ -24,7 +25,7 @@ export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable)
 		this.pathFinder = new PathFinder([new GridPosition({ x: this.target.position.x, y: this.target.position.y })]);
 		this.speed = this.projectile.baseSpeed;
 		const theta = this.pathFinder.getOrientation(this.position);
-		this.updateTheta(theta);
+		this.setOrientation(theta);
 	}
 
 	canMove(): boolean {
@@ -37,7 +38,7 @@ export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable)
 	followPath(): void {
 		if (this.canMove() && !this.pathFinder.isArrived) {
 			const [nextPosition, theta] = this.pathFinder.getNextPositionAndOrientation(this.position, this.speed);
-			this.updateTheta(theta);
+			this.setOrientation(theta);
 			this.move(nextPosition);
 		}
 		if (this.pathFinder.isArrived) {
@@ -45,9 +46,6 @@ export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable)
 		}
 	}
 
-	updateTheta(theta: number) {
-		this.angle = theta;
-	}
 
 	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;

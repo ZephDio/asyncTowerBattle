@@ -8,6 +8,7 @@ import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { THitbox } from "../../../shared/traits/engine/core/THitbox";
+import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 
 export class Explosion extends Derive(
 	TCollider,
@@ -16,7 +17,7 @@ export class Explosion extends Derive(
 	TRenderable,
 ) {
 	type = "explosion" as const;
-	drawPriority = 5;
+	drawPriority = DrawPriority.NormalGridElement;
 	constructor(
 		public MaxSize: Size,
 		public position: GridPosition,

@@ -2,24 +2,13 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { AnyUnit } from "../../../units/recruit/unit-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Derive } from "@ddd-ts/traits";
-import { Cast, Caster } from "../../../../shared/traits/engine/cast";
+import { BattleBarrack } from "../battle-barrack";
 import { BasicBarrack } from "../../recruit/implementation/basic-barrack-recruit";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { TUnitPreviewHudRenderable } from "../../../../shared/traits/render/huds/unit-preview-enderable";
-import { HaveStats, Stats } from "../../../stats/stats";
-import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { Status } from "../../../../shared/traits/engine/status";
+import { Stats } from "../../../stats/stats";
 
 export class VeterantBattleBarrack extends Derive(
-	TCollider,
-	HTHitbox,
-	Caster,
-	HTImageDrawable,
-	TUnitPreviewHudRenderable,
-	GridElement,
-	HaveStats,
+	BattleBarrack
 ) {
 	castCost: number;
 
@@ -30,7 +19,7 @@ export class VeterantBattleBarrack extends Derive(
 
 		public readonly hooks: BattleArmyHooks,
 		public readonly unitRecruit: AnyUnit,
-		public override orientation: number,
+		override _orientation: number
 	) {
 		super({
 			casterRecruit: barrackRecruit,
@@ -43,18 +32,10 @@ export class VeterantBattleBarrack extends Derive(
 			foodCost: barrackRecruit.foodCost,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
+			descriptor: barrackRecruit,
 		});
 		this.castCost = unitRecruit.cost;
-		this.angle = this.orientation;
 		this.gridShape = barrackRecruit.gridShape;
-	}
-
-	tick() {
-		super.tickCast();
-	}
-
-	casts(): void {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost);
 	}
 
 	onCastResolve(): void {

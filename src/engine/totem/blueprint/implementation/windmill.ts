@@ -5,13 +5,13 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { TSynergy } from "../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
-import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
+import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { Windmill } from "../../recruit/implementation/windmill";
 
 export class WindmillBlueprint extends Derive(
@@ -22,15 +22,15 @@ export class WindmillBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(Resources.totem.windmill.resource.image, Resources.totem.windmill.size, 3),
+	TImageDrawable(Resources.totem.windmill.resource.image, Resources.totem.windmill.size, DrawPriority.NormalGridElement),
     TSynergy,
-    TFoodTag
+    FoodTag
 ) {
 	description = new Description("Windmill", ["▣ Food monuments", "gain 25% cast speed", "", "Gains 5 max foods" , "for each ▣ food monuments"]);
     
     patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
         if(!gridElement) return false;
-        if(implementsTrait(gridElement, TFoodTag)) return true;
+        if(implementsTrait(gridElement, FoodTag)) return true;
          return false
      }
     override patternEffect: PatternEffect = new PatternEffect(

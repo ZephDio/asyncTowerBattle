@@ -7,8 +7,9 @@ import { PathFinder } from "../../../battle/path-finder";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Bullet } from "../../blueprint/implementation/bullet";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class BattleBullet extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
+export class BattleBullet extends Derive(TRenderable, HTHitbox, HTImageDrawable, Orientable) {
 	pathFinder: PathFinder;
 	speed: number;
 
@@ -32,7 +33,7 @@ export class BattleBullet extends Derive(TRenderable, HTHitbox, HTImageDrawable)
 		if (this.canMove() && !this.pathFinder.isArrived) {
 			const [nextPosition, theta] = this.pathFinder.getNextPositionAndOrientation(this.position, this.speed);
 
-			this.updateTheta(theta);
+			this.setOrientation(theta);
 			this.move(nextPosition);
 		}
 		if (this.pathFinder.isArrived) {
@@ -47,10 +48,6 @@ export class BattleBullet extends Derive(TRenderable, HTHitbox, HTImageDrawable)
 	hit() {
 		this.target.takeDamage(this.damage);
 		this.hooks.removeProjectile(this);
-	}
-
-	updateTheta(theta: number) {
-		this.angle = theta;
 	}
 
 	move(newPosition: GridPosition) {

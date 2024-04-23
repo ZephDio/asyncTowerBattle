@@ -36,6 +36,7 @@ export class CanvasRenderer implements Renderer {
 			grid.render(this.context);
 			const gridElementDrawables = grid.getDrawables();
 			[...gridElementDrawables, ...drawables]
+				.sort((drawableA, drawableB) => drawableB.position.y - drawableA.position.y)
 				.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
 				.map((drawable) => drawable.render(this.context, grid));
 		}
@@ -57,10 +58,13 @@ export class CanvasRenderer implements Renderer {
 
 	init() {
 		const render = async () => {
+			const before = new Date()
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			this.sizeGame();
 			await this.draw();
-			await new Promise((res: any) => setTimeout(() => res(), 1));
+			const after = new Date()
+			const diff = after.getTime() - before.getTime()
+			await new Promise((res: any) => setTimeout(() => res(), 15 - diff));
 			window.requestAnimationFrame(render);
 		};
 		render();

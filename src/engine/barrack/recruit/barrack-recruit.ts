@@ -11,10 +11,11 @@ import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { TGrid } from "../../grid/tgrid";
 import { RecruitCaster } from "../../../shared/traits/engine/cast";
+import { BarrackTag } from "../../../shared/traits/engine/tags";
 
 export type AnyBarrack = ImplementsTrait<typeof Barrack>;
 
-export const Barrack = Subtrait([TRecruit, RecruitCaster], (base) => {
+export const Barrack = Subtrait([TRecruit, RecruitCaster, BarrackTag], (base) => {
 	abstract class IBarrack extends base {
 		abstract productionSpeed: number;
 		abstract unitRecruit: null | AnyUnit;

@@ -7,6 +7,7 @@ import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { THitbox } from "../../../shared/traits/engine/core/THitbox";
+import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 
 export class HealWave extends Derive(
 	TDrawable,
@@ -15,7 +16,7 @@ export class HealWave extends Derive(
 	THitbox(new HitBox([[new Ellipse({ width: 9, height: 9 }), new GridPosition({ x: 0, y: 0 })]])),
 ) {
 	type = "heal-wave" as const;
-	drawPriority = 5;
+	drawPriority = DrawPriority.NormalGridElement;
 	clock = 0;
 	constructor(
 		public maxDuration: number,

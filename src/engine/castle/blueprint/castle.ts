@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { TImageDrawable } from "../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { Castle } from "../recruit/castle-recruit";
 import { Resources } from "../../../renderer/resources";
 import { HitBox } from "../../../shared/hitbox/hitboxe";
@@ -9,7 +9,7 @@ import { Cell, GridPosition } from "../../../shared/position";
 import { Description, TDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 
 export class CastleBlueprint extends Derive(
-	TImageDrawable(Resources.castle.resource.image, Resources.castle.size, 3),
+	TImageDrawable(Resources.castle.resource.image, Resources.castle.size, DrawPriority.NormalGridElement),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 ) {

@@ -373,15 +373,6 @@ export const Resources = {
 				image: createImage("/resources/economy/gold.png"),
 			},
 		},
-		speedButton: {
-			resource: {
-				image: {
-					timesOne: createImage("/resources/button/buttonone.png"),
-					timesTwo: createImage("/resources/button/buttontwo.png"),
-					timesThree: createImage("/resources/button/buttonthree.png"),
-				},
-			},
-		},
 		slider: {
 			resource: {
 				image: createImage("/resources/button/slider.png"),
@@ -392,5 +383,18 @@ export const Resources = {
 				image: createImage("/resources/button/cursor.png"),
 			},
 		},
+		banner: {
+			resource: {
+				image : createImage("/resources/hud/banner.png"),
+			}
+		},
+		icons: {
+			food : {
+				image : createImage("/resources/economy/food.png"),
+			},
+			health : {
+				image : createImage("/resources/hud/health.png"),
+			}
+		}
 	},
 } as const;

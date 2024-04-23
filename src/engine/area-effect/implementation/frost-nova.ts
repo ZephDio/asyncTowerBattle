@@ -10,6 +10,7 @@ import { Physic } from "../../../shared/physic";
 import { Status } from "../../../shared/traits/engine/status";
 import { Stats } from "../../stats/stats";
 import { TRenderable } from "../../../shared/traits/render/renderable";
+import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 
 export class FrostNova extends Derive(
 	TCollider,
@@ -18,7 +19,7 @@ export class FrostNova extends Derive(
 	TRenderable,
 ) {
 	type = "frost-nova" as const;
-	drawPriority = 5;
+	drawPriority = DrawPriority.NormalGridElement;
 	lifespan = 12;
 	hasTriggered = false;
 	constructor(
@@ -59,6 +60,7 @@ export class FrostNova extends Derive(
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawEllipse(context, size, canvasPosition, scale);
 		context.fill;
+		context.globalAlpha = 1;
 	}
 }
 

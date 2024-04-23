@@ -5,11 +5,11 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { CropsField } from "../../recruit/implementation/crops-flied-recruit";
-import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
+import { FoodTag } from "../../../../shared/traits/engine/tags";
 
 export class CropsFieldBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -19,8 +19,8 @@ export class CropsFieldBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(Resources.totem.cropsfield.resource.image, Resources.totem.cropsfield.size, 3),
-	TFoodTag
+	TImageDrawable(Resources.totem.cropsfield.resource.image, Resources.totem.cropsfield.size, DrawPriority.NormalGridElement),
+	FoodTag
 ) {
 	description = new Description("Crops Field", ["A field to grow crops"]);
 

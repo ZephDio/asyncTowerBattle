@@ -1,16 +1,12 @@
 import { Derive, implementsTrait } from "@ddd-ts/traits";
-import { TPhysics } from "../../../../shared/traits/engine/core/physics";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { OrangeTotem } from "../../recruit/implementation/orange-tower-recruit";
-import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
-import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
-import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
-import { TRenderable } from "../../../../shared/traits/render/renderable";
+import { BattleTotem } from "../battle-totem";
 
-export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement) {
+export class OrangeBattleTower extends Derive(BattleTotem) {
 	hasTriggered = false;
 
 	constructor(
@@ -18,15 +14,10 @@ export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawabl
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		public override orientation: number,
+		override _orientation: number,
 	) {
 		super({ imageDrawable: recruit, hitboxHolder: recruit });
-		this.angle = this.orientation;
 		this.gridShape = recruit.gridShape;
-	}
-
-	get realPosition(): GridPosition {
-		return this.position;
 	}
 
 	tick() {
@@ -44,13 +35,7 @@ export class OrangeBattleTower extends Derive(HTHitbox, TPhysics, HTImageDrawabl
 		}
 	}
 
-	isAlive(): boolean {
-		return true;
-	}
 
-	takeDamage(_damage: number): void {
-		return;
-	}
 }
 
 export class OrangeTowerBuff extends Derive(Status) {

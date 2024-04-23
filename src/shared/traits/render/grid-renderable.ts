@@ -1,10 +1,11 @@
 import { Subtrait } from "@ddd-ts/traits";
 import { TGrid } from "../../../engine/grid/tgrid";
 import { TDrawable } from "./drawable";
+import { DrawPriority } from "./image-drawable";
 
 export const TGridDrawable = Subtrait([TGrid, TDrawable], (base) => {
 	abstract class IGridDrawable extends base {
-		drawPriority = 1;
+		drawPriority = DrawPriority.BackGroundGrid;
 		draw(context: CanvasRenderingContext2D): void {
 			context.fillStyle = "#6C6";
 			context.globalAlpha = 1;

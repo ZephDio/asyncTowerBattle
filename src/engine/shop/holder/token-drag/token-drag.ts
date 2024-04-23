@@ -7,21 +7,20 @@ import { Buyable } from "../../retail/buyable";
 import { TokenHooks } from "../holder";
 import { TGrid } from "../../../grid/tgrid";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
 type Holdable = Buyable | AnyRecruit;
 
-export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable], (base, Props) => {
+export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, Orientable], (base, Props) => {
 	abstract class ITokenDrag extends base {
 		protected hooks: TokenHooks;
 		public position: ScreenPosition;
 		abstract holded: Holdable;
-		public orientation: number;
 		constructor(props: { hooks: TokenHooks; position: ScreenPosition; orientation: number } & typeof Props) {
 			super(props);
 			this.hooks = props.hooks;
 			this.position = props.position;
-			this.orientation = props.orientation;
-			this.angle = this.orientation;
+			this.setOrientation(props.orientation);
 		}
 		abstract onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void;
 		abstract getPatternEffect(): PatternEffect | undefined;
@@ -34,8 +33,8 @@ export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable], (base, Pro
 		}
 
 		rotate() {
-			this.orientation = ((Math.PI * 2) + (this.orientation - Math.PI / 2)) % (2 * Math.PI);
-			this.angle = this.orientation;
+			const orientation = ((Math.PI * 2) + (this.orientation - Math.PI / 2)) % (2 * Math.PI);
+			this.setOrientation(orientation);
 		}
 	}
 	return ITokenDrag;

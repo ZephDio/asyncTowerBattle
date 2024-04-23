@@ -6,9 +6,9 @@ import { BattleGrid } from "../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell } from "../../../../shared/position";
 import { BattleCropsField } from "../../battle/implementation/battle-crops-field";
-import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
+import { FoodTag } from "../../../../shared/traits/engine/tags";
 
-export class CropsField extends Derive(Totem, RecruitCaster,TFoodTag) {
+export class CropsField extends Derive(Totem, RecruitCaster,FoodTag) {
 	castSpeed = 3;
 	constructor(
 		public cell: Cell,

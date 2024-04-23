@@ -12,8 +12,9 @@ import { TGrid } from "../../grid/tgrid";
 import { HTDamageDealer } from "../../../shared/traits/engine/damage-dealer";
 import { RecruitCaster } from "../../../shared/traits/engine/cast";
 import { HTFoodConsumer } from "../../../shared/traits/engine/food-consumer";
+import { TowerTag } from "../../../shared/traits/engine/tags";
 
-export const Tower = Subtrait([HTDamageDealer, RecruitCaster, TRecruit, HTFoodConsumer], (base) => {
+export const Tower = Subtrait([HTDamageDealer, RecruitCaster, TRecruit, HTFoodConsumer, TowerTag], (base) => {
 	abstract class ITower extends base {
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;

@@ -1,26 +1,23 @@
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { RenderableState } from "../../renderer/renderer";
 import { BattleState } from "../../shared/gamestate";
-import { FoodBarHud } from "../../shared/hud-element/army-food-bar";
 import { BattleClockHud } from "../../shared/hud-element/battle/battle-clock";
-import { CastleLifeBar } from "../../shared/hud-element/battle/castle-life-bar";
 import { SliderBattleSpeed } from "../../shared/hud-element/battle/slider-speed";
 import { Army } from "../army/army";
 import { Game } from "../game";
 import { BattleRandomSeed } from "./battle-random-seed";
 import { Battlefield } from "./battlefield/battlefield";
+import { ArmyResume } from "../../shared/hud-element/battle/army-resume/army-resume";
 
 export class Battle {
 	battlefield: Battlefield;
 	isOver = false;
 
 	gameSpeed = 31.25;
-	alliedCastleLifeBar: CastleLifeBar;
-	enemyCastleLifeBar: CastleLifeBar;
-	alliedFoodBar: FoodBarHud;
-	enemyFoodBar: FoodBarHud;
 	battleClock: BattleClockHud;
 	speedCursor: SliderBattleSpeed;
+	alliedArmyResume : ArmyResume
+	enemyArmyResume : ArmyResume
 
 	timer = { clock: 0 };
 
@@ -34,12 +31,10 @@ export class Battle {
 		this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy, this.handleBattleOver.bind(this), () =>
 			this.randomSeed.random(),
 		);
-		this.alliedCastleLifeBar = new CastleLifeBar(this.battlefield.alliedArmy.castle, true, this.battlefield.grid);
-		this.enemyCastleLifeBar = new CastleLifeBar(this.battlefield.enemyArmy.castle, false, this.battlefield.grid);
-		this.alliedFoodBar = new FoodBarHud(this.battlefield.alliedArmy.foodEconomy, PercentToReal({ x: 5, y: 50 }));
-		this.enemyFoodBar = new FoodBarHud(this.battlefield.enemyArmy.foodEconomy, PercentToReal({ x: 95, y: 50 }));
 		this.battleClock = new BattleClockHud(this.timer);
 		this.speedCursor = new SliderBattleSpeed(PercentToReal({ x: 10, y: 96 }), this.changeSpeed.bind(this));
+		this.alliedArmyResume = new ArmyResume(this.battlefield.alliedArmy, PercentToReal({ x: 14, y: 32 }))
+		this.enemyArmyResume = new ArmyResume(this.battlefield.enemyArmy, PercentToReal({ x: 86, y: 32 }))
 	}
 
 	start() {
@@ -79,12 +74,10 @@ export class Battle {
 	getDrawables(): RenderableState {
 		return {
 			renderables: [
-				this.alliedCastleLifeBar,
-				this.enemyCastleLifeBar,
-				this.alliedFoodBar,
-				this.enemyFoodBar,
 				this.battleClock,
 				this.speedCursor,
+				this.alliedArmyResume,
+				this.enemyArmyResume,
 			],
 			grids: [
 				{
@@ -112,8 +105,6 @@ export class Battle {
 			grid: this.battlefield.grid,
 			path: this.battlefield.alliedArmy.path,
 			hudElements: [
-				this.alliedCastleLifeBar,
-				this.enemyCastleLifeBar,
 				this.battleClock,
 				this.speedCursor,
 			],

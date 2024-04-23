@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { Resources } from "../../../../renderer/resources";
-import { TImageDrawable } from "../../../../shared/traits/render/image-drawable";
+import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
@@ -15,7 +15,7 @@ export class WaveBarrackBlueprint extends Derive(
 	TDescriptor,
 	FoodConsumer,
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
-	TImageDrawable(Resources.barracks.wave.resource.image, Resources.barracks.wave.size, 2),
+	TImageDrawable(Resources.barracks.wave.resource.image, Resources.barracks.wave.size, DrawPriority.NormalGridElement),
 ) {
 	productionSpeed: number = 3.5;
 

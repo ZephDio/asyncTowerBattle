@@ -8,8 +8,9 @@ import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Spark } from "../../blueprint/implementation/spark";
 import { TGrid } from "../../../grid/tgrid";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
+import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable) {
+export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable, Orientable) {
 	pathFinder: PathFinder;
 	speed: number;
 	spreading: boolean = false;
@@ -37,7 +38,7 @@ export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable) 
 		if (this.canMove() && !this.pathFinder.isArrived) {
 			const [nextPosition, theta] = this.pathFinder.getNextPositionAndOrientation(this.position, this.speed);
 
-			this.updateTheta(theta);
+			this.setOrientation(theta);
 			this.move(nextPosition);
 		}
 		if (this.pathFinder.isArrived) {
@@ -75,10 +76,6 @@ export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable) 
 			this.touchedTargets.push(nextTarget);
 			nextTarget.takeDamage(this.damage / (2 + i * 0.7));
 		}
-	}
-
-	updateTheta(theta: number) {
-		this.angle = theta;
 	}
 
 	isValidSpreadTarget(target: AnyBattleUnit, distanceSqrd: number) {
