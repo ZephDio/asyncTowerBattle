@@ -3,10 +3,10 @@ import { CropsField } from "../../recruit/implementation/crops-flied-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
-import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
+import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { BattleTotem } from "../battle-totem";
 
-export class BattleCropsField extends Derive(BattleTotem, Caster, TFoodTag) {
+export class BattleCropsField extends Derive(BattleTotem, Caster, FoodTag) {
 	foodProduction: number = 5;
 	constructor(
 		public cropsField: CropsField,

@@ -36,7 +36,6 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 		});
 		this.gridShape = recruit.gridShape;
 		this.setOrientation(orientation);
-		console.log(this.foodHooks)
 	}
 
 	isAlive() {
@@ -48,7 +47,7 @@ export class BattleCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable,
 	}
 
 	onCastResolve() {
-		this.foodHooks.addFood(4);
+		this.foodHooks.addFood(3);
 		this.finishCast(true);
 	}
 

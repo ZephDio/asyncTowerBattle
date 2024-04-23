@@ -60,6 +60,7 @@ export class FrostNova extends Derive(
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawEllipse(context, size, canvasPosition, scale);
 		context.fill;
+		context.globalAlpha = 1;
 	}
 }
 

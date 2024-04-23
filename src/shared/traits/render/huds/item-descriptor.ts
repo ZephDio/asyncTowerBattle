@@ -1,8 +1,9 @@
-import { Derive, ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait, Subtrait, Trait, implementsTrait } from "@ddd-ts/traits";
 import { TRenderable } from "../renderable";
 import { ScreenPosition } from "../../../position";
 import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
 import { BannerBackground } from "./banner-background";
+import { Tag, Tagged } from "../../engine/tags";
 
 export const TDescriptor = Trait((base) => {
 	abstract class IDescriptor extends base {
@@ -29,6 +30,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	position: ScreenPosition;
 	titlePosition: ScreenPosition;
 	linesPosition: ScreenPosition[];
+	tags : Tag[]
 
 	extraLines: Record<string, string>;
 	constructor(public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>) {
@@ -37,6 +39,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 10 }));
 		this.extraLines = this.item.description.extraLines ?? {};
 		this.linesPosition = this.getLinesPositions();
+		this.tags = implementsTrait(this.item, Tagged) ? this.item.tags : []
 	}
 
 	getPosition() {

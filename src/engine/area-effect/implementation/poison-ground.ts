@@ -60,5 +60,6 @@ export class PoisonGround extends Derive(
 		const size = this.getCanvasSize(context, this.size.width, this.size.height);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawEllipse(context, size, canvasPosition, scale);
+		context.globalAlpha = 1;
 	}
 }

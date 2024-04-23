@@ -3,13 +3,13 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Windmill } from "../../recruit/implementation/windmill";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
-import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
+import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { Caster } from "../../../../shared/traits/engine/cast";
 import { Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 
-export class BattleWindmill extends Derive(BattleTotem, HTSynergy,TFoodTag) {
+export class BattleWindmill extends Derive(BattleTotem, HTSynergy,FoodTag) {
     hasTriggered = false;
 	foodProduction: number = 5;
 	constructor(
@@ -36,7 +36,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy,TFoodTag) {
         this.hasTriggered = true;
         const elements = this.hooks.gridHooks.getRelativeNeighborsInArmy(this.cell,this.patternEffect.getRelativeCells(this.orientation));
         for(const element of elements){
-            if(implementsTrait(element, TFoodTag)){
+            if(implementsTrait(element, FoodTag)){
                 this.hooks.alliedFoodHooks.addMaxFood(5);
                 if(implementsTrait(element, Caster)){
                     const windmillBuff = new WindmillBuff({})

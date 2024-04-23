@@ -30,6 +30,6 @@ export class OrangeTotemBlueprint extends Derive(
 	toRecruit(cell: Cell) {
 		return new OrangeTotem(cell, this);
 	}
-	description = new Description("Boost Tower", ["A tower that boosts", "damage of nearby", "towers by 30%"]);
+	description = new Description("Enrage Totem", ["A totem that boosts", "damage of ▣ towers", "by 30%"]);
 	projectile = undefined;
 }

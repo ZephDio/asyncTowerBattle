@@ -14,7 +14,6 @@ export class ArmyResume extends Derive(BannerBackground){
     foodBar :FoodBarHud
     constructor(public army: BattleArmy,public  position : ScreenPosition) {
         super({});
-        console.log('position', position)
         this.castleLifeBar = new CastleLifeBar(army.castle, this.position.add(
             new ScreenPosition({ x: 0, y: this.size.height/3})
         ))

@@ -22,7 +22,6 @@ export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 		context.strokeStyle = "black";
 		context.lineWidth = 1;
 		const size = this.getCanvasSize(context, 12, 1.3, scale);
-		console.log("lifebarSP", position)
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawRectangle(context, size, canvasPosition);
 		context.fillStyle = "green";
