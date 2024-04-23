@@ -2,6 +2,7 @@ import { Derive, ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { TRenderable } from "../renderable";
 import { ScreenPosition } from "../../../position";
 import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
+import { BannerBackground } from "./banner-background";
 
 export const TDescriptor = Trait((base) => {
 	abstract class IDescriptor extends base {
@@ -23,7 +24,7 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 	return IDescriptor;
 });
 
-export class DescriptionHud extends Derive(TRenderable) {
+export class DescriptionHud extends Derive(BannerBackground) {
 	drawPriority: 9;
 	position: ScreenPosition;
 	titlePosition: ScreenPosition;
@@ -57,12 +58,9 @@ export class DescriptionHud extends Derive(TRenderable) {
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
-		const size = this.getCanvasSize(context, 15, 25, scale);
-		context.fillStyle = "#FFB266";
-		context.strokeStyle = "#000000";
-		context.lineWidth = 3;
+		const bannerSize =this.getCanvasSize(context, 19.3, 33, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
-		this.drawRectangle(context, size, canvasPosition);
+		this.drawBanner(context, bannerSize, canvasPosition);
 		// Title
 		const titlePosition = this.getCanvasPosition(context, this.titlePosition);
 		const title = this.item.description.name;
