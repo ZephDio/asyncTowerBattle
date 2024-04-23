@@ -70,11 +70,10 @@ export const TBattleUnit = Subtrait(
 				const succes = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 				if (succes) {
 					this.stats.heal(1);
-					this.hunger = Math.max(this.hunger--,0)
 					return;
 				}
-				this.stats.takeDamage(this.hunger);
 				this.hunger++
+				this.stats.takeDamage(this.hunger);
 			}
 		}
 		return IBattleUnit;

@@ -51,6 +51,7 @@ export class BattleFrostSpike extends Derive(TRenderable, HTHitbox, HTImageDrawa
 		this.hooks.removeProjectile(this);
 	}
 
+	
 	updateTheta(theta: number) {
 		this.angle = theta;
 	}

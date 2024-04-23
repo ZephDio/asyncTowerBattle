@@ -3,6 +3,7 @@ export type FoodHooks = {
 	addFood: (amount: number) => void;
 	consumeFood: (amount: number) => boolean;
 	removeFood: (amount: number) => void;
+	addMaxFood: (amount: number) => void;
 };
 
 export class BattleFoodEconomy {
@@ -47,6 +48,7 @@ export class BattleFoodEconomy {
 			addFood: this.addFood.bind(this),
 			consumeFood: this.consumeFood.bind(this),
 			removeFood: this.removeFood.bind(this),
+			addMaxFood: this.addMaxFood.bind(this),
 		};
 	}
 }

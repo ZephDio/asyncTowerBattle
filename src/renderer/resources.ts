@@ -41,11 +41,16 @@ export const Resources = {
 		},
 		yellow: {
 			size: {
-				width: 13,
-				height: 5,
+				width: 5,
+				height: 10,
 			},
 			resource: {
-				image: createImage("/resources/towers/tower_yellow.png"),
+				image: {
+					frontView : createImage("/resources/towers/poison-tower/front-view.png"),
+					backView : createImage("/resources/towers/poison-tower/back-view.png"),
+					leftView : createImage("/resources/towers/poison-tower/left-view.png"),
+					rightView : createImage("/resources/towers/poison-tower/right-view.png"),
+				},
 				shape: "rectangle",
 				color: "green",
 			},
@@ -81,6 +86,21 @@ export const Resources = {
 			},
 			resource: {
 				image: createImage("/resources/totem/crops-field.png"),
+				shape: "ellipse",
+			},
+		},
+		windmill: {
+			size: {
+				width: 6.4,
+				height: 6.4,
+			},
+			resource: {
+				image: {
+						frontView : createImage("/resources/totem/windmill/front-view.png"),
+						backView : createImage("/resources/totem/windmill/back-view.png"),
+						leftView : createImage("/resources/totem/windmill/left-view.png"),
+						rightView : createImage("/resources/totem/windmill/right-view.png"),
+				},
 				shape: "ellipse",
 			},
 		},

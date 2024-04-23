@@ -8,8 +8,9 @@ import { CropsField } from "../../recruit/implementation/crops-flied-recruit";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
+import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
 
-export class BattleCropsField extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, Caster) {
+export class BattleCropsField extends Derive(HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, Caster, TFoodTag) {
 	foodProduction: number = 5;
 	constructor(
 		public cropsField: CropsField,

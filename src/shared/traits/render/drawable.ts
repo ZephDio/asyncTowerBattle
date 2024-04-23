@@ -68,7 +68,7 @@ export const TDrawable = Trait((base) => {
 			image: HTMLImageElement,
 			theta: number | undefined = undefined,
 		) {
-			if (theta) {
+			if (theta !== undefined) {
 				context.save();
 				context.translate(position.x, position.y);
 				context.rotate(-theta); // canvas rotate clockwise

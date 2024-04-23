@@ -27,6 +27,7 @@ import { GobelinPortalBlueprint } from "../../totem/blueprint/implementation/gob
 import { CropsFieldBlueprint } from "../../totem/blueprint/implementation/crops-field";
 import { TrapTileBlueprint } from "../../tile/blueprint/implementation/trap-tile-blueprint";
 import { FoxBlueprint } from "../../units/blueprint/implementation/fox";
+import { WindmillBlueprint } from "../../totem/blueprint/implementation/windmill";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint =
@@ -36,10 +37,10 @@ type AnyBlueprint =
 	| AnyBarrackBlueprint
 	| AnyTotemBlueprint;
 // TODO trait blueprint
-const pool = [
+const pool: { value : Constructor<AnyBlueprint>[], share : number }[] = [
 	{
-		value: [OrangeTotemBlueprint, GobelinPortalBlueprint, CropsFieldBlueprint] as any,
-		share: 35,
+		value: [OrangeTotemBlueprint, GobelinPortalBlueprint, CropsFieldBlueprint, WindmillBlueprint],
+		share: 100,
 	},
 	{
 		value: [ZappingTowerBlueprint, YellowTowerBlueprint, BlueTowerBlueprint, GreenTowerBlueprint, FrostTowerBlueprint],
@@ -73,7 +74,7 @@ export class RetailFiller {
 	}
 
 	generateRandomBluePrint() {
-		const recruitPool = Random.roll(pool) as Constructor<AnyBlueprint>[];
+		const recruitPool = Random.roll(pool)
 		const outComes = recruitPool.map((blueprint) => {
 			const item = new blueprint({});
 			return { value: item, share: item.probabilityShare };

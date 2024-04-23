@@ -62,6 +62,7 @@ export class Stats {
 		movementSpeed: 100,
 		maxHealth: 100,
 		foodCost: 100,
+		castSpeed: 100,
 	};
 
 	public status: Map<string, ImplementsTrait<typeof Status>> = new Map();
@@ -101,7 +102,7 @@ export class Stats {
 	}
 
 	get castSpeed() {
-		return this._castSpeed;
+		return this._castSpeed * Math.max(0, this.basePercentStat.castSpeed / 100); 
 	}
 
 	get attackSpeed() {

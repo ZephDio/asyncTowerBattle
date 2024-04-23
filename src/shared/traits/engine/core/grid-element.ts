@@ -36,7 +36,7 @@ export const GridElement = Subtrait([TRenderable], (base) => {
 	abstract class IGridElement extends base {
 		gridShape: GridShape = new GridShape();
 
-		orientation = 0;
+		orientation = 0
 		abstract cell: Cell;
 
 		setOrientation(orientation: number) {

@@ -9,6 +9,7 @@ import { TImageDrawable } from "../../../../shared/traits/render/image-drawable"
 import { Resources } from "../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { CropsField } from "../../recruit/implementation/crops-flied-recruit";
+import { TFoodTag } from "../../../../shared/traits/engine/Tfood-tag";
 
 export class CropsFieldBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -19,6 +20,7 @@ export class CropsFieldBlueprint extends Derive(
 	),
 	TDescriptor,
 	TImageDrawable(Resources.totem.cropsfield.resource.image, Resources.totem.cropsfield.size, 3),
+	TFoodTag
 ) {
 	description = new Description("Crops Field", ["A field to grow crops"]);
 

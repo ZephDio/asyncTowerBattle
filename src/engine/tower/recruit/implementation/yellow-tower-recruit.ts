@@ -12,20 +12,19 @@ import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { GridShape } from "../../../../shared/traits/engine/core/grid-element";
 export class YellowTower extends Derive(HTDamageDealer, Tower, HTSynergy) {
 	attackSpeed = 0.8;
-	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 1, y: 0 })]);
-
+	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: -1, y: 0 })]);
 	constructor(
 		public cell: Cell,
 		public tower: YellowTowerBlueprint = new YellowTowerBlueprint({}),
-	) {
-		super({
-			synergy: tower,
-			damageDealer: tower,
-			imageDrawable: tower,
-			hitboxHolder: tower,
-			descriptor: tower,
-			foodConsumer: tower,
-		});
+		) {
+			super({
+				synergy: tower,
+				damageDealer: tower,
+				imageDrawable: tower,
+				hitboxHolder: tower,
+				descriptor: tower,
+				foodConsumer: tower,
+			});
 	}
 
 	getAreaEffect(hooks: BattleArmyHooks, position: GridPosition, damage: number) {
