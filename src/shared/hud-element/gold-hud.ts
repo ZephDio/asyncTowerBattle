@@ -28,7 +28,7 @@ export class GoldHud extends Derive(
 		const canvasPosition = this.getCanvasPosition(context, position);
 		const size = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		const text = this.gold.toString();
-		context.font = `${size.height}px Arial`;
+		context.font = `${size.height}px text`;
 		const textWidth = context.measureText(text).width;
 		context.fillText(text, unitPosition.x + size.width - textWidth, unitPosition.y);
 		this.drawImage(context, size, canvasPosition, image);

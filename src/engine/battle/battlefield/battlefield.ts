@@ -8,6 +8,7 @@ import { GridPosition } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
 import { BattlePath } from "../../path/battle/battle-path";
+import { ArmyBuff } from "../../army/battle/army-buff";
 
 export type SearchTarget = Battlefield["searchAlliedUnitTarget"] | Battlefield["searchEnemyUnitTarget"];
 export type SearchAreaForUnit = Battlefield["searchAlliesInArea"] | Battlefield["searchEnemiesInArea"];
@@ -33,6 +34,10 @@ export class Battlefield {
 		enemyArmy: Army,
 	): { alliedBattleArmy: BattleArmy; enemyBattleArmy: BattleArmy; battleGrid: BattleGrid } {
 		const grid = BattleGrid.fuse(alliedArmy.grid, enemyArmy.grid);
+		const alliedArmyBuff = new ArmyBuff();
+		const alliedArmyBuffHooks = alliedArmyBuff.getHooks();
+		const enemyArmyBuff = new ArmyBuff();
+		const enemyArmyBuffHooks = enemyArmyBuff.getHooks();
 
 		const alliedFoodEconomy = alliedArmy.foodEconomy.toBattle();
 		const enemyFoodEconomy = enemyArmy.foodEconomy.toBattle();
@@ -59,6 +64,8 @@ export class Battlefield {
 			() => enemyBattleCastle,
 			enemyFoodEconomy.getHooks(),
 			grid.getAlliedHooks(),
+			alliedArmyBuffHooks,
+			enemyArmyBuffHooks,
 		);
 		const enemyBattleArmy = new BattleArmy(
 			enemyFoodEconomy,
@@ -69,6 +76,8 @@ export class Battlefield {
 			() => alliedBattleCastle,
 			alliedFoodEconomy.getHooks(),
 			grid.getEnemyHooks(),
+			enemyArmyBuffHooks,
+			alliedArmyBuffHooks,
 		);
 		const alliedBattleTiles = alliedArmy.pathTiles.map((pathTile) =>
 			pathTile.toAllied(grid, alliedBattleArmy.getHooks()),
@@ -93,6 +102,7 @@ export class Battlefield {
 			alliedBattleBarrack,
 			alliedBattleTiles,
 			alliedBattleTotem,
+			alliedArmyBuff,
 		);
 		enemyBattleArmy.init(
 			enemyBattleCastle,
@@ -101,6 +111,7 @@ export class Battlefield {
 			enemyBattleBarracks,
 			enemyBattleTiles,
 			enemyBattleTotem,
+			enemyArmyBuff,
 		);
 		grid.initElements(alliedBattleArmy, enemyBattleArmy, [...alliedArmy.environment, ...enemyArmy.environment]);
 		return {

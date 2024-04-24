@@ -1,11 +1,20 @@
 import { ImplementsTrait, Trait } from "@ddd-ts/traits";
 import { Status } from "../../shared/traits/engine/status";
+import { Buff } from "../army/battle/army-buff";
 
 export const HaveStats = Trait((base) => {
 	abstract class HaveStats extends base {
 		stats: Stats;
 		addStatus(status: ImplementsTrait<typeof Status>) {
 			this.stats.addStatus(status);
+		}
+
+		initArmyBuffs(buffs: [Buff, number][]) {
+			this.stats.applyArmyBuffs(buffs);
+		}
+
+		applyBuff(buff: Buff, amount: number) {
+			this.stats.applyArmyBuffs([[buff, amount]]);
 		}
 
 		removeStatus(status: ImplementsTrait<typeof Status>) {
@@ -85,6 +94,24 @@ export class Stats {
 		this._foodCost = foodCost;
 	}
 
+	applyArmyBuffs(buffs: [Buff, number][]) {
+		buffs.forEach(([buff, amount]) => {
+			switch (buff) {
+				case "movement-speed":
+					this.basePercentStat.movementSpeed += amount * 2;
+					break;
+				case "cast-speed":
+					this.basePercentStat.castSpeed += amount * 2;
+					break;
+				case "vitality":
+					this.addMaxHealth(3 * amount, true);
+					break;
+				case "attack":
+					this.basePercentStat.attack += amount * 4;
+					break;
+			}
+		});
+	}
 	get health() {
 		return this._health;
 	}
@@ -102,7 +129,7 @@ export class Stats {
 	}
 
 	get castSpeed() {
-		return this._castSpeed * Math.max(0, this.basePercentStat.castSpeed / 100); 
+		return this._castSpeed * Math.max(0, this.basePercentStat.castSpeed / 100);
 	}
 
 	get attackSpeed() {

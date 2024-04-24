@@ -15,7 +15,7 @@ export const TBattleUnit = Subtrait(
 	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, HaveStats],
 	(base) => {
 		abstract class IBattleUnit extends base {
-			hunger = 0
+			hunger = 0;
 			clock: number = 0;
 			abstract override position: GridPosition;
 			abstract enemyPath: BattlePath;
@@ -72,7 +72,7 @@ export const TBattleUnit = Subtrait(
 					this.stats.heal(1);
 					return;
 				}
-				this.hunger++
+				this.hunger++;
 				this.stats.takeDamage(this.hunger);
 			}
 		}

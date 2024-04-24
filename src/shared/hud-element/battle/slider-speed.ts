@@ -46,7 +46,7 @@ export class SliderBattleSpeed extends Derive(
 
 	timesOnePos: number;
 	cursor: Cursor;
-	speedIndicator : SpeedIndicator
+	speedIndicator: SpeedIndicator;
 	constructor(
 		public position: ScreenPosition,
 		public changeSpeed: (speed: number) => void,
@@ -57,9 +57,10 @@ export class SliderBattleSpeed extends Derive(
 		this.timesOnePos = this.position.x - 3;
 		this.cursor = new Cursor(new ScreenPosition({ x: this.timesOnePos, y: this.position.y }));
 		this.speedIndicator = new SpeedIndicator(
-			this.position.add(new GridPosition({ x : 0, y : -2.8})),
-			{ width : this.size.width , height : this.size.height *0.8}, 
-			this.getSpeed.bind(this))
+			this.position.add(new GridPosition({ x: 0, y: -2.8 })),
+			{ width: this.size.width, height: this.size.height * 0.8 },
+			this.getSpeed.bind(this),
+		);
 	}
 
 	moveCursor(screenPosition: ScreenPosition) {
@@ -87,7 +88,7 @@ export class SliderBattleSpeed extends Derive(
 		context.globalAlpha = 1;
 		super.render(context, grid);
 		this.cursor.render(context, grid);
-		this.speedIndicator.render(context,grid)
+		this.speedIndicator.render(context, grid);
 	}
 }
 
@@ -106,24 +107,23 @@ class Cursor extends Derive(
 	}
 }
 
-class SpeedIndicator extends Derive(TRenderable){
-
+class SpeedIndicator extends Derive(TRenderable) {
 	drawPriority = DrawPriority.HUD;
-	constructor(public position : ScreenPosition, public size :Size,public getSpeed : () => number){
-		super({})
+	constructor(
+		public position: ScreenPosition,
+		public size: Size,
+		public getSpeed: () => number,
+	) {
+		super({});
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		context.fillStyle = "black";
-		const size = this.getCanvasSize(context,this.size.width, this.size.height, scale)
-		context.font = `${size.height}px Arial`;
+		const size = this.getCanvasSize(context, this.size.width, this.size.height, scale);
+		context.font = `${size.height}px text`;
 		const canvasPosition = this.getCanvasPosition(context, position);
-		const speed = this.getSpeed()
+		const speed = this.getSpeed();
 		context.textAlign = "center";
-		context.fillText(
-			`X ${speed}`,
-			canvasPosition.x,
-			canvasPosition.y,
-		);
+		context.fillText(`X ${speed}`, canvasPosition.x, canvasPosition.y);
 	}
 }

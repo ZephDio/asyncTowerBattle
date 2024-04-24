@@ -1,5 +1,6 @@
 import { Game } from "../../engine/game";
 import { ScreenPosition } from "../../shared/position";
+import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 
 export const proportion = 16 / 9.8;
@@ -17,6 +18,14 @@ export const PercentToReal = (position: { x: number; y: number }) => {
 		y: position.y / proportion,
 	});
 };
+
+export function getRelativePositionPercent(position: ScreenPosition, size: Size, percent: { x: number; y: number }) {
+	return new ScreenPosition({
+		x: position.x + (size.width / 100) * (percent.x - 50),
+		y: position.y + (size.height / 100) * (percent.y - 50),
+	});
+}
+
 export class CanvasRenderer implements Renderer {
 	public container: HTMLElement;
 	public canvas: HTMLCanvasElement;
@@ -58,12 +67,12 @@ export class CanvasRenderer implements Renderer {
 
 	init() {
 		const render = async () => {
-			const before = new Date()
+			const before = new Date();
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			this.sizeGame();
 			await this.draw();
-			const after = new Date()
-			const diff = after.getTime() - before.getTime()
+			const after = new Date();
+			const diff = after.getTime() - before.getTime();
 			await new Promise((res: any) => setTimeout(() => res(), 15 - diff));
 			window.requestAnimationFrame(render);
 		};

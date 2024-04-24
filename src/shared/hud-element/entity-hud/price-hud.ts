@@ -17,7 +17,7 @@ export class PriceHud extends Derive(TDrawable) {
 		const size = this.getCanvasSize(context, 1.9, 1.9, scale);
 		const text = this.buyable.price.toString();
 		const textPosition = this.getCanvasPosition(context, new ScreenPosition({ x: position.x, y: position.y - 0.6 }));
-		context.font = `${size.height}px Arial`;
+		context.font = `${size.height}px text`;
 		const textWidth = context.measureText(text).width;
 		const offSet = (textWidth + 31) / 2;
 		context.fillText(text, textPosition.x - offSet, textPosition.y);
