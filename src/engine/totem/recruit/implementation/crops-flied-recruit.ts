@@ -8,8 +8,8 @@ import { Cell } from "../../../../shared/position";
 import { BattleCropsField } from "../../battle/implementation/battle-crops-field";
 import { FoodTag } from "../../../../shared/traits/engine/tags";
 
-export class CropsField extends Derive(Totem, RecruitCaster,FoodTag) {
-	castSpeed = 3;
+export class CropsField extends Derive(Totem, RecruitCaster, FoodTag) {
+	castSpeed = 1;
 	constructor(
 		public cell: Cell,
 		public blueprint: CropsFieldBlueprint = new CropsFieldBlueprint({}),

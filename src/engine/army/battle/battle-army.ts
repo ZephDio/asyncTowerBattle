@@ -12,6 +12,7 @@ import { GridPosition } from "../../../shared/position";
 import { AnyBattleTile } from "../../tile/battle/battle-tile";
 import { AnyBattleTotem } from "../../totem/battle/battle-totem";
 import { BattleFoodEconomy, FoodHooks } from "../../food/battle-food-economy";
+import { ArmyBuff, ArmyBuffHooks, Buff } from "./army-buff";
 
 export type BattleArmyHooks = {
 	random: () => number;
@@ -27,6 +28,8 @@ export type BattleArmyHooks = {
 	getEnemyPath: BattleArmy["getEnemyPath"];
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
 	getAlliedCastle: () => BattleCastle;
+	alliedArmyBuffHooks: ArmyBuffHooks;
+	enemyArmyBuffHooks: ArmyBuffHooks;
 	alliedFoodHooks: FoodHooks;
 	enemyFoodHooks: FoodHooks;
 	gridHooks: GridHooks;
@@ -42,6 +45,7 @@ export class BattleArmy {
 	towers: AnyBattleTower[];
 	tiles: AnyBattleTile[];
 
+	armyBuff: ArmyBuff;
 	totems: AnyBattleTotem[];
 
 	constructor(
@@ -53,7 +57,25 @@ export class BattleArmy {
 		public getEnemyCastle: () => BattleCastle,
 		public enemyFoodHooks: FoodHooks,
 		public gridHooks: GridHooks,
-	) {}
+		public alliedArmyBuffHooks: ArmyBuffHooks,
+		public enemyArmyBuffHooks: ArmyBuffHooks,
+	) {
+		this.surchargeBuffHooks();
+	}
+
+	surchargeBuffHooks() {
+		const defaultUnitHook = this.alliedArmyBuffHooks.addUnitBuff;
+		this.alliedArmyBuffHooks.addUnitBuff = (buff, amount) => {
+			this.addUnitBuffs(buff, amount);
+			defaultUnitHook(buff, amount);
+		};
+
+		const defaultTowerHook = this.alliedArmyBuffHooks.addTowerBuff;
+		this.alliedArmyBuffHooks.addTowerBuff = (buff, amount) => {
+			this.addTowerBuffs(buff, amount);
+			defaultTowerHook(buff, amount);
+		};
+	}
 
 	init(
 		castle: BattleCastle,
@@ -62,6 +84,7 @@ export class BattleArmy {
 		barracks: AnyBattleBarrack[],
 		tiles: AnyBattleTile[],
 		totems: AnyBattleTotem[],
+		armyBuff: ArmyBuff,
 	) {
 		this.castle = castle;
 		this.path = path;
@@ -69,9 +92,23 @@ export class BattleArmy {
 		this.barracks = barracks;
 		this.tiles = tiles;
 		this.totems = totems;
+		this.armyBuff = armyBuff;
+	}
+
+	addUnitBuffs(buffs: Buff, amount: number = 1) {
+		[...this.units.keys()].forEach((unit: AnyBattleUnit) => {
+			unit.applyBuff(buffs, amount);
+		});
+	}
+
+	addTowerBuffs(buffs: Buff, amount: number = 1) {
+		this.towers.forEach((tower) => {
+			tower.applyBuff(buffs, amount);
+		});
 	}
 
 	addUnit(entityRecruit: AnyBattleUnit, source: any) {
+		entityRecruit.initArmyBuffs(this.armyBuff.getUnitArmyBuffs());
 		this.units.set(entityRecruit, source);
 	}
 
@@ -120,6 +157,8 @@ export class BattleArmy {
 			getEnemyPath: this.getEnemyPath.bind(this),
 			getEnemyCastle: this.getEnemyCastle.bind(this),
 			getAlliedCastle: () => this.castle,
+			alliedArmyBuffHooks: this.alliedArmyBuffHooks,
+			enemyArmyBuffHooks: this.enemyArmyBuffHooks,
 			alliedFoodHooks: this.foodEconomy.getHooks(),
 			enemyFoodHooks: this.enemyFoodHooks,
 			gridHooks: this.gridHooks,

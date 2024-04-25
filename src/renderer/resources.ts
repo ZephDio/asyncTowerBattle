@@ -46,10 +46,10 @@ export const Resources = {
 			},
 			resource: {
 				image: {
-					frontView : createImage("/resources/towers/poison-tower/front-view.png"),
-					backView : createImage("/resources/towers/poison-tower/back-view.png"),
-					leftView : createImage("/resources/towers/poison-tower/left-view.png"),
-					rightView : createImage("/resources/towers/poison-tower/right-view.png"),
+					frontView: createImage("/resources/towers/poison-tower/front-view.png"),
+					backView: createImage("/resources/towers/poison-tower/back-view.png"),
+					leftView: createImage("/resources/towers/poison-tower/left-view.png"),
+					rightView: createImage("/resources/towers/poison-tower/right-view.png"),
 				},
 				shape: "rectangle",
 				color: "green",
@@ -96,10 +96,10 @@ export const Resources = {
 			},
 			resource: {
 				image: {
-						frontView : createImage("/resources/totem/windmill/front-view.png"),
-						backView : createImage("/resources/totem/windmill/back-view.png"),
-						leftView : createImage("/resources/totem/windmill/left-view.png"),
-						rightView : createImage("/resources/totem/windmill/right-view.png"),
+					frontView: createImage("/resources/totem/windmill/front-view.png"),
+					backView: createImage("/resources/totem/windmill/back-view.png"),
+					leftView: createImage("/resources/totem/windmill/left-view.png"),
+					rightView: createImage("/resources/totem/windmill/right-view.png"),
 				},
 				shape: "ellipse",
 			},
@@ -385,16 +385,34 @@ export const Resources = {
 		},
 		banner: {
 			resource: {
-				image : createImage("/resources/hud/banner.png"),
-			}
+				image: createImage("/resources/hud/banner.png"),
+			},
 		},
 		icons: {
-			food : {
-				image : createImage("/resources/economy/food.png"),
+			food: {
+				image: createImage("/resources/economy/food.png"),
 			},
-			health : {
-				image : createImage("/resources/hud/health.png"),
-			}
-		}
+			health: {
+				image: createImage("/resources/hud/health.png"),
+			},
+			movespeed: {
+				image: createImage("/resources/hud/speed.svg"),
+			},
+			vitality: {
+				image: createImage("/resources/hud/vitality.svg"),
+			},
+			castSpeed: {
+				image: createImage("/resources/hud/cast-speed.svg"),
+			},
+			attack: {
+				image: createImage("/resources/hud/attack.svg"),
+			},
+			tower: {
+				image: createImage("/resources/hud/tower.svg"),
+			},
+			unit: {
+				image: createImage("/resources/hud/unit.svg"),
+			},
+		},
 	},
 } as const;
