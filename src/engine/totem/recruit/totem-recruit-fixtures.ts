@@ -4,7 +4,7 @@ import { GobelinPortalBlueprint } from "../blueprint/implementation/gobelin-port
 import { OrangeTotemBlueprint } from "../blueprint/implementation/orange-totem";
 import { CropsField } from "./implementation/crops-flied-recruit";
 import { GobelinPortal } from "./implementation/gobelin-totem-recruit";
-import { OrangeTotem } from "./implementation/orange-tower-recruit";
+import { OrangeTotem } from "./implementation/orange-totem-recruit";
 
 export class TotemBuilder {
 	cell: Cell;

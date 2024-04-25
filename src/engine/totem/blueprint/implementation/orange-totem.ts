@@ -5,7 +5,7 @@ import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
-import { OrangeTotem } from "../../recruit/implementation/orange-tower-recruit";
+import { OrangeTotem } from "../../recruit/implementation/orange-totem-recruit";
 import { TSynergy } from "../../../../shared/traits/engine/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
