@@ -16,7 +16,7 @@ import { Barrack } from "../../../barrack/recruit/barrack-recruit";
 import { BattleBarrack } from "../../../barrack/battle/battle-barrack";
 
 export class BreweryBlueprint extends Derive(
-	TShopBlueprint(15, 10),
+	TShopBlueprint(15, 5),
 	THitbox(new HitBox([[new Rectangle({ width: STANDARD_CELL_SIZE, height: 10 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	TImageDrawable(Resources.totem.brewery.resource.image, Resources.totem.brewery.size, DrawPriority.NormalGridElement),

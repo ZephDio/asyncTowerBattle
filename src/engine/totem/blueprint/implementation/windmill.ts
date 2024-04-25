@@ -22,31 +22,40 @@ export class WindmillBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(Resources.totem.windmill.resource.image, Resources.totem.windmill.size, DrawPriority.NormalGridElement),
-    TSynergy,
-    FoodTag
+	TImageDrawable(
+		Resources.totem.windmill.resource.image,
+		Resources.totem.windmill.size,
+		DrawPriority.NormalGridElement,
+	),
+	TSynergy,
+	FoodTag,
 ) {
-	description = new Description("Windmill", ["▣ Food monuments", "gain 25% cast speed", "", "Gains 5 max foods" , "for each ▣ food monuments"]);
-    
-    patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
-        if(!gridElement) return false;
-        if(implementsTrait(gridElement, FoodTag)) return true;
-         return false
-     }
-    override patternEffect: PatternEffect = new PatternEffect(
-        [
-            new Cell({ x : 1, y : 0 }), 
-            new Cell({ x : 2, y : 0 }), 
-            new Cell({ x : 0, y : 1 }), 
-            new Cell({ x : 0, y : 2}),
-            new Cell({ x : 0, y : -1}),
-            new Cell({ x : 0, y : -2}),
-            new Cell({ x : -1, y : 0}),
-            new Cell({ x : -2, y : 0}),
-        ],
-        this.patternCondition.bind(this)
-    )
+	description = new Description("Windmill", [
+		"▣ Food monuments",
+		"gain 25% cast speed",
+		"",
+		"Gains 5max 🌽",
+		"for each ▣ food monuments",
+	]);
 
+	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
+		if (!gridElement) return false;
+		if (implementsTrait(gridElement, FoodTag)) return true;
+		return false;
+	};
+	override patternEffect: PatternEffect = new PatternEffect(
+		[
+			new Cell({ x: 1, y: 0 }),
+			new Cell({ x: 2, y: 0 }),
+			new Cell({ x: 0, y: 1 }),
+			new Cell({ x: 0, y: 2 }),
+			new Cell({ x: 0, y: -1 }),
+			new Cell({ x: 0, y: -2 }),
+			new Cell({ x: -1, y: 0 }),
+			new Cell({ x: -2, y: 0 }),
+		],
+		this.patternCondition.bind(this),
+	);
 
 	toRecruit(cell: Cell) {
 		return new Windmill(cell, this);

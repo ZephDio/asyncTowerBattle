@@ -9,15 +9,13 @@ import { BasicBattlePathTile } from "../../../tile/battle/implementation/basic-b
 import { TrapBattlePathTile } from "../../../tile/battle/implementation/trap-battle-tle";
 import { BattleTower } from "../battle-tower";
 
-export class YellowBattleTower extends Derive(
-	BattleTower
-) {
+export class YellowBattleTower extends Derive(BattleTower) {
 	constructor(
 		private readonly recruit: YellowTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation : number
+		orientation: number,
 	) {
 		super({
 			orientation,
@@ -73,7 +71,6 @@ export class YellowBattleTower extends Derive(
 		this.attack();
 		this.finishCast();
 	}
-
 }
 
 export class Poisoned extends Derive(Status) {

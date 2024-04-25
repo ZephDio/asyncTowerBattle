@@ -23,6 +23,7 @@ export class Game {
 	constructor() {
 		const envGenerator = new EnvironmentGeneration();
 		envGenerator.generateEnvironment(this.army.grid, 0);
+		this.startShop();
 	}
 
 	async getState(): Promise<GameState> {

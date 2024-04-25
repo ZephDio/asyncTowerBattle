@@ -24,9 +24,9 @@ export class BakeryBlueprint extends Derive(
 ) {
 	description = new Description("Bakery Wryy", [
 		"Every 4 seconds :",
-		"consume 5 foods and gain",
-		"2♥ for units, otherwise",
-		"produce 3 foods.",
+		"consume 5🌽 and gain",
+		"2💚 for units, otherwise",
+		"produce 3🌽",
 	]);
 
 	toRecruit(cell: Cell) {
