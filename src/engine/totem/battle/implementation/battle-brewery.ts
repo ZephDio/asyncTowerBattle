@@ -34,10 +34,6 @@ export class BattleBrewery extends Derive(BattleTotem, FoodTag, HTSynergy, Caste
 		this.gridShape = bakery.gridShape;
 	}
 
-	get realPosition(): GridPosition {
-		return this.position;
-	}
-
 	gainSpeedForEachBarracks() {
 		this.hasTriggered = true;
 		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(

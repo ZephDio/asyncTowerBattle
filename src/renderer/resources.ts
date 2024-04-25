@@ -101,7 +101,7 @@ export const Resources = {
 		},
 		brewery: {
 			size: {
-				width: 5,
+				width: 10,
 				height: 5,
 			},
 			resource: {

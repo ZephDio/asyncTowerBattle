@@ -8,9 +8,11 @@ import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { BreweryBlueprint } from "../../blueprint/implementation/brewery-blueprint";
 import { BattleBrewery } from "../../battle/implementation/battle-brewery";
+import { GridShape } from "../../../../shared/traits/engine/core/grid-element";
 
 export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag) {
 	castSpeed = 1;
+	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: -1, y: 0 })]);
 	constructor(
 		public cell: Cell,
 		public blueprint: BreweryBlueprint = new BreweryBlueprint({}),
@@ -31,6 +33,6 @@ export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag) {
 	}
 
 	get position() {
-		return this.cell;
+		return this.gridShape.getCenterPosition(this.cell, this.orientation);
 	}
 }

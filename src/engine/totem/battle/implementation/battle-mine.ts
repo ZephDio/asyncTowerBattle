@@ -19,9 +19,5 @@ export class BattleMine extends Derive(BattleTotem) {
 		this.gridShape = bakery.gridShape;
 	}
 
-	get realPosition(): GridPosition {
-		return this.position;
-	}
-
 	tick() {}
 }

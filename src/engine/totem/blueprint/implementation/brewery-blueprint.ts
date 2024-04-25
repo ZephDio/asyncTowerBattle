@@ -17,11 +17,7 @@ import { BattleBarrack } from "../../../barrack/battle/battle-barrack";
 
 export class BreweryBlueprint extends Derive(
 	TShopBlueprint(15, 10),
-	THitbox(
-		new HitBox([
-			[new Rectangle({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE }), new GridPosition({ x: 0, y: 0 })],
-		]),
-	),
+	THitbox(new HitBox([[new Rectangle({ width: STANDARD_CELL_SIZE, height: 10 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	TImageDrawable(Resources.totem.brewery.resource.image, Resources.totem.brewery.size, DrawPriority.NormalGridElement),
 	TSynergy,
@@ -41,7 +37,7 @@ export class BreweryBlueprint extends Derive(
 		return implementsTrait(gridElement, Barrack) || implementsTrait(gridElement, BattleBarrack);
 	};
 	patternEffect = new PatternEffect(
-		[new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 })],
+		[new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 }), new Cell({ x: -2, y: 0 }), new Cell({ x: -1, y: -1 })],
 		this.patternCondition.bind(this),
 	);
 

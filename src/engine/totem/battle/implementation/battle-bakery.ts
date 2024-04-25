@@ -31,10 +31,6 @@ export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster) {
 		this.gridShape = bakery.gridShape;
 	}
 
-	get realPosition(): GridPosition {
-		return this.position;
-	}
-
 	feedTheArmy() {
 		const success = this.hooks.alliedFoodHooks.consumeFood(5);
 		if (!success) {
