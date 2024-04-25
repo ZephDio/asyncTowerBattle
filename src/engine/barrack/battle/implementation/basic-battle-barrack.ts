@@ -5,9 +5,7 @@ import { Derive } from "@ddd-ts/traits";
 import { BasicBarrack } from "../../recruit/implementation/basic-barrack-recruit";
 import { BattleBarrack } from "../battle-barrack";
 
-export class BasicBattleBarrack extends Derive(
-	BattleBarrack
-) {
+export class BasicBattleBarrack extends Derive(BattleBarrack) {
 	castCost: number;
 
 	constructor(
@@ -15,8 +13,8 @@ export class BasicBattleBarrack extends Derive(
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
 		public readonly hooks: BattleArmyHooks,
-		public readonly unitRecruit: AnyUnit,
-		override _orientation: number
+		public readonly unitRecruit: AnyUnit | null,
+		override _orientation: number,
 	) {
 		super({
 			casterRecruit: barrackRecruit,
@@ -31,7 +29,7 @@ export class BasicBattleBarrack extends Derive(
 			hitboxHolder: barrackRecruit,
 			descriptor: barrackRecruit,
 		});
-		this.castCost = unitRecruit.cost;
+		this.castCost = unitRecruit ? unitRecruit.cost : NaN;
 		this.gridShape = barrackRecruit.gridShape;
 	}
 
@@ -40,6 +38,7 @@ export class BasicBattleBarrack extends Derive(
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
 		const succes = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 		if (succes) {
+			if (!this.unitRecruit) throw new Error("Unit recruit is undefined in a Barrack Attempting to cast");
 			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
 		}
 		this.finishCast(succes);

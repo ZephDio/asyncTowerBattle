@@ -84,6 +84,21 @@ export const TGrid = Trait((base) => {
 			}
 		}
 
+		getRelativeNeighborsInGrid(gridPosition: Cell, relativePositions: Cell[]) {
+			const founds: ImplementsTrait<typeof GridElement>[] = [];
+			for (const relativePosition of relativePositions) {
+				const targetPosition = new Cell({
+					x: gridPosition.x + relativePosition.x,
+					y: gridPosition.y + relativePosition.y,
+				});
+				const elementFound = this.tiles.get(ArmyGrid.posToString(targetPosition));
+				if (elementFound) {
+					founds.push(elementFound);
+				}
+			}
+			return founds;
+		}
+
 		getElement(cell: Cell) {
 			return this.tiles.get(ArmyGrid.posToString(cell));
 		}

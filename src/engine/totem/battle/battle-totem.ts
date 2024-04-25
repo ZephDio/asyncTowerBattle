@@ -12,6 +12,10 @@ export const BattleTotem = Subtrait(
 	[HTHitbox, TPhysics, HTImageDrawable, TRenderable, GridElement, Orientable],
 	(base) => {
 		abstract class TBattleTotem extends base {
+			get realPosition() {
+				return this.gridShape.getCenterPosition(this.cell, this.orientation);
+			}
+
 			isAlive(): boolean {
 				return true;
 			}

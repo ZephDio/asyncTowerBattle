@@ -1,0 +1,55 @@
+import { Derive } from "@ddd-ts/traits";
+import { Totem } from "../totem-recruit";
+import { RecruitCaster } from "../../../../shared/traits/engine/cast";
+import { BattleGrid } from "../../../grid/battle-grid";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { Cell } from "../../../../shared/position";
+import { MineBlueprint } from "../../blueprint/implementation/mine-blueprint";
+import { BattleMine } from "../../battle/implementation/battle-mine";
+import { ShopEnterTrigger } from "../../../../shared/traits/engine/shop-enter";
+import { ArmyHooks } from "../../../army/army";
+import { HTSynergy } from "../../../../shared/traits/engine/synergy";
+
+export class Mine extends Derive(Totem, RecruitCaster, ShopEnterTrigger, HTSynergy) {
+	castSpeed = 1;
+	constructor(
+		public cell: Cell,
+		public blueprint: MineBlueprint = new MineBlueprint({}),
+	) {
+		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint, synergy: blueprint });
+	}
+
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
+		const position = grid.cellToGrid(this.cell);
+		return new BattleMine(this, hooks, position, this.cell, this.orientation);
+	}
+
+	onShopEnter(hooks: ArmyHooks): void {
+		this.produceOnRock(hooks);
+		this.mineProfit(hooks);
+	}
+
+	produceOnRock(hooks: ArmyHooks): void {
+		const relativeCells = this.getRelativeSynergyCell(this.orientation);
+		const neighbors = hooks.getRelativeNeighborsInGrid(this.cell, relativeCells);
+		const neighbor = neighbors[0];
+		if (!this.patternEffect.patternCondition(neighbor)) return;
+		hooks.economyHooks.addGold(5);
+	}
+
+	mineProfit(hooks: ArmyHooks) {
+		const golds = hooks.economyHooks.getEconomy().amount;
+		hooks.economyHooks.addGold(Math.floor(golds / 10));
+	}
+
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
+		const cell = BattleGrid.flip(grid, this.cell);
+		const position = grid.cellToGrid(cell);
+		const orientation = this.orientation + Math.PI;
+		return new BattleMine(this, hooks, position, cell, orientation);
+	}
+
+	get position() {
+		return this.cell;
+	}
+}

@@ -5,6 +5,7 @@ import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
 import { Bakery } from "../../recruit/implementation/backery";
+import { seconds } from "../../../../shared/seconds";
 
 export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster) {
 	vitalityBuffAmount: number = 2;
@@ -30,14 +31,10 @@ export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster) {
 		this.gridShape = bakery.gridShape;
 	}
 
-	get realPosition(): GridPosition {
-		return this.position;
-	}
-
 	feedTheArmy() {
 		const success = this.hooks.alliedFoodHooks.consumeFood(5);
 		if (!success) {
-			this.produceBrew();
+			this.produceBreads();
 			this.finishCast();
 			return;
 		}
@@ -45,7 +42,7 @@ export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster) {
 		this.finishCast();
 	}
 
-	produceBrew() {
+	produceBreads() {
 		this.hooks.alliedFoodHooks.addFood(3);
 	}
 
@@ -58,5 +55,3 @@ export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster) {
 		this.tickCast();
 	}
 }
-
-export const seconds = (seconds: number) => 32 * seconds;

@@ -9,8 +9,8 @@ import { Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 
-export class BattleWindmill extends Derive(BattleTotem, HTSynergy,FoodTag) {
-    hasTriggered = false;
+export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag) {
+	hasTriggered = false;
 	foodProduction: number = 5;
 	constructor(
 		public windmill: Windmill,
@@ -22,46 +22,43 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy,FoodTag) {
 		super({
 			imageDrawable: windmill,
 			hitboxHolder: windmill,
-            synergy: windmill,
+			synergy: windmill,
 		});
 		this.gridShape = windmill.gridShape;
 	}
 
-	get realPosition(): GridPosition {
-		return this.position;
-	}
-
 	tick() {
-		if(this.hasTriggered) return
-        this.hasTriggered = true;
-        const elements = this.hooks.gridHooks.getRelativeNeighborsInArmy(this.cell,this.patternEffect.getRelativeCells(this.orientation));
-        for(const element of elements){
-            if(implementsTrait(element, FoodTag)){
-                this.hooks.alliedFoodHooks.addMaxFood(5);
-                if(implementsTrait(element, Caster)){
-                    const windmillBuff = new WindmillBuff({})
-                    element.addStatus(windmillBuff)
-                }
-            }
-        }
+		if (this.hasTriggered) return;
+		this.hasTriggered = true;
+		const elements = this.hooks.gridHooks.getRelativeNeighborsInArmy(
+			this.cell,
+			this.patternEffect.getRelativeCells(this.orientation),
+		);
+		for (const element of elements) {
+			if (implementsTrait(element, FoodTag)) {
+				this.hooks.alliedFoodHooks.addMaxFood(5);
+				if (implementsTrait(element, Caster)) {
+					const windmillBuff = new WindmillBuff({});
+					element.addStatus(windmillBuff);
+				}
+			}
+		}
 	}
 
 	incrementFood() {
 		this.hooks.alliedFoodHooks.addFood(this.foodProduction);
 	}
-
-
 }
 
-export class WindmillBuff extends Derive(Status){
-    clock = 0
-    stats: Stats;
-    override key = 'windmill-buff'
-    override duration = Infinity;
-    hasTriggered = false;
-    override tick(): void {
-        if(this.hasTriggered) return
-        this.hasTriggered = true;
-        this.stats.basePercentStat.castSpeed += 0.25;
-    }
+export class WindmillBuff extends Derive(Status) {
+	clock = 0;
+	stats: Stats;
+	override key = "windmill-buff";
+	override duration = Infinity;
+	hasTriggered = false;
+	override tick(): void {
+		if (this.hasTriggered) return;
+		this.hasTriggered = true;
+		this.stats.basePercentStat.castSpeed += 0.25;
+	}
 }

@@ -11,7 +11,7 @@ export class LifeBar extends Derive(TDrawable) {
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
-		if (this.entity.stats.health === this.entity.stats.maxHealth) return;
+		if (Math.round(this.entity.stats.health) === Math.round(this.entity.stats.maxHealth)) return;
 		context.globalAlpha = 1;
 		context.fillStyle = "red";
 		context.strokeStyle = "cyan";

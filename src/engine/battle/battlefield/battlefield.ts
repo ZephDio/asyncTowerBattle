@@ -66,6 +66,8 @@ export class Battlefield {
 			grid.getAlliedHooks(),
 			alliedArmyBuffHooks,
 			enemyArmyBuffHooks,
+			alliedArmy.getEconomyHooks(),
+			enemyArmy.getEconomyHooks(),
 		);
 		const enemyBattleArmy = new BattleArmy(
 			enemyFoodEconomy,
@@ -78,6 +80,8 @@ export class Battlefield {
 			grid.getEnemyHooks(),
 			enemyArmyBuffHooks,
 			alliedArmyBuffHooks,
+			enemyArmy.getEconomyHooks(),
+			alliedArmy.getEconomyHooks(),
 		);
 		const alliedBattleTiles = alliedArmy.pathTiles.map((pathTile) =>
 			pathTile.toAllied(grid, alliedBattleArmy.getHooks()),

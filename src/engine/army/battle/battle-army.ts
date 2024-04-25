@@ -13,6 +13,7 @@ import { AnyBattleTile } from "../../tile/battle/battle-tile";
 import { AnyBattleTotem } from "../../totem/battle/battle-totem";
 import { BattleFoodEconomy, FoodHooks } from "../../food/battle-food-economy";
 import { ArmyBuff, ArmyBuffHooks, Buff } from "./army-buff";
+import { EconomyHooks } from "../../gold/army-gold-economy";
 
 export type BattleArmyHooks = {
 	random: () => number;
@@ -27,12 +28,15 @@ export type BattleArmyHooks = {
 	searchAlliesInArea: BattleArmy["searchAlliesInArea"];
 	getEnemyPath: BattleArmy["getEnemyPath"];
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
+	getAlliedUnits: () => AnyBattleUnit[];
 	getAlliedCastle: () => BattleCastle;
 	alliedArmyBuffHooks: ArmyBuffHooks;
 	enemyArmyBuffHooks: ArmyBuffHooks;
 	alliedFoodHooks: FoodHooks;
 	enemyFoodHooks: FoodHooks;
 	gridHooks: GridHooks;
+	alliedEconomyHooks: EconomyHooks;
+	enemyEconomyHooks: EconomyHooks;
 };
 
 export class BattleArmy {
@@ -59,6 +63,10 @@ export class BattleArmy {
 		public gridHooks: GridHooks,
 		public alliedArmyBuffHooks: ArmyBuffHooks,
 		public enemyArmyBuffHooks: ArmyBuffHooks,
+
+		public alliedGoldEconomyHooks: EconomyHooks,
+
+		public enemyGoldEconomyHooks: EconomyHooks,
 	) {
 		this.surchargeBuffHooks();
 	}
@@ -157,11 +165,14 @@ export class BattleArmy {
 			getEnemyPath: this.getEnemyPath.bind(this),
 			getEnemyCastle: this.getEnemyCastle.bind(this),
 			getAlliedCastle: () => this.castle,
+			getAlliedUnits: () => [...this.units.keys()],
 			alliedArmyBuffHooks: this.alliedArmyBuffHooks,
 			enemyArmyBuffHooks: this.enemyArmyBuffHooks,
 			alliedFoodHooks: this.foodEconomy.getHooks(),
 			enemyFoodHooks: this.enemyFoodHooks,
 			gridHooks: this.gridHooks,
+			alliedEconomyHooks: this.alliedGoldEconomyHooks,
+			enemyEconomyHooks: this.enemyGoldEconomyHooks,
 		};
 	}
 }

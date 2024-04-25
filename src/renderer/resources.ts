@@ -86,7 +86,7 @@ export const Resources = {
 			},
 			resource: {
 				image: createImage("/resources/totem/crops-field.png"),
-				shape: "ellipse",
+				shape: "rectangle",
 			},
 		},
 		bakery: {
@@ -96,7 +96,17 @@ export const Resources = {
 			},
 			resource: {
 				image: createImage("/resources/totem/bakery.png"),
-				shape: "ellipse",
+				shape: "rectangle",
+			},
+		},
+		brewery: {
+			size: {
+				width: 10,
+				height: 5,
+			},
+			resource: {
+				image: createImage("/resources/totem/brewery.png"),
+				shape: "rectangle",
 			},
 		},
 		windmill: {
@@ -111,6 +121,16 @@ export const Resources = {
 					leftView: createImage("/resources/totem/windmill/left-view.png"),
 					rightView: createImage("/resources/totem/windmill/right-view.png"),
 				},
+				shape: "rectangle",
+			},
+		},
+		mine: {
+			size: {
+				width: 5,
+				height: 5,
+			},
+			resource: {
+				image: createImage("/resources/totem/mine.png"),
 				shape: "ellipse",
 			},
 		},
