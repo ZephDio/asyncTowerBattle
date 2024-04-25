@@ -11,7 +11,6 @@ import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { TSynergy } from "../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { Rock } from "../../../environment/rock";
 import { Mine } from "../../recruit/implementation/mine";
 
@@ -25,7 +24,6 @@ export class MineBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(Resources.totem.mine.resource.image, Resources.totem.mine.size, DrawPriority.NormalGridElement),
 	TSynergy,
-	FoodTag,
 ) {
 	description = new Description("Gold Mine", [
 		"Shop entered : gain 5 🪙",

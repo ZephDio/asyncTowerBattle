@@ -4,14 +4,13 @@ import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell } from "../../../../shared/position";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { MineBlueprint } from "../../blueprint/implementation/mine-blueprint";
 import { BattleMine } from "../../battle/implementation/battle-mine";
 import { ShopEnterTrigger } from "../../../../shared/traits/engine/shop-enter";
 import { ArmyHooks } from "../../../army/army";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 
-export class Mine extends Derive(Totem, RecruitCaster, FoodTag, ShopEnterTrigger, HTSynergy) {
+export class Mine extends Derive(Totem, RecruitCaster, ShopEnterTrigger, HTSynergy) {
 	castSpeed = 1;
 	constructor(
 		public cell: Cell,

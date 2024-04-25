@@ -28,6 +28,7 @@ export type BattleArmyHooks = {
 	searchAlliesInArea: BattleArmy["searchAlliesInArea"];
 	getEnemyPath: BattleArmy["getEnemyPath"];
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
+	getAlliedUnits: () => AnyBattleUnit[];
 	getAlliedCastle: () => BattleCastle;
 	alliedArmyBuffHooks: ArmyBuffHooks;
 	enemyArmyBuffHooks: ArmyBuffHooks;
@@ -164,6 +165,7 @@ export class BattleArmy {
 			getEnemyPath: this.getEnemyPath.bind(this),
 			getEnemyCastle: this.getEnemyCastle.bind(this),
 			getAlliedCastle: () => this.castle,
+			getAlliedUnits: () => [...this.units.keys()],
 			alliedArmyBuffHooks: this.alliedArmyBuffHooks,
 			enemyArmyBuffHooks: this.enemyArmyBuffHooks,
 			alliedFoodHooks: this.foodEconomy.getHooks(),
