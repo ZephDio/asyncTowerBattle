@@ -114,6 +114,16 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		mine: {
+			size: {
+				width: 5,
+				height: 5,
+			},
+			resource: {
+				image: createImage("/resources/totem/mine.png"),
+				shape: "ellipse",
+			},
+		},
 		gobelinportal: {
 			size: {
 				width: 5,

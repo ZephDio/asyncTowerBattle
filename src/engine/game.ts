@@ -2,7 +2,7 @@ import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
 import { ArmyFactory } from "./army/army-fixtures";
-import { EconomyHooks, ShopPhase } from "./shop/shop";
+import { ShopPhase } from "./shop/shop";
 import { LocalMatchMaker } from "./match-maker/local-match-maker";
 import { MatchMaker } from "./match-maker/match-maker";
 import { RoundsTracker } from "./rounds/tracker";
@@ -20,10 +20,6 @@ export class Game {
 
 	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new LocalMatchMaker();
-	economy = {
-		gold: 70,
-	};
-
 	constructor() {
 		const envGenerator = new EnvironmentGeneration();
 		envGenerator.generateEnvironment(this.army.grid, 0);
@@ -85,13 +81,9 @@ export class Game {
 	}
 
 	startShop() {
-		this.shop = new ShopPhase(
-			this.army,
-			this.handleShopQuit.bind(this),
-			this.setDescriptionHud.bind(this),
-			this.getEconomyHooks(),
-		);
-		this.addGold(20 + 5 * this.rounds.round);
+		this.shop = new ShopPhase(this.army, this.handleShopQuit.bind(this), this.setDescriptionHud.bind(this));
+		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
+		this.army.onShopeEnter();
 	}
 
 	startBattleSummary(lastBattleState: BattleState, battleVerdict: "victory" | "defeat") {
@@ -110,28 +102,7 @@ export class Game {
 		this.battle.start();
 	}
 
-	getEconomy() {
-		return this.economy;
-	}
-
-	spendGold(amount: number) {
-		this.economy.gold -= amount;
-	}
-
-	addGold(amount: number) {
-		this.economy.gold += amount;
-	}
-
 	setDescriptionHud(descriptionHud: DescriptionHud | null) {
 		this.descriptionHud = descriptionHud;
-	}
-
-	getEconomyHooks(): EconomyHooks {
-		return {
-			getEconomy: this.getEconomy.bind(this),
-			spendGold: this.spendGold.bind(this),
-			addGold: this.addGold.bind(this),
-			canPurchase: (price: number) => this.economy.gold >= price,
-		};
 	}
 }

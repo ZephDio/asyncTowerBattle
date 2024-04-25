@@ -15,9 +15,10 @@ export class BattleDragon extends Derive(TBattleUnit) {
 		public enemyPath: BattlePath,
 		public hooks: BattleArmyHooks,
 	) {
+		const golds = hooks.alliedEconomyHooks.getEconomy().amount;
 		super({
 			imageDrawable: recruit,
-			maxHealth: recruit.maxLife,
+			maxHealth: recruit.maxLife + Math.floor(golds / 5),
 			attack: recruit.attackDamage,
 			movementSpeed: recruit.speed,
 			attackSpeed: recruit.attackSpeed,

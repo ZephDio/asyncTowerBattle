@@ -13,6 +13,7 @@ import { AnyRecruit } from "../../shared/traits/engine/recruit";
 import { Buyable } from "./retail/buyable";
 import { RefreshBellHud } from "../../shared/hud-element/refresh-bell-hud";
 import { Holder } from "./holder/holder";
+import { EconomyHooks } from "../gold/army-gold-economy";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -34,23 +35,19 @@ export type ShopPhaseHooks = {
 	armyHooks: ArmyHooks;
 	shopHooks: RetailHooks;
 };
-export type EconomyHooks = {
-	getEconomy: () => { gold: number };
-	canPurchase: (price: number) => boolean;
-	addGold: (amount: number) => void;
-	spendGold: (amount: number) => void;
-};
 
 export class ShopPhase {
 	public retail = new Retail();
 	public holderControl = new Holder();
+	economyHooks: EconomyHooks;
 	constructor(
 		public army: Army,
 		public onShopExit: Game["handleShopQuit"],
 
 		public setDescriptionHud: Game["setDescriptionHud"],
-		public economyHooks: EconomyHooks,
-	) {}
+	) {
+		this.economyHooks = army.getEconomyHooks();
+	}
 
 	exitShop() {
 		this.holderControl.exit();
@@ -108,7 +105,7 @@ export class ShopPhase {
 			renderables: [
 				new StartBattleButton({}),
 				new RefreshBellHud({}),
-				new GoldHud(this.economyHooks.getEconomy().gold),
+				new GoldHud(this.army.getEconomyHooks().getEconomy().amount),
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
 		};

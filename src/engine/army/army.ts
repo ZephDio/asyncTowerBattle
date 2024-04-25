@@ -7,13 +7,22 @@ import { AnyRecruit, TRecruit } from "../../shared/traits/engine/recruit";
 import { TGrid } from "../grid/tgrid";
 import { BattlePath } from "../path/battle/battle-path";
 import { ArmyFoodEconomy } from "../food/food-economy";
+import { ArmyGoldEconomy, EconomyHooks } from "../gold/army-gold-economy";
+import { ShopEnterTrigger } from "../../shared/traits/engine/shop-enter";
+import { GridElement } from "../../shared/traits/engine/core/grid-element";
+
+export type ArmyHooks = {
+	economyHooks: EconomyHooks;
+	getRelativeNeighborsInGrid: (gridPosition: Cell, relativePositions: Cell[]) => ImplementsTrait<typeof GridElement>[];
+};
+
 export class Army {
 	constructor(
-		//public path: ArmyPath,
 		public grid: ArmyGrid,
 		public inventory: Inventory,
 
 		public foodEconomy = new ArmyFoodEconomy(),
+		public goldEconomy = new ArmyGoldEconomy(),
 	) {}
 
 	isValidDestinationCell(cell: Cell) {
@@ -83,10 +92,6 @@ export class Army {
 		this.inventory.add(recruit);
 	}
 
-	// addTower(recruit: AnyTower) {
-	// 	this.grid.setElement(recruit);
-	// }
-
 	addToInventory(recruit: AnyRecruit) {
 		this.inventory.setElement(recruit);
 	}
@@ -95,7 +100,23 @@ export class Army {
 		this.grid.setElement(recruit);
 	}
 
-	// addBarrack(barrack: AnyBarrack) {
-	// 	this.grid.setElement(barrack);
-	// }
+	getEconomyHooks() {
+		return this.goldEconomy.getHooks();
+	}
+
+	onShopeEnter() {
+		const hooks = this.getHooks();
+		this.grid.getElements().forEach((element) => {
+			if (implementsTrait(element, ShopEnterTrigger)) {
+				element.onShopEnter(hooks);
+			}
+		});
+	}
+
+	getHooks(): ArmyHooks {
+		return {
+			economyHooks: this.getEconomyHooks(),
+			getRelativeNeighborsInGrid: this.grid.getRelativeNeighborsInGrid.bind(this.grid),
+		};
+	}
 }

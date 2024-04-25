@@ -29,6 +29,7 @@ import { TrapTileBlueprint } from "../../tile/blueprint/implementation/trap-tile
 import { FoxBlueprint } from "../../units/blueprint/implementation/fox";
 import { WindmillBlueprint } from "../../totem/blueprint/implementation/windmill";
 import { BakeryBlueprint } from "../../totem/blueprint/implementation/bakery";
+import { MineBlueprint } from "../../totem/blueprint/implementation/mine-blueprint";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint =
@@ -40,7 +41,14 @@ type AnyBlueprint =
 // TODO trait blueprint
 const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 	{
-		value: [OrangeTotemBlueprint, GobelinPortalBlueprint, CropsFieldBlueprint, WindmillBlueprint, BakeryBlueprint],
+		value: [
+			OrangeTotemBlueprint,
+			GobelinPortalBlueprint,
+			CropsFieldBlueprint,
+			WindmillBlueprint,
+			BakeryBlueprint,
+			MineBlueprint,
+		],
 		share: 100,
 	},
 	{
