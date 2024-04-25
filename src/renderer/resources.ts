@@ -89,6 +89,16 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		bakery: {
+			size: {
+				width: 5,
+				height: 5,
+			},
+			resource: {
+				image: createImage("/resources/totem/bakery.png"),
+				shape: "ellipse",
+			},
+		},
 		windmill: {
 			size: {
 				width: 6.4,
