@@ -1,17 +1,10 @@
-import { Game } from "../../engine/game";
+import { GameWrapper } from "../../engine/wrap";
 import { Cell, ScreenPosition } from "../../shared/position";
 import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 
 export const proportion = 16 / 9.8;
 
-/**
- * Path: the road to castle
- * Tile: a square of the Path
- *
- * Grid: a rectangle of
- *
- */
 export const PercentToReal = (position: { x: number; y: number }) => {
 	return new ScreenPosition({
 		x: position.x,
@@ -30,7 +23,7 @@ export class CanvasRenderer implements Renderer {
 	public container: HTMLElement;
 	public canvas: HTMLCanvasElement;
 	public context: CanvasRenderingContext2D;
-	constructor(public game: Game) {
+	constructor(public gameWrap: GameWrapper) {
 		this.container = document.getElementById("container") as HTMLElement;
 		this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
 		const context = this.canvas.getContext("2d");
@@ -39,7 +32,7 @@ export class CanvasRenderer implements Renderer {
 	}
 
 	async draw() {
-		const { grids, renderables } = this.game.getRenderState();
+		const { grids, renderables } = this.gameWrap.getRenderState();
 		this.drawBackGround();
 		for (const { grid, drawables } of grids) {
 			grid.render(this.context);
@@ -63,12 +56,6 @@ export class CanvasRenderer implements Renderer {
 			.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
 			.map((drawable) => drawable.render(this.context));
 	}
-
-	// getCanvasPosition(position: ScreenPosition) {
-	// 	const x = (this.canvas.width / 100) * position.x;
-	// 	const y = this.canvas.height - (this.canvas.width / 100) * position.y; // !
-	// 	return { x, y };
-	// }
 
 	drawBackGround() {
 		this.context.fillStyle = "#A65";
@@ -99,10 +86,4 @@ export class CanvasRenderer implements Renderer {
 		this.canvas.width = width;
 		this.canvas.height = width / proportion;
 	}
-
-	// getCanvasSize(width: number, height: number) {
-	// 	const cWidth = (this.canvas.width / 100) * width;
-	// 	const cHeight = (this.canvas.width / 100) * height;
-	// 	return { width: cWidth, height: cHeight };
-	// }
 }

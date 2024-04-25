@@ -8,6 +8,9 @@ import { BattleSummary } from "../engine/battle-summary/battle-summary";
 import { ShopInputToIntentTranslator } from "./translators/shop-input-translator";
 import { BattleInputToIntentTranslator } from "./translators/battle-input-translator";
 import { BattleSummaryInputToIntentTranslator } from "./translators/battlesummary-input-translator";
+import { GameWrapper } from "../engine/wrap";
+import { MainMenu } from "../engine/menu/main-menu";
+import { MainMenuInputToIntentTranslator } from "./translators/main-menu-input-translator";
 
 export interface PlayerIntent {
 	intent: string;
@@ -16,14 +19,20 @@ export interface PlayerIntent {
 ArmyGrid;
 
 export class InputToIntent {
-	battleTranslator = new BattleInputToIntentTranslator();
-	shopTranslator = new ShopInputToIntentTranslator();
-	battleSummaryTranslator = new BattleSummaryInputToIntentTranslator();
-	constructor(public game: Game) {}
+	battleTranslator: BattleInputToIntentTranslator;
+	shopTranslator: ShopInputToIntentTranslator;
+	battleSummaryTranslator: BattleSummaryInputToIntentTranslator;
+	mainMenuTranslator: MainMenuInputToIntentTranslator;
+	constructor(public gameWrap: GameWrapper) {
+		this.battleTranslator = new BattleInputToIntentTranslator();
+		this.shopTranslator = new ShopInputToIntentTranslator();
+		this.battleSummaryTranslator = new BattleSummaryInputToIntentTranslator();
+		this.mainMenuTranslator = new MainMenuInputToIntentTranslator(gameWrap);
+	}
 
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType) {
 		//this.isGameAction() TODO
-		const phase = this.determinatePhase(this.game);
+		const phase = this.determinatePhase(this.gameWrap);
 		if (phase instanceof Battle) {
 			this.battleTranslator.handle(screenPosition, eventType, phase);
 		}
@@ -33,16 +42,26 @@ export class InputToIntent {
 		if (phase instanceof BattleSummary) {
 			this.battleSummaryTranslator.handle(screenPosition, eventType, phase);
 		}
+		if (phase instanceof MainMenu) {
+			this.mainMenuTranslator.handle(screenPosition, eventType, phase);
+		}
 	}
-	determinatePhase(game: Game) {
-		if (game.battle) {
-			return game.battle;
+	determinatePhase(gameWrap: GameWrapper) {
+		if (gameWrap.state === "game") {
+			const game = gameWrap.game as Game;
+			if (game.battle) {
+				return game.battle;
+			}
+			if (game.shop) {
+				return game.shop;
+			}
+			if (game.battleSummary) {
+				return game.battleSummary;
+			}
+			throw new Error("No Active Phase");
 		}
-		if (game.shop) {
-			return game.shop;
-		}
-		if (game.battleSummary) {
-			return game.battleSummary;
+		if (gameWrap.state === "mainMenu") {
+			return gameWrap.mainMenu;
 		}
 		throw new Error("No Active Phase");
 	}

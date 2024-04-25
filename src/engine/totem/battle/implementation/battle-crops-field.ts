@@ -5,6 +5,7 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { BattleTotem } from "../battle-totem";
+import { seconds } from "../../../../shared/seconds";
 
 export class BattleCropsField extends Derive(BattleTotem, Caster, FoodTag) {
 	foodProduction: number = 5;
@@ -49,6 +50,6 @@ export class BattleCropsField extends Derive(BattleTotem, Caster, FoodTag) {
 	}
 
 	casts() {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 96);
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), seconds(3.5));
 	}
 }

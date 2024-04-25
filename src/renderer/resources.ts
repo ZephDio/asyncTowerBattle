@@ -393,6 +393,15 @@ export const Resources = {
 				image: createImage("/resources/button/start.png"),
 			},
 		},
+		startGame: {
+			resource: {
+				image: createImage("/resources/button/start-game.png"),
+			},
+			size: {
+				width: 50,
+				height: 20,
+			},
+		},
 		bell: {
 			resource: {
 				image: createImage("/resources/button/bell.png"),

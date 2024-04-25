@@ -19,10 +19,14 @@ export class CropsFieldBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(Resources.totem.cropsfield.resource.image, Resources.totem.cropsfield.size, DrawPriority.NormalGridElement),
-	FoodTag
+	TImageDrawable(
+		Resources.totem.cropsfield.resource.image,
+		Resources.totem.cropsfield.size,
+		DrawPriority.NormalGridElement,
+	),
+	FoodTag,
 ) {
-	description = new Description("Crops Field", ["A field to grow crops"]);
+	description = new Description("Crops Field", ["Every 3.5 seconds :", "produce 5🌽"]);
 
 	toRecruit(cell: Cell) {
 		return new CropsField(cell, this);
