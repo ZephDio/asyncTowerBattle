@@ -20,15 +20,15 @@ export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag) {
 		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint, synergy: blueprint });
 	}
 
-	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
-		const position = grid.cellToGrid(this.cell);
+	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks) {
+		const position = this.gridShape.getCenterPosition(this.cell, this.orientation);
 		return new BattleBrewery(this, hooks, position, this.cell, this.orientation);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const position = grid.cellToGrid(cell);
 		const orientation = this.orientation + Math.PI;
+		const position = this.gridShape.getCenterPosition(cell, orientation);
 		return new BattleBrewery(this, hooks, position, cell, orientation);
 	}
 

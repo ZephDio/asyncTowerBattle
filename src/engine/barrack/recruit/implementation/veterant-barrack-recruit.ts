@@ -26,33 +26,27 @@ export class VeterantBarrack extends Derive(TUnitPreviewHudRenderable, Barrack, 
 		return this.cell;
 	}
 
-	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
-		if (this.unitRecruit) {
-			return new VeterantBattleBarrack(
-				this,
-				grid.cellToGrid(this.position),
-				this.cell.clone(),
-				hooks,
-				this.unitRecruit,
-				this.orientation,
-			);
-		}
-		return undefined;
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack {
+		return new VeterantBattleBarrack(
+			this,
+			grid.cellToGrid(this.position),
+			this.cell.clone(),
+			hooks,
+			this.unitRecruit,
+			this.orientation,
+		);
 	}
 
-	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
-		if (this.unitRecruit) {
-			const newPosition = BattleGrid.flip(grid, this.position);
-			const orientation = this.orientation + Math.PI;
-			return new VeterantBattleBarrack(
-				this,
-				grid.cellToGrid(newPosition),
-				newPosition,
-				hooks,
-				this.unitRecruit,
-				orientation,
-			);
-		}
-		return undefined;
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack {
+		const newPosition = BattleGrid.flip(grid, this.position);
+		const orientation = this.orientation + Math.PI;
+		return new VeterantBattleBarrack(
+			this,
+			grid.cellToGrid(newPosition),
+			newPosition,
+			hooks,
+			this.unitRecruit,
+			orientation,
+		);
 	}
 }

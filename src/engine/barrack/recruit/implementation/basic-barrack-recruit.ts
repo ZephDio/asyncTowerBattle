@@ -25,33 +25,27 @@ export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack, HTF
 		return this.cell;
 	}
 
-	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
-		if (this.unitRecruit) {
-			return new BasicBattleBarrack(
-				this,
-				grid.cellToGrid(this.position),
-				this.cell.clone(),
-				hooks,
-				this.unitRecruit,
-				this.orientation,
-			);
-		}
-		return undefined;
+	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack {
+		return new BasicBattleBarrack(
+			this,
+			grid.cellToGrid(this.position),
+			this.cell.clone(),
+			hooks,
+			this.unitRecruit,
+			this.orientation,
+		);
 	}
 
-	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack | undefined {
-		if (this.unitRecruit) {
-			const newPosition = BattleGrid.flip(grid, this.position);
-			const orientation = this.orientation + Math.PI;
-			return new BasicBattleBarrack(
-				this,
-				grid.cellToGrid(newPosition),
-				newPosition,
-				hooks,
-				this.unitRecruit,
-				orientation,
-			);
-		}
-		return undefined;
+	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack {
+		const newPosition = BattleGrid.flip(grid, this.position);
+		const orientation = this.orientation + Math.PI;
+		return new BasicBattleBarrack(
+			this,
+			grid.cellToGrid(newPosition),
+			newPosition,
+			hooks,
+			this.unitRecruit,
+			orientation,
+		);
 	}
 }

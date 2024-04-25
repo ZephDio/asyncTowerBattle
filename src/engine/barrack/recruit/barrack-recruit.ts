@@ -24,8 +24,8 @@ export const Barrack = Subtrait([TRecruit, RecruitCaster, BarrackTag], (base) =>
 			this.unitRecruit = unit;
 		}
 
-		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
-		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack | undefined;
+		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack;
+		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack;
 
 		moveRecruit(hooks: TokenHooks, position: GridPosition, orientation: number, grid?: ImplementsTrait<typeof TGrid>) {
 			if (!grid) throw new Error("Invalid grid");

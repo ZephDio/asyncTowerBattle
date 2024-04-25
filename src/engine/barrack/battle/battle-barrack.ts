@@ -11,33 +11,38 @@ import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { HaveStats } from "../../stats/stats";
 import { Orientable } from "../../../shared/traits/engine/core/orientable";
 import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
+import { AnyUnit } from "../../units/recruit/unit-recruit";
 
 export type AnyBattleBarrack = BasicBattleBarrack | WaveBattleBarrack | VeterantBattleBarrack;
 
+export const BattleBarrack = Subtrait(
+	[
+		TCollider,
+		HTHitbox,
+		Caster,
+		HTImageDrawable,
+		TUnitPreviewHudRenderable,
+		GridElement,
+		HaveStats,
+		Orientable,
+		HTDescriptor,
+	],
+	(base) => {
+		abstract class BattleBarrack extends base {
+			abstract castCost: number;
+			abstract onCastResolve(): void;
+			abstract unitRecruit: AnyUnit | null;
 
-export const BattleBarrack = Subtrait([
-    TCollider,
-	HTHitbox,
-	Caster,
-	HTImageDrawable,
-	TUnitPreviewHudRenderable,
-	GridElement,
-	HaveStats,
-	Orientable,
-    HTDescriptor
-],(base)=>  {
-    abstract class BattleBarrack extends base {
-        abstract castCost: number;
-        abstract onCastResolve(): void;
+			tick() {
+				if (this.unitRecruit) {
+					super.tickCast();
+				}
+			}
 
-        tick() {
-            super.tickCast();
-        }
-    
-        casts(): void {
-            this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost);
-        }
-    
-    }
-    return BattleBarrack
-})
+			casts(): void {
+				this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost);
+			}
+		}
+		return BattleBarrack;
+	},
+);

@@ -6,9 +6,7 @@ import { Cast } from "../../../../shared/traits/engine/cast";
 import { WaveBarrack } from "../../recruit/implementation/wave-barrack-recruit";
 import { BattleBarrack } from "../battle-barrack";
 
-export class WaveBattleBarrack extends Derive(
-	BattleBarrack
-) {
+export class WaveBattleBarrack extends Derive(BattleBarrack) {
 	castCost: number;
 
 	cycles = [2.6, 0.2, 0.2];
@@ -19,8 +17,8 @@ export class WaveBattleBarrack extends Derive(
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
 		public readonly hooks: BattleArmyHooks,
-		public readonly unitRecruit: AnyUnit,
-		override _orientation: number
+		public readonly unitRecruit: AnyUnit | null,
+		override _orientation: number,
 	) {
 		super({
 			casterRecruit: barrackRecruit,
@@ -35,11 +33,9 @@ export class WaveBattleBarrack extends Derive(
 			hitboxHolder: barrackRecruit,
 			descriptor: barrackRecruit,
 		});
-		this.castCost = unitRecruit.cost;
+		this.castCost = unitRecruit ? unitRecruit.cost : NaN;
 		this.gridShape = barrackRecruit.gridShape;
 	}
-
-	
 
 	override casts(): void {
 		const cycle = this.cycles[this.cycle % this.cycles.length] as number;
@@ -52,6 +48,7 @@ export class WaveBattleBarrack extends Derive(
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
 		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 		if (sucess) {
+			if (!this.unitRecruit) throw new Error("Unit recruit is undefined in a Barrack Attempting to cast");
 			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
 		}
 		this.finishCast(sucess);
