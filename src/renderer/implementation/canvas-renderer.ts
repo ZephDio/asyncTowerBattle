@@ -1,5 +1,5 @@
 import { Game } from "../../engine/game";
-import { ScreenPosition } from "../../shared/position";
+import { Cell, ScreenPosition } from "../../shared/position";
 import { Size } from "../../shared/size";
 import { Renderer } from "../renderer";
 
@@ -45,7 +45,17 @@ export class CanvasRenderer implements Renderer {
 			grid.render(this.context);
 			const gridElementDrawables = grid.getDrawables();
 			[...gridElementDrawables, ...drawables]
-				.sort((drawableA, drawableB) => drawableB.position.y - drawableA.position.y)
+				.sort((drawableA, drawableB) => {
+					let positionA = drawableA.position.clone();
+					let positionB = drawableB.position.clone();
+					if (drawableA.position instanceof Cell) {
+						positionA = grid.cellToGrid(drawableA.position);
+					}
+					if (drawableB.position instanceof Cell) {
+						positionB = grid.cellToGrid(drawableB.position);
+					}
+					return positionB.y - positionA.y;
+				})
 				.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
 				.map((drawable) => drawable.render(this.context, grid));
 		}

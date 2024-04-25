@@ -1,12 +1,12 @@
 import { Derive, implementsTrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { OrangeTotem } from "../../recruit/implementation/orange-tower-recruit";
+import { OrangeTotem } from "../../recruit/implementation/orange-totem-recruit";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 
-export class OrangeBattleTower extends Derive(BattleTotem) {
+export class OrangeBattleTotem extends Derive(BattleTotem) {
 	hasTriggered = false;
 
 	constructor(
@@ -28,17 +28,15 @@ export class OrangeBattleTower extends Derive(BattleTotem) {
 			);
 			for (const neighbor of neighbors) {
 				if (implementsTrait(neighbor, HaveStats)) {
-					neighbor.addStatus(new OrangeTowerBuff({}));
+					neighbor.addStatus(new OrangeTotemBuff({}));
 				}
 			}
 			this.hasTriggered = true;
 		}
 	}
-
-
 }
 
-export class OrangeTowerBuff extends Derive(Status) {
+export class OrangeTotemBuff extends Derive(Status) {
 	clock = 0;
 	duration: number;
 
