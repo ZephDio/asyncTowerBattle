@@ -6,8 +6,10 @@ import { Fox } from "../../recruit/implementation/fox-recruit";
 import { GridPosition } from "../../../../shared/position";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { seconds } from "../../../../shared/seconds";
 
 export class BattleFox extends Derive(TBattleUnit, Caster) {
+	foodConsume: number = 2;
 	pathFinder: PathFinder;
 	constructor(
 		recruit: Fox,
@@ -31,12 +33,12 @@ export class BattleFox extends Derive(TBattleUnit, Caster) {
 	}
 
 	eatOpponentFood() {
-		this.hooks.enemyFoodHooks.removeFood(this.stats.attack * 2);
+		this.hooks.enemyFoodHooks.removeFood((this.stats.basePercentStat.attack / 100) * this.foodConsume);
 		this.finishCast();
 	}
 
 	casts() {
-		this.castInProgress = new Cast(this, this.eatOpponentFood.bind(this), 96);
+		this.castInProgress = new Cast(this, this.eatOpponentFood.bind(this), seconds(4.5));
 	}
 
 	override tick() {

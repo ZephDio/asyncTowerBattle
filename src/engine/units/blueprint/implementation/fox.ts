@@ -21,12 +21,16 @@ export class FoxBlueprint extends Derive(
 	TDamageDealer(1.5),
 	FoodConsumer,
 ) {
-	description = new UnitDescription("Glutton Fox", ["A unit that eat", "crops from your enemies", "as well"], {
-		health: "22",
-		damage: "1.5",
-		"move speed": "0.18",
-		"production cost": "150",
-	});
+	description = new UnitDescription(
+		"Glutton Fox",
+		["every 4.5 seconds", "consume 2🌽 from", "your enemy", "(scale with attack)"],
+		{
+			health: "22",
+			damage: "1.5",
+			"move speed": "0.18",
+			"production cost": "150",
+		},
+	);
 
 	baseMaxLife = 22;
 	baseSpeed = 0.18;

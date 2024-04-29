@@ -42,7 +42,7 @@ export class BattleBerseker extends Derive(TBattleUnit) {
 export class Enraged extends Derive(Status) {
 	key = "enraged";
 	clock = 0;
-	duration = 0;
+	duration = Infinity;
 	stats: Stats;
 	didTrigger = false;
 	tick() {
