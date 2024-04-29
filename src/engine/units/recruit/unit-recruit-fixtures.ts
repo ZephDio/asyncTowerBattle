@@ -9,6 +9,8 @@ import { Choupisson } from "./implementation/choupisson-recruit";
 import { Dragon } from "./implementation/dragon-recruit";
 import { Priest } from "./implementation/priest-recruit";
 import { Soldier } from "./implementation/soldier-recruit";
+import { FoxBlueprint } from "../blueprint/implementation/fox";
+import { Fox } from "./implementation/fox-recruit";
 
 export class UnitRecruitBuilder {
 	buildSoldier(soldier?: SoldierBlueprint) {
@@ -25,6 +27,9 @@ export class UnitRecruitBuilder {
 	}
 	buildChoupisson(choupisson?: ChoupissonBlueprint) {
 		return new Choupisson(new Cell({ x: 0, y: 2 }), choupisson);
+	}
+	buildGluttonFox(fox? : FoxBlueprint) {
+		return new Fox(new Cell({ x: 0, y: 2 }), fox);
 	}
 }
 
@@ -43,5 +48,8 @@ export class UnitRecruitFixture {
 	}
 	static get choupisson() {
 		return new UnitRecruitBuilder().buildChoupisson();
+	}
+	static get fox() {
+		return new UnitRecruitBuilder().buildGluttonFox();
 	}
 }

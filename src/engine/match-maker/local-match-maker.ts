@@ -14,8 +14,8 @@ import { MatchMaker } from "./match-maker";
 
 export class LocalMatchMaker extends MatchMaker {
 	getOpponent(round: number) {
-		if (round > 5) {
-			return EnemyArmyFixtures[5]();
+		if (round > 6) {
+			return EnemyArmyFixtures[6]();
 		}
 		const key = round as keyof typeof EnemyArmyFixtures;
 		return EnemyArmyFixtures[key]();
@@ -38,11 +38,11 @@ const EnemyArmyFixtures = {
 		const tiles = PathFactory.default;
 		const barracks = [
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.dragon)
+				.setUnit(UnitRecruitFixture.soldier)
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.buildWave(),
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.berseker)
+				.setUnit(UnitRecruitFixture.soldier)
 				.withCell(new Cell({ x: 3, y: 1 }))
 				.buildVeterant(),
 		];
@@ -63,11 +63,11 @@ const EnemyArmyFixtures = {
 		];
 		const barracks = [
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.dragon)
+				.setUnit(UnitRecruitFixture.berseker)
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.buildWave(),
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.berseker)
+				.setUnit(UnitRecruitFixture.soldier)
 				.withCell(new Cell({ x: 3, y: 1 }))
 				.buildVeterant(),
 		];
@@ -195,6 +195,55 @@ const EnemyArmyFixtures = {
 			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),
 			new TotemBuilder().celled(new Cell({ x: 1, y: 4 })).buildCropsField(),
 
+			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
+		];
+		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
+		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
+	},
+	6: () => {
+		const grid = new ArmyGrid(8, 6);
+		const castle = CastleFactory.round2;
+		const towers: AnyTower[] = [
+			//TowerFixtures.centerTower,
+			new TowerBuilder()
+				.celled(new Cell({ x: 3, y: 3 }))
+				.buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
+			new TowerBuilder().celled(new Cell({ x: 6, y: 2 })).buildBlue(),
+			new TowerBuilder()
+				.celled(new Cell({ x: 2, y: 1 }))
+				.buildZapping(),
+			//new TotemBuilder()
+		];
+		const barracks = [
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.dragon)
+				.withCell(new Cell({ x: 1, y: 1 }))
+				.withProductionSpeed(3.2)
+				.buildWave(),
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.berseker)
+				.withCell(new Cell({ x: 3, y: 1 }))
+				.withProductionSpeed(3.2)
+				.buildVeterant(),
+
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.priest)
+				.withCell(new Cell({ x: 6, y: 1 }))
+				.withProductionSpeed(3.2)
+				.buildBasic(),
+			new BarrackRecruitBuilder()
+				.setUnit(UnitRecruitFixture.fox)
+				.withCell(new Cell({ x: 6, y: 4 }))
+				.withProductionSpeed(3.2)
+				.buildBasic(),
+		];
+		const tiles = PathFactory.round2;
+		const totems = [
+			new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 5 })).buildCropsField(),
+			new TotemBuilder().celled(new Cell({ x: 1, y: 4 })).buildWindmill(),
 			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
 		];
 		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));

@@ -63,7 +63,7 @@ export class ArmyFixture {
 
 export class ArmyFactory {
 	static get default() {
-		const grid = new ArmyGrid(7, 5, undefined, 6.0);
+		const grid = new ArmyGrid(7, 5, undefined, 6);
 		const castle = CastleFactory.default;
 		const tiles = PathFactory.default;
 		const unitInventory = new Inventory();

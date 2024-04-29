@@ -21,7 +21,7 @@ export class DragonBlueprint extends Derive(
 	TDamageDealer(3),
 	FoodConsumer,
 ) {
-	description = new UnitDescription("Dragon", ["A unit that breath", "fire in a cone"], {
+	description = new UnitDescription("Dragon", ["Gains 1 max Health", "for each 5🪙 you own"], {
 		health: "18",
 		damage: "3",
 		"move speed": "0.25",

@@ -11,7 +11,7 @@ import { Description, TDescriptor } from "../../../../shared/traits/render/huds/
 
 export class TrapTileBlueprint extends Derive(
 	TShopBlueprint(10, 5),
-	TImageDrawable(Resources.path.trap.image, { width: 4.9, height: 4.9 }, DrawPriority.NormalGridElement),
+	TImageDrawable(Resources.path.trap.image, { width: 4.9, height: 4.9 }, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 4.9, height: 4.9 }), new GridPosition({ x: 0, y: 0 })]])),
 ) {
