@@ -1,4 +1,4 @@
-import { BattleCastle } from "../../castle/battle/battle-castle";
+import { BattleHumanCastle } from "../../castle/battle/battle-castle";
 import { AnyBattleProjectile } from "../../projectile/battle/battle-projectile";
 import { AnyBattleTower } from "../../tower/battle/battle-tower";
 import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
@@ -29,7 +29,7 @@ export type BattleArmyHooks = {
 	getEnemyPath: BattleArmy["getEnemyPath"];
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
 	getAlliedUnits: () => AnyBattleUnit[];
-	getAlliedCastle: () => BattleCastle;
+	getAlliedCastle: () => BattleHumanCastle;
 	alliedArmyBuffHooks: ArmyBuffHooks;
 	enemyArmyBuffHooks: ArmyBuffHooks;
 	alliedFoodHooks: FoodHooks;
@@ -43,7 +43,7 @@ export class BattleArmy {
 	units: Map<AnyBattleUnit, AnyBattleBarrack> = new Map();
 	areaEffects: Map<AreaEffect, any> = new Map();
 	path: BattlePath;
-	castle: BattleCastle;
+	castle: BattleHumanCastle;
 	barracks: AnyBattleBarrack[];
 	projectiles: Map<AnyBattleProjectile, any> = new Map();
 	towers: AnyBattleTower[];
@@ -58,7 +58,7 @@ export class BattleArmy {
 		public searchEnemyInArea: SearchAreaForUnit,
 		public random: () => number,
 		public getEnemyPath: () => BattlePath,
-		public getEnemyCastle: () => BattleCastle,
+		public getEnemyCastle: () => BattleHumanCastle,
 		public enemyFoodHooks: FoodHooks,
 		public gridHooks: GridHooks,
 		public alliedArmyBuffHooks: ArmyBuffHooks,
@@ -86,7 +86,7 @@ export class BattleArmy {
 	}
 
 	init(
-		castle: BattleCastle,
+		castle: BattleHumanCastle,
 		path: BattlePath,
 		towers: AnyBattleTower[],
 		barracks: AnyBattleBarrack[],

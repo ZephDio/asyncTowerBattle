@@ -48,7 +48,7 @@ export const Unit = Subtrait([TRecruit, HTFoodConsumer], (base) => {
 				if (element) throw new Error("already occupied cell");
 				this.cell = cell.clone();
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
-				return;
+				return undefined;
 			}
 			throw new Error("Invalid grid");
 		}

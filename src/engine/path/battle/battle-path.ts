@@ -1,25 +1,25 @@
 import { MemorizePath } from "../../../shared/decorators/path-memorize";
 import { Cell, GridPosition } from "../../../shared/position";
-import { BattleCastle } from "../../castle/battle/battle-castle";
+import { BattleHumanCastle } from "../../castle/battle/battle-castle";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyPathTile } from "../../tile/recruit/tile";
 export class BattlePath {
 	constructor(
 		public pathTileNodes: GridPosition[],
-		public alliedCastle: BattleCastle,
-		public enemyCastle: BattleCastle,
+		public alliedCastle: BattleHumanCastle,
+		public enemyCastle: BattleHumanCastle,
 	) {}
 
 	getNodes() {
 		return [this.enemyCastle.position, ...this.pathTileNodes, this.alliedCastle.position];
 	}
 
-	static toAllied(grid: BattleGrid, cells: Cell[], alliedCastle: BattleCastle, enemyCastle: BattleCastle) {
+	static toAllied(grid: BattleGrid, cells: Cell[], alliedCastle: BattleHumanCastle, enemyCastle: BattleHumanCastle) {
 		const pathTileNodes = cells.map((cell) => grid.cellToGrid(cell));
 		return new BattlePath(pathTileNodes, alliedCastle, enemyCastle);
 	}
 
-	static toEnemy(grid: BattleGrid, cells: Cell[], alliedCastle: BattleCastle, enemyCastle: BattleCastle) {
+	static toEnemy(grid: BattleGrid, cells: Cell[], alliedCastle: BattleHumanCastle, enemyCastle: BattleHumanCastle) {
 		const pathTileNodes = cells.map((cell) => {
 			const flipped = BattleGrid.flip(grid, cell);
 			const position = grid.cellToGrid(flipped);

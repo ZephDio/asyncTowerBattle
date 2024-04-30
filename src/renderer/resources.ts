@@ -68,13 +68,18 @@ export const Resources = {
 		},
 	},
 	totem: {
-		orange: {
+		anvil: {
 			size: {
-				width: 5,
-				height: 8,
+				width: 6.2,
+				height: 6,
 			},
 			resource: {
-				image: createImage("/resources/totem/orange-totem.png"),
+				image: {
+					frontView: createImage("/resources/totem/anvil/front-view.png"),
+					backView: createImage("/resources/totem/anvil/back-view.png"),
+					leftView: createImage("/resources/totem/anvil/left-view.png"),
+					rightView: createImage("/resources/totem/anvil/right-view.png"),
+				},
 				shape: "ellipse",
 				color: "orange",
 			},

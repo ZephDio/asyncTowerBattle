@@ -1,9 +1,9 @@
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
-import { BattleCastle } from "../engine/castle/battle/battle-castle";
+import { BattleHumanCastle } from "../engine/castle/battle/battle-castle";
 import { Tower } from "../engine/tower/recruit/tower-recruit";
 import { HudElement } from "./hud-element/hud-element";
 import { Retail } from "../engine/shop/retail/retail";
-import { Castle } from "../engine/castle/recruit/castle-recruit";
+import { AnyCastle } from "../engine/castle/recruit/castle-recruit";
 import { AreaEffect } from "../engine/area-effect/area-effect";
 import { ArmyGrid } from "../engine/grid/grid";
 import { BattleGrid } from "../engine/grid/battle-grid";
@@ -29,7 +29,7 @@ export interface SummaryState extends GameState {
 
 export interface BattleState extends GameState {
 	type: "battle";
-	castles: BattleCastle[];
+	castles: BattleHumanCastle[];
 	towers: AnyBattleTower[];
 	grid: BattleGrid;
 	units: AnyBattleUnit[];
@@ -44,7 +44,7 @@ export interface ShopState extends GameState {
 	type: "shop";
 	retail: Retail;
 
-	castle: Castle;
+	castle: AnyCastle;
 	towers: ImplementsTrait<typeof Tower>[];
 	path: GridPosition[] | null;
 	grid: ArmyGrid;

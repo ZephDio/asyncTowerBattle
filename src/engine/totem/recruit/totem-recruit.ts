@@ -1,6 +1,6 @@
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattleGrid } from "../../grid/battle-grid";
-import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
 import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { GridPosition } from "../../../shared/position";
 import { RetailGrid } from "../../grid/retail-grid";
@@ -25,18 +25,26 @@ export const Totem = Subtrait([TRecruit, TotemTag], (base) => {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
-				return;
+				return undefined;
 			}
 			const cell = grid.gridPositionToCell(gridPosition);
 			if (!cell) throw new Error("Invalid cell");
 
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				const condition = grid.checkCondition(this, cell, orientation);
-				if (!condition) throw new Error("Invalid condition");
+				const { valid, elements } = grid.validateGridElementPlacement(this, cell, orientation);
+				if (!valid) throw new Error("Invalid condition");
+				elements.forEach((element) => {
+					if (implementsTrait(element, TRecruit)) {
+						hooks.shopPhaseHooks.armyHooks.removeRecruit(element);
+						hooks.shopPhaseHooks.armyHooks.pushToInventory(element);
+						return undefined;
+					}
+					throw new Error(`Element found in swap ${element}`);
+				});
 				this.cell = cell.clone();
 				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
-				return;
+				return elements[0];
 			}
 			throw new Error("No Case Matched");
 		}

@@ -2,7 +2,7 @@ import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { BattleArmy } from "../army/battle/battle-army";
-import { BattleCastle } from "../castle/battle/battle-castle";
+import { BattleHumanCastle } from "../castle/battle/battle-castle";
 import { AnyBattleTower } from "../tower/battle/battle-tower";
 import { ArmyGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
@@ -16,7 +16,7 @@ import { TEnvironmentElement } from "../environment/environment";
 export type BattleGridElement =
 	| AnyBattleTower
 	| AnyBattleTile
-	| BattleCastle
+	| BattleHumanCastle
 	| ImplementsTrait<typeof TEnvironmentElement>;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();

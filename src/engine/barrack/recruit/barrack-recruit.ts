@@ -1,4 +1,4 @@
-import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { AnyUnit } from "../../units/recruit/unit-recruit";
 import { AnyBattleBarrack } from "../battle/battle-barrack";
@@ -39,12 +39,20 @@ export const Barrack = Subtrait([TRecruit, RecruitCaster, BarrackTag], (base) =>
 			const cell = grid.gridPositionToCell(position);
 			if (!cell) throw new Error("Invalid cell");
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				const condition = grid.checkCondition(this, cell, orientation);
-				if (!condition) throw new Error("Invalid condition");
+				const { valid, elements } = grid.validateGridElementPlacement(this, cell, orientation);
+				if (!valid) throw new Error("Invalid condition");
+				elements.forEach((element) => {
+					if (implementsTrait(element, TRecruit)) {
+						hooks.shopPhaseHooks.armyHooks.removeRecruit(element);
+						hooks.shopPhaseHooks.armyHooks.pushToInventory(element);
+						return undefined;
+					}
+					throw new Error(`Element found in swap ${element}`);
+				});
 				this.cell = cell.clone();
 				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
-				return;
+				return elements[0];
 			}
 			throw new Error("No Case Matched");
 		}

@@ -1,14 +1,14 @@
 import { Derive } from "@ddd-ts/traits";
 import { DrawPriority, TImageDrawable } from "../../../shared/traits/render/image-drawable";
-import { Castle } from "../recruit/castle-recruit";
 import { Resources } from "../../../renderer/resources";
 import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../shared/position";
 import { Description, TDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
+import { HumanCastle } from "../recruit/implem/human-castle";
 
-export class CastleBlueprint extends Derive(
+export class HumanCastleBlueprint extends Derive(
 	TImageDrawable(Resources.castle.resource.image, Resources.castle.size, DrawPriority.NormalGridElement),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
@@ -28,19 +28,19 @@ export class CastleBlueprint extends Derive(
 
 export class CastleRecruitFixture {
 	static get allied() {
-		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 5 }));
+		return new HumanCastle(new HumanCastleBlueprint({}), new Cell({ x: 0, y: 5 }));
 	}
 	static get enemy() {
-		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 5 }));
+		return new HumanCastle(new HumanCastleBlueprint({}), new Cell({ x: 0, y: 5 }));
 	}
 }
 
 export class CastleFactory {
 	static get default() {
-		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 4 }));
+		return new HumanCastle(new HumanCastleBlueprint({}), new Cell({ x: 0, y: 4 }));
 	}
 
 	static get round2() {
-		return new Castle(new CastleBlueprint({}), new Cell({ x: 0, y: 5 }));
+		return new HumanCastle(new HumanCastleBlueprint({}), new Cell({ x: 0, y: 5 }));
 	}
 }

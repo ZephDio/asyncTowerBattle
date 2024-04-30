@@ -17,6 +17,7 @@ import { Physic } from "../../../shared/physic";
 export type TokenHooks = {
 	shopPhaseHooks: ShopPhaseHooks;
 	holderHooks: {
+		setHold: Holder["setHold"];
 		removeHold: Holder["setNull"];
 	};
 };
@@ -72,7 +73,7 @@ export class Holder {
 		hooks: ShopPhaseHooks,
 		grid: ImplementsTrait<typeof TGrid>,
 	) {
-		if (recruit instanceof Castle) return;
+		if (implementsTrait(recruit, Castle)) return;
 		if (implementsTrait(recruit, Barrack)) {
 			if (recruit.unitRecruit) {
 				const barrackPosition = grid.cellToGrid(recruit.cell);
@@ -110,6 +111,7 @@ export class Holder {
 		return {
 			shopPhaseHooks,
 			holderHooks: {
+				setHold: this.setHold.bind(this),
 				removeHold: this.setNull.bind(this),
 			},
 		};

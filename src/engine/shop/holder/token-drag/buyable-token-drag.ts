@@ -6,6 +6,8 @@ import { RetailGrid } from "../../../grid/retail-grid";
 import { Buyable } from "../../retail/buyable";
 import { TokenHooks } from "../holder";
 import { TGrid } from "../../../grid/tgrid";
+import { TRecruit } from "../../../../shared/traits/engine/recruit";
+import { RecruitTokenDrag } from "./army-recruit-token-drag";
 
 export class BuyableTokenDrag extends Derive(TTokenDrag) {
 	constructor(
@@ -28,9 +30,25 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 			if (grid instanceof RetailGrid) {
 				throw new Error("can't sell item in shop DHU");
 			}
-			this.holded.entity.moveRecruit(this.hooks, position, this.orientation, grid);
-			this.hooks.shopPhaseHooks.shopHooks.buy(this.holded);
-			this.hooks.holderHooks.removeHold();
+			const element = this.holded.entity.moveRecruit(this.hooks, position, this.orientation, grid);
+			if (!element) {
+				this.hooks.shopPhaseHooks.shopHooks.buy(this.holded);
+				this.hooks.holderHooks.removeHold();
+				return;
+			}
+			if (implementsTrait(element, TRecruit)) {
+				const onAbort = () => {
+					this.hooks.shopPhaseHooks.armyHooks.pushToInventory(element);
+					this.hooks.holderHooks.removeHold();
+				};
+				const token = new RecruitTokenDrag(element, this.position, this.hooks, onAbort);
+				this.hooks.shopPhaseHooks.shopHooks.buy(this.holded);
+				this.hooks.holderHooks.removeHold();
+				this.hooks.holderHooks.setHold(token);
+				this.hooks.shopPhaseHooks.armyHooks.removeRecruit(element);
+				return;
+			}
+			throw new Error("Invalid element");
 		} catch {
 			this.onAbort();
 		}

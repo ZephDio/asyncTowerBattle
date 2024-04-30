@@ -7,7 +7,7 @@ import { WaveBarrackBlueprint } from "../../barrack/blueprint/implementation/wav
 import { BasicTileBlueprint } from "../../tile/blueprint/implementation/basic-path-blueprint";
 import { SlowingTileBlueprint } from "../../tile/blueprint/implementation/slowing-tile-blueprint";
 import { AnyPathTileBlueprint } from "../../tile/blueprint/tile";
-import { BlueTowerBlueprint } from "../../tower/blueprint/implementation/blue-tower";
+import { BlueTowerBlueprint } from "../../tower/blueprint/implementation/blue-tower-blueprint";
 import { GreenTowerBlueprint } from "../../tower/blueprint/implementation/green-tower";
 import { YellowTowerBlueprint } from "../../tower/blueprint/implementation/yellow-tower";
 import { AnyTowerBlueprint } from "../../tower/blueprint/tower";
@@ -22,13 +22,13 @@ import { BersekerBlueprint } from "../../units/blueprint/implementation/berseker
 import { ChoupissonBlueprint } from "../../units/blueprint/implementation/choupisson";
 import { VeterantBarrackBlueprint } from "../../barrack/blueprint/implementation/veteran-barrack";
 import { AnyTotemBlueprint } from "../../totem/blueprint/totem";
-import { OrangeTotemBlueprint } from "../../totem/blueprint/implementation/orange-totem";
-import { GobelinPortalBlueprint } from "../../totem/blueprint/implementation/gobelin-portal";
-import { CropsFieldBlueprint } from "../../totem/blueprint/implementation/crops-field";
+import { AnvilTotemBlueprint } from "../../totem/blueprint/implementation/anvil-blueprint";
+import { GobelinPortalBlueprint } from "../../totem/blueprint/implementation/gobelin-portal-blueprint";
+import { CropsFieldBlueprint } from "../../totem/blueprint/implementation/crops-field-blueprint";
 import { TrapTileBlueprint } from "../../tile/blueprint/implementation/trap-tile-blueprint";
 import { FoxBlueprint } from "../../units/blueprint/implementation/fox";
-import { WindmillBlueprint } from "../../totem/blueprint/implementation/windmill";
-import { BakeryBlueprint } from "../../totem/blueprint/implementation/bakery";
+import { WindmillBlueprint } from "../../totem/blueprint/implementation/windmill-blueprint";
+import { BakeryBlueprint } from "../../totem/blueprint/implementation/bakery-blueprint";
 import { MineBlueprint } from "../../totem/blueprint/implementation/mine-blueprint";
 import { BreweryBlueprint } from "../../totem/blueprint/implementation/brewery-blueprint";
 
@@ -43,7 +43,7 @@ type AnyBlueprint =
 const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 	{
 		value: [
-			OrangeTotemBlueprint,
+			AnvilTotemBlueprint,
 			GobelinPortalBlueprint,
 			CropsFieldBlueprint,
 			WindmillBlueprint,
