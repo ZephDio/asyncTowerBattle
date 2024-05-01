@@ -1,6 +1,6 @@
 import { Cell } from "../../shared/position";
 import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-recruit-fixtures";
-import { CastleFactory, CastleRecruitFixture } from "../castle/blueprint/castle";
+import { CastleFactory, CastleRecruitFixture } from "../castle/blueprint/human-castle-blueprint";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
@@ -63,7 +63,7 @@ export class ArmyFixture {
 
 export class ArmyFactory {
 	static get default() {
-		const grid = new ArmyGrid(7, 5, undefined, 6);
+		const grid = new ArmyGrid(7, 5, undefined, 6); 
 		const castle = CastleFactory.default;
 		const tiles = PathFactory.default;
 		const unitInventory = new Inventory();

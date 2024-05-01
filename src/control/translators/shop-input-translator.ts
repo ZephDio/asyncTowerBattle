@@ -48,6 +48,7 @@ export class ShopInputToIntentTranslator {
 			return;
 		}
 		if (!focus) return;
+		if(shop.holderControl.hold) return
 		if (focus.cell && focus.grid instanceof ArmyGrid) {
 			if (focus.element && implementsTrait(focus.element, TRecruit)) {
 				shop.setHoldFromArmyRecruit(focus.element, screenPosition, focus.grid);
@@ -202,27 +203,4 @@ export class ShopInputToIntentTranslator {
 	}
 }
 
-// export class SetDescriptionHudIntent {
-// 	constructor(
-// 		public hud: DescriptionHud | null,
-// 		public shop: ShopPhase,
-// 	) {}
 
-// 	resolve() {
-// 		this.shop.setDescriptionHud(this.hud);
-// 	}
-// }
-
-// export class SetOveredTileIntent {
-// 	constructor(
-// 		public cell: Cell | null,
-// 		public shop: ShopPhase,
-// 		public grid: ArmyGrid | Inventory,
-// 	) {}
-
-// 	resolve() {
-// 		this.shop.army.grid.setOveredTile(null);
-// 		this.shop.army.inventory.setOveredTile(null);
-// 		this.grid.setOveredTile(this.cell);
-// 	}
-// }

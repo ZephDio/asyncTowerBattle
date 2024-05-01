@@ -2,7 +2,7 @@ import { Cell } from "../../shared/position";
 import { Army } from "../army/army";
 import { ArmyFixture } from "../army/army-fixtures";
 import { BarrackRecruitBuilder } from "../barrack/recruit/barrack-recruit-fixtures";
-import { CastleFactory } from "../castle/blueprint/castle";
+import { CastleFactory } from "../castle/blueprint/human-castle-blueprint";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory } from "../path/army/path-fixtures";

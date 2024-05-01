@@ -5,7 +5,7 @@ import { BattleGrid } from "../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell } from "../../../../shared/position";
 import { FoodTag } from "../../../../shared/traits/engine/tags";
-import { BakeryBlueprint } from "../../blueprint/implementation/bakery";
+import { BakeryBlueprint } from "../../blueprint/implementation/bakery-blueprint";
 import { BattleBakery } from "../../battle/implementation/battle-bakery";
 
 export class Bakery extends Derive(Totem, RecruitCaster, FoodTag) {

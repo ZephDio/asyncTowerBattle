@@ -4,7 +4,6 @@ import { STANDARD_CELL_SIZE, TGrid } from "../tgrid";
 import { Cell, ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { SynergyEffectHud } from "../grid-effects/synergy-effect";
-import { ArmyGrid } from "../grid";
 import { HoverEffect } from "../grid-effects/hover-effect";
 import { AnyRecruit } from "../../../shared/traits/engine/recruit";
 import { TRenderable } from "../../../shared/traits/render/renderable";
@@ -22,11 +21,28 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 		super({ cellSize, height, width, position: screenPosition });
 	}
 
-	getNextFreeCell() {
+	getNextValidPosition(recruit: AnyRecruit) {
+		const cells = recruit.gridShape.getVectorialCells(recruit.orientation);
 		for (let y = 0; y < this.height; y++) {
 			for (let x = 0; x < this.width; x++) {
 				const cell = new Cell({ x, y });
-				if (!this.tiles.has(ArmyGrid.posToString(cell))) {
+				let valid = true;
+				for (const cellOffset of cells) {
+					const cellInShape = cell.add(cellOffset);
+					if(cellInShape.x >= this.width || cellInShape.y >= this.height) {
+						valid = false;
+						break;
+					}
+					if(cellInShape.x < 0 || cellInShape.y < 0) {
+						valid = false;
+						break;
+					}
+					if (this.getElement(cellInShape)) {
+						valid = false;
+						break;
+					}
+				}
+				if(valid) {
 					return cell;
 				}
 			}
@@ -34,7 +50,7 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return undefined;
 	}
 	add(recruit: AnyRecruit) {
-		const freeCell = this.getNextFreeCell();
+		const freeCell = this.getNextValidPosition(recruit);
 		if (!freeCell) throw new Error("No free cell in inventory");
 		recruit.cell = freeCell.clone();
 		this.setElement(recruit);

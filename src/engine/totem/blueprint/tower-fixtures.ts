@@ -1,8 +1,8 @@
-import { OrangeTotemBlueprint } from "./implementation/orange-totem";
+import { AnvilTotemBlueprint } from "./implementation/anvil-blueprint";
 
 export class TotemBlueprintBuilder {
 	buildOrangeTotem() {
-		return new OrangeTotemBlueprint({});
+		return new AnvilTotemBlueprint({});
 	}
 }
 

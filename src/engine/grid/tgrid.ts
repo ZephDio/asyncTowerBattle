@@ -1,10 +1,12 @@
-import { ImplementsTrait, Trait } from "@ddd-ts/traits";
+import { ImplementsTrait, Trait, implementsTrait } from "@ddd-ts/traits";
 import { ArmyGrid } from "./grid";
 import { Cell, GridPosition, ScreenPosition } from "../../shared/position";
 import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { TRenderable } from "../../shared/traits/render/renderable";
+import { TRecruit } from "../../shared/traits/engine/recruit";
+import { Castle } from "../castle/recruit/castle-recruit";
 
 export const STANDARD_CELL_SIZE = 4.9;
 
@@ -61,20 +63,27 @@ export const TGrid = Trait((base) => {
 			return new Cell({ x: x, y: y });
 		}
 
-		checkCondition(gridElement: ImplementsTrait<typeof GridElement>, cell: Cell, orientation: number) {
+		validateGridElementPlacement(
+			gridElement: ImplementsTrait<typeof GridElement>,
+			cell: Cell,
+			orientation: number,
+		): { valid: boolean; elements: ImplementsTrait<typeof TRecruit>[] } {
 			const cells = gridElement.gridShape.getOccupiedCellsFrom(cell, orientation);
 			for (const cell of cells) {
 				if (cell.x < 0 || cell.x >= this.width || cell.y < 0 || cell.y >= this.height) {
-					return false;
+					return { valid: false, elements: [] };
 				}
 			}
+			const founds = new Set<ImplementsTrait<typeof TRecruit>>();
 			for (const cell of cells) {
 				const found = this.getElement(cell);
 				if (found) {
-					return false;
+					if(implementsTrait(found, Castle)) return { valid: false, elements: [] };
+					if(!implementsTrait(found, TRecruit)) return { valid: false, elements: [] };
+					founds.add(found);
 				}
 			}
-			return true;
+			return { valid: true, elements: [...founds.values()] };
 		}
 
 		setElement(gridElement: ImplementsTrait<typeof GridElement>) {

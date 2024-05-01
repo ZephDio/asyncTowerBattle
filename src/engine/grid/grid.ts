@@ -4,7 +4,7 @@ import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
 import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
-import { Castle } from "../castle/recruit/castle-recruit";
+import { AnyCastle, Castle } from "../castle/recruit/castle-recruit";
 import { Tower } from "../tower/recruit/tower-recruit";
 import { Barrack } from "../barrack/recruit/barrack-recruit";
 import { GridElement } from "../../shared/traits/engine/core/grid-element";
@@ -31,7 +31,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 
 	get castle() {
-		const castle = [...this.tiles.values()].find((e): e is Castle => e instanceof Castle);
+		const castle = [...this.tiles.values()].find((e): e is AnyCastle => implementsTrait(e, Castle));
 		if (!castle) {
 			throw new Error("Castle not found");
 		}

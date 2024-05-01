@@ -1,7 +1,7 @@
 import { Derive } from "@ddd-ts/traits";
 import { Totem } from "../totem-recruit";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
-import { CropsFieldBlueprint } from "../../blueprint/implementation/crops-field";
+import { CropsFieldBlueprint } from "../../blueprint/implementation/crops-field-blueprint";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell } from "../../../../shared/position";

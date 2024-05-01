@@ -3,7 +3,7 @@ import { Totem } from "../totem-recruit";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell } from "../../../../shared/position";
-import { WindmillBlueprint } from "../../blueprint/implementation/windmill";
+import { WindmillBlueprint } from "../../blueprint/implementation/windmill-blueprint";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { BattleWindmill } from "../../battle/implementation/battle-windmill";
 import { FoodTag } from "../../../../shared/traits/engine/tags";

@@ -1,11 +1,11 @@
 import { Cell } from "../../../shared/position";
-import { CropsFieldBlueprint } from "../blueprint/implementation/crops-field";
+import { CropsFieldBlueprint } from "../blueprint/implementation/crops-field-blueprint";
 import { GobelinPortalBlueprint } from "../blueprint/implementation/gobelin-portal";
-import { OrangeTotemBlueprint } from "../blueprint/implementation/orange-totem";
-import { WindmillBlueprint } from "../blueprint/implementation/windmill";
+import { AnvilTotemBlueprint } from "../blueprint/implementation/anvil-blueprint";
+import { WindmillBlueprint } from "../blueprint/implementation/windmill-blueprint";
 import { CropsField } from "./implementation/crops-flied-recruit";
 import { GobelinPortal } from "./implementation/gobelin-totem-recruit";
-import { OrangeTotem } from "./implementation/orange-totem-recruit";
+import { AnvilTotem } from "./implementation/anvil";
 import { Windmill } from "./implementation/windmill";
 
 export class TotemBuilder {
@@ -14,8 +14,8 @@ export class TotemBuilder {
 		this.cell = position;
 		return this;
 	}
-	buildOrange(tower?: OrangeTotemBlueprint) {
-		return new OrangeTotem(this.cell, tower);
+	buildOrange(tower?: AnvilTotemBlueprint) {
+		return new AnvilTotem(this.cell, tower);
 	}
 	buildGobelinPortal(tower?: GobelinPortalBlueprint) {
 		return new GobelinPortal(this.cell, tower);

@@ -1,16 +1,16 @@
 import { Derive, implementsTrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { OrangeTotem } from "../../recruit/implementation/orange-totem-recruit";
+import { AnvilTotem } from "../../recruit/implementation/anvil";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 
-export class OrangeBattleTotem extends Derive(BattleTotem) {
+export class AnvilBattleTotem extends Derive(BattleTotem) {
 	hasTriggered = false;
 
 	constructor(
-		public recruit: OrangeTotem,
+		public recruit: AnvilTotem,
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
