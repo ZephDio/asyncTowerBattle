@@ -4,9 +4,9 @@ import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { Totem } from "../totem-recruit";
-import { GobelinPortalBlueprint } from "../../blueprint/implementation/gobelin-portal";
 import { BattleGobelinPortal } from "../../battle/implementation/battle-gobelin-portal";
 import { GobelinBlueprint } from "../../../units/blueprint/implementation/gobelin";
+import { GobelinPortalBlueprint } from "../../blueprint/implementation/gobelin-portal-blueprint";
 
 export class GobelinPortal extends Derive(Totem, HTSynergy) {
 	recruit = new GobelinBlueprint({})

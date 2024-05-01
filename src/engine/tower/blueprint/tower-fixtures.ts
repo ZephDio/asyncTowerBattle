@@ -1,4 +1,5 @@
-import { BlueTowerBlueprint } from "./implementation/blue-tower";
+
+import { BlueTowerBlueprint } from "./implementation/blue-tower-blueprint";
 import { GreenTowerBlueprint } from "./implementation/green-tower";
 import { YellowTowerBlueprint } from "./implementation/yellow-tower";
 import { ZappingTowerBlueprint } from "./implementation/zapping-tower";
