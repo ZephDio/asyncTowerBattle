@@ -12,7 +12,7 @@ import { TSynergy } from "../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { Brewery } from "../../recruit/implementation/brewery";
-import { Barrack } from "../../../barrack/recruit/barrack-recruit";
+import { Barrack } from "../../../barrack/recruit/barrack";
 import { BattleBarrack } from "../../../barrack/battle/battle-barrack";
 
 export class BreweryBlueprint extends Derive(

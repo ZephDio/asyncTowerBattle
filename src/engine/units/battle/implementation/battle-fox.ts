@@ -2,7 +2,7 @@ import { Derive } from "@ddd-ts/traits";
 import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
-import { Fox } from "../../recruit/implementation/fox-recruit";
+import { Fox } from "../../recruit/implementation/fox";
 import { GridPosition } from "../../../../shared/position";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";

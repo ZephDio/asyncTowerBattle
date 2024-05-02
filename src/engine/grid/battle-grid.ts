@@ -2,7 +2,7 @@ import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { BattleArmy } from "../army/battle/battle-army";
-import { BattleHumanCastle } from "../castle/battle/battle-castle";
+import { BattleHumanCastle } from "../castle/battle/battle-human-castle";
 import { AnyBattleTower } from "../tower/battle/battle-tower";
 import { ArmyGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";

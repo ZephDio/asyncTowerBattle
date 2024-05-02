@@ -1,12 +1,12 @@
 
 import { BlueTowerBlueprint } from "./implementation/blue-tower-blueprint";
-import { GreenTowerBlueprint } from "./implementation/green-tower";
-import { YellowTowerBlueprint } from "./implementation/yellow-tower";
-import { ZappingTowerBlueprint } from "./implementation/zapping-tower";
+import { GreenTowerBlueprint } from "./implementation/green-tower-blueprint";
+import { WitchHouseBlueprint } from "./implementation/witch-house-blueprint";
+import { ZappingTowerBlueprint } from "./implementation/zapping-tower-blueprint";
 
 export class TowerBlueprintBuilder {
 	buildYellow() {
-		return new YellowTowerBlueprint({});
+		return new WitchHouseBlueprint({});
 	}
 	buildBlue() {
 		return new BlueTowerBlueprint({});

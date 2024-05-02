@@ -2,7 +2,7 @@ import { Derive, implementsTrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Caster } from "../../../../shared/traits/engine/cast";
-import { GobelinPortal } from "../../recruit/implementation/gobelin-totem-recruit";
+import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
 import { BattleTotem } from "../battle-totem";
 
 export class BattleGobelinPortal extends Derive(BattleTotem) {

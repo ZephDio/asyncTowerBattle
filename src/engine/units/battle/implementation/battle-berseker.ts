@@ -4,7 +4,7 @@ import { PathFinder } from "../../../battle/path-finder";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { Berseker } from "../../recruit/implementation/berseker-recruit";
+import { Berseker } from "../../recruit/implementation/berseker";
 import { Status } from "../../../../shared/traits/engine/status";
 import { TBattleUnit } from "../battle-unit";
 

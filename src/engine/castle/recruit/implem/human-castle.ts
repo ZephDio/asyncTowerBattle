@@ -2,7 +2,7 @@ import { Derive } from "@ddd-ts/traits";
 import { HumanCastleBlueprint } from "../../blueprint/human-castle-blueprint";
 import { Cell } from "../../../../shared/position";
 import { FoodHooks } from "../../../food/battle-food-economy";
-import { BattleHumanCastle } from "../../battle/battle-castle";
+import { BattleHumanCastle } from "../../battle/battle-human-castle";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Castle } from "../castle-recruit";
 

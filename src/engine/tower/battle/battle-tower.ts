@@ -6,7 +6,7 @@ import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { HaveStats } from "../../stats/stats";
 import { Orientable } from "../../../shared/traits/engine/core/orientable";
-import { Tower } from "../recruit/tower-recruit";
+import { Tower } from "../recruit/tower";
 import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 
 export type AnyBattleTower = ImplementsTrait<typeof BattleTower>;

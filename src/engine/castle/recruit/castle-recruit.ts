@@ -1,6 +1,6 @@
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { GridPosition } from "../../../shared/position";
-import { BattleHumanCastle } from "../battle/battle-castle";
+import { BattleHumanCastle } from "../battle/battle-human-castle";
 import { BattleGrid } from "../../grid/battle-grid";
 import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { TokenHooks } from "../../shop/holder/holder";

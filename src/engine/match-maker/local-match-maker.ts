@@ -1,15 +1,15 @@
 import { Cell } from "../../shared/position";
 import { Army } from "../army/army";
 import { ArmyFixture } from "../army/army-fixtures";
-import { BarrackRecruitBuilder } from "../barrack/recruit/barrack-recruit-fixtures";
+import { BarrackRecruitBuilder } from "../barrack/recruit/barrack-fixtures";
 import { CastleFactory } from "../castle/blueprint/human-castle-blueprint";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory } from "../path/army/path-fixtures";
-import { TotemBuilder } from "../totem/recruit/totem-recruit-fixtures";
-import { AnyTower } from "../tower/recruit/tower-recruit";
-import { TowerBuilder } from "../tower/recruit/tower-recruit-fixtures";
-import { UnitRecruitFixture } from "../units/recruit/unit-recruit-fixtures";
+import { TotemBuilder } from "../totem/recruit/totem-fixtures";
+import { AnyTower } from "../tower/recruit/tower";
+import { TowerBuilder } from "../tower/recruit/tower-fixtures";
+import { UnitRecruitFixture } from "../units/recruit/unit-fixtures";
 import { MatchMaker } from "./match-maker";
 
 export class LocalMatchMaker extends MatchMaker {

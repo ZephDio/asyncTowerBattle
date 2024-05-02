@@ -1,6 +1,6 @@
 import { MemorizePath } from "../../../shared/decorators/path-memorize";
 import { Cell, GridPosition } from "../../../shared/position";
-import { BattleHumanCastle } from "../../castle/battle/battle-castle";
+import { BattleHumanCastle } from "../../castle/battle/battle-human-castle";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyPathTile } from "../../tile/recruit/tile";
 export class BattlePath {

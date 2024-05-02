@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { Totem } from "../totem-recruit";
+import { Totem } from "../totem";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";

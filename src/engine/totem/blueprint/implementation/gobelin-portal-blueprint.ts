@@ -11,7 +11,7 @@ import { TSynergy } from "../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { Caster, RecruitCaster } from "../../../../shared/traits/engine/cast";
-import { GobelinPortal } from "../../recruit/implementation/gobelin-totem-recruit";
+import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
 
 export class GobelinPortalBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -20,7 +20,7 @@ export class GobelinPortalBlueprint extends Derive(
 	TImageDrawable(Resources.totem.gobelinportal.resource.image, Resources.totem.gobelinportal.size, DrawPriority.NormalGridElement),
 	TSynergy,
 ){
-	description = new Description("Golbelin Portal", ["On ▣ trigger :","30% chance to", "generate a goblin"]);
+	description = new Description("Gobelin Portal", ["On ▣ trigger :","30% chance to", "generate a goblin"]);
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		if(!gridElement) return false
 		return implementsTrait(gridElement, RecruitCaster) || implementsTrait(gridElement, Caster);
