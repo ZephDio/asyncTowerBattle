@@ -1,7 +1,7 @@
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattleBullet } from "../../../projectile/battle/implementation/battle-bullet";
-import { GreenBattleTower } from "../../battle/implementation/battle.green.tower";
+import { GreenBattleTower } from "../../battle/implementation/battle-green-tower";
 import { GreenTowerBlueprint } from "../../blueprint/implementation/green-tower-blueprint";
 import { Tower } from "../tower";
 import { AnyBattleTower } from "../../battle/battle-tower";

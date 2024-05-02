@@ -1,70 +1,97 @@
 import { Derive } from "@ddd-ts/traits";
-import { Physic } from "../../../../shared/physic";
-import { BlueTower } from "../../recruit/implementation/blue-tower";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { AnyBattleUnit } from "../../../units/battle/battle-unit";
+import { WitchHouse } from "../../recruit/implementation/witch-house";
+import { Stats } from "../../../stats/stats";
+import { Status } from "../../../../shared/traits/engine/status";
+import { SlowingBattlePathTile } from "../../../tile/battle/implementation/slowing-battle-tile";
+import { BasicBattlePathTile } from "../../../tile/battle/implementation/basic-battle-tile";
+import { TrapBattlePathTile } from "../../../tile/battle/implementation/trap-battle-tle";
 import { BattleTower } from "../battle-tower";
-export class BlueBattleTower extends Derive(
-	BattleTower
-) {
+
+export class BattleWitchHouse extends Derive(BattleTower) {
 	constructor(
-		private readonly recruit: BlueTower,
+		private readonly recruit: WitchHouse,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation : number
+		orientation: number,
 	) {
 		super({
-			recruit,
 			orientation,
+			recruit,
 			casterRecruit: recruit,
-			hitboxHolder: recruit,
 			imageDrawable: recruit,
 			maxHealth: NaN,
 			attack: recruit.attackDamage,
 			movementSpeed: NaN,
 			castSpeed: recruit.attackSpeed,
 			attackSpeed: NaN,
-			foodCost: recruit.foodCost,
 			onDeath: () => {},
+			foodCost: recruit.foodCost,
+			hitboxHolder: recruit,
 			descriptor: recruit,
 		});
+		this.gridShape = recruit.gridShape;
+		this.setOrientation(orientation);
 	}
 
-	target = null as null | AnyBattleUnit;
-	private attack(target: AnyBattleUnit) {
-		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
-		if (sucess) {
-			const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
-			this.hooks.addProjectile(projectile, this);
+	private attack() {
+		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
+			this.cell,
+			this.recruit.patternEffect.getRelativeCells(this.recruit.orientation),
+		);
+		let sucess: boolean = false;
+		if (
+			neighbors.some(
+				(neighbor) =>
+					neighbor instanceof BasicBattlePathTile ||
+					neighbor instanceof SlowingBattlePathTile ||
+					neighbor instanceof TrapBattlePathTile,
+			)
+		) {
+			sucess = this.hooks.alliedFoodHooks.consumeFood(this.recruit.foodCost);
+			if (sucess) {
+				for (const neighbor of neighbors) {
+					if (
+						neighbor instanceof BasicBattlePathTile ||
+						neighbor instanceof SlowingBattlePathTile ||
+						neighbor instanceof TrapBattlePathTile
+					) {
+						const position = this.hooks.gridHooks.getRealPosition(neighbor.cell);
+						const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.stats.attack);
+						this.hooks.addAreaEffect(areaEffects, this);
+					}
+				}
+			}
 		}
 		this.finishCast(sucess);
 	}
+	onCastResolve(): void {
+		this.attack();
+		this.finishCast();
+	}
+}
 
-	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
-		return enemyUnit.isAlive() && distanceSqrd < 20 * 20;
+export class Poisoned extends Derive(Status) {
+	key = "poisoned";
+	clock = 0;
+	duration = 70;
+	stats: Stats;
+
+	constructor(public damage: number) {
+		super({});
 	}
 
-	setTarget(enemyUnit: AnyBattleUnit | null) {
-		this.target = enemyUnit;
-	}
-
-	onCastResolve() {
-		if (
-			this.target &&
-			this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
-		) {
-			this.attack(this.target);
-
-			return;
+	tick() {
+		this.clock++;
+		if (this.clock >= this.duration) {
+			this.onRemove();
 		}
-		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule);
-		this.setTarget(target);
-		if (this.target) {
-			this.attack(this.target);
-			return;
-		}
+		this.stats.takeDamage(this.damage / 64);
 	}
 
+	onRemove() {
+		this.stats.removeStatus(this);
+	}
 }

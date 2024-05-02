@@ -1,7 +1,7 @@
 import { ImplementsTrait } from "@ddd-ts/traits";
 import { Cell } from "../../../shared/position";
 import { Random } from "../../../shared/random";
-import { AnyBarrackBlueprint } from "../../barrack/blueprint/barrack";
+import { AnyBarrackBlueprint } from "../../barrack/blueprint/barrack-blueprint";
 import { BasicBarrackBlueprint } from "../../barrack/blueprint/implementation/basic-barrack-blueprint";
 import { WaveBarrackBlueprint } from "../../barrack/blueprint/implementation/wave-barrack-blueprint";
 import { BasicTileBlueprint } from "../../tile/blueprint/implementation/basic-path-blueprint";
