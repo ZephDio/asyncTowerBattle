@@ -11,6 +11,7 @@ import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Resources } from "../../../../renderer/resources";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 import { Fox } from "../../recruit/implementation/fox";
+import { seconds } from "../../../../shared/seconds";
 
 export class FoxBlueprint extends Derive(
 	TShopBlueprint(15, 5),
@@ -28,7 +29,8 @@ export class FoxBlueprint extends Derive(
 			health: "22",
 			damage: "1.5",
 			"move speed": "0.18",
-			"production cost": "150",
+			"food consumption" : "0.5",
+			"production time": "1.8s",
 		},
 	);
 
@@ -37,7 +39,7 @@ export class FoxBlueprint extends Derive(
 	attackSpeed = 4;
 
 	foodCost = 0.5;
-	cost = 150;
+	cost = seconds(1.8);
 
 	castSpeed = 1;
 

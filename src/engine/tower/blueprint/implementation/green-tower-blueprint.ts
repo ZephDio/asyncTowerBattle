@@ -25,10 +25,10 @@ export class GreenTowerBlueprint extends Derive(
 		damage: "10",
 		range: "3",
 		"cast speed": "3",
-		"cast cost": "100",
+		"food consumption": "1.5",
 	});
 
-	foodCost = 2;
+	foodCost = 1.5;
 
 	toRecruit(cell: Cell) {
 		return new GreenTower(cell, this);

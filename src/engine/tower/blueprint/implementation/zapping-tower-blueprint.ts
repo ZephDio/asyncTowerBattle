@@ -23,7 +23,7 @@ export class ZappingTowerBlueprint extends Derive(
 	toRecruit(cell: Cell) {
 		return new ZappingTower(cell, this);
 	}
-	foodCost = 2;
+	foodCost = 3;
 
 	override description = new TowerDescription(
 		"Zapping Tower",
@@ -32,7 +32,7 @@ export class ZappingTowerBlueprint extends Derive(
 			damage: "15",
 			range: "20",
 			"cast speed": "1",
-			"cast cost": "10",
+			"food consumption": "3",
 		},
 	);
 

@@ -17,12 +17,12 @@ export class WaveBarrackBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.barracks.wave.resource.image, Resources.barracks.wave.size, DrawPriority.NormalGridElement),
 ) {
-	productionSpeed: number = 3.5;
+	productionSpeed: number = 1;
 
 	foodCost = 1.8;
 
 	description = new BarrackDescription("Wave Barrack", ["A barrack that", "spawn unit 3 by 3"], {
-		"production speed": "3.5",
+		"production speed": "1",
 	});
 
 	toRecruit(cell: Cell) {

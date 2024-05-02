@@ -9,6 +9,7 @@ import { FoodHooks } from "../../food/battle-food-economy";
 import { Cast, Caster } from "../../../shared/traits/engine/cast";
 import { Orientable } from "../../../shared/traits/engine/core/orientable";
 import { HumanCastle } from "../recruit/implem/human-castle";
+import { seconds } from "../../../shared/seconds";
 
 export class BattleHumanCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement, Caster, Orientable) {
 	public actualLife: number;
@@ -43,11 +44,11 @@ export class BattleHumanCastle extends Derive(HTHitbox, TRenderable, HTImageDraw
 	}
 
 	casts() {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 64);
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), seconds(1));
 	}
 
 	onCastResolve() {
-		this.foodHooks.addFood(3);
+		this.foodHooks.addFood(4);
 		this.finishCast(true);
 	}
 

@@ -11,6 +11,7 @@ import { Berseker } from "../../recruit/implementation/berseker";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
+import { seconds } from "../../../../shared/seconds";
 
 export class BersekerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -25,9 +26,9 @@ export class BersekerBlueprint extends Derive(
 	baseSpeed = 0.25;
 	attackSpeed = 4;
 
-	foodCost = 1.4;
+	foodCost = 2;
 
-	cost = 160;
+	cost = seconds(3);
 
 	description = new UnitDescription(
 		"Berseker",
@@ -36,7 +37,8 @@ export class BersekerBlueprint extends Derive(
 			health: "23",
 			damage: "2",
 			"move speed": "0.25",
-			"production cost": "160",
+			"food consumption": "2",
+			"production time": "3s",
 		},
 	);
 

@@ -17,15 +17,15 @@ export class VeterantBarrackBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.barracks.veterant.resource.image, Resources.barracks.veterant.size, DrawPriority.NormalGridElement),
 ) {
-	productionSpeed: number = 1.6;
+	productionSpeed: number = 1;
 
 	foodCost = 5;
 
 	description = new BarrackDescription(
 		"Veterant Barrack",
-		["A barrack that spawn", "a giant unit with", "reduced movement", "speed but greatly", "enhanced health"],
+		["A barrack that spawn", "a giant unit with", "reduced movement", "speed but greatly", "enhanced health", "", "Takes 1.6 times more", "time to produce unit"],
 		{
-			"production speed": "1.6",
+			"production speed": "1",
 		},
 	);
 

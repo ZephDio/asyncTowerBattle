@@ -13,6 +13,7 @@ import { BattleGobelin } from "../../battle/implementation/battle-gobelin";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
+import { seconds } from "../../../../shared/seconds";
 
 export class GobelinBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
@@ -30,7 +31,7 @@ export class GobelinBlueprint extends Derive(
 
 	foodCost = 1;
 
-	cost = 10;
+	cost = seconds(1);
 
 	toBattle(gridPosition: GridPosition, enemyPath: BattlePath, hooks: BattleArmyHooks) {
 		return new BattleGobelin(this, gridPosition, enemyPath, hooks);

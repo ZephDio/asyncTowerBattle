@@ -23,13 +23,13 @@ export class BlueTowerBlueprint extends Derive(
 	toRecruit(cell: Cell) {
 		return new BlueTower(cell, this);
 	}
-	foodCost = 2;
+	foodCost = 3;
 
 	description = new TowerDescription("Blue Tower", ["A tower that shoots", "missile that explode", "in an area"], {
 		damage: "7",
 		range: "20",
 		"cast speed": "1.2",
-		"cast cost": "100",
+		"food consumption": "3",
 	});
 	type = "blue" as const;
 	projectile = new Rocket();

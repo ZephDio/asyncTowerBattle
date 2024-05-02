@@ -9,8 +9,9 @@ import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Choupisson } from "../../recruit/implementation/choupisson";
-import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
+import { seconds } from "../../../../shared/seconds";
 
 export class ChoupissonBlueprint extends Derive(
 	TShopBlueprint(15, 7),
@@ -25,18 +26,19 @@ export class ChoupissonBlueprint extends Derive(
 	baseSpeed = 0.25;
 	attackSpeed = 4;
 
-	foodCost = 1.25;
+	foodCost = 1.8;
 
-	cost = 110;
+	cost = seconds(3.5)
 
-	override description = new Description(
+	override description = new UnitDescription(
 		"Choupisson",
 		["Throw 3 projectiles", "in a cone on enemies", "when damaged"],
 		{
 			health: "18",
 			damage: "3",
 			"move speed": "0.25",
-			"production cost": "110",
+			"production time": "3.5s", // "production cost": "110
+			"food consumption": "1.8",
 		},
 	);
 	toRecruit(cell: Cell) {

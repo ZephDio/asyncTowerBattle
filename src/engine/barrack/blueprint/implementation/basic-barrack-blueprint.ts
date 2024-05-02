@@ -17,12 +17,12 @@ export class BasicBarrackBlueprint extends Derive(
 	FoodConsumer,
 	TImageDrawable(Resources.barracks.basic.resource.image, Resources.barracks.basic.size, DrawPriority.NormalGridElement),
 ) {
-	productionSpeed: number = 3;
+	productionSpeed: number = 1;
 
 	override foodCost = 4;
 
 	description = new BarrackDescription("Basic Barrack", ["A barrack that spawn", "unit one by one"], {
-		"production speed": "3",
+		"production speed": "1",
 	});
 
 	toRecruit(cell: Cell) {

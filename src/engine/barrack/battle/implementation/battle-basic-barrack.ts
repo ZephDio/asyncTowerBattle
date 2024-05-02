@@ -24,7 +24,7 @@ export class BasicBattleBarrack extends Derive(BattleBarrack) {
 			movementSpeed: NaN,
 			castSpeed: barrackRecruit.productionSpeed,
 			attackSpeed: NaN,
-			foodCost: barrackRecruit.foodCost,
+			foodCost: NaN,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 			descriptor: barrackRecruit,
@@ -36,11 +36,8 @@ export class BasicBattleBarrack extends Derive(BattleBarrack) {
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
-		const succes = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
-		if (succes) {
-			if (!this.unitRecruit) throw new Error("Unit recruit is undefined in a Barrack Attempting to cast");
-			this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
-		}
-		this.finishCast(succes);
+		if (!this.unitRecruit) throw new Error("Unit recruit is undefined in a Barrack Attempting to cast");
+		this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
+		this.finishCast();
 	}
 }
