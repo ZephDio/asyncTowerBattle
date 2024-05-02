@@ -30,6 +30,7 @@ export class Battle {
 	) {
 		this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy, this.handleBattleOver.bind(this), () =>
 			this.randomSeed.random(),
+			this.timer
 		);
 		this.battleClock = new BattleClockHud(this.timer);
 		this.speedCursor = new SliderBattleSpeed(PercentToReal({ x: 10, y: 96 }), this.changeSpeed.bind(this));
@@ -38,6 +39,7 @@ export class Battle {
 	}
 
 	start() {
+		this.battlefield.triggerBattleStartEffects()
 		const loop = () => {
 			setTimeout(() => {
 				if (!this.gameSpeed) {
@@ -57,6 +59,7 @@ export class Battle {
 		this.battlefield.tick();
 	}
 
+	
 	handleBattleOver(battleVerdict: "victory" | "defeat") {
 		// could be nice to build summary here
 		this.isOver = true;

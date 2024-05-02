@@ -8,9 +8,9 @@ import { Caster } from "../../../../shared/traits/engine/cast";
 import { Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
+import { BattleStartTrigger } from "../../../../shared/traits/engine/battle-start";
 
-export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag) {
-	hasTriggered = false;
+export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, BattleStartTrigger) {
 	foodProduction: number = 5;
 	constructor(
 		public windmill: Windmill,
@@ -20,6 +20,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag) {
 		override _orientation: number,
 	) {
 		super({
+			battleStartRecruit: windmill,
 			imageDrawable: windmill,
 			hitboxHolder: windmill,
 			synergy: windmill,
@@ -27,9 +28,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag) {
 		this.gridShape = windmill.gridShape;
 	}
 
-	tick() {
-		if (this.hasTriggered) return;
-		this.hasTriggered = true;
+	onBattleStart(): void {
 		const elements = this.hooks.gridHooks.getRelativeNeighborsInArmy(
 			this.cell,
 			this.patternEffect.getRelativeCells(this.orientation),
@@ -44,10 +43,8 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag) {
 			}
 		}
 	}
+	tick() {}
 
-	incrementFood() {
-		this.hooks.alliedFoodHooks.addFood(this.foodProduction);
-	}
 }
 
 export class WindmillBuff extends Derive(Status) {

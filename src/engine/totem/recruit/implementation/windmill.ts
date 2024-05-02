@@ -7,8 +7,9 @@ import { WindmillBlueprint } from "../../blueprint/implementation/windmill-bluep
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { BattleWindmill } from "../../battle/implementation/battle-windmill";
 import { FoodTag } from "../../../../shared/traits/engine/tags";
+import { RecruitBattleStart } from "../../../../shared/traits/engine/battle-start";
 
-export class Windmill extends Derive(Totem, HTSynergy, FoodTag) {
+export class Windmill extends Derive(Totem, HTSynergy, FoodTag, RecruitBattleStart) {
 	constructor(
 		public cell: Cell,
 		public blueprint: WindmillBlueprint = new WindmillBlueprint({}),

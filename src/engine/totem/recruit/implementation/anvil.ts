@@ -1,12 +1,13 @@
 import { Cell } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { AnvilBattleTotem } from "../../battle/implementation/battle-orange-totem";
+import { AnvilBattleTotem } from "../../battle/implementation/battle-anvil";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { Totem } from "../totem";
 import { AnvilTotemBlueprint } from "../../blueprint/implementation/anvil-blueprint";
-export class AnvilTotem extends Derive(Totem, HTSynergy) {
+import { RecruitBattleStart } from "../../../../shared/traits/engine/battle-start";
+export class AnvilTotem extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 	constructor(
 		public cell: Cell,
 		public totem: AnvilTotemBlueprint = new AnvilTotemBlueprint({}),

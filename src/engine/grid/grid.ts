@@ -103,11 +103,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			);
 		}
 	}
-
-	getElements() {
-		return [...this.tiles.values()];
-	}
-
+	
 	getCastleCell() {
 		return new Cell({ x: 0, y: this.height - 1 });
 	}
