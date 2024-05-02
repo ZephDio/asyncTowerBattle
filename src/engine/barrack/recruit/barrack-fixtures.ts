@@ -47,10 +47,9 @@ export class BarrackRecruitBuilder {
 }
 
 export class BarrackRecruitFixtures {
-	static basicWithSoldier(speed?: number) {
+	static basicWithDefaultUnit(speed?: number) {
 		return new BarrackRecruitBuilder()
 			.withProductionSpeed(speed)
-			.setUnit(UnitRecruitFixture.soldier)
 			.withCell(new Cell({ x: 2, y: 1 }))
 			.buildBasic();
 	}
@@ -66,7 +65,6 @@ export class BarrackRecruitFixtures {
 	static waveWithSoldier(speed?: number) {
 		return new BarrackRecruitBuilder()
 			.withProductionSpeed(speed)
-			.setUnit(UnitRecruitFixture.soldier)
 			.withCell(new Cell({ x: 3, y: 1 }))
 			.buildWave();
 	}

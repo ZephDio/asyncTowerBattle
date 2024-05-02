@@ -2,24 +2,24 @@ import { Derive } from "@ddd-ts/traits";
 import { GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
-import { Soldier } from "../../recruit/implementation/soldier";
 import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
+import { SoldierBlueprint } from "../../blueprint/implementation/soldier-blueprint";
 
 export class BattleSoldier extends Derive(TBattleUnit) {
 	pathFinder: PathFinder;
 
 	constructor(
-		recruit: Soldier,
+		recruit: SoldierBlueprint,
 		public position: GridPosition,
 		public enemyPath: BattlePath,
 		public hooks: BattleArmyHooks,
 	) {
 		super({
 			imageDrawable: recruit,
-			maxHealth: recruit.maxLife,
+			maxHealth: recruit.baseMaxLife,
 			attack: recruit.attackDamage,
-			movementSpeed: recruit.speed,
+			movementSpeed: recruit.baseSpeed,
 			attackSpeed: recruit.attackSpeed,
 			castSpeed: NaN,
 			foodCost: recruit.foodCost,

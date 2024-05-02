@@ -1,32 +1,35 @@
 import { Cell } from "../../shared/position";
 import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-fixtures";
-import { CastleFactory, CastleRecruitFixture } from "../castle/blueprint/human-castle-blueprint";
+import { CastleFactory, CastleFixture } from "../castle/recruit/castle-recruit-fixtures";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
+import { Classes } from "../menu/main-menu";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
 import { TotemBuilder } from "../totem/recruit/totem-fixtures";
 import { TowerBlueprintFixtures } from "../tower/blueprint/tower-fixtures";
 import { AnyTower } from "../tower/recruit/tower";
 import { TowerBuilder } from "../tower/recruit/tower-fixtures";
+import { DwarfBlueprint } from "../units/blueprint/implementation/dwarf-blueprint";
+import { SoldierBlueprint } from "../units/blueprint/implementation/soldier-blueprint";
 import { UnitRecruitFixture } from "../units/recruit/unit-fixtures";
 import { Army } from "./army";
 
 export class ArmyFixture {
 	static get pacifist() {
 		const grid = new ArmyGrid(6, 4, undefined, 7);
-		const castle = CastleFactory.default;
+		const castle = CastleFactory.defaultDwarf;
 		const towers: AnyTower[] = [];
 		const tiles = PathFactory.default;
-		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
+		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.choupisson, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
 		[castle, ...towers, ...tiles].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
-		return new Army(grid, unitInventory);
+		return new Army(grid, unitInventory, new DwarfBlueprint({}));
 	}
 	static get allied() {
 		const grid = new ArmyGrid(7, 5);
-		const castle = CastleFactory.default;
+		const castle = CastleFactory.defaultDwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
@@ -37,12 +40,12 @@ export class ArmyFixture {
 		const totems = [new TotemBuilder().celled(new Cell({ x: 3, y: 2 })).buildOrange()];
 		const tiles = PathFactory.default;
 		const barracks = [BarrackRecruitFixtures.veterantWithDragon()];
-		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.soldier, UnitRecruitFixture.priest];
+		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.choupisson, UnitRecruitFixture.priest];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
 		[castle, ...towers, ...tiles, ...totems, ...barracks].map((e) => grid.setElement(e));
 		//return new Army(castle, towers, path, barracks, grid, unitInventory);
-		return new Army(grid, unitInventory);
+		return new Army(grid, unitInventory, new DwarfBlueprint({}));
 	}
 	static get enemy() {
 		const grid = new ArmyGrid();
@@ -53,23 +56,33 @@ export class ArmyFixture {
 				.celled(new Cell({ x: 4, y: 3 }))
 				.buildZapping(TowerBlueprintFixtures.zapping),
 		];
-		const castle = CastleRecruitFixture.enemy;
+		const castle = CastleFixture.enemy;
 		const tiles = PathFixture.default;
 		const barracks = [BarrackRecruitFixtures.basicWithDragon(), BarrackRecruitFixtures.waveWithSoldier()];
 		[castle, ...towers, ...barracks, ...tiles].map((e) => grid.setElement(e));
-		return new Army(grid, new Inventory());
+		return new Army(grid, new Inventory(), new DwarfBlueprint({}));
 	}
 }
 
 export class ArmyFactory {
-	static get default() {
-		const grid = new ArmyGrid(7, 5, undefined, 6); 
-		const castle = CastleFactory.default;
+	static default(classe : Classes) {
+		if(classe === Classes.Dwarf){
+			const grid = new ArmyGrid(7, 5, undefined, 6); 
+			const castle = CastleFactory.defaultDwarf;
+			const tiles = PathFactory.default;
+			const unitInventory = new Inventory();
+			[castle, ...tiles].map((e) => grid.setElement(e));
+			return new Army(grid, unitInventory, new DwarfBlueprint({}));
+		}
+		if(classe === Classes.Human){
+			const grid = new ArmyGrid(7, 5, undefined, 6); 
+		const castle = CastleFactory.defaultHuman;
 		const tiles = PathFactory.default;
 		const unitInventory = new Inventory();
 		[castle, ...tiles].map((e) => grid.setElement(e));
-		//return new Army(castle, towers, path, barracks, grid, unitInventory);
-		return new Army(grid, unitInventory);
+		return new Army(grid, unitInventory, new SoldierBlueprint({}));
+		}
+		throw new Error("Invalid class");
 	}
 }
 

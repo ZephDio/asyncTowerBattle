@@ -29,15 +29,16 @@ export class BasicBattleBarrack extends Derive(BattleBarrack) {
 			hitboxHolder: barrackRecruit,
 			descriptor: barrackRecruit,
 		});
-		this.castCost = unitRecruit ? unitRecruit.cost : NaN;
+		
+		this.castCost = unitRecruit ? unitRecruit.cost : this.hooks.getDefaultUnit().cost;
 		this.gridShape = barrackRecruit.gridShape;
 	}
 
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
-		if (!this.unitRecruit) throw new Error("Unit recruit is undefined in a Barrack Attempting to cast");
-		this.hooks.addUnits(this.unitRecruit.toBattle(spawnPoint, path, this.hooks), this);
+		const unit = this.unitRecruit ? this.unitRecruit.toBattle(spawnPoint, path, this.hooks) : this.hooks.getDefaultUnit().toBattle(spawnPoint, path, this.hooks);
+		this.hooks.addUnits(unit, this);
 		this.finishCast();
 	}
 }

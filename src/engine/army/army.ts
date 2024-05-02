@@ -10,6 +10,7 @@ import { ArmyFoodEconomy } from "../food/food-economy";
 import { ArmyGoldEconomy, EconomyHooks } from "../gold/army-gold-economy";
 import { ShopEnterTrigger } from "../../shared/traits/engine/shop-enter";
 import { GridElement } from "../../shared/traits/engine/core/grid-element";
+import { TokenUnit } from "../../shared/traits/engine/token-unit";
 
 export type ArmyHooks = {
 	economyHooks: EconomyHooks;
@@ -20,6 +21,7 @@ export class Army {
 	constructor(
 		public grid: ArmyGrid,
 		public inventory: Inventory,
+		public defaultUnit: ImplementsTrait<typeof TokenUnit>,
 
 		public foodEconomy = new ArmyFoodEconomy(),
 		public goldEconomy = new ArmyGoldEconomy(),

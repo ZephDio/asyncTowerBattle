@@ -2,13 +2,15 @@ import { Cell } from "../../shared/position";
 import { Army } from "../army/army";
 import { ArmyFixture } from "../army/army-fixtures";
 import { BarrackRecruitBuilder } from "../barrack/recruit/barrack-fixtures";
-import { CastleFactory } from "../castle/blueprint/human-castle-blueprint";
+import { CastleFactory } from "../castle/recruit/castle-recruit-fixtures";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory } from "../path/army/path-fixtures";
 import { TotemBuilder } from "../totem/recruit/totem-fixtures";
 import { AnyTower } from "../tower/recruit/tower";
 import { TowerBuilder } from "../tower/recruit/tower-fixtures";
+import { DwarfBlueprint } from "../units/blueprint/implementation/dwarf-blueprint";
+import { SoldierBlueprint } from "../units/blueprint/implementation/soldier-blueprint";
 import { UnitRecruitFixture } from "../units/recruit/unit-fixtures";
 import { MatchMaker } from "./match-maker";
 
@@ -26,7 +28,7 @@ ArmyFixture;
 const EnemyArmyFixtures = {
 	1: () => {
 		const grid = new ArmyGrid(7, 5, undefined, 6.3);
-		const castle = CastleFactory.default;
+		const castle = CastleFactory.defaultDwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
@@ -38,22 +40,20 @@ const EnemyArmyFixtures = {
 		const tiles = PathFactory.default;
 		const barracks = [
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.soldier)
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.buildWave(),
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.soldier)
 				.withCell(new Cell({ x: 3, y: 1 }))
 				.buildVeterant(),
 		];
 		const totems = [new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField()];
 		const unitInventory = new Inventory();
 		[castle, ...towers, ...tiles, ...totems, ...barracks].map((e) => grid.setElement(e));
-		return { army: new Army(grid, unitInventory), randomSeed: 123456 };
+		return { army: new Army(grid, unitInventory, new DwarfBlueprint({})), randomSeed: 123456 };
 	},
 	2: () => {
 		const grid = new ArmyGrid(8, 6);
-		const castle = CastleFactory.round2;
+		const castle = CastleFactory.round2Human;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
@@ -67,7 +67,6 @@ const EnemyArmyFixtures = {
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.buildWave(),
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.soldier)
 				.withCell(new Cell({ x: 3, y: 1 }))
 				.buildVeterant(),
 		];
@@ -78,11 +77,11 @@ const EnemyArmyFixtures = {
 			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
 		];
 		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
-		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
+		return { army: new Army(grid, new Inventory(), new SoldierBlueprint({})), randomSeed: 123456 };
 	},
 	3: () => {
 		const grid = new ArmyGrid(8, 6);
-		const castle = CastleFactory.round2;
+		const castle = CastleFactory.round2Dwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
@@ -114,11 +113,11 @@ const EnemyArmyFixtures = {
 			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
 		];
 		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
-		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
+		return { army: new Army(grid, new Inventory(), new DwarfBlueprint({})), randomSeed: 123456 };
 	},
 	4: () => {
 		const grid = new ArmyGrid(8, 6);
-		const castle = CastleFactory.round2;
+		const castle = CastleFactory.round2Human;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
@@ -154,11 +153,11 @@ const EnemyArmyFixtures = {
 			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
 		];
 		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
-		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
+		return { army: new Army(grid, new Inventory(), new SoldierBlueprint({})), randomSeed: 123456 };
 	},
 	5: () => {
 		const grid = new ArmyGrid(8, 6);
-		const castle = CastleFactory.round2;
+		const castle = CastleFactory.round2Dwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
@@ -198,11 +197,11 @@ const EnemyArmyFixtures = {
 			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
 		];
 		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
-		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
+		return { army: new Army(grid, new Inventory(), new DwarfBlueprint({})), randomSeed: 123456 };
 	},
 	6: () => {
 		const grid = new ArmyGrid(8, 6);
-		const castle = CastleFactory.round2;
+		const castle = CastleFactory.round2Dwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
 			new TowerBuilder()
@@ -247,7 +246,7 @@ const EnemyArmyFixtures = {
 			new TotemBuilder().celled(new Cell({ x: 2, y: 2 })).buildGobelinPortal(),
 		];
 		[castle, ...towers, ...barracks, ...totems, ...tiles].map((e) => grid.setElement(e));
-		return { army: new Army(grid, new Inventory()), randomSeed: 123456 };
+		return { army: new Army(grid, new Inventory(), new DwarfBlueprint({})), randomSeed: 123456 };
 	},
 };
 

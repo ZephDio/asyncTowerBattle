@@ -13,7 +13,6 @@ import { WitchHouseBlueprint } from "../../tower/blueprint/implementation/witch-
 import { AnyTowerBlueprint } from "../../tower/blueprint/tower-blueprint";
 import { DragonBlueprint } from "../../units/blueprint/implementation/dragon-blueprint";
 import { PriestBlueprint } from "../../units/blueprint/implementation/priest-blueprint";
-import { SoldierBlueprint } from "../../units/blueprint/implementation/soldier-blueprint";
 import { AnyUnitBlueprint } from "../../units/blueprint/units-blueprint";
 import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { ZappingTowerBlueprint } from "../../tower/blueprint/implementation/zapping-tower-blueprint";
@@ -68,7 +67,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 		share: 35,
 	},
 	{
-		value: [SoldierBlueprint, DragonBlueprint, PriestBlueprint, BersekerBlueprint, ChoupissonBlueprint, FoxBlueprint],
+		value: [DragonBlueprint, PriestBlueprint, BersekerBlueprint, ChoupissonBlueprint, FoxBlueprint],
 		share: 50,
 	},
 ];
