@@ -96,11 +96,16 @@ export const Resources = {
 		},
 		bakery: {
 			size: {
-				width: 5,
-				height: 5,
+				width: 6,
+				height: 6,
 			},
 			resource: {
-				image: createImage("/resources/totem/bakery.png"),
+				image: {
+					frontView: createImage("/resources/totem/bakery/front-view.png"),
+					backView: createImage("/resources/totem/bakery/back-view.png"),
+					leftView: createImage("/resources/totem/bakery/left-view.png"),
+					rightView: createImage("/resources/totem/bakery/right-view.png"),
+				},
 				shape: "rectangle",
 			},
 		},
