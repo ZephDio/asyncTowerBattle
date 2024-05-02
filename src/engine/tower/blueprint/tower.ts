@@ -1,4 +1,4 @@
-import { BlueTowerBlueprint } from "./implementation/blue-tower";
+import { BlueTowerBlueprint } from "./implementation/blue-tower-blueprint";
 import { FrostTowerBlueprint } from "./implementation/frost-tower";
 import { GreenTowerBlueprint } from "./implementation/green-tower";
 import { YellowTowerBlueprint } from "./implementation/yellow-tower";

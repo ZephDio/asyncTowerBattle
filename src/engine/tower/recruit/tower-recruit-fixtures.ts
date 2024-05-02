@@ -1,6 +1,5 @@
 import { BlueTower } from "./implementation/blue-tower-recruit";
 import { GreenTower } from "./implementation/green-tower-recruit";
-import { BlueTowerBlueprint } from "../blueprint/implementation/blue-tower";
 import { GreenTowerBlueprint } from "../blueprint/implementation/green-tower";
 import { Cell } from "../../../shared/position";
 import { TowerBlueprintFixtures } from "../blueprint/tower-fixtures";
@@ -10,6 +9,7 @@ import { ZappingTowerBlueprint } from "../blueprint/implementation/zapping-tower
 import { ZappingTower } from "./implementation/zapping-tower-recruit";
 import { FrostTowerBlueprint } from "../blueprint/implementation/frost-tower";
 import { FrostTower } from "./implementation/frost-tower-recruit";
+import { BlueTowerBlueprint } from "../blueprint/implementation/blue-tower-blueprint";
 
 export class TowerBuilder {
 	cell: Cell;
