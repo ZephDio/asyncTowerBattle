@@ -22,6 +22,7 @@ export class Battlefield {
 		enemyArmy: Army,
 		public onBattleOver: Battle["handleBattleOver"],
 		public random: () => number,
+		public timer : { clock: number }
 	) {
 		const { alliedBattleArmy, enemyBattleArmy, battleGrid } = this.init(alliedArmy, enemyArmy);
 		this.alliedArmy = alliedBattleArmy;
@@ -60,6 +61,7 @@ export class Battlefield {
 			this.searchAlliedUnitTarget.bind(this),
 			this.searchEnemiesInArea.bind(this),
 			this.random.bind(this),
+			() => this.timer,
 			() => enemyBattlePath,
 			() => enemyBattleCastle,
 			enemyFoodEconomy.getHooks(),
@@ -74,6 +76,7 @@ export class Battlefield {
 			this.searchEnemyUnitTarget.bind(this),
 			this.searchAlliesInArea.bind(this),
 			this.random.bind(this),
+			() => this.timer,
 			() => alliedBattlePath,
 			() => alliedBattleCastle,
 			alliedFoodEconomy.getHooks(),
@@ -183,6 +186,11 @@ export class Battlefield {
 			}
 		}
 		return bestTarget[0];
+	}
+
+	triggerBattleStartEffects(){
+		this.alliedArmy.triggerBattleStartEffects()
+		this.enemyArmy.triggerBattleStartEffects()
 	}
 
 	tickTowers() {

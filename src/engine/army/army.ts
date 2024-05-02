@@ -104,7 +104,7 @@ export class Army {
 		return this.goldEconomy.getHooks();
 	}
 
-	onShopeEnter() {
+	onShopEnter() {
 		const hooks = this.getHooks();
 		this.grid.getElements().forEach((element) => {
 			if (implementsTrait(element, ShopEnterTrigger)) {

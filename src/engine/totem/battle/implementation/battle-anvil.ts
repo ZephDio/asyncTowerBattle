@@ -5,9 +5,9 @@ import { AnvilTotem } from "../../recruit/implementation/anvil";
 import { HaveStats, Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
+import { BattleStartTrigger } from "../../../../shared/traits/engine/battle-start";
 
-export class AnvilBattleTotem extends Derive(BattleTotem) {
-	hasTriggered = false;
+export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger) {
 
 	constructor(
 		public recruit: AnvilTotem,
@@ -16,24 +16,22 @@ export class AnvilBattleTotem extends Derive(BattleTotem) {
 		public readonly cell: Cell,
 		override _orientation: number,
 	) {
-		super({ imageDrawable: recruit, hitboxHolder: recruit });
+		super({ imageDrawable: recruit, hitboxHolder: recruit, battleStartRecruit: recruit });
 		this.gridShape = recruit.gridShape;
 	}
-
-	tick() {
-		if (!this.hasTriggered) {
-			const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
-				this.cell,
-				this.recruit.patternEffect.getRelativeCells(this.recruit.orientation),
-			);
-			for (const neighbor of neighbors) {
-				if (implementsTrait(neighbor, HaveStats)) {
-					neighbor.addStatus(new OrangeTotemBuff({}));
-				}
+	
+	onBattleStart() {
+		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
+			this.cell,
+			this.recruit.patternEffect.getRelativeCells(this.recruit.orientation),
+		);
+		for (const neighbor of neighbors) {
+			if (implementsTrait(neighbor, HaveStats)) {
+				neighbor.addStatus(new OrangeTotemBuff({}));
 			}
-			this.hasTriggered = true;
 		}
 	}
+	tick() {}
 }
 
 export class OrangeTotemBuff extends Derive(Status) {

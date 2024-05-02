@@ -9,8 +9,9 @@ import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { BreweryBlueprint } from "../../blueprint/implementation/brewery-blueprint";
 import { BattleBrewery } from "../../battle/implementation/battle-brewery";
 import { GridShape } from "../../../../shared/traits/engine/core/grid-element";
+import { RecruitBattleStart } from "../../../../shared/traits/engine/battle-start";
 
-export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag) {
+export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag, RecruitBattleStart) {
 	castSpeed = 1;
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: -1, y: 0 })]);
 	constructor(

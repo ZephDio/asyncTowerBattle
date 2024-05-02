@@ -42,11 +42,6 @@ export class BattleCropsField extends Derive(BattleTotem, Caster, FoodTag) {
 
 	produceFood() {
 		this.hooks.alliedFoodHooks.addFood(this.foodProduction);
-		// this.hooks.alliedArmyBuffHooks.addUnitBuff("cast-speed", 20);
-		// this.hooks.alliedArmyBuffHooks.addTowerBuff("attack", 20);
-		// this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", 20);
-		// this.hooks.alliedArmyBuffHooks.addUnitBuff("movement-speed", 20);
-		// this.hooks.alliedArmyBuffHooks.addUnitBuff("vitality", 20);
 	}
 
 	casts() {

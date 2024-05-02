@@ -157,8 +157,6 @@ export class Stats {
 
 		this.basePercentStat.maxHealth += rawGain;
 		this._health += rawGain;
-		console.log("real", this._health);
-		console.log("percent", this.health);
 	}
 
 	heal(amount: number) {

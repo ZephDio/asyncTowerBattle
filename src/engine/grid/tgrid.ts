@@ -108,6 +108,10 @@ export const TGrid = Trait((base) => {
 			return founds;
 		}
 
+		getElements() {
+			return [...this.tiles.values()];
+		}
+		
 		getElement(cell: Cell) {
 			return this.tiles.get(ArmyGrid.posToString(cell));
 		}

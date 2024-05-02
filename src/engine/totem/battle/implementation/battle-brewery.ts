@@ -7,35 +7,35 @@ import { BattleTotem } from "../battle-totem";
 import { seconds } from "../../../../shared/seconds";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { Brewery } from "../../recruit/implementation/brewery";
+import { BattleStartTrigger } from "../../../../shared/traits/engine/battle-start";
 
-export class BattleBrewery extends Derive(BattleTotem, FoodTag, HTSynergy, Caster) {
+export class BattleBrewery extends Derive(BattleTotem, FoodTag, HTSynergy, Caster, BattleStartTrigger) {
 	vitalityBuffAmount: number = 2;
-	hasTriggered: boolean = false;
 	constructor(
-		public bakery: Brewery,
+		public brewery: Brewery,
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
 		override _orientation: number,
 	) {
 		super({
-			synergy: bakery,
-			casterRecruit: bakery,
-			imageDrawable: bakery,
-			hitboxHolder: bakery,
+			synergy: brewery,
+			casterRecruit: brewery,
+			battleStartRecruit: brewery,
+			imageDrawable: brewery,
+			hitboxHolder: brewery,
 			maxHealth: NaN,
 			attack: NaN,
 			attackSpeed: NaN,
 			movementSpeed: NaN,
-			castSpeed: bakery.castSpeed,
+			castSpeed: brewery.castSpeed,
 			foodCost: NaN,
 			onDeath: () => {},
 		});
-		this.gridShape = bakery.gridShape;
+		this.gridShape = brewery.gridShape;
 	}
 
 	gainSpeedForEachBarracks() {
-		this.hasTriggered = true;
 		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
 			this.cell,
 			this.patternEffect.getRelativeCells(this.orientation),
@@ -58,8 +58,12 @@ export class BattleBrewery extends Derive(BattleTotem, FoodTag, HTSynergy, Caste
 		this.castInProgress = new Cast(this, this.produceBrew.bind(this), seconds(5));
 	}
 
+	onBattleStart(): void {
+		this.gainSpeedForEachBarracks();
+	}
+
+	
 	tick() {
-		if (!this.hasTriggered) this.gainSpeedForEachBarracks();
 		this.stats.tick();
 		this.tickCast();
 	}

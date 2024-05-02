@@ -84,7 +84,7 @@ export class Game {
 	startShop() {
 		this.shop = new ShopPhase(this.army, this.handleShopQuit.bind(this), this.setDescriptionHud.bind(this));
 		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
-		this.army.onShopeEnter();
+		this.army.onShopEnter();
 	}
 
 	startBattleSummary(lastBattleState: BattleState, battleVerdict: "victory" | "defeat") {
