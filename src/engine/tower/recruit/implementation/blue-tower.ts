@@ -1,7 +1,6 @@
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattleRocket } from "../../../projectile/battle/implementation/battle-rocket";
-import { BlueBattleTower } from "../../battle/implementation/battle-witch-house";
 import { Tower } from "../tower";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
@@ -10,6 +9,7 @@ import { Derive } from "@ddd-ts/traits";
 import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { BlueTowerBlueprint } from "../../blueprint/implementation/blue-tower-blueprint";
+import { BlueBattleTower } from "../../battle/implementation/battle-blue-tower";
 
 export class BlueTower extends Derive(HTDamageDealer, Tower) {
 	attackSpeed = 1.2;
