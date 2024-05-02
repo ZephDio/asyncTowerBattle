@@ -27,7 +27,7 @@ export const Totem = Subtrait([TRecruit, TotemTag], (base) => {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
 				return undefined;
 			}
-			const cell = grid.gridPositionToCell(gridPosition);
+			const cell = grid.gridPositionToCell(this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation));
 			if (!cell) throw new Error("Invalid cell");
 
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {

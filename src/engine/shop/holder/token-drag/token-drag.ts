@@ -5,7 +5,7 @@ import { ImplementsTrait, Subtrait } from "../../../../../traits/traits";
 import { AnyRecruit } from "../../../../shared/traits/engine/recruit";
 import { Buyable } from "../../retail/buyable";
 import { TokenHooks } from "../holder";
-import { TGrid } from "../../../grid/tgrid";
+import { STANDARD_CELL_SIZE, TGrid } from "../../../grid/tgrid";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
@@ -25,11 +25,21 @@ export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, Orientable]
 		abstract onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void;
 		abstract getPatternEffect(): PatternEffect | undefined;
 
-		getProjectionCells(cell: Cell) {
+		getProjectionCells(gridPosition: GridPosition) {
 			if (this.holded instanceof Buyable) {
+				const gridPositionForDefaultTile = this.holded.entity.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, this.orientation);
+				const cell = new Cell({
+					x: Math.floor(gridPositionForDefaultTile.x / STANDARD_CELL_SIZE),
+					y: Math.floor(gridPositionForDefaultTile.y /  STANDARD_CELL_SIZE),
+				});
 				return this.holded.entity.gridShape.getOccupiedCellsFrom(cell, this.orientation);
 			}
-			return this.holded.gridShape.getOccupiedCellsFrom(cell, this.orientation);
+			const gridPositionForDefaultTile = this.holded.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, this.orientation);
+				const cell = new Cell({
+					x: Math.floor(gridPositionForDefaultTile.x / STANDARD_CELL_SIZE),
+					y: Math.floor(gridPositionForDefaultTile.y /  STANDARD_CELL_SIZE),
+				});
+				return this.holded.gridShape.getOccupiedCellsFrom(cell, this.orientation);
 		}
 
 		rotate() {
