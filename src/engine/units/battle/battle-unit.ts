@@ -72,7 +72,7 @@ export const TBattleUnit = Subtrait(
 					this.stats.heal(1);
 					return;
 				}
-				this.hunger++;
+				this.hunger+= 2;
 				this.stats.takeDamage(this.hunger);
 			}
 		}

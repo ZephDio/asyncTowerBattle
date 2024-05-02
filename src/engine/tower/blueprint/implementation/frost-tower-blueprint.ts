@@ -24,12 +24,12 @@ export class FrostTowerBlueprint extends Derive(
 		return new FrostTower(cell, this);
 	}
 
-	foodCost = 2;
+	foodCost = 3.5;
 
 	description = new TowerDescription(
 		"Frost Tower",
 		["Makes an enormous", "frost boulder that", "falls and explodes on", "enemies, slowing them"],
-		{ damage: "4", range: "20", "cast speed": "1", "cast cost": "10" },
+		{ damage: "4", range: "20", "cast speed": "1", "food consumption": "3.5" },
 	);
 	type = "frost" as const;
 	projectile = new FrostSpike();

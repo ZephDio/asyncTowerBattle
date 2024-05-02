@@ -11,6 +11,7 @@ import { Priest } from "../../recruit/implementation/priest";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
+import { seconds } from "../../../../shared/seconds";
 
 export class PriestBlueprint extends Derive(
 	TShopBlueprint(20, 6),
@@ -27,13 +28,14 @@ export class PriestBlueprint extends Derive(
 
 	foodCost = 1.3;
 
-	cost = 160;
+	cost = seconds(2.6);
 
 	description = new UnitDescription("Priest", ["A unit that cast", "an healing area", "area around him"], {
 		health: "22",
 		damage: "0.5",
 		"move speed": "0.16",
-		"production cost": "160",
+		"food consumption" :"1.3",
+		"production time": "2.6s",
 	});
 
 	toRecruit(cell: Cell) {

@@ -27,27 +27,24 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 			movementSpeed: NaN,
 			castSpeed: barrackRecruit.productionSpeed,
 			attackSpeed: NaN,
-			foodCost: barrackRecruit.foodCost,
+			foodCost: NaN,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 			descriptor: barrackRecruit,
 		});
-		this.castCost = unitRecruit ? unitRecruit.cost : NaN;
+		this.castCost = unitRecruit ? unitRecruit.cost * 1.6 : NaN;
 		this.gridShape = barrackRecruit.gridShape;
 	}
 
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
-		const succes = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
-		if (succes) {
-			if (!this.unitRecruit) throw new Error("Unit recruit is undefined in a Barrack Attempting to cast");
-			const unit = this.unitRecruit.toBattle(spawnPoint, path, this.hooks);
-			const buff = new VeterantBuff();
-			unit.addStatus(buff);
-			unit.addSize(0.3);
-			this.hooks.addUnits(unit, this);
-		}
+		if (!this.unitRecruit) throw new Error("Unit recruit is undefined in a Barrack Attempting to cast");
+		const unit = this.unitRecruit.toBattle(spawnPoint, path, this.hooks);
+		const buff = new VeterantBuff();
+		unit.addStatus(buff);
+		unit.addSize(0.3);
+		this.hooks.addUnits(unit, this);
 		this.finishCast();
 	}
 }

@@ -27,7 +27,7 @@ export class WitchHouseBlueprint extends Derive(
 	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, DrawPriority.NormalGridElement),
 	TSynergy,
 ) {
-	foodCost = 2;
+	foodCost = 5;
 
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		return gridElement
@@ -43,7 +43,7 @@ export class WitchHouseBlueprint extends Derive(
 	description = new TowerDescription(
 		"Poison Sentinel",
 		["This tower make", "some poison puddles", "on path around it"],
-		{ damage: "6 per tick", range: "5", "cast speed": "0.8", "cast cost": "100" },
+		{ damage: "6 per tick", range: "5", "cast speed": "0.8", "food consumption": "5" },
 	);
 	toRecruit(cell: Cell) {
 		return new WitchHouse(cell, this);

@@ -109,7 +109,7 @@ export class Description {
 export type TowerLinesDescription = {
 	damage: string;
 	"cast speed": string;
-	"cast cost": string;
+	"food consumption": string;
 	range: string;
 };
 export class TowerDescription extends Description {
@@ -122,7 +122,8 @@ export type UnitLinesDescription = {
 	health: string;
 	damage: string;
 	"move speed": string;
-	"production cost": string;
+	"food consumption": string;
+	"production time": string;
 };
 export class UnitDescription extends Description {
 	constructor(name: string, description: string[], extraLines: UnitLinesDescription) {

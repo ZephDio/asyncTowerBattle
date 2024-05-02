@@ -11,6 +11,7 @@ import { Soldier } from "../../recruit/implementation/soldier";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
+import { seconds } from "../../../../shared/seconds";
 
 export class SoldierBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -26,13 +27,14 @@ export class SoldierBlueprint extends Derive(
 	attackSpeed = 5;
 
 	foodCost = 0.6;
-	cost = 75;
+	cost = seconds(1.2);
 
 	description = new UnitDescription("Soldier", ["A lame unit", "that doesn't do", "anything special"], {
 		health: "6",
 		damage: "1",
 		"move speed": "0.32",
-		"production cost": "75",
+		"food consumption" : "0.6",
+		"production time": "1.2s",
 	});
 	toRecruit(cell: Cell) {
 		return new Soldier(cell, this);
