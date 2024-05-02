@@ -6,7 +6,7 @@ import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 
-import { Poisoned } from "../../tower/battle/implementation/battle-yellow-tower";
+import { Poisoned } from "../../tower/battle/implementation/battle-witch-house";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { STANDARD_CELL_SIZE } from "../../grid/tgrid";

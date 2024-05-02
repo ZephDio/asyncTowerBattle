@@ -5,7 +5,7 @@ import { AnyBattleTower } from "../../battle/battle-tower";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
 import { WitchHouseBlueprint } from "../../blueprint/implementation/witch-house-blueprint";
-import { BattleWitchHouse } from "../../battle/implementation/battle-yellow-tower";
+import { BattleWitchHouse } from "../../battle/implementation/battle-witch-house";
 import { PoisonGround } from "../../../area-effect/implementation/poison-ground";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";

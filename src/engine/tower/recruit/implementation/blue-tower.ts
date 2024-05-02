@@ -1,7 +1,7 @@
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattleRocket } from "../../../projectile/battle/implementation/battle-rocket";
-import { BlueBattleTower } from "../../battle/implementation/battle-blue-tower";
+import { BlueBattleTower } from "../../battle/implementation/battle-witch-house";
 import { Tower } from "../tower";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";

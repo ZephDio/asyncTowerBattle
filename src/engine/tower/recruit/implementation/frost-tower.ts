@@ -7,7 +7,7 @@ import { Derive } from "@ddd-ts/traits";
 
 import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
-import { FrostBattleTower } from "../../battle/implementation/frost-battle-tower";
+import { FrostBattleTower } from "../../battle/implementation/battle-frost-tower";
 import { FrostTowerBlueprint } from "../../blueprint/implementation/frost-tower-blueprint";
 import { BattleFrostSpike } from "../../../projectile/battle/implementation/battle-frost-spike";
 
