@@ -1,7 +1,7 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { YellowTower } from "../../recruit/implementation/yellow-tower-recruit";
+import { WitchHouse } from "../../recruit/implementation/witch-house";
 import { Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
 import { SlowingBattlePathTile } from "../../../tile/battle/implementation/slowing-battle-tile";
@@ -9,9 +9,9 @@ import { BasicBattlePathTile } from "../../../tile/battle/implementation/basic-b
 import { TrapBattlePathTile } from "../../../tile/battle/implementation/trap-battle-tle";
 import { BattleTower } from "../battle-tower";
 
-export class YellowBattleTower extends Derive(BattleTower) {
+export class BattleWitchHouse extends Derive(BattleTower) {
 	constructor(
-		private readonly recruit: YellowTower,
+		private readonly recruit: WitchHouse,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,

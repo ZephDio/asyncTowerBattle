@@ -1,4 +1,4 @@
-import { BattleHumanCastle } from "../../castle/battle/battle-castle";
+import { BattleHumanCastle } from "../../castle/battle/battle-human-castle";
 import { AnyBattleProjectile } from "../../projectile/battle/battle-projectile";
 import { AnyBattleTower } from "../../tower/battle/battle-tower";
 import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";

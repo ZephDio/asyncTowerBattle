@@ -3,7 +3,7 @@ import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";
-import { Priest } from "../../recruit/implementation/priest-recruit";
+import { Priest } from "../../recruit/implementation/priest";
 import { HealWave } from "../../../area-effect/implementation/heal-wave";
 import { GridPosition } from "../../../../shared/position";
 import { TBattleUnit } from "../battle-unit";

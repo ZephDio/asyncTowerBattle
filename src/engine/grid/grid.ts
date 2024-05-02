@@ -5,8 +5,8 @@ import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
 import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { AnyCastle, Castle } from "../castle/recruit/castle-recruit";
-import { Tower } from "../tower/recruit/tower-recruit";
-import { Barrack } from "../barrack/recruit/barrack-recruit";
+import { Tower } from "../tower/recruit/tower";
+import { Barrack } from "../barrack/recruit/barrack";
 import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { PathTile } from "../tile/recruit/tile";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
@@ -14,7 +14,7 @@ import { TRenderable } from "../../shared/traits/render/renderable";
 import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
 import { TRecruit } from "../../shared/traits/engine/recruit";
 import { TEnvironmentElement } from "../environment/environment";
-import { Totem } from "../totem/recruit/totem-recruit";
+import { Totem } from "../totem/recruit/totem";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();

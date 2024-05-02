@@ -2,7 +2,7 @@ import { ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell } from "../../shared/position";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
-import { Unit } from "../units/recruit/unit-recruit";
+import { Unit } from "../units/recruit/unit";
 import { AnyRecruit, TRecruit } from "../../shared/traits/engine/recruit";
 import { TGrid } from "../grid/tgrid";
 import { BattlePath } from "../path/battle/battle-path";

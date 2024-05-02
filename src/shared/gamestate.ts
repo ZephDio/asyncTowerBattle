@@ -1,6 +1,6 @@
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
-import { BattleHumanCastle } from "../engine/castle/battle/battle-castle";
-import { Tower } from "../engine/tower/recruit/tower-recruit";
+import { BattleHumanCastle } from "../engine/castle/battle/battle-human-castle";
+import { Tower } from "../engine/tower/recruit/tower";
 import { HudElement } from "./hud-element/hud-element";
 import { Retail } from "../engine/shop/retail/retail";
 import { AnyCastle } from "../engine/castle/recruit/castle-recruit";

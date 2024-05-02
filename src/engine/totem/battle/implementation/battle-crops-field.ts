@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { CropsField } from "../../recruit/implementation/crops-flied-recruit";
+import { CropsField } from "../../recruit/implementation/crops-field";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";

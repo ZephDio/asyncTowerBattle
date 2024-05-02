@@ -1,7 +1,7 @@
 import { Derive } from "@ddd-ts/traits";
 import { TDrawable } from "../../../traits/render/drawable";
 import { ScreenPosition } from "../../../position";
-import { BattleHumanCastle } from "../../../../engine/castle/battle/battle-castle";
+import { BattleHumanCastle } from "../../../../engine/castle/battle/battle-human-castle";
 import { TRenderable } from "../../../traits/render/renderable";
 import { Resources } from "../../../../renderer/resources";
 import { DrawPriority } from "../../../traits/render/image-drawable";

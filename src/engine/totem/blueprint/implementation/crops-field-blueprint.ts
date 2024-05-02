@@ -8,7 +8,7 @@ import { Description, TDescriptor } from "../../../../shared/traits/render/huds/
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
-import { CropsField } from "../../recruit/implementation/crops-flied-recruit";
+import { CropsField } from "../../recruit/implementation/crops-field";
 import { FoodTag } from "../../../../shared/traits/engine/tags";
 
 export class CropsFieldBlueprint extends Derive(

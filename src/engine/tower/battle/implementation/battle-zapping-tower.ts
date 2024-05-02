@@ -1,7 +1,7 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { ZappingTower } from "../../recruit/implementation/zapping-tower-recruit";
+import { ZappingTower } from "../../recruit/implementation/zapping-tower";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Physic } from "../../../../shared/physic";
 import { BattleTower } from "../battle-tower";

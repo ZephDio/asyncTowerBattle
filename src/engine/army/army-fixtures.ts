@@ -1,14 +1,14 @@
 import { Cell } from "../../shared/position";
-import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-recruit-fixtures";
+import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-fixtures";
 import { CastleFactory, CastleRecruitFixture } from "../castle/blueprint/human-castle-blueprint";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
-import { TotemBuilder } from "../totem/recruit/totem-recruit-fixtures";
+import { TotemBuilder } from "../totem/recruit/totem-fixtures";
 import { TowerBlueprintFixtures } from "../tower/blueprint/tower-fixtures";
-import { AnyTower } from "../tower/recruit/tower-recruit";
-import { TowerBuilder } from "../tower/recruit/tower-recruit-fixtures";
-import { UnitRecruitFixture } from "../units/recruit/unit-recruit-fixtures";
+import { AnyTower } from "../tower/recruit/tower";
+import { TowerBuilder } from "../tower/recruit/tower-fixtures";
+import { UnitRecruitFixture } from "../units/recruit/unit-fixtures";
 import { Army } from "./army";
 
 export class ArmyFixture {

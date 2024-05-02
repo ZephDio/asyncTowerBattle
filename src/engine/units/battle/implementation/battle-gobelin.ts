@@ -4,7 +4,7 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
-import { GobelinBlueprint } from "../../blueprint/implementation/gobelin";
+import { GobelinBlueprint } from "../../blueprint/implementation/gobelin-blueprint";
 
 export class BattleGobelin extends Derive(TBattleUnit) {
 	pathFinder: PathFinder;

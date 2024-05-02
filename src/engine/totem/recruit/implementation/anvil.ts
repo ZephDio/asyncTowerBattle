@@ -4,7 +4,7 @@ import { AnvilBattleTotem } from "../../battle/implementation/battle-orange-tote
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
-import { Totem } from "../totem-recruit";
+import { Totem } from "../totem";
 import { AnvilTotemBlueprint } from "../../blueprint/implementation/anvil-blueprint";
 export class AnvilTotem extends Derive(Totem, HTSynergy) {
 	constructor(

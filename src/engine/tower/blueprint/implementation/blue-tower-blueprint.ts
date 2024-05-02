@@ -5,7 +5,7 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { Rocket } from "../../../projectile/blueprint/implementation/rocket";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
-import { BlueTower } from "../../recruit/implementation/blue-tower-recruit";
+import { BlueTower } from "../../recruit/implementation/blue-tower";
 import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { Derive } from "../../../../../traits/traits";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
