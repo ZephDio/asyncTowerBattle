@@ -86,15 +86,18 @@ export class ShopInputToIntentTranslator {
 			focus.grid.setOveredTile([focus.cell]);
 			if (shop.holderControl.hold) {
 				const patternEffect = shop.holderControl.hold.getPatternEffect();
-				if (patternEffect) {
+				const gridPosition = focus.grid.screenToGridPosition(screenPosition)
+				const projectionCells = shop.holderControl.hold.getProjectionCells(gridPosition);
+				focus.grid.setOveredTile(projectionCells);
+				if (patternEffect && projectionCells[0]) {
+
 					focus.grid.setSynergiesTiles(
-						focus.cell,
+						projectionCells[0],
 						patternEffect.getRelativeCells(shop.holderControl.hold.orientation),
 						patternEffect.patternCondition,
 					);
 				}
-				const projectionCells = shop.holderControl.hold.getProjectionCells(focus.cell);
-				focus.grid.setOveredTile(projectionCells);
+
 				return;
 			}
 			if (focus.element) {
@@ -122,7 +125,9 @@ export class ShopInputToIntentTranslator {
 		if (focus.cell && focus.grid instanceof Inventory) {
 			focus.grid.setOveredTile([focus.cell]);
 			if (shop.holderControl.hold) {
-				return;
+				const gridPosition = focus.grid.screenToGridPosition(screenPosition)
+				const projectionCells = shop.holderControl.hold.getProjectionCells(gridPosition);
+				focus.grid.setOveredTile(projectionCells);
 			}
 			if (focus.element) {
 				focus.grid.setOveredTile([

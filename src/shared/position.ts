@@ -120,6 +120,13 @@ export class Cell {
 		return this.x === other.x && this.y === other.y;
 	}
 
+	divideBy(divisor: number) {
+		return new Cell({
+			x: this.x / divisor,
+			y: this.y / divisor,
+		});
+	}
+
 	clone() {
 		return new Cell({ x: this.x, y: this.y });
 	}

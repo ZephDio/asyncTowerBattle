@@ -28,7 +28,7 @@ export const PathTile = Subtrait([TRecruit], (base) => {
 			if (grid instanceof RetailGrid) {
 				throw new Error("cannot sell tile");
 			}
-			const cell = grid.gridPositionToCell(gridPosition);
+			const cell = grid.gridPositionToCell(this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation));
 			if (!cell) throw new Error("Invalid cell");
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
 				const { valid, elements } = grid.validateGridElementPlacement(this, cell, orientation);
