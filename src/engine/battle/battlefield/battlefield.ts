@@ -64,6 +64,7 @@ export class Battlefield {
 			() => this.timer,
 			() => enemyBattlePath,
 			() => enemyBattleCastle,
+			() => alliedArmy.defaultUnit,
 			enemyFoodEconomy.getHooks(),
 			grid.getAlliedHooks(),
 			alliedArmyBuffHooks,
@@ -79,6 +80,7 @@ export class Battlefield {
 			() => this.timer,
 			() => alliedBattlePath,
 			() => alliedBattleCastle,
+			() => enemyArmy.defaultUnit,
 			alliedFoodEconomy.getHooks(),
 			grid.getEnemyHooks(),
 			enemyArmyBuffHooks,
@@ -101,6 +103,8 @@ export class Battlefield {
 			.filter((b): b is AnyBattleBarrack => b !== undefined);
 		const alliedBattleTotem = alliedArmy.totems.map((totem) => totem.toAllied(grid, alliedBattleArmy.getHooks()));
 		const enemyBattleTotem = enemyArmy.totems.map((totem) => totem.toEnemy(grid, enemyBattleArmy.getHooks()));
+		alliedBattleCastle.initHooks(alliedBattleArmy.getHooks());
+		enemyBattleCastle.initHooks(enemyBattleArmy.getHooks());
 
 		alliedBattleArmy.init(
 			alliedBattleCastle,

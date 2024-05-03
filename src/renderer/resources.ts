@@ -159,8 +159,8 @@ export const Resources = {
 	unit: {
 		soldier: {
 			size: {
-				width: 2,
-				height: 2,
+				width: 3,
+				height: 3,
 			},
 			resource: {
 				shape: "ellipse",
@@ -217,6 +217,16 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		dwarf: {
+			size: {
+				width: 3,
+				height: 3,
+			},
+			resource: {
+				image: createImage("/resources/units/dwarf.png"),
+				shape: "rectangle",
+			},
+		},
 		fox: {
 			size: {
 				width: 3,
@@ -267,15 +277,29 @@ export const Resources = {
 		},
 	},
 	castle: {
-		size: {
-			width: 7,
-			height: 7,
+		human : {
+			size: {
+				width: 7,
+				height: 7,
+			},
+			resource: {
+				image: createImage("/resources/castle/castle_blue.png"),
+				shape: "rectangle",
+				color: "#3b3b3b",
+			},
 		},
-		resource: {
-			image: createImage("/resources/castle/castle_blue.png"),
-			shape: "rectangle",
-			color: "#3b3b3b",
-		},
+		dwarf : {
+			size: {
+				width: 7,
+				height: 7,
+			},
+			resource: {
+				image: createImage("/resources/castle/castle_purple.png"),
+				shape: "rectangle",
+				color: "#3b3b3b",
+			},
+		}
+		
 	},
 	projectiles: {
 		bullet: {
@@ -410,6 +434,11 @@ export const Resources = {
 			size: {
 				width: 50,
 				height: 20,
+			},
+		},
+		factionSelector: {
+			resource: {
+				image: createImage("/resources/hud/selector.png"),
 			},
 		},
 		bell: {

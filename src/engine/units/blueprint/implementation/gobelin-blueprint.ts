@@ -14,6 +14,7 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 import { seconds } from "../../../../shared/seconds";
+import { TokenUnit } from "../../../../shared/traits/engine/token-unit";
 
 export class GobelinBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
@@ -23,6 +24,7 @@ export class GobelinBlueprint extends Derive(
 	TImageDrawable(Resources.unit.gobelin.resource.image, Resources.unit.gobelin.size, DrawPriority.NormalGridElement),
 	TDamageDealer(1),
 	FoodConsumer,
+	TokenUnit
 ) {
 	override description = new Description("Gobelin", ["A small and fast creature"]);
 	baseMaxLife = 10;

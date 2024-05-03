@@ -27,15 +27,13 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 
 export class DescriptionHud extends Derive(BannerBackground) {
 	drawPriority: 9;
-	position: ScreenPosition;
 	titlePosition: ScreenPosition;
 	linesPosition: ScreenPosition[];
 	tags : Tag[]
 
 	extraLines: Record<string, string>;
-	constructor(public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>) {
+	constructor(public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>,public position : ScreenPosition = PercentToReal({ x: 66.3, y: 50 })) {
 		super({});
-		this.position = this.getPosition();
 		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 10 }));
 		this.extraLines = this.item.description.extraLines ?? {};
 		this.linesPosition = this.getLinesPositions();
@@ -43,7 +41,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	}
 
 	getPosition() {
-		return PercentToReal({ x: 66.3, y: 50 });
+		return ;
 	}
 
 	getLinesPositions() {

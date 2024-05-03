@@ -2,8 +2,6 @@ import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { WitchHouse } from "../../recruit/implementation/witch-house";
-import { Stats } from "../../../stats/stats";
-import { Status } from "../../../../shared/traits/engine/status";
 import { SlowingBattlePathTile } from "../../../tile/battle/implementation/slowing-battle-tile";
 import { BasicBattlePathTile } from "../../../tile/battle/implementation/basic-battle-tile";
 import { TrapBattlePathTile } from "../../../tile/battle/implementation/trap-battle-tle";
@@ -73,25 +71,3 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 	}
 }
 
-export class Poisoned extends Derive(Status) {
-	key = "poisoned";
-	clock = 0;
-	duration = 70;
-	stats: Stats;
-
-	constructor(public damage: number) {
-		super({});
-	}
-
-	tick() {
-		this.clock++;
-		if (this.clock >= this.duration) {
-			this.onRemove();
-		}
-		this.stats.takeDamage(this.damage / 64);
-	}
-
-	onRemove() {
-		this.stats.removeStatus(this);
-	}
-}

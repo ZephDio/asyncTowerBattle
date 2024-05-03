@@ -4,18 +4,16 @@ import { Berseker } from "./implementation/berseker";
 import { ChoupissonBlueprint } from "../blueprint/implementation/choupisson-blueprint";
 import { DragonBlueprint } from "../blueprint/implementation/dragon-blueprint";
 import { PriestBlueprint } from "../blueprint/implementation/priest-blueprint";
-import { SoldierBlueprint } from "../blueprint/implementation/soldier-blueprint";
 import { Choupisson } from "./implementation/choupisson";
 import { Dragon } from "./implementation/dragon";
 import { Priest } from "./implementation/priest";
-import { Soldier } from "./implementation/soldier";
 import { FoxBlueprint } from "../blueprint/implementation/fox-blueprint";
 import { Fox } from "./implementation/fox";
 
 export class UnitRecruitBuilder {
-	buildSoldier(soldier?: SoldierBlueprint) {
-		return new Soldier(new Cell({ x: 0, y: 1 }), soldier);
-	}
+	// buildSoldier(soldier?: SoldierBlueprint) {
+	// 	return new Soldier(new Cell({ x: 0, y: 1 }), soldier);
+	// }
 	buildDragon(dragon?: DragonBlueprint) {
 		return new Dragon(new Cell({ x: 0, y: 0 }), dragon);
 	}
@@ -34,9 +32,9 @@ export class UnitRecruitBuilder {
 }
 
 export class UnitRecruitFixture {
-	static get soldier() {
-		return new UnitRecruitBuilder().buildSoldier();
-	}
+	// static get soldier() {
+	// 	return new UnitRecruitBuilder().buildSoldier();
+	// }
 	static get dragon() {
 		return new UnitRecruitBuilder().buildDragon();
 	}

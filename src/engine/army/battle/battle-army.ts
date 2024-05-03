@@ -14,13 +14,15 @@ import { AnyBattleTotem } from "../../totem/battle/battle-totem";
 import { BattleFoodEconomy, FoodHooks } from "../../food/battle-food-economy";
 import { ArmyBuff, ArmyBuffHooks, Buff } from "./army-buff";
 import { EconomyHooks } from "../../gold/army-gold-economy";
-import { implementsTrait } from "@ddd-ts/traits";
+import { ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { BattleStartTrigger } from "../../../shared/traits/engine/battle-start";
+import { TokenUnit } from "../../../shared/traits/engine/token-unit";
 
 export type BattleArmyHooks = {
 	random: () => number;
 	timer : () => { clock : number };
 	addUnits: BattleArmy["addUnit"];
+	getDefaultUnit: BattleArmy["getDefaultUnit"];
 	removeUnit: BattleArmy["removeUnit"];
 	addProjectile: BattleArmy["addProjectile"];
 	removeProjectile: BattleArmy["removeProjectile"];
@@ -63,6 +65,7 @@ export class BattleArmy {
 		public getTimer: () => { clock: number },
 		public getEnemyPath: () => BattlePath,
 		public getEnemyCastle: () => BattleHumanCastle,
+		public getDefaultUnit: () => ImplementsTrait<typeof TokenUnit>,
 		public enemyFoodHooks: FoodHooks,
 		public gridHooks: GridHooks,
 		public alliedArmyBuffHooks: ArmyBuffHooks,
@@ -167,6 +170,7 @@ export class BattleArmy {
 			random: this.random.bind(this),
 			timer : this.getTimer.bind(this),
 			addUnits: this.addUnit.bind(this),
+			getDefaultUnit: this.getDefaultUnit.bind(this),
 			removeUnit: this.removeUnit.bind(this),
 			addProjectile: this.addProjectile.bind(this),
 			removeProjectile: this.removeProjectile.bind(this),

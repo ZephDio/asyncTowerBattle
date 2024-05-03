@@ -1,7 +1,6 @@
 import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
-import { ArmyFactory } from "./army/army-fixtures";
 import { ShopPhase } from "./shop/shop";
 import { LocalMatchMaker } from "./match-maker/local-match-maker";
 import { MatchMaker } from "./match-maker/match-maker";
@@ -10,17 +9,23 @@ import { DescriptionHud } from "../shared/traits/render/huds/item-descriptor";
 import { RenderableState } from "../renderer/renderer";
 import { BattleRandomSeed } from "./battle/battle-random-seed";
 import { EnvironmentGeneration } from "./environment/env-generation";
+import { Faction } from "./menu/main-menu";
+import { Army } from "./army/army";
+import { ArmyFactory } from "./army/army-fixtures";
 
 export class Game {
-	army = ArmyFactory.default;
+	army : Army
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
 	shop: null | ShopPhase = null;
-	rounds = new RoundsTracker(this.army);
+	rounds : RoundsTracker
 
 	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new LocalMatchMaker();
-	constructor() {
+	constructor(public chosenClass : Faction) {
+		console.log(chosenClass)
+		this.army = ArmyFactory.default(chosenClass)
+		this.rounds = new RoundsTracker(this.army);
 		const envGenerator = new EnvironmentGeneration();
 		envGenerator.generateEnvironment(this.army.grid, 0);
 		this.startShop();

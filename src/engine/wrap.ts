@@ -10,7 +10,7 @@ export class GameWrapper {
 	}
 
 	startNewGame() {
-		this.game = new Game();
+		this.game = new Game(this.mainMenu.classesSelectorHud.selectedClass);
 		this.state = "game";
 	}
 

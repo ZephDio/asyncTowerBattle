@@ -34,9 +34,7 @@ export const BattleBarrack = Subtrait(
 			abstract unitRecruit: AnyUnit | null;
 
 			tick() {
-				if (this.unitRecruit) {
-					super.tickCast();
-				}
+				super.tickCast();	
 			}
 
 			casts(): void {

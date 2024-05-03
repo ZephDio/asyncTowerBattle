@@ -9,11 +9,12 @@ import { FoodHooks } from "../../food/battle-food-economy";
 import { Cast, Caster } from "../../../shared/traits/engine/cast";
 import { Orientable } from "../../../shared/traits/engine/core/orientable";
 import { HumanCastle } from "../recruit/implem/human-castle";
-import { seconds } from "../../../shared/seconds";
+import { BattleArmyHooks } from "../../army/battle/battle-army";
 
 export class BattleHumanCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement, Caster, Orientable) {
 	public actualLife: number;
 	public maxLife: number;
+	public hooks : BattleArmyHooks;
 
 	constructor(
 		recruit: HumanCastle,
@@ -39,20 +40,29 @@ export class BattleHumanCastle extends Derive(HTHitbox, TRenderable, HTImageDraw
 		this.setOrientation(orientation);
 	}
 
+	initHooks(hooks: BattleArmyHooks){
+        this.hooks = hooks;
+    }
 	isAlive() {
 		return this.actualLife > 0;
 	}
 
 	casts() {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), seconds(1));
+		const cost = this.hooks.getDefaultUnit().cost
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), cost);
+	}
+
+	produceFood(){
+		this.foodHooks.addFood(4/32);
 	}
 
 	onCastResolve() {
-		this.foodHooks.addFood(4);
+		this.hooks.addUnits(this.hooks.getDefaultUnit().toBattle(this.position.clone(), this.hooks.getEnemyPath(), this.hooks), this);
 		this.finishCast(true);
 	}
 
 	tick() {
+		this.produceFood()
 		this.tickCast();
 	}
 }
