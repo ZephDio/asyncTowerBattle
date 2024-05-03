@@ -3,7 +3,7 @@ import { BarrackRecruitFixtures } from "../barrack/recruit/barrack-fixtures";
 import { CastleFactory, CastleFixture } from "../castle/recruit/castle-recruit-fixtures";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
-import { Classes } from "../menu/main-menu";
+import { Faction } from "../menu/main-menu";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
 import { TotemBuilder } from "../totem/recruit/totem-fixtures";
 import { TowerBlueprintFixtures } from "../tower/blueprint/tower-fixtures";
@@ -65,8 +65,8 @@ export class ArmyFixture {
 }
 
 export class ArmyFactory {
-	static default(classe : Classes) {
-		if(classe === Classes.Dwarf){
+	static default(classe : Faction) {
+		if(classe === Faction.Dwarf){
 			const grid = new ArmyGrid(7, 5, undefined, 6); 
 			const castle = CastleFactory.defaultDwarf;
 			const tiles = PathFactory.default;
@@ -74,7 +74,7 @@ export class ArmyFactory {
 			[castle, ...tiles].map((e) => grid.setElement(e));
 			return new Army(grid, unitInventory, new DwarfBlueprint({}));
 		}
-		if(classe === Classes.Human){
+		if(classe === Faction.Human){
 			const grid = new ArmyGrid(7, 5, undefined, 6); 
 		const castle = CastleFactory.defaultHuman;
 		const tiles = PathFactory.default;

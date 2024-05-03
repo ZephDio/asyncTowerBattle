@@ -1,7 +1,7 @@
 import { HudElement } from "../../shared/hud-element/hud-element";
-import { ClassesSelectorHud } from "./huds/classes-selector";
+import { FactionsSelectorHud as FactionSelectorHud } from "./huds/faction-selector";
 import { StartGameButton } from "./huds/start-game-button";
-export enum Classes{
+export enum Faction{
 	Dwarf = "Dwarf",
 	Human = "Human"
 
@@ -10,7 +10,7 @@ export enum Classes{
 
 export class MainMenu {
 	startGameButton: StartGameButton = new StartGameButton({});
-	classesSelectorHud = new ClassesSelectorHud()
+	classesSelectorHud = new FactionSelectorHud()
 	getState(): MainMenuState {
 		return {
 			hudElements: [this.startGameButton, this.classesSelectorHud.selectDwarfButton, this.classesSelectorHud.selectHumanButton],

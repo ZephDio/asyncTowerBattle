@@ -1,6 +1,6 @@
 import { ScreenPosition } from "../../shared/position";
 import { MouseEventType } from "../mouse-event-handler";
-import { Classes, MainMenu, MainMenuState } from "../../engine/menu/main-menu";
+import { Faction, MainMenu, MainMenuState } from "../../engine/menu/main-menu";
 import { StartGameButton } from "../../engine/menu/huds/start-game-button";
 import { GameWrapper } from "../../engine/wrap";
 import { SelectHumanButton } from "../../engine/menu/huds/select-human-button";
@@ -26,10 +26,10 @@ export class MainMenuInputToIntentTranslator {
 			this.gameWrapper.startNewGame();
 		}
 		if(focus instanceof SelectHumanButton){
-			this.gameWrapper.mainMenu.classesSelectorHud.changeClass(Classes.Human)
+			this.gameWrapper.mainMenu.classesSelectorHud.changeClass(Faction.Human)
 		}
 		if(focus instanceof SelectDwarfButton){
-			this.gameWrapper.mainMenu.classesSelectorHud.changeClass(Classes.Dwarf)
+			this.gameWrapper.mainMenu.classesSelectorHud.changeClass(Faction.Dwarf)
 		}
 	}
 

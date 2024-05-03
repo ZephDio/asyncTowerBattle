@@ -436,7 +436,7 @@ export const Resources = {
 				height: 20,
 			},
 		},
-		classesSelector: {
+		factionSelector: {
 			resource: {
 				image: createImage("/resources/hud/selector.png"),
 			},

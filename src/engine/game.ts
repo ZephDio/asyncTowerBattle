@@ -9,7 +9,7 @@ import { DescriptionHud } from "../shared/traits/render/huds/item-descriptor";
 import { RenderableState } from "../renderer/renderer";
 import { BattleRandomSeed } from "./battle/battle-random-seed";
 import { EnvironmentGeneration } from "./environment/env-generation";
-import { Classes } from "./menu/main-menu";
+import { Faction } from "./menu/main-menu";
 import { Army } from "./army/army";
 import { ArmyFactory } from "./army/army-fixtures";
 
@@ -22,7 +22,7 @@ export class Game {
 
 	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new LocalMatchMaker();
-	constructor(public chosenClass : Classes) {
+	constructor(public chosenClass : Faction) {
 		console.log(chosenClass)
 		this.army = ArmyFactory.default(chosenClass)
 		this.rounds = new RoundsTracker(this.army);

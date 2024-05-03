@@ -10,13 +10,13 @@ import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../renderer/resources";
 
 
-export class ClassesSelectorCursor extends Derive(
+export class FactionSelectorCursor extends Derive(
     TCollider,
 	THitbox(new HitBox([[new Rectangle({ width: 12, height: 12 }), new ScreenPosition({ x: 0, y: 0 })]])),
 	TRenderable,
 ){
 
-    resource = Resources.hudElement.classesSelector.resource.image;
+    resource = Resources.hudElement.factionSelector.resource.image;
     drawPriority = DrawPriority.HUD;
 
     size = { width : 12 , height : 12}
