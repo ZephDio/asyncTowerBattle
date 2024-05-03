@@ -6,11 +6,13 @@ import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 
-import { Poisoned } from "../../tower/battle/implementation/battle-witch-house";
+
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { STANDARD_CELL_SIZE } from "../../grid/tgrid";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
+import { Status } from "../../../shared/traits/engine/status";
+import { Stats } from "../../stats/stats";
 
 export class PoisonGround extends Derive(
 	TDrawable,
@@ -61,5 +63,28 @@ export class PoisonGround extends Derive(
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawEllipse(context, size, canvasPosition, scale);
 		context.globalAlpha = 1;
+	}
+}
+
+export class Poisoned extends Derive(Status) {
+	key = "poisoned";
+	clock = 0;
+	duration = 70;
+	stats: Stats;
+
+	constructor(public damage: number) {
+		super({});
+	}
+
+	tick() {
+		this.clock++;
+		if (this.clock >= this.duration) {
+			this.onRemove();
+		}
+		this.stats.takeDamage(this.damage / 64);
+	}
+
+	onRemove() {
+		this.stats.removeStatus(this);
 	}
 }
