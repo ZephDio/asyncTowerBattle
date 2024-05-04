@@ -31,6 +31,7 @@ import { BakeryBlueprint } from "../../totem/blueprint/implementation/bakery-blu
 import { MineBlueprint } from "../../totem/blueprint/implementation/mine-blueprint";
 import { BreweryBlueprint } from "../../totem/blueprint/implementation/brewery-blueprint";
 import { PowderMagazineBlueprint } from "../../totem/blueprint/implementation/powder-magazine-blueprint";
+import { RedObeliskBlueprint } from "../../totem/blueprint/implementation/red-obelisk";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint =
@@ -50,7 +51,8 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			BakeryBlueprint,
 			MineBlueprint,
 			BreweryBlueprint,
-			PowderMagazineBlueprint
+			PowderMagazineBlueprint,
+			RedObeliskBlueprint
 		],
 		share: 100,
 	},

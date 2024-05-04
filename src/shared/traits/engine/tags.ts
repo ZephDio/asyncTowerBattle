@@ -1,6 +1,6 @@
 import { Subtrait, Trait } from "@ddd-ts/traits";
 
-export type Tag = "Food" | "Tower" | "Barrack" | "Totem"
+export type Tag = "Food" | "Tower" | "Barrack" | "Totem" | "Evil"
 
 export const Tagged = Trait((base) => {
     abstract class Tagged extends base {
@@ -18,6 +18,17 @@ export const FoodTag = Subtrait([Tagged],(base, Props) => {
         }
     }
     return TFoodTag;
+})
+
+export const EvilTag = Subtrait([Tagged],(base, Props) => {
+    abstract class TEvilTag extends base {
+        evilTag = true
+        constructor(props: typeof Props){
+            super(props);
+            this.tags.push("Evil");
+        }
+    }
+    return TEvilTag;
 })
 
 export const TowerTag = Subtrait([Tagged],(base, Props) => {

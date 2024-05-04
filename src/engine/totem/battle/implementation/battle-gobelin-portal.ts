@@ -4,8 +4,9 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Caster } from "../../../../shared/traits/engine/cast";
 import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
 import { BattleTotem } from "../battle-totem";
+import { EvilTag } from "../../../../shared/traits/engine/tags";
 
-export class BattleGobelinPortal extends Derive(BattleTotem) {
+export class BattleGobelinPortal extends Derive(BattleTotem,EvilTag) {
 	hasTriggered = false;
 
 	constructor(
@@ -26,7 +27,7 @@ export class BattleGobelinPortal extends Derive(BattleTotem) {
                 this.portal.patternEffect.getRelativeCells(this.portal.orientation),
             );
             for (const neighbor of neighbors) {
-                if (implementsTrait(neighbor, Caster)) {
+                if (neighbor && implementsTrait(neighbor, Caster)) {
                     neighbor.subscribeOnCast(this, this.gobelinSpawn.bind(this))
                 }
             }

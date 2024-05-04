@@ -65,9 +65,9 @@ export class Physic {
 	
 	static getPositionFromPositionAndVectorAndOrientation(gridPosition: GridPosition, orientation: number, vector: GridPosition) {
 		const defaultTileGridPosition = new GridPosition({
-			x : gridPosition.x - (vector.x * Math.cos(orientation)) - (vector.y * Math.sin(orientation)),
-			y : gridPosition.y - (vector.x * Math.sin(orientation)) - (vector.y * Math.cos(orientation))
-		})
+			x: gridPosition.x - (vector.x * Math.cos(orientation)) + (vector.y * Math.sin(orientation)),
+			y: gridPosition.y - (vector.x * Math.sin(orientation)) - (vector.y * Math.cos(orientation))
+		});
 		return defaultTileGridPosition;
 	}
 

@@ -174,18 +174,15 @@ const EnemyArmyFixtures = {
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.dragon)
 				.withCell(new Cell({ x: 1, y: 1 }))
-				.withProductionSpeed(3.2)
 				.buildWave(),
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.berseker)
 				.withCell(new Cell({ x: 3, y: 1 }))
-				.withProductionSpeed(3.2)
 				.buildVeterant(),
 
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.priest)
 				.withCell(new Cell({ x: 6, y: 1 }))
-				.withProductionSpeed(3.2)
 				.buildBasic(),
 		];
 		const tiles = PathFactory.round2;
@@ -218,23 +215,19 @@ const EnemyArmyFixtures = {
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.dragon)
 				.withCell(new Cell({ x: 1, y: 1 }))
-				.withProductionSpeed(3.2)
 				.buildWave(),
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.berseker)
 				.withCell(new Cell({ x: 3, y: 1 }))
-				.withProductionSpeed(3.2)
 				.buildVeterant(),
 
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.priest)
 				.withCell(new Cell({ x: 6, y: 1 }))
-				.withProductionSpeed(3.2)
 				.buildBasic(),
 			new BarrackRecruitBuilder()
 				.setUnit(UnitRecruitFixture.fox)
 				.withCell(new Cell({ x: 6, y: 4 }))
-				.withProductionSpeed(3.2)
 				.buildBasic(),
 		];
 		const tiles = PathFactory.round2;
