@@ -22,12 +22,13 @@ export class BattleClockHud extends Derive(TRenderable, TDrawable) {
 	get realDeciSeconds() {
 		return Math.floor(this.timer.clock * 3.3);
 	}
+
 	get seconds() {
 		return Math.floor(this.realDeciSeconds / 100) % 60;
 	}
 
 	get realSeconds() {
-		return Math.floor(this.deciSeconds / 100);
+		return Math.floor(this.realDeciSeconds / 100);
 	}
 
 	get minutes() {

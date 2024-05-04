@@ -12,6 +12,7 @@ import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { Caster, RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
+import { EvilTag } from "../../../../shared/traits/engine/tags";
 
 export class GobelinPortalBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -19,6 +20,7 @@ export class GobelinPortalBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(Resources.totem.gobelinportal.resource.image, Resources.totem.gobelinportal.size, DrawPriority.NormalGridElement),
 	TSynergy,
+	EvilTag
 ){
 	description = new Description("Gobelin Portal", ["On ▣ trigger :","30% chance to", "generate a goblin"]);
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {

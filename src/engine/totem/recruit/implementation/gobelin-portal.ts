@@ -7,8 +7,9 @@ import { Totem } from "../totem";
 import { BattleGobelinPortal } from "../../battle/implementation/battle-gobelin-portal";
 import { GobelinBlueprint } from "../../../units/blueprint/implementation/gobelin-blueprint";
 import { GobelinPortalBlueprint } from "../../blueprint/implementation/gobelin-portal-blueprint";
+import { EvilTag } from "../../../../shared/traits/engine/tags";
 
-export class GobelinPortal extends Derive(Totem, HTSynergy) {
+export class GobelinPortal extends Derive(Totem, HTSynergy, EvilTag) {
 	recruit = new GobelinBlueprint({})
 	constructor(
 		public cell: Cell,

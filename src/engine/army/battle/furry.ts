@@ -20,7 +20,7 @@ export class Furry {
     }
 
     increaseFurry(){
-        this.addFurry(this.furryIncrease++)
+        this.addFurry(++this.furryIncrease)
     }
 
     getFurry() {

@@ -71,7 +71,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 
 	getRelativeNeighborsInArmy(armyGridPosition: Cell, relativePositions: Cell[], isEnemy: boolean) {
-		const founds: BattleGridElement[] = [];
+		const founds: (BattleGridElement | undefined)[]  = [];
 		for (const relativePosition of relativePositions) {
 			const yCoordinate = armyGridPosition.y + (isEnemy ? -relativePosition.y : relativePosition.y);
 			const targetPosition = new Cell({
@@ -79,9 +79,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 				y: yCoordinate,
 			});
 			const elementFound = this.tiles.get(ArmyGrid.posToString(targetPosition));
-			if (elementFound) {
-				founds.push(elementFound);
-			}
+			founds.push(elementFound);
 		}
 		return founds;
 	}
@@ -167,8 +165,8 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 export type GridHooks = {
 	getRealPosition: (cell: Cell) => GridPosition;
-	getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
-	getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => BattleGridElement[];
+	getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => (BattleGridElement | undefined)[];
+	getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => (BattleGridElement | undefined)[];
 	getRelativeDirection: () => { above: GridPosition; below: GridPosition; left: GridPosition; right: GridPosition };
 	getBoundaries: () => { minX: number; minY: number; maxX: number; maxY: number };
 };

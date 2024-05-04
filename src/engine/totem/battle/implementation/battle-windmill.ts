@@ -34,6 +34,8 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, Batt
 			this.patternEffect.getRelativeCells(this.orientation),
 		);
 		for (const element of elements) {
+			if(!element) continue
+			console.log(element)
 			if (implementsTrait(element, FoodTag)) {
 				this.hooks.alliedFoodHooks.addMaxFood(5);
 				if (implementsTrait(element, Caster)) {

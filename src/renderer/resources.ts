@@ -94,6 +94,16 @@ export const Resources = {
 				shape: "rectangle",
 			},
 		},
+		obelisk: {
+			size: {
+				width: 4,
+				height: 10,
+			},
+			resource: {
+				image: createImage("/resources/totem/obelisk.png"),
+				shape: "rectangle",
+			},
+		},
 		bakery: {
 			size: {
 				width: 6,

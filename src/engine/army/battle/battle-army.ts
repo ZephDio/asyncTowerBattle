@@ -36,6 +36,7 @@ export type BattleArmyHooks = {
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
 	getAlliedUnits: () => AnyBattleUnit[];
 	getAlliedCastle: () => BattleHumanCastle;
+	triggerFurry: ()  => void;
 	alliedArmyBuffHooks: ArmyBuffHooks;
 	enemyArmyBuffHooks: ArmyBuffHooks;
 	alliedFoodHooks: FoodHooks;
@@ -192,6 +193,7 @@ export class BattleArmy {
 			getEnemyCastle: this.getEnemyCastle.bind(this),
 			getAlliedCastle: () => this.castle,
 			getAlliedUnits: () => [...this.units.keys()],
+			triggerFurry: ()  => this.furry.increaseFurry(),
 			alliedArmyBuffHooks: this.alliedArmyBuffHooks,
 			enemyArmyBuffHooks: this.enemyArmyBuffHooks,
 			alliedFoodHooks: this.foodEconomy.getHooks(),
