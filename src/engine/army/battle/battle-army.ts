@@ -17,6 +17,7 @@ import { EconomyHooks } from "../../gold/army-gold-economy";
 import { ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { BattleStartTrigger } from "../../../shared/traits/engine/battle-start";
 import { TokenUnit } from "../../../shared/traits/engine/token-unit";
+import { Furry } from "./furry";
 
 export type BattleArmyHooks = {
 	random: () => number;
@@ -56,6 +57,7 @@ export class BattleArmy {
 
 	armyBuff: ArmyBuff;
 	totems: AnyBattleTotem[];
+	furry: Furry
 
 	constructor(
 		public foodEconomy: BattleFoodEconomy,
@@ -76,6 +78,7 @@ export class BattleArmy {
 		public enemyGoldEconomyHooks: EconomyHooks,
 	) {
 		this.surchargeBuffHooks();
+		this.furry = new Furry(0,0, this.getTimer)
 	}
 
 	surchargeBuffHooks() {
@@ -118,6 +121,11 @@ export class BattleArmy {
 		}
 	}
 
+	addFurryBuff(unit : AnyBattleUnit){
+		console.log(this.furry.getFurry())
+		unit.addFurry(this.furry.getFurry())
+	}
+
 	addUnitBuffs(buffs: Buff, amount: number = 1) {
 		[...this.units.keys()].forEach((unit: AnyBattleUnit) => {
 			unit.applyBuff(buffs, amount);
@@ -132,6 +140,7 @@ export class BattleArmy {
 
 	addUnit(entityRecruit: AnyBattleUnit, source: any) {
 		entityRecruit.initArmyBuffs(this.armyBuff.getUnitArmyBuffs());
+		this.addFurryBuff(entityRecruit)
 		this.units.set(entityRecruit, source);
 	}
 

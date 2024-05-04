@@ -491,6 +491,9 @@ export const Resources = {
 			unit: {
 				image: createImage("/resources/hud/unit.svg"),
 			},
+			furry: {
+				image: createImage("/resources/hud/furry.png"),
+			},
 		},
 	},
 } as const;

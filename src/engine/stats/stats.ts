@@ -33,6 +33,11 @@ export const HaveStats = Trait((base) => {
 			this.stats.die();
 		}
 
+		addFurry(amount: number) {
+			this.stats.addMaxHealth(amount,true);
+			this.stats.basePercentStat.movementSpeed += amount;
+		}
+
 		constructor(props: {
 			maxHealth: number;
 			attack: number;

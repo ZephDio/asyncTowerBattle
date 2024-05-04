@@ -141,6 +141,8 @@ export class Battlefield {
 		this.tickAreaEffects();
 		this.tickPathTiles();
 		this.tickCastles();
+		this.enemyArmy.furry.tick();
+		this.alliedArmy.furry.tick();
 	}
 
 	searchEnemiesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
