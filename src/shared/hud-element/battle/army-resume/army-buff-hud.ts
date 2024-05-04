@@ -69,7 +69,7 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 		const speedIconCanvasPosition = this.getCanvasPosition(context, speedIconPosition);
 		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
 		this.drawImage(context, size, speedIconCanvasPosition, this.speedIcon);
-		context.font = `${size.width / 1.9}px text`;
+		context.font = `bold ${size.width / 1.9}px text`;
 		context.fillStyle = "green";
 		context.fillText(`${amount}`, speedIconCanvasPosition.x, speedIconCanvasPosition.y, size.width);
 	}
@@ -79,7 +79,7 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 		const vitalityIconCanvasPosition = this.getCanvasPosition(context, vitalityIconPosition);
 		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
 		this.drawImage(context, size, vitalityIconCanvasPosition, this.vitalityIcon);
-		context.font = `${size.width / 1.9}px text`;
+		context.font = `bold ${size.width / 1.9}px text`;
 		context.fillStyle = "green";
 		context.fillText(`${amount}`, vitalityIconCanvasPosition.x, vitalityIconCanvasPosition.y, size.width);
 	}
@@ -89,7 +89,7 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 		const castSpeedIconCanvasPosition = this.getCanvasPosition(context, castSpeedIconPosition);
 		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
 		this.drawImage(context, size, castSpeedIconCanvasPosition, this.castSpeedIcon);
-		context.font = `${size.width / 1.9}px text`;
+		context.font = `bold ${size.width / 1.9}px text`;
 		context.fillStyle = "green";
 		context.fillText(`${amount}`, castSpeedIconCanvasPosition.x, castSpeedIconCanvasPosition.y, size.width);
 	}
@@ -99,7 +99,7 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 		const damageTowerIconCanvasPosition = this.getCanvasPosition(context, damageTowerIconPosition);
 		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
 		this.drawImage(context, size, damageTowerIconCanvasPosition, this.attackIcon);
-		context.font = `${size.width / 1.9}px text`;
+		context.font = `bold ${size.width / 1.9}px text`;
 		context.fillStyle = "green";
 		context.fillText(`${amount}`, damageTowerIconCanvasPosition.x, damageTowerIconCanvasPosition.y, size.width);
 	}
@@ -109,7 +109,7 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 		const castSpeedIconCanvasPosition = this.getCanvasPosition(context, castSpeedIconPosition);
 		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
 		this.drawImage(context, size, castSpeedIconCanvasPosition, this.castSpeedIcon);
-		context.font = `${size.width / 1.9}px text`;
+		context.font = `bold ${size.width / 1.9}px text`;
 		context.fillStyle = "green";
 		context.fillText(`${amount}`, castSpeedIconCanvasPosition.x, castSpeedIconCanvasPosition.y, size.width);
 	}

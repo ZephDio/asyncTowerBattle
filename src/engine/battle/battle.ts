@@ -8,12 +8,13 @@ import { Game } from "../game";
 import { BattleRandomSeed } from "./battle-random-seed";
 import { Battlefield } from "./battlefield/battlefield";
 import { ArmyResume } from "../../shared/hud-element/battle/army-resume/army-resume";
+import { seconds } from "../../shared/seconds";
 
 export class Battle {
 	battlefield: Battlefield;
 	isOver = false;
 
-	gameSpeed = 31.25;
+	gameSpeed = seconds(1);
 	battleClock: BattleClockHud;
 	speedCursor: SliderBattleSpeed;
 	alliedArmyResume: ArmyResume;

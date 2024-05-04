@@ -44,6 +44,7 @@ export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 
 			 context.fillStyle = "black";
 			 context.textAlign = "center";
+			 context.font = `bold ${size.height*1.5}px text`;
 			 context.fillText(`${Math.round(this.castle.stats.health)}/${Math.round(this.castle.stats.maxHealth)}`, canvasPosition.x, canvasPosition.y + size.height/2
 			  , size.width)
 	}

@@ -5,14 +5,16 @@ import { CastleLifeBar } from "./castle-life-bar";
 import { FoodBarHud } from "./army-food-bar";
 import { BannerBackground } from "../../../traits/render/huds/banner-background";
 import { ArmyBuffHud } from "./army-buff-hud";
+import { FurryHud } from "./furry-hud";
 
 export class ArmyResume extends Derive(BannerBackground) {
 	override drawPriority = 8;
 	size = { width: 27, height: 38 };
 	castleLifeBar: CastleLifeBar;
 	foodBar: FoodBarHud;
-
 	armyBuffHud: ArmyBuffHud;
+
+	furryHud : FurryHud
 	constructor(
 		public army: BattleArmy,
 		public position: ScreenPosition,
@@ -35,6 +37,7 @@ export class ArmyResume extends Derive(BannerBackground) {
 				height: this.size.height / 2,
 			},
 		);
+		this.furryHud = new FurryHud(this.army.furry,this.position.add(new ScreenPosition({ x: 0, y: -this.size.height / 4 })))
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
@@ -45,5 +48,6 @@ export class ArmyResume extends Derive(BannerBackground) {
 		this.castleLifeBar.render(context);
 		this.foodBar.render(context);
 		this.armyBuffHud.render(context);
+		this.furryHud.render(context)
 	}
 }
