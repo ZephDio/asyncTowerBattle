@@ -15,6 +15,7 @@ import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
 import { TRecruit } from "../../shared/traits/engine/recruit";
 import { TEnvironmentElement } from "../environment/environment";
 import { Totem } from "../totem/recruit/totem";
+import { EnvironmentGeneration } from "../environment/env-generation";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();
@@ -118,11 +119,21 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return `${cell.x}|${cell.y}`;
 	}
 
-	roundTwo() {
+	roundOne(envGenerator: EnvironmentGeneration) {
+		envGenerator.generateEnvironmentForRoundOne(this);
+	}
+	roundTwo(envGenerator: EnvironmentGeneration) {
 		this.width = 8;
 		this.height = 6;
 		this.cellSize = STANDARD_CELL_SIZE;
 		this.translate();
 		[new BasicPathTile(new Cell({ x: 7, y: 5 }))].forEach((pathTile) => this.setElement(pathTile));
+		envGenerator.generateEnvironmentForRoundTwo(this);
+	}
+
+	roundThree(envGenerator: EnvironmentGeneration) {
+		this.width = 11;
+		[new BasicPathTile(new Cell({ x: 8, y: 5 })),new BasicPathTile(new Cell({ x: 9, y: 5 })),new BasicPathTile(new Cell({ x: 10, y: 5 }))].forEach((pathTile) => this.setElement(pathTile));
+		envGenerator.generateEnvironmentForRoundTwo(this);
 	}
 }

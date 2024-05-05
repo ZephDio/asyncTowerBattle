@@ -45,12 +45,12 @@ export class Battlefield {
 
 		const enemyBattleCastle = enemyArmy.castle.toEnemy(
 			grid,
-			() => this.onBattleOver("victory"),
+			() => this.onBattleOver("Victory"),
 			enemyFoodEconomy.getHooks(),
 		);
 		const alliedBattleCastle = alliedArmy.castle.toAllied(
 			grid,
-			() => this.onBattleOver("defeat"),
+			() => this.onBattleOver("Defeat"),
 			alliedFoodEconomy.getHooks(),
 		);
 

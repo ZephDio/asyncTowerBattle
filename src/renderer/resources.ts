@@ -482,6 +482,9 @@ export const Resources = {
 			},
 			health: {
 				image: createImage("/resources/hud/health.png"),
+			},			
+			emptyHealth: {
+				image: createImage("/resources/hud/health-empty.png"),
 			},
 			movespeed: {
 				image: createImage("/resources/hud/speed.svg"),

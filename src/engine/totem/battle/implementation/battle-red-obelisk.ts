@@ -1,6 +1,6 @@
 
 
-import { Derive, implementsTrait } from "@ddd-ts/traits";
+import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";

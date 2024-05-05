@@ -25,6 +25,9 @@ export interface GameState {
 export interface SummaryState extends GameState {
 	type: "summary";
 	battleVerdict: BattleVerdict;
+	battleState: BattleState;
+	hudElements: HudElement[];
+	hidden: boolean;
 }
 
 export interface BattleState extends GameState {

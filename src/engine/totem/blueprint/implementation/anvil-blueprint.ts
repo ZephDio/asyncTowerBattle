@@ -30,6 +30,6 @@ export class AnvilTotemBlueprint extends Derive(
 	toRecruit(cell: Cell) {
 		return new AnvilTotem(cell, this);
 	}
-	description = new Description("", ["A totem that boosts", "damage of ▣ towers", "by 30%"]);
+	description = new Description("Forging Anvil", ["A totem that boosts", "damage of ▣ towers", "by 30%"]);
 	projectile = undefined;
 }
