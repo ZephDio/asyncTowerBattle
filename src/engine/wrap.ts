@@ -10,8 +10,13 @@ export class GameWrapper {
 	}
 
 	startNewGame() {
-		this.game = new Game(this.mainMenu.classesSelectorHud.selectedClass);
+		this.game = new Game(this.mainMenu.classesSelectorHud.selectedClass, this.endGame.bind(this));
 		this.state = "game";
+	}
+
+	endGame() {
+		this.game = null;
+		this.state = "mainMenu";
 	}
 
 	getRenderState() {

@@ -26,7 +26,7 @@ export class InputToIntent {
 	constructor(public gameWrap: GameWrapper) {
 		this.battleTranslator = new BattleInputToIntentTranslator();
 		this.shopTranslator = new ShopInputToIntentTranslator();
-		this.battleSummaryTranslator = new BattleSummaryInputToIntentTranslator();
+		this.battleSummaryTranslator = new BattleSummaryInputToIntentTranslator(this.battleTranslator);
 		this.mainMenuTranslator = new MainMenuInputToIntentTranslator(gameWrap);
 	}
 

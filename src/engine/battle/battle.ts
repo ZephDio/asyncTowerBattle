@@ -61,10 +61,9 @@ export class Battle {
 	}
 
 	
-	handleBattleOver(battleVerdict: "victory" | "defeat") {
-		// could be nice to build summary here
+	handleBattleOver(battleVerdict: "Victory" | "Defeat") {
 		this.isOver = true;
-		this.onBattleOver(battleVerdict);
+		this.onBattleOver(battleVerdict, this);
 	}
 
 	changeSpeed(speed: number) {

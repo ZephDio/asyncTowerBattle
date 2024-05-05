@@ -19,10 +19,11 @@ export class Game {
 	battleSummary: null | BattleSummary = null;
 	shop: null | ShopPhase = null;
 	rounds : RoundsTracker
+	life =  5
 
 	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new LocalMatchMaker();
-	constructor(public chosenClass : Faction) {
+	constructor(public chosenClass : Faction, private endGame: () => void) {
 		this.army = ArmyFactory.default(chosenClass)
 		const envGenerator = new EnvironmentGeneration();
 		this.rounds = new RoundsTracker(this.army, envGenerator);
@@ -51,14 +52,19 @@ export class Game {
 		return this.shop.getState();
 	}
 
-	handleEndBattle(battleVerdict: "victory" | "defeat") {
-		const lastBattleState = this.getBattleState();
-		this.startBattleSummary(lastBattleState, battleVerdict);
+	handleEndBattle(battleVerdict: "Victory" | "Defeat", battle : Battle) {
+		this.startBattleSummary(battle, battleVerdict);
+		if(battleVerdict === "Defeat"){
+			this.life--
+		}
 		this.battle = null;
 	}
 
 	handleSummaryQuit() {
 		this.battleSummary = null;
+		if(this.life === 0){
+			this.endGame()
+		}
 		this.startShop();
 	}
 
@@ -90,8 +96,8 @@ export class Game {
 		this.army.onShopEnter();
 	}
 
-	startBattleSummary(lastBattleState: BattleState, battleVerdict: "victory" | "defeat") {
-		this.battleSummary = new BattleSummary(lastBattleState, battleVerdict, this.handleSummaryQuit.bind(this));
+	startBattleSummary(battle: Battle, battleVerdict: "Victory" | "Defeat") {
+		this.battleSummary = new BattleSummary(battle, battleVerdict, this.handleSummaryQuit.bind(this), this.life);
 	}
 
 	startBattle() {

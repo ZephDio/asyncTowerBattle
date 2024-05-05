@@ -23,7 +23,7 @@ export class StartGameButton extends Derive(
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawImage(context, canvasSize, canvasPosition, this.background);
 
-		context.fillStyle = "white";
+		context.fillStyle = "#172634";
 		context.font = `${canvasSize.height * 0.22}px title`;
 		context.textAlign = "center";
 		context.fillText("Start Game", canvasPosition.x, canvasPosition.y);
