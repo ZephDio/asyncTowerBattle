@@ -23,11 +23,9 @@ export class Game {
 	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new LocalMatchMaker();
 	constructor(public chosenClass : Faction) {
-		console.log(chosenClass)
 		this.army = ArmyFactory.default(chosenClass)
-		this.rounds = new RoundsTracker(this.army);
 		const envGenerator = new EnvironmentGeneration();
-		envGenerator.generateEnvironment(this.army.grid, 0);
+		this.rounds = new RoundsTracker(this.army, envGenerator);
 		this.startShop();
 	}
 
@@ -57,7 +55,6 @@ export class Game {
 		const lastBattleState = this.getBattleState();
 		this.startBattleSummary(lastBattleState, battleVerdict);
 		this.battle = null;
-		this.rounds.update();
 	}
 
 	handleSummaryQuit() {
@@ -87,6 +84,7 @@ export class Game {
 	}
 
 	startShop() {
+		this.rounds.update()
 		this.shop = new ShopPhase(this.army, this.handleShopQuit.bind(this), this.setDescriptionHud.bind(this));
 		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
 		this.army.onShopEnter();

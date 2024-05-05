@@ -80,7 +80,7 @@ const EnemyArmyFixtures = {
 		return { army: new Army(grid, new Inventory(), new SoldierBlueprint({})), randomSeed: 123456 };
 	},
 	3: () => {
-		const grid = new ArmyGrid(8, 6);
+		const grid = new ArmyGrid(11, 6);
 		const castle = CastleFactory.round2Dwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -104,7 +104,7 @@ const EnemyArmyFixtures = {
 				.withCell(new Cell({ x: 6, y: 1 }))
 				.buildBasic(),
 		];
-		const tiles = PathFactory.round2;
+		const tiles = PathFactory.round3;
 		const totems = [
 			new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField(),
 			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),
@@ -116,7 +116,7 @@ const EnemyArmyFixtures = {
 		return { army: new Army(grid, new Inventory(), new DwarfBlueprint({})), randomSeed: 123456 };
 	},
 	4: () => {
-		const grid = new ArmyGrid(8, 6);
+		const grid = new ArmyGrid(11, 6);
 		const castle = CastleFactory.round2Human;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -144,7 +144,7 @@ const EnemyArmyFixtures = {
 				.withCell(new Cell({ x: 6, y: 1 }))
 				.buildBasic(),
 		];
-		const tiles = PathFactory.round2;
+		const tiles = PathFactory.round3;
 		const totems = [
 			new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField(),
 			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),
@@ -156,7 +156,7 @@ const EnemyArmyFixtures = {
 		return { army: new Army(grid, new Inventory(), new SoldierBlueprint({})), randomSeed: 123456 };
 	},
 	5: () => {
-		const grid = new ArmyGrid(8, 6);
+		const grid = new ArmyGrid(11, 6);
 		const castle = CastleFactory.round2Dwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -185,7 +185,7 @@ const EnemyArmyFixtures = {
 				.withCell(new Cell({ x: 6, y: 1 }))
 				.buildBasic(),
 		];
-		const tiles = PathFactory.round2;
+		const tiles = PathFactory.round3;
 		const totems = [
 			new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField(),
 			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),
@@ -197,7 +197,7 @@ const EnemyArmyFixtures = {
 		return { army: new Army(grid, new Inventory(), new DwarfBlueprint({})), randomSeed: 123456 };
 	},
 	6: () => {
-		const grid = new ArmyGrid(8, 6);
+		const grid = new ArmyGrid(11, 6);
 		const castle = CastleFactory.round2Dwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -230,7 +230,7 @@ const EnemyArmyFixtures = {
 				.withCell(new Cell({ x: 6, y: 4 }))
 				.buildBasic(),
 		];
-		const tiles = PathFactory.round2;
+		const tiles = PathFactory.round3;
 		const totems = [
 			new TotemBuilder().celled(new Cell({ x: 1, y: 3 })).buildCropsField(),
 			new TotemBuilder().celled(new Cell({ x: 1, y: 2 })).buildCropsField(),

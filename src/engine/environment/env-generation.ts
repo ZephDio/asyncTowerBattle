@@ -2,23 +2,42 @@ import { Cell } from "../../shared/position";
 import { ArmyGrid } from "../grid/grid";
 import { Forest } from "./forest";
 import { Rock } from "./rock";
-
+8 / 10
 export class EnvironmentGeneration {
-	generateEnvironment(grid: ArmyGrid, rounds: number) {
-		if (rounds === 0) {
+	generateEnvironmentForRoundOne(grid: ArmyGrid) {
 			this.generateTrees(grid, 3);
 			this.generateRocks(grid, 2);
-		}
+	}
+	
+
+	generateEnvironmentForRoundTwo(grid: ArmyGrid){
+			if(Math.random() < (5/12)){	
+				this.generateRocks(grid, 1, {minX : 7, maxX : 7, minY : 1, maxY : 4});
+				return
+			}
+			this.generateRocks(grid, 1, {minX : 0, maxX : 7, minY : 0, maxY : 0});
 	}
 
-	generateTrees(grid: ArmyGrid, amount: number) {
+	generateEnvironmentForRoundThree(grid: ArmyGrid){
+			this.generateTrees(grid, 2, {minX : 8, maxX : 10, minY : 0, maxY : 5});
+			this.generateRocks(grid, 1, {minX : 8, maxX : 10, minY : 0, maxY : 5});
+	}
+	
+	generateTrees(grid: ArmyGrid, amount: number, range? : {minX : number, maxX: number , minY : number, maxY : number}) {
 		let trys = 0;
 		let generated = 0;
 		let lastGenerated = null as null | Forest;
 		while (generated < amount && trys < 10000) {
 			if (!lastGenerated) {
-				const x = Math.round(Math.random() * (grid.width - 1));
-				const y = Math.round(Math.random() * (grid.height - 1));
+				let x : number
+				let y : number
+				if(range){
+					x = Math.round(Math.random() * (range.maxX - range.minX) + range.minX);
+					y = Math.round(Math.random() * (range.maxY - range.minY) + range.minY);
+				}else{
+					x = Math.round(Math.random() * (grid.width - 1 ));
+					y = Math.round(Math.random() * (grid.height - 1));
+				}
 				const cell = new Cell({ x, y });
 				if (!grid.getElement(cell)) {
 					const forest = new Forest(cell);
@@ -53,13 +72,20 @@ export class EnvironmentGeneration {
 		}
 	}
 
-	generateRocks(grid: ArmyGrid, amount: number) {
+	generateRocks(grid: ArmyGrid, amount: number, range? : {minX : number, maxX: number , minY : number, maxY : number}) {
 		let trys = 0;
 		let generated = 0;
 
 		while (generated < amount && trys < 10000) {
-			const x = Math.round(Math.random() * (grid.width - 1));
-			const y = Math.round(Math.random() * (grid.height - 1));
+			let x : number
+			let y : number
+			if(range){
+				x = Math.round(Math.random() * (range.maxX - range.minX) + range.minX);
+				y = Math.round(Math.random() * (range.maxY - range.minY) + range.minY);
+			} else {
+				x = Math.round(Math.random() * (grid.width - 1));
+				y = Math.round(Math.random() * (grid.height - 1));
+			}
 			const cell = new Cell({ x, y });
 
 			const surrounding = cell.surrounding();

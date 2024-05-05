@@ -9,7 +9,7 @@ import { FurryHud } from "./furry-hud";
 
 export class ArmyResume extends Derive(BannerBackground) {
 	override drawPriority = 8;
-	size = { width: 27, height: 38 };
+	size = { width: 22, height: 38 };
 	castleLifeBar: CastleLifeBar;
 	foodBar: FoodBarHud;
 	armyBuffHud: ArmyBuffHud;

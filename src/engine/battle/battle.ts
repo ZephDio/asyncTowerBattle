@@ -35,8 +35,8 @@ export class Battle {
 		);
 		this.battleClock = new BattleClockHud(this.timer);
 		this.speedCursor = new SliderBattleSpeed(PercentToReal({ x: 10, y: 96 }), this.changeSpeed.bind(this));
-		this.alliedArmyResume = new ArmyResume(this.battlefield.alliedArmy, PercentToReal({ x: 14, y: 32 }));
-		this.enemyArmyResume = new ArmyResume(this.battlefield.enemyArmy, PercentToReal({ x: 86, y: 32 }));
+		this.alliedArmyResume = new ArmyResume(this.battlefield.alliedArmy, PercentToReal({ x: 11, y: 32 }));
+		this.enemyArmyResume = new ArmyResume(this.battlefield.enemyArmy, PercentToReal({ x: 89, y: 32 }));
 	}
 
 	start() {
