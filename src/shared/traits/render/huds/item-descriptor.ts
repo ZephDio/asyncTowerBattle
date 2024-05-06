@@ -32,7 +32,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	tags : Tag[]
 
 	extraLines: Record<string, string>;
-	constructor(public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>,public position : ScreenPosition = PercentToReal({ x: 66.3, y: 50 })) {
+	constructor(public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>,public position : ScreenPosition = PercentToReal({ x: 86, y: 73 })) {
 		super({});
 		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 10 }));
 		this.extraLines = this.item.description.extraLines ?? {};

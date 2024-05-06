@@ -134,6 +134,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	roundThree(envGenerator: EnvironmentGeneration) {
 		this.width = 11;
 		[new BasicPathTile(new Cell({ x: 8, y: 5 })),new BasicPathTile(new Cell({ x: 9, y: 5 })),new BasicPathTile(new Cell({ x: 10, y: 5 }))].forEach((pathTile) => this.setElement(pathTile));
+		this.updateCornerPosition();
 		envGenerator.generateEnvironmentForRoundTwo(this);
 	}
 }
