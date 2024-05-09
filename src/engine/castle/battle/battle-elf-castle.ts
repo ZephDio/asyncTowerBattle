@@ -49,7 +49,6 @@ export class BattleElfCastle extends Derive(
 		});
 		this.gridShape = recruit.gridShape;
 		this.setOrientation(orientation);
-		console.log("elf Battle", this.orientation);
 	}
 
 	initHooks(hooks: BattleArmyHooks) {

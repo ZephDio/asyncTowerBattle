@@ -61,9 +61,6 @@ export const TImageDrawable = (
 					return assets;
 				}
 				const angle = (orientation + 2 * Math.PI) % (2 * Math.PI);
-				if (this.constructor.name.includes("BattleElfCastle")) {
-					console.log("angle elf Castle", angle);
-				}
 				const threshold = Math.PI / 2;
 				if (angle <= 0 + 0.1) {
 					return assets.rightView;

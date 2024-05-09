@@ -14,7 +14,6 @@ export class ElfCastle extends Derive(Castle) {
 		super({ imageDrawable: castle, hitboxHolder: castle, descriptor: castle });
 		this.maxLife = castle.maxLife;
 		this.castSpeed = castle.castSpeed;
-		console.log("elf Recruit", this.orientation);
 	}
 
 	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
