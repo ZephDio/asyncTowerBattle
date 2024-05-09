@@ -9,22 +9,21 @@ import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 import { DwarfCastleBlueprint } from "../../castle/blueprint/dwarf-castle-blueprint";
 import { DwarfBlueprint } from "../../units/blueprint/implementation/dwarf-blueprint";
 
-
 export class SelectDwarfButton extends Derive(
-  TCollider,
+	TCollider,
 	THitbox(new HitBox([[new Rectangle({ width: 12, height: 12 }), new ScreenPosition({ x: 0, y: 0 })]])),
 	TRenderable,
-){
-    override drawPriority: DrawPriority.HUD;
-    castle = new DwarfCastleBlueprint({})
-    defaultUnit = new DwarfBlueprint({})
-    constructor(public position : ScreenPosition){
-        super({})
-    }
-    draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number){
-      const castlePosition = position.add(new ScreenPosition({x: 0, y: -1}))
-      this.castle.draw(context, castlePosition, scale)
-      const unitPosition = position.add(new ScreenPosition({x: 0, y: 3}))
-      this.defaultUnit.draw(context, unitPosition, scale)
-    }
+) {
+	override drawPriority: DrawPriority.HUD;
+	castle = new DwarfCastleBlueprint({});
+	defaultUnit = new DwarfBlueprint({});
+	constructor(public position: ScreenPosition) {
+		super({});
+	}
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
+		const castlePosition = position.add(new ScreenPosition({ x: 0, y: -1 }));
+		this.castle.draw(context, castlePosition, scale * 1.4);
+		const unitPosition = position.add(new ScreenPosition({ x: 0, y: 3 }));
+		this.defaultUnit.draw(context, unitPosition, scale * 1.4);
+	}
 }

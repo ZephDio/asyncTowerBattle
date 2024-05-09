@@ -1,5 +1,3 @@
-
-
 import { Derive } from "@ddd-ts/traits";
 import { GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
@@ -27,6 +25,7 @@ export class BattleDwarf extends Derive(TBattleUnit) {
 			foodCost: recruit.foodCost,
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
+			descriptor: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

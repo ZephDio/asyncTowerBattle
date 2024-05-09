@@ -5,7 +5,7 @@ import { GoldHud } from "./gold-hud";
 import { RefreshBellHud } from "./refresh-bell-hud";
 import { StartBattleButton } from "./start-battle-button";
 import { SelectDwarfButton } from "../../engine/menu/huds/select-dwarf-button";
-import { SelectHumanButton } from "../../engine/menu/huds/select-human-button";
+import { SelectElfButton } from "../../engine/menu/huds/select-elf-button";
 import { StartGameButton } from "../../engine/menu/huds/start-game-button";
 import { HideHud } from "../../engine/battle-summary/huds/hide-hud";
 import { BattleVerdictHud } from "../../engine/battle-summary/huds/battle-verdict-hud";
@@ -21,8 +21,8 @@ export type HudElement =
 	| BattleClockHud
 	| SliderBattleSpeed
 	| SelectDwarfButton
-	| SelectHumanButton
+	| SelectElfButton
 	| HideHud
 	| BattleVerdictHud
 	| NextRoundHud
-	| LifeRemainingHud
+	| LifeRemainingHud;

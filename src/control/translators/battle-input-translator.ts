@@ -28,7 +28,6 @@ export class BattleInputToIntentTranslator {
 			return battle.setDescriptionHud(new DescriptionHud(focus));
 		}
 	}
-
 	determinateFocus(screenPosition: ScreenPosition, state: BattleState) {
 		for (const hudElement of state.hudElements) {
 			if (hudElement instanceof SliderBattleSpeed && hudElement.contains(screenPosition)) {
@@ -39,6 +38,11 @@ export class BattleInputToIntentTranslator {
 		const gridPosition = grid.screenToGridPosition(screenPosition);
 		const cell = grid.gridPositionToCell(gridPosition);
 		if (cell) {
+			for (const unit of state.units) {
+				if (unit.contains(gridPosition)) {
+					return unit;
+				}
+			}
 			const gridElement = grid.getElement(cell);
 			if (gridElement) {
 				return gridElement;

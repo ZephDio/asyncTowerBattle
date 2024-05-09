@@ -1,34 +1,32 @@
 import { Derive } from "@ddd-ts/traits";
-import { HumanCastleBlueprint } from "../../blueprint/human-castle-blueprint";
+import { ElfCastleBlueprint } from "../../blueprint/elf-castle-blueprint";
 import { Cell } from "../../../../shared/position";
 import { FoodHooks } from "../../../food/battle-food-economy";
-import { BattleHumanCastle } from "../../battle/battle-human-castle";
+import { BattleElfCastle } from "../../battle/battle-elf-castle";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Castle } from "../castle-recruit";
 
-
-export class HumanCastle extends Derive(Castle){
-
+export class ElfCastle extends Derive(Castle) {
 	constructor(
-		castle: HumanCastleBlueprint,
+		castle: ElfCastleBlueprint,
 		public cell: Cell,
 	) {
 		super({ imageDrawable: castle, hitboxHolder: castle, descriptor: castle });
 		this.maxLife = castle.maxLife;
 		this.castSpeed = castle.castSpeed;
+		console.log("elf Recruit", this.orientation);
 	}
 
-	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleHumanCastle {
+	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
 		const position = grid.cellToGrid(this.cell);
-		return new BattleHumanCastle(this, onDeath, this.cell.clone(), position, this.orientation, foodHooks);
+		return new BattleElfCastle(this, onDeath, this.cell.clone(), position, this.orientation, foodHooks);
 	}
 
-	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleHumanCastle {
+	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
 		const orientation = this.orientation + Math.PI;
-		const BC = new BattleHumanCastle(this, onDeath, cell, position, orientation, foodHooks);
+		const BC = new BattleElfCastle(this, onDeath, cell, position, orientation, foodHooks);
 		return BC;
 	}
-
 }

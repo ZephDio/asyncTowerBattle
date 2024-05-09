@@ -2,7 +2,7 @@ import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { BattleArmy } from "../army/battle/battle-army";
-import { BattleHumanCastle } from "../castle/battle/battle-human-castle";
+import { BattleElfCastle } from "../castle/battle/battle-elf-castle";
 import { AnyBattleTower } from "../tower/battle/battle-tower";
 import { ArmyGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
@@ -16,7 +16,7 @@ import { TEnvironmentElement } from "../environment/environment";
 export type BattleGridElement =
 	| AnyBattleTower
 	| AnyBattleTile
-	| BattleHumanCastle
+	| BattleElfCastle
 	| ImplementsTrait<typeof TEnvironmentElement>;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();
@@ -71,7 +71,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 
 	getRelativeNeighborsInArmy(armyGridPosition: Cell, relativePositions: Cell[], isEnemy: boolean) {
-		const founds: (BattleGridElement | undefined)[]  = [];
+		const founds: (BattleGridElement | undefined)[] = [];
 		for (const relativePosition of relativePositions) {
 			const yCoordinate = armyGridPosition.y + (isEnemy ? -relativePosition.y : relativePosition.y);
 			const targetPosition = new Cell({

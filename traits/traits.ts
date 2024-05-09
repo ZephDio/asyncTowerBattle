@@ -108,7 +108,7 @@ export const Trait = <T extends (base: AbstractConstructor<{}, {}>) => AbstractC
   return { factory, superTraits: [] as Trait[], symbol };
 };
 
-export function implementsTrait<I extends InstanceType<any>, T extends Trait>(instance: I, trait: T): instance is ImplementsTrait<T> {
+export function implementsTrait<I extends {}, T extends Trait>(instance: I, trait: T): instance is ImplementsTrait<T> {
   return (instance as any).constructor[trait.symbol] === true;
 }
 

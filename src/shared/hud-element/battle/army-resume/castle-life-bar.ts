@@ -1,16 +1,16 @@
 import { Derive } from "@ddd-ts/traits";
 import { TDrawable } from "../../../traits/render/drawable";
 import { ScreenPosition } from "../../../position";
-import { BattleHumanCastle } from "../../../../engine/castle/battle/battle-human-castle";
+import { BattleElfCastle } from "../../../../engine/castle/battle/battle-elf-castle";
 import { TRenderable } from "../../../traits/render/renderable";
 import { Resources } from "../../../../renderer/resources";
 import { DrawPriority } from "../../../traits/render/image-drawable";
 
 export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 	drawPriority = DrawPriority.HUD;
-	healthIcon = Resources.hudElement.icons.health.image
+	healthIcon = Resources.hudElement.icons.health.image;
 	constructor(
-		private castle: BattleHumanCastle,
+		private castle: BattleElfCastle,
 		public position: ScreenPosition,
 	) {
 		super({});
@@ -37,15 +37,17 @@ export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 				y: canvasPosition.y,
 			}),
 		);
-		const iconPosition = this.getCanvasPosition(context,this.position.add(new ScreenPosition({ x: -6 , y: 0 })))
-		this.drawImage(context, { width: size.width/5, height:size.height*1.5 },
-			iconPosition, 
-			 this.healthIcon)
+		const iconPosition = this.getCanvasPosition(context, this.position.add(new ScreenPosition({ x: -6, y: 0 })));
+		this.drawImage(context, { width: size.width / 5, height: size.height * 1.5 }, iconPosition, this.healthIcon);
 
-			 context.fillStyle = "black";
-			 context.textAlign = "center";
-			 context.font = `bold ${size.height*1.5}px text`;
-			 context.fillText(`${Math.round(this.castle.stats.health)}/${Math.round(this.castle.stats.maxHealth)}`, canvasPosition.x, canvasPosition.y + size.height/2
-			  , size.width)
+		context.fillStyle = "black";
+		context.textAlign = "center";
+		context.font = `bold ${size.height * 1.5}px text`;
+		context.fillText(
+			`${Math.round(this.castle.stats.health)}/${Math.round(this.castle.stats.maxHealth)}`,
+			canvasPosition.x,
+			canvasPosition.y + size.height / 2,
+			size.width,
+		);
 	}
 }

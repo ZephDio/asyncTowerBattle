@@ -10,7 +10,7 @@ import { TowerBlueprintFixtures } from "../tower/blueprint/tower-fixtures";
 import { AnyTower } from "../tower/recruit/tower";
 import { TowerBuilder } from "../tower/recruit/tower-fixtures";
 import { DwarfBlueprint } from "../units/blueprint/implementation/dwarf-blueprint";
-import { SoldierBlueprint } from "../units/blueprint/implementation/soldier-blueprint";
+import { ElfBlueprint } from "../units/blueprint/implementation/elf-blueprint";
 import { UnitRecruitFixture } from "../units/recruit/unit-fixtures";
 import { Army } from "./army";
 
@@ -65,22 +65,22 @@ export class ArmyFixture {
 }
 
 export class ArmyFactory {
-	static default(classe : Faction) {
-		if(classe === Faction.Dwarf){
-			const grid = new ArmyGrid(7, 5, undefined, 6); 
+	static default(classe: Faction) {
+		if (classe === Faction.Dwarf) {
+			const grid = new ArmyGrid(7, 5, undefined, 6);
 			const castle = CastleFactory.defaultDwarf;
 			const tiles = PathFactory.default;
 			const unitInventory = new Inventory();
 			[castle, ...tiles].map((e) => grid.setElement(e));
 			return new Army(grid, unitInventory, new DwarfBlueprint({}));
 		}
-		if(classe === Faction.Human){
-			const grid = new ArmyGrid(7, 5, undefined, 6); 
-		const castle = CastleFactory.defaultHuman;
-		const tiles = PathFactory.default;
-		const unitInventory = new Inventory();
-		[castle, ...tiles].map((e) => grid.setElement(e));
-		return new Army(grid, unitInventory, new SoldierBlueprint({}));
+		if (classe === Faction.Elf) {
+			const grid = new ArmyGrid(7, 5, undefined, 6);
+			const castle = CastleFactory.defaultElf;
+			const tiles = PathFactory.default;
+			const unitInventory = new Inventory();
+			[castle, ...tiles].map((e) => grid.setElement(e));
+			return new Army(grid, unitInventory, new ElfBlueprint({}));
 		}
 		throw new Error("Invalid class");
 	}

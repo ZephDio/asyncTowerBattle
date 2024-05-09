@@ -4,20 +4,16 @@ import { GreenTower } from "../../recruit/implementation/green-tower";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
-import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { BattleTower } from "../battle-tower";
 
-export class GreenBattleTower extends Derive(
-	BattleTower,
-	HTDescriptor,
-) {
+export class GreenBattleTower extends Derive(BattleTower) {
 	target = null as null | AnyBattleUnit;
 	constructor(
 		private readonly recruit: GreenTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation: number
+		orientation: number,
 	) {
 		super({
 			orientation,
@@ -34,7 +30,6 @@ export class GreenBattleTower extends Derive(
 			hitboxHolder: recruit,
 			descriptor: recruit,
 		});
-
 	}
 
 	private attack(target: AnyBattleUnit) {
@@ -54,7 +49,6 @@ export class GreenBattleTower extends Derive(
 		this.target = enemyUnit;
 	}
 
-
 	onCastResolve(): void {
 		if (
 			this.target &&
@@ -70,5 +64,4 @@ export class GreenBattleTower extends Derive(
 			return;
 		}
 	}
-
 }

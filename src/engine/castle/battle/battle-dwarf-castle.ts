@@ -10,11 +10,21 @@ import { Cast, Caster } from "../../../shared/traits/engine/cast";
 import { Orientable } from "../../../shared/traits/engine/core/orientable";
 import { DwarfCastle } from "../recruit/implem/dwarf-castle";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
+import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 
-export class BattleDwarfCastle extends Derive(HTHitbox, TRenderable, HTImageDrawable, TPhysics, GridElement, Caster, Orientable) {
+export class BattleDwarfCastle extends Derive(
+	HTHitbox,
+	TRenderable,
+	HTImageDrawable,
+	TPhysics,
+	GridElement,
+	Caster,
+	Orientable,
+	HTDescriptor,
+) {
 	public actualLife: number;
 	public maxLife: number;
-    public hooks : BattleArmyHooks;
+	public hooks: BattleArmyHooks;
 
 	constructor(
 		recruit: DwarfCastle,
@@ -23,8 +33,6 @@ export class BattleDwarfCastle extends Derive(HTHitbox, TRenderable, HTImageDraw
 		public position: GridPosition,
 		orientation: number,
 		public foodHooks: FoodHooks,
-
-        
 	) {
 		super({
 			imageDrawable: recruit,
@@ -37,35 +45,39 @@ export class BattleDwarfCastle extends Derive(HTHitbox, TRenderable, HTImageDraw
 			attackSpeed: NaN,
 			foodCost: NaN,
 			onDeath: () => this.onDeath(),
+			descriptor: recruit,
 		});
 		this.gridShape = recruit.gridShape;
 		this.setOrientation(orientation);
 	}
 
-    initHooks(hooks: BattleArmyHooks){
-        this.hooks = hooks;
-    }
+	initHooks(hooks: BattleArmyHooks) {
+		this.hooks = hooks;
+	}
 
 	isAlive() {
 		return this.actualLife > 0;
 	}
 
 	casts() {
-        const cost = this.hooks.getDefaultUnit().cost
+		const cost = this.hooks.getDefaultUnit().cost;
 		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), cost);
 	}
 
 	onCastResolve() {
-        this.hooks.addUnits(this.hooks.getDefaultUnit().toBattle(this.position.clone(), this.hooks.getEnemyPath(), this.hooks), this);
+		this.hooks.addUnits(
+			this.hooks.getDefaultUnit().toBattle(this.position.clone(), this.hooks.getEnemyPath(), this.hooks),
+			this,
+		);
 		this.finishCast(true);
 	}
 
-    produceFood(){
-        this.foodHooks.addFood(3.5/32);
-    }
+	produceFood() {
+		this.foodHooks.addFood(3.5 / 32);
+	}
 
 	tick() {
-        this.produceFood()
+		this.produceFood();
 		this.tickCast();
 	}
 }

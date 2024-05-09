@@ -8,7 +8,7 @@ import { BattleStartTrigger } from "../../../../shared/traits/engine/battle-star
 
 export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger) {
 	vitalityBuffAmount: number = 2;
-    triggered = false;
+	triggered = false;
 
 	constructor(
 		public powderMagazine: PowderMagazine,
@@ -20,36 +20,35 @@ export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger
 		super({
 			imageDrawable: powderMagazine,
 			hitboxHolder: powderMagazine,
-			battleStartRecruit: powderMagazine
+			battleStartRecruit: powderMagazine,
+			descriptor: powderMagazine,
 		});
 		this.gridShape = powderMagazine.gridShape;
 	}
 
+	onBattleStart() {
+		const rand = this.hooks.random();
+		if (rand < 0.5) {
+			this.hooks.alliedArmyBuffHooks.addTowerBuff("attack", 4);
+			return;
+		}
+		this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", 4);
+	}
 
-    onBattleStart() {
-        const rand = this.hooks.random();
-        if(rand < 0.5) {
-            this.hooks.alliedArmyBuffHooks.addTowerBuff("attack", 4);
-            return
-        }
-        this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", 4);
-       
-    }
-
-    onTrigger(){
-        const rand = this.hooks.random();
-        if(rand < 0.5) {
-            this.hooks.alliedArmyBuffHooks.addTowerBuff("attack", 8);
-            return
-        }
-        this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", 8);
-    }
+	onTrigger() {
+		const rand = this.hooks.random();
+		if (rand < 0.5) {
+			this.hooks.alliedArmyBuffHooks.addTowerBuff("attack", 8);
+			return;
+		}
+		this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", 8);
+	}
 
 	tick() {
-        const timer = this.hooks.timer().clock
-        if(timer > seconds(15) && !this.triggered) {
-		  this.onTrigger()
-          this.triggered = true;
-        }
+		const timer = this.hooks.timer().clock;
+		if (timer > seconds(15) && !this.triggered) {
+			this.onTrigger();
+			this.triggered = true;
+		}
 	}
 }
