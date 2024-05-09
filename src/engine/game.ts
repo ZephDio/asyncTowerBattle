@@ -12,6 +12,8 @@ import { EnvironmentGeneration } from "./environment/env-generation";
 import { Faction } from "./menu/main-menu";
 import { Army } from "./army/army";
 import { ArmyFactory } from "./army/army-fixtures";
+import { TranslateAnimation } from "./translate-animation/translate-animation";
+import { PercentToReal } from "../renderer/implementation/canvas-renderer";
 
 export class Game {
 	army : Army
@@ -62,6 +64,8 @@ export class Game {
 
 	handleSummaryQuit() {
 		this.battleSummary = null;
+		const animation = new TranslateAnimation(20, this.army.grid.centerPosition, PercentToReal({ x: 35, y: 28 }) , this.army.grid.centerPosition.clone(), ()=> {this.army.grid.updateCornerPosition()},()=> {this.army.grid.updateCornerPosition()})
+		animation.startAnimation()
 		if(this.life === 0){
 			this.endGame()
 		}
@@ -109,7 +113,7 @@ export class Game {
 			this.handleEndBattle.bind(this),
 			this.setDescriptionHud.bind(this),
 		);
-		this.battle.start();
+		this.battle.init();
 	}
 
 	setDescriptionHud(descriptionHud: DescriptionHud | null) {

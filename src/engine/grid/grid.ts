@@ -119,6 +119,11 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return `${cell.x}|${cell.y}`;
 	}
 
+	resetPosition(){
+		this.centerPosition = PercentToReal({ x: 35, y: 28 })
+		this.updateCornerPosition()
+	}
+
 	roundOne(envGenerator: EnvironmentGeneration) {
 		envGenerator.generateEnvironmentForRoundOne(this);
 	}

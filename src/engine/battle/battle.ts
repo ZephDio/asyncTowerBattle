@@ -9,11 +9,13 @@ import { BattleRandomSeed } from "./battle-random-seed";
 import { Battlefield } from "./battlefield/battlefield";
 import { ArmyResume } from "../../shared/hud-element/battle/army-resume/army-resume";
 import { seconds } from "../../shared/seconds";
+import { TranslateAnimation } from "../translate-animation/translate-animation";
 
 export class Battle {
 	battlefield: Battlefield;
 	isOver = false;
 
+	animationOver = false;
 	gameSpeed = seconds(1);
 	battleClock: BattleClockHud;
 	speedCursor: SliderBattleSpeed;
@@ -39,6 +41,20 @@ export class Battle {
 		this.enemyArmyResume = new ArmyResume(this.battlefield.enemyArmy, PercentToReal({ x: 89, y: 32 }));
 	}
 
+
+	init(){
+		const armyGridAnimation = new TranslateAnimation(20, this.alliedArmy.grid.centerPosition, PercentToReal({ x: 50, y: 25.5 }) , this.alliedArmy.grid.centerPosition.clone(), ()=> {
+			this.animationOver = true
+		},()=> {
+			this.alliedArmy.grid.updateCornerPosition()
+		})
+		const alliedArmyResumeAnimation = new TranslateAnimation(20, this.alliedArmyResume.position, this.alliedArmyResume.position.clone(), PercentToReal({ x : -20, y : 32}))
+		const enemyArmyResumeAnimation = new TranslateAnimation(20, this.enemyArmyResume.position, this.enemyArmyResume.position.clone(), PercentToReal({ x : 120, y : 32}),this.start.bind(this))
+		armyGridAnimation.startAnimation()
+		alliedArmyResumeAnimation.startAnimation()
+		enemyArmyResumeAnimation.startAnimation()
+	}
+	
 	start() {
 		this.battlefield.triggerBattleStartEffects()
 		const loop = () => {
@@ -77,7 +93,7 @@ export class Battle {
 	getDrawables(): RenderableState {
 		return {
 			renderables: [this.battleClock, this.speedCursor, this.alliedArmyResume, this.enemyArmyResume],
-			grids: [
+			grids: this.animationOver ? [
 				{
 					grid: this.battlefield.grid,
 					drawables: [
@@ -87,6 +103,11 @@ export class Battle {
 						...this.battlefield.projectiles,
 					],
 				},
+			] : [
+				{
+					grid: this.alliedArmy.grid,
+					drawables: [],
+				}
 			],
 		};
 	}

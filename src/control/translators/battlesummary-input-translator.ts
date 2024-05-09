@@ -21,7 +21,7 @@ export class BattleSummaryInputToIntentTranslator {
 		}
 	}
 
-	handleMouseDownInput(screenPosition: ScreenPosition, focus:ReturnType<BattleSummaryInputToIntentTranslator["determinateFocus"]> ,summary: BattleSummary){
+	handleMouseDownInput(_screenPosition: ScreenPosition, focus:ReturnType<BattleSummaryInputToIntentTranslator["determinateFocus"]> ,summary: BattleSummary){
 		if(focus instanceof HideHud){
 			summary.toggleHide()
 		}

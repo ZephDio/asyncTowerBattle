@@ -29,7 +29,7 @@ export const TGrid = Trait((base) => {
 		abstract hoverEffect: HoverEffect[] | null;
 		abstract synergiesEffects: SynergyEffectHud[];
 
-		get position() {
+		get position(): ScreenPosition {
 			return this.bottomLeftCornerPosition;
 		}
 
