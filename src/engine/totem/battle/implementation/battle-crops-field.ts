@@ -27,6 +27,7 @@ export class BattleCropsField extends Derive(BattleTotem, Caster, FoodTag) {
 			castSpeed: cropsField.castSpeed,
 			foodCost: NaN,
 			onDeath: () => {},
+			descriptor: cropsField,
 		});
 		this.gridShape = cropsField.gridShape;
 	}

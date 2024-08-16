@@ -7,17 +7,16 @@ import { MouseEventType } from "../mouse-event-handler";
 import { BattleInputToIntentTranslator } from "./battle-input-translator";
 
 export class BattleSummaryInputToIntentTranslator {
-
 	constructor(private battleTranslator: BattleInputToIntentTranslator) {}
-	
+
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, summary: BattleSummary) {
-		const state = summary.getState()
-		if(state.hidden){
-			this.battleTranslator.handle(screenPosition, eventType, summary.battle)
+		const state = summary.getState();
+		if (state.hidden) {
+			this.battleTranslator.handle(screenPosition, eventType, summary.battle);
 		}
 		const focus = this.determinateFocus(screenPosition, state);
 		if (eventType === "down") {
-			this.handleMouseDownInput(screenPosition, focus, summary)
+			this.handleMouseDownInput(screenPosition, focus, summary);
 		}
 	}
 
@@ -25,18 +24,18 @@ export class BattleSummaryInputToIntentTranslator {
 		if(focus instanceof HideHud){
 			summary.toggleHide()
 		}
-		if(focus instanceof NextRoundHud){
-			summary.quitSummary()
+		if (focus instanceof NextRoundHud) {
+			summary.quitSummary();
 		}
 	}
 
-	determinateFocus(screenPosition: ScreenPosition, state: SummaryState){ 
+	determinateFocus(screenPosition: ScreenPosition, state: SummaryState) {
 		for (const hudElement of state.hudElements) {
-			if(hudElement instanceof HideHud && hudElement.contains(screenPosition)){
-				return hudElement
+			if (hudElement instanceof HideHud && hudElement.contains(screenPosition)) {
+				return hudElement;
 			}
-			if(hudElement instanceof NextRoundHud && hudElement.contains(screenPosition)){
-				return hudElement
+			if (hudElement instanceof NextRoundHud && hudElement.contains(screenPosition)) {
+				return hudElement;
 			}
 		}
 		return undefined;

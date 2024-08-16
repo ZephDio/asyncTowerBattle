@@ -1,29 +1,31 @@
 import { HudElement } from "../../shared/hud-element/hud-element";
 import { FactionsSelectorHud as FactionSelectorHud } from "./huds/faction-selector";
 import { StartGameButton } from "./huds/start-game-button";
-export enum Faction{
+export enum Faction {
 	Dwarf = "Dwarf",
-	Human = "Human"
-
+	Elf = "Elf",
 }
-
 
 export class MainMenu {
 	startGameButton: StartGameButton = new StartGameButton({});
-	classesSelectorHud = new FactionSelectorHud()
+	classesSelectorHud = new FactionSelectorHud();
 	getState(): MainMenuState {
 		return {
-			hudElements: [this.startGameButton, this.classesSelectorHud.selectDwarfButton, this.classesSelectorHud.selectHumanButton],
+			hudElements: [
+				this.startGameButton,
+				this.classesSelectorHud.selectDwarfButton,
+				this.classesSelectorHud.selectElfButton,
+			],
 		};
 	}
 	getRenderState() {
 		return {
 			grids: [],
-			renderables: [ this.startGameButton, this.classesSelectorHud], //
+			renderables: [this.startGameButton, this.classesSelectorHud], //
 		};
 	}
 }
 
 export type MainMenuState = {
-	hudElements: HudElement[]
+	hudElements: HudElement[];
 };

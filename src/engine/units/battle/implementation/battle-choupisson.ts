@@ -27,6 +27,7 @@ export class BattleChoupisson extends Derive(TBattleUnit) {
 			foodCost: recruit.foodCost,
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
+			descriptor: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

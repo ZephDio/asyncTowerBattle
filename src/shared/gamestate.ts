@@ -1,5 +1,5 @@
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
-import { BattleHumanCastle } from "../engine/castle/battle/battle-human-castle";
+import { BattleElfCastle } from "../engine/castle/battle/battle-elf-castle";
 import { Tower } from "../engine/tower/recruit/tower";
 import { HudElement } from "./hud-element/hud-element";
 import { Retail } from "../engine/shop/retail/retail";
@@ -32,7 +32,7 @@ export interface SummaryState extends GameState {
 
 export interface BattleState extends GameState {
 	type: "battle";
-	castles: BattleHumanCastle[];
+	castles: BattleElfCastle[];
 	towers: AnyBattleTower[];
 	grid: BattleGrid;
 	units: AnyBattleUnit[];
