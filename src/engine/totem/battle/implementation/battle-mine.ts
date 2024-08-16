@@ -6,17 +6,18 @@ import { Mine } from "../../recruit/implementation/mine";
 
 export class BattleMine extends Derive(BattleTotem) {
 	constructor(
-		public bakery: Mine,
+		public mine: Mine,
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
 		override _orientation: number,
 	) {
 		super({
-			imageDrawable: bakery,
-			hitboxHolder: bakery,
+			imageDrawable: mine,
+			hitboxHolder: mine,
+			descriptor: mine,
 		});
-		this.gridShape = bakery.gridShape;
+		this.gridShape = mine.gridShape;
 	}
 
 	tick() {}

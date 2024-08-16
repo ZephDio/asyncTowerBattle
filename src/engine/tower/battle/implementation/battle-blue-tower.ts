@@ -5,15 +5,13 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { BattleTower } from "../battle-tower";
-export class BlueBattleTower extends Derive(
-	BattleTower
-) {
+export class BlueBattleTower extends Derive(BattleTower) {
 	constructor(
 		private readonly recruit: BlueTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation : number
+		orientation: number,
 	) {
 		super({
 			recruit,
@@ -66,5 +64,4 @@ export class BlueBattleTower extends Derive(
 			return;
 		}
 	}
-
 }

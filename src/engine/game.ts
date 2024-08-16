@@ -14,17 +14,20 @@ import { Army } from "./army/army";
 import { ArmyFactory } from "./army/army-fixtures";
 
 export class Game {
-	army : Army
+	army: Army;
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
 	shop: null | ShopPhase = null;
-	rounds : RoundsTracker
-	life =  5
+	rounds: RoundsTracker;
+	life = 5;
 
 	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new LocalMatchMaker();
-	constructor(public chosenClass : Faction, private endGame: () => void) {
-		this.army = ArmyFactory.default(chosenClass)
+	constructor(
+		public chosenClass: Faction,
+		private endGame: () => void,
+	) {
+		this.army = ArmyFactory.default(chosenClass);
 		const envGenerator = new EnvironmentGeneration();
 		this.rounds = new RoundsTracker(this.army, envGenerator);
 		this.startShop();
@@ -52,18 +55,18 @@ export class Game {
 		return this.shop.getState();
 	}
 
-	handleEndBattle(battleVerdict: "Victory" | "Defeat", battle : Battle) {
-		this.startBattleSummary(battle, battleVerdict);
-		if(battleVerdict === "Defeat"){
-			this.life--
+	handleEndBattle(battleVerdict: "Victory" | "Defeat", battle: Battle) {
+		if (battleVerdict === "Defeat") {
+			this.life--;
 		}
+		this.startBattleSummary(battle, battleVerdict);
 		this.battle = null;
 	}
 
 	handleSummaryQuit() {
 		this.battleSummary = null;
-		if(this.life === 0){
-			this.endGame()
+		if (this.life === 0) {
+			this.endGame();
 		}
 		this.startShop();
 	}
@@ -90,7 +93,7 @@ export class Game {
 	}
 
 	startShop() {
-		this.rounds.update()
+		this.rounds.update();
 		this.shop = new ShopPhase(this.army, this.handleShopQuit.bind(this), this.setDescriptionHud.bind(this));
 		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
 		this.army.onShopEnter();

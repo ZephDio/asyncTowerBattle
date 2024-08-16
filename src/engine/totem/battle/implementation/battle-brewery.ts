@@ -8,7 +8,6 @@ import { seconds } from "../../../../shared/seconds";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { Brewery } from "../../recruit/implementation/brewery";
 import { BattleStartTrigger } from "../../../../shared/traits/engine/battle-start";
-
 export class BattleBrewery extends Derive(BattleTotem, FoodTag, HTSynergy, Caster, BattleStartTrigger) {
 	vitalityBuffAmount: number = 2;
 	constructor(
@@ -31,6 +30,7 @@ export class BattleBrewery extends Derive(BattleTotem, FoodTag, HTSynergy, Caste
 			castSpeed: brewery.castSpeed,
 			foodCost: NaN,
 			onDeath: () => {},
+			descriptor: brewery,
 		});
 		this.gridShape = brewery.gridShape;
 	}
@@ -62,7 +62,6 @@ export class BattleBrewery extends Derive(BattleTotem, FoodTag, HTSynergy, Caste
 		this.gainSpeedForEachBarracks();
 	}
 
-	
 	tick() {
 		this.stats.tick();
 		this.tickCast();

@@ -34,7 +34,7 @@ export const Unit = Subtrait([TRecruit, HTFoodConsumer], (base) => {
 			if (!cell) throw new Error("Invalid cell");
 			const element = grid.getElement(cell);
 			if (grid instanceof ArmyGrid) {
-				if (implementsTrait(element, Barrack)) {
+				if (element && implementsTrait(element, Barrack)) {
 					if (element.unitRecruit) {
 						hooks.shopPhaseHooks.armyHooks.pushToInventory(element.unitRecruit);
 					}

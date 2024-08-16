@@ -70,4 +70,3 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 		this.finishCast();
 	}
 }
-

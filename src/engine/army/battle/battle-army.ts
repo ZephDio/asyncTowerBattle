@@ -1,4 +1,4 @@
-import { BattleHumanCastle } from "../../castle/battle/battle-human-castle";
+import { BattleElfCastle } from "../../castle/battle/battle-elf-castle";
 import { AnyBattleProjectile } from "../../projectile/battle/battle-projectile";
 import { AnyBattleTower } from "../../tower/battle/battle-tower";
 import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
@@ -21,7 +21,7 @@ import { Furry } from "./furry";
 
 export type BattleArmyHooks = {
 	random: () => number;
-	timer : () => { clock : number };
+	timer: () => { clock: number };
 	addUnits: BattleArmy["addUnit"];
 	getDefaultUnit: BattleArmy["getDefaultUnit"];
 	removeUnit: BattleArmy["removeUnit"];
@@ -35,8 +35,8 @@ export type BattleArmyHooks = {
 	getEnemyPath: BattleArmy["getEnemyPath"];
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
 	getAlliedUnits: () => AnyBattleUnit[];
-	getAlliedCastle: () => BattleHumanCastle;
-	triggerFurry: ()  => void;
+	getAlliedCastle: () => BattleElfCastle;
+	triggerFurry: () => void;
 	alliedArmyBuffHooks: ArmyBuffHooks;
 	enemyArmyBuffHooks: ArmyBuffHooks;
 	alliedFoodHooks: FoodHooks;
@@ -50,7 +50,7 @@ export class BattleArmy {
 	units: Map<AnyBattleUnit, AnyBattleBarrack> = new Map();
 	areaEffects: Map<AreaEffect, any> = new Map();
 	path: BattlePath;
-	castle: BattleHumanCastle;
+	castle: BattleElfCastle;
 	barracks: AnyBattleBarrack[];
 	projectiles: Map<AnyBattleProjectile, any> = new Map();
 	towers: AnyBattleTower[];
@@ -58,7 +58,7 @@ export class BattleArmy {
 
 	armyBuff: ArmyBuff;
 	totems: AnyBattleTotem[];
-	furry: Furry
+	furry: Furry;
 
 	constructor(
 		public foodEconomy: BattleFoodEconomy,
@@ -67,7 +67,7 @@ export class BattleArmy {
 		public random: () => number,
 		public getTimer: () => { clock: number },
 		public getEnemyPath: () => BattlePath,
-		public getEnemyCastle: () => BattleHumanCastle,
+		public getEnemyCastle: () => BattleElfCastle,
 		public getDefaultUnit: () => ImplementsTrait<typeof TokenUnit>,
 		public enemyFoodHooks: FoodHooks,
 		public gridHooks: GridHooks,
@@ -79,7 +79,7 @@ export class BattleArmy {
 		public enemyGoldEconomyHooks: EconomyHooks,
 	) {
 		this.surchargeBuffHooks();
-		this.furry = new Furry(0,0, this.getTimer)
+		this.furry = new Furry(0, 0, this.getTimer);
 	}
 
 	surchargeBuffHooks() {
@@ -97,7 +97,7 @@ export class BattleArmy {
 	}
 
 	init(
-		castle: BattleHumanCastle,
+		castle: BattleElfCastle,
 		path: BattlePath,
 		towers: AnyBattleTower[],
 		barracks: AnyBattleBarrack[],
@@ -114,17 +114,16 @@ export class BattleArmy {
 		this.armyBuff = armyBuff;
 	}
 
-	triggerBattleStartEffects(){
-		for(const element of [...this.towers, ...this.totems, ...this.barracks, this.castle]){
-			if(implementsTrait(element, BattleStartTrigger)){
+	triggerBattleStartEffects() {
+		for (const element of [...this.towers, ...this.totems, ...this.barracks, this.castle]) {
+			if (implementsTrait(element, BattleStartTrigger)) {
 				element.onBattleStart();
 			}
 		}
 	}
 
-	addFurryBuff(unit : AnyBattleUnit){
-		console.log(this.furry.getFurry())
-		unit.addFurry(this.furry.getFurry())
+	addFurryBuff(unit: AnyBattleUnit) {
+		unit.addFurry(this.furry.getFurry());
 	}
 
 	addUnitBuffs(buffs: Buff, amount: number = 1) {
@@ -141,7 +140,7 @@ export class BattleArmy {
 
 	addUnit(entityRecruit: AnyBattleUnit, source: any) {
 		entityRecruit.initArmyBuffs(this.armyBuff.getUnitArmyBuffs());
-		this.addFurryBuff(entityRecruit)
+		this.addFurryBuff(entityRecruit);
 		this.units.set(entityRecruit, source);
 	}
 
@@ -178,7 +177,7 @@ export class BattleArmy {
 	getHooks(): BattleArmyHooks {
 		return {
 			random: this.random.bind(this),
-			timer : this.getTimer.bind(this),
+			timer: this.getTimer.bind(this),
 			addUnits: this.addUnit.bind(this),
 			getDefaultUnit: this.getDefaultUnit.bind(this),
 			removeUnit: this.removeUnit.bind(this),
@@ -193,7 +192,7 @@ export class BattleArmy {
 			getEnemyCastle: this.getEnemyCastle.bind(this),
 			getAlliedCastle: () => this.castle,
 			getAlliedUnits: () => [...this.units.keys()],
-			triggerFurry: ()  => this.furry.increaseFurry(),
+			triggerFurry: () => this.furry.increaseFurry(),
 			alliedArmyBuffHooks: this.alliedArmyBuffHooks,
 			enemyArmyBuffHooks: this.enemyArmyBuffHooks,
 			alliedFoodHooks: this.foodEconomy.getHooks(),

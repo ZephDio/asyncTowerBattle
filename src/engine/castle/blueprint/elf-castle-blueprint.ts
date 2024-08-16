@@ -7,8 +7,8 @@ import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { GridPosition } from "../../../shared/position";
 import { Description, TDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 
-export class HumanCastleBlueprint extends Derive(
-	TImageDrawable(Resources.castle.human.resource.image, Resources.castle.human.size, DrawPriority.NormalGridElement),
+export class ElfCastleBlueprint extends Derive(
+	TImageDrawable(Resources.castle.elf.resource.image, Resources.castle.elf.size, DrawPriority.NormalGridElement),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 ) {

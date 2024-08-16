@@ -13,7 +13,7 @@ import { RecruitBattleStart } from "../../../../shared/traits/engine/battle-star
 
 export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag, RecruitBattleStart) {
 	castSpeed = 1;
-	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: -1, y: 0 })]);
+	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: -1 })]);
 	constructor(
 		public cell: Cell,
 		public blueprint: BreweryBlueprint = new BreweryBlueprint({}),

@@ -24,6 +24,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, Batt
 			imageDrawable: windmill,
 			hitboxHolder: windmill,
 			synergy: windmill,
+			descriptor: windmill,
 		});
 		this.gridShape = windmill.gridShape;
 	}
@@ -34,8 +35,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, Batt
 			this.patternEffect.getRelativeCells(this.orientation),
 		);
 		for (const element of elements) {
-			if(!element) continue
-			console.log(element)
+			if (!element) continue;
 			if (implementsTrait(element, FoodTag)) {
 				this.hooks.alliedFoodHooks.addMaxFood(5);
 				if (implementsTrait(element, Caster)) {
@@ -46,7 +46,6 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, Batt
 		}
 	}
 	tick() {}
-
 }
 
 export class WindmillBuff extends Derive(Status) {

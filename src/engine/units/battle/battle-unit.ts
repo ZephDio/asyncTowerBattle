@@ -10,9 +10,10 @@ import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattlePath } from "../../path/battle/battle-path";
 import { PathFinder } from "../../battle/path-finder";
 import { Action } from "../../../shared/action";
+import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 
 export const TBattleUnit = Subtrait(
-	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, HaveStats],
+	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, HaveStats, HTDescriptor],
 	(base) => {
 		abstract class IBattleUnit extends base {
 			hunger = 0;
@@ -72,7 +73,7 @@ export const TBattleUnit = Subtrait(
 					this.stats.heal(1);
 					return;
 				}
-				this.hunger+= 2;
+				this.hunger += 2;
 				this.stats.takeDamage(this.hunger);
 			}
 		}

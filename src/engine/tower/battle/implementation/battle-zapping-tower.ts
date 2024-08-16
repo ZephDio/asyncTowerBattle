@@ -6,9 +6,7 @@ import { AnyBattleUnit } from "../../../units/battle/battle-unit";
 import { Physic } from "../../../../shared/physic";
 import { BattleTower } from "../battle-tower";
 
-export class ZappingBattleTower extends Derive(
-	BattleTower
-) {
+export class ZappingBattleTower extends Derive(BattleTower) {
 	target = null as null | AnyBattleUnit;
 
 	constructor(
@@ -16,7 +14,7 @@ export class ZappingBattleTower extends Derive(
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation: number
+		orientation: number,
 	) {
 		super({
 			recruit,

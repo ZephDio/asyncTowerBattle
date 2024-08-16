@@ -27,6 +27,7 @@ export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster) {
 			castSpeed: bakery.castSpeed,
 			foodCost: NaN,
 			onDeath: () => {},
+			descriptor: bakery,
 		});
 		this.gridShape = bakery.gridShape;
 	}

@@ -4,13 +4,13 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
-import { SoldierBlueprint } from "../../blueprint/implementation/soldier-blueprint";
+import { ElfBlueprint } from "../../blueprint/implementation/elf-blueprint";
 
-export class BattleSoldier extends Derive(TBattleUnit) {
+export class BattleElf extends Derive(TBattleUnit) {
 	pathFinder: PathFinder;
 
 	constructor(
-		recruit: SoldierBlueprint,
+		recruit: ElfBlueprint,
 		public position: GridPosition,
 		public enemyPath: BattlePath,
 		public hooks: BattleArmyHooks,
@@ -25,6 +25,7 @@ export class BattleSoldier extends Derive(TBattleUnit) {
 			foodCost: recruit.foodCost,
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
+			descriptor: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

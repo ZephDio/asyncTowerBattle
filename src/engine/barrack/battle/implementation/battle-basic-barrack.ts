@@ -29,7 +29,7 @@ export class BasicBattleBarrack extends Derive(BattleBarrack) {
 			hitboxHolder: barrackRecruit,
 			descriptor: barrackRecruit,
 		});
-		
+
 		this.castCost = unitRecruit ? unitRecruit.cost : this.hooks.getDefaultUnit().cost;
 		this.gridShape = barrackRecruit.gridShape;
 	}
@@ -37,7 +37,9 @@ export class BasicBattleBarrack extends Derive(BattleBarrack) {
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
-		const unit = this.unitRecruit ? this.unitRecruit.toBattle(spawnPoint, path, this.hooks) : this.hooks.getDefaultUnit().toBattle(spawnPoint, path, this.hooks);
+		const unit = this.unitRecruit
+			? this.unitRecruit.toBattle(spawnPoint, path, this.hooks)
+			: this.hooks.getDefaultUnit().toBattle(spawnPoint, path, this.hooks);
 		this.hooks.addUnits(unit, this);
 		this.finishCast();
 	}

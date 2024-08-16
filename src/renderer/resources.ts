@@ -125,7 +125,12 @@ export const Resources = {
 				height: 5,
 			},
 			resource: {
-				image: createImage("/resources/totem/brewery.png"),
+				image: {
+					frontView: createImage("/resources/totem/brewery/front-view.png"),
+					backView: createImage("/resources/totem/brewery/back-view.png"),
+					leftView: createImage("/resources/totem/brewery/left-view.png"),
+					rightView: createImage("/resources/totem/brewery/right-view.png"),
+				},
 				shape: "rectangle",
 			},
 		},
@@ -167,14 +172,14 @@ export const Resources = {
 		},
 	},
 	unit: {
-		soldier: {
+		elf: {
 			size: {
 				width: 3,
 				height: 3,
 			},
 			resource: {
 				shape: "ellipse",
-				image: createImage("/resources/units/soldier.png"),
+				image: createImage("/resources/units/elf.png"),
 			},
 		},
 		choupisson: {
@@ -287,29 +292,38 @@ export const Resources = {
 		},
 	},
 	castle: {
-		human : {
+		elf: {
 			size: {
 				width: 7,
 				height: 7,
 			},
 			resource: {
-				image: createImage("/resources/castle/castle_blue.png"),
+				image: {
+					frontView: createImage("/resources/castle/elf/front-view.png"),
+					backView: createImage("/resources/castle/elf/back-view.png"),
+					leftView: createImage("/resources/castle/elf/back-view.png"),
+					rightView: createImage("/resources/castle/elf/front-view.png"),
+				},
 				shape: "rectangle",
 				color: "#3b3b3b",
 			},
 		},
-		dwarf : {
+		dwarf: {
 			size: {
 				width: 7,
 				height: 7,
 			},
 			resource: {
-				image: createImage("/resources/castle/castle_purple.png"),
+				image: {
+					frontView: createImage("/resources/castle/dwarf/front-view.png"),
+					backView: createImage("/resources/castle/dwarf/back-view.png"),
+					leftView: createImage("/resources/castle/dwarf/back-view.png"),
+					rightView: createImage("/resources/castle/dwarf/front-view.png"),
+				},
 				shape: "rectangle",
 				color: "#3b3b3b",
 			},
-		}
-		
+		},
 	},
 	projectiles: {
 		bullet: {
@@ -482,7 +496,7 @@ export const Resources = {
 			},
 			health: {
 				image: createImage("/resources/hud/health.png"),
-			},			
+			},
 			emptyHealth: {
 				image: createImage("/resources/hud/health-empty.png"),
 			},

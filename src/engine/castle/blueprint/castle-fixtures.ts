@@ -1,12 +1,11 @@
-import { HumanCastleBlueprint } from "./human-castle-blueprint";
-
+import { ElfCastleBlueprint } from "./elf-castle-blueprint";
 
 export class CastleBlueprintFixtures {
 	static get allied() {
-		return new HumanCastleBlueprint({});
+		return new ElfCastleBlueprint({});
 	}
 
 	static get enemy() {
-		return new HumanCastleBlueprint({});
+		return new ElfCastleBlueprint({});
 	}
 }
