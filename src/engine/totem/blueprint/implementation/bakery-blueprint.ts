@@ -8,8 +8,8 @@ import { Description, TDescriptor } from "../../../../shared/traits/render/huds/
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { Bakery } from "../../recruit/implementation/backery";
+import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class BakeryBlueprint extends Derive(
 	TShopBlueprint(10, 10),

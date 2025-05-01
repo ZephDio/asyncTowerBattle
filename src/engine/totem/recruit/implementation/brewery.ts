@@ -4,12 +4,12 @@ import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell } from "../../../../shared/position";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { BreweryBlueprint } from "../../blueprint/implementation/brewery-blueprint";
 import { BattleBrewery } from "../../battle/implementation/battle-brewery";
 import { GridShape } from "../../../../shared/traits/engine/core/grid-element";
 import { RecruitBattleStart } from "../../../../shared/traits/engine/battle-start";
+import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag, RecruitBattleStart) {
 	castSpeed = 1;

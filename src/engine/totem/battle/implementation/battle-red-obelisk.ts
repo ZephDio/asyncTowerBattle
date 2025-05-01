@@ -3,10 +3,10 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
-import { EvilTag } from "../../../../shared/traits/engine/tags";
 import { RedObelisk } from "../../recruit/implementation/obelisk";
 import { seconds } from "../../../../shared/seconds";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
+import { EvilTag } from "../../../../shared/traits/engine/tags/alignment/alignment-tags";
 export class BattleRedObelisk extends Derive(BattleTotem, EvilTag, Caster, HTSynergy) {
 	hasTriggered = false;
 

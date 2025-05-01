@@ -3,12 +3,12 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Windmill } from "../../recruit/implementation/windmill";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { Caster } from "../../../../shared/traits/engine/cast";
 import { Stats } from "../../../stats/stats";
 import { Status } from "../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 import { BattleStartTrigger } from "../../../../shared/traits/engine/battle-start";
+import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, BattleStartTrigger) {
 	foodProduction: number = 5;
@@ -40,7 +40,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, Batt
 				this.hooks.alliedFoodHooks.addMaxFood(5);
 				if (implementsTrait(element, Caster)) {
 					const windmillBuff = new WindmillBuff({});
-					element.addStatus(windmillBuff);
+					element.addBoon(windmillBuff);
 				}
 			}
 		}
@@ -58,5 +58,8 @@ export class WindmillBuff extends Derive(Status) {
 		if (this.hasTriggered) return;
 		this.hasTriggered = true;
 		this.stats.basePercentStat.castSpeed += 0.25;
+	}
+	override onRemove(): void {
+		this.stats.basePercentStat.castSpeed -= 0.25;
 	}
 }

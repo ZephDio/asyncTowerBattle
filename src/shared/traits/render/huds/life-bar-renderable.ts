@@ -1,8 +1,9 @@
-import { Subtrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { GridPosition } from "../../../position";
 import { LifeBar } from "../../../hud-element/entity-hud/lifebar";
 import { THudRenderable } from "./hud-renderable";
 import { HaveStats } from "../../../../engine/stats/stats";
+import { TDrawable } from "../drawable";
 
 export const TLifeBarRenderable = Subtrait([THudRenderable, HaveStats], (base) => {
 	abstract class ILifeBarRenderable extends base {

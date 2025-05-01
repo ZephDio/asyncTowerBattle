@@ -7,15 +7,15 @@ import { Totem } from "../totem";
 import { BattleGobelinPortal } from "../../battle/implementation/battle-gobelin-portal";
 import { GobelinBlueprint } from "../../../units/blueprint/implementation/gobelin-blueprint";
 import { GobelinPortalBlueprint } from "../../blueprint/implementation/gobelin-portal-blueprint";
-import { EvilTag } from "../../../../shared/traits/engine/tags";
+import { EvilTag } from "../../../../shared/traits/engine/tags/alignment/alignment-tags";
 
 export class GobelinPortal extends Derive(Totem, HTSynergy, EvilTag) {
-	recruit = new GobelinBlueprint({})
+	recruit = new GobelinBlueprint({});
 	constructor(
 		public cell: Cell,
 		public totem: GobelinPortalBlueprint = new GobelinPortalBlueprint({}),
 	) {
-		super({ synergy: totem, imageDrawable: totem, hitboxHolder: totem, descriptor: totem })
+		super({ synergy: totem, imageDrawable: totem, hitboxHolder: totem, descriptor: totem });
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {

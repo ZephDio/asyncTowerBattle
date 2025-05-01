@@ -1,13 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
 import { seconds } from "../../../../shared/seconds";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { Brewery } from "../../recruit/implementation/brewery";
 import { BattleStartTrigger } from "../../../../shared/traits/engine/battle-start";
+import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 export class BattleBrewery extends Derive(BattleTotem, FoodTag, HTSynergy, Caster, BattleStartTrigger) {
 	vitalityBuffAmount: number = 2;
 	constructor(

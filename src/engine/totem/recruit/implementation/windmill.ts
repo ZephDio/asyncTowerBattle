@@ -6,8 +6,8 @@ import { Cell } from "../../../../shared/position";
 import { WindmillBlueprint } from "../../blueprint/implementation/windmill-blueprint";
 import { HTSynergy } from "../../../../shared/traits/engine/synergy";
 import { BattleWindmill } from "../../battle/implementation/battle-windmill";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { RecruitBattleStart } from "../../../../shared/traits/engine/battle-start";
+import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class Windmill extends Derive(Totem, HTSynergy, FoodTag, RecruitBattleStart) {
 	constructor(

@@ -59,7 +59,7 @@ export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable, 
 	}
 
 	hit() {
-		this.target.takeDamage(this.damage);
+		this.target.takeHit(this.damage);
 		this.spread();
 	}
 
@@ -74,7 +74,7 @@ export class BattleSpark extends Derive(TRenderable, HTHitbox, HTImageDrawable, 
 			}
 			lastPosition = nextTarget.position;
 			this.touchedTargets.push(nextTarget);
-			nextTarget.takeDamage(this.damage / (2 + i * 0.7));
+			nextTarget.takeHit(this.damage / (2 + i * 0.7));
 		}
 	}
 

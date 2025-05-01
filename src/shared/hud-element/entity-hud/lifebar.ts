@@ -6,12 +6,14 @@ import { DrawPriority } from "../../traits/render/image-drawable";
 
 export class LifeBar extends Derive(TDrawable) {
 	drawPriority = DrawPriority.HUD;
+	toggled = false;
 	constructor(private entity: ImplementsTrait<typeof HaveStats>) {
 		super({});
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
-		if (Math.round(this.entity.stats.health) === Math.round(this.entity.stats.maxHealth)) return;
+		if (Math.round(this.entity.stats.health) !== Math.round(this.entity.stats.maxHealth)) this.toggled = true;
+		if (!this.toggled) return;
 		context.globalAlpha = 1;
 		context.fillStyle = "red";
 		context.strokeStyle = "cyan";

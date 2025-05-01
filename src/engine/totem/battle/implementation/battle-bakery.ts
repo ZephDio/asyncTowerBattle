@@ -1,11 +1,11 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
 import { Bakery } from "../../recruit/implementation/backery";
 import { seconds } from "../../../../shared/seconds";
+import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster) {
 	vitalityBuffAmount: number = 2;

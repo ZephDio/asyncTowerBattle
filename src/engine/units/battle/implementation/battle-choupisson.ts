@@ -32,7 +32,7 @@ export class BattleChoupisson extends Derive(TBattleUnit) {
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}
 
-	override takeDamage(damage: number) {
+	override takeHit(damage: number) {
 		const { below, left, right } = this.hooks.gridHooks.getRelativeDirection();
 		left.x = left.x * 0.25;
 		right.x = right.x * 0.25;

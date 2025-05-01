@@ -35,8 +35,8 @@ export class FrostNova extends Derive(
 			const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
 			for (const enemy of enemies) {
 				const distance = Physic.getDistance(this.position, enemy.position);
-				enemy.takeDamage(Math.max(9 / (9 - distance), 1) * this.damage);
-				enemy.addStatus(new Frozen(78, (9 - distance) * 8));
+				enemy.takeHit(Math.max(9 / (9 - distance), 1) * this.damage);
+				enemy.addCondition(new Frozen(78, (9 - distance) * 8));
 			}
 			this.hasTriggered = true;
 		}
@@ -65,14 +65,11 @@ export class FrostNova extends Derive(
 }
 
 export class Frozen extends Derive(Status) {
-	override key: "frozen";
+	key = "frozen" as const;
 	override clock: number = 0;
 	override stats: Stats;
-	type = "frozen" as const;
 
 	hasTriggered = false;
-
-	override stackable = false;
 
 	constructor(
 		public duration: number,
@@ -89,7 +86,12 @@ export class Frozen extends Derive(Status) {
 		this.clock++;
 		this.stats.basePercentStat.movementSpeed += this.intensity / this.duration;
 		if (this.clock >= this.duration) {
-			this.stats.removeStatus(this);
+			this.stats.removeCondition(this);
 		}
+	}
+
+	override onRemove(): void {
+		const remainingTime = this.duration - this.clock;
+		this.stats.basePercentStat.movementSpeed += (this.intensity / this.duration) * remainingTime;
 	}
 }

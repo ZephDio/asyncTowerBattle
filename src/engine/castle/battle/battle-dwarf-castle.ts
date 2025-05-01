@@ -64,6 +64,13 @@ export class BattleDwarfCastle extends Derive(
 		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), cost);
 	}
 
+	override takeDamage(damage: number): void {
+		this.actualLife -= damage;
+		if (this.actualLife <= 0) {
+			this.onDeath();
+		}
+	}
+
 	onCastResolve() {
 		this.hooks.addUnits(
 			this.hooks.getDefaultUnit().toBattle(this.position.clone(), this.hooks.getEnemyPath(), this.hooks),

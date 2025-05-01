@@ -9,7 +9,7 @@ import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { TGrid } from "../../grid/tgrid";
 import { AnyBattleTotem } from "../battle/battle-totem";
-import { TotemTag } from "../../../shared/traits/engine/tags";
+import { TotemTag } from "../../../shared/traits/engine/tags/building/building-tags";
 
 export const Totem = Subtrait([TRecruit, TotemTag], (base) => {
 	abstract class ITotem extends base {

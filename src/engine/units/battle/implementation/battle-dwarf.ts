@@ -5,6 +5,7 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
 import { DwarfBlueprint } from "../../blueprint/implementation/dwarf-blueprint";
+import { StoneShield } from "../../../stats/status/stone-shield";
 
 export class BattleDwarf extends Derive(TBattleUnit) {
 	pathFinder: PathFinder;
@@ -28,5 +29,6 @@ export class BattleDwarf extends Derive(TBattleUnit) {
 			descriptor: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
+		this.stats.addBoon(new StoneShield({}));
 	}
 }
