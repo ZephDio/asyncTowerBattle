@@ -3,7 +3,7 @@ import { TRenderable } from "../renderable";
 import { ScreenPosition } from "../../../position";
 import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
 import { BannerBackground } from "./banner-background";
-import { Tag, Tagged } from "../../engine/tags";
+import { Tag, Tagged } from "../../engine/tags/tagged";
 
 export const TDescriptor = Trait((base) => {
 	abstract class IDescriptor extends base {

@@ -54,7 +54,7 @@ export class BattleSpine extends Derive(TRenderable, HTHitbox, HTImageDrawable, 
 	}
 
 	hit(touched: AnyBattleUnit) {
-		touched.takeDamage(this.damage);
+		touched.takeHit(this.damage);
 	}
 
 	move(newPosition: GridPosition) {

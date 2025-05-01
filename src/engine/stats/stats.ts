@@ -1,12 +1,19 @@
-import { ImplementsTrait, Trait } from "@ddd-ts/traits";
-import { Status } from "../../shared/traits/engine/status";
+import { implementsTrait, ImplementsTrait, Trait } from "@ddd-ts/traits";
+import { StackableStatus, Status } from "../../shared/traits/engine/status";
 import { Buff } from "../army/battle/army-buff";
+import { StoneShield } from "./status/stone-shield";
+import { TRenderable } from "../../shared/traits/render/renderable";
+import { TDrawable } from "../../shared/traits/render/drawable";
 
 export const HaveStats = Trait((base) => {
 	abstract class HaveStats extends base {
 		stats: Stats;
-		addStatus(status: ImplementsTrait<typeof Status>) {
-			this.stats.addStatus(status);
+		addCondition(condition: ImplementsTrait<typeof Status>) {
+			this.stats.addCondition(condition);
+		}
+
+		addBoon(boon: ImplementsTrait<typeof Status>) {
+			this.stats.addBoon(boon);
 		}
 
 		initArmyBuffs(buffs: [Buff, number][]) {
@@ -17,12 +24,21 @@ export const HaveStats = Trait((base) => {
 			this.stats.applyArmyBuffs([[buff, amount]]);
 		}
 
-		removeStatus(status: ImplementsTrait<typeof Status>) {
-			this.stats.removeStatus(status);
+		removeCondition(condition: ImplementsTrait<typeof Status>) {
+			this.stats.removeCondition(condition);
 		}
 
-		takeDamage(damage: number) {
-			this.stats.takeDamage(damage);
+		removeBoon(boon: ImplementsTrait<typeof Status>) {
+			this.stats.removeBoon(boon);
+		}
+
+		takeHit(hitDamage: number) {
+			const stoneShield = this.stats.getStoneShieldBoon();
+			if (stoneShield) {
+				this.stats.removeBoon(stoneShield);
+				return;
+			}
+			this.stats.takeDamage(hitDamage);
 		}
 
 		heal(amount: number) {
@@ -34,8 +50,12 @@ export const HaveStats = Trait((base) => {
 		}
 
 		addFurry(amount: number) {
-			this.stats.addMaxHealth(amount,true);
+			this.stats.addMaxHealth(amount, true);
 			this.stats.basePercentStat.movementSpeed += amount;
+		}
+
+		getRenderableStatus() {
+			return this.stats.getRenderableStatus();
 		}
 
 		constructor(props: {
@@ -79,7 +99,8 @@ export class Stats {
 		castSpeed: 100,
 	};
 
-	public status: Map<string, ImplementsTrait<typeof Status>> = new Map();
+	public conditions: Map<string, ImplementsTrait<typeof Status>> = new Map();
+	public boons: Map<string, ImplementsTrait<typeof Status>> = new Map();
 
 	constructor(
 		maxHealth: number,
@@ -152,6 +173,10 @@ export class Stats {
 		}
 	}
 
+	getStoneShieldBoon() {
+		return this.boons.get(StoneShield.prototype.key);
+	}
+
 	addMaxHealth(amount: number, percent: boolean = false) {
 		const rawGain = percent ? amount * (this._maxHealth / 100) : amount;
 		if (percent) {
@@ -174,28 +199,55 @@ export class Stats {
 	}
 
 	canMove() {
-		return !this.status.has("stunned");
-	}
-	removeStatus(status: ImplementsTrait<typeof Status>) {
-		this.status.delete(status.key);
+		return !this.conditions.has("stunned");
 	}
 
-	addStatus(status: ImplementsTrait<typeof Status>) {
-		const alreadyAffected = this.status.get(status.key);
-		if (alreadyAffected) {
-			if (!status.stackable) return;
-			if (alreadyAffected.duration < status.duration) {
-				alreadyAffected.duration = status.duration;
+	removeCondition(condition: ImplementsTrait<typeof Status>) {
+		condition.onRemove();
+		this.conditions.delete(condition.key);
+	}
+
+	removeBoon(boon: ImplementsTrait<typeof Status>) {
+		boon.onRemove();
+		this.boons.delete(boon.key);
+	}
+
+	addCondition(condition: ImplementsTrait<typeof Status>) {
+		condition.setStats(this);
+		const alreadyAffected = this.conditions.get(condition.key);
+		const stackable = implementsTrait(condition, StackableStatus);
+		if (!stackable && alreadyAffected) return;
+		if (stackable && alreadyAffected) {
+			if (implementsTrait(alreadyAffected, StackableStatus)) {
+				alreadyAffected.stack(condition);
 			}
-			alreadyAffected.clock = 0;
 			return;
 		}
-		this.status.set(status.key, status);
-		status.setStats(this);
+		this.conditions.set(condition.key, condition);
+	}
+
+	addBoon(boon: ImplementsTrait<typeof Status>) {
+		boon.setStats(this);
+		const alreadyAffected = this.boons.get(boon.key);
+		const stackable = implementsTrait(boon, StackableStatus);
+		if (!stackable && alreadyAffected) return;
+		if (stackable && alreadyAffected) {
+			if (implementsTrait(alreadyAffected, StackableStatus)) {
+				alreadyAffected.stack(boon);
+			}
+			return;
+		}
+		this.conditions.set(boon.key, boon);
+	}
+
+	getRenderableStatus() {
+		return [...this.conditions.values(), ...this.boons.values()].filter((status) => {
+			return implementsTrait(status, TDrawable);
+		});
 	}
 
 	tick() {
-		this.status.forEach((status) => {
+		this.conditions.forEach((status) => {
 			status.tick();
 		});
 	}

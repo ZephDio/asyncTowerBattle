@@ -3,9 +3,9 @@ import { CropsField } from "../../recruit/implementation/crops-field";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { BattleTotem } from "../battle-totem";
 import { seconds } from "../../../../shared/seconds";
+import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class BattleCropsField extends Derive(BattleTotem, Caster, FoodTag) {
 	foodProduction: number = 5;

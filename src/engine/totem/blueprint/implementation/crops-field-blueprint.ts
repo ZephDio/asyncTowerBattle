@@ -9,7 +9,7 @@ import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/i
 import { Resources } from "../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { CropsField } from "../../recruit/implementation/crops-field";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
+import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class CropsFieldBlueprint extends Derive(
 	TShopBlueprint(10, 10),

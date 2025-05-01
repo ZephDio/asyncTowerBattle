@@ -3,7 +3,6 @@ import { TCollider } from "../../../shared/traits/engine/core/TCollider";
 import { HTHitbox } from "../../../shared/traits/engine/core/THitbox";
 import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { TLifeBarRenderable } from "../../../shared/traits/render/huds/life-bar-renderable";
-import { HaveStats } from "../../stats/stats";
 import { GridPosition } from "../../../shared/position";
 import { TSizable } from "../../../shared/traits/engine/core/sizable";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
@@ -11,9 +10,10 @@ import { BattlePath } from "../../path/battle/battle-path";
 import { PathFinder } from "../../battle/path-finder";
 import { Action } from "../../../shared/action";
 import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
+import { TStatsRenderable } from "../../../shared/traits/render/huds/stat-renderable";
 
 export const TBattleUnit = Subtrait(
-	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, HaveStats, HTDescriptor],
+	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, TStatsRenderable, HTDescriptor],
 	(base) => {
 		abstract class IBattleUnit extends base {
 			hunger = 0;
@@ -61,7 +61,7 @@ export const TBattleUnit = Subtrait(
 			}
 
 			attackCastle() {
-				this.enemyPath.alliedCastle.takeDamage(this.stats.attack);
+				this.enemyPath.alliedCastle.takeHit(this.stats.attack);
 				this.hooks.removeUnit(this);
 				this.stats.die(); // TODO
 			}

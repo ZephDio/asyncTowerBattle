@@ -63,6 +63,13 @@ export class BattleElfCastle extends Derive(
 		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), cost);
 	}
 
+	override takeDamage(damage: number): void {
+		this.actualLife -= damage;
+		if (this.actualLife <= 0) {
+			this.onDeath();
+		}
+	}
+
 	produceFood() {
 		this.foodHooks.addFood(4 / 32);
 	}

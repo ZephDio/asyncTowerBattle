@@ -6,7 +6,6 @@ import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 
-
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { STANDARD_CELL_SIZE } from "../../grid/tgrid";
@@ -43,7 +42,7 @@ export class PoisonGround extends Derive(
 		}
 		const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
 		for (const enemy of enemies) {
-			enemy.addStatus(new Poisoned(this.damage));
+			enemy.addCondition(new Poisoned(this.damage));
 		}
 	}
 
@@ -79,12 +78,10 @@ export class Poisoned extends Derive(Status) {
 	tick() {
 		this.clock++;
 		if (this.clock >= this.duration) {
-			this.onRemove();
+			this.stats.removeCondition(this);
 		}
 		this.stats.takeDamage(this.damage / 64);
 	}
 
-	onRemove() {
-		this.stats.removeStatus(this);
-	}
+	onRemove() {}
 }

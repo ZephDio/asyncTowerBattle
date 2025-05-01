@@ -4,7 +4,7 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { Caster } from "../../../../shared/traits/engine/cast";
 import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
 import { BattleTotem } from "../battle-totem";
-import { EvilTag } from "../../../../shared/traits/engine/tags";
+import { EvilTag } from "../../../../shared/traits/engine/tags/alignment/alignment-tags";
 
 export class BattleGobelinPortal extends Derive(BattleTotem, EvilTag) {
 	hasTriggered = false;

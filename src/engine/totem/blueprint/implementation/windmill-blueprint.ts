@@ -11,8 +11,8 @@ import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { TSynergy } from "../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
-import { FoodTag } from "../../../../shared/traits/engine/tags";
 import { Windmill } from "../../recruit/implementation/windmill";
+import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class WindmillBlueprint extends Derive(
 	TShopBlueprint(10, 10),

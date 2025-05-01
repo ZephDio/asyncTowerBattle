@@ -12,30 +12,32 @@ import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { Caster, RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
-import { EvilTag } from "../../../../shared/traits/engine/tags";
+import { EvilTag } from "../../../../shared/traits/engine/tags/alignment/alignment-tags";
 
 export class GobelinPortalBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(Resources.totem.gobelinportal.resource.image, Resources.totem.gobelinportal.size, DrawPriority.NormalGridElement),
+	TImageDrawable(
+		Resources.totem.gobelinportal.resource.image,
+		Resources.totem.gobelinportal.size,
+		DrawPriority.NormalGridElement,
+	),
 	TSynergy,
-	EvilTag
-){
-	description = new Description("Gobelin Portal", ["On ▣ trigger :","30% chance to", "generate a goblin"]);
+	EvilTag,
+) {
+	description = new Description("Gobelin Portal", ["On ▣ trigger :", "30% chance to", "generate a goblin"]);
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
-		if(!gridElement) return false
+		if (!gridElement) return false;
 		return implementsTrait(gridElement, RecruitCaster) || implementsTrait(gridElement, Caster);
-	}
-	patternEffect= new PatternEffect(
-		[	new Cell({ x : 1, y : 1}), 
-			new Cell({ x : -1 , y : -1}), 
-			new Cell({ x : 1, y : -1}), 
-			new Cell({ x : -1, y : 1})
-		], this.patternCondition.bind(this));
+	};
+	patternEffect = new PatternEffect(
+		[new Cell({ x: 1, y: 1 }), new Cell({ x: -1, y: -1 }), new Cell({ x: 1, y: -1 }), new Cell({ x: -1, y: 1 })],
+		this.patternCondition.bind(this),
+	);
 
 	toRecruit(cell: Cell) {
 		return new GobelinPortal(cell, this);
 	}
-		projectile = undefined;
+	projectile = undefined;
 }

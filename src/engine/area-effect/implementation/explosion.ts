@@ -34,7 +34,7 @@ export class Explosion extends Derive(
 		if (this.size.width > this.MaxSize.width) {
 			const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
 			for (const enemy of enemies) {
-				enemy.takeDamage(this.damage);
+				enemy.takeHit(this.damage);
 			}
 			this.hooks.removeAreaEffect(this);
 		}

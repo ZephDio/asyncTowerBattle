@@ -44,7 +44,7 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 			: this.hooks.getDefaultUnit().toBattle(spawnPoint, path, this.hooks);
 		this.hooks.addUnits(unit, this);
 		const buff = new VeterantBuff();
-		unit.addStatus(buff);
+		unit.addBoon(buff);
 		unit.addSize(0.3);
 		this.hooks.addUnits(unit, this);
 		this.finishCast();
@@ -70,6 +70,7 @@ export class VeterantBuff extends Derive(Status) {
 	}
 
 	onRemove() {
-		this.stats.removeStatus(this);
+		this.stats.basePercentStat.movementSpeed += 10;
+		this.stats.basePercentStat.attack -= 20;
 	}
 }

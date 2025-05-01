@@ -11,7 +11,7 @@ import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { TGrid } from "../../grid/tgrid";
 import { RecruitCaster } from "../../../shared/traits/engine/cast";
-import { BarrackTag } from "../../../shared/traits/engine/tags";
+import { BarrackTag } from "../../../shared/traits/engine/tags/building/building-tags";
 
 export type AnyBarrack = ImplementsTrait<typeof Barrack>;
 
@@ -27,7 +27,12 @@ export const Barrack = Subtrait([TRecruit, RecruitCaster, BarrackTag], (base) =>
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack;
 
-		moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, orientation: number, grid?: ImplementsTrait<typeof TGrid>) {
+		moveRecruit(
+			hooks: TokenHooks,
+			gridPosition: GridPosition,
+			orientation: number,
+			grid?: ImplementsTrait<typeof TGrid>,
+		) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
@@ -36,7 +41,9 @@ export const Barrack = Subtrait([TRecruit, RecruitCaster, BarrackTag], (base) =>
 				}
 				return;
 			}
-			const cell = grid.gridPositionToCell(this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation));
+			const cell = grid.gridPositionToCell(
+				this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation),
+			);
 			if (!cell) throw new Error("Invalid cell");
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
 				const { valid, elements } = grid.validateGridElementPlacement(this, cell, orientation);

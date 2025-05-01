@@ -46,7 +46,7 @@ export class BattleBullet extends Derive(TRenderable, HTHitbox, HTImageDrawable,
 	}
 
 	hit() {
-		this.target.takeDamage(this.damage);
+		this.target.takeHit(this.damage);
 		this.hooks.removeProjectile(this);
 	}
 

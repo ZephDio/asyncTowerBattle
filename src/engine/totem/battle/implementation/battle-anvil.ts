@@ -28,7 +28,7 @@ export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger, HT
 		for (const neighbor of neighbors) {
 			if (!neighbor) continue;
 			if (implementsTrait(neighbor, HaveStats)) {
-				neighbor.addStatus(new OrangeTotemBuff({}));
+				neighbor.addBoon(new OrangeTotemBuff({}));
 			}
 		}
 	}
@@ -50,5 +50,9 @@ export class OrangeTotemBuff extends Derive(Status) {
 		if (this.didTrigger) return;
 		this.stats.basePercentStat.attack += 30;
 		this.didTrigger = true;
+	}
+
+	override onRemove(): void {
+		this.stats.basePercentStat.attack -= 30;
 	}
 }

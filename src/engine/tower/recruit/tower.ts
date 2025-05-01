@@ -12,7 +12,7 @@ import { TGrid } from "../../grid/tgrid";
 import { HTDamageDealer } from "../../../shared/traits/engine/damage-dealer";
 import { RecruitCaster } from "../../../shared/traits/engine/cast";
 import { HTFoodConsumer } from "../../../shared/traits/engine/food-consumer";
-import { TowerTag } from "../../../shared/traits/engine/tags";
+import { TowerTag } from "../../../shared/traits/engine/tags/building/building-tags";
 
 export const Tower = Subtrait([HTDamageDealer, RecruitCaster, TRecruit, HTFoodConsumer, TowerTag], (base) => {
 	abstract class ITower extends base {
@@ -30,7 +30,9 @@ export const Tower = Subtrait([HTDamageDealer, RecruitCaster, TRecruit, HTFoodCo
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
 				return undefined;
 			}
-			const cell = grid.gridPositionToCell(this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation));
+			const cell = grid.gridPositionToCell(
+				this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation),
+			);
 			if (!cell) throw new Error("Invalid cell");
 
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
