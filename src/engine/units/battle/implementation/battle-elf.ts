@@ -5,12 +5,14 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
 import { ElfBlueprint } from "../../blueprint/implementation/elf-blueprint";
+import { Cast, Caster } from "../../../../shared/traits/engine/cast";
+import { BattleArrow } from "../../../projectile/battle/implementation/battle-arrow";
 
-export class BattleElf extends Derive(TBattleUnit) {
+export class BattleElf extends Derive(TBattleUnit, Caster) {
 	pathFinder: PathFinder;
-
+	blyat = "blyat";
 	constructor(
-		recruit: ElfBlueprint,
+		public recruit: ElfBlueprint,
 		public position: GridPosition,
 		public enemyPath: BattlePath,
 		public hooks: BattleArmyHooks,
@@ -21,12 +23,33 @@ export class BattleElf extends Derive(TBattleUnit) {
 			attack: recruit.attackDamage,
 			movementSpeed: recruit.baseSpeed,
 			attackSpeed: recruit.attackSpeed,
-			castSpeed: NaN,
+			castSpeed: recruit.castSpeed,
 			foodCost: recruit.foodCost,
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
 			descriptor: recruit,
+			casterRecruit: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
+	}
+
+	shootArrow() {
+		console.log("Elf shoot arrow");
+		const vector = this.hooks.gridHooks.getRelativeDirection().below;
+		this.hooks.addProjectile(
+			new BattleArrow(this.recruit.getProjectile(), this.position.clone(), this.hooks, 3, vector),
+			this,
+		);
+		this.finishCast();
+	}
+
+	casts(): void {
+		console.log("Elf cast");
+		this.castInProgress = new Cast(this, this.shootArrow.bind(this), 400);
+	}
+
+	override tick() {
+		super.tick();
+		this.tickCast();
 	}
 }

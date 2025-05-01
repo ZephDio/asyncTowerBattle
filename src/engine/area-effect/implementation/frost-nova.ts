@@ -7,10 +7,9 @@ import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { Physic } from "../../../shared/physic";
-import { Status } from "../../../shared/traits/engine/status";
-import { Stats } from "../../stats/stats";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
+import { Frozen } from "../../stats/status/frozen";
 
 export class FrostNova extends Derive(
 	TCollider,
@@ -61,37 +60,5 @@ export class FrostNova extends Derive(
 		this.drawEllipse(context, size, canvasPosition, scale);
 		context.fill;
 		context.globalAlpha = 1;
-	}
-}
-
-export class Frozen extends Derive(Status) {
-	key = "frozen" as const;
-	override clock: number = 0;
-	override stats: Stats;
-
-	hasTriggered = false;
-
-	constructor(
-		public duration: number,
-		public intensity: number,
-	) {
-		super({});
-	}
-
-	tick() {
-		if (!this.hasTriggered) {
-			this.stats.basePercentStat.movementSpeed -= this.intensity;
-			this.hasTriggered = true;
-		}
-		this.clock++;
-		this.stats.basePercentStat.movementSpeed += this.intensity / this.duration;
-		if (this.clock >= this.duration) {
-			this.stats.removeCondition(this);
-		}
-	}
-
-	override onRemove(): void {
-		const remainingTime = this.duration - this.clock;
-		this.stats.basePercentStat.movementSpeed += (this.intensity / this.duration) * remainingTime;
 	}
 }

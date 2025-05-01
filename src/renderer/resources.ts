@@ -326,6 +326,17 @@ export const Resources = {
 		},
 	},
 	projectiles: {
+		arrow: {
+			resource: {
+				image: createImage("/resources/projectiles/arrow.png"),
+				shape: "rectangle",
+				color: "#3b3b3b",
+			},
+			size: {
+				width: 3.5,
+				height: 1.5,
+			},
+		},
 		bullet: {
 			resource: {
 				image: createImage("/resources/projectiles/bullet.png"),
