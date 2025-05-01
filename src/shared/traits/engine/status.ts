@@ -3,8 +3,8 @@ import { Stats } from "../../../engine/stats/stats";
 
 export const Status = Trait((base) => {
 	abstract class Status extends base {
-		abstract clock: number;
 		abstract key: string;
+		abstract clock: number;
 		abstract duration: number;
 
 		abstract stats: Stats;

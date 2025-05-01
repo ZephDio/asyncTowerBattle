@@ -8,7 +8,11 @@ import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/i
 
 export class Bullet extends Derive(
 	THitbox(new HitBox([[new Ellipse({ width: 1, height: 1 }), new GridPosition({ x: 0, y: 0 })]])),
-	TImageDrawable(Resources.projectiles.bullet.resource.image, Resources.projectiles.bullet.size, DrawPriority.FlyingGridElement),
+	TImageDrawable(
+		Resources.projectiles.bullet.resource.image,
+		Resources.projectiles.bullet.size,
+		DrawPriority.FlyingGridElement,
+	),
 ) {
 	type = "bullet" as const;
 	constructor(public baseSpeed: number = 2.8) {

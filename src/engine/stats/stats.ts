@@ -1,8 +1,6 @@
 import { implementsTrait, ImplementsTrait, Trait } from "@ddd-ts/traits";
 import { StackableStatus, Status } from "../../shared/traits/engine/status";
 import { Buff } from "../army/battle/army-buff";
-import { StoneShield } from "./status/stone-shield";
-import { TRenderable } from "../../shared/traits/render/renderable";
 import { TDrawable } from "../../shared/traits/render/drawable";
 
 export const HaveStats = Trait((base) => {
@@ -174,7 +172,7 @@ export class Stats {
 	}
 
 	getStoneShieldBoon() {
-		return this.boons.get(StoneShield.prototype.key);
+		return this.boons.get("stoneShield");
 	}
 
 	addMaxHealth(amount: number, percent: boolean = false) {
@@ -237,7 +235,7 @@ export class Stats {
 			}
 			return;
 		}
-		this.conditions.set(boon.key, boon);
+		this.boons.set(boon.key, boon);
 	}
 
 	getRenderableStatus() {
