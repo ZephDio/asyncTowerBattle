@@ -222,6 +222,16 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		ent: {
+			size: {
+				width: 3,
+				height: 3,
+			},
+			resource: {
+				image: createImage("/resources/units/ent.png"),
+				shape: "ellipse",
+			},
+		},
 		gobelin: {
 			size: {
 				width: 2.8,
@@ -531,6 +541,13 @@ export const Resources = {
 			},
 			furry: {
 				image: createImage("/resources/hud/furry.png"),
+			},
+		},
+	},
+	status: {
+		rooted: {
+			resource: {
+				image: createImage("/resources/effect/rooted.png"),
 			},
 		},
 	},

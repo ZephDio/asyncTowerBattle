@@ -5,8 +5,8 @@ import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
 import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { AnyCastle, Castle } from "../castle/recruit/castle-recruit";
-import { Tower } from "../tower/recruit/tower";
-import { Barrack } from "../barrack/recruit/barrack";
+import { Tower } from "../constructs/tower/recruit/tower";
+import { Barrack } from "../constructs/barrack/recruit/barrack";
 import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { PathTile } from "../tile/recruit/tile";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
@@ -14,7 +14,7 @@ import { TRenderable } from "../../shared/traits/render/renderable";
 import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
 import { TRecruit } from "../../shared/traits/engine/recruit";
 import { TEnvironmentElement } from "../environment/environment";
-import { Totem } from "../totem/recruit/totem";
+import { Totem } from "../constructs/totem/recruit/totem";
 import { EnvironmentGeneration } from "../environment/env-generation";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
@@ -104,7 +104,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			);
 		}
 	}
-	
+
 	getCastleCell() {
 		return new Cell({ x: 0, y: this.height - 1 });
 	}
@@ -119,9 +119,9 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return `${cell.x}|${cell.y}`;
 	}
 
-	resetPosition(){
-		this.centerPosition = PercentToReal({ x: 35, y: 28 })
-		this.updateCornerPosition()
+	resetPosition() {
+		this.centerPosition = PercentToReal({ x: 35, y: 28 });
+		this.updateCornerPosition();
 	}
 
 	roundOne(envGenerator: EnvironmentGeneration) {
@@ -138,7 +138,11 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	roundThree(envGenerator: EnvironmentGeneration) {
 		this.width = 11;
-		[new BasicPathTile(new Cell({ x: 8, y: 5 })),new BasicPathTile(new Cell({ x: 9, y: 5 })),new BasicPathTile(new Cell({ x: 10, y: 5 }))].forEach((pathTile) => this.setElement(pathTile));
+		[
+			new BasicPathTile(new Cell({ x: 8, y: 5 })),
+			new BasicPathTile(new Cell({ x: 9, y: 5 })),
+			new BasicPathTile(new Cell({ x: 10, y: 5 })),
+		].forEach((pathTile) => this.setElement(pathTile));
 		this.updateCornerPosition();
 		envGenerator.generateEnvironmentForRoundTwo(this);
 	}

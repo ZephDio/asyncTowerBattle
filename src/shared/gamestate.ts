@@ -1,6 +1,6 @@
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
 import { BattleElfCastle } from "../engine/castle/battle/battle-elf-castle";
-import { Tower } from "../engine/tower/recruit/tower";
+import { Tower } from "../engine/constructs/tower/recruit/tower";
 import { HudElement } from "./hud-element/hud-element";
 import { Retail } from "../engine/shop/retail/retail";
 import { AnyCastle } from "../engine/castle/recruit/castle-recruit";
@@ -8,7 +8,7 @@ import { AreaEffect } from "../engine/area-effect/area-effect";
 import { ArmyGrid } from "../engine/grid/grid";
 import { BattleGrid } from "../engine/grid/battle-grid";
 import { ImplementsTrait } from "@ddd-ts/traits";
-import { AnyBattleTower } from "../engine/tower/battle/battle-tower";
+import { AnyBattleTower } from "../engine/constructs/tower/battle/battle-tower";
 import { AnyBattleTile } from "../engine/tile/battle/battle-tile";
 import { AnyBattleUnit } from "../engine/units/battle/battle-unit";
 import { TTokenDrag } from "../engine/shop/holder/token-drag/token-drag";

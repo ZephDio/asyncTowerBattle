@@ -5,7 +5,7 @@ import { AnyBattleUnit } from "../battle/battle-unit";
 import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { RetailGrid } from "../../grid/retail-grid";
 import { ArmyGrid } from "../../grid/grid";
-import { Barrack } from "../../barrack/recruit/barrack";
+import { Barrack } from "../../constructs/barrack/recruit/barrack";
 import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { GridPosition } from "../../../shared/position";

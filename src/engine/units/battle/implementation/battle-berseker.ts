@@ -35,7 +35,7 @@ export class BattleBerseker extends Derive(TBattleUnit) {
 	override tick() {
 		super.tick();
 		if (this.stats.health <= this.stats.maxHealth / 2) {
-			this.addStatus(new Enraged({}));
+			this.addBoon(new Enraged({}));
 		}
 	}
 }
@@ -56,7 +56,5 @@ export class Enraged extends Derive(Status) {
 	onRemove() {
 		this.stats.basePercentStat.movementSpeed -= 30;
 		this.stats.basePercentStat.attack -= 25;
-
-		this.stats.removeStatus(this);
 	}
 }
