@@ -9,7 +9,7 @@ import { AnyRecruit } from "../../../shared/traits/engine/recruit";
 import { Army } from "../../army/army";
 import { TGrid } from "../../grid/tgrid";
 import { Castle } from "../../castle/recruit/castle-recruit";
-import { AnyBarrack, Barrack } from "../../barrack/recruit/barrack";
+import { AnyBarrack, Barrack } from "../../constructs/barrack/recruit/barrack";
 import { RecruitTokenDrag } from "./token-drag/army-recruit-token-drag";
 import { AnyUnit } from "../../units/recruit/unit";
 import { Physic } from "../../../shared/physic";

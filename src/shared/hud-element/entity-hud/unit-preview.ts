@@ -1,7 +1,7 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { TDrawable } from "../../traits/render/drawable";
-import { Barrack } from "../../../engine/barrack/recruit/barrack";
-import { AnyBattleBarrack } from "../../../engine/barrack/battle/battle-barrack";
+import { Barrack } from "../../../engine/constructs/barrack/recruit/barrack";
+import { AnyBattleBarrack } from "../../../engine/constructs/barrack/battle/battle-barrack";
 import { ScreenPosition } from "../../position";
 import { DrawPriority } from "../../traits/render/image-drawable";
 export class UnitPreviewHud extends Derive(TDrawable) {

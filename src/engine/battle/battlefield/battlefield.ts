@@ -6,12 +6,16 @@ import { Physic } from "../../../shared/physic";
 import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { GridPosition } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
-import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
+import { AnyBattleBarrack } from "../../constructs/barrack/battle/battle-barrack";
 import { BattlePath } from "../../path/battle/battle-path";
 import { ArmyBuff } from "../../army/battle/army-buff";
+import { AnyBattleConstruct } from "../../constructs/construct";
 
 export type SearchTarget = Battlefield["searchAlliedUnitTarget"] | Battlefield["searchEnemyUnitTarget"];
 export type SearchAreaForUnit = Battlefield["searchAlliesInArea"] | Battlefield["searchEnemiesInArea"];
+export type SearchAreaFotConstruct =
+	| Battlefield["searchAlliesConstructInArea"]
+	| Battlefield["searchEnemiesConstructInArea"];
 export class Battlefield {
 	public alliedArmy: BattleArmy;
 	public enemyArmy: BattleArmy;
@@ -22,7 +26,7 @@ export class Battlefield {
 		enemyArmy: Army,
 		public onBattleOver: Battle["handleBattleOver"],
 		public random: () => number,
-		public timer : { clock: number }
+		public timer: { clock: number },
 	) {
 		const { alliedBattleArmy, enemyBattleArmy, battleGrid } = this.init(alliedArmy, enemyArmy);
 		this.alliedArmy = alliedBattleArmy;
@@ -60,6 +64,8 @@ export class Battlefield {
 			alliedFoodEconomy,
 			this.searchAlliedUnitTarget.bind(this),
 			this.searchEnemiesInArea.bind(this),
+			this.searchEnemiesConstructInArea.bind(this),
+			this.searchAlliesConstructInArea.bind(this),
 			this.random.bind(this),
 			() => this.timer,
 			() => enemyBattlePath,
@@ -76,6 +82,8 @@ export class Battlefield {
 			enemyFoodEconomy,
 			this.searchEnemyUnitTarget.bind(this),
 			this.searchAlliesInArea.bind(this),
+			this.searchAlliesConstructInArea.bind(this),
+			this.searchEnemiesConstructInArea.bind(this),
 			this.random.bind(this),
 			() => this.timer,
 			() => alliedBattlePath,
@@ -165,6 +173,38 @@ export class Battlefield {
 		return found;
 	}
 
+	searchAlliesConstructInArea(
+		position: GridPosition,
+		criteria: (enemyUnit: AnyBattleConstruct, distanceSqrd: number) => boolean,
+	): AnyBattleConstruct | null {
+		let bestTarget: [AnyBattleConstruct | null, number] = [null, Infinity];
+		for (const construct of [...this.alliedArmy.towers, ...this.alliedArmy.barracks, ...this.alliedArmy.totems]) {
+			const distanceSqrd = Physic.getDistanceSqrd(position, this.grid.cellToGrid(construct.cell));
+			if (criteria(construct, distanceSqrd)) {
+				if (distanceSqrd < bestTarget[1]) {
+					bestTarget = [construct, distanceSqrd];
+				}
+			}
+		}
+		return bestTarget[0];
+	}
+
+	searchEnemiesConstructInArea(
+		position: GridPosition,
+		criteria: (enemyUnit: AnyBattleConstruct, distanceSqrd: number) => boolean,
+	): AnyBattleConstruct | null {
+		let bestTarget: [AnyBattleConstruct | null, number] = [null, Infinity];
+		for (const construct of [...this.enemyArmy.towers, ...this.enemyArmy.barracks, ...this.enemyArmy.totems]) {
+			const distanceSqrd = Physic.getDistanceSqrd(position, this.grid.cellToGrid(construct.cell));
+			if (criteria(construct, distanceSqrd)) {
+				if (distanceSqrd < bestTarget[1]) {
+					bestTarget = [construct, distanceSqrd];
+				}
+			}
+		}
+		return bestTarget[0];
+	}
+
 	searchAlliedUnitTarget(
 		position: GridPosition,
 		criteria: (enemyUnit: AnyBattleUnit, distanceSqrd: number) => boolean,
@@ -194,9 +234,9 @@ export class Battlefield {
 		return bestTarget[0];
 	}
 
-	triggerBattleStartEffects(){
-		this.alliedArmy.triggerBattleStartEffects()
-		this.enemyArmy.triggerBattleStartEffects()
+	triggerBattleStartEffects() {
+		this.alliedArmy.triggerBattleStartEffects();
+		this.enemyArmy.triggerBattleStartEffects();
 	}
 
 	tickTowers() {

@@ -3,7 +3,7 @@ import { Cell, GridPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { BattleArmy } from "../army/battle/battle-army";
 import { BattleElfCastle } from "../castle/battle/battle-elf-castle";
-import { AnyBattleTower } from "../tower/battle/battle-tower";
+import { AnyBattleTower } from "../constructs/tower/battle/battle-tower";
 import { ArmyGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
 import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";

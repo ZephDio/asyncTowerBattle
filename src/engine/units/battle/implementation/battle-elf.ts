@@ -10,7 +10,6 @@ import { BattleArrow } from "../../../projectile/battle/implementation/battle-ar
 
 export class BattleElf extends Derive(TBattleUnit, Caster) {
 	pathFinder: PathFinder;
-	blyat = "blyat";
 	constructor(
 		public recruit: ElfBlueprint,
 		public position: GridPosition,
@@ -34,7 +33,6 @@ export class BattleElf extends Derive(TBattleUnit, Caster) {
 	}
 
 	shootArrow() {
-		console.log("Elf shoot arrow");
 		const vector = this.hooks.gridHooks.getRelativeDirection().below;
 		this.hooks.addProjectile(
 			new BattleArrow(this.recruit.getProjectile(), this.position.clone(), this.hooks, 3, vector),
@@ -44,7 +42,6 @@ export class BattleElf extends Derive(TBattleUnit, Caster) {
 	}
 
 	casts(): void {
-		console.log("Elf cast");
 		this.castInProgress = new Cast(this, this.shootArrow.bind(this), 400);
 	}
 

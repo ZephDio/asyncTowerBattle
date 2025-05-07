@@ -1,37 +1,38 @@
 import { ImplementsTrait } from "@ddd-ts/traits";
 import { Cell } from "../../../shared/position";
 import { Random } from "../../../shared/random";
-import { AnyBarrackBlueprint } from "../../barrack/blueprint/barrack-blueprint";
-import { BasicBarrackBlueprint } from "../../barrack/blueprint/implementation/basic-barrack-blueprint";
-import { WaveBarrackBlueprint } from "../../barrack/blueprint/implementation/wave-barrack-blueprint";
+import { AnyBarrackBlueprint } from "../../constructs/barrack/blueprint/barrack-blueprint";
+import { BasicBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/basic-barrack-blueprint";
+import { WaveBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/wave-barrack-blueprint";
 import { BasicTileBlueprint } from "../../tile/blueprint/implementation/basic-path-blueprint";
 import { SlowingTileBlueprint } from "../../tile/blueprint/implementation/slowing-tile-blueprint";
 import { AnyPathTileBlueprint } from "../../tile/blueprint/tile";
-import { BlueTowerBlueprint } from "../../tower/blueprint/implementation/blue-tower-blueprint";
-import { GreenTowerBlueprint } from "../../tower/blueprint/implementation/green-tower-blueprint";
-import { WitchHouseBlueprint } from "../../tower/blueprint/implementation/witch-house-blueprint";
-import { AnyTowerBlueprint } from "../../tower/blueprint/tower-blueprint";
+import { BlueTowerBlueprint } from "../../constructs/tower/blueprint/implementation/blue-tower-blueprint";
+import { GreenTowerBlueprint } from "../../constructs/tower/blueprint/implementation/green-tower-blueprint";
+import { WitchHouseBlueprint } from "../../constructs/tower/blueprint/implementation/witch-house-blueprint";
+import { AnyTowerBlueprint } from "../../constructs/tower/blueprint/tower-blueprint";
 import { DragonBlueprint } from "../../units/blueprint/implementation/dragon-blueprint";
 import { PriestBlueprint } from "../../units/blueprint/implementation/priest-blueprint";
 import { AnyUnitBlueprint } from "../../units/blueprint/units-blueprint";
 import { TRecruit } from "../../../shared/traits/engine/recruit";
-import { ZappingTowerBlueprint } from "../../tower/blueprint/implementation/zapping-tower-blueprint";
-import { FrostTowerBlueprint } from "../../tower/blueprint/implementation/frost-tower-blueprint";
+import { ZappingTowerBlueprint } from "../../constructs/tower/blueprint/implementation/zapping-tower-blueprint";
+import { FrostTowerBlueprint } from "../../constructs/tower/blueprint/implementation/frost-tower-blueprint";
 import { BersekerBlueprint } from "../../units/blueprint/implementation/berseker-blueprint";
 import { ChoupissonBlueprint } from "../../units/blueprint/implementation/choupisson-blueprint";
-import { VeterantBarrackBlueprint } from "../../barrack/blueprint/implementation/veteran-barrack-blueprint";
-import { AnyTotemBlueprint } from "../../totem/blueprint/totem-blueprint";
-import { AnvilTotemBlueprint } from "../../totem/blueprint/implementation/anvil-blueprint";
-import { GobelinPortalBlueprint } from "../../totem/blueprint/implementation/gobelin-portal-blueprint";
-import { CropsFieldBlueprint } from "../../totem/blueprint/implementation/crops-field-blueprint";
+import { VeterantBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/veteran-barrack-blueprint";
+import { AnyTotemBlueprint } from "../../constructs/totem/blueprint/totem-blueprint";
+import { AnvilTotemBlueprint } from "../../constructs/totem/blueprint/implementation/anvil-blueprint";
+import { GobelinPortalBlueprint } from "../../constructs/totem/blueprint/implementation/gobelin-portal-blueprint";
+import { CropsFieldBlueprint } from "../../constructs/totem/blueprint/implementation/crops-field-blueprint";
 import { TrapTileBlueprint } from "../../tile/blueprint/implementation/trap-tile-blueprint";
 import { FoxBlueprint } from "../../units/blueprint/implementation/fox-blueprint";
-import { WindmillBlueprint } from "../../totem/blueprint/implementation/windmill-blueprint";
-import { BakeryBlueprint } from "../../totem/blueprint/implementation/bakery-blueprint";
-import { MineBlueprint } from "../../totem/blueprint/implementation/mine-blueprint";
-import { BreweryBlueprint } from "../../totem/blueprint/implementation/brewery-blueprint";
-import { PowderMagazineBlueprint } from "../../totem/blueprint/implementation/powder-magazine-blueprint";
-import { RedObeliskBlueprint } from "../../totem/blueprint/implementation/red-obelisk";
+import { WindmillBlueprint } from "../../constructs/totem/blueprint/implementation/windmill-blueprint";
+import { BakeryBlueprint } from "../../constructs/totem/blueprint/implementation/bakery-blueprint";
+import { MineBlueprint } from "../../constructs/totem/blueprint/implementation/mine-blueprint";
+import { BreweryBlueprint } from "../../constructs/totem/blueprint/implementation/brewery-blueprint";
+import { PowderMagazineBlueprint } from "../../constructs/totem/blueprint/implementation/powder-magazine-blueprint";
+import { RedObeliskBlueprint } from "../../constructs/totem/blueprint/implementation/red-obelisk";
+import { EntBlueprint } from "../../units/blueprint/implementation/ent-blueprint";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint =
@@ -52,7 +53,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			MineBlueprint,
 			BreweryBlueprint,
 			PowderMagazineBlueprint,
-			RedObeliskBlueprint
+			RedObeliskBlueprint,
 		],
 		share: 100,
 	},
@@ -69,7 +70,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 		share: 35,
 	},
 	{
-		value: [DragonBlueprint, PriestBlueprint, BersekerBlueprint, ChoupissonBlueprint, FoxBlueprint],
+		value: [DragonBlueprint, PriestBlueprint, BersekerBlueprint, ChoupissonBlueprint, FoxBlueprint, EntBlueprint],
 		share: 50,
 	},
 ];

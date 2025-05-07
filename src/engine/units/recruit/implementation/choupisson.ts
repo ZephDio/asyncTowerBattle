@@ -31,7 +31,7 @@ export class Choupisson extends Derive(HTDamageDealer, Unit) {
 	get position() {
 		return this.cell;
 	}
-	type = "dragon" as const;
+	type = "choupisson" as const;
 
 	toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks) {
 		return new BattleChoupisson(this, position, path, hooks);

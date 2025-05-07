@@ -51,7 +51,7 @@ export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement,
 	trapUnits() {
 		const unitsStepping = this.hooks.searchEnemyInArea(this.position, this.hitbox);
 		for (const unitStepping of unitsStepping) {
-			unitStepping.addStatus(new Stunned({}));
+			unitStepping.addCondition(new Stunned({}));
 		}
 		this.didTrigger = true;
 	}
@@ -73,7 +73,5 @@ export class Stunned extends Derive(Status) {
 		this.didTrigger = true;
 	}
 
-	onRemove() {
-		this.stats.removeStatus(this);
-	}
+	onRemove() {}
 }

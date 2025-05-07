@@ -1,16 +1,16 @@
 import { BattleElfCastle } from "../../castle/battle/battle-elf-castle";
 import { AnyBattleProjectile } from "../../projectile/battle/battle-projectile";
-import { AnyBattleTower } from "../../tower/battle/battle-tower";
-import { SearchAreaForUnit, SearchTarget } from "../../battle/battlefield/battlefield";
+import { AnyBattleTower } from "../../constructs/tower/battle/battle-tower";
+import { SearchAreaForUnit, SearchAreaFotConstruct, SearchTarget } from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
 import { GridHooks } from "../../grid/battle-grid";
 import { BattlePath } from "../../path/battle/battle-path";
-import { AnyBattleBarrack } from "../../barrack/battle/battle-barrack";
+import { AnyBattleBarrack } from "../../constructs/barrack/battle/battle-barrack";
 import { AnyBattleUnit } from "../../units/battle/battle-unit";
 import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { GridPosition } from "../../../shared/position";
 import { AnyBattleTile } from "../../tile/battle/battle-tile";
-import { AnyBattleTotem } from "../../totem/battle/battle-totem";
+import { AnyBattleTotem } from "../../constructs/totem/battle/battle-totem";
 import { BattleFoodEconomy, FoodHooks } from "../../food/battle-food-economy";
 import { ArmyBuff, ArmyBuffHooks, Buff } from "./army-buff";
 import { EconomyHooks } from "../../gold/army-gold-economy";
@@ -33,6 +33,8 @@ export type BattleArmyHooks = {
 	searchEnemyInArea: BattleArmy["searchEnemyInArea"];
 	searchAlliesInArea: BattleArmy["searchAlliesInArea"];
 	getEnemyPath: BattleArmy["getEnemyPath"];
+	searchEnemyConstructsInArea: BattleArmy["searchEnemyConstructsInArea"];
+	searchAlliesConstructsInArea: BattleArmy["searchAlliesConstructsInArea"];
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
 	getAlliedUnits: () => AnyBattleUnit[];
 	getAlliedCastle: () => BattleElfCastle;
@@ -64,6 +66,8 @@ export class BattleArmy {
 		public foodEconomy: BattleFoodEconomy,
 		public searchTarget: SearchTarget,
 		public searchEnemyInArea: SearchAreaForUnit,
+		public searchEnemyConstructsInArea: SearchAreaFotConstruct,
+		public searchAlliesConstructsInArea: SearchAreaFotConstruct,
 		public random: () => number,
 		public getTimer: () => { clock: number },
 		public getEnemyPath: () => BattlePath,
@@ -188,6 +192,8 @@ export class BattleArmy {
 			searchTarget: this.searchTarget.bind(this),
 			searchEnemyInArea: this.searchEnemyInArea.bind(this),
 			searchAlliesInArea: this.searchAlliesInArea.bind(this),
+			searchEnemyConstructsInArea: this.searchEnemyConstructsInArea.bind(this),
+			searchAlliesConstructsInArea: this.searchAlliesConstructsInArea.bind(this),
 			getEnemyPath: this.getEnemyPath.bind(this),
 			getEnemyCastle: this.getEnemyCastle.bind(this),
 			getAlliedCastle: () => this.castle,
