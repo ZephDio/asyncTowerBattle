@@ -6,8 +6,9 @@ import { BattleTotem } from "../battle-totem";
 import { Bakery } from "../../recruit/implementation/backery";
 import { seconds } from "../../../../../shared/seconds";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
 
-export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster) {
+export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster, TStatsRenderable) {
 	vitalityBuffAmount: number = 2;
 	constructor(
 		public bakery: Bakery,

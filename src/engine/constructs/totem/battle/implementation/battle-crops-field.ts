@@ -6,8 +6,9 @@ import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
 import { seconds } from "../../../../../shared/seconds";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
 
-export class BattleCropsField extends Derive(BattleTotem, Caster, FoodTag) {
+export class BattleCropsField extends Derive(BattleTotem, Caster, TStatsRenderable, FoodTag) {
 	foodProduction: number = 5;
 	constructor(
 		public cropsField: CropsField,
