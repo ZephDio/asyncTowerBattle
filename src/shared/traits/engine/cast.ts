@@ -5,7 +5,6 @@ import { Action } from "../../action";
 export class Cast extends Action {
 	constructor(
 		private readonly caster: ImplementsTrait<typeof Caster>,
-
 		resolve: () => void,
 		private readonly castCost: number,
 	) {

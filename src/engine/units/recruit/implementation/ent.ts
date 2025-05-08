@@ -25,8 +25,6 @@ export class Ent extends Derive(Unit, ForestTag, RecruitCaster) {
 		return this.cell;
 	}
 
-	type = "ent" as const;
-
 	toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks) {
 		return new BattleEnt(this, position, path, hooks);
 	}

@@ -22,7 +22,6 @@ export class Priest extends Derive(Unit, RecruitCaster) {
 	get position() {
 		return this.cell;
 	}
-	type = "priest" as const;
 
 	toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks) {
 		return new BattlePriest(this, position, path, hooks);

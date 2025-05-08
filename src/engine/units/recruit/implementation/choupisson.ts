@@ -8,10 +8,6 @@ import { BattleChoupisson } from "../../battle/implementation/battle-choupisson"
 import { HTBaseStats } from "../../../stats/base-stats";
 
 export class Choupisson extends Derive(Unit, HTBaseStats) {
-	speed: number;
-	maxLife: number;
-	attackSpeed: number;
-	cost: number;
 	constructor(
 		public cell: Cell,
 		blueprint: ChoupissonBlueprint = new ChoupissonBlueprint({}),
@@ -27,7 +23,6 @@ export class Choupisson extends Derive(Unit, HTBaseStats) {
 	get position() {
 		return this.cell;
 	}
-	type = "choupisson" as const;
 
 	toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks) {
 		return new BattleChoupisson(this, position, path, hooks);

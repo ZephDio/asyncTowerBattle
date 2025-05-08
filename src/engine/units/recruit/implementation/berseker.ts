@@ -26,7 +26,6 @@ export class Berseker extends Derive(Unit) {
 	get position() {
 		return this.cell;
 	}
-	type = "berseker" as const;
 
 	toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks) {
 		return new BattleBerseker(this, position, path, hooks);

@@ -262,6 +262,16 @@ export const Resources = {
 				shape: "ellipse",
 			},
 		},
+		brewmaster: {
+			size: {
+				width: 3.2,
+				height: 3.2,
+			},
+			resource: {
+				image: createImage("/resources/units/brewmaster.png"),
+				shape: "rectangle",
+			},
+		},
 	},
 	path: {
 		normal: {
