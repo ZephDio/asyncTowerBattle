@@ -10,6 +10,7 @@ import { Resources } from "../../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { CropsField } from "../../recruit/implementation/crops-field";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TBaseStats } from "../../../../stats/base-stats";
 
 export class CropsFieldBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -24,6 +25,17 @@ export class CropsFieldBlueprint extends Derive(
 		Resources.totem.cropsfield.size,
 		DrawPriority.NormalGridElement,
 	),
+	TBaseStats({
+		health: NaN,
+		damage: NaN,
+		castSpeed: 1,
+		attackSpeed: NaN,
+		speed: NaN,
+		foodConsumption: NaN,
+		foodConsumptionOnCast: NaN,
+		summonTime: NaN,
+		range: NaN,
+	}),
 	FoodTag,
 ) {
 	description = new Description("Crops Field", ["Every 3.5 seconds :", "produce 5🌽"]);

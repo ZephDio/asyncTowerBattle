@@ -8,23 +8,29 @@ import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { VeterantBarrack } from "../../recruit/implementation/veterant-barrack";
 import { BarrackDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
-import { FoodConsumer } from "../../../../../shared/traits/engine/food-consumer";
+import { TBaseStats } from "../../../../stats/base-stats";
 
 export class VeterantBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 6),
 	TDescriptor,
-	FoodConsumer,
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TImageDrawable(
 		Resources.barracks.veterant.resource.image,
 		Resources.barracks.veterant.size,
 		DrawPriority.NormalGridElement,
 	),
+	TBaseStats({
+		health: NaN,
+		damage: NaN,
+		castSpeed: 1,
+		attackSpeed: NaN,
+		speed: NaN,
+		foodConsumption: NaN,
+		foodConsumptionOnCast: 5,
+		summonTime: NaN,
+		range: NaN,
+	}),
 ) {
-	productionSpeed: number = 1;
-
-	foodCost = 5;
-
 	description = new BarrackDescription(
 		"Veterant Barrack",
 		[
@@ -37,9 +43,7 @@ export class VeterantBarrackBlueprint extends Derive(
 			"Takes 1.6 times more",
 			"time to produce unit",
 		],
-		{
-			"production speed": "1",
-		},
+		this,
 	);
 
 	toRecruit(cell: Cell) {

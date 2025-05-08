@@ -3,10 +3,11 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Unit } from "../unit";
-import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { ChoupissonBlueprint } from "../../blueprint/implementation/choupisson-blueprint";
 import { BattleChoupisson } from "../../battle/implementation/battle-choupisson";
-export class Choupisson extends Derive(HTDamageDealer, Unit) {
+import { HTBaseStats } from "../../../stats/base-stats";
+
+export class Choupisson extends Derive(Unit, HTBaseStats) {
 	speed: number;
 	maxLife: number;
 	attackSpeed: number;
@@ -17,15 +18,10 @@ export class Choupisson extends Derive(HTDamageDealer, Unit) {
 	) {
 		super({
 			imageDrawable: blueprint,
-			damageDealer: blueprint,
 			hitboxHolder: blueprint,
 			descriptor: blueprint,
-			foodConsumer: blueprint,
+			statsHolder: blueprint,
 		});
-		this.maxLife = blueprint.baseMaxLife;
-		this.speed = blueprint.baseSpeed;
-		this.attackSpeed = blueprint.attackSpeed;
-		this.cost = blueprint.cost;
 	}
 
 	get position() {

@@ -14,6 +14,7 @@ import { GridElement } from "../../../../../shared/traits/engine/core/grid-eleme
 import { Brewery } from "../../recruit/implementation/brewery";
 import { Barrack } from "../../../barrack/recruit/barrack";
 import { BattleBarrack } from "../../../barrack/battle/battle-barrack";
+import { TBaseStats } from "../../../../stats/base-stats";
 
 export class BreweryBlueprint extends Derive(
 	TShopBlueprint(15, 5),
@@ -21,6 +22,17 @@ export class BreweryBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(Resources.totem.brewery.resource.image, Resources.totem.brewery.size, DrawPriority.NormalGridElement),
 	TSynergy,
+	TBaseStats({
+		health: NaN,
+		damage: NaN,
+		castSpeed: 1,
+		attackSpeed: NaN,
+		speed: NaN,
+		foodConsumption: NaN,
+		foodConsumptionOnCast: NaN,
+		summonTime: NaN,
+		range: NaN,
+	}),
 ) {
 	description = new Description("Cow-boy Brewery", [
 		"Every 5 seconds :",

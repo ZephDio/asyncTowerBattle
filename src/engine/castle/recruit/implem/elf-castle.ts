@@ -11,9 +11,7 @@ export class ElfCastle extends Derive(Castle) {
 		castle: ElfCastleBlueprint,
 		public cell: Cell,
 	) {
-		super({ imageDrawable: castle, hitboxHolder: castle, descriptor: castle });
-		this.maxLife = castle.maxLife;
-		this.castSpeed = castle.castSpeed;
+		super({ imageDrawable: castle, hitboxHolder: castle, descriptor: castle, statsHolder: castle });
 	}
 
 	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {

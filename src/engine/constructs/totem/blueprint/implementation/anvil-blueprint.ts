@@ -7,11 +7,11 @@ import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/rende
 import { Resources } from "../../../../../renderer/resources";
 import { AnvilTotem } from "../../recruit/implementation/anvil";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
-import { HTDamageDealer } from "../../../../../shared/traits/engine/damage-dealer";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
+import { BaseStatsProps, TBaseStats } from "../../../../stats/base-stats";
 
 export class AnvilTotemBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -21,7 +21,11 @@ export class AnvilTotemBlueprint extends Derive(
 	TSynergy,
 ) {
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
-		return gridElement ? implementsTrait(gridElement, HTDamageDealer) : false;
+		if (!gridElement) return false;
+		if (implementsTrait(gridElement, TBaseStats({} as BaseStatsProps))) {
+			return gridElement.stats.hasDamage();
+		}
+		return false;
 	};
 	patternEffect = new PatternEffect(
 		[new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 })],

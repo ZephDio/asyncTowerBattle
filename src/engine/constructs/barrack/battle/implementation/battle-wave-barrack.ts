@@ -23,17 +23,18 @@ export class WaveBattleBarrack extends Derive(BattleBarrack) {
 		super({
 			casterRecruit: barrackRecruit,
 			imageDrawable: barrackRecruit,
-			maxHealth: NaN,
-			attack: NaN,
-			movementSpeed: NaN,
-			castSpeed: barrackRecruit.productionSpeed,
-			attackSpeed: NaN,
-			foodCost: NaN,
+			maxHealth: barrackRecruit.stats.health,
+			attack: barrackRecruit.stats.damage,
+			movementSpeed: barrackRecruit.stats.speed,
+			castSpeed: barrackRecruit.stats.castSpeed,
+			attackSpeed: barrackRecruit.stats.attackSpeed,
+			foodCost: barrackRecruit.stats.foodConsumptionOnCast,
+			range: barrackRecruit.stats.range,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 			descriptor: barrackRecruit,
 		});
-		this.castCost = unitRecruit ? unitRecruit.cost : this.hooks.getDefaultUnit().cost;
+		this.castCost = unitRecruit ? unitRecruit.stats.summonTime : this.hooks.getDefaultUnit().stats.summonTime;
 		this.gridShape = barrackRecruit.gridShape;
 	}
 

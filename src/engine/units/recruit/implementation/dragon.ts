@@ -5,27 +5,18 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleDragon } from "../../battle/implementation/battle-dragon";
 import { DragonBlueprint } from "../../blueprint/implementation/dragon-blueprint";
 import { Unit } from "../unit";
-import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
-export class Dragon extends Derive(HTDamageDealer, Unit) {
-	speed: number;
-	maxLife: number;
-	attackSpeed: number;
-	cost: number;
+import { MonsterTag } from "../../../../shared/traits/engine/tags/species/species-tag";
+export class Dragon extends Derive(Unit, MonsterTag) {
 	constructor(
 		public cell: Cell,
 		dragon: DragonBlueprint = new DragonBlueprint({}),
 	) {
 		super({
 			imageDrawable: dragon,
-			damageDealer: dragon,
 			hitboxHolder: dragon,
 			descriptor: dragon,
-			foodConsumer: dragon,
+			statsHolder: dragon,
 		});
-		this.maxLife = dragon.baseMaxLife;
-		this.speed = dragon.baseSpeed;
-		this.attackSpeed = dragon.attackSpeed;
-		this.cost = dragon.cost;
 	}
 
 	get position() {

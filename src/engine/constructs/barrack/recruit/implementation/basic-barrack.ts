@@ -7,17 +7,13 @@ import { Barrack } from "../barrack";
 import { TUnitPreviewHudRenderable } from "../../../../../shared/traits/render/huds/unit-preview-enderable";
 import { Cell } from "../../../../../shared/position";
 import { BattleGrid } from "../../../../grid/battle-grid";
-import { HTFoodConsumer } from "../../../../../shared/traits/engine/food-consumer";
 
-export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack, HTFoodConsumer) {
-	productionSpeed: number;
-
+export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	constructor(
 		public cell: Cell,
 		barrack: BasicBarrackBlueprint = new BasicBarrackBlueprint({}),
 	) {
-		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, foodConsumer: barrack });
-		this.productionSpeed = barrack.productionSpeed;
+		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, statsHolder: barrack });
 	}
 	unitRecruit: null | AnyUnit;
 

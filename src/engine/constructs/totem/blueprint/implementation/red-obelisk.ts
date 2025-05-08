@@ -12,6 +12,7 @@ import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
 import { RedObelisk } from "../../recruit/implementation/obelisk";
 import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
+import { TBaseStats } from "../../../../stats/base-stats";
 
 export class RedObeliskBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -20,8 +21,18 @@ export class RedObeliskBlueprint extends Derive(
 	TImageDrawable(Resources.totem.obelisk.resource.image, Resources.totem.obelisk.size, DrawPriority.NormalGridElement),
 	TSynergy,
 	EvilTag,
+	TBaseStats({
+		health: NaN,
+		damage: NaN,
+		castSpeed: 1,
+		attackSpeed: NaN,
+		speed: NaN,
+		foodConsumption: NaN,
+		foodConsumptionOnCast: NaN,
+		summonTime: NaN,
+		range: NaN,
+	}),
 ) {
-	castSpeed = 1;
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		if (!gridElement) return false;
 		if (implementsTrait(gridElement, EvilTag)) return true;

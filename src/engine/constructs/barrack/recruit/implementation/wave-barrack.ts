@@ -8,17 +8,13 @@ import { Cell } from "../../../../../shared/position";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { WaveBarrackBlueprint } from "../../blueprint/implementation/wave-barrack-blueprint";
 import { WaveBattleBarrack } from "../../battle/implementation/battle-wave-barrack";
-import { HTFoodConsumer } from "../../../../../shared/traits/engine/food-consumer";
 
-export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack, HTFoodConsumer) {
-	productionSpeed: number;
-
+export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	constructor(
 		public cell: Cell,
 		barrack: WaveBarrackBlueprint = new WaveBarrackBlueprint({}),
 	) {
-		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, foodConsumer: barrack });
-		this.productionSpeed = barrack.productionSpeed;
+		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, statsHolder: barrack });
 	}
 	unitRecruit: null | AnyUnit;
 

@@ -10,15 +10,21 @@ import { BattleBrewery } from "../../battle/implementation/battle-brewery";
 import { GridShape } from "../../../../../shared/traits/engine/core/grid-element";
 import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { HTBaseStats } from "../../../../stats/base-stats";
 
-export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag, RecruitBattleStart) {
-	castSpeed = 1;
+export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag, RecruitBattleStart, HTBaseStats) {
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: -1 })]);
 	constructor(
 		public cell: Cell,
 		public blueprint: BreweryBlueprint = new BreweryBlueprint({}),
 	) {
-		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint, synergy: blueprint });
+		super({
+			descriptor: blueprint,
+			imageDrawable: blueprint,
+			hitboxHolder: blueprint,
+			synergy: blueprint,
+			statsHolder: blueprint,
+		});
 	}
 
 	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks) {

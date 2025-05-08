@@ -3,32 +3,20 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Unit } from "../unit";
-import { HTDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { PriestBlueprint } from "../../blueprint/implementation/priest-blueprint";
 import { BattlePriest } from "../../battle/implementation/battle-priest";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
-export class Priest extends Derive(Unit, RecruitCaster, HTDamageDealer) {
-	speed: number;
-	maxLife: number;
-	attackSpeed: number;
-	cost: number;
-	castSpeed :number
+export class Priest extends Derive(Unit, RecruitCaster) {
 	constructor(
 		public cell: Cell,
 		priest: PriestBlueprint = new PriestBlueprint({}),
 	) {
 		super({
 			imageDrawable: priest,
-			damageDealer: priest,
 			hitboxHolder: priest,
 			descriptor: priest,
-			foodConsumer: priest,
+			statsHolder: priest,
 		});
-		this.maxLife = priest.baseMaxLife;
-		this.speed = priest.baseSpeed;
-		this.attackSpeed = priest.attackSpeed;
-		this.castSpeed = priest.attackSpeed
-		this.cost = priest.cost;
 	}
 
 	get position() {

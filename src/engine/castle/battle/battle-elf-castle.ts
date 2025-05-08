@@ -1,27 +1,12 @@
 import { Cell, GridPosition } from "../../../shared/position";
-import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { Derive } from "@ddd-ts/traits";
-import { TPhysics } from "../../../shared/traits/engine/core/physics";
-import { HTHitbox } from "../../../shared/traits/engine/core/THitbox";
-import { GridElement } from "../../../shared/traits/engine/core/grid-element";
-import { TRenderable } from "../../../shared/traits/render/renderable";
 import { FoodHooks } from "../../food/battle-food-economy";
-import { Cast, Caster } from "../../../shared/traits/engine/cast";
-import { Orientable } from "../../../shared/traits/engine/core/orientable";
+import { Cast } from "../../../shared/traits/engine/cast";
 import { ElfCastle } from "../recruit/implem/elf-castle";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
+import { TBattleCastle } from ".";
 
-export class BattleElfCastle extends Derive(
-	HTHitbox,
-	TRenderable,
-	HTImageDrawable,
-	TPhysics,
-	GridElement,
-	Caster,
-	Orientable,
-	HTDescriptor,
-) {
+export class BattleElfCastle extends Derive(TBattleCastle) {
 	public actualLife: number;
 	public maxLife: number;
 	public hooks: BattleArmyHooks;
@@ -38,36 +23,27 @@ export class BattleElfCastle extends Derive(
 			imageDrawable: recruit,
 			hitboxHolder: recruit,
 			casterRecruit: recruit,
-			maxHealth: recruit.maxLife,
-			attack: NaN,
-			movementSpeed: NaN,
-			castSpeed: recruit.castSpeed,
-			attackSpeed: NaN,
-			foodCost: NaN,
+			maxHealth: recruit.stats.health,
+			attack: recruit.stats.damage,
+			movementSpeed: recruit.stats.speed,
+			castSpeed: recruit.stats.castSpeed,
+			attackSpeed: recruit.stats.attackSpeed,
+			foodCost: recruit.stats.foodConsumptionOnCast,
+			range: recruit.stats.range,
 			onDeath: () => this.onDeath(),
 			descriptor: recruit,
 		});
 		this.gridShape = recruit.gridShape;
 		this.setOrientation(orientation);
+		console.log("2", { position });
 	}
 
 	initHooks(hooks: BattleArmyHooks) {
 		this.hooks = hooks;
 	}
-	isAlive() {
-		return this.actualLife > 0;
-	}
-
 	casts() {
-		const cost = this.hooks.getDefaultUnit().cost;
+		const cost = this.hooks.getDefaultUnit().stats.summonTime;
 		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), cost);
-	}
-
-	override takeDamage(damage: number): void {
-		this.actualLife -= damage;
-		if (this.actualLife <= 0) {
-			this.onDeath();
-		}
 	}
 
 	produceFood() {
@@ -80,10 +56,5 @@ export class BattleElfCastle extends Derive(
 			this,
 		);
 		this.finishCast(true);
-	}
-
-	tick() {
-		this.produceFood();
-		this.tickCast();
 	}
 }

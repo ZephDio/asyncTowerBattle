@@ -6,12 +6,10 @@ import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { TokenHooks } from "../../shop/holder/holder";
 import { FoodHooks } from "../../food/battle-food-economy";
 import { RecruitCaster } from "../../../shared/traits/engine/cast";
+import { HTBaseStats } from "../../stats/base-stats";
 
-export const Castle = Subtrait([TRecruit, RecruitCaster], (base) => {
+export const Castle = Subtrait([TRecruit, RecruitCaster, HTBaseStats], (base) => {
 	abstract class ICastle extends base {
-		maxLife: number;
-		castSpeed: number;
-
 		abstract toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle;
 		abstract toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle;
 

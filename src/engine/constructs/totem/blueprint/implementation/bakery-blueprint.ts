@@ -10,6 +10,7 @@ import { Resources } from "../../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { Bakery } from "../../recruit/implementation/backery";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TBaseStats } from "../../../../stats/base-stats";
 
 export class BakeryBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -20,6 +21,17 @@ export class BakeryBlueprint extends Derive(
 	),
 	TDescriptor,
 	TImageDrawable(Resources.totem.bakery.resource.image, Resources.totem.bakery.size, DrawPriority.NormalGridElement),
+	TBaseStats({
+		health: NaN,
+		damage: NaN,
+		castSpeed: 1,
+		attackSpeed: NaN,
+		speed: NaN,
+		foodConsumption: NaN,
+		foodConsumptionOnCast: 5,
+		summonTime: NaN,
+		range: NaN,
+	}),
 	FoodTag,
 ) {
 	description = new Description("Bakery Wryy", [

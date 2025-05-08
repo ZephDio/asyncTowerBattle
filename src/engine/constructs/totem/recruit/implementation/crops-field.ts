@@ -7,14 +7,14 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell } from "../../../../../shared/position";
 import { BattleCropsField } from "../../battle/implementation/battle-crops-field";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { HTBaseStats } from "../../../../stats/base-stats";
 
-export class CropsField extends Derive(Totem, RecruitCaster, FoodTag) {
-	castSpeed = 1;
+export class CropsField extends Derive(Totem, RecruitCaster, FoodTag, HTBaseStats) {
 	constructor(
 		public cell: Cell,
 		public blueprint: CropsFieldBlueprint = new CropsFieldBlueprint({}),
 	) {
-		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint });
+		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint, statsHolder: blueprint });
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {

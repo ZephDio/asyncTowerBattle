@@ -24,7 +24,7 @@ export const TBattleUnit = Subtrait(
 
 			abstract pathFinder: PathFinder;
 
-			action = null as null | Action;
+			attackAction = null as null | Action;
 			canMove() {
 				return this.stats.canMove();
 			}
@@ -39,14 +39,14 @@ export const TBattleUnit = Subtrait(
 					this.followPath();
 					return;
 				}
-				if (this.action === null) {
-					this.action = new Action(this.stats.attackSpeed, () => {
+				if (this.attackAction === null) {
+					this.attackAction = new Action(this.stats.attackSpeed, () => {
 						this.attackCastle();
-						this.action = null;
+						this.attackAction = null;
 					});
 					return;
 				}
-				this.action.tick();
+				this.attackAction.tick();
 			}
 			move(newPosition: GridPosition) {
 				this.position.x = newPosition.x;

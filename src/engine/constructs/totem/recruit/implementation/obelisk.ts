@@ -9,16 +9,22 @@ import { GridShape } from "../../../../../shared/traits/engine/core/grid-element
 import { RecruitCaster } from "../../../../../shared/traits/engine/cast";
 import { BattleRedObelisk } from "../../battle/implementation/battle-red-obelisk";
 import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
+import { HTBaseStats } from "../../../../stats/base-stats";
 
-export class RedObelisk extends Derive(Totem, HTSynergy, EvilTag, RecruitCaster) {
+export class RedObelisk extends Derive(Totem, HTSynergy, EvilTag, RecruitCaster, HTBaseStats) {
 	castSpeed: number;
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: 1 })]);
 	constructor(
 		public cell: Cell,
 		public bluePrint: RedObeliskBlueprint = new RedObeliskBlueprint({}),
 	) {
-		super({ synergy: bluePrint, imageDrawable: bluePrint, hitboxHolder: bluePrint, descriptor: bluePrint });
-		this.castSpeed = bluePrint.castSpeed;
+		super({
+			synergy: bluePrint,
+			imageDrawable: bluePrint,
+			hitboxHolder: bluePrint,
+			descriptor: bluePrint,
+			statsHolder: bluePrint,
+		});
 	}
 
 	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks) {

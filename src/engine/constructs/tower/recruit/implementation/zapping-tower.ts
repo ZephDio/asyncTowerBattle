@@ -4,19 +4,21 @@ import { Tower } from "../tower";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
-import { HTDamageDealer } from "../../../../../shared/traits/engine/damage-dealer";
 import { ZappingTowerBlueprint } from "../../blueprint/implementation/zapping-tower-blueprint";
 import { ZappingBattleTower } from "../../battle/implementation/battle-zapping-tower";
 import { BattleSpark } from "../../../../projectile/battle/implementation/battle-spark";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
-export class ZappingTower extends Derive(HTDamageDealer, Tower) {
-	attackSpeed = 1.3;
-
+export class ZappingTower extends Derive(Tower) {
 	constructor(
 		public cell: Cell,
 		public tower: ZappingTowerBlueprint = new ZappingTowerBlueprint({}),
 	) {
-		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower, descriptor: tower, foodConsumer: tower });
+		super({
+			imageDrawable: tower,
+			hitboxHolder: tower,
+			descriptor: tower,
+			statsHolder: tower,
+		});
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {

@@ -5,20 +5,21 @@ import { Tower } from "../tower";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
-
-import { HTDamageDealer } from "../../../../../shared/traits/engine/damage-dealer";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import { BlueTowerBlueprint } from "../../blueprint/implementation/blue-tower-blueprint";
 import { BlueBattleTower } from "../../battle/implementation/battle-blue-tower";
 
-export class BlueTower extends Derive(HTDamageDealer, Tower) {
-	attackSpeed = 1.2;
-
+export class BlueTower extends Derive(Tower) {
 	constructor(
 		public cell: Cell,
 		public tower: BlueTowerBlueprint = new BlueTowerBlueprint({}),
 	) {
-		super({ imageDrawable: tower, damageDealer: tower, hitboxHolder: tower, descriptor: tower, foodConsumer: tower });
+		super({
+			imageDrawable: tower,
+			hitboxHolder: tower,
+			descriptor: tower,
+			statsHolder: tower,
+		});
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {

@@ -8,22 +8,26 @@ import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { WaveBarrack } from "../../recruit/implementation/wave-barrack";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { BarrackDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
-import { FoodConsumer } from "../../../../../shared/traits/engine/food-consumer";
+import { TBaseStats } from "../../../../stats/base-stats";
 
 export class WaveBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	TDescriptor,
-	FoodConsumer,
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TImageDrawable(Resources.barracks.wave.resource.image, Resources.barracks.wave.size, DrawPriority.NormalGridElement),
+	TBaseStats({
+		health: NaN,
+		damage: NaN,
+		castSpeed: 1,
+		attackSpeed: NaN,
+		speed: NaN,
+		foodConsumption: NaN,
+		foodConsumptionOnCast: 3,
+		summonTime: NaN,
+		range: NaN,
+	}),
 ) {
-	productionSpeed: number = 1;
-
-	foodCost = 1.8;
-
-	description = new BarrackDescription("Wave Barrack", ["A barrack that", "spawn unit 3 by 3"], {
-		"production speed": "1",
-	});
+	description = new BarrackDescription("Wave Barrack", ["A barrack that", "spawn unit 3 by 3"], this);
 
 	toRecruit(cell: Cell) {
 		return new WaveBarrack(cell.clone(), this);

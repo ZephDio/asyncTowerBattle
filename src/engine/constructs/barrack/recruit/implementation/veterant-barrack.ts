@@ -8,17 +8,13 @@ import { Cell } from "../../../../../shared/position";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { VeterantBattleBarrack } from "../../battle/implementation/battle-veterant-barrack";
 import { VeterantBarrackBlueprint } from "../../blueprint/implementation/veteran-barrack-blueprint";
-import { HTFoodConsumer } from "../../../../../shared/traits/engine/food-consumer";
 
-export class VeterantBarrack extends Derive(TUnitPreviewHudRenderable, Barrack, HTFoodConsumer) {
-	productionSpeed: number;
-
+export class VeterantBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	constructor(
 		public cell: Cell,
 		barrack: VeterantBarrackBlueprint = new VeterantBarrackBlueprint({}),
 	) {
-		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, foodConsumer: barrack });
-		this.productionSpeed = barrack.productionSpeed;
+		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, statsHolder: barrack });
 	}
 	unitRecruit: null | AnyUnit;
 

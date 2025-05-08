@@ -8,11 +8,9 @@ import { WitchHouseBlueprint } from "../../blueprint/implementation/witch-house-
 
 import { PoisonGround } from "../../../../area-effect/implementation/poison-ground";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
-import { HTDamageDealer } from "../../../../../shared/traits/engine/damage-dealer";
 import { GridShape } from "../../../../../shared/traits/engine/core/grid-element";
 import { BattleWitchHouse } from "../../battle/implementation/battle-witch-house";
-export class WitchHouse extends Derive(HTDamageDealer, Tower, HTSynergy) {
-	attackSpeed = 0.8;
+export class WitchHouse extends Derive(Tower, HTSynergy) {
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: -1, y: 0 })]);
 	constructor(
 		public cell: Cell,
@@ -20,11 +18,10 @@ export class WitchHouse extends Derive(HTDamageDealer, Tower, HTSynergy) {
 	) {
 		super({
 			synergy: tower,
-			damageDealer: tower,
 			imageDrawable: tower,
 			hitboxHolder: tower,
 			descriptor: tower,
-			foodConsumer: tower,
+			statsHolder: tower,
 		});
 	}
 

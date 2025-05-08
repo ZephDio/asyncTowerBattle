@@ -1,6 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
 import { Totem } from "../totem";
-import { RecruitCaster } from "../../../../../shared/traits/engine/cast";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell } from "../../../../../shared/position";
@@ -8,8 +7,7 @@ import { PowderMagazineBlueprint } from "../../blueprint/implementation/powder-m
 import { BattlePowderMagazine } from "../../battle/implementation/battle-powder-magazine";
 import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
 
-export class PowderMagazine extends Derive(Totem, RecruitCaster, RecruitBattleStart) {
-	castSpeed = 1;
+export class PowderMagazine extends Derive(Totem, RecruitBattleStart) {
 	constructor(
 		public cell: Cell,
 		public blueprint: PowderMagazineBlueprint = new PowderMagazineBlueprint({}),

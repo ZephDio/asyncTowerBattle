@@ -6,18 +6,20 @@ import { GreenTowerBlueprint } from "../../blueprint/implementation/green-tower-
 import { Tower } from "../tower";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
-import { HTDamageDealer } from "../../../../../shared/traits/engine/damage-dealer";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 
-export class GreenTower extends Derive(HTDamageDealer, Tower) {
-	attackSpeed = 3;
-
+export class GreenTower extends Derive(Tower) {
 	constructor(
 		public cell: Cell,
 		public tower: GreenTowerBlueprint = new GreenTowerBlueprint({}),
 	) {
-		super({ damageDealer: tower, imageDrawable: tower, hitboxHolder: tower, descriptor: tower, foodConsumer: tower });
+		super({
+			imageDrawable: tower,
+			hitboxHolder: tower,
+			descriptor: tower,
+			statsHolder: tower,
+		});
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {
