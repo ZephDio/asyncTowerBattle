@@ -2,7 +2,6 @@ import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { BattleArmy } from "../army/battle/battle-army";
-import { BattleElfCastle } from "../castle/battle/battle-elf-castle";
 import { AnyBattleTower } from "../constructs/tower/battle/battle-tower";
 import { ArmyGrid } from "./grid";
 import { AnyBattleTile } from "../tile/battle/battle-tile";
@@ -12,11 +11,12 @@ import { HoverEffect } from "./grid-effects/hover-effect";
 import { TRenderable } from "../../shared/traits/render/renderable";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { TEnvironmentElement } from "../environment/environment";
+import { AnyBattleCastle } from "../castle/battle";
 
 export type BattleGridElement =
 	| AnyBattleTower
 	| AnyBattleTile
-	| BattleElfCastle
+	| AnyBattleCastle
 	| ImplementsTrait<typeof TEnvironmentElement>;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();

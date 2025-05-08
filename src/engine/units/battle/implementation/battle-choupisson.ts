@@ -19,11 +19,11 @@ export class BattleChoupisson extends Derive(TBattleUnit) {
 	) {
 		super({
 			imageDrawable: recruit,
-			maxHealth: recruit.maxLife,
+			maxHealth: recruit.stats.health,
 			attack: recruit.stats.damage,
-			movementSpeed: recruit.speed,
-			attackSpeed: recruit.attackSpeed,
-			castSpeed: recruit.attackSpeed,
+			movementSpeed: recruit.stats.speed,
+			attackSpeed: recruit.stats.attackSpeed,
+			castSpeed: recruit.stats.castSpeed,
 			foodCost: recruit.stats.foodConsumption,
 			range: recruit.stats.range,
 			onDeath: () => this.hooks.removeUnit(this),

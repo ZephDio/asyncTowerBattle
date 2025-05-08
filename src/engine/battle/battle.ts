@@ -31,9 +31,12 @@ export class Battle {
 		public onBattleOver: Game["handleEndBattle"],
 		public setDescriptionHud: Game["setDescriptionHud"],
 	) {
-		this.battlefield = new Battlefield(this.alliedArmy, this.enemyArmy, this.handleBattleOver.bind(this), () =>
-			this.randomSeed.random(),
-			this.timer
+		this.battlefield = new Battlefield(
+			this.alliedArmy,
+			this.enemyArmy,
+			this.handleBattleOver.bind(this),
+			() => this.randomSeed.random(),
+			this.timer,
 		);
 		this.battleClock = new BattleClockHud(this.timer);
 		this.speedCursor = new SliderBattleSpeed(PercentToReal({ x: 10, y: 96 }), this.changeSpeed.bind(this));
@@ -41,22 +44,39 @@ export class Battle {
 		this.enemyArmyResume = new ArmyResume(this.battlefield.enemyArmy, PercentToReal({ x: 89, y: 32 }));
 	}
 
-
-	init(){
-		const armyGridAnimation = new TranslateAnimation(20, this.alliedArmy.grid.centerPosition, PercentToReal({ x: 50, y: 25.5 }) , this.alliedArmy.grid.centerPosition.clone(), ()=> {
-			this.animationOver = true
-		},()=> {
-			this.alliedArmy.grid.updateCornerPosition()
-		})
-		const alliedArmyResumeAnimation = new TranslateAnimation(20, this.alliedArmyResume.position, this.alliedArmyResume.position.clone(), PercentToReal({ x : -20, y : 32}))
-		const enemyArmyResumeAnimation = new TranslateAnimation(20, this.enemyArmyResume.position, this.enemyArmyResume.position.clone(), PercentToReal({ x : 120, y : 32}),this.start.bind(this))
-		armyGridAnimation.startAnimation()
-		alliedArmyResumeAnimation.startAnimation()
-		enemyArmyResumeAnimation.startAnimation()
+	init() {
+		const armyGridAnimation = new TranslateAnimation(
+			20,
+			this.alliedArmy.grid.centerPosition,
+			PercentToReal({ x: 50, y: 25.5 }),
+			this.alliedArmy.grid.centerPosition.clone(),
+			() => {
+				this.animationOver = true;
+			},
+			() => {
+				this.alliedArmy.grid.updateCornerPosition();
+			},
+		);
+		const alliedArmyResumeAnimation = new TranslateAnimation(
+			20,
+			this.alliedArmyResume.position,
+			this.alliedArmyResume.position.clone(),
+			PercentToReal({ x: -20, y: 32 }),
+		);
+		const enemyArmyResumeAnimation = new TranslateAnimation(
+			20,
+			this.enemyArmyResume.position,
+			this.enemyArmyResume.position.clone(),
+			PercentToReal({ x: 120, y: 32 }),
+			this.start.bind(this),
+		);
+		armyGridAnimation.startAnimation();
+		alliedArmyResumeAnimation.startAnimation();
+		enemyArmyResumeAnimation.startAnimation();
 	}
-	
+
 	start() {
-		this.battlefield.triggerBattleStartEffects()
+		this.battlefield.triggerBattleStartEffects();
 		const loop = () => {
 			setTimeout(() => {
 				if (!this.gameSpeed) {
@@ -76,7 +96,6 @@ export class Battle {
 		this.battlefield.tick();
 	}
 
-	
 	handleBattleOver(battleVerdict: "Victory" | "Defeat") {
 		this.isOver = true;
 		this.onBattleOver(battleVerdict, this);
@@ -93,22 +112,24 @@ export class Battle {
 	getDrawables(): RenderableState {
 		return {
 			renderables: [this.battleClock, this.speedCursor, this.alliedArmyResume, this.enemyArmyResume],
-			grids: this.animationOver ? [
-				{
-					grid: this.battlefield.grid,
-					drawables: [
-						...this.battlefield.alliedArmy.areaEffects.keys(),
-						...this.battlefield.enemyArmy.areaEffects.keys(),
-						...this.battlefield.units,
-						...this.battlefield.projectiles,
+			grids: this.animationOver
+				? [
+						{
+							grid: this.battlefield.grid,
+							drawables: [
+								...this.battlefield.alliedArmy.areaEffects.keys(),
+								...this.battlefield.enemyArmy.areaEffects.keys(),
+								...this.battlefield.units,
+								...this.battlefield.projectiles,
+							],
+						},
+					]
+				: [
+						{
+							grid: this.alliedArmy.grid,
+							drawables: [],
+						},
 					],
-				},
-			] : [
-				{
-					grid: this.alliedArmy.grid,
-					drawables: [],
-				}
-			],
 		};
 	}
 

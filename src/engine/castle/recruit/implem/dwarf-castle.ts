@@ -1,7 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { Cell } from "../../../../shared/position";
 import { FoodHooks } from "../../../food/battle-food-economy";
-import { BattleElfCastle } from "../../battle/battle-elf-castle";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Castle } from "../castle-recruit";
 import { DwarfCastleBlueprint } from "../../blueprint/dwarf-castle-blueprint";
@@ -15,12 +14,12 @@ export class DwarfCastle extends Derive(Castle) {
 		super({ imageDrawable: castle, hitboxHolder: castle, descriptor: castle, statsHolder: castle });
 	}
 
-	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
+	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleDwarfCastle {
 		const position = grid.cellToGrid(this.cell);
 		return new BattleDwarfCastle(this, onDeath, this.cell.clone(), position, this.orientation, foodHooks);
 	}
 
-	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
+	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleDwarfCastle {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
 		const orientation = this.orientation - Math.PI;

@@ -1,4 +1,5 @@
 import { BersekerBlueprint } from "./implementation/berseker-blueprint";
+import { BrewmasterBlueprint } from "./implementation/brewmaster-blueprint";
 import { ChoupissonBlueprint } from "./implementation/choupisson-blueprint";
 import { DragonBlueprint } from "./implementation/dragon-blueprint";
 import { EntBlueprint } from "./implementation/ent-blueprint";
@@ -11,4 +12,5 @@ export type AnyUnitBlueprint =
 	| BersekerBlueprint
 	| FoxBlueprint
 	| ChoupissonBlueprint
-	| EntBlueprint;
+	| EntBlueprint
+	| BrewmasterBlueprint;

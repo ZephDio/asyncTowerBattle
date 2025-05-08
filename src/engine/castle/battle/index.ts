@@ -7,6 +7,7 @@ import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor
 import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { GridPosition } from "../../../shared/position";
+import { BattleArmyHooks } from "../../army/battle/battle-army";
 
 export type AnyBattleCastle = ImplementsTrait<typeof TBattleCastle>;
 
@@ -16,6 +17,11 @@ export const TBattleCastle = Subtrait(
 		abstract class TBattleCastle extends base {
 			abstract override position: GridPosition;
 			abstract produceFood(): void;
+			public hooks: BattleArmyHooks;
+			initHooks(hooks: BattleArmyHooks) {
+				this.hooks = hooks;
+			}
+
 			isAlive() {
 				return this.stats.health > 0;
 			}

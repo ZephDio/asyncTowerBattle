@@ -1,5 +1,4 @@
 import { BattleVerdict } from "../engine/battle-summary/battle-summary";
-import { BattleElfCastle } from "../engine/castle/battle/battle-elf-castle";
 import { Tower } from "../engine/constructs/tower/recruit/tower";
 import { HudElement } from "./hud-element/hud-element";
 import { Retail } from "../engine/shop/retail/retail";
@@ -16,6 +15,7 @@ import { AnyBattleProjectile } from "../engine/projectile/battle/battle-projecti
 import { BattlePath } from "../engine/path/battle/battle-path";
 import { GridPosition } from "./position";
 import { Inventory } from "../engine/grid/inventory/unit-inventory";
+import { AnyBattleCastle } from "../engine/castle/battle";
 
 export interface GameState {
 	type: string;
@@ -32,7 +32,7 @@ export interface SummaryState extends GameState {
 
 export interface BattleState extends GameState {
 	type: "battle";
-	castles: BattleElfCastle[];
+	castles: AnyBattleCastle[];
 	towers: AnyBattleTower[];
 	grid: BattleGrid;
 	units: AnyBattleUnit[];

@@ -19,9 +19,9 @@ export class BattleBerseker extends Derive(TBattleUnit) {
 	) {
 		super({
 			imageDrawable: recruit,
-			maxHealth: recruit.maxLife,
+			maxHealth: recruit.stats.health,
 			attack: recruit.stats.damage,
-			movementSpeed: recruit.speed,
+			movementSpeed: recruit.stats.speed,
 			attackSpeed: recruit.attackSpeed,
 			castSpeed: recruit.stats.castSpeed,
 			foodCost: recruit.stats.foodConsumption,

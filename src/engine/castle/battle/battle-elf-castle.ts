@@ -3,14 +3,9 @@ import { Derive } from "@ddd-ts/traits";
 import { FoodHooks } from "../../food/battle-food-economy";
 import { Cast } from "../../../shared/traits/engine/cast";
 import { ElfCastle } from "../recruit/implem/elf-castle";
-import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { TBattleCastle } from ".";
 
 export class BattleElfCastle extends Derive(TBattleCastle) {
-	public actualLife: number;
-	public maxLife: number;
-	public hooks: BattleArmyHooks;
-
 	constructor(
 		recruit: ElfCastle,
 		public onDeath: () => void,
@@ -35,12 +30,8 @@ export class BattleElfCastle extends Derive(TBattleCastle) {
 		});
 		this.gridShape = recruit.gridShape;
 		this.setOrientation(orientation);
-		console.log("2", { position });
 	}
 
-	initHooks(hooks: BattleArmyHooks) {
-		this.hooks = hooks;
-	}
 	casts() {
 		const cost = this.hooks.getDefaultUnit().stats.summonTime;
 		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), cost);
