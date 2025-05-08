@@ -15,14 +15,16 @@ export class BattleGobelin extends Derive(TBattleUnit) {
 		public enemyPath: BattlePath,
 		public hooks: BattleArmyHooks,
 	) {
+		console.log({ recruit });
 		super({
 			imageDrawable: recruit,
-			maxHealth: recruit.baseMaxLife,
-			attack: recruit.attackDamage,
-			movementSpeed: recruit.baseSpeed,
-			attackSpeed: recruit.attackSpeed,
-			castSpeed: NaN,
-			foodCost: recruit.foodCost,
+			maxHealth: recruit.stats.health,
+			attack: recruit.stats.damage,
+			movementSpeed: recruit.stats.speed,
+			attackSpeed: recruit.stats.attackSpeed,
+			castSpeed: recruit.stats.castSpeed,
+			foodCost: recruit.stats.foodConsumption,
+			range: recruit.stats.range,
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
 			descriptor: recruit,

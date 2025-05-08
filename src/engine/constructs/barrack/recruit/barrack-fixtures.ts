@@ -28,20 +28,18 @@ export class BarrackRecruitBuilder {
 	buildBasic() {
 		const basicBarrackRecruit = new BasicBarrack(this.cell);
 		if (this.unit) basicBarrackRecruit.setUnit(this.unit);
-		if (this.productionSpeed) basicBarrackRecruit.productionSpeed = this.productionSpeed;
 		return basicBarrackRecruit;
 	}
+
 	buildWave() {
 		const waveBarrackRecruit = new WaveBarrack(this.cell);
 		if (this.unit) waveBarrackRecruit.setUnit(this.unit);
-		if (this.productionSpeed) waveBarrackRecruit.productionSpeed = this.productionSpeed;
 		return waveBarrackRecruit;
 	}
 
 	buildVeterant() {
 		const veterantBarrackRecruit = new VeterantBarrack(this.cell);
 		if (this.unit) veterantBarrackRecruit.unitRecruit = this.unit;
-		if (this.productionSpeed) veterantBarrackRecruit.productionSpeed = this.productionSpeed;
 		return veterantBarrackRecruit;
 	}
 }

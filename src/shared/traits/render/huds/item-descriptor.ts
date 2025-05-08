@@ -4,6 +4,8 @@ import { ScreenPosition } from "../../../position";
 import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
 import { BannerBackground } from "./banner-background";
 import { Tag, Tagged } from "../../engine/tags/tagged";
+import { TBaseStats } from "../../../../engine/stats/base-stats";
+import { frame, seconds } from "../../../seconds";
 
 export const TDescriptor = Trait((base) => {
 	abstract class IDescriptor extends base {
@@ -29,19 +31,22 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	drawPriority: 9;
 	titlePosition: ScreenPosition;
 	linesPosition: ScreenPosition[];
-	tags : Tag[]
+	tags: Tag[];
 
 	extraLines: Record<string, string>;
-	constructor(public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>,public position : ScreenPosition = PercentToReal({ x: 86, y: 73 })) {
+	constructor(
+		public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>,
+		public position: ScreenPosition = PercentToReal({ x: 86, y: 73 }),
+	) {
 		super({});
 		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 10 }));
 		this.extraLines = this.item.description.extraLines ?? {};
 		this.linesPosition = this.getLinesPositions();
-		this.tags = implementsTrait(this.item, Tagged) ? this.item.tags : []
+		this.tags = implementsTrait(this.item, Tagged) ? this.item.tags : [];
 	}
 
 	getPosition() {
-		return ;
+		return;
 	}
 
 	getLinesPositions() {
@@ -59,7 +64,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
-		const bannerSize =this.getCanvasSize(context, 19.3, 33, scale);
+		const bannerSize = this.getCanvasSize(context, 19.3, 33, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawBanner(context, bannerSize, canvasPosition);
 		// Title
@@ -111,7 +116,13 @@ export type TowerLinesDescription = {
 	range: string;
 };
 export class TowerDescription extends Description {
-	constructor(name: string, description: string[], extraLines: TowerLinesDescription) {
+	constructor(name: string, description: string[], tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
+		const extraLines: TowerLinesDescription = {
+			damage: `${tower.stats.damage}`,
+			"cast speed": `${tower.stats.castSpeed}`,
+			"food consumption": `${tower.stats.foodConsumptionOnCast}`,
+			range: `${tower.stats.range}`,
+		};
 		super(name, description, extraLines);
 	}
 }
@@ -124,7 +135,15 @@ export type UnitLinesDescription = {
 	"production time": string;
 };
 export class UnitDescription extends Description {
-	constructor(name: string, description: string[], extraLines: UnitLinesDescription) {
+	constructor(name: string, description: string[], unit: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
+		const extraLines: UnitLinesDescription = {
+			health: `${unit.stats.health}`,
+			damage: `${unit.stats.damage}`,
+			"move speed": `${unit.stats.speed}`,
+			"food consumption": `${unit.stats.foodConsumption}`,
+			"production time": `${frame(unit.stats.summonTime)}s`,
+		};
+		seconds(unit.stats.summonTime);
 		super(name, description, extraLines);
 	}
 }
@@ -133,7 +152,10 @@ export type BarrackLinesDescription = {
 	"production speed": string;
 };
 export class BarrackDescription extends Description {
-	constructor(name: string, description: string[], extraLines: BarrackLinesDescription) {
+	constructor(name: string, description: string[], barrack: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
+		const extraLines: BarrackLinesDescription = {
+			"production speed": `x${barrack.stats.castSpeed}`,
+		};
 		super(name, description, extraLines);
 	}
 }

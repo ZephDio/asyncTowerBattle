@@ -20,13 +20,14 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 			recruit,
 			casterRecruit: recruit,
 			imageDrawable: recruit,
-			maxHealth: NaN,
-			attack: recruit.attackDamage,
-			movementSpeed: NaN,
-			castSpeed: recruit.attackSpeed,
-			attackSpeed: NaN,
+			maxHealth: recruit.stats.health,
+			attack: recruit.stats.damage,
+			movementSpeed: recruit.stats.speed,
+			castSpeed: recruit.stats.castSpeed,
+			attackSpeed: recruit.stats.attackSpeed,
+			foodCost: recruit.stats.foodConsumptionOnCast,
+			range: recruit.stats.range,
 			onDeath: () => {},
-			foodCost: recruit.foodCost,
 			hitboxHolder: recruit,
 			descriptor: recruit,
 		});
@@ -37,7 +38,7 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 	private attack() {
 		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
 			this.cell,
-			this.recruit.patternEffect.getRelativeCells(this.recruit.orientation),
+			this.recruit.patternEffect.getRelativeCells(this.orientation),
 		);
 		let sucess: boolean = false;
 		if (
@@ -48,7 +49,7 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 					neighbor instanceof TrapBattlePathTile,
 			)
 		) {
-			sucess = this.hooks.alliedFoodHooks.consumeFood(this.recruit.foodCost);
+			sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 			if (sucess) {
 				for (const neighbor of neighbors) {
 					if (

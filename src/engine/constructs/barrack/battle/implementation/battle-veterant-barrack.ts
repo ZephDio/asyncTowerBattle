@@ -22,17 +22,20 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 		super({
 			casterRecruit: barrackRecruit,
 			imageDrawable: barrackRecruit,
-			maxHealth: NaN,
-			attack: NaN,
-			movementSpeed: NaN,
-			castSpeed: barrackRecruit.productionSpeed,
-			attackSpeed: NaN,
-			foodCost: NaN,
+			maxHealth: barrackRecruit.stats.health,
+			attack: barrackRecruit.stats.damage,
+			movementSpeed: barrackRecruit.stats.speed,
+			castSpeed: barrackRecruit.stats.castSpeed,
+			attackSpeed: barrackRecruit.stats.attackSpeed,
+			foodCost: barrackRecruit.stats.foodConsumptionOnCast,
+			range: barrackRecruit.stats.range,
 			onDeath: () => {},
 			hitboxHolder: barrackRecruit,
 			descriptor: barrackRecruit,
 		});
-		this.castCost = unitRecruit ? unitRecruit.cost * 1.6 : this.hooks.getDefaultUnit().cost * 1.6;
+		this.castCost = unitRecruit
+			? unitRecruit.stats.summonTime * 1.6
+			: this.hooks.getDefaultUnit().stats.summonTime * 1.6;
 		this.gridShape = barrackRecruit.gridShape;
 	}
 

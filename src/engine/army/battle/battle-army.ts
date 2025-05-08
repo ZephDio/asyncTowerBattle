@@ -1,4 +1,3 @@
-import { BattleElfCastle } from "../../castle/battle/battle-elf-castle";
 import { AnyBattleProjectile } from "../../projectile/battle/battle-projectile";
 import { AnyBattleTower } from "../../constructs/tower/battle/battle-tower";
 import { SearchAreaForUnit, SearchAreaFotConstruct, SearchTarget } from "../../battle/battlefield/battlefield";
@@ -18,6 +17,7 @@ import { ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { BattleStartTrigger } from "../../../shared/traits/engine/battle-start";
 import { TokenUnit } from "../../../shared/traits/engine/token-unit";
 import { Furry } from "./furry";
+import { AnyBattleCastle } from "../../castle/battle";
 
 export type BattleArmyHooks = {
 	random: () => number;
@@ -37,7 +37,7 @@ export type BattleArmyHooks = {
 	searchAlliesConstructsInArea: BattleArmy["searchAlliesConstructsInArea"];
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
 	getAlliedUnits: () => AnyBattleUnit[];
-	getAlliedCastle: () => BattleElfCastle;
+	getAlliedCastle: () => AnyBattleCastle;
 	triggerFurry: () => void;
 	alliedArmyBuffHooks: ArmyBuffHooks;
 	enemyArmyBuffHooks: ArmyBuffHooks;
@@ -52,7 +52,7 @@ export class BattleArmy {
 	units: Map<AnyBattleUnit, AnyBattleBarrack> = new Map();
 	areaEffects: Map<AreaEffect, any> = new Map();
 	path: BattlePath;
-	castle: BattleElfCastle;
+	castle: AnyBattleCastle;
 	barracks: AnyBattleBarrack[];
 	projectiles: Map<AnyBattleProjectile, any> = new Map();
 	towers: AnyBattleTower[];
@@ -71,7 +71,7 @@ export class BattleArmy {
 		public random: () => number,
 		public getTimer: () => { clock: number },
 		public getEnemyPath: () => BattlePath,
-		public getEnemyCastle: () => BattleElfCastle,
+		public getEnemyCastle: () => AnyBattleCastle,
 		public getDefaultUnit: () => ImplementsTrait<typeof TokenUnit>,
 		public enemyFoodHooks: FoodHooks,
 		public gridHooks: GridHooks,
@@ -101,7 +101,7 @@ export class BattleArmy {
 	}
 
 	init(
-		castle: BattleElfCastle,
+		castle: AnyBattleCastle,
 		path: BattlePath,
 		towers: AnyBattleTower[],
 		barracks: AnyBattleBarrack[],

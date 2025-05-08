@@ -1,6 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
 import { Totem } from "../totem";
-import { RecruitCaster } from "../../../../../shared/traits/engine/cast";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell } from "../../../../../shared/position";
@@ -10,8 +9,7 @@ import { ShopEnterTrigger } from "../../../../../shared/traits/engine/shop-enter
 import { ArmyHooks } from "../../../../army/army";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 
-export class Mine extends Derive(Totem, RecruitCaster, ShopEnterTrigger, HTSynergy) {
-	castSpeed = 1;
+export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy) {
 	constructor(
 		public cell: Cell,
 		public blueprint: MineBlueprint = new MineBlueprint({}),

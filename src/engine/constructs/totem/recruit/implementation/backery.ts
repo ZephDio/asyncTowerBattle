@@ -7,14 +7,14 @@ import { Cell } from "../../../../../shared/position";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { BakeryBlueprint } from "../../blueprint/implementation/bakery-blueprint";
 import { BattleBakery } from "../../battle/implementation/battle-bakery";
+import { HTBaseStats } from "../../../../stats/base-stats";
 
-export class Bakery extends Derive(Totem, RecruitCaster, FoodTag) {
-	castSpeed = 1;
+export class Bakery extends Derive(Totem, RecruitCaster, FoodTag, HTBaseStats) {
 	constructor(
 		public cell: Cell,
 		public blueprint: BakeryBlueprint = new BakeryBlueprint({}),
 	) {
-		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint });
+		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint, statsHolder: blueprint });
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {

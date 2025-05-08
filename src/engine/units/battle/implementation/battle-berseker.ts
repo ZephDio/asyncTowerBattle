@@ -20,14 +20,15 @@ export class BattleBerseker extends Derive(TBattleUnit) {
 		super({
 			imageDrawable: recruit,
 			maxHealth: recruit.maxLife,
-			attack: recruit.attackDamage,
+			attack: recruit.stats.damage,
 			movementSpeed: recruit.speed,
 			attackSpeed: recruit.attackSpeed,
-			castSpeed: NaN,
-			foodCost: recruit.foodCost,
+			castSpeed: recruit.stats.castSpeed,
+			foodCost: recruit.stats.foodConsumption,
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
 			descriptor: recruit,
+			range: recruit.stats.range,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

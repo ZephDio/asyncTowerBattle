@@ -4,21 +4,22 @@ import { Tower } from "../tower";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { Derive } from "@ddd-ts/traits";
-
-import { HTDamageDealer } from "../../../../../shared/traits/engine/damage-dealer";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import { FrostBattleTower } from "../../battle/implementation/battle-frost-tower";
 import { FrostTowerBlueprint } from "../../blueprint/implementation/frost-tower-blueprint";
 import { BattleFrostSpike } from "../../../../projectile/battle/implementation/battle-frost-spike";
 
-export class FrostTower extends Derive(HTDamageDealer, Tower) {
-	attackSpeed = 1.2;
-
+export class FrostTower extends Derive(Tower) {
 	constructor(
 		public cell: Cell,
 		public tower = new FrostTowerBlueprint({}),
 	) {
-		super({ imageDrawable: tower, damageDealer: tower, hitboxHolder: tower, descriptor: tower, foodConsumer: tower });
+		super({
+			imageDrawable: tower,
+			hitboxHolder: tower,
+			descriptor: tower,
+			statsHolder: tower,
+		});
 	}
 
 	getProjectile(hooks: BattleArmyHooks, target: AnyBattleUnit, position: GridPosition, damage: number) {

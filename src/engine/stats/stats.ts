@@ -63,6 +63,7 @@ export const HaveStats = Trait((base) => {
 			attackSpeed: number;
 			castSpeed: number;
 			foodCost: number;
+			range: number;
 			onDeath: () => void;
 		}) {
 			super(props);
@@ -73,6 +74,7 @@ export const HaveStats = Trait((base) => {
 				props.castSpeed,
 				props.attackSpeed,
 				props.foodCost,
+				props.range,
 				props.onDeath,
 			);
 		}
@@ -88,6 +90,7 @@ export class Stats {
 	private _foodCost: number;
 	private _castSpeed: number;
 	private _attackSpeed: number;
+	private _range: number;
 
 	public basePercentStat = {
 		attack: 100,
@@ -95,6 +98,7 @@ export class Stats {
 		maxHealth: 100,
 		foodCost: 100,
 		castSpeed: 100,
+		range: 100,
 	};
 
 	public conditions: Map<string, ImplementsTrait<typeof Status>> = new Map();
@@ -107,6 +111,7 @@ export class Stats {
 		castSpeed: number,
 		attackSpeed: number,
 		foodCost: number,
+		range: number,
 		public onDeath: () => void,
 	) {
 		this._health = maxHealth;
@@ -116,6 +121,7 @@ export class Stats {
 		this._castSpeed = castSpeed;
 		this._attackSpeed = attackSpeed;
 		this._foodCost = foodCost;
+		this._range = range;
 	}
 
 	applyArmyBuffs(buffs: [Buff, number][]) {
@@ -162,6 +168,10 @@ export class Stats {
 
 	get foodCost() {
 		return this._foodCost * Math.max(0, this.basePercentStat.foodCost / 100);
+	}
+
+	get range() {
+		return this._range * Math.max(0, this.basePercentStat.range / 100);
 	}
 
 	takeDamage(damage: number) {

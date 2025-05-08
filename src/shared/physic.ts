@@ -7,7 +7,7 @@ export interface Recruit {
 	hitbox: HitBox;
 }
 
-type Position = GridPosition | ScreenPosition;
+export type Position = GridPosition | ScreenPosition;
 
 export class Physic {
 	static getDistance<T extends GridPosition | ScreenPosition>(positionA: T, positionB: T) {
@@ -62,11 +62,15 @@ export class Physic {
 			y: position.y + Math.sin(theta) * speed,
 		});
 	}
-	
-	static getPositionFromPositionAndVectorAndOrientation(gridPosition: GridPosition, orientation: number, vector: GridPosition) {
+
+	static getPositionFromPositionAndVectorAndOrientation(
+		gridPosition: GridPosition,
+		orientation: number,
+		vector: GridPosition,
+	) {
 		const defaultTileGridPosition = new GridPosition({
-			x: gridPosition.x - (vector.x * Math.cos(orientation)) + (vector.y * Math.sin(orientation)),
-			y: gridPosition.y - (vector.x * Math.sin(orientation)) - (vector.y * Math.cos(orientation))
+			x: gridPosition.x - vector.x * Math.cos(orientation) + vector.y * Math.sin(orientation),
+			y: gridPosition.y - vector.x * Math.sin(orientation) - vector.y * Math.cos(orientation),
 		});
 		return defaultTileGridPosition;
 	}
@@ -211,20 +215,5 @@ export class Physic {
 
 	static clamp(value: number, min: number, max: number) {
 		return Math.min(Math.max(value, min), max);
-	}
-}
-
-export abstract class PhysicEntity<T extends Recruit> {
-	constructor(
-		public entity: T,
-		public position: Position,
-		public theta: number,
-		public type: string,
-	) {}
-	abstract tick(): void;
-	abstract isAlive(): boolean;
-	isAttacked(damage: number): void {
-		// Do nothing
-		damage;
 	}
 }

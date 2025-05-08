@@ -5,41 +5,39 @@ import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
-import { TDamageDealer } from "../../../../shared/traits/engine/damage-dealer";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Choupisson } from "../../recruit/implementation/choupisson";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { FoodConsumer } from "../../../../shared/traits/engine/food-consumer";
 import { seconds } from "../../../../shared/seconds";
+import { TBaseStats } from "../../../stats/base-stats";
 
 export class ChoupissonBlueprint extends Derive(
 	TShopBlueprint(15, 7),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
-	TImageDrawable(Resources.unit.choupisson.resource.image, Resources.unit.choupisson.size, DrawPriority.NormalGridElement),
-	TDamageDealer(1.5),
-	FoodConsumer,
+	TImageDrawable(
+		Resources.unit.choupisson.resource.image,
+		Resources.unit.choupisson.size,
+		DrawPriority.NormalGridElement,
+	),
+	TBaseStats({
+		health: 18,
+		speed: 0.25,
+		attackSpeed: seconds(0.3),
+		castSpeed: 4,
+		damage: 3,
+		foodConsumptionOnCast: NaN,
+		foodConsumption: 1.8,
+		summonTime: seconds(3.5),
+		range: NaN,
+	}),
 ) {
-	baseMaxLife = 18;
-	baseSpeed = 0.25;
-	attackSpeed = 4;
-
-	foodCost = 1.8;
-
-	cost = seconds(3.5)
-
 	override description = new UnitDescription(
 		"Choupisson",
 		["Throw 3 projectiles", "in a cone on enemies", "when damaged"],
-		{
-			health: "18",
-			damage: "3",
-			"move speed": "0.25",
-			"production time": "3.5s", // "production cost": "110
-			"food consumption": "1.8",
-		},
+		this,
 	);
 	toRecruit(cell: Cell) {
 		return new Choupisson(cell, this);

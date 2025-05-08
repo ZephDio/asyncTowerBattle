@@ -10,18 +10,12 @@ import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { GridPosition } from "../../../shared/position";
 import { TGrid } from "../../grid/tgrid";
-import { HTFoodConsumer } from "../../../shared/traits/engine/food-consumer";
+import { HTBaseStats } from "../../stats/base-stats";
 
 export type AnyUnit = ImplementsTrait<typeof Unit>;
 
-export const Unit = Subtrait([TRecruit, HTFoodConsumer], (base) => {
+export const Unit = Subtrait([TRecruit, HTBaseStats], (base) => {
 	abstract class IUnit extends base {
-		abstract maxLife: number;
-		abstract speed: number;
-		abstract attackSpeed: number;
-		abstract attackDamage: number;
-		abstract cost: number;
-
 		abstract toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks): AnyBattleUnit;
 
 		moveRecruit(hooks: TokenHooks, position: GridPosition, _orientation: number, grid?: ImplementsTrait<typeof TGrid>) {

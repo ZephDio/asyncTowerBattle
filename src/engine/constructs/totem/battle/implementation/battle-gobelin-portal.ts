@@ -38,8 +38,16 @@ export class BattleGobelinPortal extends Derive(BattleTotem, EvilTag) {
 	gobelinSpawn() {
 		const out = this.hooks.random();
 		if (out > 0.3) return;
-		const position = this.hooks.getAlliedCastle().position.clone();
+		const pos0 = this.hooks.getAlliedCastle().position.clone();
+		const pos1 = this.hooks.getAlliedCastle().position.clone();
+		const pos2 = this.hooks.getAlliedCastle().position.clone();
+		const pos3 = this.hooks.getAlliedCastle().position.clone();
+		const pos4 = this.hooks.getAlliedCastle().position.clone();
+		console.log([pos0, pos1, pos2, pos3, pos4]);
+
+		console.log("Gobelin spawn", { position: this.hooks.getAlliedCastle().position.clone() });
 		const path = this.hooks.getEnemyPath();
-		this.hooks.addUnits(this.portal.recruit.toBattle(position, path, this.hooks), this);
+		console.log({ goblin: this.portal.recruit.toBattle(pos3, path, this.hooks) });
+		this.hooks.addUnits(this.portal.recruit.toBattle(pos3, path, this.hooks), this);
 	}
 }
