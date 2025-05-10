@@ -18,7 +18,7 @@ export class GridPosition {
 		return new GridPosition({ x: this.x + other.x, y: this.y + other.y });
 	}
 
-	substract(other: GridPosition) {
+	subtract(other: GridPosition) {
 		return new ScreenPosition({ x: this.x - other.x, y: this.y - other.y });
 	}
 
