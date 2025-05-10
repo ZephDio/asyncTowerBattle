@@ -15,23 +15,14 @@ export class BattleClockHud extends Derive(TRenderable, TDrawable) {
 		super({});
 	}
 
-	get miliseconds() {
+	get time() {
 		const date = new Date("1970-01-01T00:00:00Z");
 		date.setMilliseconds(this.timer.clock * 31.25);
-		const diff = date.getTime() - new Date("1970-01-01T00:00:00Z").getTime();
-		return diff;
-	}
-
-	get deciSeconds() {
-		return Math.floor(this.miliseconds / 100) % 10;
-	}
-
-	get seconds() {
-		return Math.floor(this.miliseconds / 1000) % 60;
-	}
-
-	get minutes() {
-		return Math.floor(this.miliseconds / 60000);
+		return {
+			minutes: date.getMinutes(),
+			seconds: date.getSeconds(),
+			deciSeconds: Math.floor(date.getMilliseconds() / 100),
+		};
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
@@ -39,8 +30,9 @@ export class BattleClockHud extends Derive(TRenderable, TDrawable) {
 		const size = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		context.font = `${size.height}px text`;
 		const canvasPosition = this.getCanvasPosition(context, position);
+		const { minutes, seconds, deciSeconds } = this.time;
 		context.fillText(
-			`${this.minutes.toString()}:${this.seconds.toString().padStart(2, "0")}.${this.deciSeconds.toString()}`,
+			`${minutes.toString()}:${seconds.toString().padStart(2, "0")}.${deciSeconds.toString()}`,
 			canvasPosition.x,
 			canvasPosition.y,
 		);

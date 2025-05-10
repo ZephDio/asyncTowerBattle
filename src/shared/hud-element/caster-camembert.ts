@@ -5,7 +5,6 @@ import { ScreenPosition } from "../position";
 import { DrawPriority } from "../traits/render/image-drawable";
 
 export class CasterCamembert extends Derive(TDrawable) {
-	objective = 100;
 	constructor(public caster: ImplementsTrait<typeof Caster>) {
 		super({});
 	}
@@ -18,13 +17,12 @@ export class CasterCamembert extends Derive(TDrawable) {
 		const canvasPosition = this.getCanvasPosition(context, position);
 		context.strokeStyle = "black";
 		context.lineWidth = 3;
-		//this.drawLine(context,canvasPosition.x,canvasPosition.y, canvasPosition.x +35, canvasPosition.y+35)
 		this.drawArc(
 			context,
 			canvasPosition.x,
 			canvasPosition.y,
 			size,
-			this.caster.castInProgress.progress / this.objective,
+			this.caster.castInProgress.progress / this.caster.castInProgress.cost,
 		);
 	}
 }

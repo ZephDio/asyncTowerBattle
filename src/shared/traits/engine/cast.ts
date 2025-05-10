@@ -7,16 +7,20 @@ export class Cast extends Action {
 	constructor(
 		private readonly caster: ImplementsTrait<typeof Caster>,
 		resolve: () => void,
-		private readonly cost: number = 960, // 960 is the best number to avoid float numbers, making 30 the cast speed for 1 second
+		private readonly _cost: number = 960, // 960 is the best number to avoid float numbers, making 30 the cast speed for 1 second
 	) {
 		super(caster.castSpeed, resolve);
 	}
 
 	override tick() {
 		this.progress += this.caster.castSpeed;
-		if (this.progress >= this.cost) {
+		if (this.progress >= this._cost) {
 			this.resolve();
 		}
+	}
+
+	get cost() {
+		return this._cost;
 	}
 }
 
