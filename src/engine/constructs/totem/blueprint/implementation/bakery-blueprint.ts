@@ -11,6 +11,7 @@ import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { Bakery } from "../../recruit/implementation/backery";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 
 export class BakeryBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -24,7 +25,7 @@ export class BakeryBlueprint extends Derive(
 	TBaseStats({
 		health: NaN,
 		damage: NaN,
-		castSpeed: 1,
+		castSpeed: castSpeedFromSeconds(4),
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

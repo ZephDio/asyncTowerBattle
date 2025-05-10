@@ -7,6 +7,7 @@ import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { GridPosition } from "../../../shared/position";
 import { Description, TDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../shared/seconds";
 
 export class DwarfCastleBlueprint extends Derive(
 	TImageDrawable(Resources.castle.dwarf.resource.image, Resources.castle.dwarf.size, DrawPriority.NormalGridElement),
@@ -15,7 +16,7 @@ export class DwarfCastleBlueprint extends Derive(
 	TBaseStats({
 		health: 25,
 		damage: NaN,
-		castSpeed: 1,
+		castSpeed: castSpeedFromSeconds(1),
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

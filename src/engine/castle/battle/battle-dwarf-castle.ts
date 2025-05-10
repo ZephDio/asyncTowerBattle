@@ -1,7 +1,6 @@
 import { Cell, GridPosition } from "../../../shared/position";
 import { Derive } from "@ddd-ts/traits";
 import { FoodHooks } from "../../food/battle-food-economy";
-import { Cast } from "../../../shared/traits/engine/cast";
 import { DwarfCastle } from "../recruit/implem/dwarf-castle";
 import { TBattleCastle } from ".";
 
@@ -30,19 +29,6 @@ export class BattleDwarfCastle extends Derive(TBattleCastle) {
 		});
 		this.gridShape = recruit.gridShape;
 		this.setOrientation(orientation);
-	}
-
-	casts() {
-		const cost = this.hooks.getDefaultUnit().stats.summonTime;
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), cost);
-	}
-
-	onCastResolve() {
-		this.hooks.addUnits(
-			this.hooks.getDefaultUnit().toBattle(this.position.clone(), this.hooks.getEnemyPath(), this.hooks),
-			this,
-		);
-		this.finishCast(true);
 	}
 
 	produceFood() {

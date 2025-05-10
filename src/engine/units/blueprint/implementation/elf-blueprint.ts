@@ -7,7 +7,7 @@ import { GridPosition } from "../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { seconds } from "../../../../shared/seconds";
+import { secondsToFrame } from "../../../../shared/seconds";
 import { BattleElf } from "../../battle/implementation/battle-elf";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
@@ -27,11 +27,11 @@ export class ElfBlueprint extends Derive(
 		health: 10,
 		damage: 1,
 		speed: 0.32,
-		attackSpeed: seconds(0.3),
-		castSpeed: 5,
+		attackSpeed: secondsToFrame(0.3),
+		castSpeed: secondsToFrame(0.1),
 		foodConsumption: 0.4,
 		foodConsumptionOnCast: NaN,
-		summonTime: seconds(1.2),
+		summonTime: secondsToFrame(1.2),
 		range: NaN,
 	}),
 ) {

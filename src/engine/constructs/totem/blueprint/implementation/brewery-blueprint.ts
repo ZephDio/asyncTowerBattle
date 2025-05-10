@@ -15,6 +15,7 @@ import { Brewery } from "../../recruit/implementation/brewery";
 import { Barrack } from "../../../barrack/recruit/barrack";
 import { BattleBarrack } from "../../../barrack/battle/battle-barrack";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 
 export class BreweryBlueprint extends Derive(
 	TShopBlueprint(15, 5),
@@ -25,7 +26,7 @@ export class BreweryBlueprint extends Derive(
 	TBaseStats({
 		health: NaN,
 		damage: NaN,
-		castSpeed: 1,
+		castSpeed: castSpeedFromSeconds(5),
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

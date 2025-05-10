@@ -40,7 +40,7 @@ export class BattleBrewmaster extends Derive(TBattleUnit, Caster) {
 	}
 
 	casts() {
-		this.castInProgress = new Cast(this, this.drink.bind(this), 250);
+		this.castInProgress = new Cast(this, this.drink.bind(this));
 	}
 
 	override tick(): void {

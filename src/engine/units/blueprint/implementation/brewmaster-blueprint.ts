@@ -10,7 +10,7 @@ import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/h
 import { Resources } from "../../../../renderer/resources";
 import { TBaseStats } from "../../../stats/base-stats";
 import { Brewmaster } from "../../recruit/implementation/brewmaster";
-import { seconds } from "../../../../shared/seconds";
+import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
 
 export class BrewmasterBlueprint extends Derive(
 	TShopBlueprint(15, 12),
@@ -25,12 +25,12 @@ export class BrewmasterBlueprint extends Derive(
 	TBaseStats({
 		health: 40,
 		speed: 0.22,
-		attackSpeed: seconds(0.3),
-		castSpeed: 4,
+		attackSpeed: secondsToFrame(0.3),
+		castSpeed: castSpeedFromSeconds(2),
 		damage: 3.5,
 		foodConsumptionOnCast: NaN,
 		foodConsumption: 5,
-		summonTime: seconds(4),
+		summonTime: secondsToFrame(4),
 		range: NaN,
 	}),
 ) {

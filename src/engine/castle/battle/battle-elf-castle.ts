@@ -32,20 +32,7 @@ export class BattleElfCastle extends Derive(TBattleCastle) {
 		this.setOrientation(orientation);
 	}
 
-	casts() {
-		const cost = this.hooks.getDefaultUnit().stats.summonTime;
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), cost);
-	}
-
 	produceFood() {
 		this.foodHooks.addFood(4 / 32);
-	}
-
-	onCastResolve() {
-		this.hooks.addUnits(
-			this.hooks.getDefaultUnit().toBattle(this.position.clone(), this.hooks.getEnemyPath(), this.hooks),
-			this,
-		);
-		this.finishCast(true);
 	}
 }

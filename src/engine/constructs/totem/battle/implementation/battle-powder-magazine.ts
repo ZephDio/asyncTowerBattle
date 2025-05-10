@@ -3,7 +3,7 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { BattleTotem } from "../battle-totem";
 import { PowderMagazine } from "../../recruit/implementation/powder-magazine";
-import { seconds } from "../../../../../shared/seconds";
+import { secondsToFrame } from "../../../../../shared/seconds";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
 
 export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger) {
@@ -46,7 +46,7 @@ export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger
 
 	tick() {
 		const timer = this.hooks.timer().clock;
-		if (timer > seconds(15) && !this.triggered) {
+		if (timer > secondsToFrame(15) && !this.triggered) {
 			this.onTrigger();
 			this.triggered = true;
 		}

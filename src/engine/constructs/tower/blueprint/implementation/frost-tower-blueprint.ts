@@ -10,6 +10,7 @@ import { FrostTower } from "../../recruit/implementation/frost-tower";
 import { FrostSpike } from "../../../../projectile/blueprint/implementation/frost-spike";
 import { TDescriptor, TowerDescription } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 
 export class FrostTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -20,7 +21,7 @@ export class FrostTowerBlueprint extends Derive(
 		health: NaN,
 		damage: 4,
 		attackSpeed: NaN,
-		castSpeed: 1,
+		castSpeed: castSpeedFromSeconds(3),
 		speed: NaN,
 		foodConsumption: NaN,
 		foodConsumptionOnCast: 3.5,

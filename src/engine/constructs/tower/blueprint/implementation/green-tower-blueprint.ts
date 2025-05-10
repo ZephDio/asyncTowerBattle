@@ -11,6 +11,7 @@ import { GreenTower } from "../../recruit/implementation/green-tower";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, TowerDescription } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 
 export class GreenTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -21,7 +22,7 @@ export class GreenTowerBlueprint extends Derive(
 		health: NaN,
 		damage: 10,
 		attackSpeed: NaN,
-		castSpeed: 3,
+		castSpeed: castSpeedFromSeconds(1.5),
 		speed: NaN,
 		foodConsumption: NaN,
 		foodConsumptionOnCast: 1.5,

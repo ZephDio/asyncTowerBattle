@@ -10,6 +10,7 @@ import { ZappingTower } from "../../recruit/implementation/zapping-tower";
 import { Spark } from "../../../../projectile/blueprint/implementation/spark";
 import { TDescriptor, TowerDescription } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 
 export class ZappingTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -20,7 +21,7 @@ export class ZappingTowerBlueprint extends Derive(
 		health: NaN,
 		damage: 15,
 		attackSpeed: NaN,
-		castSpeed: 1,
+		castSpeed: castSpeedFromSeconds(3.5),
 		speed: NaN,
 		foodConsumption: NaN,
 		foodConsumptionOnCast: 3,

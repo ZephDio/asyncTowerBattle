@@ -1,2 +1,4 @@
-export const seconds = (seconds: number) => 31.25 * seconds;
-export const frame = (frame: number) => Math.round((frame / 31.25) * 100) / 100;
+export const secondsToFrame = (seconds: number) => 32 * seconds;
+export const frameToSeconds = (frame: number) => frame / 32;
+export const castSpeedFromSeconds = (seconds: number) => 960 / 32 / seconds;
+export const castCostFromFrames = (frames: number) => 960 * (frames / 32);

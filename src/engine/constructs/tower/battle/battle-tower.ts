@@ -44,7 +44,7 @@ export const BattleTower = Subtrait(
 			}
 
 			casts(): void {
-				this.castInProgress = new Cast(this, this.onCastResolve.bind(this), 100);
+				this.castInProgress = new Cast(this, this.onCastResolve.bind(this));
 			}
 		}
 		return BattleTower;

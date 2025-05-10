@@ -10,6 +10,7 @@ import { Derive } from "../../../../../../traits/traits";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { TowerDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 
 export class BlueTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -19,7 +20,7 @@ export class BlueTowerBlueprint extends Derive(
 	TBaseStats({
 		health: NaN,
 		damage: 7,
-		castSpeed: 1.2,
+		castSpeed: castSpeedFromSeconds(2.5),
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

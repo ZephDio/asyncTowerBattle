@@ -11,6 +11,7 @@ import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { CropsField } from "../../recruit/implementation/crops-field";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 
 export class CropsFieldBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -28,7 +29,7 @@ export class CropsFieldBlueprint extends Derive(
 	TBaseStats({
 		health: NaN,
 		damage: NaN,
-		castSpeed: 1,
+		castSpeed: castSpeedFromSeconds(3.5),
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

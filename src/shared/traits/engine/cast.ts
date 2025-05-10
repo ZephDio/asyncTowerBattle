@@ -1,19 +1,20 @@
 import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { HaveStats } from "../../../engine/stats/stats";
 import { Action } from "../../action";
+import { castCostFromFrames } from "../../seconds";
 
 export class Cast extends Action {
 	constructor(
 		private readonly caster: ImplementsTrait<typeof Caster>,
 		resolve: () => void,
-		private readonly castCost: number,
+		private readonly cost: number = 960, // 960 is the best number to avoid float numbers, making 30 the cast speed for 1 second
 	) {
-		super(castCost, resolve);
+		super(caster.castSpeed, resolve);
 	}
 
 	override tick() {
 		this.progress += this.caster.castSpeed;
-		if (this.progress >= this.castCost) {
+		if (this.progress >= this.cost) {
 			this.resolve();
 		}
 	}
@@ -33,6 +34,10 @@ export const Caster = Subtrait([HaveStats], (base, _props) => {
 			for (const { callback } of this.subscribers) {
 				callback();
 			}
+		}
+
+		get castTime() {
+			return castCostFromFrames(this.castSpeed);
 		}
 
 		finishCast(sucess: boolean = true) {

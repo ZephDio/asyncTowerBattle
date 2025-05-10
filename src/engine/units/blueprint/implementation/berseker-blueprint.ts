@@ -9,7 +9,7 @@ import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint"
 import { Berseker } from "../../recruit/implementation/berseker";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { seconds } from "../../../../shared/seconds";
+import { secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 
 export class BersekerBlueprint extends Derive(
@@ -21,12 +21,12 @@ export class BersekerBlueprint extends Derive(
 	TBaseStats({
 		health: 23,
 		speed: 0.25,
-		attackSpeed: seconds(0.3),
-		castSpeed: 4,
+		attackSpeed: secondsToFrame(0.3),
+		castSpeed: NaN,
 		damage: 2,
 		foodConsumption: 2,
 		foodConsumptionOnCast: NaN,
-		summonTime: seconds(3),
+		summonTime: secondsToFrame(3),
 		range: NaN,
 	}),
 ) {

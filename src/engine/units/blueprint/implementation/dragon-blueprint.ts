@@ -9,7 +9,7 @@ import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { Dragon } from "../../recruit/implementation/dragon";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { seconds } from "../../../../shared/seconds";
+import { secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 import { MonsterTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
@@ -22,12 +22,12 @@ export class DragonBlueprint extends Derive(
 	TBaseStats({
 		health: 18,
 		speed: 0.25,
-		attackSpeed: seconds(0.3),
+		attackSpeed: secondsToFrame(0.3),
 		castSpeed: 4,
 		damage: 3,
 		foodConsumptionOnCast: NaN,
 		foodConsumption: 1.6,
-		summonTime: seconds(2.2),
+		summonTime: secondsToFrame(2.2),
 		range: NaN,
 	}),
 	MonsterTag,

@@ -9,7 +9,7 @@ import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/h
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Resources } from "../../../../renderer/resources";
 import { Fox } from "../../recruit/implementation/fox";
-import { seconds } from "../../../../shared/seconds";
+import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 
 export class FoxBlueprint extends Derive(
@@ -22,11 +22,11 @@ export class FoxBlueprint extends Derive(
 		health: 22,
 		damage: 1.5,
 		speed: 0.18,
-		attackSpeed: seconds(0.3),
-		castSpeed: 4,
+		attackSpeed: secondsToFrame(0.3),
+		castSpeed: castSpeedFromSeconds(4.5),
 		foodConsumption: 0.5,
 		foodConsumptionOnCast: NaN,
-		summonTime: seconds(1.8),
+		summonTime: secondsToFrame(1.8),
 		range: NaN,
 	}),
 ) {

@@ -13,6 +13,9 @@ import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { AnyUnit } from "../../../units/recruit/unit";
 import { TStatsRenderable } from "../../../../shared/traits/render/huds/stat-renderable";
+import { castCostFromFrames } from "../../../../shared/seconds";
+import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { AnyBarrack } from "../recruit/barrack";
 
 export type AnyBattleBarrack = BasicBattleBarrack | WaveBattleBarrack | VeterantBattleBarrack;
 
@@ -34,13 +37,31 @@ export const BattleBarrack = Subtrait(
 			abstract castCost: number;
 			abstract onCastResolve(): void;
 			abstract unitRecruit: AnyUnit | null;
+			abstract hooks: BattleArmyHooks;
+			abstract barrackRecruit: AnyBarrack;
 
 			tick() {
 				super.tickCast();
 			}
 
+			get bondedUnit() {
+				return this.unitRecruit ?? this.hooks.getDefaultUnit();
+			}
+
+			override get castTime() {
+				return castCostFromFrames(this.bondedUnit.stats.summonTime / 31.25 / this.castMultiplier);
+			}
+
+			get castMultiplier() {
+				return this.barrackRecruit.castMultiplier;
+			}
+
 			casts(): void {
-				this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost);
+				this.castInProgress = new Cast(
+					this,
+					this.onCastResolve.bind(this),
+					castCostFromFrames(this.bondedUnit.stats.summonTime),
+				);
 			}
 		}
 		return BattleBarrack;

@@ -40,7 +40,7 @@ export class BattlePriest extends Derive(TBattleUnit, Caster) {
 	}
 
 	casts(): void {
-		this.castInProgress = new Cast(this, this.healWave.bind(this), 400);
+		this.castInProgress = new Cast(this, this.healWave.bind(this));
 	}
 
 	override tick() {

@@ -43,7 +43,7 @@ export class BattleElf extends Derive(TBattleUnit, Caster) {
 	}
 
 	casts(): void {
-		this.castInProgress = new Cast(this, this.shootArrow.bind(this), 400);
+		this.castInProgress = new Cast(this, this.shootArrow.bind(this));
 	}
 
 	override tick() {

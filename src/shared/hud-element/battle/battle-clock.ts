@@ -15,24 +15,23 @@ export class BattleClockHud extends Derive(TRenderable, TDrawable) {
 		super({});
 	}
 
-	get deciSeconds() {
-		return Math.floor(this.timer.clock * 0.33) % 10;
+	get miliseconds() {
+		const date = new Date("1970-01-01T00:00:00Z");
+		date.setMilliseconds(this.timer.clock * 31.25);
+		const diff = date.getTime() - new Date("1970-01-01T00:00:00Z").getTime();
+		return diff;
 	}
 
-	get realDeciSeconds() {
-		return Math.floor(this.timer.clock * 3.3);
+	get deciSeconds() {
+		return Math.floor(this.miliseconds / 100) % 10;
 	}
 
 	get seconds() {
-		return Math.floor(this.realDeciSeconds / 100) % 60;
-	}
-
-	get realSeconds() {
-		return Math.floor(this.realDeciSeconds / 100);
+		return Math.floor(this.miliseconds / 1000) % 60;
 	}
 
 	get minutes() {
-		return Math.floor(this.realSeconds / 60);
+		return Math.floor(this.miliseconds / 60000);
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {

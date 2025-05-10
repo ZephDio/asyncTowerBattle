@@ -258,5 +258,8 @@ export class Stats {
 		this.conditions.forEach((status) => {
 			status.tick();
 		});
+		this.boons.forEach((status) => {
+			status.tick();
+		});
 	}
 }

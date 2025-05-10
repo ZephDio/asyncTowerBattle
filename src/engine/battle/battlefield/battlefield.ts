@@ -58,12 +58,6 @@ export class Battlefield {
 			alliedFoodEconomy.getHooks(),
 		);
 
-		setInterval(() => {
-			if (Number.isNaN(alliedBattleCastle.position.x)) {
-				console.log({ cul: this });
-			}
-		}, 1);
-
 		const alliedBattlePath = BattlePath.toAllied(grid, alliedArmy.path, alliedBattleCastle, enemyBattleCastle);
 		const enemyBattlePath = BattlePath.toEnemy(grid, enemyArmy.path, enemyBattleCastle, alliedBattleCastle);
 		const alliedBattleArmy = new BattleArmy(

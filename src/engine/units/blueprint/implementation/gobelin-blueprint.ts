@@ -11,7 +11,7 @@ import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { BattleGobelin } from "../../battle/implementation/battle-gobelin";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { seconds } from "../../../../shared/seconds";
+import { secondsToFrame } from "../../../../shared/seconds";
 import { TokenUnit } from "../../../../shared/traits/engine/token-unit";
 import { TBaseStats } from "../../../stats/base-stats";
 
@@ -26,11 +26,11 @@ export class GobelinBlueprint extends Derive(
 		health: 10,
 		damage: 1,
 		speed: 0.4,
-		attackSpeed: seconds(0.3),
-		castSpeed: 4,
+		attackSpeed: secondsToFrame(0.3),
+		castSpeed: NaN,
 		foodConsumption: 1,
 		foodConsumptionOnCast: NaN,
-		summonTime: seconds(1),
+		summonTime: secondsToFrame(1),
 		range: NaN,
 	}),
 ) {
