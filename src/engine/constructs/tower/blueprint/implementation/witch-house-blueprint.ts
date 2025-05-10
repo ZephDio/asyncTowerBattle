@@ -48,7 +48,7 @@ export class WitchHouseBlueprint extends Derive(
 		this.patternCondition.bind(this),
 	);
 	description = new TowerDescription(
-		"Poison Sentinel",
+		"Witch House",
 		["This tower make", "some poison puddles", "on path around it"],
 		this,
 	);

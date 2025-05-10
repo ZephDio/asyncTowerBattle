@@ -11,7 +11,7 @@ import { GridElement } from "../../../../../shared/traits/engine/core/grid-eleme
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
-import { BaseStatsProps, TBaseStats } from "../../../../stats/base-stats";
+import { HTBaseStats } from "../../../../stats/base-stats";
 
 export class AnvilTotemBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -22,7 +22,7 @@ export class AnvilTotemBlueprint extends Derive(
 ) {
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		if (!gridElement) return false;
-		if (implementsTrait(gridElement, TBaseStats({} as BaseStatsProps))) {
+		if (implementsTrait(gridElement, HTBaseStats)) {
 			return gridElement.stats.hasDamage();
 		}
 		return false;

@@ -5,7 +5,7 @@ import { PercentToReal } from "../../../../renderer/implementation/canvas-render
 import { BannerBackground } from "./banner-background";
 import { Tag, Tagged } from "../../engine/tags/tagged";
 import { TBaseStats } from "../../../../engine/stats/base-stats";
-import { frameToSeconds, secondsToFrame } from "../../../seconds";
+import { castSpeedToSecond, frameToSeconds, secondsToFrame } from "../../../seconds";
 
 export const TDescriptor = Trait((base) => {
 	abstract class IDescriptor extends base {
@@ -119,7 +119,7 @@ export class TowerDescription extends Description {
 	constructor(name: string, description: string[], tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
 		const extraLines: TowerLinesDescription = {
 			damage: `${tower.stats.damage}`,
-			"cast speed": `${tower.stats.castSpeed}`,
+			"cast speed": `${castSpeedToSecond(tower.stats.castSpeed)}s`,
 			"food consumption": `${tower.stats.foodConsumptionOnCast}`,
 			range: `${tower.stats.range}`,
 		};
