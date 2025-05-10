@@ -5,7 +5,7 @@ import { Windmill } from "../../recruit/implementation/windmill";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { Caster } from "../../../../../shared/traits/engine/cast";
 import { Stats } from "../../../../stats/stats";
-import { Status } from "../../../../../shared/traits/engine/status";
+import { StackableStatus } from "../../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
@@ -48,18 +48,25 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, Batt
 	tick() {}
 }
 
-export class WindmillBuff extends Derive(Status) {
+export class WindmillBuff extends Derive(StackableStatus) {
 	clock = 0;
 	stats: Stats;
 	override key = "windmill-buff";
 	override duration = Infinity;
 	hasTriggered = false;
+	amount = 0;
 	override tick(): void {
 		if (this.hasTriggered) return;
 		this.hasTriggered = true;
-		this.stats.basePercentStat.castSpeed += 0.25;
+		this.stats.basePercentStat.castSpeed += 25;
+		this.amount++;
 	}
 	override onRemove(): void {
-		this.stats.basePercentStat.castSpeed -= 0.25;
+		this.stats.basePercentStat.castSpeed -= 25 * this.amount;
+	}
+
+	override stack(_status: WindmillBuff): void {
+		this.stats.basePercentStat.castSpeed += 25;
+		this.amount++;
 	}
 }

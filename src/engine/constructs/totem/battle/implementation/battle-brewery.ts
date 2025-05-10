@@ -3,7 +3,6 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
-import { seconds } from "../../../../../shared/seconds";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { Brewery } from "../../recruit/implementation/brewery";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
@@ -64,7 +63,7 @@ export class BattleBrewery extends Derive(
 	}
 
 	casts() {
-		this.castInProgress = new Cast(this, this.produceBrew.bind(this), seconds(5));
+		this.castInProgress = new Cast(this, this.produceBrew.bind(this));
 	}
 
 	onBattleStart(): void {

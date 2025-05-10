@@ -47,7 +47,7 @@ export class BattleEnt extends Derive(TBattleUnit, Caster) {
 	}
 
 	casts() {
-		this.castInProgress = new Cast(this, this.root.bind(this), 400);
+		this.castInProgress = new Cast(this, this.root.bind(this));
 	}
 
 	override tick() {

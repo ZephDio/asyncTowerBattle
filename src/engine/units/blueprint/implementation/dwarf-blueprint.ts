@@ -10,7 +10,7 @@ import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/h
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { seconds } from "../../../../shared/seconds";
+import { secondsToFrame } from "../../../../shared/seconds";
 import { BattleDwarf } from "../../battle/implementation/battle-dwarf";
 import { TokenUnit } from "../../../../shared/traits/engine/token-unit";
 import { TBaseStats } from "../../../stats/base-stats";
@@ -24,12 +24,12 @@ export class DwarfBlueprint extends Derive(
 	TBaseStats({
 		health: 14,
 		damage: 1.2,
-		attackSpeed: seconds(0.3),
+		attackSpeed: secondsToFrame(0.3),
 		speed: 0.13,
-		castSpeed: 4,
+		castSpeed: NaN,
 		foodConsumption: 0.4,
 		foodConsumptionOnCast: NaN,
-		summonTime: seconds(1.6),
+		summonTime: secondsToFrame(1.6),
 		range: NaN,
 	}),
 ) {

@@ -16,6 +16,7 @@ import { TDescriptor, TowerDescription } from "../../../../../shared/traits/rend
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { TrapPathTile } from "../../../../tile/recruit/implementation/trap-tile";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 
 export class WitchHouseBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -27,7 +28,7 @@ export class WitchHouseBlueprint extends Derive(
 		health: NaN,
 		damage: 6,
 		attackSpeed: NaN,
-		castSpeed: 0.8,
+		castSpeed: castSpeedFromSeconds(6),
 		speed: NaN,
 		foodConsumption: NaN,
 		foodConsumptionOnCast: 5,

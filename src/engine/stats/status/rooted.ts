@@ -1,7 +1,7 @@
 import { Derive } from "@ddd-ts/traits";
 import { StackableStatus } from "../../../shared/traits/engine/status";
 import { Stats } from "../stats";
-import { seconds } from "../../../shared/seconds";
+import { secondsToFrame } from "../../../shared/seconds";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 import { ScreenPosition } from "../../../shared/position";
@@ -15,7 +15,7 @@ export class Rooted extends Derive(StackableStatus, TDrawable) {
 	hasTriggered = false;
 
 	constructor(
-		public duration: number = seconds(3),
+		public duration: number = secondsToFrame(3),
 		public intensity: number = 60,
 	) {
 		super({});

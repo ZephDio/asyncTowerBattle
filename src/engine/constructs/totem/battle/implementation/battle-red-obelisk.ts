@@ -4,7 +4,6 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
 import { RedObelisk } from "../../recruit/implementation/obelisk";
-import { seconds } from "../../../../../shared/seconds";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
@@ -67,6 +66,6 @@ export class BattleRedObelisk extends Derive(BattleTotem, EvilTag, Caster, HTSyn
 	}
 
 	casts() {
-		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), seconds(5));
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this));
 	}
 }

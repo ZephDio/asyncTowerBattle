@@ -13,6 +13,7 @@ import { GridElement } from "../../../../../shared/traits/engine/core/grid-eleme
 import { RedObelisk } from "../../recruit/implementation/obelisk";
 import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 
 export class RedObeliskBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -24,7 +25,7 @@ export class RedObeliskBlueprint extends Derive(
 	TBaseStats({
 		health: NaN,
 		damage: NaN,
-		castSpeed: 1,
+		castSpeed: castSpeedFromSeconds(5),
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

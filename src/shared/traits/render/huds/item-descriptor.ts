@@ -5,7 +5,7 @@ import { PercentToReal } from "../../../../renderer/implementation/canvas-render
 import { BannerBackground } from "./banner-background";
 import { Tag, Tagged } from "../../engine/tags/tagged";
 import { TBaseStats } from "../../../../engine/stats/base-stats";
-import { frame, seconds } from "../../../seconds";
+import { frameToSeconds, secondsToFrame } from "../../../seconds";
 
 export const TDescriptor = Trait((base) => {
 	abstract class IDescriptor extends base {
@@ -141,9 +141,9 @@ export class UnitDescription extends Description {
 			damage: `${unit.stats.damage}`,
 			"move speed": `${unit.stats.speed}`,
 			"food consumption": `${unit.stats.foodConsumption}`,
-			"production time": `${frame(unit.stats.summonTime)}s`,
+			"production time": `${frameToSeconds(unit.stats.summonTime)}s`,
 		};
-		seconds(unit.stats.summonTime);
+		secondsToFrame(unit.stats.summonTime);
 		super(name, description, extraLines);
 	}
 }

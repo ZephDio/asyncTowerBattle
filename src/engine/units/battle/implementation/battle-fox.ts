@@ -6,7 +6,6 @@ import { Fox } from "../../recruit/implementation/fox";
 import { GridPosition } from "../../../../shared/position";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { seconds } from "../../../../shared/seconds";
 
 export class BattleFox extends Derive(TBattleUnit, Caster) {
 	foodConsume: number = 2;
@@ -40,7 +39,7 @@ export class BattleFox extends Derive(TBattleUnit, Caster) {
 	}
 
 	casts() {
-		this.castInProgress = new Cast(this, this.eatOpponentFood.bind(this), seconds(4.5));
+		this.castInProgress = new Cast(this, this.eatOpponentFood.bind(this));
 	}
 
 	override tick() {

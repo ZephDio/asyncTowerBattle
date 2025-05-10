@@ -8,7 +8,7 @@ import { Resources } from "../../../../renderer/resources";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { seconds } from "../../../../shared/seconds";
+import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
 import { ForestTag } from "../../../../shared/traits/engine/tags/biome/biome-tags";
 import { Ent } from "../../recruit/implementation/ent";
 import { TBaseStats } from "../../../stats/base-stats";
@@ -22,12 +22,12 @@ export class EntBlueprint extends Derive(
 	TBaseStats({
 		health: 45,
 		speed: 0.13,
-		castSpeed: 4,
-		attackSpeed: seconds(0.3),
+		castSpeed: castSpeedFromSeconds(6),
+		attackSpeed: secondsToFrame(0.3),
 		damage: 3,
 		foodConsumptionOnCast: NaN,
 		foodConsumption: 1.5,
-		summonTime: seconds(4.5),
+		summonTime: secondsToFrame(4.5),
 		range: NaN,
 	}),
 	ForestTag,

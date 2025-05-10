@@ -9,7 +9,7 @@ import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { Priest } from "../../recruit/implementation/priest";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { seconds } from "../../../../shared/seconds";
+import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 
 export class PriestBlueprint extends Derive(
@@ -21,12 +21,12 @@ export class PriestBlueprint extends Derive(
 	TBaseStats({
 		health: 22,
 		speed: 0.16,
-		attackSpeed: seconds(0.3),
-		castSpeed: 4,
+		attackSpeed: secondsToFrame(0.3),
+		castSpeed: castSpeedFromSeconds(2),
 		damage: 0.5,
 		foodConsumptionOnCast: NaN,
 		foodConsumption: 1.3,
-		summonTime: seconds(2.6),
+		summonTime: secondsToFrame(2.6),
 		range: NaN,
 	}),
 ) {

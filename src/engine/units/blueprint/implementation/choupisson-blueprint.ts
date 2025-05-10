@@ -9,7 +9,7 @@ import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Choupisson } from "../../recruit/implementation/choupisson";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { seconds } from "../../../../shared/seconds";
+import { secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 
 export class ChoupissonBlueprint extends Derive(
@@ -25,12 +25,12 @@ export class ChoupissonBlueprint extends Derive(
 	TBaseStats({
 		health: 18,
 		speed: 0.25,
-		attackSpeed: seconds(0.3),
-		castSpeed: 4,
+		attackSpeed: secondsToFrame(0.3),
+		castSpeed: NaN,
 		damage: 3,
 		foodConsumptionOnCast: NaN,
 		foodConsumption: 1.8,
-		summonTime: seconds(3.5),
+		summonTime: secondsToFrame(3.5),
 		range: NaN,
 	}),
 ) {

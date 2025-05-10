@@ -8,7 +8,7 @@ import { Game } from "../game";
 import { BattleRandomSeed } from "./battle-random-seed";
 import { Battlefield } from "./battlefield/battlefield";
 import { ArmyResume } from "../../shared/hud-element/battle/army-resume/army-resume";
-import { seconds } from "../../shared/seconds";
+import { secondsToFrame } from "../../shared/seconds";
 import { TranslateAnimation } from "../translate-animation/translate-animation";
 
 export class Battle {
@@ -16,7 +16,7 @@ export class Battle {
 	isOver = false;
 
 	animationOver = false;
-	gameSpeed = seconds(1);
+	gameSpeed = secondsToFrame(1);
 	battleClock: BattleClockHud;
 	speedCursor: SliderBattleSpeed;
 	alliedArmyResume: ArmyResume;
@@ -79,7 +79,7 @@ export class Battle {
 		this.battlefield.triggerBattleStartEffects();
 		const loop = () => {
 			setTimeout(() => {
-				if (!this.gameSpeed) {
+				if (this.gameSpeed === 0) {
 					loop();
 					return;
 				}
