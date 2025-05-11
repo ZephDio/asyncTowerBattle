@@ -3,12 +3,12 @@ import { TDrawable } from "../../../traits/render/drawable";
 import { ScreenPosition } from "../../../position";
 import { BattleFoodEconomy } from "../../../../engine/food/battle-food-economy";
 import { TRenderable } from "../../../traits/render/renderable";
-import { Resources } from "../../../../renderer/resources";
 import { DrawPriority } from "../../../traits/render/image-drawable";
+import { IconResources } from "../../../../renderer/resources/icons.resources";
 
 export class FoodBarHud extends Derive(TRenderable, TDrawable) {
 	drawPriority = DrawPriority.HUD;
-	foodIcon = Resources.hudElement.icons.food.image
+	foodIcon = IconResources.food.image
 	constructor(
 		private economy: BattleFoodEconomy,
 		public position: ScreenPosition,

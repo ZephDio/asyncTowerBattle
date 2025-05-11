@@ -2,9 +2,9 @@ import { Derive } from "@ddd-ts/traits";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../renderer/resources";
 import { ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
+import { IconResources } from "../../../renderer/resources/icons.resources";
 
 export class LifeRemainingHud extends Derive(TDrawable, TRenderable) {
 	constructor(
@@ -16,8 +16,8 @@ export class LifeRemainingHud extends Derive(TDrawable, TRenderable) {
 	size = { width: 7.5, height: 7.5 };
 	drawPriority = DrawPriority.HUD;
 
-	heartIcon = Resources.hudElement.icons.health.image;
-	emptyHeartIcon = Resources.hudElement.icons.emptyHealth.image;
+	heartIcon = IconResources.health.image;
+	emptyHeartIcon = IconResources.emptyHealth.image;
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		let heartPosition = position.add(new ScreenPosition({ x: -20, y: 0 }));

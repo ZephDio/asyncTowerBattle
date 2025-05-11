@@ -4,7 +4,6 @@ import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../../renderer/resources";
 
 import { Bullet } from "../../../../projectile/blueprint/implementation/bullet";
 import { GreenTower } from "../../recruit/implementation/green-tower";
@@ -12,12 +11,13 @@ import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-bluepri
 import { TDescriptor, TowerDescription } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
+import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 
 export class GreenTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(Resources.tower.green.resource.image, Resources.tower.green.size, DrawPriority.NormalGridElement),
+	TImageDrawable(TowerResources.green.image, TowerResources.green.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
 		damage: 10,

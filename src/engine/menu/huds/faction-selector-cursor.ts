@@ -7,7 +7,7 @@ import { Rectangle } from "../../../shared/hitbox/shapes/rectangle";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { Derive } from "@ddd-ts/traits";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../renderer/resources";
+import { HudElementResources } from "../../../renderer/resources/hud-element.resources";
 
 
 export class FactionSelectorCursor extends Derive(
@@ -16,7 +16,7 @@ export class FactionSelectorCursor extends Derive(
 	TRenderable,
 ){
 
-    resource = Resources.hudElement.factionSelector.resource.image;
+    resource = HudElementResources.factionSelector.image;
     drawPriority = DrawPriority.HUD;
 
     size = { width : 12 , height : 12}

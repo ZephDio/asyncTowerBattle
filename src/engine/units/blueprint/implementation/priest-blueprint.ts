@@ -1,5 +1,4 @@
 import { Derive } from "@ddd-ts/traits";
-import { Resources } from "../../../../renderer/resources";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
@@ -11,13 +10,14 @@ import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint"
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class PriestBlueprint extends Derive(
 	TShopBlueprint(20, 6),
 	THitbox(new HitBox([[new Rectangle({ width: 1.8, height: 2.2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
-	TImageDrawable(Resources.unit.priest.resource.image, Resources.unit.priest.size, DrawPriority.NormalGridElement),
+	TImageDrawable(UnitResources.priest.image, UnitResources.priest.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 22,
 		speed: 0.16,

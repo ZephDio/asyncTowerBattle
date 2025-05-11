@@ -2,9 +2,9 @@ import { Derive } from "@ddd-ts/traits";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../renderer/resources";
 import { ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
+import { HudElementResources } from "../../../renderer/resources/hud-element.resources";
 
 
 export class BattleVerdictHud extends Derive(TDrawable, TRenderable) {
@@ -12,7 +12,7 @@ export class BattleVerdictHud extends Derive(TDrawable, TRenderable) {
         super({});
     }
     size = { width: 32, height: 15 };
-    background = Resources.hudElement.startGame.resource.image;
+    background = HudElementResources.startGame.image;
 
     drawPriority = DrawPriority.HUD;
 

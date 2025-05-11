@@ -1,8 +1,8 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { TDrawable } from "../../traits/render/drawable";
-import { Resources } from "../../../renderer/resources";
 import { THasPrice } from "../../traits/engine/has-price";
 import { ScreenPosition } from "../../position";
+import { IconResources } from "../../../renderer/resources/icons.resources";
 
 export class PriceHud extends Derive(TDrawable) {
 	override drawPriority: 4;
@@ -12,7 +12,7 @@ export class PriceHud extends Derive(TDrawable) {
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
 		context.globalAlpha = 1;
 		context.fillStyle = "yellow";
-		const image = Resources.hudElement.gold.resource.image;
+		const image = IconResources.gold.image;
 		const canvasPosition = this.getCanvasPosition(context, position);
 		const size = this.getCanvasSize(context, 1.9, 1.9, scale);
 		const text = this.buyable.price.toString();

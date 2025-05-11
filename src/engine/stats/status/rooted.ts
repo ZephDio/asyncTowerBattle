@@ -4,7 +4,7 @@ import { secondsToFrame } from "../../../shared/seconds";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 import { ScreenPosition } from "../../../shared/position";
-import { Resources } from "../../../renderer/resources";
+import { StatusResources } from "../../../renderer/resources/status.resources";
 import { Status } from "../../../shared/traits/engine/status";
 
 export class Rooted extends Derive(Status, TDrawable) {
@@ -45,7 +45,7 @@ export class Rooted extends Derive(Status, TDrawable) {
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		const size = this.getCanvasSize(context, 3 * scale, 3 * scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
-		this.drawImage(context, size, canvasPosition, Resources.status.rooted.resource.image);
+		this.drawImage(context, size, canvasPosition, StatusResources.rooted.image);
 		context.globalAlpha = 1;
 	}
 }

@@ -1,5 +1,4 @@
 import { Derive } from "@ddd-ts/traits";
-import { Resources } from "../../../../../renderer/resources";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
@@ -10,14 +9,15 @@ import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-bluepri
 import { BarrackDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
+import { BarrackResources } from "../../../../../renderer/resources/barrack.resources";
 
 export class BasicBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	TImageDrawable(
-		Resources.barracks.basic.resource.image,
-		Resources.barracks.basic.size,
+		BarrackResources.basic.image,
+		BarrackResources.basic.size,
 		DrawPriority.NormalGridElement,
 	),
 	TBaseStats({

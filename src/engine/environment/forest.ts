@@ -1,12 +1,12 @@
 import { Derive } from "@ddd-ts/traits";
 import { DrawPriority, TImageDrawable } from "../../shared/traits/render/image-drawable";
-import { Resources } from "../../renderer/resources";
 import { TEnvironmentElement } from "./environment";
 import { Cell } from "../../shared/position";
+import { EnvironmentResources } from "../../renderer/resources/environment.resources";
 
 export class Forest extends Derive(
 	TEnvironmentElement,
-	TImageDrawable(Resources.environment.forest.resource.image, Resources.environment.forest.size, DrawPriority.NormalGridElement),
+	TImageDrawable(EnvironmentResources.forest.image, EnvironmentResources.forest.size, DrawPriority.NormalGridElement),
 ) {
 	type = "forest" as const;
 	constructor(public cell: Cell) {

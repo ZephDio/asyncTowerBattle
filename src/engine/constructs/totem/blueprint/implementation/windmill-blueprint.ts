@@ -6,13 +6,13 @@ import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
 import { Windmill } from "../../recruit/implementation/windmill";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class WindmillBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -23,8 +23,8 @@ export class WindmillBlueprint extends Derive(
 	),
 	TDescriptor,
 	TImageDrawable(
-		Resources.totem.windmill.resource.image,
-		Resources.totem.windmill.size,
+		TotemResources.windmill.image,
+		TotemResources.windmill.size,
 		DrawPriority.NormalGridElement,
 	),
 	TSynergy,

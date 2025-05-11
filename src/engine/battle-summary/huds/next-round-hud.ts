@@ -2,13 +2,13 @@ import { Derive } from "@ddd-ts/traits";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../renderer/resources";
 import { GridPosition, ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { HitBox } from "../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../shared/hitbox/shapes/rectangle";
 import { TCollider } from "../../../shared/traits/engine/core/TCollider";
+import { HudElementResources } from "../../../renderer/resources/hud-element.resources";
 
 export class NextRoundHud extends Derive(
   TCollider,
@@ -20,7 +20,7 @@ export class NextRoundHud extends Derive(
   }
   size = { width: 25, height: 11 };
   drawPriority = DrawPriority.HUD;
-	background = Resources.hudElement.startGame.resource.image;
+	background = HudElementResources.startGame.image;
 
   draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale : number): void {
 		const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);

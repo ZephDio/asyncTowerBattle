@@ -4,7 +4,6 @@ import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../../renderer/resources";
 
 import { WitchHouse } from "../../recruit/implementation/witch-house";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
@@ -17,12 +16,13 @@ import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { TrapPathTile } from "../../../../tile/recruit/implementation/trap-tile";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
+import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 
 export class WitchHouseBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 10 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(Resources.tower.yellow.resource.image, Resources.tower.yellow.size, DrawPriority.NormalGridElement),
+	TImageDrawable(TowerResources.witchHouse.image, TowerResources.witchHouse.size, DrawPriority.NormalGridElement),
 	TSynergy,
 	TBaseStats({
 		health: NaN,

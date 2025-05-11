@@ -1,5 +1,4 @@
 import { Derive } from "@ddd-ts/traits";
-import { Resources } from "../../../../renderer/resources";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
@@ -9,10 +8,11 @@ import { BasicPathTile } from "../../recruit/implementation/basic-tile";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import { PathResources } from "../../../../renderer/resources/path.resources";
 
 export class BasicTileBlueprint extends Derive(
 	TShopBlueprint(10, 10),
-	TImageDrawable(Resources.path.normal.image, { width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE }, DrawPriority.CarpetStyleGridElement),
+	TImageDrawable(PathResources.normal.image, PathResources.normal.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,
 	THitbox(
 		new HitBox([
