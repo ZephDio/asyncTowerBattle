@@ -1,13 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
-import { StackableStatus } from "../../../shared/traits/engine/status";
 import { Stats } from "../stats";
 import { secondsToFrame } from "../../../shared/seconds";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 import { ScreenPosition } from "../../../shared/position";
 import { Resources } from "../../../renderer/resources";
+import { Status } from "../../../shared/traits/engine/status";
 
-export class Rooted extends Derive(StackableStatus, TDrawable) {
+export class Rooted extends Derive(Status, TDrawable) {
 	key = "rooted" as const;
 	override clock: number = 0;
 	override stats: Stats;

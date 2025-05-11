@@ -5,7 +5,7 @@ import { Windmill } from "../../recruit/implementation/windmill";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { Caster } from "../../../../../shared/traits/engine/cast";
 import { Stats } from "../../../../stats/stats";
-import { StackableStatus } from "../../../../../shared/traits/engine/status";
+import { Status } from "../../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
@@ -48,7 +48,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, Batt
 	tick() {}
 }
 
-export class WindmillBuff extends Derive(StackableStatus) {
+export class WindmillBuff extends Derive(Status) {
 	clock = 0;
 	stats: Stats;
 	override key = "windmill-buff";

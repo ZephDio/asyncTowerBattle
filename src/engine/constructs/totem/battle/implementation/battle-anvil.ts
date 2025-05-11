@@ -43,16 +43,21 @@ export class OrangeTotemBuff extends Derive(Status) {
 	maxDuration = Infinity;
 	stats: Stats;
 
-	didTrigger = false;
+	stackCount = 1;
+	stackApplied = 0;
 
 	tick() {
 		this.clock++;
-		if (this.didTrigger) return;
+		if (this.stackApplied >= this.stackCount) return;
 		this.stats.basePercentStat.attack += 30;
-		this.didTrigger = true;
+		this.stackApplied++;
+	}
+
+	stack(_status: OrangeTotemBuff): void {
+		this.stackCount++;
 	}
 
 	override onRemove(): void {
-		this.stats.basePercentStat.attack -= 30;
+		this.stats.basePercentStat.attack -= 30 * this.stackCount;
 	}
 }

@@ -83,5 +83,7 @@ export class Poisoned extends Derive(Status) {
 		this.stats.takeDamage(this.damage / 64);
 	}
 
+	stack(_status: Poisoned) {}
+
 	onRemove() {}
 }

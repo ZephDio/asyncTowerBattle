@@ -68,9 +68,11 @@ export class VeterantBuff extends Derive(Status) {
 		if (this.hasTriggered) return;
 		this.stats.basePercentStat.movementSpeed -= 10;
 		this.stats.basePercentStat.attack += 20;
-		this.stats.addMaxHealth(100, true);
+		this.stats.addMaxHealth(130, true);
 		this.hasTriggered = true;
 	}
+
+	stack(_status: VeterantBuff): void {}
 
 	onRemove() {
 		this.stats.basePercentStat.movementSpeed += 10;

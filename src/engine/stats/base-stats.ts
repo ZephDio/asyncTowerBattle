@@ -1,4 +1,4 @@
-import { Derive, ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 
 export class BaseStats {
 	private _health: number;

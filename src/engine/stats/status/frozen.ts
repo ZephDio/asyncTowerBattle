@@ -16,6 +16,8 @@ export class Frozen extends Derive(Status) {
 		super({});
 	}
 
+	override stack(_status: Frozen): void {}
+
 	tick() {
 		if (!this.hasTriggered) {
 			this.stats.basePercentStat.movementSpeed -= this.intensity;

@@ -1,7 +1,6 @@
 import { Cell, GridPosition } from "../../../shared/position";
 import { Derive } from "@ddd-ts/traits";
 import { FoodHooks } from "../../food/battle-food-economy";
-import { Cast } from "../../../shared/traits/engine/cast";
 import { ElfCastle } from "../recruit/implem/elf-castle";
 import { TBattleCastle } from ".";
 

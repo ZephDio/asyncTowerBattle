@@ -1,5 +1,5 @@
 import { implementsTrait, ImplementsTrait, Trait } from "@ddd-ts/traits";
-import { StackableStatus, Status } from "../../shared/traits/engine/status";
+import { Status } from "../../shared/traits/engine/status";
 import { Buff } from "../army/battle/army-buff";
 import { TDrawable } from "../../shared/traits/render/drawable";
 
@@ -223,29 +223,19 @@ export class Stats {
 	addCondition(condition: ImplementsTrait<typeof Status>) {
 		condition.setStats(this);
 		const alreadyAffected = this.conditions.get(condition.key);
-		const stackable = implementsTrait(condition, StackableStatus);
-		if (!stackable && alreadyAffected) return;
-		if (stackable && alreadyAffected) {
-			if (implementsTrait(alreadyAffected, StackableStatus)) {
-				alreadyAffected.stack(condition);
-			}
-			return;
+		if (alreadyAffected) {
+			alreadyAffected.stack(condition);
 		}
 		this.conditions.set(condition.key, condition);
 	}
 
 	addBoon(boon: ImplementsTrait<typeof Status>) {
 		boon.setStats(this);
-		const alreadyAffected = this.boons.get(boon.key);
-		const stackable = implementsTrait(boon, StackableStatus);
-		if (!stackable && alreadyAffected) return;
-		if (stackable && alreadyAffected) {
-			if (implementsTrait(alreadyAffected, StackableStatus)) {
-				alreadyAffected.stack(boon);
-			}
-			return;
+		const alreadyAffected = this.conditions.get(boon.key);
+		if (alreadyAffected) {
+			alreadyAffected.stack(boon);
 		}
-		this.boons.set(boon.key, boon);
+		this.conditions.set(boon.key, boon);
 	}
 
 	getRenderableStatus() {
