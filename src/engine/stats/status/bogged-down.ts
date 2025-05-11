@@ -1,8 +1,8 @@
 import { Derive } from "@ddd-ts/traits";
-import { StackableStatus } from "../../../shared/traits/engine/status";
+import { Status } from "../../../shared/traits/engine/status";
 import { Stats } from "../stats";
 
-export class BoggedDown extends Derive(StackableStatus) {
+export class BoggedDown extends Derive(Status) {
 	key = "boggedDown" as const;
 	clock = 0;
 	duration = 3;

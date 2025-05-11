@@ -54,6 +54,8 @@ export class Enraged extends Derive(Status) {
 		this.didTrigger = true;
 	}
 
+	stack(_status: Enraged) {}
+
 	onRemove() {
 		this.stats.basePercentStat.movementSpeed -= 30;
 		this.stats.basePercentStat.attack -= 25;

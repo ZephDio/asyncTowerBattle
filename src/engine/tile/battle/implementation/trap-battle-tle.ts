@@ -73,5 +73,9 @@ export class Stunned extends Derive(Status) {
 		this.didTrigger = true;
 	}
 
+	stack(status: Stunned) {
+		this.duration += status.duration;
+	}
+
 	onRemove() {}
 }

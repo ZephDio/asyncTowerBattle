@@ -8,7 +8,7 @@ import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { GridPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { castCostFromFrames, secondsToFrame } from "../../../shared/seconds";
+import { castCostFromFrames } from "../../../shared/seconds";
 
 export type AnyBattleCastle = ImplementsTrait<typeof TBattleCastle>;
 

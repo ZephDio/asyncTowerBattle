@@ -9,10 +9,12 @@ export class StoneShield extends Derive(Status, TDrawable) {
 	key = "stoneShield" as const;
 	stackable = false;
 	clock = 0;
-	duration = 0;
+	duration = Infinity;
 	stats: Stats;
 
 	tick() {}
+
+	stack(_status: StoneShield) {}
 
 	onRemove() {}
 
