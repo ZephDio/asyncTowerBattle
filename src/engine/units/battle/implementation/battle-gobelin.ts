@@ -15,7 +15,6 @@ export class BattleGobelin extends Derive(TBattleUnit) {
 		public enemyPath: BattlePath,
 		public hooks: BattleArmyHooks,
 	) {
-		console.log({ recruit });
 		super({
 			imageDrawable: recruit,
 			maxHealth: recruit.stats.health,

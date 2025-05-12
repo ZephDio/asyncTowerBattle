@@ -2,18 +2,18 @@ import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { TrapPathTile } from "../../recruit/implementation/trap-tile";
-import { Stats } from "../../../stats/stats";
 import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { Status } from "../../../../shared/traits/engine/status";
 import { Action } from "../../../../shared/action";
+import { secondsToFrame } from "../../../../shared/seconds";
+import { Stunned } from "../../../stats/status/stunned";
 
 export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
 	didTrigger = false;
-	cooldown = 96;
+	cooldown = secondsToFrame(3);
 	clock = 0;
 
 	action = null as null | Action;
@@ -55,27 +55,4 @@ export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement,
 		}
 		this.didTrigger = true;
 	}
-}
-
-export class Stunned extends Derive(Status) {
-	key = "stunned";
-	clock = 0;
-	duration = 32;
-	stats: Stats;
-	didTrigger = false;
-	tick() {
-		this.clock++;
-		if (this.clock >= this.duration) {
-			this.onRemove();
-		}
-
-		if (this.didTrigger) return;
-		this.didTrigger = true;
-	}
-
-	stack(status: Stunned) {
-		this.duration += status.duration;
-	}
-
-	onRemove() {}
 }
