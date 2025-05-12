@@ -235,7 +235,7 @@ export class Stats {
 		if (alreadyAffected) {
 			alreadyAffected.stack(boon);
 		}
-		this.conditions.set(boon.key, boon);
+		this.boons.set(boon.key, boon);
 	}
 
 	getRenderableStatus() {
