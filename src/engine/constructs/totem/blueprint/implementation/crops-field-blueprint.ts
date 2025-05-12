@@ -6,12 +6,12 @@ import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { CropsField } from "../../recruit/implementation/crops-field";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
+import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class CropsFieldBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -22,8 +22,8 @@ export class CropsFieldBlueprint extends Derive(
 	),
 	TDescriptor,
 	TImageDrawable(
-		Resources.totem.cropsfield.resource.image,
-		Resources.totem.cropsfield.size,
+		TotemResources.cropsfield.image,
+		TotemResources.cropsfield.size,
 		DrawPriority.NormalGridElement,
 	),
 	TBaseStats({

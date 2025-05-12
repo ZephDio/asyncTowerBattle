@@ -3,11 +3,11 @@ import { HitBox } from "../hitbox/hitboxe";
 import { Rectangle } from "../hitbox/shapes/rectangle";
 import { TCollider } from "../traits/engine/core/TCollider";
 import { TDrawable } from "../traits/render/drawable";
-import { Resources } from "../../renderer/resources";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { ScreenPosition } from "../position";
 import { TRenderable } from "../traits/render/renderable";
 import { THitbox } from "../traits/engine/core/THitbox";
+import { HudElementResources } from "../../renderer/resources/hud-element.resources";
 
 export class StartBattleButton extends Derive(
 	TCollider,
@@ -18,7 +18,7 @@ export class StartBattleButton extends Derive(
 	drawPriority: 5;
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		context.globalAlpha = 1;
-		const image = Resources.hudElement.startBattle.resource.image;
+		const image = HudElementResources.startBattle.image;
 		const canvasPosition = this.getCanvasPosition(context, position);
 		const size = this.getCanvasSize(context, this.size.width, this.size.height);
 		this.drawImage(context, size, canvasPosition, image);

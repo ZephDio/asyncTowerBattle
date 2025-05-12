@@ -4,19 +4,19 @@ import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { Rocket } from "../../../../projectile/blueprint/implementation/rocket";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../../renderer/resources";
 import { BlueTower } from "../../recruit/implementation/blue-tower";
 import { Derive } from "../../../../../../traits/traits";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { TowerDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
+import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 
 export class BlueTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(Resources.tower.blue.resource.image, Resources.tower.blue.size, DrawPriority.NormalGridElement),
+	TImageDrawable(TowerResources.blue.image, TowerResources.blue.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
 		damage: 7,

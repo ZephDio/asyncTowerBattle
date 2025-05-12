@@ -4,15 +4,15 @@ import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../renderer/resources";
 import { SlowingPathTile } from "../../recruit/implementation/slowing-tile";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import { PathResources } from "../../../../renderer/resources/path.resources";
 
 export class SlowingTileBlueprint extends Derive(
 	TShopBlueprint(10, 3),
-	TImageDrawable(Resources.path.slowing.image, { width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE }, DrawPriority.CarpetStyleGridElement),
+	TImageDrawable(PathResources.slowing.image, PathResources.slowing.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,
 	THitbox(
 		new HitBox([

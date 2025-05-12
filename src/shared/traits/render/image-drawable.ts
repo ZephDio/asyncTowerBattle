@@ -3,6 +3,7 @@ import { ScreenPosition } from "../../position";
 
 import { TDrawable } from "./drawable";
 import { Orientable } from "../engine/core/orientable";
+import { Size } from "../../size";
 
 export enum DrawPriority {
 	BackGroundScreen = 0,
@@ -24,7 +25,7 @@ export type HTMLImageElementAsset = {
 
 export const TImageDrawable = (
 	image: HTMLImageElement | HTMLImageElementAsset,
-	size: { width: number; height: number },
+	size: Size,
 	priority: number,
 ) =>
 	Subtrait([TDrawable], (base) => {

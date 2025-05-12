@@ -5,10 +5,10 @@ import { HitBox } from "../../hitbox/hitboxe";
 import { Rectangle } from "../../hitbox/shapes/rectangle";
 import { GridPosition, ScreenPosition } from "../../position";
 import { TRenderable } from "../../traits/render/renderable";
-import { Resources } from "../../../renderer/resources";
 import { DrawPriority, TImageDrawable } from "../../traits/render/image-drawable";
 import { TGrid } from "../../../engine/grid/tgrid";
 import { Size } from "../../size";
+import { HudElementResources } from "../../../renderer/resources/hud-element.resources";
 
 const speedMap = {
 	0: 0,
@@ -33,7 +33,7 @@ const speedMap = {
 export class SliderBattleSpeed extends Derive(
 	TCollider,
 	THitbox(new HitBox([[new Rectangle({ width: 16, height: 2.5 }), new ScreenPosition({ x: 0, y: 0 })]])),
-	TImageDrawable(Resources.hudElement.slider.resource.image, { width: 16, height: 1.8 }, 8),
+	TImageDrawable(HudElementResources.slider.image, { width: 16, height: 1.8 }, 8),
 	TRenderable,
 ) {
 	override drawPriority = DrawPriority.HUD;
@@ -95,7 +95,7 @@ export class SliderBattleSpeed extends Derive(
 class Cursor extends Derive(
 	TCollider,
 	THitbox(new HitBox([[new Rectangle({ width: 2, height: 2 }), new ScreenPosition({ x: 0, y: 0 })]])),
-	TImageDrawable(Resources.hudElement.cursor.resource.image, { width: 2, height: 2.6 }, 9),
+	TImageDrawable(HudElementResources.cursor.image, { width: 2, height: 2.6 }, 9),
 	TRenderable,
 ) {
 	constructor(public position: ScreenPosition) {

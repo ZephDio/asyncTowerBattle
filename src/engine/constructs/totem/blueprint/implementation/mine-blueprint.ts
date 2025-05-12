@@ -6,13 +6,13 @@ import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
 import { Rock } from "../../../../environment/rock";
 import { Mine } from "../../recruit/implementation/mine";
+import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class MineBlueprint extends Derive(
 	TShopBlueprint(15, 10),
@@ -22,7 +22,7 @@ export class MineBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(Resources.totem.mine.resource.image, Resources.totem.mine.size, DrawPriority.NormalGridElement),
+	TImageDrawable(TotemResources.mine.image, TotemResources.mine.size, DrawPriority.NormalGridElement),
 	TSynergy,
 ) {
 	description = new Description("Gold Mine", [

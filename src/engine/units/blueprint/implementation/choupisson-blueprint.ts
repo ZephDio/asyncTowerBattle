@@ -4,13 +4,13 @@ import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../renderer/resources";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Choupisson } from "../../recruit/implementation/choupisson";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class ChoupissonBlueprint extends Derive(
 	TShopBlueprint(15, 7),
@@ -18,8 +18,8 @@ export class ChoupissonBlueprint extends Derive(
 	TDrawable,
 	TDescriptor,
 	TImageDrawable(
-		Resources.unit.choupisson.resource.image,
-		Resources.unit.choupisson.size,
+		UnitResources.choupisson.image,
+		UnitResources.choupisson.size,
 		DrawPriority.NormalGridElement,
 	),
 	TBaseStats({

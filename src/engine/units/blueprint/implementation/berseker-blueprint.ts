@@ -4,20 +4,20 @@ import { Ellipse } from "../../../../shared/hitbox/shapes/ellipse";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { GridPosition } from "../../../../shared/position";
-import { Resources } from "../../../../renderer/resources";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Berseker } from "../../recruit/implementation/berseker";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BersekerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Ellipse({ width: 2, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
-	TImageDrawable(Resources.unit.berseker.resource.image, Resources.unit.berseker.size, DrawPriority.NormalGridElement),
+	TImageDrawable(UnitResources.berseker.image, UnitResources.berseker.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 23,
 		speed: 0.25,

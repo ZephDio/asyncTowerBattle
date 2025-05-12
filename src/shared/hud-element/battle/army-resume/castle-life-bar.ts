@@ -2,13 +2,13 @@ import { Derive } from "@ddd-ts/traits";
 import { TDrawable } from "../../../traits/render/drawable";
 import { ScreenPosition } from "../../../position";
 import { TRenderable } from "../../../traits/render/renderable";
-import { Resources } from "../../../../renderer/resources";
 import { DrawPriority } from "../../../traits/render/image-drawable";
 import { AnyBattleCastle } from "../../../../engine/castle/battle";
+import { IconResources } from "../../../../renderer/resources/icons.resources";
 
 export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 	drawPriority = DrawPriority.HUD;
-	healthIcon = Resources.hudElement.icons.health.image;
+	healthIcon = IconResources.health.image;
 	constructor(
 		private castle: AnyBattleCastle,
 		public position: ScreenPosition,

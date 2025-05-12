@@ -6,21 +6,21 @@ import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../../renderer/resources";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
 import { Caster, RecruitCaster } from "../../../../../shared/traits/engine/cast";
 import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
 import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
+import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class GobelinPortalBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	TImageDrawable(
-		Resources.totem.gobelinportal.resource.image,
-		Resources.totem.gobelinportal.size,
+		TotemResources.gobelinportal.image,
+		TotemResources.gobelinportal.size,
 		DrawPriority.NormalGridElement,
 	),
 	TSynergy,

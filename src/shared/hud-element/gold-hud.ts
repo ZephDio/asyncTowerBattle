@@ -1,6 +1,4 @@
-import { Resources } from "../../renderer/resources";
 import { Derive } from "@ddd-ts/traits";
-
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { TDrawable } from "../traits/render/drawable";
 import { HitBox } from "../hitbox/hitboxe";
@@ -9,6 +7,7 @@ import { TCollider } from "../traits/engine/core/TCollider";
 import { ScreenPosition } from "../position";
 import { TRenderable } from "../traits/render/renderable";
 import { THitbox } from "../traits/engine/core/THitbox";
+import { IconResources } from "../../renderer/resources/icons.resources";
 
 export class GoldHud extends Derive(
 	TCollider,
@@ -23,7 +22,7 @@ export class GoldHud extends Derive(
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		context.globalAlpha = 1;
 		context.fillStyle = "yellow";
-		const image = Resources.hudElement.gold.resource.image;
+		const image = IconResources.gold.image;
 		const unitPosition = this.getCanvasPosition(context, new ScreenPosition({ x: position.x - 5, y: position.y - 1 }));
 		const canvasPosition = this.getCanvasPosition(context, position);
 		const size = this.getCanvasSize(context, this.size.width, this.size.height, scale);

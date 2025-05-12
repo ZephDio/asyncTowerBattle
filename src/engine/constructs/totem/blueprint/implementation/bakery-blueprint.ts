@@ -6,12 +6,12 @@ import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../../renderer/resources";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { Bakery } from "../../recruit/implementation/backery";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
+import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class BakeryBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -21,7 +21,7 @@ export class BakeryBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(Resources.totem.bakery.resource.image, Resources.totem.bakery.size, DrawPriority.NormalGridElement),
+	TImageDrawable(TotemResources.bakery.image, TotemResources.bakery.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
 		damage: NaN,

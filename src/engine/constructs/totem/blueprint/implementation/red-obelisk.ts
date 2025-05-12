@@ -4,7 +4,6 @@ import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../../renderer/resources";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
@@ -14,12 +13,13 @@ import { RedObelisk } from "../../recruit/implementation/obelisk";
 import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
+import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class RedObeliskBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(Resources.totem.obelisk.resource.image, Resources.totem.obelisk.size, DrawPriority.NormalGridElement),
+	TImageDrawable(TotemResources.obelisk.image, TotemResources.obelisk.size, DrawPriority.NormalGridElement),
 	TSynergy,
 	EvilTag,
 	TBaseStats({

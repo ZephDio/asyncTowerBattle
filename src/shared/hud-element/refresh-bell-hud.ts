@@ -4,10 +4,10 @@ import { Rectangle } from "../hitbox/shapes/rectangle";
 import { TCollider } from "../traits/engine/core/TCollider";
 import { TDrawable } from "../traits/render/drawable";
 import { ScreenPosition } from "../position";
-import { Resources } from "../../renderer/resources";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { TRenderable } from "../traits/render/renderable";
 import { THitbox } from "../traits/engine/core/THitbox";
+import { IconResources } from "../../renderer/resources/icons.resources";
 
 export class RefreshBellHud extends Derive(
 	TCollider,
@@ -18,7 +18,7 @@ export class RefreshBellHud extends Derive(
 	drawPriority: 5;
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		context.globalAlpha = 1;
-		const image = Resources.hudElement.bell.resource.image;
+		const image = IconResources.bell.image;
 		const canvasPosition = this.getCanvasPosition(context, position);
 		const size = this.getCanvasSize(context, this.size.width, this.size.height);
 		this.drawImage(context, size, canvasPosition, image);

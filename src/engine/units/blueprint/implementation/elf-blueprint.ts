@@ -1,5 +1,4 @@
 import { Derive } from "@ddd-ts/traits";
-import { Resources } from "../../../../renderer/resources";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
@@ -15,12 +14,13 @@ import { TokenUnit } from "../../../../shared/traits/engine/token-unit";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { Arrow } from "../../../projectile/blueprint/implementation/arrow";
 import { TBaseStats } from "../../../stats/base-stats";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class ElfBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 2, height: 2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
-	TImageDrawable(Resources.unit.elf.resource.image, Resources.unit.elf.size, DrawPriority.NormalGridElement),
+	TImageDrawable(UnitResources.elf.image, UnitResources.elf.size, DrawPriority.NormalGridElement),
 	TokenUnit,
 	RecruitCaster,
 	TBaseStats({

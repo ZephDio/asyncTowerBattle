@@ -1,5 +1,4 @@
 import { Derive } from "@ddd-ts/traits";
-import { Resources } from "../../../../../renderer/resources";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
@@ -9,12 +8,13 @@ import { WaveBarrack } from "../../recruit/implementation/wave-barrack";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { BarrackDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { BarrackResources } from "../../../../../renderer/resources/barrack.resources";
 
 export class WaveBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
-	TImageDrawable(Resources.barracks.wave.resource.image, Resources.barracks.wave.size, DrawPriority.NormalGridElement),
+	TImageDrawable(BarrackResources.wave.image, BarrackResources.wave.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
 		damage: NaN,

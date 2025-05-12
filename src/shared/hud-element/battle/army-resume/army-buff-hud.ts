@@ -3,18 +3,18 @@ import { TRenderable } from "../../../traits/render/renderable";
 import { ScreenPosition } from "../../../position";
 import { DrawPriority } from "../../../traits/render/image-drawable";
 import { ArmyBuff } from "../../../../engine/army/battle/army-buff";
-import { Resources } from "../../../../renderer/resources";
 import { Size } from "../../../size";
 import { getRelativePositionPercent } from "../../../../renderer/implementation/canvas-renderer";
+import { IconResources } from "../../../../renderer/resources/icons.resources";
 
 export class ArmyBuffHud extends Derive(TRenderable) {
-	speedIcon = Resources.hudElement.icons.movespeed.image;
-	vitalityIcon = Resources.hudElement.icons.vitality.image;
-	castSpeedIcon = Resources.hudElement.icons.castSpeed.image;
-	attackIcon = Resources.hudElement.icons.attack.image;
+	speedIcon = IconResources.movespeed.image;
+	vitalityIcon = IconResources.vitality.image;
+	castSpeedIcon = IconResources.castSpeed.image;
+	attackIcon = IconResources.attack.image;
 
-	towerIcon = Resources.hudElement.icons.tower.image;
-	unitIcon = Resources.hudElement.icons.unit.image;
+	towerIcon = IconResources.tower.image;
+	unitIcon = IconResources.unit.image;
 
 	constructor(
 		public armyBuff: ArmyBuff,

@@ -4,10 +4,10 @@ import { TDrawable } from "../../../traits/render/drawable";
 import { Furry } from "../../../../engine/army/battle/furry";
 import { ScreenPosition } from "../../../position";
 import { DrawPriority } from "../../../traits/render/image-drawable";
-import { Resources } from "../../../../renderer/resources";
+import { IconResources } from "../../../../renderer/resources/icons.resources";
 
 export class FurryHud extends Derive(TRenderable, TDrawable){
-    furryIcon = Resources.hudElement.icons.furry.image
+    furryIcon = IconResources.furry.image
     
     size = { width: 4.5, height: 4.5 };
     drawPriority: DrawPriority = DrawPriority.HUD;

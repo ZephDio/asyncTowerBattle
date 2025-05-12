@@ -7,10 +7,10 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { Resources } from "../../../../renderer/resources";
 import { TBaseStats } from "../../../stats/base-stats";
 import { Brewmaster } from "../../recruit/implementation/brewmaster";
 import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BrewmasterBlueprint extends Derive(
 	TShopBlueprint(15, 12),
@@ -18,8 +18,8 @@ export class BrewmasterBlueprint extends Derive(
 	TDrawable,
 	TDescriptor,
 	TImageDrawable(
-		Resources.unit.brewmaster.resource.image,
-		Resources.unit.brewmaster.size,
+		UnitResources.brewmaster.image,
+		UnitResources.brewmaster.size,
 		DrawPriority.NormalGridElement,
 	),
 	TBaseStats({

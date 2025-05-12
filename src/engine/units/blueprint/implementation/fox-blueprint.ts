@@ -7,17 +7,17 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { Resources } from "../../../../renderer/resources";
 import { Fox } from "../../recruit/implementation/fox";
 import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class FoxBlueprint extends Derive(
 	TShopBlueprint(15, 5),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
-	TImageDrawable(Resources.unit.fox.resource.image, Resources.unit.fox.size, DrawPriority.NormalGridElement),
+	TImageDrawable(UnitResources.fox.image, UnitResources.fox.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 22,
 		damage: 1.5,
