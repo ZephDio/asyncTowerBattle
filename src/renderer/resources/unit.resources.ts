@@ -87,7 +87,7 @@ export class UnitResources {
       width: 3,
       height: 3,
     },
-    image: createImage("/resources/units/gobelin-archer.png"),
+    image: createImage("/resources/units/brewmaster.png"),
     shape: "ellipse",
   }
 }
