@@ -225,15 +225,17 @@ export class Stats {
 		const alreadyAffected = this.conditions.get(condition.key);
 		if (alreadyAffected) {
 			alreadyAffected.stack(condition);
+			return;
 		}
 		this.conditions.set(condition.key, condition);
 	}
 
 	addBoon(boon: ImplementsTrait<typeof Status>) {
 		boon.setStats(this);
-		const alreadyAffected = this.conditions.get(boon.key);
+		const alreadyAffected = this.boons.get(boon.key);
 		if (alreadyAffected) {
 			alreadyAffected.stack(boon);
+			return;
 		}
 		this.boons.set(boon.key, boon);
 	}
