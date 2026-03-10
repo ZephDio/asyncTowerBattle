@@ -13,13 +13,14 @@ export class BoggedDown extends Derive(Status) {
 		if (this.clock >= this.duration) {
 			this.stats.removeCondition(this);
 		}
-
 		if (this.didTrigger) return;
+		console.log("Bogged down triggered");
 		this.stats.basePercentStat.movementSpeed -= 30;
 		this.didTrigger = true;
 	}
 
 	stack(status: BoggedDown) {
+		console.log("Stacking bogged down");
 		this.clock = Math.min(this.clock, status.clock);
 		this.duration = Math.max(this.duration, status.duration);
 	}
