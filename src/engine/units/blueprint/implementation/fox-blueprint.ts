@@ -11,6 +11,7 @@ import { Fox } from "../../recruit/implementation/fox";
 import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
+import { AnimalTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class FoxBlueprint extends Derive(
 	TShopBlueprint(15, 5),
@@ -29,6 +30,7 @@ export class FoxBlueprint extends Derive(
 		summonTime: secondsToFrame(1.8),
 		range: NaN,
 	}),
+	AnimalTag,
 ) {
 	description = new UnitDescription(
 		"Glutton Fox",

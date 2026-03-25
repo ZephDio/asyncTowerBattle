@@ -28,6 +28,7 @@ export class BlueBattleTower extends Derive(BattleTower) {
 			range: recruit.stats.range,
 			onDeath: () => {},
 			descriptor: recruit,
+			tagHolder: recruit,
 		});
 	}
 

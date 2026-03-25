@@ -17,6 +17,7 @@ export class Choupisson extends Derive(Unit, HTBaseStats) {
 			hitboxHolder: blueprint,
 			descriptor: blueprint,
 			statsHolder: blueprint,
+			tagHolder: blueprint,
 		});
 	}
 

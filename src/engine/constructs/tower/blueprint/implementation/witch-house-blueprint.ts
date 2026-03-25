@@ -17,6 +17,7 @@ import { TrapPathTile } from "../../../../tile/recruit/implementation/trap-tile"
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
+import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class WitchHouseBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -35,6 +36,7 @@ export class WitchHouseBlueprint extends Derive(
 		summonTime: NaN,
 		range: NaN,
 	}),
+	TowerTag,
 ) {
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		return gridElement

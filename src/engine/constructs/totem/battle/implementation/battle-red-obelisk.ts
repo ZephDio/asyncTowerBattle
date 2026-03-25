@@ -7,7 +7,7 @@ import { RedObelisk } from "../../recruit/implementation/obelisk";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
-export class BattleRedObelisk extends Derive(BattleTotem, EvilTag, Caster, HTSynergy, TStatsRenderable) {
+export class BattleRedObelisk extends Derive(BattleTotem, Caster, HTSynergy, TStatsRenderable) {
 	hasTriggered = false;
 
 	constructor(
@@ -21,6 +21,7 @@ export class BattleRedObelisk extends Derive(BattleTotem, EvilTag, Caster, HTSyn
 			synergy: obelisk,
 			imageDrawable: obelisk,
 			hitboxHolder: obelisk,
+			tagHolder: obelisk,
 			casterRecruit: obelisk,
 			maxHealth: obelisk.stats.health,
 			attack: obelisk.stats.damage,

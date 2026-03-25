@@ -8,7 +8,7 @@ import { BattleTotem } from "../battle-totem";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
 import { HTDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 
-export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger, HTDescriptor) {
+export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger) {
 	constructor(
 		public recruit: AnvilTotem,
 		readonly hooks: BattleArmyHooks,
@@ -16,7 +16,12 @@ export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger, HT
 		public readonly cell: Cell,
 		override _orientation: number,
 	) {
-		super({ imageDrawable: recruit, hitboxHolder: recruit, battleStartRecruit: recruit, descriptor: recruit });
+		super({ 
+			imageDrawable: recruit, 
+			hitboxHolder: recruit, 
+			tagHolder: recruit,
+			battleStartRecruit: recruit, 
+			descriptor: recruit });
 		this.gridShape = recruit.gridShape;
 	}
 

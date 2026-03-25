@@ -11,12 +11,11 @@ import { Inventory } from "../../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../../shop/holder/holder";
 import { TGrid } from "../../../grid/tgrid";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
-import { BarrackTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 import { HTBaseStats } from "../../../stats/base-stats";
 
 export type AnyBarrack = ImplementsTrait<typeof Barrack>;
 
-export const Barrack = Subtrait([TRecruit, RecruitCaster, BarrackTag, HTBaseStats], (base) => {
+export const Barrack = Subtrait([TRecruit, RecruitCaster, HTBaseStats], (base) => {
 	abstract class IBarrack extends base {
 		abstract unitRecruit: null | AnyUnit;
 

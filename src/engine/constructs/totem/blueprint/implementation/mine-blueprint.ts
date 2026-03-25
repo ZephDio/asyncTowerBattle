@@ -13,6 +13,7 @@ import { GridElement } from "../../../../../shared/traits/engine/core/grid-eleme
 import { Rock } from "../../../../environment/rock";
 import { Mine } from "../../recruit/implementation/mine";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
+import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class MineBlueprint extends Derive(
 	TShopBlueprint(15, 10),
@@ -24,6 +25,7 @@ export class MineBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(TotemResources.mine.image, TotemResources.mine.size, DrawPriority.NormalGridElement),
 	TSynergy,
+	TotemTag,
 ) {
 	description = new Description("Gold Mine", [
 		"Shop entered : gain 5 🪙",

@@ -14,6 +14,8 @@ import { secondsToFrame } from "../../../../shared/seconds";
 import { TokenUnit } from "../../../../shared/traits/engine/token-unit";
 import { TBaseStats } from "../../../stats/base-stats";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
+import { EvilTag } from "../../../../shared/traits/engine/tags/alignment/alignment-tags";
+import { MonsterTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class GobelinBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
@@ -33,6 +35,8 @@ export class GobelinBlueprint extends Derive(
 		summonTime: secondsToFrame(1),
 		range: NaN,
 	}),
+	EvilTag,
+	MonsterTag,
 ) {
 	override description = new UnitDescription("Gobelin", ["A small and fast creature"], this);
 

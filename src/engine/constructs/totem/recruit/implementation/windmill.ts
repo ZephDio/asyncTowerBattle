@@ -7,14 +7,19 @@ import { WindmillBlueprint } from "../../blueprint/implementation/windmill-bluep
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { BattleWindmill } from "../../battle/implementation/battle-windmill";
 import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
-import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
-export class Windmill extends Derive(Totem, HTSynergy, FoodTag, RecruitBattleStart) {
+export class Windmill extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 	constructor(
 		public cell: Cell,
 		public blueprint: WindmillBlueprint = new WindmillBlueprint({}),
 	) {
-		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint, synergy: blueprint });
+		super({ 
+			descriptor: blueprint,
+			tagHolder: blueprint,
+			imageDrawable: blueprint, 
+			hitboxHolder: blueprint, 
+			synergy: blueprint 
+		});
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {

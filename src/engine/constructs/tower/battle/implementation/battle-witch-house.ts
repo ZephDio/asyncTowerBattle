@@ -30,6 +30,7 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 			onDeath: () => {},
 			hitboxHolder: recruit,
 			descriptor: recruit,
+			tagHolder: recruit,
 		});
 		this.gridShape = recruit.gridShape;
 		this.setOrientation(orientation);

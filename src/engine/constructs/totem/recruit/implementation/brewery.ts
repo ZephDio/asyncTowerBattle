@@ -9,10 +9,9 @@ import { BreweryBlueprint } from "../../blueprint/implementation/brewery-bluepri
 import { BattleBrewery } from "../../battle/implementation/battle-brewery";
 import { GridShape } from "../../../../../shared/traits/engine/core/grid-element";
 import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
-import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { HTBaseStats } from "../../../../stats/base-stats";
 
-export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag, RecruitBattleStart, HTBaseStats) {
+export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, RecruitBattleStart, HTBaseStats) {
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: -1 })]);
 	constructor(
 		public cell: Cell,
@@ -20,6 +19,7 @@ export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, FoodTag, Re
 	) {
 		super({
 			descriptor: blueprint,
+			tagHolder: blueprint,
 			imageDrawable: blueprint,
 			hitboxHolder: blueprint,
 			synergy: blueprint,

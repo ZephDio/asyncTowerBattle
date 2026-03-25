@@ -11,6 +11,7 @@ import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/h
 import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
+import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class PriestBlueprint extends Derive(
 	TShopBlueprint(20, 6),
@@ -29,6 +30,7 @@ export class PriestBlueprint extends Derive(
 		summonTime: secondsToFrame(2.6),
 		range: NaN,
 	}),
+	KinfolkTag,
 ) {
 	description = new UnitDescription("Priest", ["A unit that cast", "an healing area", "area around him"], this);
 

@@ -12,7 +12,13 @@ export class AnvilTotem extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 		public cell: Cell,
 		public totem: AnvilTotemBlueprint = new AnvilTotemBlueprint({}),
 	) {
-		super({ synergy: totem, imageDrawable: totem, hitboxHolder: totem, descriptor: totem });
+		super({ 
+			synergy: totem,
+			tagHolder: totem,
+			imageDrawable: totem, 
+			hitboxHolder: totem, 
+			descriptor: totem 
+		});
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {

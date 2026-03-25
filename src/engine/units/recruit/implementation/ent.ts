@@ -4,11 +4,10 @@ import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Unit } from "../unit";
 import { EntBlueprint } from "../../blueprint/implementation/ent-blueprint";
-import { ForestTag } from "../../../../shared/traits/engine/tags/biome/biome-tags";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { BattleEnt } from "../../battle/implementation/battle-ent";
 
-export class Ent extends Derive(Unit, ForestTag, RecruitCaster) {
+export class Ent extends Derive(Unit, RecruitCaster) {
 	constructor(
 		public cell: Cell,
 		blueprint: EntBlueprint = new EntBlueprint({}),
@@ -18,6 +17,7 @@ export class Ent extends Derive(Unit, ForestTag, RecruitCaster) {
 			hitboxHolder: blueprint,
 			descriptor: blueprint,
 			statsHolder: blueprint,
+			tagHolder: blueprint,
 		});
 	}
 

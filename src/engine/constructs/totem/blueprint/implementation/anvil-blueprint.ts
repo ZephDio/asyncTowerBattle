@@ -12,11 +12,13 @@ import { Description, TDescriptor } from "../../../../../shared/traits/render/hu
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { HTBaseStats } from "../../../../stats/base-stats";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
+import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class AnvilTotemBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
+	TotemTag,
 	TImageDrawable(TotemResources.anvil.image, TotemResources.anvil.size, DrawPriority.NormalGridElement),
 	TSynergy,
 ) {

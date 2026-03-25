@@ -26,6 +26,7 @@ export class BattleDwarfCastle extends Derive(TBattleCastle) {
 			range: recruit.stats.range,
 			onDeath: () => this.onDeath(),
 			descriptor: recruit,
+			tagHolder: recruit,
 		});
 		this.gridShape = recruit.gridShape;
 		this.setOrientation(orientation);

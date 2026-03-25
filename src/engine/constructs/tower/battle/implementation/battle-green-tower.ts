@@ -30,6 +30,7 @@ export class GreenBattleTower extends Derive(BattleTower) {
 			onDeath: () => {},
 			hitboxHolder: recruit,
 			descriptor: recruit,
+			tagHolder: recruit,
 		});
 	}
 

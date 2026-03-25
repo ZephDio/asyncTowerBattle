@@ -18,6 +18,7 @@ export class ZappingTower extends Derive(Tower) {
 			hitboxHolder: tower,
 			descriptor: tower,
 			statsHolder: tower,
+			tagHolder: tower,
 		});
 	}
 

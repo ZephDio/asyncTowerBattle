@@ -18,6 +18,7 @@ export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger
 		override _orientation: number,
 	) {
 		super({
+			tagHolder: powderMagazine,
 			imageDrawable: powderMagazine,
 			hitboxHolder: powderMagazine,
 			battleStartRecruit: powderMagazine,

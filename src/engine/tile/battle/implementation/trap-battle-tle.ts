@@ -10,8 +10,9 @@ import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable
 import { Action } from "../../../../shared/action";
 import { secondsToFrame } from "../../../../shared/seconds";
 import { Stunned } from "../../../stats/status/stunned";
+import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 
-export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
+export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, HTTag) {
 	didTrigger = false;
 	cooldown = secondsToFrame(3);
 	clock = 0;
@@ -24,7 +25,7 @@ export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement,
 		public position: GridPosition,
 		private hooks: BattleArmyHooks,
 	) {
-		super({ imageDrawable: pathTile, hitboxHolder: pathTile });
+		super({ imageDrawable: pathTile, hitboxHolder: pathTile, tagHolder: pathTile });
 	}
 
 	tick() {

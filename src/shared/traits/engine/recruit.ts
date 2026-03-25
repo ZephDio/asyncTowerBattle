@@ -7,8 +7,9 @@ import { TGrid } from "../../../engine/grid/tgrid";
 import { HTHitbox } from "./core/THitbox";
 import { HTDescriptor } from "../render/huds/item-descriptor";
 import { GridElement, GridShape } from "./core/grid-element";
+import { HTTag } from "./tags/tagged";
 
-export const TRecruit = Subtrait([TGCollider, HTHitbox, HTDescriptor, HTImageDrawable], (base) => {
+export const TRecruit = Subtrait([TGCollider, HTHitbox, HTDescriptor, HTImageDrawable, HTTag], (base) => {
 	abstract class IRecruit extends base {
 		override gridShape = new GridShape();
 		abstract moveRecruit(

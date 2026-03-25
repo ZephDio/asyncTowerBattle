@@ -8,12 +8,14 @@ import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-bluepri
 import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { PowderMagazine } from "../../recruit/implementation/powder-magazine";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
+import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class PowderMagazineBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	TImageDrawable(TotemResources.anvil.image, TotemResources.anvil.size, DrawPriority.NormalGridElement),
+	TotemTag,
 ) {
 	toRecruit(cell: Cell) {
 		return new PowderMagazine(cell, this);

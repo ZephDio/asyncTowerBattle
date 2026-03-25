@@ -4,17 +4,22 @@ import { RecruitCaster } from "../../../../../shared/traits/engine/cast";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell } from "../../../../../shared/position";
-import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { BakeryBlueprint } from "../../blueprint/implementation/bakery-blueprint";
 import { BattleBakery } from "../../battle/implementation/battle-bakery";
 import { HTBaseStats } from "../../../../stats/base-stats";
 
-export class Bakery extends Derive(Totem, RecruitCaster, FoodTag, HTBaseStats) {
+export class Bakery extends Derive(Totem, RecruitCaster, HTBaseStats) {
 	constructor(
 		public cell: Cell,
 		public blueprint: BakeryBlueprint = new BakeryBlueprint({}),
 	) {
-		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint, statsHolder: blueprint });
+		super({ 
+			descriptor: blueprint,
+			tagHolder: blueprint,
+			imageDrawable: blueprint, 
+			hitboxHolder: blueprint, 
+			statsHolder: blueprint 
+		});
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {

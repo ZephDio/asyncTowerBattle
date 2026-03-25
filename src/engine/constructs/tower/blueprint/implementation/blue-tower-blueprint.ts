@@ -11,6 +11,7 @@ import { TowerDescription, TDescriptor } from "../../../../../shared/traits/rend
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
+import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class BlueTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -28,6 +29,7 @@ export class BlueTowerBlueprint extends Derive(
 		summonTime: NaN,
 		range: 20,
 	}),
+	TowerTag,
 ) {
 	toRecruit(cell: Cell) {
 		return new BlueTower(cell, this);

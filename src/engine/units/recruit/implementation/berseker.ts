@@ -20,6 +20,7 @@ export class Berseker extends Derive(Unit) {
 			hitboxHolder: berseker,
 			descriptor: berseker,
 			statsHolder: berseker,
+			tagHolder: berseker,
 		});
 	}
 

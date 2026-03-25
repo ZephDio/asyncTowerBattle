@@ -13,7 +13,7 @@ import { AnyBattleConstruct } from "../../constructs/construct";
 
 export type SearchTarget = Battlefield["searchAlliedUnitTarget"] | Battlefield["searchEnemyUnitTarget"];
 export type SearchAreaForUnit = Battlefield["searchAlliesInArea"] | Battlefield["searchEnemiesInArea"];
-export type SearchAreaFotConstruct =
+export type SearchAreaForConstruct =
 	| Battlefield["searchAlliesConstructInArea"]
 	| Battlefield["searchEnemiesConstructInArea"];
 export class Battlefield {

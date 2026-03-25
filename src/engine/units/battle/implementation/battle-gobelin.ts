@@ -27,6 +27,7 @@ export class BattleGobelin extends Derive(TBattleUnit) {
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
 			descriptor: recruit,
+			tagHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

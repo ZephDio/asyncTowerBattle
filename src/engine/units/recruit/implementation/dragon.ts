@@ -5,8 +5,7 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleDragon } from "../../battle/implementation/battle-dragon";
 import { DragonBlueprint } from "../../blueprint/implementation/dragon-blueprint";
 import { Unit } from "../unit";
-import { MonsterTag } from "../../../../shared/traits/engine/tags/species/species-tag";
-export class Dragon extends Derive(Unit, MonsterTag) {
+export class Dragon extends Derive(Unit) {
 	constructor(
 		public cell: Cell,
 		dragon: DragonBlueprint = new DragonBlueprint({}),
@@ -16,6 +15,7 @@ export class Dragon extends Derive(Unit, MonsterTag) {
 			hitboxHolder: dragon,
 			descriptor: dragon,
 			statsHolder: dragon,
+			tagHolder: dragon,
 		});
 	}
 

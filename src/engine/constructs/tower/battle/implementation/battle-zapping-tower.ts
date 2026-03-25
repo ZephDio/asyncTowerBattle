@@ -31,6 +31,7 @@ export class ZappingBattleTower extends Derive(BattleTower) {
 			onDeath: () => {},
 			hitboxHolder: recruit,
 			descriptor: recruit,
+			tagHolder: recruit,
 		});
 
 		this.setOrientation(orientation);

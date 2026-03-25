@@ -11,10 +11,11 @@ import { TokenHooks } from "../../shop/holder/holder";
 import { GridPosition } from "../../../shared/position";
 import { TGrid } from "../../grid/tgrid";
 import { HTBaseStats } from "../../stats/base-stats";
+import { HTTag } from "../../../shared/traits/engine/tags/tagged";
 
 export type AnyUnit = ImplementsTrait<typeof Unit>;
 
-export const Unit = Subtrait([TRecruit, HTBaseStats], (base) => {
+export const Unit = Subtrait([TRecruit, HTBaseStats, HTTag], (base) => {
 	abstract class IUnit extends base {
 		abstract toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks): AnyBattleUnit;
 

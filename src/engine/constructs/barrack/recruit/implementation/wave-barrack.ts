@@ -14,7 +14,7 @@ export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 		public cell: Cell,
 		barrack: WaveBarrackBlueprint = new WaveBarrackBlueprint({}),
 	) {
-		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, statsHolder: barrack });
+		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, statsHolder: barrack, tagHolder: barrack});
 	}
 	unitRecruit: null | AnyUnit;
 

@@ -9,15 +9,16 @@ import { GridElement } from "../../../../shared/traits/engine/core/grid-element"
 import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { BoggedDown } from "../../../stats/status/bogged-down";
+import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 
-export class SlowingBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
+export class SlowingBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, HTTag) {
 	constructor(
 		pathTile: SlowingPathTile,
 		public cell: Cell,
 		public position: GridPosition,
 		private hooks: BattleArmyHooks,
 	) {
-		super({ imageDrawable: pathTile, hitboxHolder: pathTile });
+		super({ imageDrawable: pathTile, hitboxHolder: pathTile, tagHolder: pathTile });
 	}
 
 	tick() {

@@ -28,6 +28,7 @@ export class BattleDwarf extends Derive(TBattleUnit) {
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
 			descriptor: recruit,
+			tagHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 		this.stats.addBoon(new StoneShield({}));

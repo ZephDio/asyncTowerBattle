@@ -8,7 +8,7 @@ import { Description, TDescriptor } from "../../../../../shared/traits/render/hu
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { CropsField } from "../../recruit/implementation/crops-field";
-import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { FoodTag, TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
@@ -38,6 +38,7 @@ export class CropsFieldBlueprint extends Derive(
 		range: NaN,
 	}),
 	FoodTag,
+	TotemTag,
 ) {
 	description = new Description("Crops Field", ["Every 3.5 seconds :", "produce 5🌽"]);
 

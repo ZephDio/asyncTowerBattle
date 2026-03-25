@@ -8,6 +8,7 @@ import { Description, TDescriptor } from "../../../shared/traits/render/huds/ite
 import { TBaseStats } from "../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../shared/seconds";
 import { CastleResources } from "../../../renderer/resources/castle.resources";
+import { CastleTag } from "../../../shared/traits/engine/tags/building/building-tags";
 
 export class ElfCastleBlueprint extends Derive(
 	TImageDrawable(CastleResources.elf.image, CastleResources.elf.size, DrawPriority.NormalGridElement),
@@ -24,6 +25,7 @@ export class ElfCastleBlueprint extends Derive(
 		summonTime: NaN,
 		range: NaN,
 	}),
+	CastleTag,
 ) {
 	description = new Description(
 		"Castle",
