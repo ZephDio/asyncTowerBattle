@@ -13,6 +13,7 @@ import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { TokenUnit } from "../../shared/traits/engine/token-unit";
 import { PathTile } from "../tile/recruit/tile";
 import { DEFAULT_PATH_CONNECTIONS } from "../tile/path-shape";
+import { AnyTrap, Trap } from "../trap/recruit/trap";
 
 export type ArmyHooks = {
 	economyHooks: EconomyHooks;
@@ -36,12 +37,17 @@ export class Army {
 
 	removeRecruit(recruit: AnyRecruit) {
 		// A picked-up tile has no neighbors any more, so it shows as a plain straight while dragged.
-		if (implementsTrait(recruit, PathTile)) recruit.pathConnections = DEFAULT_PATH_CONNECTIONS;
+		if (implementsTrait(recruit, PathTile)) recruit.setPathConnections(DEFAULT_PATH_CONNECTIONS);
+		if (implementsTrait(recruit, Trap)) recruit.pathTile?.detachTrap();
 		this.inventory.deleteElement(recruit);
 		this.grid.deleteElement(recruit);
 	}
 
 	addRecruit(recruit: AnyRecruit, grid: ImplementsTrait<typeof TGrid>) {
+		if (implementsTrait(recruit, Trap)) {
+			this.addTrap(recruit, grid);
+			return;
+		}
 		if (grid instanceof ArmyGrid) {
 			if (implementsTrait(recruit, Unit)) {
 				throw new Error("Cannot add unit to army grid");
@@ -57,6 +63,20 @@ export class Army {
 			return;
 		}
 		throw new Error("Invalid grid type");
+	}
+
+	// A trap goes on the path tile of its cell, or alone in the inventory.
+	addTrap(trap: AnyTrap, grid: ImplementsTrait<typeof TGrid>) {
+		const pathTile = grid.getElement(trap.cell);
+		if (pathTile && implementsTrait(pathTile, PathTile)) {
+			pathTile.attachTrap(trap);
+			return;
+		}
+		if (grid instanceof Inventory) {
+			this.addToInventory(trap);
+			return;
+		}
+		throw new Error("A trap goes on a path tile");
 	}
 
 	get totems() {
@@ -102,7 +122,7 @@ export class Army {
 
 	// Gives every path tile its straight or turn shape.
 	refreshPathConnections(network = this.pathNetwork) {
-		this.pathTiles.forEach((tile) => (tile.pathConnections = network.connectionsAt(tile.cell)));
+		this.pathTiles.forEach((tile) => tile.setPathConnections(network.connectionsAt(tile.cell)));
 	}
 
 	// Right-click on a path tile: turns the junction it is, or the junction next to it, to its next connection.

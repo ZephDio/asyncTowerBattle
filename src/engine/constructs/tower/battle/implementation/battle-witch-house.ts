@@ -2,9 +2,7 @@ import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { WitchHouse } from "../../recruit/implementation/witch-house";
-import { SlowingBattlePathTile } from "../../../../tile/battle/implementation/slowing-battle-tile";
 import { BasicBattlePathTile } from "../../../../tile/battle/implementation/basic-battle-tile";
-import { TrapBattlePathTile } from "../../../../tile/battle/implementation/trap-battle-tle";
 import { BattleTower } from "../battle-tower";
 
 export class BattleWitchHouse extends Derive(BattleTower) {
@@ -41,22 +39,11 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 			this.recruit.patternEffect.getRelativeCells(this.orientation),
 		);
 		let sucess: boolean = false;
-		if (
-			neighbors.some(
-				(neighbor) =>
-					neighbor instanceof BasicBattlePathTile ||
-					neighbor instanceof SlowingBattlePathTile ||
-					neighbor instanceof TrapBattlePathTile,
-			)
-		) {
+		if (neighbors.some((neighbor) => neighbor instanceof BasicBattlePathTile)) {
 			sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 			if (sucess) {
 				for (const neighbor of neighbors) {
-					if (
-						neighbor instanceof BasicBattlePathTile ||
-						neighbor instanceof SlowingBattlePathTile ||
-						neighbor instanceof TrapBattlePathTile
-					) {
+					if (neighbor instanceof BasicBattlePathTile) {
 						const position = this.hooks.gridHooks.getRealPosition(neighbor.cell);
 						const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.stats.attack);
 						this.hooks.addAreaEffect(areaEffects, this);

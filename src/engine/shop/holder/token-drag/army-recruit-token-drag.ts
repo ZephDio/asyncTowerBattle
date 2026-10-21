@@ -7,6 +7,7 @@ import { AnyRecruit, TRecruit } from "../../../../shared/traits/engine/recruit";
 import { THudRenderable } from "../../../../shared/traits/render/huds/hud-renderable";
 import { TokenHooks } from "../holder";
 import { TGrid } from "../../../grid/tgrid";
+import { PathTile } from "../../../tile/recruit/tile";
 
 export class RecruitTokenDrag extends Derive(TTokenDrag) {
 	constructor(
@@ -21,6 +22,10 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 	override huds() {
 		if (implementsTrait(this.holded, THudRenderable)) {
 			return this.holded.huds();
+		}
+		// A path tile in hand keeps its trap on it.
+		if (implementsTrait(this.holded, PathTile) && this.holded.trap) {
+			return [{ hud: this.holded.trap, position: new GridPosition({ x: 0, y: 0 }) }];
 		}
 		return [];
 	}

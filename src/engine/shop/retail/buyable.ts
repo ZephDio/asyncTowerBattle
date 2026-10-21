@@ -9,6 +9,8 @@ import { AnyRecruit } from "../../../shared/traits/engine/recruit";
 import { THasPrice } from "../../../shared/traits/engine/has-price";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
+import { TImageVariant } from "../../../shared/traits/render/image-variant";
+import { implementsTrait } from "@ddd-ts/traits";
 
 export type AnyBuyable = AnyRecruit;
 
@@ -21,6 +23,7 @@ export class Buyable extends Derive(
 	TRenderable,
 	HTImageDrawable,
 	GridElement,
+	TImageVariant,
 ) {
 	drawPriority = DrawPriority.NormalGridElement;
 	constructor(
@@ -33,6 +36,10 @@ export class Buyable extends Derive(
 	}
 	get position() {
 		return this.cell;
+	}
+
+	getImageVariant() {
+		return implementsTrait(this.entity, TImageVariant) ? this.entity.getImageVariant() : null;
 	}
 
 	static from(entity: AnyBuyable, price: number) {

@@ -8,12 +8,10 @@ import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/rende
 import { WitchHouse } from "../../recruit/implementation/witch-house";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
 import { BasicPathTile } from "../../../../tile/recruit/implementation/basic-tile";
-import { SlowingPathTile } from "../../../../tile/recruit/implementation/slowing-tile";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, TowerDescription } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
-import { TrapPathTile } from "../../../../tile/recruit/implementation/trap-tile";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
@@ -37,11 +35,7 @@ export class WitchHouseBlueprint extends Derive(
 	}),
 ) {
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
-		return gridElement
-			? gridElement instanceof BasicPathTile ||
-					gridElement instanceof SlowingPathTile ||
-					gridElement instanceof TrapPathTile
-			: false;
+		return gridElement instanceof BasicPathTile;
 	};
 	patternEffect = new PatternEffect(
 		[new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 })],

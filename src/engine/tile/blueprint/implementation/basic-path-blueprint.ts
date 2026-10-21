@@ -12,7 +12,7 @@ import { PathResources } from "../../../../renderer/resources/path.resources";
 
 export class BasicTileBlueprint extends Derive(
 	TShopBlueprint(10, 10),
-	TImageDrawable(PathResources.normal.image, PathResources.normal.size, DrawPriority.CarpetStyleGridElement),
+	TImageDrawable(PathResources.normal.straight, PathResources.normal.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,
 	THitbox(
 		new HitBox([

@@ -1,18 +1,24 @@
 import { Cell } from "../../../shared/position";
 import { BasicPathTile } from "../../tile/recruit/implementation/basic-tile";
-import { SlowingPathTile } from "../../tile/recruit/implementation/slowing-tile";
-import { TrapPathTile } from "../../tile/recruit/implementation/trap-tile";
+import { SlowingTrap } from "../../trap/recruit/implementation/slowing-trap";
+import { StunTrap } from "../../trap/recruit/implementation/stun-trap";
+import { AnyTrap } from "../../trap/recruit/trap";
+
+const trapped = (tile: BasicPathTile, trap: AnyTrap) => {
+	tile.attachTrap(trap);
+	return tile;
+};
 
 export class PathFixture {
 	static get default() {
 		return [
 			new BasicPathTile(new Cell({ x: 0, y: 4 })),
-			new SlowingPathTile(new Cell({ x: 0, y: 3 })),
-			new SlowingPathTile(new Cell({ x: 1, y: 3 })),
+			trapped(new BasicPathTile(new Cell({ x: 0, y: 3 })), new SlowingTrap(new Cell({ x: 0, y: 3 }))),
+			trapped(new BasicPathTile(new Cell({ x: 1, y: 3 })), new SlowingTrap(new Cell({ x: 1, y: 3 }))),
 			new BasicPathTile(new Cell({ x: 2, y: 3 })),
 			new BasicPathTile(new Cell({ x: 2, y: 2 })),
 			new BasicPathTile(new Cell({ x: 3, y: 2 })),
-			new TrapPathTile(new Cell({ x: 4, y: 2 })),
+			trapped(new BasicPathTile(new Cell({ x: 4, y: 2 })), new StunTrap(new Cell({ x: 4, y: 2 }))),
 			new BasicPathTile(new Cell({ x: 4, y: 1 })),
 			new BasicPathTile(new Cell({ x: 5, y: 1 })),
 			new BasicPathTile(new Cell({ x: 6, y: 1 })),

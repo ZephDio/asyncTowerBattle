@@ -100,13 +100,13 @@ export class Battlefield {
 		enemyArmy.refreshPathConnections();
 		const alliedBattleTiles = alliedArmy.pathTiles.map((pathTile) => {
 			const battleTile = pathTile.toAllied(grid, alliedBattleArmy.getHooks());
-			battleTile.pathConnections = pathTile.pathConnections;
+			battleTile.setPathConnections(pathTile.pathConnections);
 			return battleTile;
 		});
 		// The enemy half is rotated by PI, which flips every connection.
 		const enemyBattleTiles = enemyArmy.pathTiles.map((pathTile) => {
 			const battleTile = pathTile.toEnemy(grid, enemyBattleArmy.getHooks());
-			battleTile.pathConnections = pathTile.pathConnections.map((offset) => new Cell({ x: -offset.x, y: -offset.y }));
+			battleTile.setPathConnections(pathTile.pathConnections.map((offset) => new Cell({ x: -offset.x, y: -offset.y })));
 			return battleTile;
 		});
 

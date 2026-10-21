@@ -1,17 +1,18 @@
 import { Cell, GridPosition, ScreenPosition } from "../../../../shared/position";
 import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { THudRenderable } from "../../../../shared/traits/render/huds/hud-renderable";
-import { ImplementsTrait, Subtrait } from "../../../../../traits/traits";
+import { ImplementsTrait, Subtrait, implementsTrait } from "../../../../../traits/traits";
 import { AnyRecruit } from "../../../../shared/traits/engine/recruit";
 import { Buyable } from "../../retail/buyable";
 import { TokenHooks } from "../holder";
 import { STANDARD_CELL_SIZE, TGrid } from "../../../grid/tgrid";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
 import { Orientable } from "../../../../shared/traits/engine/core/orientable";
+import { TImageVariant } from "../../../../shared/traits/render/image-variant";
 
 type Holdable = Buyable | AnyRecruit;
 
-export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, Orientable], (base, Props) => {
+export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, Orientable, TImageVariant], (base, Props) => {
 	abstract class ITokenDrag extends base {
 		protected hooks: TokenHooks;
 		public position: ScreenPosition;
@@ -24,6 +25,11 @@ export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, Orientable]
 		}
 		abstract onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void;
 		abstract getPatternEffect(): PatternEffect | undefined;
+
+		// Draws what the held item would draw, e.g. a path tile's straight image rather than its full tile image.
+		getImageVariant() {
+			return implementsTrait(this.holded, TImageVariant) ? this.holded.getImageVariant() : null;
+		}
 
 		getProjectionCells(gridPosition: GridPosition) {
 			if (this.holded instanceof Buyable) {

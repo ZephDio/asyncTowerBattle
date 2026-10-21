@@ -5,7 +5,8 @@ import { StartBattleButton } from "../../shared/hud-element/start-battle-button"
 import { ScreenPosition } from "../../shared/position";
 import { MouseEventType } from "../mouse-event-handler";
 import { ShopState } from "../../shared/gamestate";
-import { implementsTrait } from "@ddd-ts/traits";
+import { ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
+import { TGrid } from "../../engine/grid/tgrid";
 import { TRecruit } from "../../shared/traits/engine/recruit";
 import { DescriptionHud, TDescriptor } from "../../shared/traits/render/huds/item-descriptor";
 import { TSynergy } from "../../shared/traits/engine/synergy";
@@ -50,14 +51,10 @@ export class ShopInputToIntentTranslator {
 		}
 		if (!focus) return;
 		if(shop.holderControl.hold) return
-		if (focus.cell && focus.grid instanceof ArmyGrid) {
-			if (focus.element && implementsTrait(focus.element, TRecruit)) {
-				shop.setHoldFromArmyRecruit(focus.element, screenPosition, focus.grid);
-			}
-		}
-		if (focus.cell && focus.grid instanceof Inventory) {
-			if (focus.element && implementsTrait(focus.element, TRecruit)) {
-				shop.setHoldFromArmyRecruit(focus.element, screenPosition, focus.grid);
+		if (focus.cell && (focus.grid instanceof ArmyGrid || focus.grid instanceof Inventory)) {
+			const element = this.trapOr(focus.element, focus.grid, screenPosition);
+			if (element && implementsTrait(element, TRecruit)) {
+				shop.setHoldFromArmyRecruit(element, screenPosition, focus.grid);
 			}
 		}
 		if (focus.cell && focus.grid instanceof RetailGrid) {
@@ -102,6 +99,7 @@ export class ShopInputToIntentTranslator {
 				return;
 			}
 			if (focus.element) {
+				const described = this.trapOr(focus.element, focus.grid, screenPosition);
 				if (implementsTrait(focus.element, TSynergy)) {
 					const patternEffect = focus.element.patternEffect;
 					const condition = patternEffect.patternCondition;
@@ -114,8 +112,8 @@ export class ShopInputToIntentTranslator {
 						condition,
 					);
 				}
-				if (implementsTrait(focus.element, TDescriptor)) {
-					shop.setDescriptionHud(new DescriptionHud(focus.element));
+				if (implementsTrait(described, TDescriptor)) {
+					shop.setDescriptionHud(new DescriptionHud(described));
 				}
 				return;
 			}
@@ -134,8 +132,9 @@ export class ShopInputToIntentTranslator {
 				focus.grid.setOveredTile([
 					...focus.element.gridShape.getOccupiedCellsFrom(focus.element.cell, focus.element.orientation),
 				]);
-				if (implementsTrait(focus.element, TDescriptor)) {
-					shop.setDescriptionHud(new DescriptionHud(focus.element));
+				const described = this.trapOr(focus.element, focus.grid, screenPosition);
+				if (implementsTrait(described, TDescriptor)) {
+					shop.setDescriptionHud(new DescriptionHud(described));
 				}
 				return;
 			}
@@ -190,6 +189,13 @@ export class ShopInputToIntentTranslator {
 				shop.army.cyclePathAt(focus.element.cell);
 			}
 		}
+	}
+
+	// On a path tile carrying a trap, the middle of the tile stands for the trap: clicking there grabs only the trap
+	// and hovering describes it. The rest of the tile grabs the tile with its trap.
+	trapOr<T>(element: T, grid: ImplementsTrait<typeof TGrid>, screenPosition: ScreenPosition) {
+		if (!element || !implementsTrait(element, PathTile)) return element;
+		return element.trapAt(grid.screenToGridPosition(screenPosition), grid) ?? element;
 	}
 
 	determinateFocus(shop: ShopPhase, state: ShopState, screenPosition: ScreenPosition) {

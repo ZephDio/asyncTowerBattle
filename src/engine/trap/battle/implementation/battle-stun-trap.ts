@@ -1,9 +1,9 @@
-import { TPathShape } from "../../path-shape";
+import { TPathShape } from "../../../tile/path-shape";
 import { PathResources } from "../../../../renderer/resources/path.resources";
 import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { TrapPathTile } from "../../recruit/implementation/trap-tile";
+import { StunTrap } from "../../recruit/implementation/stun-trap";
 import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
@@ -13,7 +13,7 @@ import { Action } from "../../../../shared/action";
 import { secondsToFrame } from "../../../../shared/seconds";
 import { Stunned } from "../../../stats/status/stunned";
 
-export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.trap)) {
+export class BattleStunTrap extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.trap)) {
 	didTrigger = false;
 	cooldown = secondsToFrame(3);
 	clock = 0;
@@ -21,12 +21,12 @@ export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement,
 	action = null as null | Action;
 
 	constructor(
-		pathTile: TrapPathTile,
+		trap: StunTrap,
 		public cell: Cell,
 		public position: GridPosition,
 		private hooks: BattleArmyHooks,
 	) {
-		super({ imageDrawable: pathTile, hitboxHolder: pathTile });
+		super({ imageDrawable: trap, hitboxHolder: trap });
 	}
 
 	tick() {

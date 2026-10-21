@@ -9,18 +9,36 @@ import { BasicPathTile } from "../../recruit/implementation/basic-tile";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
+import { TTrapHolder } from "../../../../shared/traits/engine/trap-holder";
+import { AnyBattleTrap } from "../../../trap/battle/battle-trap";
 
-export class BasicBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.normal)) {
+export class BasicBattlePathTile extends Derive(
+	TCollider,
+	HTHitbox,
+	GridElement,
+	TRenderable,
+	HTImageDrawable,
+	TPathShape(PathResources.normal),
+	TTrapHolder,
+) {
+	trap: AnyBattleTrap | null;
+
 	constructor(
 		pathTile: BasicPathTile,
 		public cell: Cell,
 		public position: GridPosition,
-		_hooks: BattleArmyHooks,
+		hooks: BattleArmyHooks,
 	) {
 		super({ imageDrawable: pathTile, hitboxHolder: pathTile });
+		this.trap = pathTile.trap?.toBattle(cell, position, hooks) ?? null;
+	}
+
+	setPathConnections(connections: Cell[]) {
+		this.pathConnections = connections;
+		if (this.trap) this.trap.pathConnections = connections;
 	}
 
 	tick() {
-		return;
+		this.trap?.tick();
 	}
 }

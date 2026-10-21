@@ -7,6 +7,7 @@ import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { TRenderable } from "../../shared/traits/render/renderable";
 import { TRecruit } from "../../shared/traits/engine/recruit";
 import { Castle } from "../castle/recruit/castle-recruit";
+import { TTrapHolder } from "../../shared/traits/engine/trap-holder";
 
 export const STANDARD_CELL_SIZE = 4.9;
 
@@ -127,7 +128,10 @@ export const TGrid = Trait((base) => {
 			}
 		}
 		getDrawables(): ImplementsTrait<typeof TRenderable>[] {
-			return [...this.tiles.values(), ...this.synergiesEffects, ...(this.hoverEffect ? [...this.hoverEffect] : [])];
+			const elements = [...this.tiles.values()];
+			// Traps come after the elements so they are drawn over the path tile carrying them.
+			const traps = elements.flatMap((element) => (implementsTrait(element, TTrapHolder) && element.trap ? [element.trap] : []));
+			return [...elements, ...traps, ...this.synergiesEffects, ...(this.hoverEffect ? [...this.hoverEffect] : [])];
 		}
 
 		translate() {

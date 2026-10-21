@@ -4,15 +4,15 @@ import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
-import { SlowingPathTile } from "../../recruit/implementation/slowing-tile";
+import { SlowingTrap } from "../../recruit/implementation/slowing-trap";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { PathResources } from "../../../../renderer/resources/path.resources";
 
-export class SlowingTileBlueprint extends Derive(
+export class SlowingTrapBlueprint extends Derive(
 	TShopBlueprint(10, 3),
-	TImageDrawable(PathResources.slowing.image, PathResources.slowing.size, DrawPriority.CarpetStyleGridElement),
+	TImageDrawable(PathResources.slowing.straight, PathResources.slowing.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,
 	THitbox(
 		new HitBox([
@@ -20,9 +20,9 @@ export class SlowingTileBlueprint extends Derive(
 		]),
 	),
 ) {
-	description = new Description("Slowing Tile", ["A muddy path", "that slows stepping", "enemies by 30%"]);
+	description = new Description("Mud Trap", ["Place it on a path tile.", "Slows stepping", "enemies by 30%"]);
 
 	toRecruit(cell: Cell) {
-		return new SlowingPathTile(cell, this);
+		return new SlowingTrap(cell, this);
 	}
 }

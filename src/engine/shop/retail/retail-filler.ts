@@ -5,7 +5,7 @@ import { AnyBarrackBlueprint } from "../../constructs/barrack/blueprint/barrack-
 import { BasicBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/basic-barrack-blueprint";
 import { WaveBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/wave-barrack-blueprint";
 import { BasicTileBlueprint } from "../../tile/blueprint/implementation/basic-path-blueprint";
-import { SlowingTileBlueprint } from "../../tile/blueprint/implementation/slowing-tile-blueprint";
+import { SlowingTrapBlueprint } from "../../trap/blueprint/implementation/slowing-trap-blueprint";
 import { AnyPathTileBlueprint } from "../../tile/blueprint/tile";
 import { BlueTowerBlueprint } from "../../constructs/tower/blueprint/implementation/blue-tower-blueprint";
 import { GreenTowerBlueprint } from "../../constructs/tower/blueprint/implementation/green-tower-blueprint";
@@ -24,7 +24,8 @@ import { AnyTotemBlueprint } from "../../constructs/totem/blueprint/totem-bluepr
 import { AnvilTotemBlueprint } from "../../constructs/totem/blueprint/implementation/anvil-blueprint";
 import { GobelinPortalBlueprint } from "../../constructs/totem/blueprint/implementation/gobelin-portal-blueprint";
 import { CropsFieldBlueprint } from "../../constructs/totem/blueprint/implementation/crops-field-blueprint";
-import { TrapTileBlueprint } from "../../tile/blueprint/implementation/trap-tile-blueprint";
+import { StunTrapBlueprint } from "../../trap/blueprint/implementation/stun-trap-blueprint";
+import { AnyTrapBlueprint } from "../../trap/blueprint/trap-blueprint";
 import { FoxBlueprint } from "../../units/blueprint/implementation/fox-blueprint";
 import { WindmillBlueprint } from "../../constructs/totem/blueprint/implementation/windmill-blueprint";
 import { BakeryBlueprint } from "../../constructs/totem/blueprint/implementation/bakery-blueprint";
@@ -39,6 +40,7 @@ export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint =
 	| AnyTowerBlueprint
 	| AnyPathTileBlueprint
+	| AnyTrapBlueprint
 	| AnyUnitBlueprint
 	| AnyBarrackBlueprint
 	| AnyTotemBlueprint;
@@ -67,7 +69,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 		share: 60,
 	},
 	{
-		value: [BasicTileBlueprint, SlowingTileBlueprint, TrapTileBlueprint],
+		value: [BasicTileBlueprint, SlowingTrapBlueprint, StunTrapBlueprint],
 		share: 35,
 	},
 	{

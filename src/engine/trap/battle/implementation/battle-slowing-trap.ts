@@ -1,4 +1,4 @@
-import { TPathShape } from "../../path-shape";
+import { TPathShape } from "../../../tile/path-shape";
 import { PathResources } from "../../../../renderer/resources/path.resources";
 import { Derive } from "@ddd-ts/traits";
 import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
@@ -6,20 +6,20 @@ import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
 import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { SlowingPathTile } from "../../recruit/implementation/slowing-tile";
+import { SlowingTrap } from "../../recruit/implementation/slowing-trap";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { BoggedDown } from "../../../stats/status/bogged-down";
 
-export class SlowingBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.slowing)) {
+export class BattleSlowingTrap extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.slowing)) {
 	constructor(
-		pathTile: SlowingPathTile,
+		trap: SlowingTrap,
 		public cell: Cell,
 		public position: GridPosition,
 		private hooks: BattleArmyHooks,
 	) {
-		super({ imageDrawable: pathTile, hitboxHolder: pathTile });
+		super({ imageDrawable: trap, hitboxHolder: trap });
 	}
 
 	tick() {
