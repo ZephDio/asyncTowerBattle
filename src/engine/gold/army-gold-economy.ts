@@ -1,6 +1,6 @@
 export class ArmyGoldEconomy {
 	golds = {
-		amount: 70,
+		amount: 10000,
 	};
 
 	spendGold(amount: number) {
