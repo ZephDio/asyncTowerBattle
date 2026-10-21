@@ -95,14 +95,17 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		isActivated: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean,
 	) {
 		this.clearSynergiesTiles();
+		// An element spanning several pattern cells only lights up the first one, like the synergy only counts it once.
+		const counted = new Set<ImplementsTrait<typeof GridElement>>();
 		for (const relativeCell of relativeCellsSynergies) {
 			const synergyCell = new Cell({
 				x: cell.x + relativeCell.x,
 				y: cell.y + relativeCell.y,
 			});
-			this.synergiesEffects.push(
-				new SynergyEffectHud(synergyCell, this, isActivated(this.tiles.get(ArmyGrid.posToString(synergyCell)))),
-			);
+			const element = this.tiles.get(ArmyGrid.posToString(synergyCell));
+			const activated = element !== undefined && !counted.has(element) && isActivated(element);
+			if (activated) counted.add(element);
+			this.synergiesEffects.push(new SynergyEffectHud(synergyCell, this, activated));
 		}
 	}
 

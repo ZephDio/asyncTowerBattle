@@ -79,7 +79,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 				y: yCoordinate,
 			});
 			const elementFound = this.tiles.get(ArmyGrid.posToString(targetPosition));
-			founds.push(elementFound);
+			founds.push(elementFound && founds.includes(elementFound) ? undefined : elementFound);
 		}
 		return founds;
 	}
@@ -92,7 +92,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 				y: cell.y + (isEnemy ? -relativePosition.y : relativePosition.y),
 			});
 			const elementFound = this.tiles.get(ArmyGrid.posToString(targetPosition));
-			if (elementFound) {
+			if (elementFound && !founds.includes(elementFound)) {
 				founds.push(elementFound);
 			}
 		}

@@ -101,7 +101,8 @@ export const TGrid = Trait((base) => {
 					y: gridPosition.y + relativePosition.y,
 				});
 				const elementFound = this.tiles.get(ArmyGrid.posToString(targetPosition));
-				if (elementFound) {
+				// An element spanning several pattern cells counts once.
+				if (elementFound && !founds.includes(elementFound)) {
 					founds.push(elementFound);
 				}
 			}
