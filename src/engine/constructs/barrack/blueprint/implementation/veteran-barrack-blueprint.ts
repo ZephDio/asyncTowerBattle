@@ -8,6 +8,7 @@ import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-bluepri
 import { VeterantBarrack } from "../../recruit/implementation/veterant-barrack";
 import { BarrackDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
+import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { BarrackResources } from "../../../../../renderer/resources/barrack.resources";
 
 export class VeterantBarrackBlueprint extends Derive(
@@ -22,7 +23,7 @@ export class VeterantBarrackBlueprint extends Derive(
 	TBaseStats({
 		health: NaN,
 		damage: NaN,
-		castSpeed: 1,
+		castSpeed: castSpeedFromSeconds(1.6),
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

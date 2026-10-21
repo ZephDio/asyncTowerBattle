@@ -33,9 +33,7 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 			hitboxHolder: barrackRecruit,
 			descriptor: barrackRecruit,
 		});
-		this.castCost = unitRecruit
-			? unitRecruit.stats.summonTime * 1.6
-			: this.hooks.getDefaultUnit().stats.summonTime * 1.6;
+		this.castCost = unitRecruit ? unitRecruit.stats.summonTime : this.hooks.getDefaultUnit().stats.summonTime;
 		this.gridShape = barrackRecruit.gridShape;
 	}
 
@@ -45,7 +43,6 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 		const unit = this.unitRecruit
 			? this.unitRecruit.toBattle(spawnPoint, path, this.hooks)
 			: this.hooks.getDefaultUnit().toBattle(spawnPoint, path, this.hooks);
-		this.hooks.addUnits(unit, this);
 		const buff = new VeterantBuff();
 		unit.addBoon(buff);
 		unit.addSize(0.3);
