@@ -4,6 +4,7 @@ import { ArmyFixture } from "../army/army-fixtures";
 import { BarrackRecruitBuilder } from "../constructs/barrack/recruit/barrack-fixtures";
 import { CastleFactory } from "../castle/recruit/castle-recruit-fixtures";
 import { ArmyGrid } from "../grid/grid";
+import { ARMY_GRID_SIZES } from "../grid/grid-sizes";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { PathFactory } from "../path/army/path-fixtures";
 import { TotemBuilder } from "../constructs/totem/recruit/totem-fixtures";
@@ -27,7 +28,7 @@ export class LocalMatchMaker extends MatchMaker {
 ArmyFixture;
 const EnemyArmyFixtures = {
 	1: () => {
-		const grid = new ArmyGrid(7, 5, undefined, 6.3);
+		const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round1);
 		const castle = CastleFactory.defaultDwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -48,7 +49,7 @@ const EnemyArmyFixtures = {
 		return { army: new Army(grid, unitInventory, new DwarfBlueprint({})), randomSeed: 123456 };
 	},
 	2: () => {
-		const grid = new ArmyGrid(8, 6);
+		const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round2);
 		const castle = CastleFactory.round2Elf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -74,7 +75,7 @@ const EnemyArmyFixtures = {
 		return { army: new Army(grid, new Inventory(), new ElfBlueprint({})), randomSeed: 123456 };
 	},
 	3: () => {
-		const grid = new ArmyGrid(11, 6);
+		const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round3);
 		const castle = CastleFactory.round2Dwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -110,7 +111,7 @@ const EnemyArmyFixtures = {
 		return { army: new Army(grid, new Inventory(), new DwarfBlueprint({})), randomSeed: 123456 };
 	},
 	4: () => {
-		const grid = new ArmyGrid(11, 6);
+		const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round3);
 		const castle = CastleFactory.round2Elf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -150,7 +151,7 @@ const EnemyArmyFixtures = {
 		return { army: new Army(grid, new Inventory(), new ElfBlueprint({})), randomSeed: 123456 };
 	},
 	5: () => {
-		const grid = new ArmyGrid(11, 6);
+		const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round3);
 		const castle = CastleFactory.round2Dwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
@@ -191,7 +192,7 @@ const EnemyArmyFixtures = {
 		return { army: new Army(grid, new Inventory(), new DwarfBlueprint({})), randomSeed: 123456 };
 	},
 	6: () => {
-		const grid = new ArmyGrid(11, 6);
+		const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round3);
 		const castle = CastleFactory.round2Dwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,

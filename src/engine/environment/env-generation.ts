@@ -1,5 +1,6 @@
 import { Cell } from "../../shared/position";
 import { ArmyGrid } from "../grid/grid";
+import { ARMY_GRID_SIZES } from "../grid/grid-sizes";
 import { Forest } from "./forest";
 import { Rock } from "./rock";
 8 / 10
@@ -11,16 +12,20 @@ export class EnvironmentGeneration {
 	
 
 	generateEnvironmentForRoundTwo(grid: ArmyGrid){
-			if(Math.random() < (5/12)){	
-				this.generateRocks(grid, 1, {minX : 7, maxX : 7, minY : 1, maxY : 4});
+			const { width, height } = ARMY_GRID_SIZES.round2;
+			// new right column (door row excluded) or new top row
+			if(Math.random() < (5/12)){
+				this.generateRocks(grid, 1, {minX : width - 1, maxX : width - 1, minY : 1, maxY : height - 2});
 				return
 			}
-			this.generateRocks(grid, 1, {minX : 0, maxX : 7, minY : 0, maxY : 0});
+			this.generateRocks(grid, 1, {minX : 0, maxX : width - 1, minY : 0, maxY : 0});
 	}
 
 	generateEnvironmentForRoundThree(grid: ArmyGrid){
-			this.generateTrees(grid, 2, {minX : 8, maxX : 10, minY : 0, maxY : 5});
-			this.generateRocks(grid, 1, {minX : 8, maxX : 10, minY : 0, maxY : 5});
+			const minX = ARMY_GRID_SIZES.round2.width;
+			const { width, height } = ARMY_GRID_SIZES.round3;
+			this.generateTrees(grid, 2, {minX, maxX : width - 1, minY : 0, maxY : height - 1});
+			this.generateRocks(grid, 1, {minX, maxX : width - 1, minY : 0, maxY : height - 1});
 	}
 	
 	generateTrees(grid: ArmyGrid, amount: number, range? : {minX : number, maxX: number , minY : number, maxY : number}) {

@@ -30,9 +30,12 @@ export class PathFixture {
 	}
 }
 
+// Paths go from the enemy door (width-1, height-1) to castle.cell.down(), see Army.path.
 export class PathFactory {
+	// 8x6 board
 	static get default() {
 		return [
+			new BasicPathTile(new Cell({ x: 0, y: 4 })),
 			new BasicPathTile(new Cell({ x: 0, y: 3 })),
 			new BasicPathTile(new Cell({ x: 0, y: 2 })),
 			new BasicPathTile(new Cell({ x: 0, y: 1 })),
@@ -43,36 +46,19 @@ export class PathFactory {
 			new BasicPathTile(new Cell({ x: 4, y: 0 })),
 			new BasicPathTile(new Cell({ x: 5, y: 0 })),
 			new BasicPathTile(new Cell({ x: 6, y: 0 })),
-			new BasicPathTile(new Cell({ x: 6, y: 1 })),
-			new BasicPathTile(new Cell({ x: 6, y: 2 })),
-			new BasicPathTile(new Cell({ x: 6, y: 3 })),
-			new BasicPathTile(new Cell({ x: 6, y: 4 })),
-		];
-	}
-	static get round2() {
-		return [
-			new BasicPathTile(new Cell({ x: 0, y: 4 })),
-			new BasicPathTile(new Cell({ x: 0, y: 3 })),
-			new BasicPathTile(new Cell({ x: 0, y: 2 })),
-			new BasicPathTile(new Cell({ x: 0, y: 1 })),
-			new BasicPathTile(new Cell({ x: 0, y: 0 })),
-			new BasicPathTile(new Cell({ x: 1, y: 0 })),
-			new BasicPathTile(new Cell({ x: 2, y: 0 })),
-			new BasicPathTile(new Cell({ x: 3, y: 0 })),
-			new BasicPathTile(new Cell({ x: 4, y: 0 })),
-			new BasicPathTile(new Cell({ x: 5, y: 0 })),
-			new BasicPathTile(new Cell({ x: 5, y: 1 })),
-			new BasicPathTile(new Cell({ x: 5, y: 2 })),
-			new BasicPathTile(new Cell({ x: 5, y: 3 })),
-			new BasicPathTile(new Cell({ x: 6, y: 3 })),
+			new BasicPathTile(new Cell({ x: 7, y: 0 })),
+			new BasicPathTile(new Cell({ x: 7, y: 1 })),
+			new BasicPathTile(new Cell({ x: 7, y: 2 })),
 			new BasicPathTile(new Cell({ x: 7, y: 3 })),
 			new BasicPathTile(new Cell({ x: 7, y: 4 })),
 			new BasicPathTile(new Cell({ x: 7, y: 5 })),
 		];
 	}
 
-	static get round3() {
+	// 9x7 board
+	static get round2() {
 		return [
+			new BasicPathTile(new Cell({ x: 0, y: 5 })),
 			new BasicPathTile(new Cell({ x: 0, y: 4 })),
 			new BasicPathTile(new Cell({ x: 0, y: 3 })),
 			new BasicPathTile(new Cell({ x: 0, y: 2 })),
@@ -90,9 +76,38 @@ export class PathFactory {
 			new BasicPathTile(new Cell({ x: 7, y: 3 })),
 			new BasicPathTile(new Cell({ x: 7, y: 4 })),
 			new BasicPathTile(new Cell({ x: 7, y: 5 })),
-			new BasicPathTile(new Cell({ x: 8, y: 5 })),
-			new BasicPathTile(new Cell({ x: 9, y: 5 })),
-			new BasicPathTile(new Cell({ x: 10, y: 5 })),
+			new BasicPathTile(new Cell({ x: 7, y: 6 })),
+			new BasicPathTile(new Cell({ x: 8, y: 6 })),
+		];
+	}
+
+	// 13x7 board
+	static get round3() {
+		return [
+			new BasicPathTile(new Cell({ x: 0, y: 5 })),
+			new BasicPathTile(new Cell({ x: 0, y: 4 })),
+			new BasicPathTile(new Cell({ x: 0, y: 3 })),
+			new BasicPathTile(new Cell({ x: 0, y: 2 })),
+			new BasicPathTile(new Cell({ x: 0, y: 1 })),
+			new BasicPathTile(new Cell({ x: 0, y: 0 })),
+			new BasicPathTile(new Cell({ x: 1, y: 0 })),
+			new BasicPathTile(new Cell({ x: 2, y: 0 })),
+			new BasicPathTile(new Cell({ x: 3, y: 0 })),
+			new BasicPathTile(new Cell({ x: 4, y: 0 })),
+			new BasicPathTile(new Cell({ x: 5, y: 0 })),
+			new BasicPathTile(new Cell({ x: 5, y: 1 })),
+			new BasicPathTile(new Cell({ x: 5, y: 2 })),
+			new BasicPathTile(new Cell({ x: 5, y: 3 })),
+			new BasicPathTile(new Cell({ x: 6, y: 3 })),
+			new BasicPathTile(new Cell({ x: 7, y: 3 })),
+			new BasicPathTile(new Cell({ x: 7, y: 4 })),
+			new BasicPathTile(new Cell({ x: 7, y: 5 })),
+			new BasicPathTile(new Cell({ x: 7, y: 6 })),
+			new BasicPathTile(new Cell({ x: 8, y: 6 })),
+			new BasicPathTile(new Cell({ x: 9, y: 6 })),
+			new BasicPathTile(new Cell({ x: 10, y: 6 })),
+			new BasicPathTile(new Cell({ x: 11, y: 6 })),
+			new BasicPathTile(new Cell({ x: 12, y: 6 })),
 		];
 	}
 }
