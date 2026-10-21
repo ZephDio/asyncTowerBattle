@@ -15,6 +15,7 @@ import { RefreshBellHud } from "../../shared/hud-element/refresh-bell-hud";
 import { Holder } from "./holder/holder";
 import { EconomyHooks } from "../gold/army-gold-economy";
 import { PathPreview } from "../path/army/path-preview";
+import { PathInvalidHud } from "../../shared/hud-element/path-invalid-hud";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -51,6 +52,8 @@ export class ShopPhase {
 	}
 
 	exitShop() {
+		// The battle needs a door-to-castle path; the shop shows "Path invalid" until there is one.
+		if (!this.army.pathNetwork.complete) return;
 		this.holderControl.exit();
 		this.onShopExit();
 	}
@@ -88,11 +91,12 @@ export class ShopPhase {
 	}
 
 	getDrawables() {
+		const network = this.army.pathNetwork;
 		return {
 			grids: [
 				{
 					grid: this.army.grid,
-					drawables: [this.getPathPreview()],
+					drawables: [this.getPathPreview(network)],
 				},
 				{
 					grid: this.army.inventory,
@@ -107,13 +111,13 @@ export class ShopPhase {
 				new StartBattleButton({}),
 				new RefreshBellHud({}),
 				new GoldHud(this.army.getEconomyHooks().getEconomy().amount),
+				...(network.complete ? [] : [new PathInvalidHud()]),
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
 		};
 	}
 
-	getPathPreview() {
-		const network = this.army.pathNetwork;
+	getPathPreview(network = this.army.pathNetwork) {
 		this.army.refreshPathConnections(network);
 		return new PathPreview(network.junctions);
 	}
