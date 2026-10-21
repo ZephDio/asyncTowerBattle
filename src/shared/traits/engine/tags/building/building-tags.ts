@@ -1,7 +1,7 @@
 import { Subtrait } from "@ddd-ts/traits";
 import { Tagged } from "../tagged.js";
 
-export type BuildingTag = "Tower" | "Barrack" | "Totem" | "Food";
+export type BuildingTag = "Tower" | "Barrack" | "Totem" | "Food" | "Tile" | "Castle";
 
 export const TowerTag = Subtrait([Tagged], (base, Props) => {
 	abstract class TTowerTag extends base {
@@ -46,3 +46,27 @@ export const FoodTag = Subtrait([Tagged], (base, Props) => {
 	}
 	return TFoodTag;
 });
+
+export const TileTag = Subtrait([Tagged], (base, Props) => {
+	abstract class TTileTag extends base {
+		tileTag = true;
+		constructor(props: typeof Props) {
+			super(props);
+			this.tags.push("Tile");
+		}
+	}
+	return TTileTag;
+	}
+);
+
+export const CastleTag = Subtrait([Tagged], (base, Props) => {
+	abstract class TCastleTag extends base {
+		castleTag = true;
+		constructor(props: typeof Props) {
+			super(props);
+			this.tags.push("Castle");
+		}
+	}
+	return TCastleTag;
+	}
+);

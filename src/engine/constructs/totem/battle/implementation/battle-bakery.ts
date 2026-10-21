@@ -4,10 +4,9 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
 import { Bakery } from "../../recruit/implementation/backery";
-import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
 
-export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster, TStatsRenderable) {
+export class BattleBakery extends Derive(BattleTotem, Caster, TStatsRenderable) {
 	vitalityBuffAmount: number = 2;
 	constructor(
 		public bakery: Bakery,
@@ -18,6 +17,7 @@ export class BattleBakery extends Derive(BattleTotem, FoodTag, Caster, TStatsRen
 	) {
 		super({
 			casterRecruit: bakery,
+			tagHolder: bakery,
 			imageDrawable: bakery,
 			hitboxHolder: bakery,
 			maxHealth: bakery.stats.health,

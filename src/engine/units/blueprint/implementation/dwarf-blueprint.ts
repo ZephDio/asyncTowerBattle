@@ -14,6 +14,7 @@ import { BattleDwarf } from "../../battle/implementation/battle-dwarf";
 import { TokenUnit } from "../../../../shared/traits/engine/token-unit";
 import { TBaseStats } from "../../../stats/base-stats";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
+import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 export class DwarfBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
@@ -32,6 +33,7 @@ export class DwarfBlueprint extends Derive(
 		summonTime: secondsToFrame(1.6),
 		range: NaN,
 	}),
+	KinfolkTag,
 ) {
 	description = new UnitDescription("Dwarf", ["A unit that cast", "a healing area", "area around him"], this);
 

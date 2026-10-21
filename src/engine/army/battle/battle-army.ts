@@ -1,6 +1,6 @@
 import { AnyBattleProjectile } from "../../projectile/battle/battle-projectile";
 import { AnyBattleTower } from "../../constructs/tower/battle/battle-tower";
-import { SearchAreaForUnit, SearchAreaFotConstruct, SearchTarget } from "../../battle/battlefield/battlefield";
+import { SearchAreaForUnit, SearchAreaForConstruct, SearchTarget } from "../../battle/battlefield/battlefield";
 import { AreaEffect } from "../../area-effect/area-effect";
 import { GridHooks } from "../../grid/battle-grid";
 import { BattlePath } from "../../path/battle/battle-path";
@@ -66,8 +66,8 @@ export class BattleArmy {
 		public foodEconomy: BattleFoodEconomy,
 		public searchTarget: SearchTarget,
 		public searchEnemyInArea: SearchAreaForUnit,
-		public searchEnemyConstructsInArea: SearchAreaFotConstruct,
-		public searchAlliesConstructsInArea: SearchAreaFotConstruct,
+		public searchEnemyConstructsInArea: SearchAreaForConstruct,
+		public searchAlliesConstructsInArea: SearchAreaForConstruct,
 		public random: () => number,
 		public getTimer: () => { clock: number },
 		public getEnemyPath: () => BattlePath,

@@ -14,6 +14,7 @@ import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alig
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
+import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class RedObeliskBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -22,6 +23,7 @@ export class RedObeliskBlueprint extends Derive(
 	TImageDrawable(TotemResources.obelisk.image, TotemResources.obelisk.size, DrawPriority.NormalGridElement),
 	TSynergy,
 	EvilTag,
+	TotemTag,
 	TBaseStats({
 		health: NaN,
 		damage: NaN,

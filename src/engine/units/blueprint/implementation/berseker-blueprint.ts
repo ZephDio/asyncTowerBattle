@@ -11,6 +11,7 @@ import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/h
 import { secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
+import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class BersekerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -29,6 +30,7 @@ export class BersekerBlueprint extends Derive(
 		summonTime: secondsToFrame(3),
 		range: NaN,
 	}),
+	KinfolkTag,
 ) {
 	description = new UnitDescription(
 		"Berseker",

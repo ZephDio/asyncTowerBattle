@@ -11,7 +11,7 @@ import { TSynergy } from "../../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
 import { Windmill } from "../../recruit/implementation/windmill";
-import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { FoodTag, TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class WindmillBlueprint extends Derive(
@@ -29,6 +29,7 @@ export class WindmillBlueprint extends Derive(
 	),
 	TSynergy,
 	FoodTag,
+	TotemTag,
 ) {
 	description = new Description("Windmill", [
 		"▣ Food monuments",

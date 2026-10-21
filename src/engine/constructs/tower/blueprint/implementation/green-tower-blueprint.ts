@@ -12,6 +12,7 @@ import { TDescriptor, TowerDescription } from "../../../../../shared/traits/rend
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
+import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class GreenTowerBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -29,6 +30,7 @@ export class GreenTowerBlueprint extends Derive(
 		summonTime: NaN,
 		range: 20,
 	}),
+	TowerTag,	
 ) {
 	description = new TowerDescription("Green Tower", ["A tower that shoots", "auto-guided fast", "bullets"], this);
 

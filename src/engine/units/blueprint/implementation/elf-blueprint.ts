@@ -15,6 +15,7 @@ import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { Arrow } from "../../../projectile/blueprint/implementation/arrow";
 import { TBaseStats } from "../../../stats/base-stats";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
+import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class ElfBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 2, height: 2 }), new GridPosition({ x: 0, y: 0 })]])),
@@ -34,6 +35,7 @@ export class ElfBlueprint extends Derive(
 		summonTime: secondsToFrame(1.2),
 		range: NaN,
 	}),
+	KinfolkTag,
 ) {
 	description = new UnitDescription("Elf", ["A lame unit", "that doesn't do", "anything special"], this);
 

@@ -11,6 +11,7 @@ import { TBaseStats } from "../../../stats/base-stats";
 import { Brewmaster } from "../../recruit/implementation/brewmaster";
 import { castSpeedFromSeconds, secondsToFrame } from "../../../../shared/seconds";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
+import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class BrewmasterBlueprint extends Derive(
 	TShopBlueprint(15, 12),
@@ -33,6 +34,7 @@ export class BrewmasterBlueprint extends Derive(
 		summonTime: secondsToFrame(4),
 		range: NaN,
 	}),
+	KinfolkTag,
 ) {
 	override description = new UnitDescription("Brewmaster", ["Regenerate 15% of his", "life every 2 ", "seconds"], this);
 	toRecruit(cell: Cell) {

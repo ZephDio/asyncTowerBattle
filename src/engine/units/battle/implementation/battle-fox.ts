@@ -29,6 +29,7 @@ export class BattleFox extends Derive(TBattleUnit, Caster) {
 			onDeath: () => this.hooks.removeUnit(this),
 			hitboxHolder: recruit,
 			descriptor: recruit,
+			tagHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

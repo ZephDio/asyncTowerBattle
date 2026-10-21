@@ -16,6 +16,7 @@ import { TStatsRenderable } from "../../../../shared/traits/render/huds/stat-ren
 import { castCostFromFrames } from "../../../../shared/seconds";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { AnyBarrack } from "../recruit/barrack";
+import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 
 export type AnyBattleBarrack = BasicBattleBarrack | WaveBattleBarrack | VeterantBattleBarrack;
 
@@ -31,6 +32,7 @@ export const BattleBarrack = Subtrait(
 		HaveStats,
 		Orientable,
 		HTDescriptor,
+		HTTag,
 	],
 	(base) => {
 		abstract class BattleBarrack extends base {
@@ -38,7 +40,7 @@ export const BattleBarrack = Subtrait(
 			abstract onCastResolve(): void;
 			abstract unitRecruit: AnyUnit | null;
 			abstract hooks: BattleArmyHooks;
-			abstract barrackRecruit: AnyBarrack;
+			abstract barrack: AnyBarrack;
 
 			tick() {
 				super.tickCast();
@@ -53,7 +55,7 @@ export const BattleBarrack = Subtrait(
 			}
 
 			get castMultiplier() {
-				return this.barrackRecruit.castMultiplier;
+				return this.barrack.castMultiplier;
 			}
 
 			casts(): void {

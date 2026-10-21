@@ -16,6 +16,7 @@ import { BattleBarrack } from "../../../barrack/battle/battle-barrack";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
+import { FoodTag, TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class BreweryBlueprint extends Derive(
 	TShopBlueprint(15, 5),
@@ -23,6 +24,8 @@ export class BreweryBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(TotemResources.brewery.image, TotemResources.brewery.size, DrawPriority.NormalGridElement),
 	TSynergy,
+	FoodTag,
+	TotemTag,
 	TBaseStats({
 		health: NaN,
 		damage: NaN,

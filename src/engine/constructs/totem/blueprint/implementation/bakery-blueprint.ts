@@ -8,7 +8,7 @@ import { Description, TDescriptor } from "../../../../../shared/traits/render/hu
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { Bakery } from "../../recruit/implementation/backery";
-import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { FoodTag, TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
@@ -34,6 +34,7 @@ export class BakeryBlueprint extends Derive(
 		range: NaN,
 	}),
 	FoodTag,
+	TotemTag,
 ) {
 	description = new Description("Bakery Wryy", [
 		"Every 4 seconds :",

@@ -10,10 +10,10 @@ import { Inventory } from "../../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../../shop/holder/holder";
 import { TGrid } from "../../../grid/tgrid";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
-import { TowerTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 import { HTBaseStats } from "../../../stats/base-stats";
+import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 
-export const Tower = Subtrait([RecruitCaster, TRecruit, TowerTag, HTBaseStats], (base) => {
+export const Tower = Subtrait([RecruitCaster, TRecruit, HTBaseStats, HTTag], (base) => {
 	abstract class ITower extends base {
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;

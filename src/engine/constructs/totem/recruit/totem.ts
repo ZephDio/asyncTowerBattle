@@ -9,9 +9,8 @@ import { Inventory } from "../../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../../shop/holder/holder";
 import { TGrid } from "../../../grid/tgrid";
 import { AnyBattleTotem } from "../battle/battle-totem";
-import { TotemTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
-export const Totem = Subtrait([TRecruit, TotemTag], (base) => {
+export const Totem = Subtrait([TRecruit], (base) => {
 	abstract class ITotem extends base {
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTotem;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTotem;

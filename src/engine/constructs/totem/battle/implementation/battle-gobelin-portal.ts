@@ -4,9 +4,8 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Caster } from "../../../../../shared/traits/engine/cast";
 import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
 import { BattleTotem } from "../battle-totem";
-import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
 
-export class BattleGobelinPortal extends Derive(BattleTotem, EvilTag) {
+export class BattleGobelinPortal extends Derive(BattleTotem) {
 	hasTriggered = false;
 
 	constructor(
@@ -16,7 +15,7 @@ export class BattleGobelinPortal extends Derive(BattleTotem, EvilTag) {
 		public readonly cell: Cell,
 		override _orientation: number,
 	) {
-		super({ imageDrawable: portal, hitboxHolder: portal, descriptor: portal });
+		super({ imageDrawable: portal, hitboxHolder: portal, descriptor: portal , tagHolder: portal });
 		this.gridShape = portal.gridShape;
 	}
 

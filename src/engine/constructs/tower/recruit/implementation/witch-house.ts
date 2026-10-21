@@ -22,6 +22,7 @@ export class WitchHouse extends Derive(Tower, HTSynergy) {
 			hitboxHolder: tower,
 			descriptor: tower,
 			statsHolder: tower,
+			tagHolder: tower,
 		});
 	}
 

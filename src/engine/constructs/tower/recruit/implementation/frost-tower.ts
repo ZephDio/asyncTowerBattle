@@ -19,6 +19,7 @@ export class FrostTower extends Derive(Tower) {
 			hitboxHolder: tower,
 			descriptor: tower,
 			statsHolder: tower,
+			tagHolder: tower,
 		});
 	}
 

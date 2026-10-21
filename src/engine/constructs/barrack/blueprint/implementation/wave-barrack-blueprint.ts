@@ -9,6 +9,7 @@ import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-bluepri
 import { BarrackDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { BarrackResources } from "../../../../../renderer/resources/barrack.resources";
+import { BarrackTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class WaveBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -26,6 +27,7 @@ export class WaveBarrackBlueprint extends Derive(
 		summonTime: NaN,
 		range: NaN,
 	}),
+	BarrackTag,
 ) {
 	description = new BarrackDescription("Wave Barrack", ["A barrack that", "spawn unit 3 by 3"], this);
 

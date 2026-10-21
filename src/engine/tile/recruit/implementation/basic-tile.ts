@@ -13,7 +13,12 @@ export class BasicPathTile extends Derive(PathTile, TPathShape(PathResources.nor
 		public cell: Cell,
 		public tile: BasicTileBlueprint = new BasicTileBlueprint({}),
 	) {
-		super({ hitboxHolder: tile, imageDrawable: tile, descriptor: tile });
+		super({ 
+			hitboxHolder: tile,
+			imageDrawable: tile,
+			descriptor: tile,
+			tagHolder: tile
+		 });
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {

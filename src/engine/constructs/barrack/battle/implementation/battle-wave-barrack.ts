@@ -13,7 +13,7 @@ export class WaveBattleBarrack extends Derive(BattleBarrack) {
 	cycle = 0;
 
 	constructor(
-		public readonly barrackRecruit: WaveBarrack,
+		public readonly barrack: WaveBarrack,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
 		public readonly hooks: BattleArmyHooks,
@@ -21,21 +21,22 @@ export class WaveBattleBarrack extends Derive(BattleBarrack) {
 		override _orientation: number,
 	) {
 		super({
-			casterRecruit: barrackRecruit,
-			imageDrawable: barrackRecruit,
-			maxHealth: barrackRecruit.stats.health,
-			attack: barrackRecruit.stats.damage,
-			movementSpeed: barrackRecruit.stats.speed,
-			castSpeed: barrackRecruit.stats.castSpeed,
-			attackSpeed: barrackRecruit.stats.attackSpeed,
-			foodCost: barrackRecruit.stats.foodConsumptionOnCast,
-			range: barrackRecruit.stats.range,
+			casterRecruit: barrack,
+			imageDrawable: barrack,
+			maxHealth: barrack.stats.health,
+			attack: barrack.stats.damage,
+			movementSpeed: barrack.stats.speed,
+			castSpeed: barrack.stats.castSpeed,
+			attackSpeed: barrack.stats.attackSpeed,
+			foodCost: barrack.stats.foodConsumptionOnCast,
+			range: barrack.stats.range,
 			onDeath: () => {},
-			hitboxHolder: barrackRecruit,
-			descriptor: barrackRecruit,
+			hitboxHolder: barrack,
+			descriptor: barrack,
+			tagHolder: barrack,
 		});
 		this.castCost = unitRecruit ? unitRecruit.stats.summonTime : this.hooks.getDefaultUnit().stats.summonTime;
-		this.gridShape = barrackRecruit.gridShape;
+		this.gridShape = barrack.gridShape;
 	}
 
 	override casts(): void {

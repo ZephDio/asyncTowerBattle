@@ -9,11 +9,13 @@ import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint"
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { PathResources } from "../../../../renderer/resources/path.resources";
+import { TileTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class BasicTileBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	TImageDrawable(PathResources.normal.straight, PathResources.normal.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,
+	TileTag,
 	THitbox(
 		new HitBox([
 			[new Rectangle({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE }), new GridPosition({ x: 0, y: 0 })],

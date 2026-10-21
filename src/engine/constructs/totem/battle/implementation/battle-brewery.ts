@@ -6,11 +6,9 @@ import { BattleTotem } from "../battle-totem";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { Brewery } from "../../recruit/implementation/brewery";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
-import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
 export class BattleBrewery extends Derive(
 	BattleTotem,
-	FoodTag,
 	HTSynergy,
 	Caster,
 	BattleStartTrigger,
@@ -26,6 +24,7 @@ export class BattleBrewery extends Derive(
 	) {
 		super({
 			synergy: brewery,
+			tagHolder: brewery,
 			casterRecruit: brewery,
 			battleStartRecruit: brewery,
 			imageDrawable: brewery,

@@ -14,7 +14,13 @@ export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy) {
 		public cell: Cell,
 		public blueprint: MineBlueprint = new MineBlueprint({}),
 	) {
-		super({ descriptor: blueprint, imageDrawable: blueprint, hitboxHolder: blueprint, synergy: blueprint });
+		super({ 
+			descriptor: blueprint,
+			tagHolder: blueprint,
+			imageDrawable: blueprint, 
+			hitboxHolder: blueprint, 
+			synergy: blueprint 
+		});
 	}
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {

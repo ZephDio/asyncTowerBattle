@@ -11,9 +11,10 @@ import { PathFinder } from "../../battle/path-finder";
 import { Action } from "../../../shared/action";
 import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 import { TStatsRenderable } from "../../../shared/traits/render/huds/stat-renderable";
+import { HTTag } from "../../../shared/traits/engine/tags/tagged";
 
 export const TBattleUnit = Subtrait(
-	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, TStatsRenderable, HTDescriptor],
+	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, TStatsRenderable, HTDescriptor, HTTag],
 	(base) => {
 		abstract class IBattleUnit extends base {
 			hunger = 0;

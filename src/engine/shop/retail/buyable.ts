@@ -11,6 +11,7 @@ import { TRenderable } from "../../../shared/traits/render/renderable";
 import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 import { TImageVariant } from "../../../shared/traits/render/image-variant";
 import { implementsTrait } from "@ddd-ts/traits";
+import { HTTag } from "../../../shared/traits/engine/tags/tagged";
 
 export type AnyBuyable = AnyRecruit;
 
@@ -19,6 +20,7 @@ export class Buyable extends Derive(
 	TGCollider,
 	HTHitbox,
 	HTDescriptor,
+	HTTag,
 	TPriceHudRenderable,
 	TRenderable,
 	HTImageDrawable,
@@ -31,7 +33,7 @@ export class Buyable extends Derive(
 		public cell: Cell,
 		price: number,
 	) {
-		super({ imageDrawable: entity, hitboxHolder: entity, descriptor: entity });
+		super({ imageDrawable: entity, hitboxHolder: entity, descriptor: entity, tagHolder: entity });
 		this.price = price;
 	}
 	get position() {

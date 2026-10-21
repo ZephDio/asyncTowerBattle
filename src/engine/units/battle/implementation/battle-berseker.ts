@@ -29,6 +29,7 @@ export class BattleBerseker extends Derive(TBattleUnit) {
 			hitboxHolder: recruit,
 			descriptor: recruit,
 			range: recruit.stats.range,
+			tagHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

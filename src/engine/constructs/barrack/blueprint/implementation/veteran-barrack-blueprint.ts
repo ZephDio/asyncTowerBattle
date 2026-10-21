@@ -10,6 +10,7 @@ import { BarrackDescription, TDescriptor } from "../../../../../shared/traits/re
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { BarrackResources } from "../../../../../renderer/resources/barrack.resources";
+import { BarrackTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class VeterantBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 6),
@@ -31,6 +32,7 @@ export class VeterantBarrackBlueprint extends Derive(
 		summonTime: NaN,
 		range: NaN,
 	}),
+	BarrackTag,
 ) {
 	description = new BarrackDescription(
 		"Veterant Barrack",

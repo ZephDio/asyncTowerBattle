@@ -12,7 +12,7 @@ export class StunTrap extends Derive(Trap, TPathShape(PathResources.trap)) {
 		public cell: Cell,
 		public blueprint: StunTrapBlueprint = new StunTrapBlueprint({}),
 	) {
-		super({ hitboxHolder: blueprint, imageDrawable: blueprint, descriptor: blueprint });
+		super({ hitboxHolder: blueprint, imageDrawable: blueprint, descriptor: blueprint, tagHolder: blueprint });
 	}
 
 	toBattle(cell: Cell, position: GridPosition, hooks: BattleArmyHooks) {

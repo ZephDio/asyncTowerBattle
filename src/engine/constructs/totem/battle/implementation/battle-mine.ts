@@ -15,6 +15,7 @@ export class BattleMine extends Derive(BattleTotem) {
 		super({
 			imageDrawable: mine,
 			hitboxHolder: mine,
+			tagHolder: mine,
 			descriptor: mine,
 		});
 		this.gridShape = mine.gridShape;

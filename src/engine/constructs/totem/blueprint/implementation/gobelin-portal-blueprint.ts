@@ -13,6 +13,7 @@ import { Caster, RecruitCaster } from "../../../../../shared/traits/engine/cast"
 import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
 import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
+import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class GobelinPortalBlueprint extends Derive(
 	TShopBlueprint(10, 10),
@@ -25,6 +26,7 @@ export class GobelinPortalBlueprint extends Derive(
 	),
 	TSynergy,
 	EvilTag,
+	TotemTag,
 ) {
 	description = new Description("Gobelin Portal", ["On ▣ trigger :", "30% chance to", "generate a goblin"]);
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {

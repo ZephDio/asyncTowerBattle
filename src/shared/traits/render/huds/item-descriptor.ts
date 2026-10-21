@@ -31,6 +31,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	drawPriority: 9;
 	titlePosition: ScreenPosition;
 	linesPosition: ScreenPosition[];
+	tagsPosition: ScreenPosition;	
 	tags: Tag[];
 
 	extraLines: Record<string, string>;
@@ -45,10 +46,6 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		this.tags = implementsTrait(this.item, Tagged) ? this.item.tags : [];
 	}
 
-	getPosition() {
-		return;
-	}
-
 	getLinesPositions() {
 		const positions = [];
 		let i = 0;
@@ -61,6 +58,10 @@ export class DescriptionHud extends Derive(BannerBackground) {
 			positions.push(this.titlePosition.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.8) })));
 		});
 		return positions;
+	}
+
+	getTagPosition(index: number) {
+		return this.position.add(new ScreenPosition({x:-4.5 + (index * 5.5), y: -14.5}));
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
@@ -97,6 +98,18 @@ export class DescriptionHud extends Derive(BannerBackground) {
 			if (!descriptionPosition) return;
 			context.fillText(line, descriptionPosition.x, descriptionPosition.y, descriptionFontSize.width);
 		});
+		// Tags
+		if(implementsTrait(this.item, Tagged)) {
+			for(const [index,tag] of this.tags.entries()) {
+				const tagPosition = this.getTagPosition(index);
+				const canvasTagPosition = this.getCanvasPosition(context, tagPosition);
+				context.font = `${descriptionFontSize.height}px text`;
+				context.textAlign = "center";
+				context.fillStyle = "#000000";
+				context.fillText(`#${tag}`, canvasTagPosition.x, canvasTagPosition.y, descriptionFontSize.width);
+			};
+		}
+		
 	}
 }
 

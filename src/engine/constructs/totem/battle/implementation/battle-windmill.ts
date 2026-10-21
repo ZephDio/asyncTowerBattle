@@ -10,7 +10,7 @@ import { BattleTotem } from "../battle-totem";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
 import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
-export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, BattleStartTrigger) {
+export class BattleWindmill extends Derive(BattleTotem, HTSynergy, BattleStartTrigger) {
 	foodProduction: number = 5;
 	constructor(
 		public windmill: Windmill,
@@ -25,6 +25,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, FoodTag, Batt
 			hitboxHolder: windmill,
 			synergy: windmill,
 			descriptor: windmill,
+			tagHolder: windmill,
 		});
 		this.gridShape = windmill.gridShape;
 	}

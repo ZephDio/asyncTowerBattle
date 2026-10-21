@@ -12,7 +12,7 @@ export class SlowingTrap extends Derive(Trap, TPathShape(PathResources.slowing))
 		public cell: Cell,
 		public blueprint: SlowingTrapBlueprint = new SlowingTrapBlueprint({}),
 	) {
-		super({ hitboxHolder: blueprint, imageDrawable: blueprint, descriptor: blueprint });
+		super({ hitboxHolder: blueprint, imageDrawable: blueprint, descriptor: blueprint, tagHolder: blueprint });
 	}
 
 	toBattle(cell: Cell, position: GridPosition, hooks: BattleArmyHooks) {

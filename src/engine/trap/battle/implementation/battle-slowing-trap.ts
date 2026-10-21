@@ -11,15 +11,16 @@ import { GridElement } from "../../../../shared/traits/engine/core/grid-element"
 import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { BoggedDown } from "../../../stats/status/bogged-down";
+import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 
-export class BattleSlowingTrap extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.slowing)) {
+export class BattleSlowingTrap extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.slowing), HTTag) {
 	constructor(
 		trap: SlowingTrap,
 		public cell: Cell,
 		public position: GridPosition,
 		private hooks: BattleArmyHooks,
 	) {
-		super({ imageDrawable: trap, hitboxHolder: trap });
+		super({ imageDrawable: trap, hitboxHolder: trap, tagHolder: trap });
 	}
 
 	tick() {
