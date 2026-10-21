@@ -5,12 +5,14 @@ import { Inventory } from "../grid/inventory/unit-inventory";
 import { Unit } from "../units/recruit/unit";
 import { AnyRecruit, TRecruit } from "../../shared/traits/engine/recruit";
 import { TGrid } from "../grid/tgrid";
-import { BattlePath } from "../path/battle/battle-path";
+import { PathNetwork } from "../path/army/path-network";
 import { ArmyFoodEconomy } from "../food/food-economy";
 import { ArmyGoldEconomy, EconomyHooks } from "../gold/army-gold-economy";
 import { ShopEnterTrigger } from "../../shared/traits/engine/shop-enter";
 import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { TokenUnit } from "../../shared/traits/engine/token-unit";
+import { PathTile } from "../tile/recruit/tile";
+import { DEFAULT_PATH_CONNECTIONS } from "../tile/path-shape";
 
 export type ArmyHooks = {
 	economyHooks: EconomyHooks;
@@ -33,6 +35,8 @@ export class Army {
 	}
 
 	removeRecruit(recruit: AnyRecruit) {
+		// A picked-up tile has no neighbors any more, so it shows as a plain straight while dragged.
+		if (implementsTrait(recruit, PathTile)) recruit.pathConnections = DEFAULT_PATH_CONNECTIONS;
 		this.inventory.deleteElement(recruit);
 		this.grid.deleteElement(recruit);
 	}
@@ -76,10 +80,37 @@ export class Army {
 		return this.grid.environment;
 	}
 
+	// Door-to-castle path made by the tiles' connections. See PathNetwork.
+	get pathNetwork() {
+		return new PathNetwork(this.grid.getEnemyDoorCell(), this.castle.cell.down(), this.pathTiles);
+	}
+
 	get path() {
-		const from = this.grid.getEnemyDoorCell();
-		const to = this.castle.cell.down();
-		return BattlePath.chainTiles(from, to, this.pathTiles);
+		const network = this.pathNetwork;
+		if (!network.complete) throw new Error("No path found");
+		return network.route;
+	}
+
+	// Connected tiles from the enemy door, even when the path does not reach the castle yet.
+	get partialPath() {
+		return this.pathNetwork.route;
+	}
+
+	get pathJunctions() {
+		return this.pathNetwork.junctions;
+	}
+
+	// Gives every path tile its straight or turn shape.
+	refreshPathConnections(network = this.pathNetwork) {
+		this.pathTiles.forEach((tile) => (tile.pathConnections = network.connectionsAt(tile.cell)));
+	}
+
+	// Right-click on a path tile: turns the junction it is, or the junction next to it, to its next connection.
+	cyclePathAt(cell: Cell) {
+		const change = this.pathNetwork.nextChoiceAt(cell);
+		if (!change) return;
+		const tile = this.pathTiles.find((pathTile) => pathTile.cell.equals(change.cell));
+		if (tile) tile.connectionChoice = change.choice.map((offset) => offset.clone());
 	}
 
 	isPathValid() {

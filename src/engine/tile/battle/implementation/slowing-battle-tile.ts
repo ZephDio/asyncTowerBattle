@@ -1,3 +1,5 @@
+import { TPathShape } from "../../path-shape";
+import { PathResources } from "../../../../renderer/resources/path.resources";
 import { Derive } from "@ddd-ts/traits";
 import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
 
@@ -10,7 +12,7 @@ import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { BoggedDown } from "../../../stats/status/bogged-down";
 
-export class SlowingBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
+export class SlowingBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.slowing)) {
 	constructor(
 		pathTile: SlowingPathTile,
 		public cell: Cell,

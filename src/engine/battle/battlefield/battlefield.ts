@@ -4,7 +4,7 @@ import { BattleArmy } from "../../army/battle/battle-army";
 import { Battle } from "../battle";
 import { Physic } from "../../../shared/physic";
 import { HitBox } from "../../../shared/hitbox/hitboxe";
-import { GridPosition } from "../../../shared/position";
+import { Cell, GridPosition } from "../../../shared/position";
 import { BattleGrid } from "../../grid/battle-grid";
 import { AnyBattleBarrack } from "../../constructs/barrack/battle/battle-barrack";
 import { BattlePath } from "../../path/battle/battle-path";
@@ -96,10 +96,19 @@ export class Battlefield {
 			enemyArmy.getEconomyHooks(),
 			alliedArmy.getEconomyHooks(),
 		);
-		const alliedBattleTiles = alliedArmy.pathTiles.map((pathTile) =>
-			pathTile.toAllied(grid, alliedBattleArmy.getHooks()),
-		);
-		const enemyBattleTiles = enemyArmy.pathTiles.map((pathTile) => pathTile.toEnemy(grid, enemyBattleArmy.getHooks()));
+		alliedArmy.refreshPathConnections();
+		enemyArmy.refreshPathConnections();
+		const alliedBattleTiles = alliedArmy.pathTiles.map((pathTile) => {
+			const battleTile = pathTile.toAllied(grid, alliedBattleArmy.getHooks());
+			battleTile.pathConnections = pathTile.pathConnections;
+			return battleTile;
+		});
+		// The enemy half is rotated by PI, which flips every connection.
+		const enemyBattleTiles = enemyArmy.pathTiles.map((pathTile) => {
+			const battleTile = pathTile.toEnemy(grid, enemyBattleArmy.getHooks());
+			battleTile.pathConnections = pathTile.pathConnections.map((offset) => new Cell({ x: -offset.x, y: -offset.y }));
+			return battleTile;
+		});
 
 		const enemyBattleTowers = enemyArmy.towers.map((tower) => tower.toEnemy(grid, enemyBattleArmy.getHooks()));
 		const alliedBattleTowers = alliedArmy.towers.map((tower) => tower.toAllied(grid, alliedBattleArmy.getHooks()));

@@ -4,6 +4,7 @@ import { ScreenPosition } from "../../position";
 import { TDrawable } from "./drawable";
 import { Orientable } from "../engine/core/orientable";
 import { Size } from "../../size";
+import { TImageVariant } from "./image-variant";
 
 export enum DrawPriority {
 	BackGroundScreen = 0,
@@ -90,6 +91,11 @@ export const TImageDrawable = (
 				const { width, height } = this.getProportion(orientation);
 				const size = this.getCanvasSize(context, width, height, scale);
 				const canvasPosition = this.getCanvasPosition(context, position);
+				const variant = implementsTrait(this, TImageVariant) ? this.getImageVariant() : null;
+				if (variant) {
+					this.drawImage(context, size, canvasPosition, variant.image, variant.theta);
+					return;
+				}
 				const image = this.getView(orientation);
 				if (this.drawable.image instanceof HTMLImageElement) {
 					this.drawImage(context, size, canvasPosition, image, orientation);
