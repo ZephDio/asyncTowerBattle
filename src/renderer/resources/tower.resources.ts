@@ -13,13 +13,20 @@ export type Resource = {
   image: HTMLImageElement | HTMLImageElementAsset;
 }
 
+export const createViews = (folder: string): HTMLImageElementAsset => ({
+	frontView: createImage(`${folder}/front-view.png`),
+	backView: createImage(`${folder}/back-view.png`),
+	leftView: createImage(`${folder}/left-view.png`),
+	rightView: createImage(`${folder}/right-view.png`),
+});
+
 export class TowerResources {
   static blue : ShapedResource = {
 		size: {
 			width: 5,
 			height: 8,
 		},
-		image: createImage("/resources/towers/tower_blue.png"),
+		image: createViews("/resources/towers/blue"),
 		shape: "ellipse",
 	}
 
@@ -28,7 +35,7 @@ export class TowerResources {
 			width: 5,
 			height: 8,
 		},
-		image: createImage("/resources/towers/tower_frost.png"),
+		image: createViews("/resources/towers/frost"),
 		shape: "ellipse",
 	}
 
@@ -37,7 +44,7 @@ export class TowerResources {
 			width: 5,
 			height: 8,
 		},
-		image: createImage("/resources/towers/tower_green.png"),
+		image: createViews("/resources/towers/green"),
 		shape: "rectangle",
 	}
 
@@ -60,7 +67,7 @@ export class TowerResources {
 			width: 5,
 			height: 8,
 		},
-		image: createImage("/resources/towers/tower_purple.png"),
+		image: createViews("/resources/towers/purple"),
 		shape: "rectangle",
 	}
 }

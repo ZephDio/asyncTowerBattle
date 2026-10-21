@@ -2,7 +2,7 @@ import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
 import { ScreenPosition } from "../../position";
 
 import { TDrawable } from "./drawable";
-import { Orientable } from "../engine/core/orientable";
+import { Direction, Orientable, toDirection } from "../engine/core/orientable";
 import { Size } from "../../size";
 import { TImageVariant } from "./image-variant";
 
@@ -24,6 +24,14 @@ export type HTMLImageElementAsset = {
 	rightView: HTMLImageElement;
 };
 
+// Facing down means facing the camera, so the front of the element is seen
+const VIEW_BY_DIRECTION: Record<Direction, keyof HTMLImageElementAsset> = {
+	right: "rightView",
+	up: "backView",
+	left: "leftView",
+	down: "frontView",
+};
+
 export const TImageDrawable = (
 	image: HTMLImageElement | HTMLImageElementAsset,
 	size: Size,
@@ -41,11 +49,16 @@ export const TImageDrawable = (
 				if (this.drawable.image instanceof HTMLImageElement) {
 					return this.drawable.size;
 				}
-				const angle = (orientation + 2 * Math.PI) % (2 * Math.PI);
-				if (
-					(angle > Math.PI / 4 && angle <= (3 * Math.PI) / 4) ||
-					(angle > (5 * Math.PI) / 4 && angle <= (7 * Math.PI) / 4)
-				) {
+				const view = this.getView(orientation);
+				const front = this.drawable.image.frontView;
+				if (view.naturalWidth && front.naturalWidth) {
+					// Swap the size only when this view is turned against the front one (side of a house, not of a round tower)
+					const turned = view.naturalWidth > view.naturalHeight !== front.naturalWidth > front.naturalHeight;
+					const { width, height } = this.drawable.size;
+					return turned ? { width: height, height: width } : { width, height };
+				}
+				const direction = toDirection(orientation);
+				if (direction === "up" || direction === "down") {
 					return {
 						width: this.drawable.size.width,
 						height: this.drawable.size.height,
@@ -62,24 +75,7 @@ export const TImageDrawable = (
 				if (assets instanceof HTMLImageElement) {
 					return assets;
 				}
-				const angle = (orientation + 2 * Math.PI) % (2 * Math.PI);
-				const threshold = Math.PI / 2;
-				if (angle <= 0 + 0.1) {
-					return assets.rightView;
-				}
-				if (angle <= threshold + 0.1) {
-					return assets.backView;
-				}
-				if (angle <= 2 * threshold + 0.1) {
-					return assets.leftView;
-				}
-				if (angle <= 3 * threshold + 0.1) {
-					return assets.frontView;
-				}
-				if (angle <= 4 * threshold + 0.1) {
-					return assets.leftView;
-				}
-				throw new Error("Invalid angle");
+				return assets[VIEW_BY_DIRECTION[toDirection(orientation)]];
 			}
 
 			get drawPriority() {
