@@ -1,3 +1,5 @@
+import { TPathShape } from "../../path-shape";
+import { PathResources } from "../../../../renderer/resources/path.resources";
 import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
@@ -11,7 +13,7 @@ import { Action } from "../../../../shared/action";
 import { secondsToFrame } from "../../../../shared/seconds";
 import { Stunned } from "../../../stats/status/stunned";
 
-export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
+export class TrapBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.trap)) {
 	didTrigger = false;
 	cooldown = secondsToFrame(3);
 	clock = 0;

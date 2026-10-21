@@ -49,6 +49,10 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 		}
 		return undefined;
 	}
+	hasRoomFor(recruit: AnyRecruit) {
+		return this.getNextValidPosition(recruit) !== undefined;
+	}
+
 	add(recruit: AnyRecruit) {
 		const freeCell = this.getNextValidPosition(recruit);
 		if (!freeCell) throw new Error("No free cell in inventory");

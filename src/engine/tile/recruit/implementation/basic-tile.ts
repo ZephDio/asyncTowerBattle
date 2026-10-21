@@ -1,3 +1,5 @@
+import { TPathShape } from "../../path-shape";
+import { PathResources } from "../../../../renderer/resources/path.resources";
 import { Derive } from "@ddd-ts/traits";
 import { Cell } from "../../../../shared/position";
 import { BasicBattlePathTile } from "../../battle/implementation/basic-battle-tile";
@@ -6,7 +8,7 @@ import { PathTile } from "../tile";
 import { BasicTileBlueprint } from "../../blueprint/implementation/basic-path-blueprint";
 import { BattleGrid } from "../../../grid/battle-grid";
 
-export class BasicPathTile extends Derive(PathTile) {
+export class BasicPathTile extends Derive(PathTile, TPathShape(PathResources.normal)) {
 	constructor(
 		public cell: Cell,
 		public tile: BasicTileBlueprint = new BasicTileBlueprint({}),

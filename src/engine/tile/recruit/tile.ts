@@ -1,5 +1,5 @@
 import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
-import { GridPosition } from "../../../shared/position";
+import { Cell, GridPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { AnyBattleTile } from "../battle/battle-tile";
 import { TRecruit } from "../../../shared/traits/engine/recruit";
@@ -9,9 +9,13 @@ import { Inventory } from "../../grid/inventory/unit-inventory";
 import { TokenHooks } from "../../shop/holder/holder";
 import { BattleGrid } from "../../grid/battle-grid";
 import { TGrid } from "../../grid/tgrid";
+import { TPathConnections } from "../path-shape";
 
-export const PathTile = Subtrait([TRecruit], (base) => {
+export const PathTile = Subtrait([TRecruit, TPathConnections], (base) => {
 	abstract class IPathTile extends base {
+		// Pair of directions this tile connects when it has 3 or 4 neighbors. Set by right-clicking in the shop.
+		connectionChoice: Cell[] | null = null;
+
 		get position() {
 			return this.cell;
 		}
@@ -42,6 +46,7 @@ export const PathTile = Subtrait([TRecruit], (base) => {
 					throw new Error(`Element found in swap ${element}`);
 				});
 				this.cell = cell.clone();
+				this.connectionChoice = null;
 				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return elements[0];

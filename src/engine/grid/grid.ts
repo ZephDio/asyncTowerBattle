@@ -1,7 +1,8 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell, ScreenPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
-import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
+import { TGrid } from "./tgrid";
+import { ARMY_GRID_SIZES, GridSize, fitCellSize } from "./grid-sizes";
 import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { AnyCastle, Castle } from "../castle/recruit/castle-recruit";
@@ -23,10 +24,10 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	synergiesEffects: SynergyEffectHud[] = [];
 
 	constructor(
-		width: number = 13,
-		height: number = 6,
+		width: number = ARMY_GRID_SIZES.round1.width,
+		height: number = ARMY_GRID_SIZES.round1.height,
 		public screenPosition: ScreenPosition = PercentToReal({ x: 35, y: 28 }),
-		cellSize = STANDARD_CELL_SIZE,
+		cellSize = fitCellSize(height),
 	) {
 		super({ width, height, cellSize, position: screenPosition });
 	}
@@ -128,22 +129,29 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		envGenerator.generateEnvironmentForRoundOne(this);
 	}
 	roundTwo(envGenerator: EnvironmentGeneration) {
-		this.width = 8;
-		this.height = 6;
-		this.cellSize = STANDARD_CELL_SIZE;
+		this.resize(ARMY_GRID_SIZES.round2);
 		this.translate();
-		[new BasicPathTile(new Cell({ x: 7, y: 5 }))].forEach((pathTile) => this.setElement(pathTile));
+		this.setElement(new BasicPathTile(this.getEnemyDoorCell()));
 		envGenerator.generateEnvironmentForRoundTwo(this);
 	}
 
 	roundThree(envGenerator: EnvironmentGeneration) {
-		this.width = 11;
-		[
-			new BasicPathTile(new Cell({ x: 8, y: 5 })),
-			new BasicPathTile(new Cell({ x: 9, y: 5 })),
-			new BasicPathTile(new Cell({ x: 10, y: 5 })),
-		].forEach((pathTile) => this.setElement(pathTile));
-		this.updateCornerPosition();
+		const previousWidth = this.width;
+		this.resize(ARMY_GRID_SIZES.round3);
+		for (let x = previousWidth; x < this.width; x++) {
+			this.setElement(new BasicPathTile(new Cell({ x, y: this.height - 1 })));
+		}
 		envGenerator.generateEnvironmentForRoundTwo(this);
+	}
+
+	resize({ width, height }: GridSize) {
+		this.width = width;
+		this.height = height;
+		this.cellSize = fitCellSize(height);
+		this.updateCornerPosition();
+	}
+
+	static sized({ width, height }: GridSize) {
+		return new ArmyGrid(width, height);
 	}
 }

@@ -14,6 +14,7 @@ import { Buyable } from "./retail/buyable";
 import { RefreshBellHud } from "../../shared/hud-element/refresh-bell-hud";
 import { Holder } from "./holder/holder";
 import { EconomyHooks } from "../gold/army-gold-economy";
+import { PathPreview } from "../path/army/path-preview";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -91,7 +92,7 @@ export class ShopPhase {
 			grids: [
 				{
 					grid: this.army.grid,
-					drawables: [],
+					drawables: [this.getPathPreview()],
 				},
 				{
 					grid: this.army.inventory,
@@ -109,6 +110,12 @@ export class ShopPhase {
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
 		};
+	}
+
+	getPathPreview() {
+		const network = this.army.pathNetwork;
+		this.army.refreshPathConnections(network);
+		return new PathPreview(network.junctions);
 	}
 
 	getTokenHooks(): ShopPhaseHooks {

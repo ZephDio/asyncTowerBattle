@@ -1,3 +1,5 @@
+import { TPathShape } from "../../path-shape";
+import { PathResources } from "../../../../renderer/resources/path.resources";
 import { Derive } from "@ddd-ts/traits";
 import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
@@ -8,7 +10,7 @@ import { GridElement } from "../../../../shared/traits/engine/core/grid-element"
 import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 
-export class BasicBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable) {
+export class BasicBattlePathTile extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.normal)) {
 	constructor(
 		pathTile: BasicPathTile,
 		public cell: Cell,

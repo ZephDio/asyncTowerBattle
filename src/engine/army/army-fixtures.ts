@@ -2,6 +2,7 @@ import { Cell } from "../../shared/position";
 import { BarrackRecruitFixtures } from "../constructs/barrack/recruit/barrack-fixtures";
 import { CastleFactory, CastleFixture } from "../castle/recruit/castle-recruit-fixtures";
 import { ArmyGrid } from "../grid/grid";
+import { ARMY_GRID_SIZES } from "../grid/grid-sizes";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { Faction } from "../menu/main-menu";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
@@ -67,7 +68,7 @@ export class ArmyFixture {
 export class ArmyFactory {
 	static default(classe: Faction) {
 		if (classe === Faction.Dwarf) {
-			const grid = new ArmyGrid(7, 5, undefined, 6);
+			const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round1);
 			const castle = CastleFactory.defaultDwarf;
 			const tiles = PathFactory.default;
 			const unitInventory = new Inventory();
@@ -75,7 +76,7 @@ export class ArmyFactory {
 			return new Army(grid, unitInventory, new DwarfBlueprint({}));
 		}
 		if (classe === Faction.Elf) {
-			const grid = new ArmyGrid(7, 5, undefined, 6);
+			const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round1);
 			const castle = CastleFactory.defaultElf;
 			const tiles = PathFactory.default;
 			const unitInventory = new Inventory();

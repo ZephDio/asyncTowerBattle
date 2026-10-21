@@ -1,3 +1,5 @@
+import { TPathShape } from "../../path-shape";
+import { PathResources } from "../../../../renderer/resources/path.resources";
 import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
@@ -6,7 +8,7 @@ import { BattleGrid } from "../../../grid/battle-grid";
 import { TrapTileBlueprint } from "../../blueprint/implementation/trap-tile-blueprint";
 import { TrapBattlePathTile } from "../../battle/implementation/trap-battle-tle";
 
-export class TrapPathTile extends Derive(PathTile) {
+export class TrapPathTile extends Derive(PathTile, TPathShape(PathResources.trap)) {
 	constructor(
 		public cell: Cell,
 		public tile: TrapTileBlueprint = new TrapTileBlueprint({}),

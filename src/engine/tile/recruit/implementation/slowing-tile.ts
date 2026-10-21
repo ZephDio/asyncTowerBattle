@@ -1,3 +1,5 @@
+import { TPathShape } from "../../path-shape";
+import { PathResources } from "../../../../renderer/resources/path.resources";
 import { Derive } from "@ddd-ts/traits";
 import { Cell } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
@@ -7,7 +9,7 @@ import { TRecruit } from "../../../../shared/traits/engine/recruit";
 import { SlowingTileBlueprint } from "../../blueprint/implementation/slowing-tile-blueprint";
 import { BattleGrid } from "../../../grid/battle-grid";
 
-export class SlowingPathTile extends Derive(TRecruit, PathTile) {
+export class SlowingPathTile extends Derive(TRecruit, PathTile, TPathShape(PathResources.slowing)) {
 	constructor(
 		public cell: Cell,
 		public tile: SlowingTileBlueprint = new SlowingTileBlueprint({}),

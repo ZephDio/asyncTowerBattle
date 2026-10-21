@@ -12,6 +12,7 @@ import { TSynergy } from "../../shared/traits/engine/synergy";
 import { Inventory } from "../../engine/grid/inventory/unit-inventory";
 import { RetailGrid } from "../../engine/grid/retail-grid";
 import { Buyable } from "../../engine/shop/retail/buyable";
+import { PathTile } from "../../engine/tile/recruit/tile";
 
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
@@ -182,6 +183,12 @@ export class ShopInputToIntentTranslator {
 		if (shop.holderControl.hold) {
 			shop.holderControl.hold.rotate();
 			this.handleMouseMove(shop, focus, screenPosition);
+			return;
+		}
+		if (focus && !(focus instanceof RefreshBellHud) && !(focus instanceof StartBattleButton)) {
+			if (focus.grid instanceof ArmyGrid && focus.element && implementsTrait(focus.element, PathTile)) {
+				shop.army.cyclePathAt(focus.element.cell);
+			}
 		}
 	}
 
