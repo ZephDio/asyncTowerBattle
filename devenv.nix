@@ -12,6 +12,9 @@
 
   languages.typescript.enable = true;
 
+  # Biome from nixpkgs: the npm package ships a generic-linux binary that NixOS can't run
+  packages = [ pkgs.biome ];
+
   processes.vite.exec = "pnpm start";
 
   enterShell = ''

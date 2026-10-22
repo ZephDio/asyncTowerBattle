@@ -1,17 +1,14 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.6.3/schema.json",
-	"organizeImports": {
-		"enabled": false
-	},
+	"$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+	"assist": { "actions": { "source": { "organizeImports": "off" } } },
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true,
+			"preset": "recommended",
 			"correctness": {
 				"useYield": "off",
 				"noInvalidConstructorSuper": "off",
 				"noSwitchDeclarations": "off",
-				"noUnnecessaryContinue": "off",
 				"noChildrenProp": "off",
 				"noVoidTypeReturn": "off",
 				"noUnsafeOptionalChaining": "off",
@@ -44,7 +41,6 @@
 				"useTemplate": "off",
 				"noNonNullAssertion": "off",
 				"noInferrableTypes": "off",
-				"noCommaOperator": "error",
 				"useImportType": "off",
 				"useNumberNamespace": "off"
 			},
@@ -57,7 +53,9 @@
 				"noBannedTypes": "error",
 				"noForEach": "off",
 				"noStaticOnlyClass": "off",
-				"useLiteralKeys": "off"
+				"useLiteralKeys": "off",
+				"noUselessContinue": "off",
+				"noCommaOperator": "error"
 			},
 			"performance": {
 				"noDelete": "off",
@@ -90,11 +88,12 @@
 		"clientKind": "git"
 	},
 	"files": {
-		"ignore": [
-			"**/node_modules/**",
-			"**/dist/**",
-			"**/*.json",
-			"**/.env"
+		"includes": [
+			"**",
+			"!**/node_modules/**",
+			"!**/dist/**",
+			"!**/*.json",
+			"!**/.env"
 		]
 	}
 }
