@@ -1,4 +1,5 @@
-import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
+import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
@@ -38,7 +39,7 @@ export class RedObeliskBlueprint extends Derive(
 ) {
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		if (!gridElement) return false;
-		if (implementsTrait(gridElement, EvilTag)) return true;
+		if (hasTag(gridElement, "Evil")) return true;
 		return false;
 	};
 	override patternEffect = new PatternEffect(

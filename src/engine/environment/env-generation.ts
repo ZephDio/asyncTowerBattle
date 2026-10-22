@@ -1,112 +1,59 @@
+import { implementsTrait } from "@ddd-ts/traits";
 import { Cell } from "../../shared/position";
 import { ArmyGrid } from "../grid/grid";
-import { ARMY_GRID_SIZES } from "../grid/grid-sizes";
+import { RoundGrowth } from "../grid/grid-sizes";
+import { TEnvironmentElement } from "./environment";
 import { Forest } from "./forest";
 import { Rock } from "./rock";
-8 / 10
+
+const pickRandom = <T>(items: T[]) => items[Math.floor(Math.random() * items.length)];
+
 export class EnvironmentGeneration {
-	generateEnvironmentForRoundOne(grid: ArmyGrid) {
-			this.generateTrees(grid, 3);
-			this.generateRocks(grid, 2);
-	}
-	
-
-	generateEnvironmentForRoundTwo(grid: ArmyGrid){
-			const { width, height } = ARMY_GRID_SIZES.round2;
-			// new right column (door row excluded) or new top row
-			if(Math.random() < (5/12)){
-				this.generateRocks(grid, 1, {minX : width - 1, maxX : width - 1, minY : 1, maxY : height - 2});
-				return
-			}
-			this.generateRocks(grid, 1, {minX : 0, maxX : width - 1, minY : 0, maxY : 0});
+	generateForRound(grid: ArmyGrid, growth: RoundGrowth) {
+		this.generateTrees(grid, growth.trees);
+		this.generateRocks(grid, growth.rocks);
 	}
 
-	generateEnvironmentForRoundThree(grid: ArmyGrid){
-			const minX = ARMY_GRID_SIZES.round2.width;
-			const { width, height } = ARMY_GRID_SIZES.round3;
-			this.generateTrees(grid, 2, {minX, maxX : width - 1, minY : 0, maxY : height - 1});
-			this.generateRocks(grid, 1, {minX, maxX : width - 1, minY : 0, maxY : height - 1});
-	}
-	
-	generateTrees(grid: ArmyGrid, amount: number, range? : {minX : number, maxX: number , minY : number, maxY : number}) {
-		let trys = 0;
-		let generated = 0;
-		let lastGenerated = null as null | Forest;
-		while (generated < amount && trys < 10000) {
-			if (!lastGenerated) {
-				let x : number
-				let y : number
-				if(range){
-					x = Math.round(Math.random() * (range.maxX - range.minX) + range.minX);
-					y = Math.round(Math.random() * (range.maxY - range.minY) + range.minY);
-				}else{
-					x = Math.round(Math.random() * (grid.width - 1 ));
-					y = Math.round(Math.random() * (grid.height - 1));
-				}
-				const cell = new Cell({ x, y });
-				if (!grid.getElement(cell)) {
-					const forest = new Forest(cell);
-					grid.setElement(forest);
-					lastGenerated = forest;
-					generated++;
-				}
-			}
-			if (lastGenerated && generated < amount) {
-				const axe = Math.random() < 0.5 ? 0 : 1;
-				let x = lastGenerated.cell.x;
-				let y = lastGenerated.cell.y;
-				if (axe) {
-					x += Math.random() < 0.5 ? -1 : 1;
-				} else {
-					y += Math.random() < 0.5 ? -1 : 1;
-				}
-				if (x < 0 || x >= grid.width || y < 0 || y >= grid.height) {
-					trys++;
-					continue;
-				}
-				const cell = new Cell({ x, y });
-				if (!grid.getElement(cell)) {
-					const forest = new Forest(cell);
-					grid.setElement(forest);
-					lastGenerated = forest;
-					generated++;
-				}
-			}
-
-			trys++;
+	// Trees of a same batch grow next to each other when they can. The first one lands on any free cell, so it may or
+	// may not touch older trees.
+	generateTrees(grid: ArmyGrid, amount: number) {
+		const planted: Cell[] = [];
+		for (let i = 0; i < amount; i++) {
+			const free = this.freeCells(grid);
+			const connected = free.filter((cell) =>
+				cell.surrounding().some((around) => planted.some((p) => p.equals(around))),
+			);
+			const cell = pickRandom(connected.length > 0 ? connected : free);
+			if (!cell) return;
+			grid.setElement(new Forest(cell));
+			planted.push(cell);
 		}
 	}
 
-	generateRocks(grid: ArmyGrid, amount: number, range? : {minX : number, maxX: number , minY : number, maxY : number}) {
-		let trys = 0;
-		let generated = 0;
-
-		while (generated < amount && trys < 10000) {
-			let x : number
-			let y : number
-			if(range){
-				x = Math.round(Math.random() * (range.maxX - range.minX) + range.minX);
-				y = Math.round(Math.random() * (range.maxY - range.minY) + range.minY);
-			} else {
-				x = Math.round(Math.random() * (grid.width - 1));
-				y = Math.round(Math.random() * (grid.height - 1));
-			}
-			const cell = new Cell({ x, y });
-
-			const surrounding = cell.surrounding();
-			if (surrounding.some((c) => grid.getElement(c))) {
-				if (Math.random() > 0.1) {
-					trys++;
-					continue;
-				}
-			}
-			if (!grid.getElement(cell)) {
-				const forest = new Rock(cell);
-				grid.setElement(forest);
-				generated++;
-			}
-
-			trys++;
+	// Rocks stay away from other rocks and trees when they can.
+	generateRocks(grid: ArmyGrid, amount: number) {
+		for (let i = 0; i < amount; i++) {
+			const free = this.freeCells(grid);
+			const isolated = free.filter((cell) => !cell.surrounding().some((around) => this.isEnvironment(grid, around)));
+			const cell = pickRandom(isolated.length > 0 ? isolated : free);
+			if (!cell) return;
+			grid.setElement(new Rock(cell));
 		}
+	}
+
+	private freeCells(grid: ArmyGrid) {
+		const cells: Cell[] = [];
+		for (let x = 0; x < grid.width; x++) {
+			for (let y = 0; y < grid.height; y++) {
+				const cell = new Cell({ x, y });
+				if (!grid.getElement(cell)) cells.push(cell);
+			}
+		}
+		return cells;
+	}
+
+	private isEnvironment(grid: ArmyGrid, cell: Cell) {
+		const element = grid.getElement(cell);
+		return element !== undefined && implementsTrait(element, TEnvironmentElement);
 	}
 }

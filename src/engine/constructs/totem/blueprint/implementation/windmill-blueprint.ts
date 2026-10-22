@@ -1,4 +1,5 @@
-import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
+import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
@@ -22,11 +23,7 @@ export class WindmillBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(
-		TotemResources.windmill.image,
-		TotemResources.windmill.size,
-		DrawPriority.NormalGridElement,
-	),
+	TImageDrawable(TotemResources.windmill.image, TotemResources.windmill.size, DrawPriority.NormalGridElement),
 	TSynergy,
 	FoodTag,
 	TotemTag,
@@ -41,7 +38,7 @@ export class WindmillBlueprint extends Derive(
 
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		if (!gridElement) return false;
-		if (implementsTrait(gridElement, FoodTag)) return true;
+		if (hasTag(gridElement, "Food")) return true;
 		return false;
 	};
 	override patternEffect: PatternEffect = new PatternEffect(

@@ -66,7 +66,9 @@ describe("PathNetwork right-click", () => {
 			seen.add(offsets(network.connectionsAt(from)).join(" "));
 			tiles[0]!.connectionChoice = network.nextChoiceAt(from)!.choice;
 		}
-		expect(seen).toEqual(new Set([[UP, RIGHT].sort().join(" "), [UP, DOWN].sort().join(" "), [DOWN, RIGHT].sort().join(" ")]));
+		expect(seen).toEqual(
+			new Set([[UP, RIGHT].sort().join(" "), [UP, DOWN].sort().join(" "), [DOWN, RIGHT].sort().join(" ")]),
+		);
 	});
 
 	it("turns a neighboring junction towards a tile it does not connect", () => {

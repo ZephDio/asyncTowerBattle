@@ -1,37 +1,37 @@
-import { createImage } from "../../shared/image"
-import { ShapedResource } from "./tower.resources"
+import { createImage } from "../../shared/image";
+import { ShapedResource } from "./tower.resources";
 
 export class TotemResources {
-  static anvil: ShapedResource = {
-    size: {
-      width: 6.2,
-      height: 6,
-    },
-    image: {
-      frontView: createImage("/resources/totem/anvil/front-view.png"),
-      backView: createImage("/resources/totem/anvil/back-view.png"),
-      leftView: createImage("/resources/totem/anvil/left-view.png"),
-      rightView: createImage("/resources/totem/anvil/right-view.png"),
-    },
-    shape: "ellipse",
-  }
-  static cropsfield: ShapedResource = {
-    size: {
-      width: 5,
-      height: 5,
-    },
-    image: createImage("/resources/totem/crops-field.png"),
-    shape: "rectangle",
-  }
+	static anvil: ShapedResource = {
+		size: {
+			width: 6.2,
+			height: 6,
+		},
+		image: {
+			frontView: createImage("/resources/totem/anvil/front-view.png"),
+			backView: createImage("/resources/totem/anvil/back-view.png"),
+			leftView: createImage("/resources/totem/anvil/left-view.png"),
+			rightView: createImage("/resources/totem/anvil/right-view.png"),
+		},
+		shape: "ellipse",
+	};
+	static cropsfield: ShapedResource = {
+		size: {
+			width: 5,
+			height: 5,
+		},
+		image: createImage("/resources/totem/crops-field.png"),
+		shape: "rectangle",
+	};
 
-  static obelisk: ShapedResource = {
+	static obelisk: ShapedResource = {
 		size: {
 			width: 4,
 			height: 10,
 		},
 		image: createImage("/resources/totem/obelisk.png"),
 		shape: "rectangle",
-	}
+	};
 	static bakery: ShapedResource = {
 		size: {
 			width: 6,
@@ -44,9 +44,9 @@ export class TotemResources {
 			rightView: createImage("/resources/totem/bakery/right-view.png"),
 		},
 		shape: "rectangle",
-	}
+	};
 
-  static brewery: ShapedResource = {
+	static brewery: ShapedResource = {
 		size: {
 			width: 10,
 			height: 5,
@@ -58,7 +58,7 @@ export class TotemResources {
 			rightView: createImage("/resources/totem/brewery/right-view.png"),
 		},
 		shape: "rectangle",
-	}
+	};
 	static windmill: ShapedResource = {
 		size: {
 			width: 6.4,
@@ -71,22 +71,22 @@ export class TotemResources {
 			rightView: createImage("/resources/totem/windmill/right-view.png"),
 		},
 		shape: "rectangle",
-	}
+	};
 
-  static mine: ShapedResource = {
-			size: {
-				width: 5,
-				height: 5,
-			},
-			image: createImage("/resources/totem/mine.png"),
-			shape: "ellipse",
-		}
+	static mine: ShapedResource = {
+		size: {
+			width: 5,
+			height: 5,
+		},
+		image: createImage("/resources/totem/mine.png"),
+		shape: "ellipse",
+	};
 	static gobelinportal: ShapedResource = {
-			size: {
-				width: 5,
-				height: 5,
-			},
-			image: createImage("/resources/totem/gobelin-portal.png"),
-			shape: "ellipse",
-		}
+		size: {
+			width: 5,
+			height: 5,
+		},
+		image: createImage("/resources/totem/gobelin-portal.png"),
+		shape: "ellipse",
+	};
 }

@@ -79,8 +79,8 @@ export const TGrid = Trait((base) => {
 			for (const cell of cells) {
 				const found = this.getElement(cell);
 				if (found) {
-					if(implementsTrait(found, Castle)) return { valid: false, elements: [] };
-					if(!implementsTrait(found, TRecruit)) return { valid: false, elements: [] };
+					if (implementsTrait(found, Castle)) return { valid: false, elements: [] };
+					if (!implementsTrait(found, TRecruit)) return { valid: false, elements: [] };
 					founds.add(found);
 				}
 			}
@@ -113,7 +113,7 @@ export const TGrid = Trait((base) => {
 		getElements() {
 			return [...this.tiles.values()];
 		}
-		
+
 		getElement(cell: Cell) {
 			return this.tiles.get(ArmyGrid.posToString(cell));
 		}
@@ -130,7 +130,9 @@ export const TGrid = Trait((base) => {
 		getDrawables(): ImplementsTrait<typeof TRenderable>[] {
 			const elements = [...this.tiles.values()];
 			// Traps come after the elements so they are drawn over the path tile carrying them.
-			const traps = elements.flatMap((element) => (implementsTrait(element, TTrapHolder) && element.trap ? [element.trap] : []));
+			const traps = elements.flatMap((element) =>
+				implementsTrait(element, TTrapHolder) && element.trap ? [element.trap] : [],
+			);
 			return [...elements, ...traps, ...this.synergiesEffects, ...(this.hoverEffect ? [...this.hoverEffect] : [])];
 		}
 

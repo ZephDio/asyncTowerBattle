@@ -10,7 +10,7 @@ import { FrostNova } from "../../../area-effect/implementation/frost-nova";
 import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 
-export class BattleFrostSpike extends Derive(TRenderable, HTHitbox, HTImageDrawable,Orientable) {
+export class BattleFrostSpike extends Derive(TRenderable, HTHitbox, HTImageDrawable, Orientable) {
 	pathFinder: PathFinder;
 	speed: number;
 
@@ -52,7 +52,6 @@ export class BattleFrostSpike extends Derive(TRenderable, HTHitbox, HTImageDrawa
 		this.hooks.removeProjectile(this);
 	}
 
-	
 	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;

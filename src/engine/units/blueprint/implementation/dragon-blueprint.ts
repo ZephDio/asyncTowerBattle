@@ -11,6 +11,8 @@ import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/h
 import { secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 import { MonsterTag } from "../../../../shared/traits/engine/tags/species/species-tag";
+import { EvilTag } from "../../../../shared/traits/engine/tags/alignment/alignment-tags";
+import { MountainTag } from "../../../../shared/traits/engine/tags/biome/biome-tags";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class DragonBlueprint extends Derive(
@@ -30,6 +32,8 @@ export class DragonBlueprint extends Derive(
 		summonTime: secondsToFrame(2.2),
 		range: NaN,
 	}),
+	EvilTag,
+	MountainTag,
 	MonsterTag,
 ) {
 	description = new UnitDescription("Dragon", ["Gains 1 max Health", "for each 5🪙 you own"], this);

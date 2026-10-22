@@ -1,4 +1,3 @@
-
 import { BlueTowerBlueprint } from "./implementation/blue-tower-blueprint";
 import { GreenTowerBlueprint } from "./implementation/green-tower-blueprint";
 import { WitchHouseBlueprint } from "./implementation/witch-house-blueprint";

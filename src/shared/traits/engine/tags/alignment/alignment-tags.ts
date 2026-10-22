@@ -1,7 +1,8 @@
 import { Subtrait } from "@ddd-ts/traits";
 import { Tagged } from "../tagged.js";
 
-export type AlignmentType = "Evil" | "Magic";
+export const ALIGNMENT_TAGS = ["Food", "Evil", "Magic"] as const;
+export type AlignmentType = (typeof ALIGNMENT_TAGS)[number];
 
 export const EvilTag = Subtrait([Tagged], (base, Props) => {
 	abstract class TEvilTag extends base {

@@ -4,6 +4,7 @@ import { THitbox } from "../../shared/traits/engine/core/THitbox";
 import { HitBox } from "../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../shared/hitbox/shapes/rectangle";
 import { GridPosition } from "../../shared/position";
+import type { BattleGrid } from "../grid/battle-grid";
 import { TRenderable } from "../../shared/traits/render/renderable";
 
 export const TEnvironmentElement = Subtrait(
@@ -13,7 +14,10 @@ export const TEnvironmentElement = Subtrait(
 		TRenderable,
 	],
 	(base) => {
-		abstract class IEnvironmentElement extends base {}
+		abstract class IEnvironmentElement extends base {
+			// Copy of the element on the enemy half of the battle grid.
+			abstract toEnemy(grid: BattleGrid): IEnvironmentElement;
+		}
 
 		return IEnvironmentElement;
 	},

@@ -132,7 +132,8 @@ const RIGHT = new Cell({ x: 1, y: 0 });
 const cellKey = (cell: Cell) => `${cell.x},${cell.y}`;
 const opposite = (offset: Cell) => new Cell({ x: -offset.x, y: -offset.y });
 const offsetBetween = (from: Cell, to: Cell) => new Cell({ x: to.x - from.x, y: to.y - from.y });
-const samePair = (a: Cell[], b: Cell[]) => a.length === b.length && a.every((offset) => b.some((other) => other.equals(offset)));
+const samePair = (a: Cell[], b: Cell[]) =>
+	a.length === b.length && a.every((offset) => b.some((other) => other.equals(offset)));
 const pairsOf = (offsets: Cell[]) => offsets.flatMap((a, i) => offsets.slice(i + 1).map((b) => [a, b]));
 
 const MAX_ROUTES = 256;

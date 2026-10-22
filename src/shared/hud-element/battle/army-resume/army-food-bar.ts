@@ -8,14 +8,13 @@ import { IconResources } from "../../../../renderer/resources/icons.resources";
 
 export class FoodBarHud extends Derive(TRenderable, TDrawable) {
 	drawPriority = DrawPriority.HUD;
-	foodIcon = IconResources.food.image
+	foodIcon = IconResources.food.image;
 	constructor(
 		private economy: BattleFoodEconomy,
 		public position: ScreenPosition,
 	) {
 		super({});
 	}
-
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		context.globalAlpha = 1;
@@ -37,14 +36,17 @@ export class FoodBarHud extends Derive(TRenderable, TDrawable) {
 				y: canvasPosition.y,
 			}),
 		);
-		const iconPosition = this.getCanvasPosition(context,this.position.add(new ScreenPosition({ x: -6 , y: 0 })))
-		this.drawImage(context, { width: size.width/5, height:size.height*1.5 },
-			iconPosition, 
-			 this.foodIcon)
+		const iconPosition = this.getCanvasPosition(context, this.position.add(new ScreenPosition({ x: -6, y: 0 })));
+		this.drawImage(context, { width: size.width / 5, height: size.height * 1.5 }, iconPosition, this.foodIcon);
 
 		context.fillStyle = "black";
 		context.textAlign = "center";
-		context.font = `bold ${size.height*1.5}px text`;
-		context.fillText(`${Math.round(this.economy.food)}/${Math.round(this.economy.maxFood)}`, canvasPosition.x, canvasPosition.y + size.height/2 , size.width)
+		context.font = `bold ${size.height * 1.5}px text`;
+		context.fillText(
+			`${Math.round(this.economy.food)}/${Math.round(this.economy.maxFood)}`,
+			canvasPosition.x,
+			canvasPosition.y + size.height / 2,
+			size.width,
+		);
 	}
 }

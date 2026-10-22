@@ -67,10 +67,21 @@ export class Game {
 
 	handleSummaryQuit() {
 		this.battleSummary = null;
-		const animation = new TranslateAnimation(20, this.army.grid.centerPosition, PercentToReal({ x: 35, y: 28 }) , this.army.grid.centerPosition.clone(), ()=> {this.army.grid.updateCornerPosition()},()=> {this.army.grid.updateCornerPosition()})
-		animation.startAnimation()
-		if(this.life === 0){
-			this.endGame()
+		const animation = new TranslateAnimation(
+			20,
+			this.army.grid.centerPosition,
+			PercentToReal({ x: 35, y: 28 }),
+			this.army.grid.centerPosition.clone(),
+			() => {
+				this.army.grid.updateCornerPosition();
+			},
+			() => {
+				this.army.grid.updateCornerPosition();
+			},
+		);
+		animation.startAnimation();
+		if (this.life === 0) {
+			this.endGame();
 		}
 		this.startShop();
 	}

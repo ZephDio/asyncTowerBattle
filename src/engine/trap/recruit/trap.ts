@@ -35,7 +35,9 @@ export const Trap = Subtrait([TRecruit, TPathConnections], (base) => {
 				throw new Error("cannot sell trap");
 			}
 			if (!(grid instanceof ArmyGrid || grid instanceof Inventory)) throw new Error("No Case Matched");
-			const cell = grid.gridPositionToCell(this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation));
+			const cell = grid.gridPositionToCell(
+				this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation),
+			);
 			if (!cell) throw new Error("Invalid cell");
 			const found = grid.getElement(cell);
 			if (found && implementsTrait(found, PathTile)) {

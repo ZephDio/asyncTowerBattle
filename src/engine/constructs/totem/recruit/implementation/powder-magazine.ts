@@ -12,11 +12,11 @@ export class PowderMagazine extends Derive(Totem, RecruitBattleStart) {
 		public cell: Cell,
 		public blueprint: PowderMagazineBlueprint = new PowderMagazineBlueprint({}),
 	) {
-		super({ 
+		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
-			imageDrawable: blueprint, 
-			hitboxHolder: blueprint 
+			imageDrawable: blueprint,
+			hitboxHolder: blueprint,
 		});
 	}
 

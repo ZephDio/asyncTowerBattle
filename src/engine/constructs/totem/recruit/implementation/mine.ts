@@ -14,12 +14,12 @@ export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy) {
 		public cell: Cell,
 		public blueprint: MineBlueprint = new MineBlueprint({}),
 	) {
-		super({ 
+		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
-			imageDrawable: blueprint, 
-			hitboxHolder: blueprint, 
-			synergy: blueprint 
+			imageDrawable: blueprint,
+			hitboxHolder: blueprint,
+			synergy: blueprint,
 		});
 	}
 

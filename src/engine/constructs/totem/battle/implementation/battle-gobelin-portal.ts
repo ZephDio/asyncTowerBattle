@@ -15,7 +15,7 @@ export class BattleGobelinPortal extends Derive(BattleTotem) {
 		public readonly cell: Cell,
 		override _orientation: number,
 	) {
-		super({ imageDrawable: portal, hitboxHolder: portal, descriptor: portal , tagHolder: portal });
+		super({ imageDrawable: portal, hitboxHolder: portal, descriptor: portal, tagHolder: portal });
 		this.gridShape = portal.gridShape;
 	}
 
@@ -37,8 +37,11 @@ export class BattleGobelinPortal extends Derive(BattleTotem) {
 	gobelinSpawn() {
 		const out = this.hooks.random();
 		if (out > 0.3) return;
-		
+
 		const path = this.hooks.getEnemyPath();
-		this.hooks.addUnits(this.portal.recruit.toBattle(this.hooks.getAlliedCastle().position.clone(), path, this.hooks), this);
+		this.hooks.addUnits(
+			this.portal.recruit.toBattle(this.hooks.getAlliedCastle().position.clone(), path, this.hooks),
+			this,
+		);
 	}
 }

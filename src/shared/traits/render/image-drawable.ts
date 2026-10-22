@@ -32,11 +32,7 @@ const VIEW_BY_DIRECTION: Record<Direction, keyof HTMLImageElementAsset> = {
 	down: "frontView",
 };
 
-export const TImageDrawable = (
-	image: HTMLImageElement | HTMLImageElementAsset,
-	size: Size,
-	priority: number,
-) =>
+export const TImageDrawable = (image: HTMLImageElement | HTMLImageElementAsset, size: Size, priority: number) =>
 	Subtrait([TDrawable], (base) => {
 		abstract class TImageDrawable extends base {
 			drawable = {

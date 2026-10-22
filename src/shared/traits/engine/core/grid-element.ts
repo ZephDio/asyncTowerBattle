@@ -6,9 +6,9 @@ import { Physic } from "../../../physic";
 import { Orientable } from "./orientable";
 
 export class GridShape {
-	defaultVector: GridPosition
+	defaultVector: GridPosition;
 	constructor(public cells: Cell[] = [new Cell({ x: 0, y: 0 })]) {
-		this.defaultVector = this.calculateDefaultVector()
+		this.defaultVector = this.calculateDefaultVector();
 	}
 
 	getVectorialCells(orientation: number) {
@@ -33,12 +33,12 @@ export class GridShape {
 		});
 	}
 
-	calculateDefaultVector(){
+	calculateDefaultVector() {
 		const acc = this.cells.reduce((acc, cell) => acc.add(cell), new Cell({ x: 0, y: 0 }));
 		const average = acc.divideBy(this.cells.length);
 		return new GridPosition({
-			x: (average.x * STANDARD_CELL_SIZE),
-			y: (average.y * STANDARD_CELL_SIZE),
+			x: average.x * STANDARD_CELL_SIZE,
+			y: average.y * STANDARD_CELL_SIZE,
 		});
 	}
 

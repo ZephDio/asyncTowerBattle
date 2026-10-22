@@ -7,13 +7,7 @@ import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { Brewery } from "../../recruit/implementation/brewery";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
-export class BattleBrewery extends Derive(
-	BattleTotem,
-	HTSynergy,
-	Caster,
-	BattleStartTrigger,
-	TStatsRenderable,
-) {
+export class BattleBrewery extends Derive(BattleTotem, HTSynergy, Caster, BattleStartTrigger, TStatsRenderable) {
 	vitalityBuffAmount: number = 2;
 	constructor(
 		public brewery: Brewery,

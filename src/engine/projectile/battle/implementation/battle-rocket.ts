@@ -46,7 +46,6 @@ export class BattleRocket extends Derive(HTHitbox, HTImageDrawable, TRenderable,
 		}
 	}
 
-
 	move(newPosition: GridPosition) {
 		this.position.x = newPosition.x;
 		this.position.y = newPosition.y;

@@ -13,12 +13,12 @@ export class Bakery extends Derive(Totem, RecruitCaster, HTBaseStats) {
 		public cell: Cell,
 		public blueprint: BakeryBlueprint = new BakeryBlueprint({}),
 	) {
-		super({ 
+		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
-			imageDrawable: blueprint, 
-			hitboxHolder: blueprint, 
-			statsHolder: blueprint 
+			imageDrawable: blueprint,
+			hitboxHolder: blueprint,
+			statsHolder: blueprint,
 		});
 	}
 

@@ -11,18 +11,22 @@ import { TCollider } from "../../../shared/traits/engine/core/TCollider";
 import { HudElementResources } from "../../../renderer/resources/hud-element.resources";
 
 export class HideHud extends Derive(
-  TCollider,
-	THitbox(new HitBox([[new Rectangle({ width:18, height: 11 }), new GridPosition({ x: 0, y: 0 })]])),
-  TDrawable,
-  TRenderable) {
-  constructor(public hiddenState : { hidden : boolean },public position : ScreenPosition =  PercentToReal({ x: 50, y: 85 })) {
-      super({});
-  }
-  size = { width: 18, height: 11 };
-  drawPriority = DrawPriority.HUD;
+	TCollider,
+	THitbox(new HitBox([[new Rectangle({ width: 18, height: 11 }), new GridPosition({ x: 0, y: 0 })]])),
+	TDrawable,
+	TRenderable,
+) {
+	constructor(
+		public hiddenState: { hidden: boolean },
+		public position: ScreenPosition = PercentToReal({ x: 50, y: 85 }),
+	) {
+		super({});
+	}
+	size = { width: 18, height: 11 };
+	drawPriority = DrawPriority.HUD;
 	background = HudElementResources.startGame.image;
 
-  draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale : number): void {
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawImage(context, canvasSize, canvasPosition, this.background);
@@ -31,6 +35,5 @@ export class HideHud extends Derive(
 		context.font = `${canvasSize.height * 0.22}px title`;
 		context.textAlign = "center";
 		context.fillText("Hide", canvasPosition.x, canvasPosition.y);
-  }
-
+	}
 }

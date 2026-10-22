@@ -12,7 +12,7 @@ export class Stunned extends Derive(Status) {
 	tick() {
 		this.clock++;
 		if (this.clock >= this.duration) {
-			this.stats.removeCondition(this)
+			this.stats.removeCondition(this);
 		}
 
 		if (this.didTrigger) return;
@@ -21,7 +21,7 @@ export class Stunned extends Derive(Status) {
 
 	stack(status: Stunned) {
 		this.duration += status.duration;
-	} 
+	}
 
 	onRemove() {}
 }

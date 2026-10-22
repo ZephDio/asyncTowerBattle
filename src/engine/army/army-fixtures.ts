@@ -2,7 +2,7 @@ import { Cell } from "../../shared/position";
 import { BarrackRecruitFixtures } from "../constructs/barrack/recruit/barrack-fixtures";
 import { CastleFactory, CastleFixture } from "../castle/recruit/castle-recruit-fixtures";
 import { ArmyGrid } from "../grid/grid";
-import { ARMY_GRID_SIZES } from "../grid/grid-sizes";
+import { armyGridSize } from "../grid/grid-sizes";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { Faction } from "../menu/main-menu";
 import { PathFactory, PathFixture } from "../path/army/path-fixtures";
@@ -33,9 +33,7 @@ export class ArmyFixture {
 		const castle = CastleFactory.defaultDwarf;
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
-			new TowerBuilder()
-				.celled(new Cell({ x: 0, y: 1 }))
-				.buildFrost(),
+			new TowerBuilder().celled(new Cell({ x: 0, y: 1 })).buildFrost(),
 			//TowerEntityFixtures.topRightTower,
 		];
 		const totems = [new TotemBuilder().celled(new Cell({ x: 3, y: 2 })).buildOrange()];
@@ -53,9 +51,7 @@ export class ArmyFixture {
 		const towers = [
 			new TowerBuilder().celled(new Cell({ x: 5, y: 5 })).buildBlue(TowerBlueprintFixtures.blue),
 			//new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildOrange(TowerBlueprintFixtures.orange),
-			new TowerBuilder()
-				.celled(new Cell({ x: 4, y: 3 }))
-				.buildZapping(TowerBlueprintFixtures.zapping),
+			new TowerBuilder().celled(new Cell({ x: 4, y: 3 })).buildZapping(TowerBlueprintFixtures.zapping),
 		];
 		const castle = CastleFixture.enemy;
 		const tiles = PathFixture.default;
@@ -68,7 +64,7 @@ export class ArmyFixture {
 export class ArmyFactory {
 	static default(classe: Faction) {
 		if (classe === Faction.Dwarf) {
-			const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round1);
+			const grid = ArmyGrid.sized(armyGridSize(1));
 			const castle = CastleFactory.defaultDwarf;
 			const tiles = PathFactory.default;
 			const unitInventory = new Inventory();
@@ -76,7 +72,7 @@ export class ArmyFactory {
 			return new Army(grid, unitInventory, new DwarfBlueprint({}));
 		}
 		if (classe === Faction.Elf) {
-			const grid = ArmyGrid.sized(ARMY_GRID_SIZES.round1);
+			const grid = ArmyGrid.sized(armyGridSize(1));
 			const castle = CastleFactory.defaultElf;
 			const tiles = PathFactory.default;
 			const unitInventory = new Inventory();

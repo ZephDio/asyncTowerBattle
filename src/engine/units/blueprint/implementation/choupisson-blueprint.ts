@@ -18,11 +18,7 @@ export class ChoupissonBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
-	TImageDrawable(
-		UnitResources.choupisson.image,
-		UnitResources.choupisson.size,
-		DrawPriority.NormalGridElement,
-	),
+	TImageDrawable(UnitResources.choupisson.image, UnitResources.choupisson.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 18,
 		speed: 0.25,

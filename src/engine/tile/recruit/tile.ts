@@ -35,7 +35,9 @@ export const PathTile = Subtrait([TRecruit, TPathConnections, TTrapHolder], (bas
 			if (grid instanceof RetailGrid) {
 				throw new Error("cannot sell tile");
 			}
-			const cell = grid.gridPositionToCell(this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation));
+			const cell = grid.gridPositionToCell(
+				this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation),
+			);
 			if (!cell) throw new Error("Invalid cell");
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
 				const { valid, elements } = grid.validateGridElementPlacement(this, cell, orientation);
@@ -82,8 +84,7 @@ export const PathTile = Subtrait([TRecruit, TPathConnections, TTrapHolder], (bas
 			if (!this.trap) return null;
 			const center = grid.cellToGrid(this.cell);
 			const halfSide = STANDARD_CELL_SIZE / (2 * Math.SQRT2);
-			const onTrap =
-				Math.abs(gridPosition.x - center.x) <= halfSide && Math.abs(gridPosition.y - center.y) <= halfSide;
+			const onTrap = Math.abs(gridPosition.x - center.x) <= halfSide && Math.abs(gridPosition.y - center.y) <= halfSide;
 			return onTrap ? this.trap : null;
 		}
 

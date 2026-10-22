@@ -2,7 +2,7 @@ import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell, ScreenPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { TGrid } from "./tgrid";
-import { ARMY_GRID_SIZES, GridSize, fitCellSize } from "./grid-sizes";
+import { GridSize, armyGridSize, fitCellSize } from "./grid-sizes";
 import { SynergyEffectHud } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { AnyCastle, Castle } from "../castle/recruit/castle-recruit";
@@ -16,7 +16,6 @@ import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
 import { TRecruit } from "../../shared/traits/engine/recruit";
 import { TEnvironmentElement } from "../environment/environment";
 import { Totem } from "../constructs/totem/recruit/totem";
-import { EnvironmentGeneration } from "../environment/env-generation";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();
@@ -24,8 +23,8 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	synergiesEffects: SynergyEffectHud[] = [];
 
 	constructor(
-		width: number = ARMY_GRID_SIZES.round1.width,
-		height: number = ARMY_GRID_SIZES.round1.height,
+		width: number = armyGridSize(1).width,
+		height: number = armyGridSize(1).height,
 		public screenPosition: ScreenPosition = PercentToReal({ x: 35, y: 28 }),
 		cellSize = fitCellSize(height),
 	) {
@@ -128,23 +127,16 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		this.updateCornerPosition();
 	}
 
-	roundOne(envGenerator: EnvironmentGeneration) {
-		envGenerator.generateEnvironmentForRoundOne(this);
-	}
-	roundTwo(envGenerator: EnvironmentGeneration) {
-		this.resize(ARMY_GRID_SIZES.round2);
-		this.translate();
-		this.setElement(new BasicPathTile(this.getEnemyDoorCell()));
-		envGenerator.generateEnvironmentForRoundTwo(this);
-	}
-
-	roundThree(envGenerator: EnvironmentGeneration) {
+	// New rows come in at the top and new columns on the right. The bottom row of the new columns gets path tiles so
+	// the path still reaches the moved enemy door.
+	grow({ width, height }: GridSize) {
 		const previousWidth = this.width;
-		this.resize(ARMY_GRID_SIZES.round3);
-		for (let x = previousWidth; x < this.width; x++) {
-			this.setElement(new BasicPathTile(new Cell({ x, y: this.height - 1 })));
+		const addedRows = height - this.height;
+		this.resize({ width, height });
+		for (let i = 0; i < addedRows; i++) this.translate();
+		for (let x = previousWidth; x < width; x++) {
+			this.setElement(new BasicPathTile(new Cell({ x, y: height - 1 })));
 		}
-		envGenerator.generateEnvironmentForRoundTwo(this);
 	}
 
 	resize({ width, height }: GridSize) {

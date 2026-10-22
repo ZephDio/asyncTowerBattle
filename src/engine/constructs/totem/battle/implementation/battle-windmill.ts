@@ -8,7 +8,7 @@ import { Stats } from "../../../../stats/stats";
 import { Status } from "../../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
-import { FoodTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
 
 export class BattleWindmill extends Derive(BattleTotem, HTSynergy, BattleStartTrigger) {
 	foodProduction: number = 5;
@@ -37,7 +37,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, BattleStartTr
 		);
 		for (const element of elements) {
 			if (!element) continue;
-			if (implementsTrait(element, FoodTag)) {
+			if (hasTag(element, "Food")) {
 				this.hooks.alliedFoodHooks.addMaxFood(5);
 				if (implementsTrait(element, Caster)) {
 					const windmillBuff = new WindmillBuff({});

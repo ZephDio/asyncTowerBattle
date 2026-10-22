@@ -13,12 +13,12 @@ export class GobelinPortal extends Derive(Totem, HTSynergy) {
 		public cell: Cell,
 		public totem: GobelinPortalBlueprint = new GobelinPortalBlueprint({}),
 	) {
-		super({ 
-			synergy: totem, 
+		super({
+			synergy: totem,
 			tagHolder: totem,
-			imageDrawable: totem, 
-			hitboxHolder: totem, 
-			descriptor: totem
+			imageDrawable: totem,
+			hitboxHolder: totem,
+			descriptor: totem,
 		});
 	}
 

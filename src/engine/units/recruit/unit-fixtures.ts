@@ -26,7 +26,7 @@ export class UnitRecruitBuilder {
 	buildChoupisson(choupisson?: ChoupissonBlueprint) {
 		return new Choupisson(new Cell({ x: 0, y: 2 }), choupisson);
 	}
-	buildGluttonFox(fox? : FoxBlueprint) {
+	buildGluttonFox(fox?: FoxBlueprint) {
 		return new Fox(new Cell({ x: 0, y: 2 }), fox);
 	}
 }

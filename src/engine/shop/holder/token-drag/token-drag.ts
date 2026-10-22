@@ -33,23 +33,29 @@ export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, Orientable,
 
 		getProjectionCells(gridPosition: GridPosition) {
 			if (this.holded instanceof Buyable) {
-				const gridPositionForDefaultTile = this.holded.entity.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, this.orientation);
+				const gridPositionForDefaultTile = this.holded.entity.gridShape.getDefaultTilePositionFromGridPosition(
+					gridPosition,
+					this.orientation,
+				);
 				const cell = new Cell({
 					x: Math.floor(gridPositionForDefaultTile.x / STANDARD_CELL_SIZE),
-					y: Math.floor(gridPositionForDefaultTile.y /  STANDARD_CELL_SIZE),
+					y: Math.floor(gridPositionForDefaultTile.y / STANDARD_CELL_SIZE),
 				});
 				return this.holded.entity.gridShape.getOccupiedCellsFrom(cell, this.orientation);
 			}
-			const gridPositionForDefaultTile = this.holded.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, this.orientation);
-				const cell = new Cell({
-					x: Math.floor(gridPositionForDefaultTile.x / STANDARD_CELL_SIZE),
-					y: Math.floor(gridPositionForDefaultTile.y /  STANDARD_CELL_SIZE),
-				});
-				return this.holded.gridShape.getOccupiedCellsFrom(cell, this.orientation);
+			const gridPositionForDefaultTile = this.holded.gridShape.getDefaultTilePositionFromGridPosition(
+				gridPosition,
+				this.orientation,
+			);
+			const cell = new Cell({
+				x: Math.floor(gridPositionForDefaultTile.x / STANDARD_CELL_SIZE),
+				y: Math.floor(gridPositionForDefaultTile.y / STANDARD_CELL_SIZE),
+			});
+			return this.holded.gridShape.getOccupiedCellsFrom(cell, this.orientation);
 		}
 
 		rotate() {
-			const orientation = ((Math.PI * 2) + (this.orientation - Math.PI / 2)) % (2 * Math.PI);
+			const orientation = (Math.PI * 2 + (this.orientation - Math.PI / 2)) % (2 * Math.PI);
 			this.setOrientation(orientation);
 		}
 	}

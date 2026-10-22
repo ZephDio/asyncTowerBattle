@@ -141,7 +141,10 @@ export class Battlefield {
 			enemyBattleTotem,
 			enemyArmyBuff,
 		);
-		grid.initElements(alliedBattleArmy, enemyBattleArmy, [...alliedArmy.environment, ...enemyArmy.environment]);
+		grid.initElements(alliedBattleArmy, enemyBattleArmy, [
+			...alliedArmy.environment,
+			...enemyArmy.environment.map((element) => element.toEnemy(grid)),
+		]);
 		return {
 			alliedBattleArmy: alliedBattleArmy,
 			enemyBattleArmy: enemyBattleArmy,

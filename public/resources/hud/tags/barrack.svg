@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="64" height="64">
+  <mask id="cutout">
+    <rect x="-50" y="-50" width="100" height="100" fill="white"/>
+    <g fill="black">
+      <polygon points="0,8 16,50 -16,50"/>
+    </g>
+  </mask>
+  <g fill="#2B8A3E" mask="url(#cutout)">
+    <rect x="-2" y="-50" width="4" height="30"/>
+    <polygon points="2,-50 24,-42 2,-34"/>
+    <polygon points="0,-26 50,50 -50,50"/>
+  </g>
+</svg>

@@ -1,5 +1,5 @@
 import { Cell } from "../../../shared/position";
-import { ARMY_GRID_SIZES } from "../../grid/grid-sizes";
+import { GridSize, armyGridSize } from "../../grid/grid-sizes";
 import { CastleBlueprintFixtures } from "../blueprint/castle-fixtures";
 import { DwarfCastleBlueprint } from "../blueprint/dwarf-castle-blueprint";
 import { ElfCastleBlueprint } from "../blueprint/elf-castle-blueprint";
@@ -15,23 +15,23 @@ export class CastleFixture {
 	}
 }
 
-const round1CastleCell = () => new Cell({ x: 0, y: ARMY_GRID_SIZES.round1.height - 1 });
-const round2CastleCell = () => new Cell({ x: 0, y: ARMY_GRID_SIZES.round2.height - 1 });
+// The castle sits in the bottom-left corner of the board.
+const castleCell = ({ height }: GridSize) => new Cell({ x: 0, y: height - 1 });
 
 export class CastleFactory {
 	static get defaultDwarf() {
-		return new DwarfCastle(new DwarfCastleBlueprint({}), round1CastleCell());
+		return CastleFactory.dwarf(armyGridSize(1));
 	}
 
 	static get defaultElf() {
-		return new ElfCastle(new ElfCastleBlueprint({}), round1CastleCell());
+		return CastleFactory.elf(armyGridSize(1));
 	}
 
-	static get round2Elf() {
-		return new ElfCastle(new ElfCastleBlueprint({}), round2CastleCell());
+	static dwarf(size: GridSize) {
+		return new DwarfCastle(new DwarfCastleBlueprint({}), castleCell(size));
 	}
 
-	static get round2Dwarf() {
-		return new DwarfCastle(new DwarfCastleBlueprint({}), round2CastleCell());
+	static elf(size: GridSize) {
+		return new ElfCastle(new ElfCastleBlueprint({}), castleCell(size));
 	}
 }

@@ -14,35 +14,37 @@ import { NextRoundHud } from "./huds/next-round-hud";
 import { LifeRemainingHud } from "./huds/life-remaining-hud";
 
 export class BattleVerdict extends Derive(TDrawable, TRenderable) {
-	
-	hiddenState : { hidden : boolean } = { hidden : false }
-	hideHud : HideHud
-	battleVerdictHud : BattleVerdictHud
-	nextRoundHud : NextRoundHud
-	lifeRemainingHud : LifeRemainingHud
-	constructor(public verdict: "Victory" | "Defeat", public life: number) {
+	hiddenState: { hidden: boolean } = { hidden: false };
+	hideHud: HideHud;
+	battleVerdictHud: BattleVerdictHud;
+	nextRoundHud: NextRoundHud;
+	lifeRemainingHud: LifeRemainingHud;
+	constructor(
+		public verdict: "Victory" | "Defeat",
+		public life: number,
+	) {
 		super({});
-		this.hideHud = new HideHud(this.hiddenState)
-		this.battleVerdictHud = new BattleVerdictHud(this.verdict)
-		this.nextRoundHud = new NextRoundHud()
-		this.lifeRemainingHud = new LifeRemainingHud(this.life)
+		this.hideHud = new HideHud(this.hiddenState);
+		this.battleVerdictHud = new BattleVerdictHud(this.verdict);
+		this.nextRoundHud = new NextRoundHud();
+		this.lifeRemainingHud = new LifeRemainingHud(this.life);
 	}
 
-	toggleHide(){
-		this.hiddenState.hidden = !this.hiddenState.hidden
+	toggleHide() {
+		this.hiddenState.hidden = !this.hiddenState.hidden;
 	}
 	drawPriority = DrawPriority.HUD;
 
 	draw(context: CanvasRenderingContext2D): void {
-		this.hideHud.render(context)
-		if(this.hiddenState.hidden) return 
-		this.battleVerdictHud.render(context)
-		this.nextRoundHud.render(context)
-		this.lifeRemainingHud.render(context)
+		this.hideHud.render(context);
+		if (this.hiddenState.hidden) return;
+		this.battleVerdictHud.render(context);
+		this.nextRoundHud.render(context);
+		this.lifeRemainingHud.render(context);
 	}
 
 	getHudElements() {
-		return [this.hideHud, this.battleVerdictHud, this.nextRoundHud, this.lifeRemainingHud]
+		return [this.hideHud, this.battleVerdictHud, this.nextRoundHud, this.lifeRemainingHud];
 	}
 
 	get position() {
@@ -52,14 +54,14 @@ export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 
 export class BattleSummary {
 	public battleVerdict: BattleVerdict;
-	
+
 	constructor(
 		public battle: Battle,
 		public verdict: "Victory" | "Defeat",
 
 		public onSummaryQuit: Game["handleSummaryQuit"],
 
-		public life: number
+		public life: number,
 	) {
 		this.battleVerdict = new BattleVerdict(verdict, this.life);
 	}
@@ -77,16 +79,16 @@ export class BattleSummary {
 	}
 
 	getDrawables(): RenderableState {
-		const renderState = this.battle.getDrawables()
-		renderState.renderables.push(this.battleVerdict)
-		return renderState
+		const renderState = this.battle.getDrawables();
+		renderState.renderables.push(this.battleVerdict);
+		return renderState;
 	}
 
 	quitSummary() {
 		this.onSummaryQuit();
 	}
 
-	toggleHide(){
-		this.battleVerdict.toggleHide()
+	toggleHide() {
+		this.battleVerdict.toggleHide();
 	}
 }

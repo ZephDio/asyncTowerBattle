@@ -50,7 +50,7 @@ export class ShopInputToIntentTranslator {
 			return;
 		}
 		if (!focus) return;
-		if(shop.holderControl.hold) return
+		if (shop.holderControl.hold) return;
 		if (focus.cell && (focus.grid instanceof ArmyGrid || focus.grid instanceof Inventory)) {
 			const element = this.trapOr(focus.element, focus.grid, screenPosition);
 			if (element && implementsTrait(element, TRecruit)) {
@@ -84,11 +84,10 @@ export class ShopInputToIntentTranslator {
 			focus.grid.setOveredTile([focus.cell]);
 			if (shop.holderControl.hold) {
 				const patternEffect = shop.holderControl.hold.getPatternEffect();
-				const gridPosition = focus.grid.screenToGridPosition(screenPosition)
+				const gridPosition = focus.grid.screenToGridPosition(screenPosition);
 				const projectionCells = shop.holderControl.hold.getProjectionCells(gridPosition);
 				focus.grid.setOveredTile(projectionCells);
 				if (patternEffect && projectionCells[0]) {
-
 					focus.grid.setSynergiesTiles(
 						projectionCells[0],
 						patternEffect.getRelativeCells(shop.holderControl.hold.orientation),
@@ -124,7 +123,7 @@ export class ShopInputToIntentTranslator {
 		if (focus.cell && focus.grid instanceof Inventory) {
 			focus.grid.setOveredTile([focus.cell]);
 			if (shop.holderControl.hold) {
-				const gridPosition = focus.grid.screenToGridPosition(screenPosition)
+				const gridPosition = focus.grid.screenToGridPosition(screenPosition);
 				const projectionCells = shop.holderControl.hold.getProjectionCells(gridPosition);
 				focus.grid.setOveredTile(projectionCells);
 			}
@@ -220,5 +219,3 @@ export class ShopInputToIntentTranslator {
 		};
 	}
 }
-
-

@@ -15,12 +15,13 @@ export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger) {
 		public readonly cell: Cell,
 		override _orientation: number,
 	) {
-		super({ 
-			imageDrawable: recruit, 
-			hitboxHolder: recruit, 
+		super({
+			imageDrawable: recruit,
+			hitboxHolder: recruit,
 			tagHolder: recruit,
-			battleStartRecruit: recruit, 
-			descriptor: recruit });
+			battleStartRecruit: recruit,
+			descriptor: recruit,
+		});
 		this.gridShape = recruit.gridShape;
 	}
 

@@ -30,7 +30,7 @@ export class GreenTowerBlueprint extends Derive(
 		summonTime: NaN,
 		range: 20,
 	}),
-	TowerTag,	
+	TowerTag,
 ) {
 	description = new TowerDescription("Green Tower", ["A tower that shoots", "auto-guided fast", "bullets"], this);
 

@@ -13,12 +13,12 @@ export class CropsField extends Derive(Totem, RecruitCaster, HTBaseStats) {
 		public cell: Cell,
 		public blueprint: CropsFieldBlueprint = new CropsFieldBlueprint({}),
 	) {
-		super({ 
+		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
-			imageDrawable: blueprint, 
-			hitboxHolder: blueprint, 
-			statsHolder: blueprint 
+			imageDrawable: blueprint,
+			hitboxHolder: blueprint,
+			statsHolder: blueprint,
 		});
 	}
 

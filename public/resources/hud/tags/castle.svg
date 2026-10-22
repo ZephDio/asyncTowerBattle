@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="64" height="64">
+  <mask id="cutout">
+    <rect x="-50" y="-50" width="100" height="100" fill="white"/>
+    <g fill="black">
+      <path d="M -11 32 A 11 11 0 0 1 11 32 L 11 50 L -11 50 Z"/>
+    </g>
+  </mask>
+  <g fill="#5F3DC4" mask="url(#cutout)">
+    <rect x="-50" y="-32" width="9.333" height="14"/>
+    <rect x="-31.333" y="-32" width="9.333" height="14"/>
+    <rect x="-50" y="-19" width="28" height="69"/>
+    <rect x="22" y="-32" width="9.333" height="14"/>
+    <rect x="40.667" y="-32" width="9.333" height="14"/>
+    <rect x="22" y="-19" width="28" height="69"/>
+    <rect x="-22" y="-8" width="8.8" height="14"/>
+    <rect x="-4.4" y="-8" width="8.8" height="14"/>
+    <rect x="13.2" y="-8" width="8.8" height="14"/>
+    <rect x="-23" y="5" width="46" height="45"/>
+    <rect x="-2" y="-50" width="4" height="42"/>
+    <polygon points="2,-50 22,-42 2,-34"/>
+  </g>
+</svg>

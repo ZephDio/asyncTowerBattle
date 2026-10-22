@@ -16,11 +16,7 @@ export class BasicBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(
-		BarrackResources.basic.image,
-		BarrackResources.basic.size,
-		DrawPriority.NormalGridElement,
-	),
+	TImageDrawable(BarrackResources.basic.image, BarrackResources.basic.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
 		damage: NaN,

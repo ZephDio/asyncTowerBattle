@@ -13,7 +13,15 @@ import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { BoggedDown } from "../../../stats/status/bogged-down";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 
-export class BattleSlowingTrap extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.slowing), HTTag) {
+export class BattleSlowingTrap extends Derive(
+	TCollider,
+	HTHitbox,
+	GridElement,
+	TRenderable,
+	HTImageDrawable,
+	TPathShape(PathResources.slowing),
+	HTTag,
+) {
 	constructor(
 		trap: SlowingTrap,
 		public cell: Cell,

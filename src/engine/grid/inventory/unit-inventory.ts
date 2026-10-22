@@ -29,11 +29,11 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 				let valid = true;
 				for (const cellOffset of cells) {
 					const cellInShape = cell.add(cellOffset);
-					if(cellInShape.x >= this.width || cellInShape.y >= this.height) {
+					if (cellInShape.x >= this.width || cellInShape.y >= this.height) {
 						valid = false;
 						break;
 					}
-					if(cellInShape.x < 0 || cellInShape.y < 0) {
+					if (cellInShape.x < 0 || cellInShape.y < 0) {
 						valid = false;
 						break;
 					}
@@ -42,7 +42,7 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 						break;
 					}
 				}
-				if(valid) {
+				if (valid) {
 					return cell;
 				}
 			}

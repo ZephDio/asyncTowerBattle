@@ -18,11 +18,7 @@ export class BrewmasterBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,
-	TImageDrawable(
-		UnitResources.brewmaster.image,
-		UnitResources.brewmaster.size,
-		DrawPriority.NormalGridElement,
-	),
+	TImageDrawable(UnitResources.brewmaster.image, UnitResources.brewmaster.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 40,
 		speed: 0.22,

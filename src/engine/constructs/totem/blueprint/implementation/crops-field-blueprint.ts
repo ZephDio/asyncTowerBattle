@@ -21,11 +21,7 @@ export class CropsFieldBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(
-		TotemResources.cropsfield.image,
-		TotemResources.cropsfield.size,
-		DrawPriority.NormalGridElement,
-	),
+	TImageDrawable(TotemResources.cropsfield.image, TotemResources.cropsfield.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
 		damage: NaN,

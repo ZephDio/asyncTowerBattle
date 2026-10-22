@@ -13,12 +13,12 @@ export class Windmill extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 		public cell: Cell,
 		public blueprint: WindmillBlueprint = new WindmillBlueprint({}),
 	) {
-		super({ 
+		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
-			imageDrawable: blueprint, 
-			hitboxHolder: blueprint, 
-			synergy: blueprint 
+			imageDrawable: blueprint,
+			hitboxHolder: blueprint,
+			synergy: blueprint,
 		});
 	}
 

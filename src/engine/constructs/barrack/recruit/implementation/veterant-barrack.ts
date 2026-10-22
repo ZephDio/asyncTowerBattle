@@ -14,7 +14,13 @@ export class VeterantBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) 
 		public cell: Cell,
 		barrack: VeterantBarrackBlueprint = new VeterantBarrackBlueprint({}),
 	) {
-		super({ imageDrawable: barrack, hitboxHolder: barrack, descriptor: barrack, statsHolder: barrack, tagHolder: barrack });
+		super({
+			imageDrawable: barrack,
+			hitboxHolder: barrack,
+			descriptor: barrack,
+			statsHolder: barrack,
+			tagHolder: barrack,
+		});
 	}
 	unitRecruit: null | AnyUnit;
 

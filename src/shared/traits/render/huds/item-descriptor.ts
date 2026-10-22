@@ -6,6 +6,7 @@ import { BannerBackground } from "./banner-background";
 import { Tag, Tagged } from "../../engine/tags/tagged";
 import { TBaseStats } from "../../../../engine/stats/base-stats";
 import { castSpeedToSecond, frameToSeconds, secondsToFrame } from "../../../seconds";
+import { TagBadge, drawTagBadgeRows, sortTags } from "./tag-badge";
 
 export const TDescriptor = Trait((base) => {
 	abstract class IDescriptor extends base {
@@ -31,8 +32,9 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	drawPriority: 9;
 	titlePosition: ScreenPosition;
 	linesPosition: ScreenPosition[];
-	tagsPosition: ScreenPosition;	
+	tagsPosition: ScreenPosition;
 	tags: Tag[];
+	tagBadges: TagBadge[];
 
 	extraLines: Record<string, string>;
 	constructor(
@@ -44,6 +46,8 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		this.extraLines = this.item.description.extraLines ?? {};
 		this.linesPosition = this.getLinesPositions();
 		this.tags = implementsTrait(this.item, Tagged) ? this.item.tags : [];
+		this.tagBadges = sortTags(this.tags).map((tag) => new TagBadge(tag));
+		this.tagsPosition = this.position.add(new ScreenPosition({ x: 0, y: -14.5 }));
 	}
 
 	getLinesPositions() {
@@ -58,10 +62,6 @@ export class DescriptionHud extends Derive(BannerBackground) {
 			positions.push(this.titlePosition.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.8) })));
 		});
 		return positions;
-	}
-
-	getTagPosition(index: number) {
-		return this.position.add(new ScreenPosition({x:-4.5 + (index * 5.5), y: -14.5}));
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
@@ -99,17 +99,10 @@ export class DescriptionHud extends Derive(BannerBackground) {
 			context.fillText(line, descriptionPosition.x, descriptionPosition.y, descriptionFontSize.width);
 		});
 		// Tags
-		if(implementsTrait(this.item, Tagged)) {
-			for(const [index,tag] of this.tags.entries()) {
-				const tagPosition = this.getTagPosition(index);
-				const canvasTagPosition = this.getCanvasPosition(context, tagPosition);
-				context.font = `${descriptionFontSize.height}px text`;
-				context.textAlign = "center";
-				context.fillStyle = "#000000";
-				context.fillText(`#${tag}`, canvasTagPosition.x, canvasTagPosition.y, descriptionFontSize.width);
-			};
-		}
-		
+		const tagsPosition = this.getCanvasPosition(context, this.tagsPosition);
+		const tagHeight = this.getCanvasSize(context, 0, 1.35, scale).height;
+		const tagsMaxWidth = this.getCanvasSize(context, 16, 0, scale).width;
+		drawTagBadgeRows(context, this.tagBadges, tagsPosition, tagHeight, tagsMaxWidth, 2);
 	}
 }
 

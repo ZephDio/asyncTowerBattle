@@ -16,11 +16,7 @@ export class VeterantBarrackBlueprint extends Derive(
 	TShopBlueprint(10, 6),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
-	TImageDrawable(
-		BarrackResources.veterant.image,
-		BarrackResources.veterant.size,
-		DrawPriority.NormalGridElement,
-	),
+	TImageDrawable(BarrackResources.veterant.image, BarrackResources.veterant.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
 		damage: NaN,

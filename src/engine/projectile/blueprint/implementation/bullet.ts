@@ -8,11 +8,7 @@ import { ProjectileResources } from "../../../../renderer/resources/projectile.r
 
 export class Bullet extends Derive(
 	THitbox(new HitBox([[new Ellipse({ width: 1, height: 1 }), new GridPosition({ x: 0, y: 0 })]])),
-	TImageDrawable(
-		ProjectileResources.bullet.image,
-		ProjectileResources.bullet.size,
-		DrawPriority.FlyingGridElement,
-	),
+	TImageDrawable(ProjectileResources.bullet.image, ProjectileResources.bullet.size, DrawPriority.FlyingGridElement),
 ) {
 	type = "bullet" as const;
 	constructor(public baseSpeed: number = 2.8) {

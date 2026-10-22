@@ -3,15 +3,15 @@ import { Size } from "../../shared/size";
 import { HTMLImageElementAsset } from "../../shared/traits/render/image-drawable";
 
 export type ShapedResource = {
-  size: Size
-  image: HTMLImageElement | HTMLImageElementAsset;
-  shape: string;
-}
+	size: Size;
+	image: HTMLImageElement | HTMLImageElementAsset;
+	shape: string;
+};
 
 export type Resource = {
-  size: Size
-  image: HTMLImageElement | HTMLImageElementAsset;
-}
+	size: Size;
+	image: HTMLImageElement | HTMLImageElementAsset;
+};
 
 export const createViews = (folder: string): HTMLImageElementAsset => ({
 	frontView: createImage(`${folder}/front-view.png`),
@@ -21,34 +21,34 @@ export const createViews = (folder: string): HTMLImageElementAsset => ({
 });
 
 export class TowerResources {
-  static blue : ShapedResource = {
+	static blue: ShapedResource = {
 		size: {
 			width: 5,
 			height: 8,
 		},
 		image: createViews("/resources/towers/blue"),
 		shape: "ellipse",
-	}
+	};
 
-  static frost: ShapedResource = {
+	static frost: ShapedResource = {
 		size: {
 			width: 5,
 			height: 8,
 		},
 		image: createViews("/resources/towers/frost"),
 		shape: "ellipse",
-	}
+	};
 
-  static green: ShapedResource = {
+	static green: ShapedResource = {
 		size: {
 			width: 5,
 			height: 8,
 		},
 		image: createViews("/resources/towers/green"),
 		shape: "rectangle",
-	}
+	};
 
-  static witchHouse: ShapedResource = {
+	static witchHouse: ShapedResource = {
 		size: {
 			width: 5,
 			height: 10,
@@ -60,14 +60,14 @@ export class TowerResources {
 			rightView: createImage("/resources/towers/poison-tower/right-view.png"),
 		},
 		shape: "rectangle",
-	}
+	};
 
-  static purple: ShapedResource = {
+	static purple: ShapedResource = {
 		size: {
 			width: 5,
 			height: 8,
 		},
 		image: createViews("/resources/towers/purple"),
 		shape: "rectangle",
-	}
+	};
 }

@@ -14,7 +14,15 @@ import { secondsToFrame } from "../../../../shared/seconds";
 import { Stunned } from "../../../stats/status/stunned";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 
-export class BattleStunTrap extends Derive(TCollider, HTHitbox, GridElement, TRenderable, HTImageDrawable, TPathShape(PathResources.trap), HTTag) {
+export class BattleStunTrap extends Derive(
+	TCollider,
+	HTHitbox,
+	GridElement,
+	TRenderable,
+	HTImageDrawable,
+	TPathShape(PathResources.trap),
+	HTTag,
+) {
 	didTrigger = false;
 	cooldown = secondsToFrame(3);
 	clock = 0;
