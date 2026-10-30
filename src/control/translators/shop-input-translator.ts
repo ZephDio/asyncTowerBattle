@@ -32,7 +32,7 @@ export class ShopInputToIntentTranslator {
 			return;
 		}
 		if (eventType === "right-click") {
-			this.handleMouseRightClick(shop, focus, screenPosition);
+			this.handleMouseRightClick(shop, focus);
 		}
 	}
 
@@ -176,13 +176,8 @@ export class ShopInputToIntentTranslator {
 	handleMouseRightClick(
 		shop: ShopPhase,
 		focus: ReturnType<ShopInputToIntentTranslator["determinateFocus"]>,
-		screenPosition: ScreenPosition,
 	) {
-		if (shop.holderControl.hold) {
-			shop.holderControl.hold.rotate();
-			this.handleMouseMove(shop, focus, screenPosition);
-			return;
-		}
+		if (shop.holderControl.hold) return;
 		if (focus && !(focus instanceof RefreshBellHud) && !(focus instanceof StartBattleButton)) {
 			if (focus.grid instanceof ArmyGrid && focus.element && implementsTrait(focus.element, PathTile)) {
 				shop.army.cyclePathAt(focus.element.cell);

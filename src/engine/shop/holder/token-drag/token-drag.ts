@@ -53,11 +53,6 @@ export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, Orientable,
 			});
 			return this.holded.gridShape.getOccupiedCellsFrom(cell, this.orientation);
 		}
-
-		rotate() {
-			const orientation = (Math.PI * 2 + (this.orientation - Math.PI / 2)) % (2 * Math.PI);
-			this.setOrientation(orientation);
-		}
 	}
 	return ITokenDrag;
 });
