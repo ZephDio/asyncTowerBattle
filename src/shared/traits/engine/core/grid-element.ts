@@ -2,8 +2,7 @@ import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../position";
 import { STANDARD_CELL_SIZE, TGrid } from "../../../../engine/grid/tgrid";
 import { TRenderable } from "../../render/renderable";
-import { Physic } from "../../../physic";
-import { Orientable } from "./orientable";
+import { BoardOrientation, TBoardOriented, orientCell } from "./board-orientation";
 
 export class GridShape {
 	defaultVector: GridPosition;
@@ -11,16 +10,14 @@ export class GridShape {
 		this.defaultVector = this.calculateDefaultVector();
 	}
 
-	getVectorialCells(orientation: number) {
-		return this.cells.map((cell) => {
-			return Physic.getProjectionCellsFromOrientation(cell, orientation);
-		});
+	getVectorialCells(orientation: BoardOrientation = BoardOrientation.Normal) {
+		return this.cells.map((cell) => orientCell(cell, orientation));
 	}
-	getOccupiedCellsFrom(cell: Cell, orientation: number) {
+	getOccupiedCellsFrom(cell: Cell, orientation: BoardOrientation = BoardOrientation.Normal) {
 		return this.getVectorialCells(orientation).map((c) => c.add(cell));
 	}
 
-	getCenterPosition(mainCell: Cell, orientation: number) {
+	getCenterPosition(mainCell: Cell, orientation: BoardOrientation = BoardOrientation.Normal) {
 		const vectorCells = this.getVectorialCells(orientation);
 		const acc = vectorCells.reduce((acc, cell) => acc.add(cell), new Cell({ x: 0, y: 0 }));
 
@@ -42,12 +39,16 @@ export class GridShape {
 		});
 	}
 
-	getDefaultTilePositionFromGridPosition(gridPosition: GridPosition, orientation: number) {
-		return Physic.getPositionFromPositionAndVectorAndOrientation(gridPosition, orientation, this.defaultVector);
+	// Recruits are never mirrored, so the anchor is the grabbed position minus the shape's centre offset.
+	getDefaultTilePositionFromGridPosition(gridPosition: GridPosition) {
+		return new GridPosition({
+			x: gridPosition.x - this.defaultVector.x,
+			y: gridPosition.y - this.defaultVector.y,
+		});
 	}
 }
 
-export const GridElement = Subtrait([TRenderable, Orientable], (base) => {
+export const GridElement = Subtrait([TRenderable, TBoardOriented], (base) => {
 	abstract class IGridElement extends base {
 		gridShape: GridShape = new GridShape();
 

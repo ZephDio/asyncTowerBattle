@@ -5,6 +5,7 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BattleCropsField extends Derive(BattleTotem, Caster, TStatsRenderable) {
 	foodProduction: number = 5;
@@ -13,7 +14,7 @@ export class BattleCropsField extends Derive(BattleTotem, Caster, TStatsRenderab
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			imageDrawable: cropsField,

@@ -53,7 +53,7 @@ export class BreweryBlueprint extends Derive(
 		return implementsTrait(gridElement, Barrack) || implementsTrait(gridElement, BattleBarrack);
 	};
 	patternEffect = new PatternEffect(
-		[new Cell({ x: 0, y: 1 }), new Cell({ x: 1, y: 0 }), new Cell({ x: 1, y: -1 }), new Cell({ x: 0, y: -2 })],
+		[new Cell({ x: 1, y: 0 }), new Cell({ x: 0, y: -1 }), new Cell({ x: -1, y: -1 }), new Cell({ x: -2, y: 0 })],
 		this.patternCondition.bind(this),
 	);
 

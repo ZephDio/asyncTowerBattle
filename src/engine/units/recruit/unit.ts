@@ -19,7 +19,7 @@ export const Unit = Subtrait([TRecruit, HTBaseStats, HTTag], (base) => {
 	abstract class IUnit extends base {
 		abstract toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks): AnyBattleUnit;
 
-		moveRecruit(hooks: TokenHooks, position: GridPosition, _orientation: number, grid?: ImplementsTrait<typeof TGrid>) {
+		moveRecruit(hooks: TokenHooks, position: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));

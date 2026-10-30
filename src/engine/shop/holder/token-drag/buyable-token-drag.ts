@@ -18,7 +18,7 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 		hooks: TokenHooks,
 		public onAbort: () => void,
 	) {
-		super({ imageDrawable: holded, hooks, position, orientation: holded.orientation });
+		super({ imageDrawable: holded, hooks, position });
 	}
 	onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void {
 		try {
@@ -30,7 +30,7 @@ export class BuyableTokenDrag extends Derive(TTokenDrag) {
 			if (grid instanceof RetailGrid) {
 				throw new Error("can't sell item in shop DHU");
 			}
-			const element = this.holded.entity.moveRecruit(this.hooks, position, this.orientation, grid);
+			const element = this.holded.entity.moveRecruit(this.hooks, position, grid);
 			if (!element) {
 				this.hooks.shopPhaseHooks.shopHooks.buy(this.holded);
 				this.hooks.holderHooks.removeHold();

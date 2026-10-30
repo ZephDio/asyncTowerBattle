@@ -1,7 +1,7 @@
 import { ImplementsTrait } from "@ddd-ts/traits";
 import { GridElement } from "../../shared/traits/engine/core/grid-element";
 import { Cell } from "../../shared/position";
-import { Physic } from "../../shared/physic";
+import { BoardOrientation, orientCell } from "../../shared/traits/engine/core/board-orientation";
 
 export class PatternEffect {
 	constructor(
@@ -9,9 +9,7 @@ export class PatternEffect {
 		public patternCondition: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean,
 	) {}
 
-	getRelativeCells(orientation: number) {
-		return this.relativeCells.map((cell) => {
-			return Physic.getProjectionCellsFromOrientation(cell, orientation);
-		});
+	getRelativeCells(orientation: BoardOrientation) {
+		return this.relativeCells.map((cell) => orientCell(cell, orientation));
 	}
 }

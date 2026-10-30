@@ -7,6 +7,7 @@ import { Barrack } from "../barrack";
 import { TUnitPreviewHudRenderable } from "../../../../../shared/traits/render/huds/unit-preview-enderable";
 import { Cell } from "../../../../../shared/position";
 import { BattleGrid } from "../../../../grid/battle-grid";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	constructor(
@@ -34,20 +35,19 @@ export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 			this.cell.clone(),
 			hooks,
 			this.unitRecruit,
-			this.orientation,
+			BoardOrientation.Normal,
 		);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack {
 		const newPosition = BattleGrid.flip(grid, this.position);
-		const orientation = this.orientation + Math.PI;
 		return new BasicBattleBarrack(
 			this,
 			grid.cellToGrid(newPosition),
 			newPosition,
 			hooks,
 			this.unitRecruit,
-			orientation,
+			BoardOrientation.Mirrored,
 		);
 	}
 }

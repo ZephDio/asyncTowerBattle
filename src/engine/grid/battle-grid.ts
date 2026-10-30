@@ -12,6 +12,7 @@ import { TRenderable } from "../../shared/traits/render/renderable";
 import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { TEnvironmentElement } from "../environment/environment";
 import { AnyBattleCastle } from "../castle/battle";
+import { flipCell } from "../../shared/traits/engine/core/board-orientation";
 
 export type BattleGridElement =
 	| AnyBattleTower
@@ -70,27 +71,21 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		}
 	}
 
-	getRelativeNeighborsInArmy(armyGridPosition: Cell, relativePositions: Cell[], isEnemy: boolean) {
+	// The relative positions are already mirrored by the piece's board orientation.
+	getRelativeNeighborsInArmy(armyGridPosition: Cell, relativePositions: Cell[]) {
 		const founds: (BattleGridElement | undefined)[] = [];
 		for (const relativePosition of relativePositions) {
-			const yCoordinate = armyGridPosition.y + (isEnemy ? -relativePosition.y : relativePosition.y);
-			const targetPosition = new Cell({
-				x: armyGridPosition.x + (isEnemy ? -relativePosition.x : relativePosition.x),
-				y: yCoordinate,
-			});
+			const targetPosition = armyGridPosition.add(relativePosition);
 			const elementFound = this.tiles.get(ArmyGrid.posToString(targetPosition));
 			founds.push(elementFound && founds.includes(elementFound) ? undefined : elementFound);
 		}
 		return founds;
 	}
 
-	getRelativeNeighborsInBattle(cell: Cell, relativePositions: Cell[], isEnemy: boolean) {
+	getRelativeNeighborsInBattle(cell: Cell, relativePositions: Cell[]) {
 		const founds: BattleGridElement[] = [];
 		for (const relativePosition of relativePositions) {
-			const targetPosition = new Cell({
-				x: cell.x + (isEnemy ? -relativePosition.x : relativePosition.x),
-				y: cell.y + (isEnemy ? -relativePosition.y : relativePosition.y),
-			});
+			const targetPosition = cell.add(relativePosition);
 			const elementFound = this.tiles.get(ArmyGrid.posToString(targetPosition));
 			if (elementFound && !founds.includes(elementFound)) {
 				founds.push(elementFound);
@@ -128,12 +123,8 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	getAlliedHooks(): GridHooks {
 		return {
 			getRealPosition: this.cellToGrid.bind(this),
-			getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => {
-				return this.getRelativeNeighborsInArmy(cell, relativePositions, false);
-			},
-			getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => {
-				return this.getRelativeNeighborsInBattle(cell, relativePositions, false);
-			},
+			getRelativeNeighborsInArmy: this.getRelativeNeighborsInArmy.bind(this),
+			getRelativeNeighborsInBattle: this.getRelativeNeighborsInBattle.bind(this),
 			getRelativeDirection: () => this.getRelativeDirection(false),
 			getBoundaries: () => this.getBoundaries(),
 		};
@@ -142,24 +133,15 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	getEnemyHooks(): GridHooks {
 		return {
 			getRealPosition: this.cellToGrid.bind(this),
-			getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => {
-				return this.getRelativeNeighborsInArmy(cell, relativePositions, true);
-			},
-			getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => {
-				return this.getRelativeNeighborsInBattle(cell, relativePositions, true);
-			},
+			getRelativeNeighborsInArmy: this.getRelativeNeighborsInArmy.bind(this),
+			getRelativeNeighborsInBattle: this.getRelativeNeighborsInBattle.bind(this),
 			getRelativeDirection: () => this.getRelativeDirection(true),
 			getBoundaries: () => this.getBoundaries(),
 		};
 	}
 
 	static flip(battleGrid: BattleGrid, cell: Cell) {
-		const halfWidth = (battleGrid.width - 1) / 2;
-		const halfHeight = (battleGrid.height - 1) / 2;
-		return new Cell({
-			x: halfWidth - cell.x + halfWidth,
-			y: halfHeight - cell.y + halfHeight,
-		});
+		return flipCell(cell, battleGrid.width, battleGrid.height);
 	}
 }
 

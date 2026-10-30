@@ -6,6 +6,7 @@ import { Cell } from "../../../../../shared/position";
 import { PowderMagazineBlueprint } from "../../blueprint/implementation/powder-magazine-blueprint";
 import { BattlePowderMagazine } from "../../battle/implementation/battle-powder-magazine";
 import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class PowderMagazine extends Derive(Totem, RecruitBattleStart) {
 	constructor(
@@ -22,14 +23,13 @@ export class PowderMagazine extends Derive(Totem, RecruitBattleStart) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const position = grid.cellToGrid(this.cell);
-		return new BattlePowderMagazine(this, hooks, position, this.cell, this.orientation);
+		return new BattlePowderMagazine(this, hooks, position, this.cell, BoardOrientation.Normal);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation + Math.PI;
-		return new BattlePowderMagazine(this, hooks, position, cell, orientation);
+		return new BattlePowderMagazine(this, hooks, position, cell, BoardOrientation.Mirrored);
 	}
 
 	get position() {

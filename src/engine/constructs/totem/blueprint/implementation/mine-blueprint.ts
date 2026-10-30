@@ -41,7 +41,7 @@ export class MineBlueprint extends Derive(
 		return false;
 	};
 	override patternEffect: PatternEffect = new PatternEffect(
-		[new Cell({ x: 0, y: 1 })],
+		[new Cell({ x: 1, y: 0 })],
 		this.patternCondition.bind(this),
 	);
 

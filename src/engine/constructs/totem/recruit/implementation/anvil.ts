@@ -7,6 +7,7 @@ import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { Totem } from "../totem";
 import { AnvilTotemBlueprint } from "../../blueprint/implementation/anvil-blueprint";
 import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 export class AnvilTotem extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 	constructor(
 		public cell: Cell,
@@ -23,14 +24,13 @@ export class AnvilTotem extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const position = grid.cellToGrid(this.cell);
-		return new AnvilBattleTotem(this, hooks, position, this.cell, this.orientation);
+		return new AnvilBattleTotem(this, hooks, position, this.cell, BoardOrientation.Normal);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation + Math.PI;
-		return new AnvilBattleTotem(this, hooks, position, cell, orientation);
+		return new AnvilBattleTotem(this, hooks, position, cell, BoardOrientation.Mirrored);
 	}
 
 	get position(): Cell {

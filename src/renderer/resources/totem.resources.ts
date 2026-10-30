@@ -1,5 +1,5 @@
 import { createImage } from "../../shared/image";
-import { ShapedResource, createViews } from "./tower.resources";
+import { ShapedResource } from "./tower.resources";
 
 export class TotemResources {
 	static anvil: ShapedResource = {
@@ -7,12 +7,7 @@ export class TotemResources {
 			width: 6.2,
 			height: 6,
 		},
-		image: {
-			frontView: createImage("/resources/totem/anvil/front-view.png"),
-			backView: createImage("/resources/totem/anvil/back-view.png"),
-			leftView: createImage("/resources/totem/anvil/left-view.png"),
-			rightView: createImage("/resources/totem/anvil/right-view.png"),
-		},
+		image: createImage("/resources/totem/anvil.png"),
 		shape: "ellipse",
 	};
 	static cropsfield: ShapedResource = {
@@ -20,7 +15,7 @@ export class TotemResources {
 			width: 5,
 			height: 4.53125,
 		},
-		image: createViews("/resources/totem/crops-field"),
+		image: createImage("/resources/totem/crops-field.png"),
 		shape: "rectangle",
 	};
 
@@ -37,12 +32,7 @@ export class TotemResources {
 			width: 6,
 			height: 6,
 		},
-		image: {
-			frontView: createImage("/resources/totem/bakery/front-view.png"),
-			backView: createImage("/resources/totem/bakery/back-view.png"),
-			leftView: createImage("/resources/totem/bakery/left-view.png"),
-			rightView: createImage("/resources/totem/bakery/right-view.png"),
-		},
+		image: createImage("/resources/totem/bakery.png"),
 		shape: "rectangle",
 	};
 
@@ -51,12 +41,7 @@ export class TotemResources {
 			width: 10,
 			height: 5,
 		},
-		image: {
-			frontView: createImage("/resources/totem/brewery/front-view.png"),
-			backView: createImage("/resources/totem/brewery/back-view.png"),
-			leftView: createImage("/resources/totem/brewery/left-view.png"),
-			rightView: createImage("/resources/totem/brewery/right-view.png"),
-		},
+		image: createImage("/resources/totem/brewery.png"),
 		shape: "rectangle",
 	};
 	static windmill: ShapedResource = {
@@ -64,12 +49,7 @@ export class TotemResources {
 			width: 6.4,
 			height: 6.4,
 		},
-		image: {
-			frontView: createImage("/resources/totem/windmill/front-view.png"),
-			backView: createImage("/resources/totem/windmill/back-view.png"),
-			leftView: createImage("/resources/totem/windmill/left-view.png"),
-			rightView: createImage("/resources/totem/windmill/right-view.png"),
-		},
+		image: createImage("/resources/totem/windmill.png"),
 		shape: "rectangle",
 	};
 
@@ -86,7 +66,7 @@ export class TotemResources {
 			width: 5,
 			height: 6.25,
 		},
-		image: createViews("/resources/totem/gobelin-portal"),
+		image: createImage("/resources/totem/gobelin-portal.png"),
 		shape: "ellipse",
 	};
 }

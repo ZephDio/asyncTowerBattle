@@ -4,6 +4,7 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Derive } from "@ddd-ts/traits";
 import { BasicBarrack } from "../../recruit/implementation/basic-barrack";
 import { BattleBarrack } from "../battle-barrack";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BasicBattleBarrack extends Derive(BattleBarrack) {
 	castCost: number;
@@ -14,7 +15,7 @@ export class BasicBattleBarrack extends Derive(BattleBarrack) {
 		public readonly cell: Cell,
 		public readonly hooks: BattleArmyHooks,
 		public readonly unitRecruit: AnyUnit | null,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			casterRecruit: barrack,

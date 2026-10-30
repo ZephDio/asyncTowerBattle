@@ -5,6 +5,7 @@ import { BattleTotem } from "../battle-totem";
 import { PowderMagazine } from "../../recruit/implementation/powder-magazine";
 import { secondsToFrame } from "../../../../../shared/seconds";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger) {
 	vitalityBuffAmount: number = 2;
@@ -15,7 +16,7 @@ export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			tagHolder: powderMagazine,

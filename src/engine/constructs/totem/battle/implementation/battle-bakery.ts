@@ -5,6 +5,7 @@ import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
 import { BattleTotem } from "../battle-totem";
 import { Bakery } from "../../recruit/implementation/backery";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BattleBakery extends Derive(BattleTotem, Caster, TStatsRenderable) {
 	vitalityBuffAmount: number = 2;
@@ -13,7 +14,7 @@ export class BattleBakery extends Derive(BattleTotem, Caster, TStatsRenderable) 
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			casterRecruit: bakery,

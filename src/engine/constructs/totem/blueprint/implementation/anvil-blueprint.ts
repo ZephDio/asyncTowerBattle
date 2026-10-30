@@ -30,7 +30,7 @@ export class AnvilTotemBlueprint extends Derive(
 		return false;
 	};
 	patternEffect = new PatternEffect(
-		[new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 })],
+		[new Cell({ x: -1, y: 0 }), new Cell({ x: 1, y: 0 })],
 		this.patternCondition.bind(this),
 	);
 	toRecruit(cell: Cell) {

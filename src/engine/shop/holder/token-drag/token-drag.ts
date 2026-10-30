@@ -7,21 +7,19 @@ import { Buyable } from "../../retail/buyable";
 import { TokenHooks } from "../holder";
 import { STANDARD_CELL_SIZE, TGrid } from "../../../grid/tgrid";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
-import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 import { TImageVariant } from "../../../../shared/traits/render/image-variant";
 
 type Holdable = Buyable | AnyRecruit;
 
-export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, Orientable, TImageVariant], (base, Props) => {
+export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, TImageVariant], (base, Props) => {
 	abstract class ITokenDrag extends base {
 		protected hooks: TokenHooks;
 		public position: ScreenPosition;
 		abstract holded: Holdable;
-		constructor(props: { hooks: TokenHooks; position: ScreenPosition; orientation: number } & typeof Props) {
+		constructor(props: { hooks: TokenHooks; position: ScreenPosition } & typeof Props) {
 			super(props);
 			this.hooks = props.hooks;
 			this.position = props.position;
-			this.setOrientation(props.orientation);
 		}
 		abstract onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void;
 		abstract getPatternEffect(): PatternEffect | undefined;
@@ -33,30 +31,20 @@ export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, Orientable,
 
 		getProjectionCells(gridPosition: GridPosition) {
 			if (this.holded instanceof Buyable) {
-				const gridPositionForDefaultTile = this.holded.entity.gridShape.getDefaultTilePositionFromGridPosition(
-					gridPosition,
-					this.orientation,
-				);
+				const gridPositionForDefaultTile =
+					this.holded.entity.gridShape.getDefaultTilePositionFromGridPosition(gridPosition);
 				const cell = new Cell({
 					x: Math.floor(gridPositionForDefaultTile.x / STANDARD_CELL_SIZE),
 					y: Math.floor(gridPositionForDefaultTile.y / STANDARD_CELL_SIZE),
 				});
-				return this.holded.entity.gridShape.getOccupiedCellsFrom(cell, this.orientation);
+				return this.holded.entity.gridShape.getOccupiedCellsFrom(cell);
 			}
-			const gridPositionForDefaultTile = this.holded.gridShape.getDefaultTilePositionFromGridPosition(
-				gridPosition,
-				this.orientation,
-			);
+			const gridPositionForDefaultTile = this.holded.gridShape.getDefaultTilePositionFromGridPosition(gridPosition);
 			const cell = new Cell({
 				x: Math.floor(gridPositionForDefaultTile.x / STANDARD_CELL_SIZE),
 				y: Math.floor(gridPositionForDefaultTile.y / STANDARD_CELL_SIZE),
 			});
-			return this.holded.gridShape.getOccupiedCellsFrom(cell, this.orientation);
-		}
-
-		rotate() {
-			const orientation = (Math.PI * 2 + (this.orientation - Math.PI / 2)) % (2 * Math.PI);
-			this.setOrientation(orientation);
+			return this.holded.gridShape.getOccupiedCellsFrom(cell);
 		}
 	}
 	return ITokenDrag;

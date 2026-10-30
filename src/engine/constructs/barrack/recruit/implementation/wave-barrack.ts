@@ -8,6 +8,7 @@ import { Cell } from "../../../../../shared/position";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { WaveBarrackBlueprint } from "../../blueprint/implementation/wave-barrack-blueprint";
 import { WaveBattleBarrack } from "../../battle/implementation/battle-wave-barrack";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	constructor(
@@ -35,13 +36,19 @@ export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 			this.cell.clone(),
 			hooks,
 			this.unitRecruit,
-			this.orientation,
+			BoardOrientation.Normal,
 		);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack {
 		const newPosition = BattleGrid.flip(grid, this.position);
-		const orientation = this.orientation + Math.PI;
-		return new WaveBattleBarrack(this, grid.cellToGrid(newPosition), newPosition, hooks, this.unitRecruit, orientation);
+		return new WaveBattleBarrack(
+			this,
+			grid.cellToGrid(newPosition),
+			newPosition,
+			hooks,
+			this.unitRecruit,
+			BoardOrientation.Mirrored,
+		);
 	}
 }

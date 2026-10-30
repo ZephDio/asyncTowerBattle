@@ -8,6 +8,7 @@ import { BattleMine } from "../../battle/implementation/battle-mine";
 import { ShopEnterTrigger } from "../../../../../shared/traits/engine/shop-enter";
 import { ArmyHooks } from "../../../../army/army";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy) {
 	constructor(
@@ -25,7 +26,7 @@ export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const position = grid.cellToGrid(this.cell);
-		return new BattleMine(this, hooks, position, this.cell, this.orientation);
+		return new BattleMine(this, hooks, position, this.cell, BoardOrientation.Normal);
 	}
 
 	onShopEnter(hooks: ArmyHooks): void {
@@ -49,8 +50,7 @@ export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy) {
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation + Math.PI;
-		return new BattleMine(this, hooks, position, cell, orientation);
+		return new BattleMine(this, hooks, position, cell, BoardOrientation.Mirrored);
 	}
 
 	get position() {

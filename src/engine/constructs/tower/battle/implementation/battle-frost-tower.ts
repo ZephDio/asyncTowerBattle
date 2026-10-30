@@ -5,13 +5,14 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import { FrostTower } from "../../recruit/implementation/frost-tower";
 import { BattleTower } from "../battle-tower";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 export class FrostBattleTower extends Derive(BattleTower) {
 	constructor(
 		private readonly recruit: FrostTower,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation: number,
+		orientation: BoardOrientation,
 	) {
 		super({
 			recruit,

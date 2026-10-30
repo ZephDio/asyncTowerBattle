@@ -14,6 +14,7 @@ import { Inventory } from "../../engine/grid/inventory/unit-inventory";
 import { RetailGrid } from "../../engine/grid/retail-grid";
 import { Buyable } from "../../engine/shop/retail/buyable";
 import { PathTile } from "../../engine/tile/recruit/tile";
+import { BoardOrientation } from "../../shared/traits/engine/core/board-orientation";
 
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
@@ -32,7 +33,7 @@ export class ShopInputToIntentTranslator {
 			return;
 		}
 		if (eventType === "right-click") {
-			this.handleMouseRightClick(shop, focus, screenPosition);
+			this.handleMouseRightClick(shop, focus);
 		}
 	}
 
@@ -90,7 +91,7 @@ export class ShopInputToIntentTranslator {
 				if (patternEffect && projectionCells[0]) {
 					focus.grid.setSynergiesTiles(
 						projectionCells[0],
-						patternEffect.getRelativeCells(shop.holderControl.hold.orientation),
+						patternEffect.getRelativeCells(BoardOrientation.Normal),
 						patternEffect.patternCondition,
 					);
 				}
@@ -173,16 +174,8 @@ export class ShopInputToIntentTranslator {
 		shop.holderControl.hold.onRelease(gridPosition, focus.grid);
 	}
 
-	handleMouseRightClick(
-		shop: ShopPhase,
-		focus: ReturnType<ShopInputToIntentTranslator["determinateFocus"]>,
-		screenPosition: ScreenPosition,
-	) {
-		if (shop.holderControl.hold) {
-			shop.holderControl.hold.rotate();
-			this.handleMouseMove(shop, focus, screenPosition);
-			return;
-		}
+	handleMouseRightClick(shop: ShopPhase, focus: ReturnType<ShopInputToIntentTranslator["determinateFocus"]>) {
+		if (shop.holderControl.hold) return;
 		if (focus && !(focus instanceof RefreshBellHud) && !(focus instanceof StartBattleButton)) {
 			if (focus.grid instanceof ArmyGrid && focus.element && implementsTrait(focus.element, PathTile)) {
 				shop.army.cyclePathAt(focus.element.cell);

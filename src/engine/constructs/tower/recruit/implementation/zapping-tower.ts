@@ -8,6 +8,7 @@ import { ZappingTowerBlueprint } from "../../blueprint/implementation/zapping-to
 import { ZappingBattleTower } from "../../battle/implementation/battle-zapping-tower";
 import { BattleSpark } from "../../../../projectile/battle/implementation/battle-spark";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 export class ZappingTower extends Derive(Tower) {
 	constructor(
 		public cell: Cell,
@@ -28,14 +29,13 @@ export class ZappingTower extends Derive(Tower) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const position = grid.cellToGrid(this.cell);
-		return new ZappingBattleTower(this, hooks, position, this.cell, this.orientation);
+		return new ZappingBattleTower(this, hooks, position, this.cell, BoardOrientation.Normal);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation + Math.PI;
-		return new ZappingBattleTower(this, hooks, position, cell, orientation);
+		return new ZappingBattleTower(this, hooks, position, cell, BoardOrientation.Mirrored);
 	}
 
 	get position(): Cell {

@@ -7,6 +7,7 @@ import { WindmillBlueprint } from "../../blueprint/implementation/windmill-bluep
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { BattleWindmill } from "../../battle/implementation/battle-windmill";
 import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class Windmill extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 	constructor(
@@ -24,14 +25,13 @@ export class Windmill extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const position = grid.cellToGrid(this.cell);
-		return new BattleWindmill(this, hooks, position, this.cell, this.orientation);
+		return new BattleWindmill(this, hooks, position, this.cell, BoardOrientation.Normal);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation + Math.PI;
-		return new BattleWindmill(this, hooks, position, cell, orientation);
+		return new BattleWindmill(this, hooks, position, cell, BoardOrientation.Mirrored);
 	}
 
 	get position() {

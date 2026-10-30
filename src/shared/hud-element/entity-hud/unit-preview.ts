@@ -17,6 +17,6 @@ export class UnitPreviewHud extends Derive(TDrawable) {
 		context.globalAlpha = 1;
 		const size = this.getCanvasSize(context, recruit.drawable.size.width, recruit.drawable.size.height, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
-		this.drawImage(context, size, canvasPosition, recruit.getView(0)); // TODO
+		this.drawImage(context, size, canvasPosition, recruit.drawable.image);
 	}
 }

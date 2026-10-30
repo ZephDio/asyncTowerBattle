@@ -30,12 +30,7 @@ export const Barrack = Subtrait([TRecruit, RecruitCaster, HTBaseStats], (base) =
 			return this.stats.castSpeed / 30;
 		}
 
-		moveRecruit(
-			hooks: TokenHooks,
-			gridPosition: GridPosition,
-			orientation: number,
-			grid?: ImplementsTrait<typeof TGrid>,
-		) {
+		moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				hooks.shopPhaseHooks.economyHooks.addGold(Math.round(10));
@@ -44,12 +39,10 @@ export const Barrack = Subtrait([TRecruit, RecruitCaster, HTBaseStats], (base) =
 				}
 				return;
 			}
-			const cell = grid.gridPositionToCell(
-				this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation),
-			);
+			const cell = grid.gridPositionToCell(this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition));
 			if (!cell) throw new Error("Invalid cell");
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				const { valid, elements } = grid.validateGridElementPlacement(this, cell, orientation);
+				const { valid, elements } = grid.validateGridElementPlacement(this, cell);
 				if (!valid) throw new Error("Invalid condition");
 				elements.forEach((element) => {
 					if (implementsTrait(element, TRecruit)) {
@@ -60,7 +53,6 @@ export const Barrack = Subtrait([TRecruit, RecruitCaster, HTBaseStats], (base) =
 					throw new Error(`Element found in swap ${element}`);
 				});
 				this.cell = cell.clone();
-				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return elements[0];
 			}

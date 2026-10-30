@@ -8,6 +8,7 @@ import { Derive } from "@ddd-ts/traits";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import { BlueTowerBlueprint } from "../../blueprint/implementation/blue-tower-blueprint";
 import { BlueBattleTower } from "../../battle/implementation/battle-blue-tower";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BlueTower extends Derive(Tower) {
 	constructor(
@@ -29,14 +30,13 @@ export class BlueTower extends Derive(Tower) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const position = grid.cellToGrid(this.cell);
-		return new BlueBattleTower(this, hooks, position, this.cell, this.orientation);
+		return new BlueBattleTower(this, hooks, position, this.cell, BoardOrientation.Normal);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation + Math.PI;
-		return new BlueBattleTower(this, hooks, position, cell, orientation);
+		return new BlueBattleTower(this, hooks, position, cell, BoardOrientation.Mirrored);
 	}
 
 	get position(): Cell {

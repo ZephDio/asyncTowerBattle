@@ -9,6 +9,7 @@ import { GridShape } from "../../../../../shared/traits/engine/core/grid-element
 import { RecruitCaster } from "../../../../../shared/traits/engine/cast";
 import { BattleRedObelisk } from "../../battle/implementation/battle-red-obelisk";
 import { HTBaseStats } from "../../../../stats/base-stats";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class RedObelisk extends Derive(Totem, HTSynergy, RecruitCaster, HTBaseStats) {
 	castSpeed: number;
@@ -28,18 +29,17 @@ export class RedObelisk extends Derive(Totem, HTSynergy, RecruitCaster, HTBaseSt
 	}
 
 	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks) {
-		const position = this.gridShape.getCenterPosition(this.cell, this.orientation);
-		return new BattleRedObelisk(this, hooks, position, this.cell, this.orientation);
+		const position = this.gridShape.getCenterPosition(this.cell);
+		return new BattleRedObelisk(this, hooks, position, this.cell, BoardOrientation.Normal);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const orientation = this.orientation + Math.PI;
-		const position = this.gridShape.getCenterPosition(cell, orientation);
-		return new BattleRedObelisk(this, hooks, position, cell, orientation);
+		const position = this.gridShape.getCenterPosition(cell, BoardOrientation.Mirrored);
+		return new BattleRedObelisk(this, hooks, position, cell, BoardOrientation.Mirrored);
 	}
 
 	get position() {
-		return this.gridShape.getCenterPosition(this.cell, this.orientation);
+		return this.gridShape.getCenterPosition(this.cell);
 	}
 }

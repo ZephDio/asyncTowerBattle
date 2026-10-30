@@ -2,7 +2,6 @@ import { Cast, Caster } from "../../../shared/traits/engine/cast";
 import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { HTHitbox } from "../../../shared/traits/engine/core/THitbox";
 import { TRenderable } from "../../../shared/traits/render/renderable";
-import { Orientable } from "../../../shared/traits/engine/core/orientable";
 import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
@@ -14,7 +13,7 @@ import { HTTag } from "../../../shared/traits/engine/tags/tagged";
 export type AnyBattleCastle = ImplementsTrait<typeof TBattleCastle>;
 
 export const TBattleCastle = Subtrait(
-	[HTHitbox, TRenderable, HTImageDrawable, GridElement, Caster, Orientable, HTDescriptor, HTTag],
+	[HTHitbox, TRenderable, HTImageDrawable, GridElement, Caster, HTDescriptor, HTTag],
 	(base) => {
 		abstract class TBattleCastle extends base {
 			abstract override position: GridPosition;

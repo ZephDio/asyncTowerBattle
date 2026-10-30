@@ -3,6 +3,7 @@ import { Derive } from "@ddd-ts/traits";
 import { FoodHooks } from "../../food/battle-food-economy";
 import { DwarfCastle } from "../recruit/implem/dwarf-castle";
 import { TBattleCastle } from ".";
+import { BoardOrientation } from "../../../shared/traits/engine/core/board-orientation";
 
 export class BattleDwarfCastle extends Derive(TBattleCastle) {
 	constructor(
@@ -10,7 +11,7 @@ export class BattleDwarfCastle extends Derive(TBattleCastle) {
 		public onDeath: () => void,
 		public cell: Cell,
 		public position: GridPosition,
-		orientation: number,
+		orientation: BoardOrientation,
 		public foodHooks: FoodHooks,
 	) {
 		super({
@@ -29,7 +30,7 @@ export class BattleDwarfCastle extends Derive(TBattleCastle) {
 			tagHolder: recruit,
 		});
 		this.gridShape = recruit.gridShape;
-		this.setOrientation(orientation);
+		this.orientation = orientation;
 	}
 
 	produceFood() {
