@@ -14,6 +14,7 @@ import { Inventory } from "../../engine/grid/inventory/unit-inventory";
 import { RetailGrid } from "../../engine/grid/retail-grid";
 import { Buyable } from "../../engine/shop/retail/buyable";
 import { PathTile } from "../../engine/tile/recruit/tile";
+import { BoardOrientation } from "../../shared/traits/engine/core/board-orientation";
 
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
@@ -90,7 +91,7 @@ export class ShopInputToIntentTranslator {
 				if (patternEffect && projectionCells[0]) {
 					focus.grid.setSynergiesTiles(
 						projectionCells[0],
-						patternEffect.getRelativeCells("normal"),
+						patternEffect.getRelativeCells(BoardOrientation.Normal),
 						patternEffect.patternCondition,
 					);
 				}

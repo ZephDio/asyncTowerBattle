@@ -5,6 +5,7 @@ import { FoodHooks } from "../../../food/battle-food-economy";
 import { BattleElfCastle } from "../../battle/battle-elf-castle";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Castle } from "../castle-recruit";
+import { BoardOrientation } from "../../../../shared/traits/engine/core/board-orientation";
 
 export class ElfCastle extends Derive(Castle) {
 	constructor(
@@ -16,13 +17,13 @@ export class ElfCastle extends Derive(Castle) {
 
 	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
 		const position = grid.cellToGrid(this.cell);
-		return new BattleElfCastle(this, onDeath, this.cell.clone(), position, "normal", foodHooks);
+		return new BattleElfCastle(this, onDeath, this.cell.clone(), position, BoardOrientation.Normal, foodHooks);
 	}
 
 	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const BC = new BattleElfCastle(this, onDeath, cell, position, "mirrored", foodHooks);
+		const BC = new BattleElfCastle(this, onDeath, cell, position, BoardOrientation.Mirrored, foodHooks);
 		return BC;
 	}
 }

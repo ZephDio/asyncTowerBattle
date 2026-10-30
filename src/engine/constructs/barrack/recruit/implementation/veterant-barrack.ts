@@ -8,6 +8,7 @@ import { Cell } from "../../../../../shared/position";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { VeterantBattleBarrack } from "../../battle/implementation/battle-veterant-barrack";
 import { VeterantBarrackBlueprint } from "../../blueprint/implementation/veteran-barrack-blueprint";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class VeterantBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 	constructor(
@@ -35,7 +36,7 @@ export class VeterantBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) 
 			this.cell.clone(),
 			hooks,
 			this.unitRecruit,
-			"normal",
+			BoardOrientation.Normal,
 		);
 	}
 
@@ -47,7 +48,7 @@ export class VeterantBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) 
 			newPosition,
 			hooks,
 			this.unitRecruit,
-			"mirrored",
+			BoardOrientation.Mirrored,
 		);
 	}
 }

@@ -7,6 +7,7 @@ import { Totem } from "../totem";
 import { BattleGobelinPortal } from "../../battle/implementation/battle-gobelin-portal";
 import { GobelinBlueprint } from "../../../../units/blueprint/implementation/gobelin-blueprint";
 import { GobelinPortalBlueprint } from "../../blueprint/implementation/gobelin-portal-blueprint";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 export class GobelinPortal extends Derive(Totem, HTSynergy) {
 	recruit = new GobelinBlueprint({});
 	constructor(
@@ -24,13 +25,13 @@ export class GobelinPortal extends Derive(Totem, HTSynergy) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const position = grid.cellToGrid(this.cell);
-		return new BattleGobelinPortal(this, hooks, position, this.cell, "normal");
+		return new BattleGobelinPortal(this, hooks, position, this.cell, BoardOrientation.Normal);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		return new BattleGobelinPortal(this, hooks, position, cell, "mirrored");
+		return new BattleGobelinPortal(this, hooks, position, cell, BoardOrientation.Mirrored);
 	}
 
 	get position(): Cell {

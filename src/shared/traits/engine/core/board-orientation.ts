@@ -3,10 +3,13 @@ import { Cell } from "../../../position";
 
 // A piece is written facing the player. On the opponent board it is mirrored through a point, so its footprint, its
 // pattern and its image all turn by π together.
-export type BoardOrientation = "normal" | "mirrored";
+export enum BoardOrientation {
+	Normal = "normal",
+	Mirrored = "mirrored",
+}
 
 export const orientCell = (cell: Cell, orientation: BoardOrientation) => {
-	if (orientation === "normal") return cell;
+	if (orientation === BoardOrientation.Normal) return cell;
 	return new Cell({ x: -cell.x || 0, y: -cell.y || 0 });
 };
 
@@ -17,9 +20,9 @@ export const flipCell = (cell: Cell, width: number, height: number) => {
 
 export const TBoardOriented = Trait((base) => {
 	abstract class IBoardOriented extends base {
-		orientation: BoardOrientation = "normal";
+		orientation: BoardOrientation = BoardOrientation.Normal;
 		get mirrored() {
-			return this.orientation === "mirrored";
+			return this.orientation === BoardOrientation.Mirrored;
 		}
 	}
 	return IBoardOriented;

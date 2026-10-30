@@ -10,6 +10,7 @@ import { PoisonGround } from "../../../../area-effect/implementation/poison-grou
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { GridShape } from "../../../../../shared/traits/engine/core/grid-element";
 import { BattleWitchHouse } from "../../battle/implementation/battle-witch-house";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 export class WitchHouse extends Derive(Tower, HTSynergy) {
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: 1 })]);
 	constructor(
@@ -32,13 +33,13 @@ export class WitchHouse extends Derive(Tower, HTSynergy) {
 
 	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const position = this.gridShape.getCenterPosition(this.cell);
-		return new BattleWitchHouse(this, hooks, position, this.cell, "normal");
+		return new BattleWitchHouse(this, hooks, position, this.cell, BoardOrientation.Normal);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const position = this.gridShape.getCenterPosition(cell, "mirrored");
-		return new BattleWitchHouse(this, hooks, position, cell, "mirrored");
+		const position = this.gridShape.getCenterPosition(cell, BoardOrientation.Mirrored);
+		return new BattleWitchHouse(this, hooks, position, cell, BoardOrientation.Mirrored);
 	}
 
 	get position() {

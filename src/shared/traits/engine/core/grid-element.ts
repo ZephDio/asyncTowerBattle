@@ -10,14 +10,14 @@ export class GridShape {
 		this.defaultVector = this.calculateDefaultVector();
 	}
 
-	getVectorialCells(orientation: BoardOrientation = "normal") {
+	getVectorialCells(orientation: BoardOrientation = BoardOrientation.Normal) {
 		return this.cells.map((cell) => orientCell(cell, orientation));
 	}
-	getOccupiedCellsFrom(cell: Cell, orientation: BoardOrientation = "normal") {
+	getOccupiedCellsFrom(cell: Cell, orientation: BoardOrientation = BoardOrientation.Normal) {
 		return this.getVectorialCells(orientation).map((c) => c.add(cell));
 	}
 
-	getCenterPosition(mainCell: Cell, orientation: BoardOrientation = "normal") {
+	getCenterPosition(mainCell: Cell, orientation: BoardOrientation = BoardOrientation.Normal) {
 		const vectorCells = this.getVectorialCells(orientation);
 		const acc = vectorCells.reduce((acc, cell) => acc.add(cell), new Cell({ x: 0, y: 0 }));
 
