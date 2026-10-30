@@ -1,5 +1,5 @@
 import { createImage } from "../../shared/image";
-import { ShapedResource } from "./tower.resources";
+import { ShapedResource, createViews } from "./tower.resources";
 
 export class TotemResources {
 	static anvil: ShapedResource = {
@@ -18,9 +18,9 @@ export class TotemResources {
 	static cropsfield: ShapedResource = {
 		size: {
 			width: 5,
-			height: 5,
+			height: 4.53125,
 		},
-		image: createImage("/resources/totem/crops-field.png"),
+		image: createViews("/resources/totem/crops-field"),
 		shape: "rectangle",
 	};
 
@@ -84,9 +84,9 @@ export class TotemResources {
 	static gobelinportal: ShapedResource = {
 		size: {
 			width: 5,
-			height: 5,
+			height: 6.25,
 		},
-		image: createImage("/resources/totem/gobelin-portal.png"),
+		image: createViews("/resources/totem/gobelin-portal"),
 		shape: "ellipse",
 	};
 }
