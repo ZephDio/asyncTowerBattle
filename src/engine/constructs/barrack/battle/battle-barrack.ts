@@ -9,7 +9,6 @@ import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable
 import { TUnitPreviewHudRenderable } from "../../../../shared/traits/render/huds/unit-preview-enderable";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { HaveStats } from "../../../stats/stats";
-import { Orientable } from "../../../../shared/traits/engine/core/orientable";
 import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { AnyUnit } from "../../../units/recruit/unit";
 import { TStatsRenderable } from "../../../../shared/traits/render/huds/stat-renderable";
@@ -30,7 +29,6 @@ export const BattleBarrack = Subtrait(
 		TStatsRenderable,
 		GridElement,
 		HaveStats,
-		Orientable,
 		HTDescriptor,
 		HTTag,
 	],

@@ -27,7 +27,6 @@ export const Trap = Subtrait([TRecruit, TPathConnections], (base) => {
 		moveRecruit(
 			hooks: TokenHooks,
 			gridPosition: GridPosition,
-			orientation: number,
 			grid?: ImplementsTrait<typeof TGrid>,
 		): AnyRecruit | undefined {
 			if (!grid) throw new Error("Invalid grid");
@@ -35,28 +34,24 @@ export const Trap = Subtrait([TRecruit, TPathConnections], (base) => {
 				throw new Error("cannot sell trap");
 			}
 			if (!(grid instanceof ArmyGrid || grid instanceof Inventory)) throw new Error("No Case Matched");
-			const cell = grid.gridPositionToCell(
-				this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation),
-			);
+			const cell = grid.gridPositionToCell(this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition));
 			if (!cell) throw new Error("Invalid cell");
 			const found = grid.getElement(cell);
 			if (found && implementsTrait(found, PathTile)) {
 				// Dropped on a path tile: the trap it already carries comes back to the hand.
 				const replaced = found.trap;
 				this.cell = cell.clone();
-				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return replaced ?? undefined;
 			}
 			if (grid instanceof ArmyGrid) throw new Error("A trap goes on a path tile");
-			const { valid, elements } = grid.validateGridElementPlacement(this, cell, orientation);
+			const { valid, elements } = grid.validateGridElementPlacement(this, cell);
 			if (!valid) throw new Error("Invalid condition");
 			elements.forEach((element) => {
 				hooks.shopPhaseHooks.armyHooks.removeRecruit(element);
 				hooks.shopPhaseHooks.armyHooks.pushToInventory(element);
 			});
 			this.cell = cell.clone();
-			this.setOrientation(orientation);
 			hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 			return elements[0];
 		}

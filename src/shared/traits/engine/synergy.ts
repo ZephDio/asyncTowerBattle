@@ -1,13 +1,14 @@
 import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 import { GridElement } from "./core/grid-element";
 import { PatternEffect } from "../../../engine/pattern-effect/pattern-effect";
+import { BoardOrientation } from "./core/board-orientation";
 
 export const TSynergy = Trait((base) => {
 	abstract class ISynergy extends base {
 		abstract patternEffect: PatternEffect;
 		abstract patternCondition: (gridElement: ImplementsTrait<typeof GridElement> | undefined) => boolean;
 
-		getRelativeSynergyCell(orientation: number) {
+		getRelativeSynergyCell(orientation: BoardOrientation) {
 			return this.patternEffect.getRelativeCells(orientation);
 		}
 	}

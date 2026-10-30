@@ -29,14 +29,13 @@ export class BlueTower extends Derive(Tower) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const position = grid.cellToGrid(this.cell);
-		return new BlueBattleTower(this, hooks, position, this.cell, this.orientation);
+		return new BlueBattleTower(this, hooks, position, this.cell, "normal");
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation + Math.PI;
-		return new BlueBattleTower(this, hooks, position, cell, orientation);
+		return new BlueBattleTower(this, hooks, position, cell, "mirrored");
 	}
 
 	get position(): Cell {

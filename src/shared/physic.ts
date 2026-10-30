@@ -1,7 +1,7 @@
 import { HitBox } from "./hitbox/hitboxe";
 import { Ellipse } from "./hitbox/shapes/ellipse";
 import { Rectangle } from "./hitbox/shapes/rectangle";
-import { Cell, GridPosition, ScreenPosition } from "./position";
+import { GridPosition, ScreenPosition } from "./position";
 export interface Recruit {
 	type: string;
 	hitbox: HitBox;
@@ -37,13 +37,6 @@ export class Physic {
 		return { distance, theta };
 	}
 
-	static getProjectionCellsFromOrientation(cell: Cell, orientation: number) {
-		return new Cell({
-			x: Math.round(cell.x * Math.cos(orientation) - cell.y * Math.sin(orientation)),
-			y: Math.round(cell.x * Math.sin(orientation) + cell.y * Math.cos(orientation)),
-		});
-	}
-
 	static getVectorSqrd<T extends GridPosition | ScreenPosition>(positionA: T, positionB: T) {
 		if (!(typeof positionA === typeof positionB)) {
 			throw new Error("Both positions must be of the same type");
@@ -61,18 +54,6 @@ export class Physic {
 			x: position.x + Math.cos(theta) * speed,
 			y: position.y + Math.sin(theta) * speed,
 		});
-	}
-
-	static getPositionFromPositionAndVectorAndOrientation(
-		gridPosition: GridPosition,
-		orientation: number,
-		vector: GridPosition,
-	) {
-		const defaultTileGridPosition = new GridPosition({
-			x: gridPosition.x - vector.x * Math.cos(orientation) + vector.y * Math.sin(orientation),
-			y: gridPosition.y - vector.x * Math.sin(orientation) - vector.y * Math.cos(orientation),
-		});
-		return defaultTileGridPosition;
 	}
 
 	static getEllipseRadius(radiusWidth: number, radiusHeight: number, theta: number) {

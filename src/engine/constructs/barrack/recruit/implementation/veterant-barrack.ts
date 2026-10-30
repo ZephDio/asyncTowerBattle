@@ -35,20 +35,19 @@ export class VeterantBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) 
 			this.cell.clone(),
 			hooks,
 			this.unitRecruit,
-			this.orientation,
+			"normal",
 		);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): BasicBattleBarrack {
 		const newPosition = BattleGrid.flip(grid, this.position);
-		const orientation = this.orientation + Math.PI;
 		return new VeterantBattleBarrack(
 			this,
 			grid.cellToGrid(newPosition),
 			newPosition,
 			hooks,
 			this.unitRecruit,
-			orientation,
+			"mirrored",
 		);
 	}
 }

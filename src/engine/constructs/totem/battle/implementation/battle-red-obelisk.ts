@@ -6,6 +6,7 @@ import { BattleTotem } from "../battle-totem";
 import { RedObelisk } from "../../recruit/implementation/obelisk";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 export class BattleRedObelisk extends Derive(BattleTotem, Caster, HTSynergy, TStatsRenderable) {
 	hasTriggered = false;
 
@@ -14,7 +15,7 @@ export class BattleRedObelisk extends Derive(BattleTotem, Caster, HTSynergy, TSt
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			synergy: obelisk,

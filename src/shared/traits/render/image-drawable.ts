@@ -5,6 +5,7 @@ import { TDrawable } from "./drawable";
 import { Direction, Orientable, toDirection } from "../engine/core/orientable";
 import { Size } from "../../size";
 import { TImageVariant } from "./image-variant";
+import { TBoardOriented } from "../engine/core/board-orientation";
 
 export enum DrawPriority {
 	BackGroundScreen = 0,
@@ -79,7 +80,13 @@ export const TImageDrawable = (image: HTMLImageElement | HTMLImageElementAsset, 
 			}
 
 			draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
-				const orientation = implementsTrait(this, Orientable) ? this.orientation : 0;
+				const orientation = implementsTrait(this, Orientable)
+					? this.orientation
+					: implementsTrait(this, TBoardOriented)
+						? this.mirrored
+							? Math.PI / 2
+							: (3 * Math.PI) / 2
+						: 0;
 				const { width, height } = this.getProportion(orientation);
 				const size = this.getCanvasSize(context, width, height, scale);
 				const canvasPosition = this.getCanvasPosition(context, position);

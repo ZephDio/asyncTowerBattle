@@ -25,22 +25,15 @@ export const PathTile = Subtrait([TRecruit, TPathConnections, TTrapHolder], (bas
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTile;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTile;
 
-		moveRecruit(
-			hooks: TokenHooks,
-			gridPosition: GridPosition,
-			orientation: number,
-			grid?: ImplementsTrait<typeof TGrid>,
-		) {
+		moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {
 				throw new Error("cannot sell tile");
 			}
-			const cell = grid.gridPositionToCell(
-				this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition, orientation),
-			);
+			const cell = grid.gridPositionToCell(this.gridShape.getDefaultTilePositionFromGridPosition(gridPosition));
 			if (!cell) throw new Error("Invalid cell");
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
-				const { valid, elements } = grid.validateGridElementPlacement(this, cell, orientation);
+				const { valid, elements } = grid.validateGridElementPlacement(this, cell);
 				if (!valid) throw new Error("Invalid condition");
 				elements.forEach((element) => {
 					if (implementsTrait(element, TRecruit)) {
@@ -52,7 +45,6 @@ export const PathTile = Subtrait([TRecruit, TPathConnections, TTrapHolder], (bas
 				});
 				this.cell = cell.clone();
 				this.connectionChoice = null;
-				this.setOrientation(orientation);
 				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
 				return elements[0];
 			}

@@ -24,14 +24,13 @@ export class Bakery extends Derive(Totem, RecruitCaster, HTBaseStats) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const position = grid.cellToGrid(this.cell);
-		return new BattleBakery(this, hooks, position, this.cell, this.orientation);
+		return new BattleBakery(this, hooks, position, this.cell, "normal");
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation + Math.PI;
-		return new BattleBakery(this, hooks, position, cell, orientation);
+		return new BattleBakery(this, hooks, position, cell, "mirrored");
 	}
 
 	get position() {

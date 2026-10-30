@@ -90,7 +90,7 @@ export class ShopInputToIntentTranslator {
 				if (patternEffect && projectionCells[0]) {
 					focus.grid.setSynergiesTiles(
 						projectionCells[0],
-						patternEffect.getRelativeCells(shop.holderControl.hold.orientation),
+						patternEffect.getRelativeCells("normal"),
 						patternEffect.patternCondition,
 					);
 				}
@@ -173,10 +173,7 @@ export class ShopInputToIntentTranslator {
 		shop.holderControl.hold.onRelease(gridPosition, focus.grid);
 	}
 
-	handleMouseRightClick(
-		shop: ShopPhase,
-		focus: ReturnType<ShopInputToIntentTranslator["determinateFocus"]>,
-	) {
+	handleMouseRightClick(shop: ShopPhase, focus: ReturnType<ShopInputToIntentTranslator["determinateFocus"]>) {
 		if (shop.holderControl.hold) return;
 		if (focus && !(focus instanceof RefreshBellHud) && !(focus instanceof StartBattleButton)) {
 			if (focus.grid instanceof ArmyGrid && focus.element && implementsTrait(focus.element, PathTile)) {

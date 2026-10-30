@@ -5,6 +5,7 @@ import { ZappingTower } from "../../recruit/implementation/zapping-tower";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import { Physic } from "../../../../../shared/physic";
 import { BattleTower } from "../battle-tower";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class ZappingBattleTower extends Derive(BattleTower) {
 	target = null as null | AnyBattleUnit;
@@ -14,7 +15,7 @@ export class ZappingBattleTower extends Derive(BattleTower) {
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation: number,
+		orientation: BoardOrientation,
 	) {
 		super({
 			recruit,
@@ -34,7 +35,6 @@ export class ZappingBattleTower extends Derive(BattleTower) {
 			tagHolder: recruit,
 		});
 
-		this.setOrientation(orientation);
 		this.gridShape = recruit.gridShape;
 	}
 

@@ -15,7 +15,6 @@ export const TRecruit = Subtrait([TGCollider, HTHitbox, HTDescriptor, HTImageDra
 		abstract moveRecruit(
 			hooks: TokenHooks,
 			gridPosition: GridPosition,
-			orientation: number,
 			grid?: ImplementsTrait<typeof TGrid>,
 		): ImplementsTrait<typeof GridElement> | undefined;
 	}

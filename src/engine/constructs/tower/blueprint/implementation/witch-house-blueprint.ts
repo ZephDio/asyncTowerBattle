@@ -40,7 +40,7 @@ export class WitchHouseBlueprint extends Derive(
 		return gridElement instanceof BasicPathTile;
 	};
 	patternEffect = new PatternEffect(
-		[new Cell({ x: 0, y: 1 }), new Cell({ x: 0, y: -1 }), new Cell({ x: 1, y: 0 })],
+		[new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 }), new Cell({ x: 0, y: -1 })],
 		this.patternCondition.bind(this),
 	);
 	description = new TowerDescription(

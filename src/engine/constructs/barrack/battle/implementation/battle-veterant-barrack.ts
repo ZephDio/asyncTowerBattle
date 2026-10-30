@@ -6,6 +6,7 @@ import { BattleBarrack } from "../battle-barrack";
 import { BasicBarrack } from "../../recruit/implementation/basic-barrack";
 import { Status } from "../../../../../shared/traits/engine/status";
 import { Stats } from "../../../../stats/stats";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 	castCost: number;
@@ -17,7 +18,7 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 
 		public readonly hooks: BattleArmyHooks,
 		public readonly unitRecruit: AnyUnit | null,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			casterRecruit: barrack,

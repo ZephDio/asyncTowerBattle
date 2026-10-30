@@ -12,7 +12,7 @@ import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-s
 import { HTBaseStats } from "../../../../stats/base-stats";
 
 export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, RecruitBattleStart, HTBaseStats) {
-	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: -1 })]);
+	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: -1, y: 0 })]);
 	constructor(
 		public cell: Cell,
 		public blueprint: BreweryBlueprint = new BreweryBlueprint({}),
@@ -28,18 +28,17 @@ export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, RecruitBatt
 	}
 
 	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks) {
-		const position = this.gridShape.getCenterPosition(this.cell, this.orientation);
-		return new BattleBrewery(this, hooks, position, this.cell, this.orientation);
+		const position = this.gridShape.getCenterPosition(this.cell);
+		return new BattleBrewery(this, hooks, position, this.cell, "normal");
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const orientation = this.orientation + Math.PI;
-		const position = this.gridShape.getCenterPosition(cell, orientation);
-		return new BattleBrewery(this, hooks, position, cell, orientation);
+		const position = this.gridShape.getCenterPosition(cell, "mirrored");
+		return new BattleBrewery(this, hooks, position, cell, "mirrored");
 	}
 
 	get position() {
-		return this.gridShape.getCenterPosition(this.cell, this.orientation);
+		return this.gridShape.getCenterPosition(this.cell);
 	}
 }

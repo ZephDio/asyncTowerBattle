@@ -9,6 +9,7 @@ import { Status } from "../../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
 import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BattleWindmill extends Derive(BattleTotem, HTSynergy, BattleStartTrigger) {
 	foodProduction: number = 5;
@@ -17,7 +18,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, BattleStartTr
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			battleStartRecruit: windmill,

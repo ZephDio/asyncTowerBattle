@@ -4,6 +4,7 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { WitchHouse } from "../../recruit/implementation/witch-house";
 import { BasicBattlePathTile } from "../../../../tile/battle/implementation/basic-battle-tile";
 import { BattleTower } from "../battle-tower";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BattleWitchHouse extends Derive(BattleTower) {
 	constructor(
@@ -11,7 +12,7 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation: number,
+		orientation: BoardOrientation,
 	) {
 		super({
 			orientation,
@@ -31,7 +32,6 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 			tagHolder: recruit,
 		});
 		this.gridShape = recruit.gridShape;
-		this.setOrientation(orientation);
 	}
 
 	private attack() {

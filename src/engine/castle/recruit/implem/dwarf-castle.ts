@@ -16,14 +16,13 @@ export class DwarfCastle extends Derive(Castle) {
 
 	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleDwarfCastle {
 		const position = grid.cellToGrid(this.cell);
-		return new BattleDwarfCastle(this, onDeath, this.cell.clone(), position, this.orientation, foodHooks);
+		return new BattleDwarfCastle(this, onDeath, this.cell.clone(), position, "normal", foodHooks);
 	}
 
 	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleDwarfCastle {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation - Math.PI;
-		const battleCastle = new BattleDwarfCastle(this, onDeath, cell, position, orientation, foodHooks);
+		const battleCastle = new BattleDwarfCastle(this, onDeath, cell, position, "mirrored", foodHooks);
 		return battleCastle;
 	}
 }

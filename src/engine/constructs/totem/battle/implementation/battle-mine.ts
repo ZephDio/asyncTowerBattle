@@ -3,6 +3,7 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { BattleTotem } from "../battle-totem";
 import { Mine } from "../../recruit/implementation/mine";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BattleMine extends Derive(BattleTotem) {
 	constructor(
@@ -10,7 +11,7 @@ export class BattleMine extends Derive(BattleTotem) {
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			imageDrawable: mine,

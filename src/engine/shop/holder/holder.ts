@@ -29,11 +29,6 @@ export class Holder {
 		return this._hold;
 	}
 
-	get orientation() {
-		if (!this._hold) return 0;
-		return this._hold.orientation;
-	}
-
 	private setNull() {
 		this._hold = null;
 	}

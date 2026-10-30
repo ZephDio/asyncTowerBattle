@@ -23,14 +23,13 @@ export class AnvilTotem extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 
 	toAllied(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const position = grid.cellToGrid(this.cell);
-		return new AnvilBattleTotem(this, hooks, position, this.cell, this.orientation);
+		return new AnvilBattleTotem(this, hooks, position, this.cell, "normal");
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
 		const position = grid.cellToGrid(cell);
-		const orientation = this.orientation + Math.PI;
-		return new AnvilBattleTotem(this, hooks, position, cell, orientation);
+		return new AnvilBattleTotem(this, hooks, position, cell, "mirrored");
 	}
 
 	get position(): Cell {

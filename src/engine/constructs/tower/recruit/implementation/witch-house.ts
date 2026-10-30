@@ -11,7 +11,7 @@ import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { GridShape } from "../../../../../shared/traits/engine/core/grid-element";
 import { BattleWitchHouse } from "../../battle/implementation/battle-witch-house";
 export class WitchHouse extends Derive(Tower, HTSynergy) {
-	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: -1, y: 0 })]);
+	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: 1 })]);
 	constructor(
 		public cell: Cell,
 		public tower: WitchHouseBlueprint = new WitchHouseBlueprint({}),
@@ -31,18 +31,17 @@ export class WitchHouse extends Derive(Tower, HTSynergy) {
 	}
 
 	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
-		const position = this.gridShape.getCenterPosition(this.cell, this.orientation);
-		return new BattleWitchHouse(this, hooks, position, this.cell, this.orientation);
+		const position = this.gridShape.getCenterPosition(this.cell);
+		return new BattleWitchHouse(this, hooks, position, this.cell, "normal");
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const orientation = this.orientation + Math.PI;
-		const position = this.gridShape.getCenterPosition(cell, orientation);
-		return new BattleWitchHouse(this, hooks, position, cell, orientation);
+		const position = this.gridShape.getCenterPosition(cell, "mirrored");
+		return new BattleWitchHouse(this, hooks, position, cell, "mirrored");
 	}
 
 	get position() {
-		return this.gridShape.getCenterPosition(this.cell, this.orientation);
+		return this.gridShape.getCenterPosition(this.cell);
 	}
 }

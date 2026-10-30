@@ -5,6 +5,7 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import { BattleTower } from "../battle-tower";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class GreenBattleTower extends Derive(BattleTower) {
 	target = null as null | AnyBattleUnit;
@@ -13,7 +14,7 @@ export class GreenBattleTower extends Derive(BattleTower) {
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		orientation: number,
+		orientation: BoardOrientation,
 	) {
 		super({
 			orientation,

@@ -28,18 +28,17 @@ export class RedObelisk extends Derive(Totem, HTSynergy, RecruitCaster, HTBaseSt
 	}
 
 	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks) {
-		const position = this.gridShape.getCenterPosition(this.cell, this.orientation);
-		return new BattleRedObelisk(this, hooks, position, this.cell, this.orientation);
+		const position = this.gridShape.getCenterPosition(this.cell);
+		return new BattleRedObelisk(this, hooks, position, this.cell, "normal");
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const orientation = this.orientation + Math.PI;
-		const position = this.gridShape.getCenterPosition(cell, orientation);
-		return new BattleRedObelisk(this, hooks, position, cell, orientation);
+		const position = this.gridShape.getCenterPosition(cell, "mirrored");
+		return new BattleRedObelisk(this, hooks, position, cell, "mirrored");
 	}
 
 	get position() {
-		return this.gridShape.getCenterPosition(this.cell, this.orientation);
+		return this.gridShape.getCenterPosition(this.cell);
 	}
 }

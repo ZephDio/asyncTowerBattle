@@ -4,6 +4,7 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Caster } from "../../../../../shared/traits/engine/cast";
 import { GobelinPortal } from "../../recruit/implementation/gobelin-portal";
 import { BattleTotem } from "../battle-totem";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BattleGobelinPortal extends Derive(BattleTotem) {
 	hasTriggered = false;
@@ -13,7 +14,7 @@ export class BattleGobelinPortal extends Derive(BattleTotem) {
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({ imageDrawable: portal, hitboxHolder: portal, descriptor: portal, tagHolder: portal });
 		this.gridShape = portal.gridShape;
@@ -23,7 +24,7 @@ export class BattleGobelinPortal extends Derive(BattleTotem) {
 		if (!this.hasTriggered) {
 			const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
 				this.cell,
-				this.portal.patternEffect.getRelativeCells(this.portal.orientation),
+				this.portal.patternEffect.getRelativeCells(this.orientation),
 			);
 			for (const neighbor of neighbors) {
 				if (neighbor && implementsTrait(neighbor, Caster)) {

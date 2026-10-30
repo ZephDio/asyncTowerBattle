@@ -5,6 +5,7 @@ import { Derive } from "@ddd-ts/traits";
 import { Cast } from "../../../../../shared/traits/engine/cast";
 import { WaveBarrack } from "../../recruit/implementation/wave-barrack";
 import { BattleBarrack } from "../battle-barrack";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class WaveBattleBarrack extends Derive(BattleBarrack) {
 	castCost: number;
@@ -18,7 +19,7 @@ export class WaveBattleBarrack extends Derive(BattleBarrack) {
 		public readonly cell: Cell,
 		public readonly hooks: BattleArmyHooks,
 		public readonly unitRecruit: AnyUnit | null,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			casterRecruit: barrack,

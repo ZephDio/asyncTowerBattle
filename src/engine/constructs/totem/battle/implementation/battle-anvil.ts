@@ -6,6 +6,7 @@ import { HaveStats, Stats } from "../../../../stats/stats";
 import { Status } from "../../../../../shared/traits/engine/status";
 import { BattleTotem } from "../battle-totem";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger) {
 	constructor(
@@ -13,7 +14,7 @@ export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger) {
 		readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
-		override _orientation: number,
+		override orientation: BoardOrientation,
 	) {
 		super({
 			imageDrawable: recruit,
@@ -28,7 +29,7 @@ export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger) {
 	onBattleStart() {
 		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
 			this.cell,
-			this.recruit.patternEffect.getRelativeCells(this.recruit.orientation),
+			this.recruit.patternEffect.getRelativeCells(this.orientation),
 		);
 		for (const neighbor of neighbors) {
 			if (!neighbor) continue;

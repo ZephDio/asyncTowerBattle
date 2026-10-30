@@ -67,9 +67,8 @@ export const TGrid = Trait((base) => {
 		validateGridElementPlacement(
 			gridElement: ImplementsTrait<typeof GridElement>,
 			cell: Cell,
-			orientation: number,
 		): { valid: boolean; elements: ImplementsTrait<typeof TRecruit>[] } {
-			const cells = gridElement.gridShape.getOccupiedCellsFrom(cell, orientation);
+			const cells = gridElement.gridShape.getOccupiedCellsFrom(cell);
 			for (const cell of cells) {
 				if (cell.x < 0 || cell.x >= this.width || cell.y < 0 || cell.y >= this.height) {
 					return { valid: false, elements: [] };
