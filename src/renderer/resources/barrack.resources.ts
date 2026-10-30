@@ -1,4 +1,5 @@
-import { ShapedResource, createViews } from "./tower.resources";
+import { createImage } from "../../shared/image";
+import { ShapedResource } from "./tower.resources";
 
 export class BarrackResources {
 	static basic: ShapedResource = {
@@ -6,7 +7,7 @@ export class BarrackResources {
 			width: 5,
 			height: 8,
 		},
-		image: createViews("/resources/house/blue"),
+		image: createImage("/resources/house/blue.png"),
 		shape: "rectangle",
 	};
 
@@ -15,7 +16,7 @@ export class BarrackResources {
 			width: 5,
 			height: 8,
 		},
-		image: createViews("/resources/house/red"),
+		image: createImage("/resources/house/red.png"),
 		shape: "rectangle",
 	};
 
@@ -24,7 +25,7 @@ export class BarrackResources {
 			width: 5,
 			height: 8,
 		},
-		image: createViews("/resources/house/yellow"),
+		image: createImage("/resources/house/yellow.png"),
 		shape: "rectangle",
 	};
 }

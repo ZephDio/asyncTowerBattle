@@ -1,24 +1,16 @@
 import { createImage } from "../../shared/image";
 import { Size } from "../../shared/size";
-import { HTMLImageElementAsset } from "../../shared/traits/render/image-drawable";
 
 export type ShapedResource = {
 	size: Size;
-	image: HTMLImageElement | HTMLImageElementAsset;
+	image: HTMLImageElement;
 	shape: string;
 };
 
 export type Resource = {
 	size: Size;
-	image: HTMLImageElement | HTMLImageElementAsset;
+	image: HTMLImageElement;
 };
-
-export const createViews = (folder: string): HTMLImageElementAsset => ({
-	frontView: createImage(`${folder}/front-view.png`),
-	backView: createImage(`${folder}/back-view.png`),
-	leftView: createImage(`${folder}/left-view.png`),
-	rightView: createImage(`${folder}/right-view.png`),
-});
 
 export class TowerResources {
 	static blue: ShapedResource = {
@@ -26,7 +18,7 @@ export class TowerResources {
 			width: 5,
 			height: 8,
 		},
-		image: createViews("/resources/towers/blue"),
+		image: createImage("/resources/towers/blue.png"),
 		shape: "ellipse",
 	};
 
@@ -35,7 +27,7 @@ export class TowerResources {
 			width: 5,
 			height: 8,
 		},
-		image: createViews("/resources/towers/frost"),
+		image: createImage("/resources/towers/frost.png"),
 		shape: "ellipse",
 	};
 
@@ -44,7 +36,7 @@ export class TowerResources {
 			width: 5,
 			height: 8,
 		},
-		image: createViews("/resources/towers/green"),
+		image: createImage("/resources/towers/green.png"),
 		shape: "rectangle",
 	};
 
@@ -53,12 +45,7 @@ export class TowerResources {
 			width: 5,
 			height: 10,
 		},
-		image: {
-			frontView: createImage("/resources/towers/poison-tower/front-view.png"),
-			backView: createImage("/resources/towers/poison-tower/back-view.png"),
-			leftView: createImage("/resources/towers/poison-tower/left-view.png"),
-			rightView: createImage("/resources/towers/poison-tower/right-view.png"),
-		},
+		image: createImage("/resources/towers/poison-tower.png"),
 		shape: "rectangle",
 	};
 
@@ -67,7 +54,7 @@ export class TowerResources {
 			width: 5,
 			height: 8,
 		},
-		image: createViews("/resources/towers/purple"),
+		image: createImage("/resources/towers/purple.png"),
 		shape: "rectangle",
 	};
 }
