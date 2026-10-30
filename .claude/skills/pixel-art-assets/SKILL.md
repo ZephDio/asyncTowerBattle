@@ -1,6 +1,6 @@
 ---
 name: pixel-art-assets
-description: Create or restyle game sprites (towers, barracks/houses, totems, units...) as pixel art matching the existing tower and house art, from a sketch or description. Covers style analysis, procedural PNG generation with a Python script, previewing next to references, and wiring the four orientation views into src/renderer/resources. Use when asked to draw, update, redesign or restyle a resource visual / asset / sprite.
+description: Create or restyle game sprites (towers, barracks/houses, totems, units...) as pixel art matching the existing tower and house art, from a sketch or description. Covers style analysis, procedural PNG generation with a Python script, previewing next to references, and wiring the single front-view image into src/renderer/resources. Use when asked to draw, update, redesign or restyle a resource visual / asset / sprite.
 ---
 
 # Pixel art assets
@@ -15,13 +15,13 @@ image, and iterated on.
   `zlib` + `struct`, so anyone can rerun them. See `scripts/generate-gobelin-portal.py` (`write_png`).
 - Pillow is not installed globally. Use the skill's nix shell for analysis and previews:
   ```sh
-  nix-shell .claude/skills/pixel-art-assets/shell.nix --run "python3 .claude/skills/pixel-art-assets/scripts/analyze.py public/resources/towers/blue/front-view.png"
+  nix-shell .claude/skills/pixel-art-assets/shell.nix --run "python3 .claude/skills/pixel-art-assets/scripts/analyze.py public/resources/towers/blue.png"
   ```
   The first call can take a while to fetch from the binary cache; give it a long timeout.
 - `scripts/analyze.py <png>...`: size, bbox, run-length histogram (pixel scale) and palette.
 - `scripts/preview.py <out.png> <png>...`: composite side by side on a grass background, upscaled 3x
   nearest-neighbor. Write `<out.png>` to the scratchpad, then **Read it** to look at the result.
-  Always include a reference sprite (e.g. `public/resources/towers/blue/front-view.png`) to compare style.
+  Always include a reference sprite (e.g. `public/resources/towers/blue.png`) to compare style.
 
 ## House style (towers, houses)
 
@@ -42,16 +42,20 @@ Run `analyze.py` on a reference before starting; don't trust this list blindly i
 Units are a different, chunkier style, matched on `public/resources/units/dragon.png`: a 16x16 front-facing
 sprite upscaled 4x to 64x64 (`analyze.py` shows runs of 4), flat colors with one or two shades per part,
 light from the top left, a near-black `(29, 29, 28)` outline around the silhouette, no ground shadow, and a
-single image (units rotate with their orientation instead of having views). The voxel renderer is overkill at
+single image like every other piece. The voxel renderer is overkill at
 that size: hand place the pixels as a character grid and let a script add the outline and upscale, see
 `scripts/generate-ent.py`. Preview with `--scale 6` next to the dragon.
 
-## Four orientation views
+## One front view
 
-Towers, houses and multi-view totems ship `front-view.png`, `back-view.png`, `left-view.png`, `right-view.png`
-in one folder, loaded with `createViews(folder)` from `tower.resources.ts`. `front` faces the camera (orientation
-down), `back` is up. `TImageDrawable.getProportion` swaps width/height when a view's aspect ratio flips
-relative to the front view, so keep all views on the same canvas size unless the side really is wider.
+Pieces cannot be rotated, so every piece ships a single image, the front view facing the camera, as
+`<piece>.png` next to its folder (e.g. `public/resources/towers/blue.png`, `public/resources/totem/anvil.png`),
+loaded with `createImage(...)` in its `*.resources.ts` entry. On the opponent board the same image is drawn rotated
+by π with the piece's mirrored footprint, so don't draw a back view. Older pieces still keep their unused
+`front-view.png`, `back-view.png`, `left-view.png` and `right-view.png` in a folder; new pieces don't need one.
+
+Draw the image in the shape of the piece's footprint as written in its `GridShape`: a horizontal two-cell piece
+(brewery) gets a wide canvas, a vertical one (witch house) a tall canvas.
 
 The resource `size` is in grid units; keep `width / height` equal to the image aspect ratio
 (e.g. 128x160 → `{ width: 5, height: 6.25 }`) so the art is not stretched. The hitbox lives in the blueprint
@@ -69,7 +73,7 @@ The working oblique projection (x right, y away from camera, z up, all in pixels
 Write `scripts/generate-<asset>.py` in the repo, with tunable constants at the top (palette, sizes, shape
 parameters) and a docstring explaining the outputs. The camera, ray casting, normals, outlines and PNG writing
 live in the shared `scripts/voxel_sprite.py` (`VoxelGrid`, `render`, `Hit`, `outline`, `write_png`): a
-generator only builds the voxel model and a `shade(hit)` function. Examples, about 7s for four views each:
+generator only builds the voxel model and a `shade(hit)` function. Examples, about 2s each:
 `scripts/generate-gobelin-portal.py` (stone ring on a plinth, emissive ether, block cracks) and
 `scripts/generate-crops-field.py` (framed soil bed with wheat tufts, thin shapes, square footprint).
 
@@ -80,17 +84,14 @@ generator only builds the voxel model and a `shade(hit)` function. Examples, abo
    record label and depth. Rays reaching the ground inside the shadow ellipse get the shadow color.
 3. **Shade the hit**: estimate a normal from the empty voxels in a 5x5x5 neighborhood (another block counts as
    partly empty, which bevels block edges), dot it with a top-left light, quantize into a 4-5 color ramp.
-   Decorative patterns (paving joints, swirls) are computed in model coordinates so they turn with the view.
+   Decorative patterns (paving joints, swirls) are computed in model coordinates so they stay attached to the model.
    Emissive parts (ether) ignore lighting: Bayer-dithered gradient plus precomputed curve cells.
 4. **Screen-space pass**: outline where a neighbor is empty or much farther away, crack color between
    adjacent blocks at similar depth, dark front edge on top faces so steps read as ledges.
-5. **Views**: turn the model around z per view by mapping view voxel indices back to model indices. Front 0°,
-   back 180°. Square, roughly symmetric pieces use true quarter turns. A thin object seen exactly edge-on is an
-   unreadable slab, so its side views turn only ~50° (the house side views cheat the same way).
+5. **View**: render only the front view (model turned 0° around z).
 
 Pitfalls met so far:
-- Anything laid out in strict rows collapses into vertical lines in the views that look along the rows.
-  Scatter on a jittered grid, and group thin things (plants) into tufts with gaps so they don't merge into
+- Anything laid out in strict rows collapses into vertical lines when seen along the rows. Scatter on a jittered grid, and group thin things (plants) into tufts with gaps so they don't merge into
   one flat mass.
 - Thin shapes (1-2 voxel stems, ears) get noisy estimated normals: shade them from their empty neighbors
   instead (top/left empty → lit, right occupied → shade).
