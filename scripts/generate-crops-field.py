@@ -1,54 +1,60 @@
 #!/usr/bin/env python3
-"""Generates the crops field (wheat field) pixel art, one image per orientation view.
+"""Generates the crops field (wheat field) pixel art.
 
 Run from anywhere: python3 scripts/generate-crops-field.py
 
-Outputs public/resources/totem/crops-field/<front|back|left|right>-view.png.
+Outputs public/resources/totem/crops-field.png, the single front view.
 
-A square bed of tilled soil framed by wooden planks, with rows of ripe wheat growing on the furrow ridges and
-leaning a little in the wind. It is modeled as voxels and rendered by voxel_sprite.py, which holds the camera,
-lighting and outlines. The field is square, so every view is a true quarter turn.
+A square bed of tilled soil framed by wooden planks, with a few long rows of ripe wheat. It follows the tower and
+house art (see the pixel-art-assets skill) at the same detail level: a handful of big masses rather than many small
+plants. Each row is one band treated like the house thatch: lit top, vertical strands, chunky spikes along the top
+edge and a dark contact shadow at its base, with 1px ink between rows and a 2px outline around the piece.
+It is modeled as voxels and rendered by voxel_sprite.py, which holds the camera, lighting and outlines.
 """
 
-import math
 from pathlib import Path
 
-from voxel_sprite import EMPTY, Hit, VoxelGrid, outline, render, write_png
+from voxel_sprite import EMPTY, OUTLINE, Hit, VoxelGrid, outline, render, write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT_DIR = ROOT / "public" / "resources" / "totem" / "crops-field"
-WIDTH = 128
-HEIGHT = 116
-ORIGIN_Y = 72
+OUTPUT = ROOT / "public" / "resources" / "totem" / "crops-field.png"
+WIDTH = 110
+HEIGHT = 92
+ORIGIN_Y = 52
 
-# Wood shared with the towers, from dark to light
+# Ramps from dark to light. Wood is shared with the towers; the wheat runs from the thatch mauve through the wood
+# to the thatch cream, so it reads as straw like the house roof while staying apart from the frame
 WOOD = [(90, 70, 70, 255), (134, 99, 83, 255), (180, 131, 85, 255), (218, 181, 112, 255)]
-SOIL = [(56, 40, 40, 255), (78, 56, 50, 255), (104, 74, 60, 255), (128, 94, 72, 255)]
-STEM = [(118, 104, 52, 255), (156, 138, 66, 255), (196, 172, 86, 255)]
-EAR = [(140, 84, 38, 255), (196, 132, 52, 255), (226, 176, 74, 255), (246, 216, 120, 255)]
+SOIL = [(58, 44, 58, 255), (78, 58, 62, 255), (104, 76, 70, 255)]
+WHEAT = [(94, 71, 78, 255), (138, 103, 99, 255), (180, 131, 85, 255), (218, 181, 112, 255), (245, 239, 169, 255)]
 
 HALF_SIZE = 50
 FRAME_WIDTH = 4
 FRAME_HEIGHT = 8
 SOIL_HEIGHT = 4
-FURROW_SPACING = 10
-RIDGE_HEIGHT = 3
-# Wheat grows in tufts on a jittered grid rather than in rows: rows seen along their length collapse into lines,
-# and the gaps between tufts keep the field from reading as one flat mass
-TUFT_SPACING = 9
-TUFT_JITTER = 2
-STALKS_PER_TUFT = (4, 7)
-TUFT_RADIUS = 2.5
-STALK_HEIGHT = (15, 23)
-EAR_HEIGHT = 8
-# Horizontal drift of a stalk top, in voxels: toward model +x for the wind, away from the tuft center to fan out
-WIND = 2.5
-FAN = 3
-SHADOW_RADII = (62, 62)
+ROWS = 4
+# Gap between a row end and the frame, in voxels
+ROW_MARGIN = 3
+ROW_HEIGHT = 20
+# Half depth of a row at its base and at its top: rows flare out like a bundle
+ROW_HALF_DEPTH = (3, 7)
+# The top edge: spikes 2-3 voxels wide, one every few voxels, up to this tall
+SPIKE_WIDTH = (2, 3)
+SPIKE_HEIGHT = 5
+# Fraction of the row height in contact shadow at its base, where the stems show
+BASE_SHADE = 0.3
+# The framed bed is low and square, so it casts a square shadow barely past the frame, shifted away from the
+# top-left light: margin past the frame and offset toward the right and the camera, in voxels
+SHADOW_MARGIN = 2
+SHADOW_OFFSET = (1, -2)
+# Jitter is relative to the shadow half size, about 1-2 voxels at the edge
+SHADOW_JITTER = 0.04
+# Ignored by the renderer since shadow_shape replaces the ellipse
+SHADOW_RADII = (1, 1)
 
-FRAME, SOIL_LABEL, STEM_LABEL, EAR_LABEL, EAR_TIP = 1, 2, 3, 4, 5
-
-VIEWS = {"front-view": 0, "back-view": 180, "right-view": 90, "left-view": -90}
+FRAME, SOIL_LABEL = 1, 2
+# One label per row so neighbor rows get an ink seam between them
+ROW_LABELS = range(10, 10 + ROWS)
 
 
 def noise(*values: int) -> float:
@@ -61,11 +67,20 @@ def noise(*values: int) -> float:
     return (h & 0xFFFF) / 0xFFFF
 
 
-def ridge_top(y: int) -> int:
-    """Soil height at model row y: furrows run along x, ridges peak between them."""
-    phase = (y + HALF_SIZE) % FURROW_SPACING
-    bump = math.sin(math.pi * phase / FURROW_SPACING)
-    return SOIL_HEIGHT + round(RIDGE_HEIGHT * bump)
+def row_tops(row: int, x0: int, x1: int) -> dict[int, int]:
+    """Height of each column along a row: a slightly wavy top cut into chunky spikes, rounded at both ends."""
+    tops = {}
+    x = x0
+    spike = 0
+    while x < x1:
+        width = SPIKE_WIDTH[0] + round(noise(row, spike, 1) * (SPIKE_WIDTH[1] - SPIKE_WIDTH[0]))
+        rise = round(noise(row, spike, 2) * SPIKE_HEIGHT)
+        for column in range(x, min(x + width, x1)):
+            end = min(column - x0, x1 - 1 - column)
+            tops[column] = ROW_HEIGHT + rise - max(0, 6 - end)
+        x += width
+        spike += 1
+    return tops
 
 
 def build_model() -> VoxelGrid:
@@ -73,90 +88,76 @@ def build_model() -> VoxelGrid:
     inner = HALF_SIZE - FRAME_WIDTH
     grid.box(-HALF_SIZE, HALF_SIZE, -HALF_SIZE, HALF_SIZE, 0, FRAME_HEIGHT, FRAME)
     grid.box(-inner, inner, -inner, inner, 0, FRAME_HEIGHT, EMPTY)
-    for y in range(-inner, inner):
-        top = ridge_top(y)
-        grid.box(-inner, inner, y, y + 1, 0, top, SOIL_LABEL)
+    grid.box(-inner, inner, -inner, inner, 0, SOIL_HEIGHT, SOIL_LABEL)
 
-    margin = TUFT_JITTER + 4
-    for ty in range(-inner + margin, inner - margin + 1, TUFT_SPACING):
-        for tx in range(-inner + margin, inner - margin, TUFT_SPACING):
-            cx = tx + round((noise(tx, ty, 1) * 2 - 1) * TUFT_JITTER)
-            cy = ty + round((noise(tx, ty, 2) * 2 - 1) * TUFT_JITTER)
-            count = STALKS_PER_TUFT[0] + round(noise(tx, ty, 3) * (STALKS_PER_TUFT[1] - STALKS_PER_TUFT[0]))
-            for index in range(count):
-                angle = 2 * math.pi * (index + noise(tx, ty, index, 4)) / count
-                distance = TUFT_RADIUS * (0.4 + 0.6 * noise(tx, ty, index, 5))
-                plant_stalk(grid, cx + round(math.cos(angle) * distance), cy + round(math.sin(angle) * distance), angle)
+    spacing = 2 * inner / ROWS
+    x0, x1 = -inner + ROW_MARGIN, inner - ROW_MARGIN
+    for row, label in enumerate(ROW_LABELS):
+        cy = round(-inner + spacing * (row + 0.5))
+        for x, top in row_tops(row, x0, x1).items():
+            for z in range(SOIL_HEIGHT, SOIL_HEIGHT + top):
+                t = (z - SOIL_HEIGHT) / ROW_HEIGHT
+                half = round(ROW_HALF_DEPTH[0] + (ROW_HALF_DEPTH[1] - ROW_HALF_DEPTH[0]) * min(1.0, t * 1.5))
+                grid.box(x, x + 1, cy - half, cy + half, z, z + 1, label)
     return grid
 
 
-def plant_stalk(grid: VoxelGrid, x: int, y: int, fan_angle: float) -> None:
-    base = ridge_top(y)
-    height = STALK_HEIGHT[0] + round(noise(x, y, 3) * (STALK_HEIGHT[1] - STALK_HEIGHT[0]))
-    lean_x = WIND * (0.6 + 0.8 * noise(x, y, 4)) + FAN * math.cos(fan_angle)
-    lean_y = FAN * math.sin(fan_angle)
-
-    def drift(z: int) -> tuple[int, int]:
-        t = (z - base) / (height + EAR_HEIGHT)
-        return x + round(lean_x * t * t), y + round(lean_y * t * t)
-
-    for z in range(base, base + height):
-        sx, sy = drift(z)
-        grid.set(sx, sy, z, STEM_LABEL)
-    # The ear: a 2x2 core with grains sticking out on alternating sides, darker at the bottom, and a short awn
-    for z in range(base + height, base + height + EAR_HEIGHT):
-        sx, sy = drift(z)
-        label = EAR_TIP if z >= base + height + EAR_HEIGHT // 2 else EAR_LABEL
-        grid.box(sx, sx + 2, sy, sy + 2, z, z + 1, label)
-        if (z - base) % 2 == 0:
-            grid.set(sx - 1, sy, z, label)
-        else:
-            grid.set(sx + 2, sy + 1, z, label)
-    top = base + height + EAR_HEIGHT
-    for z in (top, top + 1):
-        sx, sy = drift(z)
-        grid.set(sx + 1, sy, z, EAR_TIP)
+def crack(label: int, other: int) -> tuple[int, int, int, int] | None:
+    """Ink between parts: one row and the next, the soil and the frame."""
+    if (label in ROW_LABELS and other in ROW_LABELS) or {label, other} == {SOIL_LABEL, FRAME}:
+        return OUTLINE
+    return None
 
 
 def shade(hit: Hit) -> tuple[int, int, int, int]:
-    if hit.label in (EAR_LABEL, EAR_TIP):
-        # Thin shapes get noisy normals, so light faces directly: top and left are lit, right is in shade
-        lit = hit.neighbor(0, 0, 1) == EMPTY or hit.neighbor(-1, 0, 0) == EMPTY
-        shaded = hit.neighbor(1, 0, 0) != EMPTY and not lit
-        if hit.label == EAR_TIP:
-            return EAR[3] if lit else EAR[1] if shaded else EAR[2]
-        return EAR[2] if lit else EAR[0] if shaded else EAR[1]
-    if hit.label == STEM_LABEL:
-        if hit.neighbor(-1, 0, 0) == EMPTY and hit.z % 3:
-            return STEM[2]
-        return STEM[1] if hit.z % 4 else STEM[0]
+    if hit.label in ROW_LABELS:
+        t = (hit.z - SOIL_HEIGHT) / ROW_HEIGHT
+        # Flat steps by face: lit top, front in light, contact shadow at the base
+        if hit.neighbor(0, 0, 1) == EMPTY:
+            step = 4
+        elif t < BASE_SHADE:
+            step = 1 if t > BASE_SHADE / 2 else 0
+        else:
+            step = 3 if t > 0.65 else 2
+        # Strands: 1px model columns one step darker or lighter along the whole front, a few longer clumps
+        streak = noise(hit.mx, hit.label, 9)
+        if streak < 0.22:
+            step -= 1
+        elif streak > 0.85 and step < 4:
+            step += 1
+        # The right end of a row turns away from the light
+        if hit.neighbor(3, 0, 0) == EMPTY and hit.neighbor(0, 0, 1) != EMPTY:
+            step -= 1
+        return WHEAT[max(0, min(4, step))]
 
-    light = hit.light(hit.normal())
     if hit.label == SOIL_LABEL:
-        index = 0 if light < 0.2 else 1 if light < 0.6 else 2 if light < 0.9 else 3
-        # A few clods catch the light
-        if index < 3 and noise(hit.mx, hit.my, hit.z) > 0.93:
-            index += 1
-        return SOIL[index]
+        return SOIL[2] if hit.neighbor(0, 0, 1) == EMPTY else SOIL[1]
 
-    # Frame planks run along each side, with a seam every few voxels
+    # Frame planks run along each side: lit top with seams, front faces with grain streaks along the plank
+    light = hit.light(hit.normal())
+    along = hit.mx if abs(hit.my) > abs(hit.mx) else hit.my
     if hit.neighbor(0, 0, 1) == EMPTY:
-        along = hit.mx if abs(hit.my) > abs(hit.mx) else hit.my
         return WOOD[1] if (along + 64) % 13 == 0 else WOOD[3]
     if hit.z == FRAME_HEIGHT // 2:
-        return WOOD[0]
-    return WOOD[1] if light < 0.4 else WOOD[2]
+        return OUTLINE if (along + 64) % 9 < 6 else WOOD[1]
+    base = 1 if light < 0.4 else 2
+    if noise((along + 64) // 5, hit.z, 11) > 0.75:
+        base -= 1
+    return WOOD[base]
+
+
+def square_shadow(x: float, y: float) -> float:
+    """Normalized distance to the square shadow of the frame."""
+    half = HALF_SIZE + SHADOW_MARGIN
+    return max(abs(x - SHADOW_OFFSET[0]), abs(y - SHADOW_OFFSET[1])) / half
 
 
 def main() -> None:
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     grid = build_model()
-    for name, yaw in VIEWS.items():
-        sprite = render(grid, yaw, WIDTH, HEIGHT, ORIGIN_Y, shade, SHADOW_RADII)
-        # A large gap keeps the depth outline to the field edges instead of every stalk in front of another
-        outline(sprite, depth_gap=10)
-        write_png(OUTPUT_DIR / f"{name}.png", sprite.pixels)
-    print(f"wrote {len(VIEWS)} views to {OUTPUT_DIR.relative_to(ROOT)}")
+    sprite = render(grid, 0, WIDTH, HEIGHT, ORIGIN_Y, shade, SHADOW_RADII, SHADOW_JITTER, shadow_shape=square_shadow)
+    outline(sprite, crack, depth_gap=6)
+    write_png(OUTPUT, sprite.pixels)
+    print(f"wrote {OUTPUT.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

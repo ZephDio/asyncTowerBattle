@@ -19,23 +19,162 @@ image, and iterated on.
   ```
   The first call can take a while to fetch from the binary cache; give it a long timeout.
 - `scripts/analyze.py <png>...`: size, bbox, run-length histogram (pixel scale) and palette.
+- `scripts/style_check.py <png>...`: off-palette colors, outline thickness, silhouette edge colors and the
+  most common color adjacencies, compared with the house style below.
 - `scripts/preview.py <out.png> <png>...`: composite side by side on a grass background, upscaled 3x
   nearest-neighbor. Write `<out.png>` to the scratchpad, then **Read it** to look at the result.
   Always include a reference sprite (e.g. `public/resources/towers/blue.png`) to compare style.
 
 ## House style (towers, houses)
 
-- Native 1px pixel art, no upscaling, no anti-aliasing, roughly 10-15 colors per sprite.
-- Outline `(22, 28, 46)` 1px around the silhouette and between distinct parts.
-- Drop shadow: ellipse under the base in `(22, 28, 46, 80)`.
-- Light from the top left: highlight on top/left edges of each block, shade on bottom/right edges.
-- 3/4 top-down view, base sitting near the bottom of the canvas.
-- Shared palette entries: teal `(90,185,187)` `(68,142,159)`, slate `(67,91,125)`, violet-dark `(72,63,97)`,
-  wood `(180,131,85)` `(218,181,112)` `(134,99,83)`, mint `(143,226,185)`.
-- Canvas: towers 128x256, houses 128x192, gobelin portal 128x160.
-- Some older totems (anvil, windmill...) are painted/high-res and are **not** the reference style.
+The references are `public/resources/towers/blue.png` (stone tower on a wooden palisade) and
+`public/resources/house/blue.png` (thatched cottage). Both were measured with `analyze.py` and
+`scripts/style_check.py`; the numbers below come from them.
 
-Run `analyze.py` on a reference before starting; don't trust this list blindly if the art has changed.
+### Pixels
+
+- Native 1px pixel art at 1x: no upscaling, no anti-aliasing, no gradients. Every opaque pixel is one of the
+  palette entries below. 12 colors on the tower, 16 on the house, transparent and shadow included.
+- The only semi-transparent color is the shadow. Everything else is alpha 255.
+- No orphan pixels: color areas are clusters of at least 2x2 pixels. The exceptions are texture strokes,
+  1px wide and 3-10px long, and plank seams.
+- The common horizontal run length is 2-3px: shapes are chunky, with no 1px checkerboards and no dithering
+  inside the sprite. The shadow edge is the only place with a broken, stair-stepped edge.
+
+### Outline
+
+- Ink `(22, 28, 46)`, the darkest color, used as the outline. Nothing else is that dark.
+- The silhouette outline is **2px thick**: in both references, runs of 2 are the most common outline run, and
+  every opaque pixel touching transparency is ink. A 1px outline looks thin next to them.
+  Where a silhouette steps diagonally, the outline is 2-3px wide on the steps.
+- Separations between parts are also ink, 2px where the parts are far apart in depth (rampart rim over
+  the trunk, roof eave over the wall, door arch) and 1px between touching parts (a merlon and its wall,
+  palisade planks).
+- Ink also draws small interior lines: horizontal plank seams as 1px dashes 3-8px long, the split between
+  door leaves, and the window mullions.
+
+### Ramps (dark → light)
+
+Each material uses one ramp. Neighboring pixels go up or down one step at a time: the most common
+adjacencies in the references are always two consecutive steps of the same ramp. A material switch
+always has ink between the two materials.
+
+| Material | Ramp |
+| --- | --- |
+| Stone | violet `(72,63,97)` → slate `(67,91,125)` → teal-dark `(68,142,159)` → teal `(90,185,187)` → mint `(143,226,185)` |
+| Wood | brown-dark `(90,70,70)` → brown `(134,99,83)` → wood `(180,131,85)` → wood-light `(218,181,112)` |
+| Thatch | mauve-dark `(94,71,78)` → mauve `(138,103,99)` → straw-shade `(175,140,121)` → straw `(227,193,140)` → cream `(245,239,169)` |
+| Glass / door | slate `(67,91,125)` → teal-dark → teal (the stone ramp, with vertical streaks) |
+
+A new material, such as red brick, iron or leaves, gets its own ramp of 4-5 steps. The steps rise in
+value and shift hue toward warm or yellow as they get lighter, and the darkest step leans toward
+violet/blue so it sits well next to the ink. Reuse the existing ramps first: wood and stone are shared by
+every piece.
+
+### Light and form
+
+Each face gets a flat base step from its orientation, then texture. Faces have no smooth shading.
+
+- **Top faces** (merlon tops, floor, thatch ridge) take the lightest step: mint on stone, wood-light on the
+  floor, cream down the roof ridge.
+- **Front faces in light** take the middle-high step: teal on stone, wood or straw.
+- **Faces in shade** take a low step, with the next lower step for texture: the inner side of the rampart
+  is slate with violet mortar, and the walls under the roof are slate with teal-dark.
+- **Cylinders and cones** darken by one step over the outer 6-12px on *both* sides. The tower trunk and the
+  rampart ring are teal in the middle and teal-dark at the edges, and the roof is cream in the middle,
+  straw-shade on the sides and mauve at the edges. Light still comes from the top left: the left side keeps
+  slightly more light than the right.
+- **Contact shadow**: right under an overhang (rampart over trunk, eave over wall), the surface drops one or
+  two steps for 8-15px: the trunk under the rampart is slate and violet instead of teal.
+
+### Texture
+
+- **Masonry**: bricks are 6-10px wide and 4-5px tall in staggered rows. The mortar is a 1px line in the next
+  lower step of the same ramp (teal-dark on teal, violet on slate, teal on mint), never ink. Mortar lines are
+  ragged, with 1px jogs, and some bricks are cut by a short crack. On a cylinder, the brick rows follow the
+  curve of the ellipse and the bricks get narrower toward the edges.
+- **Planks**: 4-6px wide. They are vertical on the palisade, the door frame and the walls, and horizontal on
+  floors and beams. Wood grain is 1px streaks of the next lower or higher step, 3-10px long, along the
+  plank. Floor seams are ink dashes. Plank ends at the bottom are ragged: 1-2px notches in the outline.
+- **Thatch**: strands are vertical 1px streaks, 4-12px long, mixed from the steps next to the area's base
+  step. The silhouette is jagged, with a spike or notch every 3-5px, and the eave hangs in uneven tufts
+  2-6px deep. Clumps of mauve "V" shapes down the ridge show the layered bundles.
+- **Arches and openings**: a thick 2px ink frame, a wood-colored arch with a lit top edge (wood-light) and a
+  shaded inner edge (brown), and a recessed interior in the stone ramp.
+
+### Shadow
+
+- One flat color `(22, 28, 46, 80)` on the ground, drawn only on transparent pixels, never over the sprite.
+  It is the only semi-transparent color.
+- It fits the **global shape of the construct seen from above**, not a fixed ellipse: the round tower base
+  casts a rounded shadow (113x53px), the square cottage a near-rectangle whose bottom rows keep a constant
+  width (103x35px). The anvil casts its own top-down outline: a flat band under the pedestal and body that
+  tapers to points under the horn tips. Thin add-ons up in the air (hammers, gears, flags) don't count.
+  The shadow follows the outline of the piece, notches and protrusions included (a stair sticking out of a
+  platform gets its own rim, and the corners beside it stay empty): never fill the footprint's bounding box.
+- The shadow is cast by a **light from above**: it rims the piece **evenly on the left and the right** and
+  drops 1-3px further toward the camera (the bottom of the image). Don't shift it sideways: the top-left light
+  only drives the shading of the faces, not the shadow. A box shadow shifted to the right leaves the left side
+  bare, which the user rejected on the obelisk.
+- It scales with the **height** of the piece: it pokes out about 10-15px past the footprint for a tall tower,
+  5-10px for a house, and almost nothing for a flat piece. The crops field or a lawn yard lying on the ground
+  have close to no shadow, at most a 1-2px rim.
+- The edge is stair-stepped and slightly ragged with 1-3px jitter, not a clean curve or line.
+- In the voxel renderer, pass `shadow_shape(x, y)` to `render` for anything that isn't round: it returns a
+  normalized distance on the model ground, 1 or less inside. The simplest way to fit the construct is to
+  derive it from the model: collect the (x, y) columns holding the main body labels, grow them by a margin
+  with a diamond (L1) distance so pointed parts stay pointed, and offset them toward the camera. See
+  `footprint_shadow` in `generate-anvil.py`. For a piece made of boxes, take the min over the boxes of the
+  distance outside each box, divided by the margin: see `footprint_shadow` in `generate-obelisk.py`. Keep `shadow_radii` for round bases, and make them small enough
+  to stay hidden under the base when the piece should have no shadow.
+
+What worked, piece by piece:
+
+| Piece | Shadow | How |
+| --- | --- | --- |
+| Anvil (tall, horns) | flat band tapering to points under the horns | `footprint_shadow`: iron and stone columns, margin 3 with an L1 distance, offset `(2, -5)` |
+| Crops field (low box) | thin square rim, 1-3px on the right and bottom | `square_shadow`: `max(abs(x - ox), abs(y - oy)) / (HALF_SIZE + 2)`, offset `(1, -2)` |
+| Obelisk (raised platform with a stair) | even 2-3px rim on the left, right and bottom, around the stair too | `footprint_shadow`: min over the platform and stair boxes of the distance outside them, margin 3, offset `(0, -2)`, jitter 0.3 |
+| Witch house (lawn yard) | none | the yard is already ground, `shadow_radii=(1, 1)` hides it under the base |
+
+Pitfalls:
+- A round margin (Euclidean distance) around a pointed footprint turns it into a capsule: the user asked for
+  the horn points, so grow with an L1 (diamond) distance and a small margin.
+- `shadow_jitter` is relative to the normalized distance, so its size in voxels is jitter × the shadow half
+  size. 0.15 is fine for a small round radius but gives an 8 voxel fringe on a 52 voxel square: scale it down
+  (0.04 there) so the edge stays a 1-2 voxel stair step. With a footprint distance in units of the margin,
+  0.2 is about one voxel.
+- `shadow_radii` is ignored when `shadow_shape` is passed; set it to `(1, 1)` and say so in a comment.
+- The shadow offset is toward -y in model coordinates (toward the camera), with x left at 0. The anvil and
+  crops field shadows predate this rule and still lean right.
+- A big shadow sets the canvas size. After shrinking or removing one, re-crop the canvas to the art (see
+  Cropping below) or the piece looks small on its tile.
+- Keep the replaced image as `<piece>.old.png` next to the new one when the user asks to compare.
+
+### Composition
+
+- 3/4 top-down view, light from the top left, base sitting about 20px above the bottom of the canvas,
+  centered horizontally.
+- Proportions are toy-like: the top part is wider than what holds it up. The tower rampart (about 108px)
+  is about 1.4x the trunk (about 76px) and overhangs it. The thatch roof takes about 70% of the house's
+  height and overhangs the walls by about 10px on each side.
+- The silhouette is readable at small size: one big shape, a few protrusions (merlons, roof tufts) and one
+  focal detail in the lower middle (door or window).
+- Canvas: towers 128x256, houses 128x192, gobelin portal 128x160.
+- Some older totems (windmill...) are painted/high-res and are **not** the reference style.
+
+Run `analyze.py` and `style_check.py` on a reference before starting; don't trust this section blindly if
+the art has changed. Run `style_check.py` on every new sprite too: off-palette colors, a run length of 1
+as the most common outline run, or non-ink silhouette edges mean the sprite drifted from the style.
+
+Carrying these rules into the voxel renderer:
+- `outline(sprite, crack, depth_gap, width=2, depth_width=2)` draws the 2px silhouette by growing it 1px outward,
+  and outlines both sides of a depth edge. Pass `depth_width=1` when thin parts (posts, stems, 1-2px rods)
+  stand in front of a wall, or they become solid ink bars (see `generate-brewery.py`). `crack` seams stay 1px.
+- In `shade`, quantize to a material's ramp by face orientation (top, front, side, under an overhang) and
+  not only by the light dot product. Then add mortar, grain or strands in model coordinates, one step
+  lower or higher.
+- Apply the cylinder edge darkening and the contact shadow as explicit step offsets.
 
 ## Unit style (dragon)
 
@@ -56,6 +195,15 @@ by π with the piece's mirrored footprint, so don't draw a back view. Older piec
 
 Draw the image in the shape of the piece's footprint as written in its `GridShape`: a horizontal two-cell piece
 (brewery) gets a wide canvas, a vertical one (witch house) a tall canvas.
+
+### Cropping
+
+Crop the canvas to the art, shadow included, with 0-3px of padding: change `WIDTH`, `HEIGHT` and `ORIGIN_Y` in
+the generator so it renders the cropped image directly instead of cropping afterwards. `render` centers the
+model on `WIDTH // 2`, so measure the bbox (Pillow's `getbbox()`) and pick a width that keeps both sides
+inside. Then size the resource so the piece fills its footprint: a one-cell piece is `STANDARD_CELL_SIZE`
+(4.9) wide, e.g. the crops field at 110x92 is `{ width: 4.9, height: 4.098 }`. Wide padding makes a piece
+look lost on its tile even when the resource size matches the cell.
 
 The resource `size` is in grid units; keep `width / height` equal to the image aspect ratio
 (e.g. 128x160 → `{ width: 5, height: 6.25 }`) so the art is not stretched. The hitbox lives in the blueprint
@@ -81,7 +229,7 @@ generator only builds the voxel model and a `shade(hit)` function. Examples, abo
    shapes from simple math: boxes for plinths, polar segments for stone blocks (each block bulging out for a
    lumpy silhouette and thicker in its middle), a thin membrane for flat effects like the ether.
 2. **Ray cast per pixel** through the oblique camera: march along depth in 0.25 steps until a voxel is hit,
-   record label and depth. Rays reaching the ground inside the shadow ellipse get the shadow color.
+   record label and depth. Rays reaching the ground inside the shadow shape (see Shadow) get the shadow color.
 3. **Shade the hit**: estimate a normal from the empty voxels in a 5x5x5 neighborhood (another block counts as
    partly empty, which bevels block edges), dot it with a top-left light, quantize into a 4-5 color ramp.
    Decorative patterns (paving joints, swirls) are computed in model coordinates so they stay attached to the model.

@@ -48,18 +48,24 @@ def bayer(x: int, y: int) -> float:
 
 
 class VoxelGrid:
-    """Labels on x and y in -64..63 and z in 0..143."""
+    """Labels on x in -half_x..half_x-1, y in -half_y..half_y-1 and z in 0..143.
 
-    def __init__(self) -> None:
-        self.voxels = bytearray(2 * HALF_XY * 2 * HALF_XY * SIZE_Z)
+    Raise `half_x` for pieces wider than one cell, e.g. 128 for a 256px wide sprite, and `half_y` for pieces
+    deeper than one cell, e.g. 96 for a tall two-cell tower.
+    """
+
+    def __init__(self, half_x: int = HALF_XY, half_y: int = HALF_XY) -> None:
+        self.half_x = half_x
+        self.half_y = half_y
+        self.voxels = bytearray(2 * half_x * 2 * half_y * SIZE_Z)
 
     def set(self, x: int, y: int, z: int, label: int) -> None:
-        if -HALF_XY <= x < HALF_XY and -HALF_XY <= y < HALF_XY and 0 <= z < SIZE_Z:
-            self.voxels[(z * 2 * HALF_XY + y + HALF_XY) * 2 * HALF_XY + x + HALF_XY] = label
+        if -self.half_x <= x < self.half_x and -self.half_y <= y < self.half_y and 0 <= z < SIZE_Z:
+            self.voxels[(z * 2 * self.half_y + y + self.half_y) * 2 * self.half_x + x + self.half_x] = label
 
     def get(self, x: int, y: int, z: int) -> int:
-        if -HALF_XY <= x < HALF_XY and -HALF_XY <= y < HALF_XY and 0 <= z < SIZE_Z:
-            return self.voxels[(z * 2 * HALF_XY + y + HALF_XY) * 2 * HALF_XY + x + HALF_XY]
+        if -self.half_x <= x < self.half_x and -self.half_y <= y < self.half_y and 0 <= z < SIZE_Z:
+            return self.voxels[(z * 2 * self.half_y + y + self.half_y) * 2 * self.half_x + x + self.half_x]
         return EMPTY
 
     def box(self, x0: int, x1: int, y0: int, y1: int, z0: int, z1: int, label: int) -> None:
@@ -156,11 +162,22 @@ def render(
     origin_y: float,
     shade: Callable[[Hit], Color],
     shadow_radii: tuple[float, float],
+    shadow_jitter: float = 0,
+    shadow_shape: Callable[[float, float], float] | None = None,
 ) -> Sprite:
     """Ray casts every pixel. `origin_y` is the screen row of the ground under the model center.
 
-    Rays reaching the ground inside the model-space shadow ellipse get the shadow color.
+    Rays reaching the ground inside the model-space shadow get the shadow color. By default the shadow is an
+    ellipse of `shadow_radii`; `shadow_shape(x, y)` replaces it with any shape fitting the piece's footprint
+    (rectangle, parallelogram...), returning a normalized distance on the model ground, 1 or less inside.
+    `shadow_jitter` (about 0.1-0.2) roughens the edge in 3x2px steps, like the stair-stepped shadows of the
+    towers and houses.
     """
+
+    def ellipse(x: float, y: float) -> float:
+        return (x / shadow_radii[0]) ** 2 + (y / shadow_radii[1]) ** 2
+
+    shape = shadow_shape or ellipse
     to_model = view_to_model(yaw)
 
     def lookup(x: int, y: int, z: int) -> int:
@@ -173,12 +190,15 @@ def render(
         for px in range(width):
             ix = px - width // 2
             # On this ray, z = (origin_y - sy - y * DEPTH_SCALE) / HEIGHT_SCALE: start where it leaves the grid top
-            y = max(-float(HALF_XY), (origin_y - sy - (SIZE_Z - 1) * HEIGHT_SCALE) / DEPTH_SCALE)
-            while y < HALF_XY:
+            y = max(-float(grid.half_y), (origin_y - sy - (SIZE_Z - 1) * HEIGHT_SCALE) / DEPTH_SCALE)
+            while y < grid.half_y:
                 z = (origin_y - sy - y * DEPTH_SCALE) / HEIGHT_SCALE
                 if z < 0:
                     mx, my = to_model(ix, math.floor(y))
-                    if ((mx + 0.5) / shadow_radii[0]) ** 2 + ((my + 0.5) / shadow_radii[1]) ** 2 <= 1:
+                    # Jitter in 3x2px blocks so the edge breaks into steps instead of a dithered fringe
+                    cell = math.sin((px // 3) * 12.9898 + (py // 2) * 78.233) * 43758.5453
+                    limit = 1 + shadow_jitter * (cell - math.floor(cell) - 0.5)
+                    if shape(mx + 0.5, my + 0.5) <= limit:
                         sprite.labels[py][px] = SHADOW_LABEL
                         sprite.pixels[py][px] = SHADOW
                     break
@@ -198,8 +218,14 @@ def outline(
     sprite: Sprite,
     crack: Callable[[int, int], Color | None] | None = None,
     depth_gap: float = 4,
+    width: int = 2,
+    depth_width: int = 2,
 ) -> None:
     """Outlines the silhouette and the pixels in front of a much farther part.
+
+    With `width` 2, the default matching the tower and house art, the silhouette outline grows 1px outward over
+    the transparent and shadow pixels. With `depth_width` 2, the farther side of a depth edge is outlined too;
+    use 1 when thin parts (posts, stems) stand in front of a wall, or they turn into solid ink bars.
 
     `crack(label, neighbor)` can return a color for the seam between two labels at a similar depth; it is only
     checked against the right and bottom neighbors so seams stay 1px.
@@ -208,13 +234,18 @@ def outline(
     for y in range(sprite.height):
         for x in range(sprite.width):
             label = sprite.labels[y][x]
-            if label <= 0:
-                continue
             neighbors = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+            if label <= 0:
+                if width >= 2 and any(sprite.label_at(nx, ny) > 0 for nx, ny in neighbors):
+                    result[y][x] = OUTLINE
+                continue
             if any(sprite.label_at(nx, ny) <= 0 for nx, ny in neighbors):
                 result[y][x] = OUTLINE
                 continue
             if any(sprite.depths[ny][nx] > sprite.depths[y][x] + depth_gap for nx, ny in neighbors):
+                result[y][x] = OUTLINE
+                continue
+            if depth_width >= 2 and any(sprite.depths[ny][nx] <sprite.depths[y][x] - depth_gap for nx, ny in neighbors):
                 result[y][x] = OUTLINE
                 continue
             if crack:
