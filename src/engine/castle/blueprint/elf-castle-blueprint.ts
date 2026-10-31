@@ -7,7 +7,6 @@ import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { GridPosition } from "../../../shared/position";
 import { Description, TDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../stats/base-stats";
-import { castSpeedFromSeconds } from "../../../shared/seconds";
 import { CastleResources } from "../../../renderer/resources/castle.resources";
 import { CastleTag } from "../../../shared/traits/engine/tags/building/building-tags";
 
@@ -19,7 +18,7 @@ export class ElfCastleBlueprint extends Derive(
 	TBaseStats({
 		health: 20,
 		damage: NaN,
-		castSpeed: castSpeedFromSeconds(1),
+		castSpeed: 1,
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

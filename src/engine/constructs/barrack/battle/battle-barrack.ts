@@ -1,4 +1,4 @@
-import { Subtrait } from "@ddd-ts/traits";
+import { Subtrait, implementsTrait } from "@ddd-ts/traits";
 import { BasicBattleBarrack } from "./implementation/battle-basic-barrack";
 import { VeterantBattleBarrack } from "./implementation/battle-veterant-barrack";
 import { WaveBattleBarrack } from "./implementation/battle-wave-barrack";
@@ -9,10 +9,16 @@ import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable
 import { TUnitPreviewHudRenderable } from "../../../../shared/traits/render/huds/unit-preview-enderable";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { HaveStats } from "../../../stats/stats";
-import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import {
+	HTDescriptor,
+	TDescriptor,
+	TLiveDescriptor,
+	formatStat,
+	liveStat,
+} from "../../../../shared/traits/render/huds/item-descriptor";
 import { AnyUnit } from "../../../units/recruit/unit";
 import { TStatsRenderable } from "../../../../shared/traits/render/huds/stat-renderable";
-import { castCostFromFrames } from "../../../../shared/seconds";
+import { frameToSeconds } from "../../../../shared/seconds";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { AnyBarrack } from "../recruit/barrack";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
@@ -31,6 +37,7 @@ export const BattleBarrack = Subtrait(
 		GridElement,
 		HaveStats,
 		HTDescriptor,
+		TLiveDescriptor,
 		HTTag,
 		HTRarity,
 	],
@@ -50,20 +57,20 @@ export const BattleBarrack = Subtrait(
 				return this.unitRecruit ?? this.hooks.getDefaultUnit();
 			}
 
-			override get castTime() {
-				return castCostFromFrames(this.bondedUnit.stats.summonTime / 31.25 / this.castMultiplier);
-			}
-
-			get castMultiplier() {
-				return this.barrack.castMultiplier;
+			liveLines() {
+				const unit = this.bondedUnit;
+				const castSpeed = this.castSpeed;
+				const summonTime =
+					castSpeed > 0 ? `${frameToSeconds(unit.stats.summonTime / castSpeed).toFixed(1)}s` : "stopped";
+				return {
+					unit: implementsTrait(unit, TDescriptor) ? unit.description.name : "-",
+					"production speed": liveStat(`x${formatStat(castSpeed)}`, castSpeed, this.stats.base.castSpeed),
+					"summon time": liveStat(summonTime, castSpeed, this.stats.base.castSpeed),
+				};
 			}
 
 			casts(): void {
-				this.castInProgress = new Cast(
-					this,
-					this.onCastResolve.bind(this),
-					castCostFromFrames(this.bondedUnit.stats.summonTime),
-				);
+				this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.bondedUnit.stats.summonTime);
 			}
 		}
 		return BattleBarrack;

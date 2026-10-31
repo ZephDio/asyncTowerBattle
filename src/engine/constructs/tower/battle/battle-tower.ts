@@ -6,7 +6,15 @@ import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { HaveStats } from "../../../stats/stats";
 import { Tower } from "../recruit/tower";
-import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import {
+	HTDescriptor,
+	LiveLine,
+	TLiveDescriptor,
+	TowerLinesDescription,
+	formatStat,
+	liveStat,
+} from "../../../../shared/traits/render/huds/item-descriptor";
+import { castSpeedToSecond } from "../../../../shared/seconds";
 import { TStatsRenderable } from "../../../../shared/traits/render/huds/stat-renderable";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 import { HTRarity } from "../../../../shared/traits/engine/rarity";
@@ -24,6 +32,7 @@ export const BattleTower = Subtrait(
 		GridElement,
 		HaveStats,
 		HTDescriptor,
+		TLiveDescriptor,
 		HTTag,
 		HTRarity,
 	],
@@ -44,6 +53,17 @@ export const BattleTower = Subtrait(
 
 			isAlive() {
 				return true;
+			}
+
+			liveLines(): Record<keyof TowerLinesDescription, LiveLine> {
+				const { stats } = this;
+				const castTime = stats.castSpeed > 0 ? `${castSpeedToSecond(stats.castSpeed)}s` : "stopped";
+				return {
+					damage: liveStat(formatStat(stats.attack), stats.attack, stats.base.attack),
+					"cast speed": liveStat(castTime, stats.castSpeed, stats.base.castSpeed),
+					"food consumption": liveStat(formatStat(stats.foodCost), stats.foodCost, stats.base.foodCost, false),
+					range: liveStat(formatStat(stats.range), stats.range, stats.base.range),
+				};
 			}
 
 			casts(): void {

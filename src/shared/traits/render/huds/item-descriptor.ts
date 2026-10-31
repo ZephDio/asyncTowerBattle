@@ -18,6 +18,34 @@ export const TDescriptor = Trait((base) => {
 	return IDescriptor;
 });
 
+export type StatTrend = "better" | "worse" | "neutral";
+export type LiveLine = { value: string; trend: StatTrend };
+
+const TrendColors: Record<StatTrend, string> = {
+	better: "#1e7b1e",
+	worse: "#b3261e",
+	neutral: "#000000",
+};
+
+export const formatStat = (value: number) => `${Number(value.toFixed(2))}`;
+
+// Compares a live stat to its base value. Pass higherIsBetter = false for costs and cooldowns.
+export const liveStat = (value: string, current: number, base: number, higherIsBetter = true): LiveLine => {
+	const delta = current - base;
+	if (Math.abs(delta) <= Math.abs(base) * 1e-6) return { value, trend: "neutral" };
+	return { value, trend: delta > 0 === higherIsBetter ? "better" : "worse" };
+};
+
+// Implemented by battle entities whose descriptor shows values that change during the battle.
+// These lines are read every frame and override static extra lines with the same key.
+export const TLiveDescriptor = Trait((base) => {
+	abstract class ILiveDescriptor extends base {
+		abstract liveLines(): Record<string, string | LiveLine>;
+	}
+
+	return ILiveDescriptor;
+});
+
 export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 	abstract class IDescriptor extends base {
 		description: Description;
@@ -38,7 +66,6 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	tags: Tag[];
 	tagBadges: TagBadge[];
 
-	extraLines: Record<string, string>;
 	constructor(
 		public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>,
 		public position: ScreenPosition = PercentToReal({ x: 86, y: 73 }),
@@ -46,11 +73,16 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		super({});
 		this.bannerImage = HudElementResources.descriptorBanner[rarityOf(this.item)].image;
 		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 10 }));
-		this.extraLines = this.item.description.extraLines ?? {};
 		this.linesPosition = this.getLinesPositions();
 		this.tags = implementsTrait(this.item, Tagged) ? this.item.tags : [];
 		this.tagBadges = sortTags(this.tags).map((tag) => new TagBadge(tag));
 		this.tagsPosition = this.position.add(new ScreenPosition({ x: 0, y: -14.5 }));
+	}
+
+	get extraLines(): Record<string, string | LiveLine> {
+		const staticLines = this.item.description.extraLines ?? {};
+		if (!implementsTrait(this.item, TLiveDescriptor)) return staticLines;
+		return { ...staticLines, ...this.item.liveLines() };
 	}
 
 	getLinesPositions() {
@@ -68,6 +100,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
+		this.linesPosition = this.getLinesPositions();
 		const bannerSize = this.getCanvasSize(context, 19.3, 33, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawBanner(context, bannerSize, canvasPosition);
@@ -94,7 +127,21 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		lines.forEach(([key, value], index) => {
 			const linePosition = linesPosition[index];
 			if (!linePosition) return;
-			context.fillText(`${key}: ${value}`, linePosition.x, linePosition.y, descriptionFontSize.width);
+			if (typeof value === "string") {
+				context.fillText(`${key}: ${value}`, linePosition.x, linePosition.y, descriptionFontSize.width);
+				return;
+			}
+			const label = `${key}: `;
+			const labelWidth = Math.min(context.measureText(label).width, descriptionFontSize.width);
+			context.fillText(label, linePosition.x, linePosition.y, descriptionFontSize.width);
+			context.fillStyle = TrendColors[value.trend];
+			context.fillText(
+				value.value,
+				linePosition.x + labelWidth,
+				linePosition.y,
+				Math.max(0, descriptionFontSize.width - labelWidth),
+			);
+			context.fillStyle = "#000000";
 		});
 		description.forEach((line, index) => {
 			const descriptionPosition = descriptionPositions[index];

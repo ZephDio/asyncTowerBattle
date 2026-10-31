@@ -26,10 +26,6 @@ export const Barrack = Subtrait([TRecruit, RecruitCaster, HTBaseStats], (base) =
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleBarrack;
 
-		get castMultiplier() {
-			return this.stats.castSpeed / 30;
-		}
-
 		moveRecruit(hooks: TokenHooks, gridPosition: GridPosition, grid?: ImplementsTrait<typeof TGrid>) {
 			if (!grid) throw new Error("Invalid grid");
 			if (grid instanceof RetailGrid) {

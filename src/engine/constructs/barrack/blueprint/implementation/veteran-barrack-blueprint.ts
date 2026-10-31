@@ -9,7 +9,6 @@ import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-bluepri
 import { VeterantBarrack } from "../../recruit/implementation/veterant-barrack";
 import { BarrackDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
-import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { BarrackResources } from "../../../../../renderer/resources/barrack.resources";
 import { BarrackTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
@@ -22,7 +21,7 @@ export class VeterantBarrackBlueprint extends Derive(
 	TBaseStats({
 		health: NaN,
 		damage: NaN,
-		castSpeed: castSpeedFromSeconds(1.6),
+		castSpeed: 0.6,
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,
@@ -34,16 +33,7 @@ export class VeterantBarrackBlueprint extends Derive(
 ) {
 	description = new BarrackDescription(
 		"Veterant Barrack",
-		[
-			"A barrack that spawn",
-			"a giant unit with",
-			"reduced movement",
-			"speed but greatly",
-			"enhanced health",
-			"",
-			"Takes 1.6 times more",
-			"time to produce unit",
-		],
+		["A barrack that spawn", "a giant unit with", "reduced movement", "speed but greatly", "enhanced health"],
 		this,
 	);
 

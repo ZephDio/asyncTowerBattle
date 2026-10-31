@@ -9,7 +9,6 @@ import { BasicBarrack } from "../../recruit/implementation/basic-barrack";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { BarrackDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
-import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { BarrackResources } from "../../../../../renderer/resources/barrack.resources";
 import { BarrackTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
@@ -22,7 +21,7 @@ export class BasicBarrackBlueprint extends Derive(
 	TBaseStats({
 		health: NaN,
 		damage: NaN,
-		castSpeed: castSpeedFromSeconds(1),
+		castSpeed: 1,
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

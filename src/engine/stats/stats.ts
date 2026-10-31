@@ -142,6 +142,18 @@ export class Stats {
 			}
 		});
 	}
+	// Values before any percent modifier, used to tell buffed stats from debuffed ones.
+	get base() {
+		return {
+			maxHealth: this._maxHealth,
+			attack: this._attack,
+			movementSpeed: this._movementSpeed,
+			castSpeed: this._castSpeed,
+			foodCost: this._foodCost,
+			range: this._range,
+		};
+	}
+
 	get health() {
 		return this._health;
 	}

@@ -7,7 +7,6 @@ import { GridElement } from "../../../shared/traits/engine/core/grid-element";
 import { HTImageDrawable } from "../../../shared/traits/render/image-drawable";
 import { GridPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
-import { castCostFromFrames } from "../../../shared/seconds";
 import { HTTag } from "../../../shared/traits/engine/tags/tagged";
 import { HTRarity } from "../../../shared/traits/engine/rarity";
 
@@ -24,15 +23,11 @@ export const TBattleCastle = Subtrait(
 				this.hooks = hooks;
 			}
 
-			override get castTime() {
-				return castCostFromFrames(this.hooks.getDefaultUnit().stats.summonTime / 31.25);
-			}
-
 			casts() {
 				this.castInProgress = new Cast(
 					this,
 					this.onCastResolve.bind(this),
-					castCostFromFrames(this.hooks.getDefaultUnit().stats.summonTime),
+					this.hooks.getDefaultUnit().stats.summonTime,
 				);
 			}
 

@@ -9,13 +9,31 @@ import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattlePath } from "../../path/battle/battle-path";
 import { PathFinder } from "../../battle/path-finder";
 import { Action } from "../../../shared/action";
-import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
+import {
+	HTDescriptor,
+	LiveLine,
+	TLiveDescriptor,
+	UnitLinesDescription,
+	formatStat,
+	liveStat,
+} from "../../../shared/traits/render/huds/item-descriptor";
 import { TStatsRenderable } from "../../../shared/traits/render/huds/stat-renderable";
 import { HTTag } from "../../../shared/traits/engine/tags/tagged";
 import { HTRarity } from "../../../shared/traits/engine/rarity";
 
 export const TBattleUnit = Subtrait(
-	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, TStatsRenderable, HTDescriptor, HTTag, HTRarity],
+	[
+		TCollider,
+		HTHitbox,
+		HTImageDrawable,
+		TSizable,
+		TLifeBarRenderable,
+		TStatsRenderable,
+		HTDescriptor,
+		TLiveDescriptor,
+		HTTag,
+		HTRarity,
+	],
 	(base) => {
 		abstract class IBattleUnit extends base {
 			hunger = 0;
@@ -60,6 +78,21 @@ export const TBattleUnit = Subtrait(
 					const newPosition = this.pathFinder.getNextPosition(this.position, this.stats.movementSpeed);
 					this.move(newPosition);
 				}
+			}
+
+			// Production time only matters before the unit exists, so it keeps its static value.
+			liveLines(): Record<Exclude<keyof UnitLinesDescription, "production time">, LiveLine> {
+				const { stats } = this;
+				return {
+					health: liveStat(
+						`${formatStat(stats.health)}/${formatStat(stats.maxHealth)}`,
+						stats.health,
+						stats.base.maxHealth,
+					),
+					damage: liveStat(formatStat(stats.attack), stats.attack, stats.base.attack),
+					"move speed": liveStat(formatStat(stats.movementSpeed), stats.movementSpeed, stats.base.movementSpeed),
+					"food consumption": liveStat(formatStat(stats.foodCost), stats.foodCost, stats.base.foodCost, false),
+				};
 			}
 
 			attackCastle() {
