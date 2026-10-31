@@ -12,6 +12,7 @@ import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { BoggedDown } from "../../../stats/status/bogged-down";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
+import { HTRarity } from "../../../../shared/traits/engine/rarity";
 
 export class BattleSlowingTrap extends Derive(
 	TCollider,
@@ -21,6 +22,7 @@ export class BattleSlowingTrap extends Derive(
 	HTImageDrawable,
 	TPathShape(PathResources.slowing),
 	HTTag,
+	HTRarity,
 ) {
 	constructor(
 		trap: SlowingTrap,
@@ -28,7 +30,7 @@ export class BattleSlowingTrap extends Derive(
 		public position: GridPosition,
 		private hooks: BattleArmyHooks,
 	) {
-		super({ imageDrawable: trap, hitboxHolder: trap, tagHolder: trap });
+		super({ imageDrawable: trap, hitboxHolder: trap, tagHolder: trap, rarityHolder: trap });
 	}
 
 	tick() {

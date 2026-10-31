@@ -21,6 +21,7 @@ export class Brewery extends Derive(Totem, RecruitCaster, HTSynergy, RecruitBatt
 		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
+			rarityHolder: blueprint,
 			imageDrawable: blueprint,
 			hitboxHolder: blueprint,
 			synergy: blueprint,

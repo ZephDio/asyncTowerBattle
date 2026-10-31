@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { Cell, GridPosition } from "../../../../../shared/position";
@@ -13,6 +14,7 @@ import { BarrackResources } from "../../../../../renderer/resources/barrack.reso
 import { BarrackTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class VeterantBarrackBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 6),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),

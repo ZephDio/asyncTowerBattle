@@ -27,6 +27,7 @@ export class BattleWindmill extends Derive(BattleTotem, HTSynergy, BattleStartTr
 			synergy: windmill,
 			descriptor: windmill,
 			tagHolder: windmill,
+			rarityHolder: windmill,
 		});
 		this.gridShape = windmill.gridShape;
 	}

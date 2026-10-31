@@ -12,9 +12,10 @@ import { Action } from "../../../shared/action";
 import { HTDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 import { TStatsRenderable } from "../../../shared/traits/render/huds/stat-renderable";
 import { HTTag } from "../../../shared/traits/engine/tags/tagged";
+import { HTRarity } from "../../../shared/traits/engine/rarity";
 
 export const TBattleUnit = Subtrait(
-	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, TStatsRenderable, HTDescriptor, HTTag],
+	[TCollider, HTHitbox, HTImageDrawable, TSizable, TLifeBarRenderable, TStatsRenderable, HTDescriptor, HTTag, HTRarity],
 	(base) => {
 		abstract class IBattleUnit extends base {
 			hunger = 0;

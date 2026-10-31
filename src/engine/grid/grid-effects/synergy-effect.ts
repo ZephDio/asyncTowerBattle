@@ -5,6 +5,7 @@ import { ArmyGrid } from "../grid";
 import { TDrawable } from "../../../shared/traits/render/drawable";
 import { TRenderable } from "../../../shared/traits/render/renderable";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
+import { HudElementResources } from "../../../renderer/resources/hud-element.resources";
 
 export class SynergyEffectHud extends Derive(TDrawable, TRenderable) {
 	drawPriority = DrawPriority.HUD;
@@ -19,14 +20,11 @@ export class SynergyEffectHud extends Derive(TDrawable, TRenderable) {
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
-		context.globalAlpha = 0.4;
-		context.fillStyle = "red";
-		if (this.isActivated) {
-			context.fillStyle = "blue";
-		}
+		context.globalAlpha = 1;
+		const star = this.isActivated ? HudElementResources.patternStarActive : HudElementResources.patternStarInactive;
 		const { width, height } = this.getCanvasSize(context, this.size, this.size);
 		const canvasPosition = this.getCanvasPosition(context, position);
-		this.drawRectangle(context, { width: width / 2, height: height / 2 }, canvasPosition);
+		this.drawImage(context, { width: width / 2, height: height / 2 }, canvasPosition, star.image);
 	}
 
 	get position() {

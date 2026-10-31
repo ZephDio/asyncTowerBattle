@@ -16,6 +16,7 @@ export class Dragon extends Derive(Unit) {
 			descriptor: dragon,
 			statsHolder: dragon,
 			tagHolder: dragon,
+			rarityHolder: dragon,
 		});
 	}
 

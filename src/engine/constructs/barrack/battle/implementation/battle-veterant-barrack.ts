@@ -34,6 +34,7 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 			hitboxHolder: barrack,
 			descriptor: barrack,
 			tagHolder: barrack,
+			rarityHolder: barrack,
 		});
 		this.castCost = unitRecruit ? unitRecruit.stats.summonTime : this.hooks.getDefaultUnit().stats.summonTime;
 		this.gridShape = barrack.gridShape;

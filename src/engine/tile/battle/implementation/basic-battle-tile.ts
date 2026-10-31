@@ -10,6 +10,7 @@ import { GridElement } from "../../../../shared/traits/engine/core/grid-element"
 import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
+import { HTRarity } from "../../../../shared/traits/engine/rarity";
 import { TTrapHolder } from "../../../../shared/traits/engine/trap-holder";
 import { AnyBattleTrap } from "../../../trap/battle/battle-trap";
 
@@ -22,6 +23,7 @@ export class BasicBattlePathTile extends Derive(
 	TPathShape(PathResources.normal),
 	TTrapHolder,
 	HTTag,
+	HTRarity,
 ) {
 	trap: AnyBattleTrap | null;
 
@@ -31,7 +33,7 @@ export class BasicBattlePathTile extends Derive(
 		public position: GridPosition,
 		hooks: BattleArmyHooks,
 	) {
-		super({ imageDrawable: pathTile, hitboxHolder: pathTile, tagHolder: pathTile });
+		super({ imageDrawable: pathTile, hitboxHolder: pathTile, tagHolder: pathTile, rarityHolder: pathTile });
 		this.trap = pathTile.trap?.toBattle(cell, position, hooks) ?? null;
 	}
 

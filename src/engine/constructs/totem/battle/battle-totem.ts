@@ -5,11 +5,12 @@ import { TRenderable } from "../../../../shared/traits/render/renderable";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
+import { HTRarity } from "../../../../shared/traits/engine/rarity";
 
 export type AnyBattleTotem = ImplementsTrait<typeof BattleTotem>;
 
 export const BattleTotem = Subtrait(
-	[HTHitbox, HTImageDrawable, TRenderable, GridElement, HTDescriptor, HTTag],
+	[HTHitbox, HTImageDrawable, TRenderable, GridElement, HTDescriptor, HTTag, HTRarity],
 	(base) => {
 		abstract class TBattleTotem extends base {
 			get realPosition() {

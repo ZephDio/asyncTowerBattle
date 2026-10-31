@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
@@ -16,6 +17,7 @@ import { MountainTag } from "../../../../shared/traits/engine/tags/biome/biome-t
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class DragonBlueprint extends Derive(
+	TRarity(Rarity.Legendary),
 	TShopBlueprint(15, 7),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,

@@ -30,6 +30,7 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 			hitboxHolder: recruit,
 			descriptor: recruit,
 			tagHolder: recruit,
+			rarityHolder: recruit,
 		});
 		this.gridShape = recruit.gridShape;
 	}

@@ -30,6 +30,7 @@ export class BattleElf extends Derive(TBattleUnit, Caster) {
 			descriptor: recruit,
 			casterRecruit: recruit,
 			tagHolder: recruit,
+			rarityHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

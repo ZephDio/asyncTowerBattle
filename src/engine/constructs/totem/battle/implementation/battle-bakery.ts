@@ -19,6 +19,7 @@ export class BattleBakery extends Derive(BattleTotem, Caster, TStatsRenderable) 
 		super({
 			casterRecruit: bakery,
 			tagHolder: bakery,
+			rarityHolder: bakery,
 			imageDrawable: bakery,
 			hitboxHolder: bakery,
 			maxHealth: bakery.stats.health,

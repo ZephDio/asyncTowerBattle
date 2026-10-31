@@ -18,6 +18,7 @@ export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy) {
 		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
+			rarityHolder: blueprint,
 			imageDrawable: blueprint,
 			hitboxHolder: blueprint,
 			synergy: blueprint,

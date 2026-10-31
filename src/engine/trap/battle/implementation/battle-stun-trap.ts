@@ -13,6 +13,7 @@ import { Action } from "../../../../shared/action";
 import { secondsToFrame } from "../../../../shared/seconds";
 import { Stunned } from "../../../stats/status/stunned";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
+import { HTRarity } from "../../../../shared/traits/engine/rarity";
 
 export class BattleStunTrap extends Derive(
 	TCollider,
@@ -22,6 +23,7 @@ export class BattleStunTrap extends Derive(
 	HTImageDrawable,
 	TPathShape(PathResources.trap),
 	HTTag,
+	HTRarity,
 ) {
 	didTrigger = false;
 	cooldown = secondsToFrame(3);
@@ -35,7 +37,7 @@ export class BattleStunTrap extends Derive(
 		public position: GridPosition,
 		private hooks: BattleArmyHooks,
 	) {
-		super({ imageDrawable: trap, hitboxHolder: trap, tagHolder: trap });
+		super({ imageDrawable: trap, hitboxHolder: trap, tagHolder: trap, rarityHolder: trap });
 	}
 
 	tick() {

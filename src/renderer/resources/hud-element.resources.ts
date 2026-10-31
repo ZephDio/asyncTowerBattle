@@ -1,6 +1,7 @@
 import { createImage } from "../../shared/image";
 import { IconResource } from "./icons.resources";
 import { Resource } from "./tower.resources";
+import { Rarity } from "../../shared/traits/engine/rarity";
 
 export class HudElementResources {
 	static victory: Resource = {
@@ -45,5 +46,21 @@ export class HudElementResources {
 
 	static banner: IconResource = {
 		image: createImage("/resources/hud/banner.png"),
+	};
+
+	static descriptorBanner: Record<Rarity, IconResource> = {
+		[Rarity.Common]: { image: createImage("/resources/hud/banner-descriptor/common.png") },
+		[Rarity.Uncommon]: { image: createImage("/resources/hud/banner-descriptor/uncommon.png") },
+		[Rarity.Rare]: { image: createImage("/resources/hud/banner-descriptor/rare.png") },
+		[Rarity.Epic]: { image: createImage("/resources/hud/banner-descriptor/epic.png") },
+		[Rarity.Legendary]: { image: createImage("/resources/hud/banner-descriptor/legendary.png") },
+	};
+
+	static patternStarActive: IconResource = {
+		image: createImage("/resources/hud/pattern-star-active.png"),
+	};
+
+	static patternStarInactive: IconResource = {
+		image: createImage("/resources/hud/pattern-star-inactive.png"),
 	};
 }

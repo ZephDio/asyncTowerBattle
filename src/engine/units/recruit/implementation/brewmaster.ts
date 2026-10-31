@@ -19,6 +19,7 @@ export class Brewmaster extends Derive(Unit, HTBaseStats, RecruitCaster) {
 			descriptor: blueprint,
 			statsHolder: blueprint,
 			tagHolder: blueprint,
+			rarityHolder: blueprint,
 		});
 	}
 

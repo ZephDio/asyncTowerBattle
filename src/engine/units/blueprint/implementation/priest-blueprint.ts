@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
@@ -14,6 +15,7 @@ import { UnitResources } from "../../../../renderer/resources/unit.resources";
 import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class PriestBlueprint extends Derive(
+	TRarity(Rarity.Rare),
 	TShopBlueprint(20, 6),
 	THitbox(new HitBox([[new Rectangle({ width: 1.8, height: 2.2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,

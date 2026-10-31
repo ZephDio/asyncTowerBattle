@@ -20,6 +20,7 @@ export class BattleBrewery extends Derive(BattleTotem, HTSynergy, Caster, Battle
 		super({
 			synergy: brewery,
 			tagHolder: brewery,
+			rarityHolder: brewery,
 			casterRecruit: brewery,
 			battleStartRecruit: brewery,
 			imageDrawable: brewery,

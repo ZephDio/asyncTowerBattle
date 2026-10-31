@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
@@ -18,6 +19,7 @@ import { UnitResources } from "../../../../renderer/resources/unit.resources";
 import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class ElfBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	THitbox(new HitBox([[new Rectangle({ width: 2, height: 2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,

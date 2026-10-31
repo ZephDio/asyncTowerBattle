@@ -22,12 +22,13 @@ export class BattleRedObelisk extends Derive(BattleTotem, Caster, HTSynergy, TSt
 			imageDrawable: obelisk,
 			hitboxHolder: obelisk,
 			tagHolder: obelisk,
+			rarityHolder: obelisk,
 			casterRecruit: obelisk,
 			maxHealth: obelisk.stats.health,
 			attack: obelisk.stats.damage,
 			attackSpeed: obelisk.stats.attackSpeed,
 			movementSpeed: obelisk.stats.speed,
-			castSpeed: obelisk.castSpeed,
+			castSpeed: obelisk.stats.castSpeed,
 			foodCost: obelisk.stats.foodConsumptionOnCast,
 			range: obelisk.stats.range,
 			onDeath: () => {},
@@ -37,6 +38,7 @@ export class BattleRedObelisk extends Derive(BattleTotem, Caster, HTSynergy, TSt
 	}
 
 	tick() {
+		this.stats.tick();
 		this.tickCast();
 		if (!this.hasTriggered) {
 			this.hasTriggered = true;

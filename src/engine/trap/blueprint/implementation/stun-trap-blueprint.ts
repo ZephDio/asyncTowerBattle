@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../shared/position";
 import { StunTrap } from "../../recruit/implementation/stun-trap";
@@ -11,6 +12,7 @@ import { PathResources } from "../../../../renderer/resources/path.resources";
 import { TrapTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class StunTrapBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 5),
 	TImageDrawable(PathResources.trap.straight, PathResources.trap.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,

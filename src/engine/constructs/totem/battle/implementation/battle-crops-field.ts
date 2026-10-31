@@ -20,6 +20,7 @@ export class BattleCropsField extends Derive(BattleTotem, Caster, TStatsRenderab
 			imageDrawable: cropsField,
 			hitboxHolder: cropsField,
 			tagHolder: cropsField,
+			rarityHolder: cropsField,
 			casterRecruit: cropsField,
 			maxHealth: cropsField.stats.health,
 			attack: cropsField.stats.damage,

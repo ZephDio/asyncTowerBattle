@@ -17,6 +17,7 @@ export class GobelinPortal extends Derive(Totem, HTSynergy) {
 		super({
 			synergy: totem,
 			tagHolder: totem,
+			rarityHolder: totem,
 			imageDrawable: totem,
 			hitboxHolder: totem,
 			descriptor: totem,

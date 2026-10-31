@@ -32,6 +32,7 @@ export class GreenBattleTower extends Derive(BattleTower) {
 			hitboxHolder: recruit,
 			descriptor: recruit,
 			tagHolder: recruit,
+			rarityHolder: recruit,
 		});
 	}
 

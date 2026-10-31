@@ -29,6 +29,7 @@ export class BattleDragon extends Derive(TBattleUnit) {
 			hitboxHolder: recruit,
 			descriptor: recruit,
 			tagHolder: recruit,
+			rarityHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

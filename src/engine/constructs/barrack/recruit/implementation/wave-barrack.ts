@@ -21,6 +21,7 @@ export class WaveBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 			descriptor: barrack,
 			statsHolder: barrack,
 			tagHolder: barrack,
+			rarityHolder: barrack,
 		});
 	}
 	unitRecruit: null | AnyUnit;

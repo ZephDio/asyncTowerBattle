@@ -16,7 +16,7 @@ export class BattleGobelinPortal extends Derive(BattleTotem) {
 		public readonly cell: Cell,
 		override orientation: BoardOrientation,
 	) {
-		super({ imageDrawable: portal, hitboxHolder: portal, descriptor: portal, tagHolder: portal });
+		super({ imageDrawable: portal, hitboxHolder: portal, descriptor: portal, tagHolder: portal, rarityHolder: portal });
 		this.gridShape = portal.gridShape;
 	}
 

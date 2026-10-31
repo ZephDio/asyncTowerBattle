@@ -24,6 +24,7 @@ export class WitchHouse extends Derive(Tower, HTSynergy) {
 			descriptor: tower,
 			statsHolder: tower,
 			tagHolder: tower,
+			rarityHolder: tower,
 		});
 	}
 

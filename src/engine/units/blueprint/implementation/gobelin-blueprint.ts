@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
@@ -18,6 +19,7 @@ import { EvilTag } from "../../../../shared/traits/engine/tags/alignment/alignme
 import { MonsterTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class GobelinBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TDescriptor,

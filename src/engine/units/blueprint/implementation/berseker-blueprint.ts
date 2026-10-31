@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Ellipse } from "../../../../shared/hitbox/shapes/ellipse";
@@ -14,6 +15,7 @@ import { UnitResources } from "../../../../renderer/resources/unit.resources";
 import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class BersekerBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Ellipse({ width: 2, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,

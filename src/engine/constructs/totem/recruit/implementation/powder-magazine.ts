@@ -16,6 +16,7 @@ export class PowderMagazine extends Derive(Totem, RecruitBattleStart) {
 		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
+			rarityHolder: blueprint,
 			imageDrawable: blueprint,
 			hitboxHolder: blueprint,
 		});
