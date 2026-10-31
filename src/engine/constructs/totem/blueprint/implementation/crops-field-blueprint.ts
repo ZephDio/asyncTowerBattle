@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
@@ -14,6 +15,7 @@ import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class CropsFieldBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
 	THitbox(
 		new HitBox([

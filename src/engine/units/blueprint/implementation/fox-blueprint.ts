@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
@@ -15,6 +16,7 @@ import { AnimalTag } from "../../../../shared/traits/engine/tags/species/species
 import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class FoxBlueprint extends Derive(
+	TRarity(Rarity.Uncommon),
 	TShopBlueprint(15, 5),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,

@@ -17,6 +17,7 @@ export class Bakery extends Derive(Totem, RecruitCaster, HTBaseStats) {
 		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
+			rarityHolder: blueprint,
 			imageDrawable: blueprint,
 			hitboxHolder: blueprint,
 			statsHolder: blueprint,

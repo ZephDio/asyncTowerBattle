@@ -4,12 +4,15 @@ import { TEnvironmentElement } from "./environment";
 import { Cell } from "../../shared/position";
 import { BattleGrid } from "../grid/battle-grid";
 import { EnvironmentResources } from "../../renderer/resources/environment.resources";
+import { Description, TDescriptor } from "../../shared/traits/render/huds/item-descriptor";
 
 export class Forest extends Derive(
 	TEnvironmentElement,
+	TDescriptor,
 	TImageDrawable(EnvironmentResources.forest.image, EnvironmentResources.forest.size, DrawPriority.NormalGridElement),
 ) {
 	type = "forest" as const;
+	description = new Description("Trees", ["Cannot be moved"]);
 	constructor(public cell: Cell) {
 		super({});
 	}

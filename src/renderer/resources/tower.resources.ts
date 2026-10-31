@@ -42,8 +42,8 @@ export class TowerResources {
 
 	static witchHouse: ShapedResource = {
 		size: {
-			width: 5,
-			height: 10,
+			width: 4.71,
+			height: 9.616,
 		},
 		image: createImage("/resources/towers/poison-tower.png"),
 		shape: "rectangle",

@@ -18,6 +18,7 @@ export class Ent extends Derive(Unit, RecruitCaster) {
 			descriptor: blueprint,
 			statsHolder: blueprint,
 			tagHolder: blueprint,
+			rarityHolder: blueprint,
 		});
 	}
 

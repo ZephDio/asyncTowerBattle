@@ -21,6 +21,7 @@ export class GreenTower extends Derive(Tower) {
 			descriptor: tower,
 			statsHolder: tower,
 			tagHolder: tower,
+			rarityHolder: tower,
 		});
 	}
 

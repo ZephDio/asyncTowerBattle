@@ -20,6 +20,7 @@ export class AnvilBattleTotem extends Derive(BattleTotem, BattleStartTrigger) {
 			imageDrawable: recruit,
 			hitboxHolder: recruit,
 			tagHolder: recruit,
+			rarityHolder: recruit,
 			battleStartRecruit: recruit,
 			descriptor: recruit,
 		});

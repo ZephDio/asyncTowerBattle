@@ -12,7 +12,14 @@ export class ElfCastle extends Derive(Castle) {
 		castle: ElfCastleBlueprint,
 		public cell: Cell,
 	) {
-		super({ imageDrawable: castle, hitboxHolder: castle, descriptor: castle, statsHolder: castle, tagHolder: castle });
+		super({
+			imageDrawable: castle,
+			hitboxHolder: castle,
+			descriptor: castle,
+			statsHolder: castle,
+			tagHolder: castle,
+			rarityHolder: castle,
+		});
 	}
 
 	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {

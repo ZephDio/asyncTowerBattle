@@ -18,6 +18,7 @@ export class Choupisson extends Derive(Unit, HTBaseStats) {
 			descriptor: blueprint,
 			statsHolder: blueprint,
 			tagHolder: blueprint,
+			rarityHolder: blueprint,
 		});
 	}
 

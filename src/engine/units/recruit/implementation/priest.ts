@@ -17,6 +17,7 @@ export class Priest extends Derive(Unit, RecruitCaster) {
 			descriptor: priest,
 			statsHolder: priest,
 			tagHolder: priest,
+			rarityHolder: priest,
 		});
 	}
 

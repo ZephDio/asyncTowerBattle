@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
@@ -12,6 +13,7 @@ import { PathResources } from "../../../../renderer/resources/path.resources";
 import { TrapTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class SlowingTrapBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 3),
 	TImageDrawable(PathResources.slowing.straight, PathResources.slowing.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,

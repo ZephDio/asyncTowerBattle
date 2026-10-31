@@ -33,7 +33,7 @@ Almost every entity is built from mixins using the local `@ddd-ts/traits` packag
 
 ### Three-layer entity model
 Each game piece type (units, towers, totems, barracks, castle, tiles, projectiles) has parallel folders, usually `blueprint/`, `recruit/` and `battle/`, each with an `implementation/` subfolder:
-1. **Blueprint**: the shop and catalog definition. It holds price (`TShopBlueprint`), hitbox, image, description, `TBaseStats` and the `type` tag. `toRecruit(cell)` creates the recruit.
+1. **Blueprint**: the shop and catalog definition. It holds price (`TShopBlueprint`), rarity (`TRarity`), hitbox, image, description, `TBaseStats` and the `type` tag. `toRecruit(cell)` creates the recruit.
 2. **Recruit**: the owned piece placed on the player's `ArmyGrid` or `Inventory`. It holds a cell and handles drag and drop through `moveRecruit`. Pieces cannot be rotated: a recruit always uses its `gridShape` cells and `patternEffect` cells as written, facing the player. `toAllied(grid, hooks)` and `toEnemy(grid, hooks)` create the battle entity. Every grid element carries a `BoardOrientation` enum (`Normal` or `Mirrored`, `src/shared/traits/engine/core/board-orientation.ts`). The enemy version has its anchor cell flipped with `BattleGrid.flip` and is built `BoardOrientation.Mirrored`, which negates its footprint and pattern and draws its single front-view image rotated by π. The opponent board is a point mirror of the board its builder made: a top right effect becomes bottom left.
 3. **Battle**: the live combat entity. It is built from `HaveStats` and `Caster` and implements `tick()` and `onCastResolve()`.
 

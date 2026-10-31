@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../../shared/traits/engine/rarity";
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
@@ -16,6 +17,7 @@ import { FoodTag, TotemTag } from "../../../../../shared/traits/engine/tags/buil
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class WindmillBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
 	THitbox(
 		new HitBox([

@@ -12,7 +12,14 @@ export class Fox extends Derive(RecruitCaster, Unit) {
 		public cell: Cell,
 		fox: FoxBlueprint = new FoxBlueprint({}),
 	) {
-		super({ imageDrawable: fox, hitboxHolder: fox, descriptor: fox, statsHolder: fox, tagHolder: fox });
+		super({
+			imageDrawable: fox,
+			hitboxHolder: fox,
+			descriptor: fox,
+			statsHolder: fox,
+			tagHolder: fox,
+			rarityHolder: fox,
+		});
 	}
 
 	get position() {

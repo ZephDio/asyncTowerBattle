@@ -18,6 +18,7 @@ export class BasicPathTile extends Derive(PathTile, TPathShape(PathResources.nor
 			imageDrawable: tile,
 			descriptor: tile,
 			tagHolder: tile,
+			rarityHolder: tile,
 		});
 	}
 

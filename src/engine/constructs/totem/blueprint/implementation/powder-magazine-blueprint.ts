@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
@@ -11,10 +12,15 @@ import { TotemResources } from "../../../../../renderer/resources/totem.resource
 import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class PowderMagazineBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(TotemResources.anvil.image, TotemResources.anvil.size, DrawPriority.NormalGridElement),
+	TImageDrawable(
+		TotemResources.powderMagazine.image,
+		TotemResources.powderMagazine.size,
+		DrawPriority.NormalGridElement,
+	),
 	TotemTag,
 ) {
 	toRecruit(cell: Cell) {

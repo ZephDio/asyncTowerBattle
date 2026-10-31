@@ -32,6 +32,7 @@ export class BattleEnt extends Derive(TBattleUnit, Caster) {
 			hitboxHolder: recruit,
 			descriptor: recruit,
 			tagHolder: recruit,
+			rarityHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
 	}

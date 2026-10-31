@@ -9,6 +9,7 @@ import { Tower } from "../recruit/tower";
 import { HTDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { TStatsRenderable } from "../../../../shared/traits/render/huds/stat-renderable";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
+import { HTRarity } from "../../../../shared/traits/engine/rarity";
 import { BoardOrientation } from "../../../../shared/traits/engine/core/board-orientation";
 
 export type AnyBattleTower = ImplementsTrait<typeof BattleTower>;
@@ -24,6 +25,7 @@ export const BattleTower = Subtrait(
 		HaveStats,
 		HTDescriptor,
 		HTTag,
+		HTRarity,
 	],
 	(base, Props) => {
 		abstract class BattleTower extends base {

@@ -12,7 +12,6 @@ import { HTBaseStats } from "../../../../stats/base-stats";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class RedObelisk extends Derive(Totem, HTSynergy, RecruitCaster, HTBaseStats) {
-	castSpeed: number;
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: 1 })]);
 	constructor(
 		public cell: Cell,
@@ -21,6 +20,7 @@ export class RedObelisk extends Derive(Totem, HTSynergy, RecruitCaster, HTBaseSt
 		super({
 			synergy: bluePrint,
 			tagHolder: bluePrint,
+			rarityHolder: bluePrint,
 			imageDrawable: bluePrint,
 			hitboxHolder: bluePrint,
 			descriptor: bluePrint,

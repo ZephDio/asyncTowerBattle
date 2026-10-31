@@ -9,11 +9,12 @@ import { GridPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { castCostFromFrames } from "../../../shared/seconds";
 import { HTTag } from "../../../shared/traits/engine/tags/tagged";
+import { HTRarity } from "../../../shared/traits/engine/rarity";
 
 export type AnyBattleCastle = ImplementsTrait<typeof TBattleCastle>;
 
 export const TBattleCastle = Subtrait(
-	[HTHitbox, TRenderable, HTImageDrawable, GridElement, Caster, HTDescriptor, HTTag],
+	[HTHitbox, TRenderable, HTImageDrawable, GridElement, Caster, HTDescriptor, HTTag, HTRarity],
 	(base) => {
 		abstract class TBattleCastle extends base {
 			abstract override position: GridPosition;

@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../../shared/traits/engine/rarity";
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
@@ -18,6 +19,7 @@ import { TowerResources } from "../../../../../renderer/resources/tower.resource
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class WitchHouseBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 10 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,

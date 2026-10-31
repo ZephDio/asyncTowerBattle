@@ -21,6 +21,7 @@ export class Berseker extends Derive(Unit) {
 			descriptor: berseker,
 			statsHolder: berseker,
 			tagHolder: berseker,
+			rarityHolder: berseker,
 		});
 	}
 

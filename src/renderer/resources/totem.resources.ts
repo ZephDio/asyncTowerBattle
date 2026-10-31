@@ -5,15 +5,15 @@ export class TotemResources {
 	static anvil: ShapedResource = {
 		size: {
 			width: 6.2,
-			height: 6,
+			height: 5.0375,
 		},
 		image: createImage("/resources/totem/anvil.png"),
 		shape: "ellipse",
 	};
 	static cropsfield: ShapedResource = {
 		size: {
-			width: 5,
-			height: 4.53125,
+			width: 4.9,
+			height: 4.098,
 		},
 		image: createImage("/resources/totem/crops-field.png"),
 		shape: "rectangle",
@@ -21,8 +21,8 @@ export class TotemResources {
 
 	static obelisk: ShapedResource = {
 		size: {
-			width: 4,
-			height: 10,
+			width: 4.808,
+			height: 9.911,
 		},
 		image: createImage("/resources/totem/obelisk.png"),
 		shape: "rectangle",
@@ -50,6 +50,15 @@ export class TotemResources {
 			height: 6.4,
 		},
 		image: createImage("/resources/totem/windmill.png"),
+		shape: "rectangle",
+	};
+
+	static powderMagazine: ShapedResource = {
+		size: {
+			width: 4.9,
+			height: 6.2,
+		},
+		image: createImage("/resources/totem/powder-magazine.png"),
 		shape: "rectangle",
 	};
 

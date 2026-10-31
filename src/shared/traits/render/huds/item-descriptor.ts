@@ -7,6 +7,8 @@ import { Tag, Tagged } from "../../engine/tags/tagged";
 import { TBaseStats } from "../../../../engine/stats/base-stats";
 import { castSpeedToSecond, frameToSeconds, secondsToFrame } from "../../../seconds";
 import { TagBadge, drawTagBadgeRows, sortTags } from "./tag-badge";
+import { rarityOf } from "../../engine/rarity";
+import { HudElementResources } from "../../../../renderer/resources/hud-element.resources";
 
 export const TDescriptor = Trait((base) => {
 	abstract class IDescriptor extends base {
@@ -42,6 +44,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		public position: ScreenPosition = PercentToReal({ x: 86, y: 73 }),
 	) {
 		super({});
+		this.bannerImage = HudElementResources.descriptorBanner[rarityOf(this.item)].image;
 		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 10 }));
 		this.extraLines = this.item.description.extraLines ?? {};
 		this.linesPosition = this.getLinesPositions();

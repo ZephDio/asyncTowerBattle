@@ -8,8 +8,9 @@ import { HTHitbox } from "./core/THitbox";
 import { HTDescriptor } from "../render/huds/item-descriptor";
 import { GridElement, GridShape } from "./core/grid-element";
 import { HTTag } from "./tags/tagged";
+import { HTRarity } from "./rarity";
 
-export const TRecruit = Subtrait([TGCollider, HTHitbox, HTDescriptor, HTImageDrawable, HTTag], (base) => {
+export const TRecruit = Subtrait([TGCollider, HTHitbox, HTDescriptor, HTImageDrawable, HTTag, HTRarity], (base) => {
 	abstract class IRecruit extends base {
 		override gridShape = new GridShape();
 		abstract moveRecruit(

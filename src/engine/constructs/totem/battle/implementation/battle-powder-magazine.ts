@@ -20,6 +20,7 @@ export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger
 	) {
 		super({
 			tagHolder: powderMagazine,
+			rarityHolder: powderMagazine,
 			imageDrawable: powderMagazine,
 			hitboxHolder: powderMagazine,
 			battleStartRecruit: powderMagazine,

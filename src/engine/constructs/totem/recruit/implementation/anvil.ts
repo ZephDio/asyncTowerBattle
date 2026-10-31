@@ -16,6 +16,7 @@ export class AnvilTotem extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 		super({
 			synergy: totem,
 			tagHolder: totem,
+			rarityHolder: totem,
 			imageDrawable: totem,
 			hitboxHolder: totem,
 			descriptor: totem,

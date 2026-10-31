@@ -17,6 +17,7 @@ export class Windmill extends Derive(Totem, HTSynergy, RecruitBattleStart) {
 		super({
 			descriptor: blueprint,
 			tagHolder: blueprint,
+			rarityHolder: blueprint,
 			imageDrawable: blueprint,
 			hitboxHolder: blueprint,
 			synergy: blueprint,

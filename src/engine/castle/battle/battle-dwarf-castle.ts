@@ -28,6 +28,7 @@ export class BattleDwarfCastle extends Derive(TBattleCastle) {
 			onDeath: () => this.onDeath(),
 			descriptor: recruit,
 			tagHolder: recruit,
+			rarityHolder: recruit,
 		});
 		this.gridShape = recruit.gridShape;
 		this.orientation = orientation;

@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { THitbox } from "../../../../shared/traits/engine/core/THitbox";
@@ -14,6 +15,7 @@ import { UnitResources } from "../../../../renderer/resources/unit.resources";
 import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class BrewmasterBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(15, 12),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,

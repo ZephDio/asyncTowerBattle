@@ -1,3 +1,4 @@
+import { Rarity, TRarity } from "../../../../../shared/traits/engine/rarity";
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
@@ -18,6 +19,7 @@ import { TotemResources } from "../../../../../renderer/resources/totem.resource
 import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class RedObeliskBlueprint extends Derive(
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,

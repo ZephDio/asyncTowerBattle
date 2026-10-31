@@ -16,6 +16,7 @@ import { castCostFromFrames } from "../../../../shared/seconds";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { AnyBarrack } from "../recruit/barrack";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
+import { HTRarity } from "../../../../shared/traits/engine/rarity";
 
 export type AnyBattleBarrack = BasicBattleBarrack | WaveBattleBarrack | VeterantBattleBarrack;
 
@@ -31,6 +32,7 @@ export const BattleBarrack = Subtrait(
 		HaveStats,
 		HTDescriptor,
 		HTTag,
+		HTRarity,
 	],
 	(base) => {
 		abstract class BattleBarrack extends base {
