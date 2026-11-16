@@ -17,25 +17,31 @@ export class GridShape {
 		return this.getVectorialCells(orientation).map((c) => c.add(cell));
 	}
 
-	getCenterPosition(mainCell: Cell, orientation: BoardOrientation = BoardOrientation.Normal) {
+	// The centre of the footprint's bounding box, not the average of its cells: an L shaped piece draws its image
+	// over the whole box.
+	getCenterOffset(orientation: BoardOrientation = BoardOrientation.Normal) {
 		const vectorCells = this.getVectorialCells(orientation);
-		const acc = vectorCells.reduce((acc, cell) => acc.add(cell), new Cell({ x: 0, y: 0 }));
+		const xs = vectorCells.map((cell) => cell.x);
+		const ys = vectorCells.map((cell) => cell.y);
+		return {
+			x: (Math.min(...xs) + Math.max(...xs)) / 2,
+			y: (Math.min(...ys) + Math.max(...ys)) / 2,
+		};
+	}
 
-		const x = acc.x / this.cells.length + mainCell.x;
-		const y = acc.y / this.cells.length + mainCell.y;
-
+	getCenterPosition(mainCell: Cell, orientation: BoardOrientation = BoardOrientation.Normal) {
+		const offset = this.getCenterOffset(orientation);
 		return new GridPosition({
-			x: (x + 0.5) * STANDARD_CELL_SIZE,
-			y: (y + 0.5) * STANDARD_CELL_SIZE,
+			x: (offset.x + mainCell.x + 0.5) * STANDARD_CELL_SIZE,
+			y: (offset.y + mainCell.y + 0.5) * STANDARD_CELL_SIZE,
 		});
 	}
 
 	calculateDefaultVector() {
-		const acc = this.cells.reduce((acc, cell) => acc.add(cell), new Cell({ x: 0, y: 0 }));
-		const average = acc.divideBy(this.cells.length);
+		const offset = this.getCenterOffset();
 		return new GridPosition({
-			x: average.x * STANDARD_CELL_SIZE,
-			y: average.y * STANDARD_CELL_SIZE,
+			x: offset.x * STANDARD_CELL_SIZE,
+			y: offset.y * STANDARD_CELL_SIZE,
 		});
 	}
 

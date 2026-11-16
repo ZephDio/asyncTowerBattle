@@ -49,6 +49,16 @@ export class TowerResources {
 		shape: "rectangle",
 	};
 
+	// An L drawn over its 2x2 cell box, one 98px quadrant per cell, the bottom left one left empty
+	static drill: ShapedResource = {
+		size: {
+			width: 9.8,
+			height: 9.8,
+		},
+		image: createImage("/resources/towers/drill-tower.png"),
+		shape: "rectangle",
+	};
+
 	static purple: ShapedResource = {
 		size: {
 			width: 5,

@@ -47,6 +47,16 @@ export class ProjectileResources {
 		},
 	};
 
+	// The drill tower's bit at the tower's scale (20px per unit), pointing right like every projectile
+	static drill: ShapedResource = {
+		image: createImage("/resources/projectiles/drill.png"),
+		shape: "rectangle",
+		size: {
+			width: 2.5,
+			height: 1.9,
+		},
+	};
+
 	static frostSpike: ShapedResource = {
 		image: createImage("/resources/projectiles/frost_spike.png"),
 		shape: "rectangle",

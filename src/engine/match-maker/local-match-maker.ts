@@ -42,6 +42,8 @@ const EnemyArmyFixtures = {
 			//TowerFixtures.centerTower,
 			new TowerBuilder().celled(new Cell({ x: 3, y: 2 })).buildGreen(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
+			// Covers (3, 4), (4, 4) and (4, 3), its star on the rock at (2, 4)
+			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildDrill(),
 		];
 		const environment = [...forests([5, 4], [6, 4], [6, 3]), ...rocks([2, 4], [4, 5])];
 		const tiles = PathFactory.default;

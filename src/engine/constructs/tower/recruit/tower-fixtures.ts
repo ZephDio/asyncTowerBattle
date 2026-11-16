@@ -10,6 +10,8 @@ import { ZappingTower } from "./implementation/zapping-tower";
 import { FrostTowerBlueprint } from "../blueprint/implementation/frost-tower-blueprint";
 import { FrostTower } from "./implementation/frost-tower";
 import { BlueTowerBlueprint } from "../blueprint/implementation/blue-tower-blueprint";
+import { DrillTowerBlueprint } from "../blueprint/implementation/drill-tower-blueprint";
+import { DrillTower } from "./implementation/drill-tower";
 
 export class TowerBuilder {
 	cell: Cell;
@@ -31,6 +33,9 @@ export class TowerBuilder {
 	}
 	buildZapping(tower?: ZappingTowerBlueprint) {
 		return new ZappingTower(this.cell, tower);
+	}
+	buildDrill(tower?: DrillTowerBlueprint) {
+		return new DrillTower(this.cell, tower);
 	}
 }
 

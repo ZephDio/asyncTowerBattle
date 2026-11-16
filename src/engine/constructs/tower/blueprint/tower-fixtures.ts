@@ -1,4 +1,5 @@
 import { BlueTowerBlueprint } from "./implementation/blue-tower-blueprint";
+import { DrillTowerBlueprint } from "./implementation/drill-tower-blueprint";
 import { GreenTowerBlueprint } from "./implementation/green-tower-blueprint";
 import { WitchHouseBlueprint } from "./implementation/witch-house-blueprint";
 import { ZappingTowerBlueprint } from "./implementation/zapping-tower-blueprint";
@@ -16,6 +17,9 @@ export class TowerBlueprintBuilder {
 	buildZapping() {
 		return new ZappingTowerBlueprint({});
 	}
+	buildDrill() {
+		return new DrillTowerBlueprint({});
+	}
 }
 
 export class TowerBlueprintFixtures {
@@ -31,5 +35,8 @@ export class TowerBlueprintFixtures {
 	}
 	static get zapping() {
 		return new TowerBlueprintBuilder().buildZapping();
+	}
+	static get drill() {
+		return new TowerBlueprintBuilder().buildDrill();
 	}
 }
