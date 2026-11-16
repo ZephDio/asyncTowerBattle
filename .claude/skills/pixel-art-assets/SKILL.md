@@ -196,6 +196,14 @@ by π with the piece's mirrored footprint, so don't draw a back view. Older piec
 Draw the image in the shape of the piece's footprint as written in its `GridShape`: a horizontal two-cell piece
 (brewery) gets a wide canvas, a vertical one (witch house) a tall canvas.
 
+A non-rectangular piece (the L shaped drill tower) is drawn over its footprint's bounding box, and each cell of
+that box is one quadrant of the image: the art for a cell must stay inside its quadrant, and an empty cell of the
+box stays fully transparent, shadow included. Don't model it as a 3D diorama of the footprint, because the oblique
+camera pushes the back row down into the front cells. Lay the parts out in screen space first, then place the
+model so the camera lands each part in its quadrant: in `generate-drill-tower.py` the shed stands far back so it
+fills the top left quadrant, and the tower stands on the front cell and is tall enough to reach the top of the
+image. Check it with a 2x2 grid overlay and count the opaque pixels in the empty quadrant.
+
 ### Cropping
 
 Crop the canvas to the art, shadow included, with 0-3px of padding: change `WIDTH`, `HEIGHT` and `ORIGIN_Y` in

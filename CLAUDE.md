@@ -21,6 +21,7 @@ This is an async auto-battler played in the browser. The player builds an army o
 - `Game` (`src/engine/game.ts`) runs the phase cycle `ShopPhase` → `Battle` → `BattleSummary` → shop again. Only one phase field is non-null at a time. The player has 5 lives and loses one per defeat. Opponents come from `LocalMatchMaker`, which keeps hard-coded enemy armies per round in `src/engine/match-maker/`.
 - `Battle` ticks the `Battlefield` with `setTimeout` at 32 ticks per second. Battle randomness must go through `BattleRandomSeed` so battles stay deterministic. `src/shared/seconds.ts` converts between seconds, frames and cast speed.
 - Rendering is pull-based. `CanvasRenderer` calls `gameWrap.getRenderState()` every frame. The active phase returns a `RenderableState`, which is a list of grids with their drawables plus free renderables. Drawables are sorted by `drawPriority` and then by y position.
+- Game coordinates are y-up: in `Cell` and `GridPosition`, y + 1 is the cell above on screen (`Cell.up()`), so "below" means negative y in grid shapes, pattern cells and hitbox offsets. The game keeps its own position frame and `TDrawable.getCanvasPosition` (`src/shared/traits/render/drawable.ts`) converts it to y-down canvas coordinates only when drawing.
 - Input goes from `MouseEventHandler` to `InputToIntent`, which uses `instanceof` to find the active phase and picks a per-phase translator in `src/control/translators/`. A translator hit-tests the screen position and calls methods on the phase object directly.
 
 ### Traits system (most important concept)
