@@ -5,6 +5,7 @@ import { TDrawable } from "./drawable";
 import { Orientable } from "../engine/core/orientable";
 import { Size } from "../../size";
 import { TImageVariant } from "./image-variant";
+import { TSpriteAnimation } from "./sprite-animation";
 import { TBoardOriented } from "../engine/core/board-orientation";
 
 export enum DrawPriority {
@@ -41,6 +42,11 @@ export const TImageDrawable = (image: HTMLImageElement, size: Size, priority: nu
 			draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 				const size = this.getCanvasSize(context, this.drawable.size.width, this.drawable.size.height, scale);
 				const canvasPosition = this.getCanvasPosition(context, position);
+				const sprite = implementsTrait(this, TSpriteAnimation) ? this.getSpriteFrame() : null;
+				if (sprite) {
+					this.drawImage(context, size, canvasPosition, sprite.image, this.getImageAngle(), sprite.frame);
+					return;
+				}
 				const variant = implementsTrait(this, TImageVariant) ? this.getImageVariant() : null;
 				if (variant) {
 					this.drawImage(context, size, canvasPosition, variant.image, variant.theta);

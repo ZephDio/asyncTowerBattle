@@ -1,4 +1,5 @@
 import { createImage } from "../../shared/image";
+import { SpriteSheet } from "../../shared/sprite-sheet";
 import { ShapedResource } from "./tower.resources";
 
 export class UnitResources {
@@ -81,6 +82,7 @@ export class UnitResources {
 		image: createImage("/resources/units/fox.png"),
 		shape: "ellipse",
 	};
+	static foxSheet = SpriteSheet.fromJson("/resources/units/fox.sheet.png", "/resources/units/fox.sheet.json");
 
 	static brewmaster: ShapedResource = {
 		size: {

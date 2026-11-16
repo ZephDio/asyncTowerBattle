@@ -1,0 +1,37 @@
+{
+  "frames": [
+    {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 13
+      },
+      "duration": 450
+    },
+    {
+      "frame": {
+        "x": 16,
+        "y": 0,
+        "w": 16,
+        "h": 13
+      },
+      "duration": 450
+    }
+  ],
+  "meta": {
+    "image": "fox.sheet.png",
+    "size": {
+      "w": 32,
+      "h": 13
+    },
+    "frameTags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 1,
+        "direction": "forward"
+      }
+    ]
+  }
+}

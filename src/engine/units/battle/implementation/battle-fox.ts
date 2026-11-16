@@ -6,8 +6,10 @@ import { Fox } from "../../recruit/implementation/fox";
 import { GridPosition } from "../../../../shared/position";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BattleFox extends Derive(TBattleUnit, Caster) {
+	override idleSheet = UnitResources.foxSheet;
 	foodConsume: number = 2;
 	pathFinder: PathFinder;
 	constructor(

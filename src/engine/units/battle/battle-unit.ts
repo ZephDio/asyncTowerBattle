@@ -20,6 +20,7 @@ import {
 import { TStatsRenderable } from "../../../shared/traits/render/huds/stat-renderable";
 import { HTTag } from "../../../shared/traits/engine/tags/tagged";
 import { HTRarity } from "../../../shared/traits/engine/rarity";
+import { TIdleAnimation } from "../../../shared/traits/render/idle-animation";
 
 export const TBattleUnit = Subtrait(
 	[
@@ -33,6 +34,7 @@ export const TBattleUnit = Subtrait(
 		TLiveDescriptor,
 		HTTag,
 		HTRarity,
+		TIdleAnimation,
 	],
 	(base) => {
 		abstract class IBattleUnit extends base {

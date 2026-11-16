@@ -1,6 +1,7 @@
 import { Trait } from "@ddd-ts/traits";
 import { Size } from "../../size";
 import { ScreenPosition } from "../../position";
+import { SpriteFrame } from "../../sprite-sheet";
 
 export const TDrawable = Trait((base) => {
 	abstract class IDrawable extends base {
@@ -67,16 +68,33 @@ export const TDrawable = Trait((base) => {
 			position: { x: number; y: number },
 			image: HTMLImageElement,
 			theta: number | undefined = undefined,
+			frame: SpriteFrame | undefined = undefined,
 		) {
 			if (theta !== undefined) {
 				context.save();
 				context.translate(position.x, position.y);
 				context.rotate(-theta); // canvas rotate clockwise
-				context.drawImage(image, -size.width / 2, -size.height / 2, size.width, size.height);
+				this.drawImageFrame(context, image, frame, -size.width / 2, -size.height / 2, size);
 				context.restore();
 				return;
 			}
-			context.drawImage(image, position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);
+			this.drawImageFrame(context, image, frame, position.x - size.width / 2, position.y - size.height / 2, size);
+		}
+
+		// Draws the whole image, or only the frame's rectangle of a sprite sheet.
+		protected drawImageFrame(
+			context: CanvasRenderingContext2D,
+			image: HTMLImageElement,
+			frame: SpriteFrame | undefined,
+			x: number,
+			y: number,
+			size: Size,
+		) {
+			if (!frame) {
+				context.drawImage(image, x, y, size.width, size.height);
+				return;
+			}
+			context.drawImage(image, frame.x, frame.y, frame.w, frame.h, x, y, size.width, size.height);
 		}
 	}
 	return IDrawable;
