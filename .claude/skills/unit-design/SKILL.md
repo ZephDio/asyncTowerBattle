@@ -44,8 +44,8 @@ Current values, to judge what "slow" or "average" means:
 | gobelin | common | 10 | 0.40 | 1 | 1 | - | 1 | Evil, Monster |
 | elf | common | 10 | 0.32 | 1 | 0.4 | - | 1.2 | Kinfolk |
 | dwarf | common | 14 | 0.13 | 1.2 | 0.4 | - | 1.6 | Kinfolk |
-| choupisson | common | 18 | 0.25 | 3 | 1.8 | - | 3.5 | Animal |
-| brewmaster | common | 40 | 0.22 | 3.5 | 5 | 2s | 4 | Kinfolk |
+| choupisson | rare | 18 | 0.25 | 3 | 1.8 | - | 3.5 | Animal |
+| brewmaster | epic | 40 | 0.22 | 3.5 | 5 | 2s | 4 | Kinfolk |
 | fox | uncommon | 22 | 0.18 | 1.5 | 0.5 | 4.5s | 1.8 | Animal, Food |
 | white stag | rare | 42 | 0.13 | 1.5 | 1.3 | 2s | 3.5 | Animal, Forest, Magic |
 | ent | epic | 45 | 0.13 | 3 | 1.5 | 6s | 4.5 | Forest |

@@ -13,7 +13,7 @@ import { BarrackResources } from "../../../../../renderer/resources/barrack.reso
 import { BarrackTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class VeterantBarrackBlueprint extends Derive(
-	TRarity(Rarity.Common),
+	TRarity(Rarity.Epic),
 	TShopBlueprint(10, 6),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),

@@ -17,7 +17,7 @@ import { TotemResources } from "../../../../../renderer/resources/totem.resource
 import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class MineBlueprint extends Derive(
-	TRarity(Rarity.Common),
+	TRarity(Rarity.Legendary),
 	TShopBlueprint(15, 10),
 	THitbox(
 		new HitBox([

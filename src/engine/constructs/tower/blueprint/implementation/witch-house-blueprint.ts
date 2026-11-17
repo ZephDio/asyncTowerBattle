@@ -19,7 +19,7 @@ import { TowerResources } from "../../../../../renderer/resources/tower.resource
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class WitchHouseBlueprint extends Derive(
-	TRarity(Rarity.Common),
+	TRarity(Rarity.Rare),
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 10 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,

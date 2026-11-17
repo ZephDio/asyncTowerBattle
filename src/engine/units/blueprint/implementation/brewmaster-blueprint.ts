@@ -15,7 +15,7 @@ import { UnitResources } from "../../../../renderer/resources/unit.resources";
 import { KinfolkTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class BrewmasterBlueprint extends Derive(
-	TRarity(Rarity.Common),
+	TRarity(Rarity.Epic),
 	TShopBlueprint(15, 12),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,

@@ -15,7 +15,7 @@ import { TowerResources } from "../../../../../renderer/resources/tower.resource
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class ZappingTowerBlueprint extends Derive(
-	TRarity(Rarity.Common),
+	TRarity(Rarity.Uncommon),
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,

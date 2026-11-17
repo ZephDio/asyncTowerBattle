@@ -15,7 +15,7 @@ import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class BakeryBlueprint extends Derive(
-	TRarity(Rarity.Common),
+	TRarity(Rarity.Uncommon),
 	TShopBlueprint(10, 10),
 	THitbox(
 		new HitBox([

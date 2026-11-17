@@ -12,7 +12,7 @@ import { PathResources } from "../../../../renderer/resources/path.resources";
 import { TrapTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class StunTrapBlueprint extends Derive(
-	TRarity(Rarity.Common),
+	TRarity(Rarity.Uncommon),
 	TShopBlueprint(10, 5),
 	TImageDrawable(PathResources.trap.straight, PathResources.trap.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,

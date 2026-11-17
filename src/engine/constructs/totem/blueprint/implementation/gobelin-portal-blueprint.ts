@@ -17,7 +17,7 @@ import { TotemResources } from "../../../../../renderer/resources/totem.resource
 import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class GobelinPortalBlueprint extends Derive(
-	TRarity(Rarity.Common),
+	TRarity(Rarity.Epic),
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
