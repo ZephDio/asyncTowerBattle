@@ -55,6 +55,13 @@ export class SpriteSheet {
 		return frames[0]?.frame ?? null;
 	}
 
+	// The total duration of the tag's frames in milliseconds, or null until the data is loaded.
+	tagDuration(tag: string): number | null {
+		const frameTag = this.data?.meta.frameTags.find((frameTag) => frameTag.name === tag);
+		if (!this.data || !frameTag) return null;
+		return this.data.frames.slice(frameTag.from, frameTag.to + 1).reduce((total, frame) => total + frame.duration, 0);
+	}
+
 	// The whole image once it is loaded, for a still sheet.
 	private stillFrame(): SpriteFrame | null {
 		if (SpriteSheet.stills.get(this.image) !== this || !this.image.complete) return null;

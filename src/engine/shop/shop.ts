@@ -43,6 +43,8 @@ export type ShopPhaseHooks = {
 export class ShopPhase {
 	public retail: Retail;
 	public holderControl = new Holder();
+	// When the refresh bell was last pressed, for its press animation
+	bellPressedAt: number | null = null;
 	economyHooks: EconomyHooks;
 	constructor(
 		public army: Army,
@@ -68,6 +70,7 @@ export class ShopPhase {
 	}
 
 	refresh() {
+		this.bellPressedAt = performance.now();
 		if (this.economyHooks.canPurchase(5)) {
 			this.retail.refresh();
 			this.economyHooks.spendGold(5);
@@ -113,7 +116,7 @@ export class ShopPhase {
 			],
 			renderables: [
 				new StartBattleButton({}),
-				new RefreshBellHud({}),
+				new RefreshBellHud(this.bellPressedAt),
 				new GoldHud(this.army.getEconomyHooks().getEconomy().amount),
 				new RarityOddsHud(rarityOdds(this.round)),
 				...(network.complete ? [] : [new PathInvalidHud()]),
@@ -151,7 +154,7 @@ export class ShopPhase {
 			type: "shop",
 			retail: this.retail,
 			hold: this.holderControl.hold,
-			hudElements: [new StartBattleButton({}), new RefreshBellHud({})],
+			hudElements: [new StartBattleButton({}), new RefreshBellHud()],
 			towers: this.army.towers,
 			castle: this.army.castle,
 			grid: this.army.grid,

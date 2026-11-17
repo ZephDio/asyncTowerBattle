@@ -1,0 +1,55 @@
+{
+  "frames": [
+    {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 88,
+        "h": 88
+      },
+      "duration": 50
+    },
+    {
+      "frame": {
+        "x": 88,
+        "y": 0,
+        "w": 88,
+        "h": 88
+      },
+      "duration": 50
+    },
+    {
+      "frame": {
+        "x": 176,
+        "y": 0,
+        "w": 88,
+        "h": 88
+      },
+      "duration": 140
+    },
+    {
+      "frame": {
+        "x": 264,
+        "y": 0,
+        "w": 88,
+        "h": 88
+      },
+      "duration": 160
+    }
+  ],
+  "meta": {
+    "image": "bell.sheet.png",
+    "size": {
+      "w": 352,
+      "h": 88
+    },
+    "frameTags": [
+      {
+        "name": "press",
+        "from": 0,
+        "to": 3,
+        "direction": "forward"
+      }
+    ]
+  }
+}

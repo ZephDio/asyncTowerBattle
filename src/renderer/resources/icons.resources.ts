@@ -1,4 +1,5 @@
 import { createImage } from "../../shared/image";
+import { SpriteSheet } from "../../shared/sprite-sheet";
 
 export type IconResource = {
 	image: HTMLImageElement;
@@ -40,4 +41,5 @@ export class IconResources {
 	static bell: IconResource = {
 		image: createImage("/resources/button/bell.png"),
 	};
+	static bellPressSheet = SpriteSheet.fromJson("/resources/button/bell.sheet.png", "/resources/button/bell.sheet.json");
 }
