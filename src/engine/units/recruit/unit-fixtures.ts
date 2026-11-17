@@ -7,6 +7,10 @@ import { Dragon } from "./implementation/dragon";
 import { WhiteStag } from "./implementation/white-stag";
 import { FoxBlueprint } from "../blueprint/implementation/fox-blueprint";
 import { Fox } from "./implementation/fox";
+import { GoGoatBlueprint } from "../blueprint/implementation/go-goat-blueprint";
+import { GoGoat } from "./implementation/go-goat";
+import { ParadiseBirdBlueprint } from "../blueprint/implementation/paradise-bird-blueprint";
+import { ParadiseBird } from "./implementation/paradise-bird";
 
 export class UnitRecruitBuilder {
 	// buildSoldier(soldier?: SoldierBlueprint) {
@@ -23,6 +27,12 @@ export class UnitRecruitBuilder {
 	}
 	buildGluttonFox(fox?: FoxBlueprint) {
 		return new Fox(new Cell({ x: 0, y: 2 }), fox);
+	}
+	buildGoGoat(goGoat?: GoGoatBlueprint) {
+		return new GoGoat(new Cell({ x: 0, y: 0 }), goGoat);
+	}
+	buildParadiseBird(paradiseBird?: ParadiseBirdBlueprint) {
+		return new ParadiseBird(new Cell({ x: 0, y: 0 }), paradiseBird);
 	}
 }
 
@@ -41,5 +51,11 @@ export class UnitRecruitFixture {
 	}
 	static get fox() {
 		return new UnitRecruitBuilder().buildGluttonFox();
+	}
+	static get goGoat() {
+		return new UnitRecruitBuilder().buildGoGoat();
+	}
+	static get paradiseBird() {
+		return new UnitRecruitBuilder().buildParadiseBird();
 	}
 }

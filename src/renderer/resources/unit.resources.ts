@@ -111,6 +111,34 @@ export class UnitResources {
 	};
 	static foxSheet = SpriteSheet.fromJson("/resources/units/fox.sheet.png", "/resources/units/fox.sheet.json");
 
+	// A two headed goat, 92x88 pixels.
+	static goGoat: ShapedResource = {
+		size: {
+			width: 3.3,
+			height: 3.157,
+		},
+		image: createImage("/resources/units/go-goat.png"),
+		shape: "ellipse",
+	};
+	static goGoatSheet = SpriteSheet.fromJson(
+		"/resources/units/go-goat.sheet.png",
+		"/resources/units/go-goat.sheet.json",
+	);
+
+	// A bird person with colorful feathers, 80x76 pixels.
+	static paradiseBird: ShapedResource = {
+		size: {
+			width: 3.2,
+			height: 3.04,
+		},
+		image: createImage("/resources/units/paradise-bird.png"),
+		shape: "ellipse",
+	};
+	static paradiseBirdSheet = SpriteSheet.fromJson(
+		"/resources/units/paradise-bird.sheet.png",
+		"/resources/units/paradise-bird.sheet.json",
+	);
+
 	static brewmaster: ShapedResource = {
 		size: {
 			width: 3,

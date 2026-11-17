@@ -12,6 +12,8 @@ import { GreenTowerBlueprint } from "../../constructs/tower/blueprint/implementa
 import { WitchHouseBlueprint } from "../../constructs/tower/blueprint/implementation/witch-house-blueprint";
 import { AnyTowerBlueprint } from "../../constructs/tower/blueprint/tower-blueprint";
 import { DragonBlueprint } from "../../units/blueprint/implementation/dragon-blueprint";
+import { GoGoatBlueprint } from "../../units/blueprint/implementation/go-goat-blueprint";
+import { ParadiseBirdBlueprint } from "../../units/blueprint/implementation/paradise-bird-blueprint";
 import { WhiteStagBlueprint } from "../../units/blueprint/implementation/white-stag-blueprint";
 import { AnyUnitBlueprint } from "../../units/blueprint/units-blueprint";
 import { TRecruit } from "../../../shared/traits/engine/recruit";
@@ -82,7 +84,16 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 		share: 35,
 	},
 	{
-		value: [DragonBlueprint, WhiteStagBlueprint, ChoupissonBlueprint, FoxBlueprint, EntBlueprint, BrewmasterBlueprint],
+		value: [
+			DragonBlueprint,
+			WhiteStagBlueprint,
+			ChoupissonBlueprint,
+			FoxBlueprint,
+			EntBlueprint,
+			BrewmasterBlueprint,
+			GoGoatBlueprint,
+			ParadiseBirdBlueprint,
+		],
 		share: 50,
 	},
 ];

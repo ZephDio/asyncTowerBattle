@@ -3,6 +3,8 @@ import { ChoupissonBlueprint } from "./implementation/choupisson-blueprint";
 import { DragonBlueprint } from "./implementation/dragon-blueprint";
 import { EntBlueprint } from "./implementation/ent-blueprint";
 import { FoxBlueprint } from "./implementation/fox-blueprint";
+import { ParadiseBirdBlueprint } from "./implementation/paradise-bird-blueprint";
+import { GoGoatBlueprint } from "./implementation/go-goat-blueprint";
 import { WhiteStagBlueprint } from "./implementation/white-stag-blueprint";
 
 export type AnyUnitBlueprint =
@@ -11,4 +13,6 @@ export type AnyUnitBlueprint =
 	| FoxBlueprint
 	| ChoupissonBlueprint
 	| EntBlueprint
-	| BrewmasterBlueprint;
+	| BrewmasterBlueprint
+	| GoGoatBlueprint
+	| ParadiseBirdBlueprint;
