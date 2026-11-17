@@ -2,7 +2,7 @@ import "reflect-metadata";
 import type { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
-import { HealthModule } from "./health.module.js";
+import { HealthModule } from "../health.module.js";
 
 describe("GET /health", () => {
 	let app: INestApplication;

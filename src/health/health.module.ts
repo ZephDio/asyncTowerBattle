@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
-import { HealthController } from "./health.controller.js";
-import { HealthService } from "./health.service.js";
+import { CheckHealth } from "./applicative/commands/check-health.use-case.js";
+import { HealthController } from "./infrastructure/health.controller.js";
 
 @Module({
 	controllers: [HealthController],
-	providers: [HealthService],
+	providers: [CheckHealth],
 })
 export class HealthModule {}
