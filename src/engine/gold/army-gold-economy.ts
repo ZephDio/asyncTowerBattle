@@ -1,6 +1,8 @@
+import { DEV_START } from "../../shared/dev-start";
+
 export class ArmyGoldEconomy {
 	golds = {
-		amount: 10000,
+		amount: DEV_START ? 10000 : 80,
 	};
 
 	spendGold(amount: number) {

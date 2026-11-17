@@ -1,3 +1,4 @@
+import { DEV_START } from "../../../shared/dev-start";
 import { Rarity } from "../../../shared/traits/engine/rarity";
 
 export type RarityOdds = Record<Rarity, number>;
@@ -23,7 +24,8 @@ const ODDS_PER_ROUND: [common: number, uncommon: number, rare: number, epic: num
 export const FLAT_ODDS_ROUND = ODDS_PER_ROUND.length;
 
 export function rarityOdds(round: number): RarityOdds {
-	const [common, uncommon, rare, epic, legendary] = ODDS_PER_ROUND[Math.min(Math.max(round, 1), FLAT_ODDS_ROUND) - 1]!;
+	const oddsRound = DEV_START ? FLAT_ODDS_ROUND : Math.min(Math.max(round, 1), FLAT_ODDS_ROUND);
+	const [common, uncommon, rare, epic, legendary] = ODDS_PER_ROUND[oddsRound - 1]!;
 	return {
 		[Rarity.Common]: common,
 		[Rarity.Uncommon]: uncommon,

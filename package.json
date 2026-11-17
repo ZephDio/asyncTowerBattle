@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "vite",
+    "start:dev": "vite --open /?dev",
     "format": "biome format src --write",
     "typecheck": "tsc --noEmit",
     "test": "jest"
