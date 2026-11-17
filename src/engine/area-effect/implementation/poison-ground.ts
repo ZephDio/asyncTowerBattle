@@ -24,7 +24,7 @@ export class PoisonGround extends Derive(
 	),
 ) {
 	type = "poison-ground" as const;
-	drawPriority = DrawPriority.CarpetStyleGridElement;
+	drawPriority = DrawPriority.GroundEffect;
 	clock = 0;
 	constructor(
 		public maxDuration: number,

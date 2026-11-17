@@ -12,6 +12,8 @@ export enum DrawPriority {
 	BackGroundScreen = 0,
 	BackGroundGrid = 1,
 	CarpetStyleGridElement = 2,
+	// Effects lying on the ground (fallen antler, poison): over the path tiles, which they can straddle, under pieces
+	GroundEffect = 2.5,
 	NormalGridElement = 3,
 	FlyingGridElement = 4,
 	HUD = 5,

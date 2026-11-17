@@ -19,7 +19,7 @@ export class FallenAntler extends Derive(
 	THitbox(new HitBox([[new Ellipse({ width: 9, height: 9 }), new GridPosition({ x: 0, y: 0 })]])),
 ) {
 	type = "fallen-antler" as const;
-	drawPriority = DrawPriority.CarpetStyleGridElement;
+	drawPriority = DrawPriority.GroundEffect;
 	clock = 0;
 	constructor(
 		public maxDuration: number,
