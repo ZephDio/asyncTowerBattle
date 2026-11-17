@@ -38,6 +38,9 @@ export class IconResources {
 	static gold: IconResource = {
 		image: createImage("/resources/economy/gold.png"),
 	};
+	static purse: IconResource = {
+		image: createImage("/resources/economy/purse.png"),
+	};
 	static bell: IconResource = {
 		image: createImage("/resources/button/bell.png"),
 	};
