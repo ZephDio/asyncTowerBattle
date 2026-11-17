@@ -44,11 +44,6 @@ export class UnitResources {
 		image: createImage("/resources/units/white-stag.png"),
 		shape: "ellipse",
 	};
-	static whiteStagOneAntler: ShapedResource = {
-		size: UnitResources.whiteStag.size,
-		image: createImage("/resources/units/white-stag-one-antler.png"),
-		shape: "ellipse",
-	};
 	static whiteStagSheet = SpriteSheet.fromJson(
 		"/resources/units/white-stag.sheet.png",
 		"/resources/units/white-stag.sheet.json",

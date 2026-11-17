@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Generates the gobelin portal pixel art, one image per orientation view.
+"""Generates the gobelin portal pixel art, its front view facing the camera.
 
 Run from anywhere: python3 scripts/generate-gobelin-portal.py
 
-Outputs public/resources/totem/gobelin-portal/<front|back|left|right>-view.png.
+Outputs public/resources/totem/gobelin-portal.png.
 
 The portal is a ring of cold stone blocks standing on a two-step paved plinth, with a green dimensional ether
 in its opening. It follows the tower and house art: native 1px pixel art, a small palette, a navy outline,
@@ -18,7 +18,7 @@ from pathlib import Path
 from voxel_sprite import EMPTY, Hit, VoxelGrid, bayer, outline, render, write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT_DIR = ROOT / "public" / "resources" / "totem" / "gobelin-portal"
+OUTPUT = ROOT / "public" / "resources" / "totem" / "gobelin-portal.png"
 WIDTH = 128
 HEIGHT = 160
 
@@ -60,10 +60,6 @@ SWIRLS = [
 WAVES = [(-0.75, 0.15, -0.38, 0.06), (-0.7, 0.3, 0.06, 0.07), (-0.35, 0.55, 0.52, 0.06)]
 
 LOWER_STEP, UPPER_STEP, ETHER_LABEL, BLOCK = 1, 2, 3, 10
-
-# Turn of the model around the vertical axis per view, in degrees (the model faces -y, toward the camera).
-# Side views only turn part of the way: an edge-on ring is a thin slab that reads poorly, houses cheat the same way.
-VIEWS = {"front-view": 0, "back-view": 180, "right-view": 50, "left-view": -50}
 
 
 def block_position(angle: float) -> tuple[int, float]:
@@ -191,14 +187,11 @@ def crack(label: int, neighbor: int) -> tuple[int, int, int, int] | None:
 
 
 def main() -> None:
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    grid = build_model()
     swirls = build_swirls()
-    for name, yaw in VIEWS.items():
-        sprite = render(grid, yaw, WIDTH, HEIGHT, ORIGIN_Y, lambda hit: shade(hit, swirls), SHADOW_RADII)
-        outline(sprite, crack)
-        write_png(OUTPUT_DIR / f"{name}.png", sprite.pixels)
-    print(f"wrote {len(VIEWS)} views to {OUTPUT_DIR.relative_to(ROOT)}")
+    sprite = render(build_model(), 0, WIDTH, HEIGHT, ORIGIN_Y, lambda hit: shade(hit, swirls), SHADOW_RADII)
+    outline(sprite, crack)
+    write_png(OUTPUT, sprite.pixels)
+    print(f"wrote {OUTPUT.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

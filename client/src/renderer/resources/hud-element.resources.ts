@@ -1,25 +1,8 @@
 import { createImage } from "../../shared/image";
 import { IconResource } from "./icons.resources";
-import { Resource } from "./tower.resources";
 import { Rarity } from "../../shared/traits/engine/rarity";
 
 export class HudElementResources {
-	static victory: Resource = {
-		size: {
-			width: 25,
-			height: 20,
-		},
-		image: createImage("/resources/verdict/victory.png"),
-	};
-
-	static defeat: Resource = {
-		size: {
-			width: 20,
-			height: 22,
-		},
-		image: createImage("/resources/verdict/defeat.png"),
-	};
-
 	static startBattle: IconResource = {
 		image: createImage("/resources/button/start.png"),
 	};

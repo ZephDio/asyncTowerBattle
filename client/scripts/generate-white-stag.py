@@ -4,11 +4,11 @@
 Run from anywhere: python3 scripts/generate-white-stag.py
 
 Outputs, in public/resources/units/:
-- white-stag.png: the stag with both antlers, from full health down to 50%.
-- white-stag-one-antler.png: the same stag once it has dropped its left antler, a stump left on its head.
+- white-stag.png: the stag with both antlers.
 - white-stag-antler.png: the dropped antler lying on the ground, drawn by the FallenAntler area effect.
-- white-stag.sheet.png and white-stag-one-antler.sheet.png, with their json: the idle sheets of the two stags (see
-  sprite_sheet.py).
+- white-stag.sheet.png and white-stag-one-antler.sheet.png, with their json: the idle sheets of the stag with both
+  antlers, from full health down to 50%, and of the same stag once it has dropped its left antler, a stump left on
+  its head (see sprite_sheet.py).
 Everything is cut from SPRITE, so the images stay in sync.
 
 It follows the dragon unit: a sprite upscaled 4x, flat colors with one or two shades per part, light from the top
@@ -112,7 +112,6 @@ def write_idle_sheet(name: str, sprite: Frame) -> None:
 def main() -> None:
     assert all(len(row) == len(SPRITE[0]) for row in SPRITE), "every row must have the same length"
     write("white-stag.png", SPRITE)
-    write("white-stag-one-antler.png", without_left_antler(SPRITE))
     write("white-stag-antler.png", left_antler(SPRITE))
     write_idle_sheet("white-stag.sheet.png", SPRITE)
     write_idle_sheet("white-stag-one-antler.sheet.png", without_left_antler(SPRITE))

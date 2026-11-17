@@ -190,8 +190,7 @@ that size: hand place the pixels as a character grid and let a script add the ou
 Pieces cannot be rotated, so every piece ships a single image, the front view facing the camera, as
 `<piece>.png` next to its folder (e.g. `client/public/resources/towers/blue.png`, `client/public/resources/totem/anvil.png`),
 loaded with `createImage(...)` in its `*.resources.ts` entry. On the opponent board the same image is drawn rotated
-by π with the piece's mirrored footprint, so don't draw a back view. Older pieces still keep their unused
-`front-view.png`, `back-view.png`, `left-view.png` and `right-view.png` in a folder; new pieces don't need one.
+by π with the piece's mirrored footprint, so don't draw a back view.
 
 Draw the image in the shape of the piece's footprint as written in its `GridShape`: a horizontal two-cell piece
 (brewery) gets a wide canvas, a vertical one (witch house) a tall canvas.
