@@ -4,40 +4,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Starter Snowpack App" />
-  <title>Starter Snowpack App</title>
+  <meta name="description" content="Async Tower Battle" />
+  <title>Async Tower Battle</title>
   <link rel="stylesheet" href="/font/icons.css" />
-  <style>
-    html {
-      margin: 0;
-      background-color: #000;
-    }
-
-    body {
-      margin: 0
-    }
-    @font-face {
-        font-family: "text";
-        src: url("/font/text.ttf")
-    }
-    @font-face {
-        font-family: "title";
-        src: url("/font/title.ttf")
-    }
-    .title {
-        font-family: "title";
-        font-size: 50px;
-        color: white;
-    }
-  </style>
 </head>
 
 <body>
-  <div id="container"
-    style="display: flex; align-items:center; justify-content: center;width:95vw; height: 95vh;margin-left: 2vw;margin-top: 2vh;">
-    <canvas id="canvas" width="100%" height="100%">
-  </div>
+  <div id="root"></div>
 </body>
-<script type="module" src="/src/index.ts"></script>
+<script type="module" src="/src/main.tsx"></script>
 
 </html>

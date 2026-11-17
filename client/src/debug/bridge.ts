@@ -71,10 +71,11 @@ export class DebugBridge {
 
 	// Inverse of MouseEventHandler.pixelPositionToRelative: a game screen position to a page pixel.
 	screenToPage(position: { x: number; y: number }) {
-		const { offsetLeft, offsetTop, width, height } = this.renderer.canvas;
+		const origin = this.renderer.pageOrigin();
+		const { width, height } = this.renderer.canvas;
 		return {
-			x: round(offsetLeft + (position.x * width) / 100, 1),
-			y: round(offsetTop + ((100 - position.y * proportion) * height) / 100, 1),
+			x: round(origin.x + (position.x * width) / 100, 1),
+			y: round(origin.y + ((100 - position.y * proportion) * height) / 100, 1),
 		};
 	}
 
@@ -108,8 +109,9 @@ export class DebugBridge {
 	}
 
 	canvasRect(): Rect {
-		const { offsetLeft, offsetTop, width, height } = this.renderer.canvas;
-		return { x: offsetLeft, y: offsetTop, width, height };
+		const origin = this.renderer.pageOrigin();
+		const { width, height } = this.renderer.canvas;
+		return { x: origin.x, y: origin.y, width, height };
 	}
 
 	// Page rectangles to crop screenshots on.

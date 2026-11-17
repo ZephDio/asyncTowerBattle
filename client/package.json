@@ -12,9 +12,16 @@
     "generate:icon-font": "nix-shell -p 'python3.withPackages (p: [ p.fonttools ])' --run 'python3 scripts/generate-icon-font.py'"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "tailwindcss": "^4.3.5",
     "vite": "^5.2.6"
   },
   "dependencies": {
-    "@ddd-ts/traits": "workspace:*"
+    "@ddd-ts/traits": "workspace:*",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   }
 }

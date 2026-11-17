@@ -5,13 +5,11 @@ import { CanvasRenderer } from "./renderer/implementation/canvas-renderer";
 import { installDebugBridge } from "./debug/bridge";
 import { DEBUG_BRIDGE } from "./debug/debug-flag";
 
-async function init() {
+export function startGame(container: HTMLElement, canvas: HTMLCanvasElement) {
 	const gameWrap = new GameWrapper();
-	const renderer = new CanvasRenderer(gameWrap);
+	const renderer = new CanvasRenderer(gameWrap, container, canvas);
 	const inputToIntent = new InputToIntent(gameWrap);
 	new MouseEventHandler(renderer, inputToIntent);
 	if (DEBUG_BRIDGE) installDebugBridge(gameWrap, renderer);
 	renderer.init();
 }
-
-init();

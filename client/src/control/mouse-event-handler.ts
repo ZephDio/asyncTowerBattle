@@ -9,7 +9,9 @@ export class MouseEventHandler {
 		private readonly renderer: CanvasRenderer,
 		private readonly inputToIntentTranslator: InputToIntent,
 	) {
-		window.addEventListener("mousedown", (event) => {
+		// Presses start a gesture only inside the game area, so clicks on the side menu stay out of the game. Moves and
+		// releases are read on the whole window, so a drag keeps going when the cursor leaves the canvas.
+		renderer.container.addEventListener("mousedown", (event) => {
 			if (event.button === 2) return;
 			this.onMouseEvent(event, "down");
 		});
@@ -19,7 +21,7 @@ export class MouseEventHandler {
 			this.onMouseEvent(event, "up");
 		});
 		window.addEventListener("mousemove", (event) => this.onMouseEvent(event, "move"));
-		window.addEventListener("contextmenu", (event) => {
+		renderer.container.addEventListener("contextmenu", (event) => {
 			event.preventDefault();
 			this.onMouseEvent(event, "right-click");
 		});
@@ -50,11 +52,11 @@ export class MouseEventHandler {
 	// }
 
 	pixelPositionToRelative(position: { x: number; y: number }) {
-		const { offsetLeft, offsetTop } = this.renderer.canvas;
+		const origin = this.renderer.pageOrigin();
 		const { width, height } = this.renderer.canvas;
 		const pixelPosition = {
-			x: position.x - offsetLeft,
-			y: position.y - offsetTop,
+			x: position.x - origin.x,
+			y: position.y - origin.y,
 		};
 		const relativePosition = PercentToReal({
 			x: pixelPosition.x / (width / 100),

@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@font-face {
+	font-family: "text";
+	src: url("/font/text.ttf");
+}
+
+@font-face {
+	font-family: "title";
+	src: url("/font/title.ttf");
+}
+
+@theme {
+	--font-text: "text";
+	--font-title: "title";
+}

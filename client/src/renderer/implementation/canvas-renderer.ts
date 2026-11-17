@@ -20,12 +20,12 @@ export function getRelativePositionPercent(position: ScreenPosition, size: Size,
 }
 
 export class CanvasRenderer implements Renderer {
-	public container: HTMLElement;
-	public canvas: HTMLCanvasElement;
 	public context: CanvasRenderingContext2D;
-	constructor(public gameWrap: GameWrapper) {
-		this.container = document.getElementById("container") as HTMLElement;
-		this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
+	constructor(
+		public gameWrap: GameWrapper,
+		public container: HTMLElement,
+		public canvas: HTMLCanvasElement,
+	) {
 		const context = this.canvas.getContext("2d");
 		if (!context) throw new Error();
 		this.context = context;
@@ -74,6 +74,13 @@ export class CanvasRenderer implements Renderer {
 			window.requestAnimationFrame(render);
 		};
 		render();
+	}
+
+	// The canvas's top left corner in page pixels. offsetLeft/offsetTop would be relative to the nearest positioned
+	// ancestor, which the React layout around the canvas can introduce.
+	pageOrigin() {
+		const { left, top } = this.canvas.getBoundingClientRect();
+		return { x: left, y: top };
 	}
 
 	sizeGame() {

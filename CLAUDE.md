@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Layout
 
 This is a pnpm workspace with two packages that share their tooling config at the root:
-- `client/`: the browser game (Vite, plain TypeScript on a canvas). The local `@ddd-ts/traits` package is `client/traits`.
+- `client/`: the browser game (Vite, plain TypeScript on a canvas inside a React and Tailwind page shell). The local `@ddd-ts/traits` package is `client/traits`.
 - `server/`: asyncTowerBattleServer, a NestJS app on port 6868 that trades boards for opponent boards. See `server/README.md`.
 
 Shared at the root: `tsconfig.base.json` (both `tsconfig.json` files extend it), `biome.json`, `devenv.nix`, `pnpm-workspace.yaml`, the lockfile, and the TypeScript, Jest and SWC dev dependencies in `package.json`. Package-specific settings stay in each package: module system (the client is bundled by Vite, the server is Node ESM), `jest.config.json`, `nest-cli.json`.
@@ -14,7 +14,7 @@ Shared at the root: `tsconfig.base.json` (both `tsconfig.json` files extend it),
 
 The package manager is pnpm. A devenv/direnv shell provides Node 22 and pnpm; `devenv up` runs both the Vite client and the server as processes. Run commands from the root unless noted.
 
-- `pnpm start`: start the Vite client and the server together. `pnpm start:client` and `pnpm start:server` start one. `pnpm start:client:dev` starts the client and opens it on `/?dev`. The client serves `client/index.html`, which loads `client/src/index.ts` and draws to a `<canvas>`.
+- `pnpm start`: start the Vite client and the server together. `pnpm start:client` and `pnpm start:server` start one. `pnpm start:client:dev` starts the client and opens it on `/?dev`. The client serves `client/index.html`, which loads the React app `client/src/main.tsx`.
 - `pnpm typecheck`: run `tsc --noEmit` in both packages. The VS Code task runs the client's with `--watch`. The shared tsconfig is strict, including `noUnusedLocals`, `noUnusedParameters`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` and `noImplicitOverride`.
 - `pnpm format`: run the Biome formatter over `client/src` and `server/src`. It uses tabs, a 120-column line width and double quotes.
 - `pnpm test` runs both packages' tests. For a single file, run Jest from the package: `cd client && pnpm exec jest src/shared/hitboxes.spec.ts`. Jest uses `@swc/jest`, roots at each package's `src` and matches `*.spec.ts`. There are very few client tests.
@@ -34,8 +34,12 @@ The package manager is pnpm. A devenv/direnv shell provides Node 22 and pnpm; `d
 
 Paths below are relative to `client/`. This is an async auto-battler played in the browser. The player builds an army on a grid during a shop phase. The army then fights an AI-supplied opponent army in an automatic battle. The code has no framework: plain TypeScript classes render to a 2D canvas.
 
+### Page shell
+- `src/main.tsx` mounts the React app in `src/app/`, styled with Tailwind (`src/index.css`, `vite.config.mts`). `App` lays out the foldable `SideMenu` and `GameCanvas`, which renders the game's container and `<canvas>` and calls `startGame` once. The game itself stays plain TypeScript; React only owns the page around the canvas.
+- `MouseEventHandler` listens for presses on the game container only, so clicks on the page shell never reach the game, and for moves and releases on the whole window. Canvas page coordinates come from `CanvasRenderer.pageOrigin()`.
+
 ### Top-level loop
-- `src/index.ts` wires up `GameWrapper`, `CanvasRenderer`, `InputToIntent` and `MouseEventHandler`.
+- `startGame` in `src/index.ts` wires up `GameWrapper`, `CanvasRenderer`, `InputToIntent` and `MouseEventHandler`.
 - `GameWrapper` (`src/engine/wrap.ts`) switches between `MainMenu` and `Game`.
 - `Game` (`src/engine/game.ts`) runs the phase cycle `ShopPhase` → `Battle` → `BattleSummary` → shop again. Only one phase field is non-null at a time. The player has 5 lives and loses one per defeat. Opponents come from `RemoteMatchMaker`, which POSTs the player's serialized board and win/loss record to the server (`server/`) and gets an opponent board back. When the server is unreachable it falls back to `LocalMatchMaker`, which keeps hard-coded enemy armies per round in `src/engine/match-maker/`.
 - `Battle` ticks the `Battlefield` with `setTimeout` at 32 ticks per second. Battle randomness must go through `BattleRandomSeed` so battles stay deterministic. `src/shared/seconds.ts` converts between seconds, frames and cast speed.
