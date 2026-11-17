@@ -16,6 +16,7 @@ import { RetailGrid } from "../../engine/grid/retail-grid";
 import { Buyable } from "../../engine/shop/retail/buyable";
 import { PathTile } from "../../engine/tile/recruit/tile";
 import { BoardOrientation } from "../../shared/traits/engine/core/board-orientation";
+import { DefaultUnitHud } from "../../shared/hud-element/default-unit-hud";
 
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
@@ -51,7 +52,7 @@ export class ShopInputToIntentTranslator {
 			shop.exitShop();
 			return;
 		}
-		if (!focus) return;
+		if (!focus || focus instanceof DefaultUnitHud) return;
 		if (shop.holderControl.hold) return;
 		if (focus.cell && (focus.grid instanceof ArmyGrid || focus.grid instanceof Inventory)) {
 			const element = this.trapOr(focus.element, focus.grid, screenPosition);
@@ -73,6 +74,13 @@ export class ShopInputToIntentTranslator {
 	) {
 		if (shop.holderControl.hold) {
 			shop.holderControl.moveHold(screenPosition);
+		}
+		if (focus instanceof DefaultUnitHud) {
+			this.clearHover(shop);
+			if (!shop.holderControl.hold && implementsTrait(focus.unit, TDescriptor)) {
+				shop.setDescriptionHud(new DescriptionHud(focus.unit));
+			}
+			return;
 		}
 		if (!focus || focus instanceof RefreshBellHud || focus instanceof StartBattleButton) {
 			shop.setDescriptionHud(null);
@@ -177,7 +185,12 @@ export class ShopInputToIntentTranslator {
 		screenPosition: ScreenPosition,
 	) {
 		if (!shop.holderControl.hold) return;
-		if (!focus || focus instanceof RefreshBellHud || focus instanceof StartBattleButton) {
+		if (
+			!focus ||
+			focus instanceof RefreshBellHud ||
+			focus instanceof StartBattleButton ||
+			focus instanceof DefaultUnitHud
+		) {
 			shop.holderControl.hold.onRelease();
 			return;
 		}
@@ -187,11 +200,22 @@ export class ShopInputToIntentTranslator {
 
 	handleMouseRightClick(shop: ShopPhase, focus: ReturnType<ShopInputToIntentTranslator["determinateFocus"]>) {
 		if (shop.holderControl.hold) return;
-		if (focus && !(focus instanceof RefreshBellHud) && !(focus instanceof StartBattleButton)) {
+		if (
+			focus &&
+			!(focus instanceof RefreshBellHud) &&
+			!(focus instanceof StartBattleButton) &&
+			!(focus instanceof DefaultUnitHud)
+		) {
 			if (focus.grid instanceof ArmyGrid && focus.element && implementsTrait(focus.element, PathTile)) {
 				shop.army.cyclePathAt(focus.element.cell);
 			}
 		}
+	}
+
+	clearHover(shop: ShopPhase) {
+		shop.army.grid.clearSynergiesTiles();
+		shop.army.grid.setOveredTile(null);
+		shop.army.inventory.setOveredTile([]);
 	}
 
 	// On a path tile carrying a trap, the middle of the tile stands for the trap: clicking there grabs only the trap
@@ -208,6 +232,9 @@ export class ShopInputToIntentTranslator {
 				return hudElement;
 			}
 			if (hudElement instanceof RefreshBellHud && hudElement.contains(screenPosition)) {
+				return hudElement;
+			}
+			if (hudElement instanceof DefaultUnitHud && hudElement.contains(screenPosition)) {
 				return hudElement;
 			}
 		}

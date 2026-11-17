@@ -2,6 +2,7 @@ import { BattleClockHud } from "./battle/battle-clock";
 import { CastleLifeBar } from "./battle/army-resume/castle-life-bar";
 import { SliderBattleSpeed } from "./battle/slider-speed";
 import { GoldHud } from "./gold-hud";
+import { DefaultUnitHud } from "./default-unit-hud";
 import { RefreshBellHud } from "./refresh-bell-hud";
 import { StartBattleButton } from "./start-battle-button";
 import { SelectDwarfButton } from "../../engine/menu/huds/select-dwarf-button";
@@ -16,6 +17,7 @@ export type HudElement =
 	| StartGameButton
 	| StartBattleButton
 	| GoldHud
+	| DefaultUnitHud
 	| RefreshBellHud
 	| CastleLifeBar
 	| BattleClockHud

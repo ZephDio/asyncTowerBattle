@@ -1,5 +1,4 @@
 import { Derive, ImplementsTrait, Subtrait, Trait, implementsTrait } from "@ddd-ts/traits";
-import { TRenderable } from "../renderable";
 import { ScreenPosition } from "../../../position";
 import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
 import { BannerBackground } from "./banner-background";
@@ -67,7 +66,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	tagBadges: TagBadge[];
 
 	constructor(
-		public item: ImplementsTrait<typeof TDescriptor> & ImplementsTrait<typeof TRenderable>,
+		public item: ImplementsTrait<typeof TDescriptor>,
 		public position: ScreenPosition = PercentToReal({ x: 86, y: 73 }),
 	) {
 		super({});

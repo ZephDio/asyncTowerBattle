@@ -18,6 +18,7 @@ import { PathPreview } from "../path/army/path-preview";
 import { PathInvalidHud } from "../../shared/hud-element/path-invalid-hud";
 import { RarityOddsHud } from "../../shared/hud-element/rarity-odds-hud";
 import { rarityOdds } from "./retail/rarity-odds";
+import { DefaultUnitHud } from "../../shared/hud-element/default-unit-hud";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -43,6 +44,7 @@ export type ShopPhaseHooks = {
 export class ShopPhase {
 	public retail: Retail;
 	public holderControl = new Holder();
+	public defaultUnitHud: DefaultUnitHud;
 	// When the refresh bell was last pressed, for its press animation
 	bellPressedAt: number | null = null;
 	economyHooks: EconomyHooks;
@@ -55,6 +57,7 @@ export class ShopPhase {
 	) {
 		this.retail = new Retail(round);
 		this.economyHooks = army.getEconomyHooks();
+		this.defaultUnitHud = new DefaultUnitHud(army.defaultUnit);
 	}
 
 	exitShop() {
@@ -119,6 +122,7 @@ export class ShopPhase {
 				new RefreshBellHud(this.bellPressedAt),
 				new GoldHud(this.army.getEconomyHooks().getEconomy().amount),
 				new RarityOddsHud(rarityOdds(this.round)),
+				this.defaultUnitHud,
 				...(network.complete ? [] : [new PathInvalidHud()]),
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
@@ -154,7 +158,7 @@ export class ShopPhase {
 			type: "shop",
 			retail: this.retail,
 			hold: this.holderControl.hold,
-			hudElements: [new StartBattleButton({}), new RefreshBellHud()],
+			hudElements: [new StartBattleButton({}), new RefreshBellHud(), this.defaultUnitHud],
 			towers: this.army.towers,
 			castle: this.army.castle,
 			grid: this.army.grid,
