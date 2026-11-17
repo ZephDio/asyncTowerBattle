@@ -1,5 +1,4 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
-import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { HitBox } from "../hitbox/hitboxe";
 import { Rectangle } from "../hitbox/shapes/rectangle";
 import { ScreenPosition } from "../position";
@@ -9,20 +8,25 @@ import { TokenUnit } from "../traits/engine/token-unit";
 import { TDrawable } from "../traits/render/drawable";
 import { DrawPriority } from "../traits/render/image-drawable";
 import { TRenderable } from "../traits/render/renderable";
+import { ArmyGrid } from "../../engine/grid/grid";
 
 const OUTLINE = "#1d1d1c";
 const PANEL_FILL = "#3b2a22";
 const PANEL_RIM = "#c8955a";
 const TEXT = "#fff4dc";
 
-// Sizes in screen units: the "Basic unit" label sits above the slot showing the unit.
-const LABEL = { width: 10, height: 3.4 };
-const SLOT = 5.6;
-const GAP = 0.8;
+// Sizes in screen units at full scale: the "Basic unit" label sits above the slot showing the unit.
+const LABEL = { width: 9, height: 3 };
+const SLOT = 5;
+const GAP = 0.6;
 const HEIGHT = LABEL.height + GAP + SLOT;
+// Room kept between the panel and the grid, where the castle overhangs, and between the panel and the screen edge.
+const GRID_MARGIN = 1.8;
+const EDGE_MARGIN = 0.6;
 
 // The army's basic unit, the one the castle and the barracks without a unit spawn, shown left of the castle in the
-// shop. It can't be picked up; hovering it shows its description.
+// shop. It can't be picked up; hovering it shows its description. The army grid widens over the rounds, so the panel
+// sticks to the grid's top left corner and shrinks to fit the room left of it.
 export class DefaultUnitHud extends Derive(
 	TCollider,
 	THitbox(new HitBox([[new Rectangle({ width: LABEL.width, height: HEIGHT }), new ScreenPosition({ x: 0, y: 0 })]])),
@@ -30,22 +34,39 @@ export class DefaultUnitHud extends Derive(
 	TRenderable,
 ) {
 	drawPriority = DrawPriority.HUD;
-	position = PercentToReal({ x: 7.5, y: 43 });
+	position: ScreenPosition;
+	scale: number;
 
-	constructor(public unit: ImplementsTrait<typeof TokenUnit>) {
+	constructor(
+		public unit: ImplementsTrait<typeof TokenUnit>,
+		grid: ArmyGrid,
+	) {
 		super({});
+		const right = grid.position.x - GRID_MARGIN;
+		this.scale = Math.min(1, (right - EDGE_MARGIN) / LABEL.width);
+		const top = grid.position.y + grid.height * grid.cellSize;
+		this.position = new ScreenPosition({
+			x: right - (LABEL.width * this.scale) / 2,
+			y: top - (HEIGHT * this.scale) / 2,
+		});
+		this.hitbox = new HitBox([
+			[
+				new Rectangle({ width: LABEL.width * this.scale, height: HEIGHT * this.scale }),
+				new ScreenPosition({ x: 0, y: 0 }),
+			],
+		]);
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		context.save();
 		context.globalAlpha = 1;
-		const unit = this.getCanvasSize(context, 1, 1).width;
+		const unit = this.getCanvasSize(context, 1, 1, this.scale).width;
 		const center = this.getCanvasPosition(context, position);
 		const top = center.y - (HEIGHT * unit) / 2;
 
 		const label = { width: LABEL.width * unit, height: LABEL.height * unit };
 		this.drawPanel(context, center.x - label.width / 2, top, label.width, label.height, unit);
-		const fontSize = unit * 1.9;
+		const fontSize = unit * 1.7;
 		context.font = `${fontSize}px title`;
 		context.textAlign = "center";
 		context.textBaseline = "middle";
@@ -62,8 +83,9 @@ export class DefaultUnitHud extends Derive(
 		const slotTop = top + label.height + GAP * unit;
 		this.drawPanel(context, center.x - slot / 2, slotTop, slot, slot, unit);
 		if (implementsTrait(this.unit, TDrawable)) {
-			const slotCenter = position.add(new ScreenPosition({ x: 0, y: HEIGHT / 2 - LABEL.height - GAP - SLOT / 2 }));
-			this.unit.draw(context, slotCenter, 1.5);
+			const slotOffset = (HEIGHT / 2 - LABEL.height - GAP - SLOT / 2) * this.scale;
+			const slotCenter = position.add(new ScreenPosition({ x: 0, y: slotOffset }));
+			this.unit.draw(context, slotCenter, 1.35 * this.scale);
 		}
 		context.restore();
 	}

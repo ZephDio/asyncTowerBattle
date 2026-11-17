@@ -44,7 +44,6 @@ export type ShopPhaseHooks = {
 export class ShopPhase {
 	public retail: Retail;
 	public holderControl = new Holder();
-	public defaultUnitHud: DefaultUnitHud;
 	// When the refresh bell was last pressed, for its press animation
 	bellPressedAt: number | null = null;
 	economyHooks: EconomyHooks;
@@ -57,7 +56,6 @@ export class ShopPhase {
 	) {
 		this.retail = new Retail(round);
 		this.economyHooks = army.getEconomyHooks();
-		this.defaultUnitHud = new DefaultUnitHud(army.defaultUnit);
 	}
 
 	exitShop() {
@@ -122,11 +120,16 @@ export class ShopPhase {
 				new RefreshBellHud(this.bellPressedAt),
 				new GoldHud(this.army.getEconomyHooks().getEconomy().amount),
 				new RarityOddsHud(rarityOdds(this.round)),
-				this.defaultUnitHud,
+				this.getDefaultUnitHud(),
 				...(network.complete ? [] : [new PathInvalidHud()]),
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
 		};
+	}
+
+	// Built from the grid each time, since the grid widens between rounds.
+	getDefaultUnitHud() {
+		return new DefaultUnitHud(this.army.defaultUnit, this.army.grid);
 	}
 
 	getPathPreview(network = this.army.pathNetwork) {
@@ -158,7 +161,7 @@ export class ShopPhase {
 			type: "shop",
 			retail: this.retail,
 			hold: this.holderControl.hold,
-			hudElements: [new StartBattleButton({}), new RefreshBellHud(), this.defaultUnitHud],
+			hudElements: [new StartBattleButton({}), new RefreshBellHud(), this.getDefaultUnitHud()],
 			towers: this.army.towers,
 			castle: this.army.castle,
 			grid: this.army.grid,
