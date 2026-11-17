@@ -8,7 +8,7 @@ import { IconResources } from "../../../../renderer/resources/icons.resources";
 
 export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 	drawPriority = DrawPriority.HUD;
-	healthIcon = IconResources.health.image;
+	healthIcon = IconResources.heartContainer.image;
 	constructor(
 		private castle: AnyBattleCastle,
 		public position: ScreenPosition,
@@ -38,7 +38,8 @@ export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 			}),
 		);
 		const iconPosition = this.getCanvasPosition(context, this.position.add(new ScreenPosition({ x: -6, y: 0 })));
-		this.drawImage(context, { width: size.width / 5, height: size.height * 1.5 }, iconPosition, this.healthIcon);
+		const iconSide = size.height * 1.5;
+		this.drawImage(context, { width: iconSide, height: iconSide }, iconPosition, this.healthIcon);
 
 		context.fillStyle = "black";
 		context.textAlign = "center";

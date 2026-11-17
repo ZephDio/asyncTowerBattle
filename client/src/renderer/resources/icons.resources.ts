@@ -6,25 +6,28 @@ export type IconResource = {
 };
 export class IconResources {
 	static food: IconResource = {
-		image: createImage("/resources/economy/food.png"),
+		image: createImage("/resources/icons/corn.png"),
 	};
-	static health: IconResource = {
-		image: createImage("/resources/hud/health.png"),
+	static heartContainer: IconResource = {
+		image: createImage("/resources/icons/heart-container.png"),
 	};
-	static emptyHealth: IconResource = {
-		image: createImage("/resources/hud/health-empty.png"),
+	static emptyHeartContainer: IconResource = {
+		image: createImage("/resources/icons/heart-container-empty.png"),
 	};
 	static movespeed: IconResource = {
-		image: createImage("/resources/hud/speed.svg"),
+		image: createImage("/resources/icons/unit-speed.png"),
 	};
 	static vitality: IconResource = {
-		image: createImage("/resources/hud/vitality.svg"),
+		image: createImage("/resources/icons/unit-health.png"),
 	};
 	static castSpeed: IconResource = {
 		image: createImage("/resources/hud/cast-speed.svg"),
 	};
+	static towerCastSpeed: IconResource = {
+		image: createImage("/resources/icons/tower-cast-speed.png"),
+	};
 	static attack: IconResource = {
-		image: createImage("/resources/hud/attack.svg"),
+		image: createImage("/resources/icons/tower-attack.png"),
 	};
 	static tower: IconResource = {
 		image: createImage("/resources/hud/tower.svg"),
@@ -36,7 +39,7 @@ export class IconResources {
 		image: createImage("/resources/hud/furry.png"),
 	};
 	static gold: IconResource = {
-		image: createImage("/resources/economy/gold.png"),
+		image: createImage("/resources/icons/gold.png"),
 	};
 	static purse: IconResource = {
 		image: createImage("/resources/economy/purse.png"),

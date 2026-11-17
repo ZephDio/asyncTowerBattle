@@ -57,11 +57,11 @@ export class HudElementResources {
 	};
 
 	static patternStarActive: IconResource = {
-		image: createImage("/resources/hud/pattern-star-active.png"),
+		image: createImage("/resources/icons/pattern-star-active.png"),
 	};
 
 	static patternStarInactive: IconResource = {
-		image: createImage("/resources/hud/pattern-star-inactive.png"),
+		image: createImage("/resources/icons/pattern-star-inactive.png"),
 	};
 
 	static targetBowActive: IconResource = {

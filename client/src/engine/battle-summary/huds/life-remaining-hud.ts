@@ -16,8 +16,8 @@ export class LifeRemainingHud extends Derive(TDrawable, TRenderable) {
 	size = { width: 7.5, height: 7.5 };
 	drawPriority = DrawPriority.HUD;
 
-	heartIcon = IconResources.health.image;
-	emptyHeartIcon = IconResources.emptyHealth.image;
+	heartIcon = IconResources.heartContainer.image;
+	emptyHeartIcon = IconResources.emptyHeartContainer.image;
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		let heartPosition = position.add(new ScreenPosition({ x: -20, y: 0 }));

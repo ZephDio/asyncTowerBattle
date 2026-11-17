@@ -11,6 +11,7 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 	speedIcon = IconResources.movespeed.image;
 	vitalityIcon = IconResources.vitality.image;
 	castSpeedIcon = IconResources.castSpeed.image;
+	towerCastSpeedIcon = IconResources.towerCastSpeed.image;
 	attackIcon = IconResources.attack.image;
 
 	towerIcon = IconResources.tower.image;
@@ -108,7 +109,7 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 		const castSpeedIconPosition = getRelativePositionPercent(position, this.size, { x: 62, y: 65 });
 		const castSpeedIconCanvasPosition = this.getCanvasPosition(context, castSpeedIconPosition);
 		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
-		this.drawImage(context, size, castSpeedIconCanvasPosition, this.castSpeedIcon);
+		this.drawImage(context, size, castSpeedIconCanvasPosition, this.towerCastSpeedIcon);
 		context.font = `${size.width / 1.9}px text`;
 		context.fillStyle = "green";
 		context.fillText(`${amount}`, castSpeedIconCanvasPosition.x, castSpeedIconCanvasPosition.y, size.width);

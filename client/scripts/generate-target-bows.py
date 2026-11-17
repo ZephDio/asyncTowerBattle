@@ -8,7 +8,7 @@ Outputs:
 - public/resources/hud/target-bow-inactive.png: grey bow, the target cell has no path tile.
 
 A drawn bow with an arrow pointing to the top right, drawn at SIZE native pixels and upscaled SCALE times like the
-pattern stars (scripts/generate-pattern-stars.py), with the same outline and the same grey ramp. Shapes are laid out
+pattern stars (scripts/generate-pattern-stars.py, in public/resources/icons/), with the same outline and the same grey ramp. Shapes are laid out
 in arrow coordinates: u along the arrow toward its head, v across it toward the bottom right.
 """
 

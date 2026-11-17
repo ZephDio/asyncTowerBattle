@@ -4,8 +4,8 @@
 Run from anywhere: python3 scripts/generate-pattern-stars.py
 
 Outputs:
-- public/resources/hud/pattern-star-active.png: yellow star, the pattern cell condition is met.
-- public/resources/hud/pattern-star-inactive.png: grey star, the pattern cell condition is not met.
+- public/resources/icons/pattern-star-active.png: yellow star, the pattern cell condition is met.
+- public/resources/icons/pattern-star-inactive.png: grey star, the pattern cell condition is not met.
 
 A five branched star with slightly rounded tips, drawn at SIZE native pixels and upscaled SCALE times.
 The star is shaded as a low pyramid: each branch is split along its spine into two flat facets whose 3D normal
@@ -19,7 +19,7 @@ from pathlib import Path
 from voxel_sprite import TRANSPARENT, Color, write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT_DIR = ROOT / "public" / "resources" / "hud"
+OUTPUT_DIR = ROOT / "public" / "resources" / "icons"
 SIZE = 24
 SCALE = 2
 
