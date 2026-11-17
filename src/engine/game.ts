@@ -2,8 +2,8 @@ import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
 import { ShopPhase } from "./shop/shop";
-import { LocalMatchMaker } from "./match-maker/local-match-maker";
-import { MatchMaker } from "./match-maker/match-maker";
+import { MatchMaker, Opponent } from "./match-maker/match-maker";
+import { RemoteMatchMaker } from "./match-maker/remote-match-maker";
 import { RoundsTracker } from "./rounds/tracker";
 import { DescriptionHud } from "../shared/traits/render/huds/item-descriptor";
 import { RenderableState } from "../renderer/renderer";
@@ -24,7 +24,9 @@ export class Game {
 	life = 5;
 
 	descriptionHud: null | DescriptionHud = null;
-	matchMaker: MatchMaker = new LocalMatchMaker();
+	matchMaker: MatchMaker = new RemoteMatchMaker();
+	// Set while the shop waits for the opponent, so the start button can't ask twice.
+	searchingOpponent = false;
 	constructor(
 		public chosenClass: Faction,
 		private endGame: () => void,
@@ -86,9 +88,14 @@ export class Game {
 		this.startShop();
 	}
 
-	handleShopQuit() {
+	// The shop stays on screen until the opponent board arrives.
+	async handleShopQuit() {
+		if (this.searchingOpponent) return;
+		this.searchingOpponent = true;
+		const opponent = await this.matchMaker.getOpponent(this.rounds.round);
+		this.searchingOpponent = false;
 		this.shop = null;
-		this.startBattle();
+		this.startBattle(opponent);
 	}
 
 	getRenderState() {
@@ -123,8 +130,7 @@ export class Game {
 		this.battleSummary = new BattleSummary(battle, battleVerdict, this.handleSummaryQuit.bind(this), this.life);
 	}
 
-	startBattle() {
-		const { army, randomSeed } = this.matchMaker.getOpponent(this.rounds.round);
+	startBattle({ army, randomSeed }: Opponent) {
 		this.battle = new Battle(
 			this.army,
 			army,

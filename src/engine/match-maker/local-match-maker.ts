@@ -18,7 +18,11 @@ import { UnitRecruitFixture } from "../units/recruit/unit-fixtures";
 import { MatchMaker } from "./match-maker";
 
 export class LocalMatchMaker extends MatchMaker {
-	getOpponent(round: number) {
+	async getOpponent(round: number) {
+		return LocalMatchMaker.board(round);
+	}
+
+	static board(round: number) {
 		const lastRound = GRID_GROWTH_CYCLE.length as keyof typeof EnemyArmyFixtures;
 		if (round > lastRound) {
 			return EnemyArmyFixtures[lastRound]();
