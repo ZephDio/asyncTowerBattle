@@ -2,7 +2,8 @@ import { InputToIntent } from "./control/input-to-intent-translator";
 import { MouseEventHandler } from "./control/mouse-event-handler";
 import { GameWrapper } from "./engine/wrap";
 import { CanvasRenderer } from "./renderer/implementation/canvas-renderer";
-import { DEBUG_BRIDGE, installDebugBridge } from "./debug/bridge";
+import { installDebugBridge } from "./debug/bridge";
+import { DEBUG_BRIDGE } from "./debug/debug-flag";
 
 async function init() {
 	const gameWrap = new GameWrapper();

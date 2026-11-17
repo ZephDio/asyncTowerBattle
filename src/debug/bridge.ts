@@ -21,8 +21,6 @@ import { TRecruit } from "../shared/traits/engine/recruit";
 import { Unit } from "../engine/units/recruit/unit";
 import { BattleArmy } from "../engine/army/battle/battle-army";
 
-export const DEBUG_BRIDGE = typeof location !== "undefined" && new URLSearchParams(location.search).has("debug");
-
 type AnyGrid = ImplementsTrait<typeof TGrid>;
 type AnyGridElement = ImplementsTrait<typeof GridElement>;
 type GridName = "army" | "inventory" | "retail" | "battle";

@@ -2,7 +2,7 @@ import { Battle } from "./battle/battle";
 import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
 import { ShopPhase } from "./shop/shop";
-import { MatchMaker, Opponent } from "./match-maker/match-maker";
+import { GamePerformance, MatchMaker, Opponent } from "./match-maker/match-maker";
 import { RemoteMatchMaker } from "./match-maker/remote-match-maker";
 import { RoundsTracker } from "./rounds/tracker";
 import { DescriptionHud } from "../shared/traits/render/huds/item-descriptor";
@@ -22,6 +22,7 @@ export class Game {
 	shop: null | ShopPhase = null;
 	rounds: RoundsTracker;
 	life = 5;
+	performance: GamePerformance = { wins: 0, losses: 0 };
 
 	descriptionHud: null | DescriptionHud = null;
 	matchMaker: MatchMaker = new RemoteMatchMaker();
@@ -62,6 +63,9 @@ export class Game {
 	handleEndBattle(battleVerdict: "Victory" | "Defeat", battle: Battle) {
 		if (battleVerdict === "Defeat") {
 			this.life--;
+			this.performance.losses++;
+		} else {
+			this.performance.wins++;
 		}
 		this.startBattleSummary(battle, battleVerdict);
 		this.battle = null;
@@ -92,7 +96,7 @@ export class Game {
 	async handleShopQuit() {
 		if (this.searchingOpponent) return;
 		this.searchingOpponent = true;
-		const opponent = await this.matchMaker.getOpponent(this.rounds.round);
+		const opponent = await this.matchMaker.getOpponent(this.rounds.round, this.army, this.performance);
 		this.searchingOpponent = false;
 		this.shop = null;
 		this.startBattle(opponent);
