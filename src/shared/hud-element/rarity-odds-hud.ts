@@ -87,12 +87,14 @@ export class RarityOddsHud extends Derive(TDrawable, TRenderable) {
 			context.strokeStyle = colors.border;
 			context.stroke();
 
+			// The font's "middle" baseline sits a bit above the digits' visual center, so nudge them down.
 			const text = Math.round(odds).toString();
+			const textY = center.y + unit * 0.15;
 			context.lineWidth = unit * 0.3;
 			context.strokeStyle = OUTLINE;
-			context.strokeText(text, x, center.y);
+			context.strokeText(text, x, textY);
 			context.fillStyle = TEXT;
-			context.fillText(text, x, center.y);
+			context.fillText(text, x, textY);
 		});
 		context.restore();
 	}
