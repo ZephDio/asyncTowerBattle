@@ -7,6 +7,7 @@ import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
+// Hitting the enemy castle gives its army one movement speed buff.
 export class BattleGoGoat extends Derive(TBattleUnit) {
 	override idleSheet = UnitResources.goGoatSheet;
 	pathFinder: PathFinder;
@@ -33,5 +34,10 @@ export class BattleGoGoat extends Derive(TBattleUnit) {
 			rarityHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
+	}
+
+	override attackCastle() {
+		this.hooks.alliedArmyBuffHooks.addUnitBuff("movement-speed");
+		super.attackCastle();
 	}
 }
