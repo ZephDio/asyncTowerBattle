@@ -14,6 +14,7 @@ import { TokenUnit } from "../../shared/traits/engine/token-unit";
 import { PathTile } from "../tile/recruit/tile";
 import { DEFAULT_PATH_CONNECTIONS } from "../tile/path-shape";
 import { AnyTrap, Trap } from "../trap/recruit/trap";
+import { Barrack } from "../constructs/barrack/recruit/barrack";
 
 export type ArmyHooks = {
 	economyHooks: EconomyHooks;
@@ -142,15 +143,23 @@ export class Army {
 	}
 
 	pushToInventory(recruit: AnyRecruit) {
+		this.join(recruit);
 		this.inventory.add(recruit);
 	}
 
 	addToInventory(recruit: AnyRecruit) {
+		this.join(recruit);
 		this.inventory.setElement(recruit);
 	}
 
 	addToGrid(recruit: AnyRecruit) {
+		this.join(recruit);
 		this.grid.setElement(recruit);
+	}
+
+	// A barrack shows the basic unit it falls back on when it holds no unit.
+	join(recruit: AnyRecruit) {
+		if (implementsTrait(recruit, Barrack)) recruit.defaultUnit = this.defaultUnit;
 	}
 
 	getEconomyHooks() {

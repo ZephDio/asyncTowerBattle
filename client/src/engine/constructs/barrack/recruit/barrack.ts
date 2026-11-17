@@ -12,12 +12,19 @@ import { TokenHooks } from "../../../shop/holder/holder";
 import { TGrid } from "../../../grid/tgrid";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { HTBaseStats } from "../../../stats/base-stats";
+import { TokenUnit } from "../../../../shared/traits/engine/token-unit";
 
 export type AnyBarrack = ImplementsTrait<typeof Barrack>;
 
 export const Barrack = Subtrait([TRecruit, RecruitCaster, HTBaseStats], (base) => {
 	abstract class IBarrack extends base {
 		abstract unitRecruit: null | AnyUnit;
+		// The army's basic unit, set by the army when the barrack joins it. The barrack spawns it when it holds no unit.
+		defaultUnit: ImplementsTrait<typeof TokenUnit> | null = null;
+
+		get bondedUnit() {
+			return this.unitRecruit ?? this.defaultUnit;
+		}
 
 		setUnit(unit: AnyUnit | null) {
 			this.unitRecruit = unit;
