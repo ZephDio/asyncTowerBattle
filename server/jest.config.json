@@ -1,0 +1,23 @@
+{
+  "rootDir": "src",
+  "testEnvironment": "node",
+  "testMatch": ["**/*.spec.ts"],
+  "collectCoverageFrom": ["<rootDir>/**/*.ts"],
+  "extensionsToTreatAsEsm": [".ts"],
+  "moduleNameMapper": {
+    "^(\\.{1,2}/.*)\\.js$": "$1"
+  },
+  "transform": {
+    "^.+\\.ts$": [
+      "@swc/jest",
+      {
+        "module": { "type": "es6" },
+        "jsc": {
+          "target": "es2023",
+          "parser": { "syntax": "typescript", "decorators": true },
+          "transform": { "legacyDecorator": true, "decoratorMetadata": true }
+        }
+      }
+    ]
+  }
+}
