@@ -16,7 +16,7 @@ import { AnimalTag } from "../../../../shared/traits/engine/tags/species/species
 import { FoodTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class FoxBlueprint extends Derive(
-	TRarity(Rarity.Uncommon),
+	TRarity(Rarity.Common),
 	TShopBlueprint(15, 5),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 2 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,

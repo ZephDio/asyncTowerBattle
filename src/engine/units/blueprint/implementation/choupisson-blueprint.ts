@@ -15,7 +15,7 @@ import { UnitResources } from "../../../../renderer/resources/unit.resources";
 import { AnimalTag } from "../../../../shared/traits/engine/tags/species/species-tag";
 
 export class ChoupissonBlueprint extends Derive(
-	TRarity(Rarity.Rare),
+	TRarity(Rarity.Common),
 	TShopBlueprint(15, 7),
 	THitbox(new HitBox([[new Rectangle({ width: 3, height: 3 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDrawable,
