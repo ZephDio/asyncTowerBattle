@@ -2,8 +2,12 @@ import "reflect-metadata";
 import type { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
+import { LegacyBoardStore } from "../applicative/interfaces/legacy-board.store.js";
+import { OpponentBoardStore } from "../applicative/interfaces/opponent-board.store.js";
 import type { SerializedBoard } from "../domain/serialized-board.js";
 import { OpponentsModule } from "../opponents.module.js";
+import { InMemoryLegacyBoardStore } from "./in-memory-legacy-board.store.js";
+import { InMemoryOpponentBoardStore } from "./in-memory-opponent-board.store.js";
 import { SEED_BOARDS } from "./seed-boards.js";
 
 const playerBoard = (round: number, randomSeed: number): SerializedBoard => ({
@@ -20,7 +24,15 @@ describe("POST /opponents/:round", () => {
 	let app: INestApplication;
 
 	beforeEach(async () => {
-		const moduleRef = await Test.createTestingModule({ imports: [OpponentsModule] }).compile();
+		// In-memory stores seeded like the seed migration, so the test needs no database.
+		const moduleRef = await Test.createTestingModule({ imports: [OpponentsModule] })
+			.overrideProvider(OpponentBoardStore)
+			.useValue(
+				InMemoryOpponentBoardStore.seeded(SEED_BOARDS.map((board) => ({ board, performance: { wins: 0, losses: 0 } }))),
+			)
+			.overrideProvider(LegacyBoardStore)
+			.useValue(new InMemoryLegacyBoardStore())
+			.compile();
 		app = moduleRef.createNestApplication();
 		await app.init();
 	});

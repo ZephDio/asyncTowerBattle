@@ -15,32 +15,32 @@ const playerBoard = (round: number, randomSeed = round): PlayerBoard => ({
 const withoutId = ({ board, performance }: PlayerBoard) => ({ board, performance });
 
 describe("InMemoryOpponentBoardStore", () => {
-	it("groups the boards by round", () => {
+	it("groups the boards by round", async () => {
 		const store = InMemoryOpponentBoardStore.seeded([playerBoard(1), playerBoard(3, 30), playerBoard(3, 31)]);
 
-		expect(store.rounds()).toEqual([1, 3]);
-		expect(store.findByRound(3).map(withoutId)).toEqual([playerBoard(3, 30), playerBoard(3, 31)]);
-		expect(store.findByRound(2)).toEqual([]);
+		expect(await store.rounds()).toEqual([1, 3]);
+		expect((await store.findByRound(3)).map(withoutId)).toEqual([playerBoard(3, 30), playerBoard(3, 31)]);
+		expect(await store.findByRound(2)).toEqual([]);
 	});
 
-	it("removes a board by id, and its round once empty", () => {
+	it("removes a board by id, and its round once empty", async () => {
 		const store = InMemoryOpponentBoardStore.seeded([playerBoard(1), playerBoard(3, 30), playerBoard(3, 31)]);
-		const [first, second] = store.findByRound(3);
+		const [first, second] = await store.findByRound(3);
 
-		store.remove(first!.id);
-		expect(store.findByRound(3)).toEqual([second]);
+		await store.remove(first!.id);
+		expect(await store.findByRound(3)).toEqual([second]);
 
-		store.remove(second!.id);
-		expect(store.rounds()).toEqual([1]);
+		await store.remove(second!.id);
+		expect(await store.rounds()).toEqual([1]);
 	});
 
-	it("hands out copies of the stored boards", () => {
+	it("hands out copies of the stored boards", async () => {
 		const stored = playerBoard(1);
 		const store = InMemoryOpponentBoardStore.seeded([stored]);
 		stored.board.randomSeed = 42;
 		stored.performance.wins = 5;
-		store.findByRound(1)[0]!.board.elements.pop();
+		(await store.findByRound(1))[0]!.board.elements.pop();
 
-		expect(store.findByRound(1).map(withoutId)).toEqual([playerBoard(1)]);
+		expect((await store.findByRound(1)).map(withoutId)).toEqual([playerBoard(1)]);
 	});
 });

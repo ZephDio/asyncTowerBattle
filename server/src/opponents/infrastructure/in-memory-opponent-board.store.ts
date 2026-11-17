@@ -10,22 +10,26 @@ export class InMemoryOpponentBoardStore extends OpponentBoardStore {
 
 	static seeded(playerBoards: PlayerBoard[]) {
 		const store = new InMemoryOpponentBoardStore();
-		for (const playerBoard of playerBoards) store.add(playerBoard);
+		for (const playerBoard of playerBoards) store.addNow(playerBoard);
 		return store;
 	}
 
-	add(playerBoard: PlayerBoard) {
+	async add(playerBoard: PlayerBoard) {
+		this.addNow(playerBoard);
+	}
+
+	private addNow(playerBoard: PlayerBoard) {
 		const id = randomUUID();
 		const boards = this.boardsByRound.get(playerBoard.board.round) ?? new Map<string, string>();
 		boards.set(id, JSON.stringify({ ...playerBoard, id }));
 		this.boardsByRound.set(playerBoard.board.round, boards);
 	}
 
-	findByRound(round: number): StoredPlayerBoard[] {
+	async findByRound(round: number): Promise<StoredPlayerBoard[]> {
 		return [...(this.boardsByRound.get(round)?.values() ?? [])].map((board) => JSON.parse(board));
 	}
 
-	remove(id: string) {
+	async remove(id: string) {
 		for (const [round, boards] of this.boardsByRound) {
 			if (!boards.delete(id)) continue;
 			if (boards.size === 0) this.boardsByRound.delete(round);
@@ -33,7 +37,7 @@ export class InMemoryOpponentBoardStore extends OpponentBoardStore {
 		}
 	}
 
-	rounds() {
+	async rounds() {
 		return [...this.boardsByRound.keys()];
 	}
 }

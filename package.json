@@ -7,6 +7,7 @@
     "start:client": "pnpm --filter ./client start",
     "start:client:dev": "pnpm --filter ./client start:dev",
     "start:server": "pnpm --filter ./server start",
+    "start:infra": "start-docker && pnpm --filter ./server db:up && pnpm --filter ./server db:migrate",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",

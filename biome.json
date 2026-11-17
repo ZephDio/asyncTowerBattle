@@ -95,6 +95,7 @@
 			"**",
 			"!**/node_modules/**",
 			"!**/dist/**",
+			"!**/src/generated/**",
 			"!**/*.json",
 			"!**/.env"
 		]

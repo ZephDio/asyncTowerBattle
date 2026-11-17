@@ -1,6 +1,7 @@
 import type { SerializedBoard } from "../domain/serialized-board.js";
 
-// The client's LocalMatchMaker boards, one per round, serialized with its board-serializer.
+// The client's LocalMatchMaker boards, one per round, serialized with its board-serializer. The migration
+// prisma/migrations/20261117000001_seed_default_boards seeds the database with them; the tests seed in-memory stores.
 export const SEED_BOARDS: SerializedBoard[] = [
 	{
 		round: 1,

@@ -7,7 +7,7 @@ import type { StoredPlayerBoard } from "../applicative/interfaces/opponent-board
 export class InMemoryLegacyBoardStore extends LegacyBoardStore {
 	private readonly boards: string[] = [];
 
-	add(playerBoard: StoredPlayerBoard) {
+	async add(playerBoard: StoredPlayerBoard) {
 		this.boards.push(JSON.stringify(playerBoard));
 	}
 

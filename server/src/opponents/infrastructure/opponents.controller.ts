@@ -24,16 +24,16 @@ export class OpponentsController {
 	// `?test=true` the board is neither stored nor taken from the others, so test runs don't publish their boards.
 	@Post(":round")
 	@HttpCode(200)
-	pull(
+	async pull(
 		@Param("round", ParseIntPipe) round: number,
 		@Body() body: PlayerBoard,
 		@Query("test", new ParseBoolPipe({ optional: true })) test?: boolean,
-	): SerializedBoard {
+	): Promise<SerializedBoard> {
 		if (typeof body?.board !== "object" || typeof body?.performance !== "object") {
 			throw new BadRequestException("Expected a board and a performance");
 		}
 		try {
-			return this.pullOpponent.execute({
+			return await this.pullOpponent.execute({
 				round,
 				board: body.board,
 				performance: body.performance,

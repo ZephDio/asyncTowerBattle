@@ -1,0 +1,29 @@
+// Run `pnpm db:generate` after changing this file, and `pnpm db:migrate:dev --name <change>` to version the change.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+// The URL comes from DATABASE_URL, see prisma.config.ts.
+datasource db {
+  provider = "postgresql"
+}
+
+// A board a player sent when asking for an opponent, with their performance at the time. It is an opponent board
+// until another player pulls it, then a legacy board.
+model PlayerBoard {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  round     Int
+  // The SerializedBoard as JSON.
+  board     Json
+  wins      Int
+  losses    Int
+  createdAt DateTime  @default(now()) @map("created_at")
+  // When the board was pulled as an opponent, null while it is still available.
+  pulledAt  DateTime? @map("pulled_at")
+
+  @@index([round, pulledAt])
+  @@map("player_board")
+}

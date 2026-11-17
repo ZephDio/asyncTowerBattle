@@ -19,29 +19,29 @@ export class PullOpponent {
 		private readonly legacyBoards: LegacyBoardStore,
 	) {}
 
-	execute({ round, board, performance, test }: PullOpponentRequest): SerializedBoard {
+	async execute({ round, board, performance, test }: PullOpponentRequest): Promise<SerializedBoard> {
 		if (!Number.isInteger(round) || round < 1) throw new InvalidRoundError(round);
 		if (board.round !== round) throw new BoardRoundMismatchError(round, board.round);
 		if (![performance.wins, performance.losses].every((count) => Number.isInteger(count) && count >= 0)) {
 			throw new InvalidPerformanceError(performance);
 		}
 
-		const opponent = this.pickOpponent(round);
+		const opponent = await this.pickOpponent(round);
 		if (test) {
 			if (!opponent) throw new NoOpponentError(round);
 			return opponent.board;
 		}
-		this.opponentBoards.add({ board, performance });
+		await this.opponentBoards.add({ board, performance });
 		if (!opponent) throw new NoOpponentError(round);
-		this.opponentBoards.remove(opponent.id);
-		this.legacyBoards.add(opponent);
+		await this.opponentBoards.remove(opponent.id);
+		await this.legacyBoards.add(opponent);
 		return opponent.board;
 	}
 
-	private pickOpponent(round: number): StoredPlayerBoard | undefined {
-		const earlierRounds = this.opponentBoards.rounds().filter((stored) => stored <= round);
+	private async pickOpponent(round: number): Promise<StoredPlayerBoard | undefined> {
+		const earlierRounds = (await this.opponentBoards.rounds()).filter((stored) => stored <= round);
 		if (earlierRounds.length === 0) return undefined;
-		const opponents = this.opponentBoards.findByRound(Math.max(...earlierRounds));
+		const opponents = await this.opponentBoards.findByRound(Math.max(...earlierRounds));
 		return opponents[Math.floor(Math.random() * opponents.length)];
 	}
 }

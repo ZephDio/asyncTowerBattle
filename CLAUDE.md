@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a pnpm workspace with two packages that share their tooling config at the root:
 - `client/`: the browser game (Vite, plain TypeScript on a canvas inside a React and Tailwind page shell). The local `@ddd-ts/traits` package is `client/traits`.
-- `server/`: asyncTowerBattleServer, a NestJS app on port 6868 that trades boards for opponent boards. See `server/README.md`.
+- `server/`: asyncTowerBattleServer, a NestJS app on port 6868 that trades boards for opponent boards. It stores them in Postgres (docker compose, Prisma migrations). See `server/README.md`.
 
 Shared at the root: `tsconfig.base.json` (both `tsconfig.json` files extend it), `biome.json`, `devenv.nix`, `pnpm-workspace.yaml`, the lockfile, and the TypeScript, Jest and SWC dev dependencies in `package.json`. Package-specific settings stay in each package: module system (the client is bundled by Vite, the server is Node ESM), `jest.config.json`, `nest-cli.json`.
 
@@ -14,7 +14,7 @@ Shared at the root: `tsconfig.base.json` (both `tsconfig.json` files extend it),
 
 The package manager is pnpm. A devenv/direnv shell provides Node 22 and pnpm; `devenv up` runs both the Vite client and the server as processes. Run commands from the root unless noted.
 
-- `pnpm start`: start the Vite client and the server together. `pnpm start:client` and `pnpm start:server` start one. `pnpm start:client:dev` starts the client and opens it on `/?dev`. The client serves `client/index.html`, which loads the React app `client/src/main.tsx`.
+- `pnpm start`: start the Vite client and the server together. `pnpm start:client` and `pnpm start:server` start one. `pnpm start:infra` starts the server's Postgres in the project's Docker daemon and applies its migrations; the devenv shell starts that daemon on entering the project (`stop-docker` stops it). `pnpm start:client:dev` starts the client and opens it on `/?dev`. The client serves `client/index.html`, which loads the React app `client/src/main.tsx`.
 - `pnpm typecheck`: run `tsc --noEmit` in both packages. The VS Code task runs the client's with `--watch`. The shared tsconfig is strict, including `noUnusedLocals`, `noUnusedParameters`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` and `noImplicitOverride`.
 - `pnpm format`: run the Biome formatter over `client/src` and `server/src`. It uses tabs, a 120-column line width and double quotes.
 - `pnpm test` runs both packages' tests. For a single file, run Jest from the package: `cd client && pnpm exec jest src/shared/hitboxes.spec.ts`. Jest uses `@swc/jest`, roots at each package's `src` and matches `*.spec.ts`. There are very few client tests.
