@@ -16,6 +16,8 @@ import { Holder } from "./holder/holder";
 import { EconomyHooks } from "../gold/army-gold-economy";
 import { PathPreview } from "../path/army/path-preview";
 import { PathInvalidHud } from "../../shared/hud-element/path-invalid-hud";
+import { RarityOddsHud } from "../../shared/hud-element/rarity-odds-hud";
+import { rarityOdds } from "./retail/rarity-odds";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -39,7 +41,7 @@ export type ShopPhaseHooks = {
 };
 
 export class ShopPhase {
-	public retail = new Retail();
+	public retail: Retail;
 	public holderControl = new Holder();
 	economyHooks: EconomyHooks;
 	constructor(
@@ -47,7 +49,9 @@ export class ShopPhase {
 		public onShopExit: Game["handleShopQuit"],
 
 		public setDescriptionHud: Game["setDescriptionHud"],
+		public round: number,
 	) {
+		this.retail = new Retail(round);
 		this.economyHooks = army.getEconomyHooks();
 	}
 
@@ -111,6 +115,7 @@ export class ShopPhase {
 				new StartBattleButton({}),
 				new RefreshBellHud({}),
 				new GoldHud(this.army.getEconomyHooks().getEconomy().amount),
+				new RarityOddsHud(rarityOdds(this.round)),
 				...(network.complete ? [] : [new PathInvalidHud()]),
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],

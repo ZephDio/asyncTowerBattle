@@ -109,7 +109,12 @@ export class Game {
 
 	startShop() {
 		this.rounds.update();
-		this.shop = new ShopPhase(this.army, this.handleShopQuit.bind(this), this.setDescriptionHud.bind(this));
+		this.shop = new ShopPhase(
+			this.army,
+			this.handleShopQuit.bind(this),
+			this.setDescriptionHud.bind(this),
+			this.rounds.round,
+		);
 		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
 		this.army.onShopEnter();
 	}

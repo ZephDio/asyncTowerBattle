@@ -25,9 +25,10 @@ export class Retail extends Derive(
 		new Cell({ x: 8, y: 3 }),
 	];
 	grid: RetailGrid;
-	retailFiller: RetailFiller = new RetailFiller();
-	constructor() {
+	retailFiller: RetailFiller;
+	constructor(round: number) {
 		super({});
+		this.retailFiller = new RetailFiller(round);
 		this.grid = new RetailGrid();
 		this.refresh();
 	}

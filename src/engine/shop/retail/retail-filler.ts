@@ -35,6 +35,8 @@ import { PowderMagazineBlueprint } from "../../constructs/totem/blueprint/implem
 import { RedObeliskBlueprint } from "../../constructs/totem/blueprint/implementation/red-obelisk";
 import { EntBlueprint } from "../../units/blueprint/implementation/ent-blueprint";
 import { BrewmasterBlueprint } from "../../units/blueprint/implementation/brewmaster-blueprint";
+import { Rarity, rarityOf } from "../../../shared/traits/engine/rarity";
+import { rarityOdds } from "./rarity-odds";
 
 export type Constructor<C> = { new (...args: any[]): C };
 type AnyBlueprint =
@@ -85,26 +87,47 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 	},
 ];
 
+type Candidate = { blueprint: AnyBlueprint; rarity: Rarity; share: number };
+
+// Each slot rolls a rarity from the round's odds, then an item of that rarity. An item is offered at most once per
+// roll: when a rarity has nothing left to offer, the slot rolls among the rarities that still have items.
 export class RetailFiller {
+	constructor(public round: number) {}
+
 	getFreshItems(cells: Cell[]) {
 		const items: { recruit: ImplementsTrait<typeof TRecruit>; price: number }[] = [];
+		const odds = rarityOdds(this.round);
+		let candidates = this.candidates();
 		for (const cell of cells) {
-			const item = this.generateRandomBluePrint();
+			const rarities = Object.values(Rarity).filter(
+				(rarity) => odds[rarity] > 0 && candidates.some((candidate) => candidate.rarity === rarity),
+			);
+			if (rarities.length === 0) break;
+			const rarity = Random.roll(rarities.map((rarity) => ({ value: rarity, share: odds[rarity] })));
+			const picked = Random.roll(
+				candidates
+					.filter((candidate) => candidate.rarity === rarity)
+					.map((candidate) => ({ value: candidate, share: candidate.share })),
+			);
+			candidates = candidates.filter((candidate) => candidate !== picked);
 			items.push({
-				recruit: item.toRecruit(cell),
-				price: item.price,
+				recruit: picked.blueprint.toRecruit(cell),
+				price: picked.blueprint.price,
 			});
 		}
 		return items;
 	}
 
-	generateRandomBluePrint() {
-		const recruitPool = Random.roll(pool);
-		const outComes = recruitPool.map((blueprint) => {
-			const item = new blueprint({});
-			return { value: item, share: item.probabilityShare };
+	// Every blueprint of the pool, weighted so that the categories keep their share of the offers within a rarity.
+	candidates(): Candidate[] {
+		return pool.flatMap((category) => {
+			const blueprints = category.value.map((blueprint) => new blueprint({}));
+			const categoryShares = blueprints.reduce((sum, blueprint) => sum + blueprint.probabilityShare, 0);
+			return blueprints.map((blueprint) => ({
+				blueprint,
+				rarity: rarityOf(blueprint),
+				share: (category.share * blueprint.probabilityShare) / categoryShares,
+			}));
 		});
-		const bluePrint = Random.roll(outComes);
-		return bluePrint;
 	}
 }
