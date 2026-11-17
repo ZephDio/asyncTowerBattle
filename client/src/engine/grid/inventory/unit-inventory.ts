@@ -1,6 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { TGridDrawable } from "../../../shared/traits/render/grid-renderable";
-import { STANDARD_CELL_SIZE, TGrid } from "../tgrid";
+import { TGrid } from "../tgrid";
 import { Cell, ScreenPosition } from "../../../shared/position";
 import { PercentToReal } from "../../../renderer/implementation/canvas-renderer";
 import { SynergyEffectHud } from "../grid-effects/synergy-effect";
@@ -12,11 +12,12 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
 	hoverEffect: HoverEffect[] = [];
 	synergiesEffects: SynergyEffectHud[] = [];
+	// Smaller cells than the standard size so the six rows fit between the bottom of the screen and the descriptor
 	constructor(
-		screenPosition: ScreenPosition = PercentToReal({ x: 85, y: 25 }),
-		width: number = 4,
-		height: number = 5,
-		cellSize: number = STANDARD_CELL_SIZE,
+		screenPosition: ScreenPosition = PercentToReal({ x: 85, y: 24.5 }),
+		width: number = 5,
+		height: number = 6,
+		cellSize: number = 4.3,
 	) {
 		super({ cellSize, height, width, position: screenPosition });
 	}
