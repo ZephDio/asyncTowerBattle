@@ -6,8 +6,10 @@ import { GridPosition } from "../../../../shared/position";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BattleBrewmaster extends Derive(TBattleUnit, Caster) {
+	override idleSheet = UnitResources.brewmasterSheet;
 	pathFinder: PathFinder;
 
 	constructor(

@@ -1,0 +1,37 @@
+{
+  "frames": [
+    {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 65,
+        "h": 64
+      },
+      "duration": 450
+    },
+    {
+      "frame": {
+        "x": 65,
+        "y": 0,
+        "w": 65,
+        "h": 64
+      },
+      "duration": 450
+    }
+  ],
+  "meta": {
+    "image": "dragon.sheet.png",
+    "size": {
+      "w": 130,
+      "h": 64
+    },
+    "frameTags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 1,
+        "direction": "forward"
+      }
+    ]
+  }
+}

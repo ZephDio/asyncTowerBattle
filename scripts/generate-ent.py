@@ -3,19 +3,24 @@
 
 Run from anywhere: python3 scripts/generate-ent.py
 
-Outputs public/resources/units/ent.png.
+Outputs public/resources/units/ent.png, and public/resources/units/ent.sheet.png with its json (see sprite_sheet.py).
 
 It follows the dragon unit: a 16x16 front-facing sprite upscaled 4x, flat colors with one or two shades per part,
 light from the top left, and a near-black outline drawn around the silhouette. The sprite is hand placed in
 SPRITE below (one character per pixel), the outline is added automatically on the transparent pixels around it.
+
+The sheet's frame 1 is ent.png. Frame 2 breathes out: the crown, the face and the branch arms drop one sprite pixel
+(SQUEEZED_ROW, a plain trunk row under the mouth, is the one squeezed out) while the root legs stay planted.
 """
 
 from pathlib import Path
 
-from voxel_sprite import TRANSPARENT, write_png
+from sprite_sheet import breath_out, outline, to_pixels, write_sheet
+from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "public" / "resources" / "units" / "ent.png"
+SHEET = ROOT / "public" / "resources" / "units" / "ent.sheet.png"
 SCALE = 4
 
 OUTLINE = (29, 29, 28, 255)
@@ -54,22 +59,20 @@ SPRITE = [
     "...bbm....mbb...",
     "................",
 ]
+SQUEEZED_ROW = 11
 
 
 def main() -> None:
-    size = len(SPRITE)
-    assert all(len(row) == size for row in SPRITE), "every row must be as long as the sprite is tall"
-    pixels = [[PALETTE[c] if c != "." else TRANSPARENT for c in row] for row in SPRITE]
-    for y in range(size):
-        for x in range(size):
-            if SPRITE[y][x] != ".":
-                continue
-            neighbors = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
-            if any(0 <= nx < size and 0 <= ny < size and SPRITE[ny][nx] != "." for nx, ny in neighbors):
-                pixels[y][x] = OUTLINE
-    scaled = [[pixel for pixel in row for _ in range(SCALE)] for row in pixels for _ in range(SCALE)]
-    write_png(OUTPUT, scaled)
-    print(f"wrote {OUTPUT.relative_to(ROOT)}")
+    assert all(len(row) == len(SPRITE) for row in SPRITE), "every row must be as long as the sprite is tall"
+    rest = outline(SPRITE, "K")
+    write_png(OUTPUT, to_pixels(rest, PALETTE, scale=SCALE))
+    write_sheet(
+        SHEET,
+        [("idle", [rest, outline(breath_out(SPRITE, SQUEEZED_ROW), "K")], 450)],
+        PALETTE,
+        scale=SCALE,
+    )
+    print(f"wrote {OUTPUT.relative_to(ROOT)}, {SHEET.relative_to(ROOT)} and its json")
 
 
 if __name__ == "__main__":

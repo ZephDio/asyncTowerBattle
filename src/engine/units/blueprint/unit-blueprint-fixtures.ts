@@ -1,7 +1,6 @@
-import { BersekerBlueprint } from "./implementation/berseker-blueprint";
 import { DragonBlueprint } from "./implementation/dragon-blueprint";
 import { ElfBlueprint } from "./implementation/elf-blueprint";
-import { PriestBlueprint } from "./implementation/priest-blueprint";
+import { WhiteStagBlueprint } from "./implementation/white-stag-blueprint";
 
 export class UnitBuilder {
 	buildElf() {
@@ -12,12 +11,8 @@ export class UnitBuilder {
 		return new DragonBlueprint({});
 	}
 
-	buildPriest() {
-		return new PriestBlueprint({});
-	}
-
-	buildBerseker() {
-		return new BersekerBlueprint({});
+	buildWhiteStag() {
+		return new WhiteStagBlueprint({});
 	}
 }
 
@@ -28,10 +23,7 @@ export class UnitFixture {
 	static get dragon() {
 		return new UnitBuilder().buildDragon();
 	}
-	static get priest() {
-		return new UnitBuilder().buildPriest();
-	}
-	static get berseker() {
-		return new UnitBuilder().buildBerseker();
+	static get whiteStag() {
+		return new UnitBuilder().buildWhiteStag();
 	}
 }

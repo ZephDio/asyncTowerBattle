@@ -7,8 +7,10 @@ import { Choupisson } from "../../recruit/implementation/choupisson";
 import { BattleSpine } from "../../../projectile/battle/implementation/battle-spine";
 import { Spine } from "../../../projectile/blueprint/implementation/spine";
 import { TBattleUnit } from "../battle-unit";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BattleChoupisson extends Derive(TBattleUnit) {
+	override idleSheet = UnitResources.choupissonSheet;
 	pathFinder: PathFinder;
 
 	constructor(

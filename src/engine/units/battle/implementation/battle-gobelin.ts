@@ -5,8 +5,10 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
 import { GobelinBlueprint } from "../../blueprint/implementation/gobelin-blueprint";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BattleGobelin extends Derive(TBattleUnit) {
+	override idleSheet = UnitResources.gobelinSheet;
 	pathFinder: PathFinder;
 
 	constructor(

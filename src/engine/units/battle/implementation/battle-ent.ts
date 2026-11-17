@@ -8,8 +8,10 @@ import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { Ent } from "../../recruit/implementation/ent";
 import { AnyBattleConstruct } from "../../../constructs/construct";
 import { Rooted } from "../../../stats/status/rooted";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BattleEnt extends Derive(TBattleUnit, Caster) {
+	override idleSheet = UnitResources.entSheet;
 	pathFinder: PathFinder;
 
 	constructor(

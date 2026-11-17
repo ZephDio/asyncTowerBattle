@@ -11,6 +11,7 @@ export class UnitResources {
 		shape: "ellipse",
 		image: createImage("/resources/units/elf.png"),
 	};
+	static elfSheet = SpriteSheet.fromJson("/resources/units/elf.sheet.png", "/resources/units/elf.sheet.json");
 
 	static choupisson: ShapedResource = {
 		size: {
@@ -20,6 +21,10 @@ export class UnitResources {
 		image: createImage("/resources/units/choupisson.png"),
 		shape: "ellipse",
 	};
+	static choupissonSheet = SpriteSheet.fromJson(
+		"/resources/units/choupisson.sheet.png",
+		"/resources/units/choupisson.sheet.json",
+	);
 
 	static dragon: ShapedResource = {
 		size: {
@@ -29,24 +34,40 @@ export class UnitResources {
 		image: createImage("/resources/units/dragon.png"),
 		shape: "ellipse",
 	};
+	static dragonSheet = SpriteSheet.fromJson("/resources/units/dragon.sheet.png", "/resources/units/dragon.sheet.json");
 
-	static priest: ShapedResource = {
+	static whiteStag: ShapedResource = {
+		size: {
+			width: 3.6,
+			height: 3.6,
+		},
+		image: createImage("/resources/units/white-stag.png"),
+		shape: "ellipse",
+	};
+	static whiteStagOneAntler: ShapedResource = {
+		size: UnitResources.whiteStag.size,
+		image: createImage("/resources/units/white-stag-one-antler.png"),
+		shape: "ellipse",
+	};
+	static whiteStagSheet = SpriteSheet.fromJson(
+		"/resources/units/white-stag.sheet.png",
+		"/resources/units/white-stag.sheet.json",
+	);
+	static whiteStagOneAntlerSheet = SpriteSheet.fromJson(
+		"/resources/units/white-stag-one-antler.sheet.png",
+		"/resources/units/white-stag-one-antler.sheet.json",
+	);
+	// The antler the stag drops, drawn at twice the stag's pixel scale so it reads on the ground: about the size of a
+	// projectile.
+	static whiteStagAntler: ShapedResource = {
 		size: {
 			width: 2.5,
 			height: 2.5,
 		},
-		image: createImage("/resources/units/priest.png"),
+		image: createImage("/resources/units/white-stag-antler.png"),
 		shape: "ellipse",
 	};
 
-	static berseker: ShapedResource = {
-		size: {
-			width: 3,
-			height: 4,
-		},
-		image: createImage("/resources/units/berseker.png"),
-		shape: "ellipse",
-	};
 	static ent: ShapedResource = {
 		size: {
 			width: 3,
@@ -55,6 +76,7 @@ export class UnitResources {
 		image: createImage("/resources/units/ent.png"),
 		shape: "ellipse",
 	};
+	static entSheet = SpriteSheet.fromJson("/resources/units/ent.sheet.png", "/resources/units/ent.sheet.json");
 
 	static gobelin: ShapedResource = {
 		size: {
@@ -64,6 +86,10 @@ export class UnitResources {
 		image: createImage("/resources/units/gobelin.png"),
 		shape: "ellipse",
 	};
+	static gobelinSheet = SpriteSheet.fromJson(
+		"/resources/units/gobelin.sheet.png",
+		"/resources/units/gobelin.sheet.json",
+	);
 
 	static dwarf: ShapedResource = {
 		size: {
@@ -73,11 +99,12 @@ export class UnitResources {
 		image: createImage("/resources/units/dwarf.png"),
 		shape: "rectangle",
 	};
+	static dwarfSheet = SpriteSheet.fromJson("/resources/units/dwarf.sheet.png", "/resources/units/dwarf.sheet.json");
 
 	static fox: ShapedResource = {
 		size: {
 			width: 3,
-			height: 2,
+			height: 2.4375,
 		},
 		image: createImage("/resources/units/fox.png"),
 		shape: "ellipse",
@@ -92,4 +119,8 @@ export class UnitResources {
 		image: createImage("/resources/units/brewmaster.png"),
 		shape: "ellipse",
 	};
+	static brewmasterSheet = SpriteSheet.fromJson(
+		"/resources/units/brewmaster.sheet.png",
+		"/resources/units/brewmaster.sheet.json",
+	);
 }

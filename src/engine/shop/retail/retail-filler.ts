@@ -12,13 +12,12 @@ import { GreenTowerBlueprint } from "../../constructs/tower/blueprint/implementa
 import { WitchHouseBlueprint } from "../../constructs/tower/blueprint/implementation/witch-house-blueprint";
 import { AnyTowerBlueprint } from "../../constructs/tower/blueprint/tower-blueprint";
 import { DragonBlueprint } from "../../units/blueprint/implementation/dragon-blueprint";
-import { PriestBlueprint } from "../../units/blueprint/implementation/priest-blueprint";
+import { WhiteStagBlueprint } from "../../units/blueprint/implementation/white-stag-blueprint";
 import { AnyUnitBlueprint } from "../../units/blueprint/units-blueprint";
 import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { ZappingTowerBlueprint } from "../../constructs/tower/blueprint/implementation/zapping-tower-blueprint";
 import { FrostTowerBlueprint } from "../../constructs/tower/blueprint/implementation/frost-tower-blueprint";
 import { DrillTowerBlueprint } from "../../constructs/tower/blueprint/implementation/drill-tower-blueprint";
-import { BersekerBlueprint } from "../../units/blueprint/implementation/berseker-blueprint";
 import { ChoupissonBlueprint } from "../../units/blueprint/implementation/choupisson-blueprint";
 import { VeterantBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/veteran-barrack-blueprint";
 import { AnyTotemBlueprint } from "../../constructs/totem/blueprint/totem-blueprint";
@@ -81,15 +80,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 		share: 35,
 	},
 	{
-		value: [
-			DragonBlueprint,
-			PriestBlueprint,
-			BersekerBlueprint,
-			ChoupissonBlueprint,
-			FoxBlueprint,
-			EntBlueprint,
-			BrewmasterBlueprint,
-		],
+		value: [DragonBlueprint, WhiteStagBlueprint, ChoupissonBlueprint, FoxBlueprint, EntBlueprint, BrewmasterBlueprint],
 		share: 50,
 	},
 ];

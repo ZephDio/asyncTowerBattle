@@ -3,21 +3,21 @@ import { Cell, GridPosition } from "../../../../shared/position";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { Unit } from "../unit";
-import { PriestBlueprint } from "../../blueprint/implementation/priest-blueprint";
-import { BattlePriest } from "../../battle/implementation/battle-priest";
+import { WhiteStagBlueprint } from "../../blueprint/implementation/white-stag-blueprint";
+import { BattleWhiteStag } from "../../battle/implementation/battle-white-stag";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
-export class Priest extends Derive(Unit, RecruitCaster) {
+export class WhiteStag extends Derive(Unit, RecruitCaster) {
 	constructor(
 		public cell: Cell,
-		priest: PriestBlueprint = new PriestBlueprint({}),
+		whiteStag: WhiteStagBlueprint = new WhiteStagBlueprint({}),
 	) {
 		super({
-			imageDrawable: priest,
-			hitboxHolder: priest,
-			descriptor: priest,
-			statsHolder: priest,
-			tagHolder: priest,
-			rarityHolder: priest,
+			imageDrawable: whiteStag,
+			hitboxHolder: whiteStag,
+			descriptor: whiteStag,
+			statsHolder: whiteStag,
+			tagHolder: whiteStag,
+			rarityHolder: whiteStag,
 		});
 	}
 
@@ -26,6 +26,6 @@ export class Priest extends Derive(Unit, RecruitCaster) {
 	}
 
 	toBattle(position: GridPosition, path: BattlePath, hooks: BattleArmyHooks) {
-		return new BattlePriest(this, position, path, hooks);
+		return new BattleWhiteStag(this, position, path, hooks);
 	}
 }

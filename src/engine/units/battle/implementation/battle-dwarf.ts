@@ -6,8 +6,10 @@ import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
 import { DwarfBlueprint } from "../../blueprint/implementation/dwarf-blueprint";
 import { StoneShield } from "../../../stats/status/stone-shield";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BattleDwarf extends Derive(TBattleUnit) {
+	override idleSheet = UnitResources.dwarfSheet;
 	pathFinder: PathFinder;
 
 	constructor(

@@ -5,8 +5,10 @@ import { BattlePath } from "../../../path/battle/battle-path";
 import { Dragon } from "../../recruit/implementation/dragon";
 import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BattleDragon extends Derive(TBattleUnit) {
+	override idleSheet = UnitResources.dragonSheet;
 	pathFinder: PathFinder;
 
 	constructor(

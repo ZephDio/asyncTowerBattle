@@ -7,8 +7,10 @@ import { TBattleUnit } from "../battle-unit";
 import { ElfBlueprint } from "../../blueprint/implementation/elf-blueprint";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
 import { BattleArrow } from "../../../projectile/battle/implementation/battle-arrow";
+import { UnitResources } from "../../../../renderer/resources/unit.resources";
 
 export class BattleElf extends Derive(TBattleUnit, Caster) {
+	override idleSheet = UnitResources.elfSheet;
 	pathFinder: PathFinder;
 	constructor(
 		public recruit: ElfBlueprint,

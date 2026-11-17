@@ -1,0 +1,37 @@
+{
+  "frames": [
+    {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 86,
+        "h": 91
+      },
+      "duration": 450
+    },
+    {
+      "frame": {
+        "x": 86,
+        "y": 0,
+        "w": 86,
+        "h": 91
+      },
+      "duration": 450
+    }
+  ],
+  "meta": {
+    "image": "gobelin.sheet.png",
+    "size": {
+      "w": 172,
+      "h": 91
+    },
+    "frameTags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 1,
+        "direction": "forward"
+      }
+    ]
+  }
+}

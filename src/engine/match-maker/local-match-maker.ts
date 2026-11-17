@@ -67,7 +67,7 @@ const EnemyArmyFixtures = {
 		];
 		const barracks = [
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.berseker)
+				.setUnit(UnitRecruitFixture.choupisson)
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.buildWave(),
 			new BarrackRecruitBuilder().withCell(new Cell({ x: 3, y: 1 })).buildVeterant(),
@@ -97,12 +97,12 @@ const EnemyArmyFixtures = {
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.buildWave(),
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.berseker)
+				.setUnit(UnitRecruitFixture.choupisson)
 				.withCell(new Cell({ x: 3, y: 1 }))
 				.buildVeterant(),
 
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.priest)
+				.setUnit(UnitRecruitFixture.whiteStag)
 				.withCell(new Cell({ x: 6, y: 1 }))
 				.buildBasic(),
 		];
@@ -135,12 +135,12 @@ const EnemyArmyFixtures = {
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.buildWave(),
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.berseker)
+				.setUnit(UnitRecruitFixture.choupisson)
 				.withCell(new Cell({ x: 3, y: 1 }))
 				.buildVeterant(),
 
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.priest)
+				.setUnit(UnitRecruitFixture.whiteStag)
 				.withCell(new Cell({ x: 6, y: 1 }))
 				.buildBasic(),
 		];
@@ -174,12 +174,12 @@ const EnemyArmyFixtures = {
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.buildWave(),
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.berseker)
+				.setUnit(UnitRecruitFixture.choupisson)
 				.withCell(new Cell({ x: 3, y: 1 }))
 				.buildVeterant(),
 
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.priest)
+				.setUnit(UnitRecruitFixture.whiteStag)
 				.withCell(new Cell({ x: 6, y: 1 }))
 				.buildBasic(),
 		];
@@ -216,12 +216,12 @@ const EnemyArmyFixtures = {
 				.withCell(new Cell({ x: 1, y: 1 }))
 				.buildWave(),
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.berseker)
+				.setUnit(UnitRecruitFixture.choupisson)
 				.withCell(new Cell({ x: 3, y: 1 }))
 				.buildVeterant(),
 
 			new BarrackRecruitBuilder()
-				.setUnit(UnitRecruitFixture.priest)
+				.setUnit(UnitRecruitFixture.whiteStag)
 				.withCell(new Cell({ x: 6, y: 1 }))
 				.buildBasic(),
 			new BarrackRecruitBuilder()

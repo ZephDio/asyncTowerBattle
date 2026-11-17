@@ -21,7 +21,7 @@ export class ArmyFixture {
 		const castle = CastleFactory.defaultDwarf;
 		const towers: AnyTower[] = [];
 		const tiles = PathFactory.default;
-		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.choupisson, UnitRecruitFixture.priest];
+		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.choupisson, UnitRecruitFixture.whiteStag];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
 		[castle, ...towers, ...tiles].map((e) => grid.setElement(e));
@@ -39,7 +39,7 @@ export class ArmyFixture {
 		const totems = [new TotemBuilder().celled(new Cell({ x: 3, y: 2 })).buildOrange()];
 		const tiles = PathFactory.default;
 		const barracks = [BarrackRecruitFixtures.veterantWithDragon()];
-		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.choupisson, UnitRecruitFixture.priest];
+		const unitInInventory = [UnitRecruitFixture.dragon, UnitRecruitFixture.choupisson, UnitRecruitFixture.whiteStag];
 		const unitInventory = new Inventory();
 		unitInInventory.map((e) => unitInventory.add(e));
 		[castle, ...towers, ...tiles, ...totems, ...barracks].map((e) => grid.setElement(e));
