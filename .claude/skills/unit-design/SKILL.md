@@ -137,6 +137,14 @@ For fast drafts, keep the grid in a text file in the scratchpad and render it wi
 final grid into the generator. When the user shares a reference image, take its treatment (shading bands,
 contrasting underside, joints, proportions), not its exact pixels, and keep this palette and outline.
 
+Then check the unit in a real battle with the game-testing skill:
+1. `give` a barrack on the grid and the unit (it goes to the inventory). `drag` the unit from `inventory` onto the
+   barrack's cell on `army`, then `start_battle`.
+2. `step` until it is on the path and take `screenshot battle`, to see its size next to the elves and dwarves.
+3. Take `state` for its live hp and statuses, and `run` for the outcome.
+
+For stat tuning, compare `run` results with the same seed and board before and after the change.
+
 ### Existing art the user likes
 
 When an old sprite is small or blurry but the user likes its drawing (the fox), **don't redraw it**: transcribe

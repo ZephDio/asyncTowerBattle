@@ -16,6 +16,10 @@ export class Battle {
 	isOver = false;
 
 	animationOver = false;
+	// Set once the intro animations end and the tick loop runs.
+	started = false;
+	// Stops the tick loop so the debug bridge can step the battle itself.
+	paused = false;
 	gameSpeed = secondsToFrame(1);
 	battleClock: BattleClockHud;
 	speedCursor: SliderBattleSpeed;
@@ -77,9 +81,10 @@ export class Battle {
 
 	start() {
 		this.battlefield.triggerBattleStartEffects();
+		this.started = true;
 		const loop = () => {
 			setTimeout(() => {
-				if (this.gameSpeed === 0) {
+				if (this.gameSpeed === 0 || this.paused) {
 					loop();
 					return;
 				}

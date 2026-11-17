@@ -255,3 +255,6 @@ Pitfalls met so far:
 
 Then: run the generator, run `preview.py` with a reference sprite, Read the preview, adjust constants, repeat.
 Finally update the `*.resources.ts` entry, `git rm` the replaced image, and run `pnpm typecheck`.
+Then check the sprite in the real game with the game-testing skill. For a shop piece, `give` it and take
+`screenshot army`. For a battle look, `start_battle`, `step` and take `screenshot battle`. Scale and draw order
+only show up there.

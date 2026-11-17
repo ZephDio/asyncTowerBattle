@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "atb-game": {
+      "command": "nix-shell",
+      "args": ["-I", "nixpkgs=flake:nixpkgs", ".claude/playwright.nix", "--run", "exec python .claude/mcp/server.py"]
+    }
+  }
+}

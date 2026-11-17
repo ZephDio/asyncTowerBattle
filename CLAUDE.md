@@ -9,6 +9,16 @@ The package manager is pnpm. A devenv/direnv shell provides Node 22 and pnpm; `d
 - `pnpm start`: start the Vite dev server. It serves `index.html`, which loads `src/index.ts` and draws to a `<canvas>`.
 - `pnpm typecheck`: run `tsc --noEmit`. The VS Code task runs it with `--watch`. The tsconfig is strict, including `noUnusedLocals`, `noUnusedParameters`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` and `noImplicitOverride`.
 - `pnpm format`: run the Biome formatter over `src`. It uses tabs, a 120-column line width and double quotes.
+- Running the game: the `atb-game` MCP server (`.mcp.json`, `.claude/mcp/server.py`) keeps the game open in headless Chromium from `.claude/playwright.nix` and starts Vite if nothing answers on port 5173. Its tools:
+  - `start` begins a seeded game.
+  - `state`, `ascii` and `inspect` read the game as JSON or text.
+  - `screenshot` captures the page, optionally cropped to a grid.
+  - `drag`, `click_cell` and `click_hud` send real mouse events.
+  - `give` and `set_gold` set the game up directly.
+  - `start_battle` (paused), `step` and `run` control battle ticks.
+  - `eval` runs JavaScript in the page.
+
+  The game-testing skill covers using them, including the `.claude/mcp/call.py` fallback for sessions where the tools aren't loaded. The tools call the debug bridge `src/debug/bridge.ts`, which the game installs as `window.__atb` when opened with `?debug`. Add new reads or actions there. `python .claude/mcp/smoke.py OUT_DIR` in that Nix shell plays a round through the tools. For one-off screenshots without the server, use `nix-shell .claude/playwright.nix --run "python .claude/scripts/screenshot.py --help"`.
 - `pnpm exec jest` runs the tests and `pnpm exec jest src/shared/hitboxes.spec.ts` runs a single file. There is no test script in `package.json`. Jest uses `@swc/jest`, roots at `src` and matches `*.spec.ts`. There are very few tests.
 
 ## Architecture

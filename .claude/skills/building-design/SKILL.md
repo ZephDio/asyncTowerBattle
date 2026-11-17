@@ -71,6 +71,9 @@ override patternEffect = new PatternEffect([new Cell({ x: -2, y: 0 })], this.pat
 To show an existing piece in this notation, read its recruit's `gridShape` and its blueprint's `patternEffect`.
 Take the bounding box of all the cells, put the highest y on the top row, and fill `o`, `s` and `x`.
 Always draw the drawing back from the code after an implementation and show it to the user to confirm.
+Also check it in the game with the game-testing skill:
+1. `give` the piece and read `ascii army`: the occupied cells must match the `o` cells.
+2. `hover_cell` on it and take `screenshot army` to see the image over its footprint and the star cells.
 
 ## Implementing a drawn building
 
