@@ -16,23 +16,23 @@ Adding a unit `<unit>` (kebab case file names, PascalCase classes):
 
 | Layer | File | Notes |
 | --- | --- | --- |
-| Blueprint | `src/engine/units/blueprint/implementation/<unit>-blueprint.ts` | rarity, shop price and share, hitbox, image, base stats, tags, description, `toRecruit` |
-| Blueprint union | `src/engine/units/blueprint/units-blueprint.ts` | add to `AnyUnitBlueprint` |
-| Blueprint fixtures | `src/engine/units/blueprint/unit-blueprint-fixtures.ts` | `build<Unit>()` and `static get <unit>()` |
-| Recruit | `src/engine/units/recruit/implementation/<unit>.ts` | `Derive(Unit)`, plus `RecruitCaster` if it casts; `toBattle` |
-| Recruit fixtures | `src/engine/units/recruit/unit-fixtures.ts` | `UnitRecruitFixture.<unit>`, used by armies and barracks |
-| Battle | `src/engine/units/battle/implementation/battle-<unit>.ts` | `Derive(TBattleUnit)`, plus `Caster` if it casts |
-| Image | `public/resources/units/<unit>.png`, entry in `src/renderer/resources/unit.resources.ts` | `size` in grid units, `shape: "ellipse"` |
-| Generator | `scripts/generate-<unit>.py` | writes the PNG (and the idle sheet, if any) |
-| Shop | `src/engine/shop/retail/retail-filler.ts` | add the blueprint to the units pool to sell it |
-| Enemies | `src/engine/match-maker/local-match-maker.ts`, `src/engine/constructs/barrack/recruit/barrack-fixtures.ts` | only if the opponent armies should field it |
+| Blueprint | `client/src/engine/units/blueprint/implementation/<unit>-blueprint.ts` | rarity, shop price and share, hitbox, image, base stats, tags, description, `toRecruit` |
+| Blueprint union | `client/src/engine/units/blueprint/units-blueprint.ts` | add to `AnyUnitBlueprint` |
+| Blueprint fixtures | `client/src/engine/units/blueprint/unit-blueprint-fixtures.ts` | `build<Unit>()` and `static get <unit>()` |
+| Recruit | `client/src/engine/units/recruit/implementation/<unit>.ts` | `Derive(Unit)`, plus `RecruitCaster` if it casts; `toBattle` |
+| Recruit fixtures | `client/src/engine/units/recruit/unit-fixtures.ts` | `UnitRecruitFixture.<unit>`, used by armies and barracks |
+| Battle | `client/src/engine/units/battle/implementation/battle-<unit>.ts` | `Derive(TBattleUnit)`, plus `Caster` if it casts |
+| Image | `client/public/resources/units/<unit>.png`, entry in `client/src/renderer/resources/unit.resources.ts` | `size` in grid units, `shape: "ellipse"` |
+| Generator | `client/scripts/generate-<unit>.py` | writes the PNG (and the idle sheet, if any) |
+| Shop | `client/src/engine/shop/retail/retail-filler.ts` | add the blueprint to the units pool to sell it |
+| Enemies | `client/src/engine/match-maker/local-match-maker.ts`, `client/src/engine/constructs/barrack/recruit/barrack-fixtures.ts` | only if the opponent armies should field it |
 
 To **replace** a unit (priest → white stag), `git mv` the three layer files, then rename every reference with a
 grep across `src` (classes, `build*`, fixture getters, `*With<Unit>` barrack helpers, recruit constructor params).
 Delete the old PNG, sheet and generator, and drop its rows from `docs/unit-idle-animation.md`. Finish with
 `grep -rn <old> src scripts docs`: it must find nothing.
 
-Then `pnpm exec biome format --write src`, `pnpm typecheck`, `pnpm exec jest`.
+Then `pnpm format`, `pnpm typecheck`, `pnpm test`.
 
 ## Stats
 
@@ -59,7 +59,7 @@ Reading the table (re-measure if it has drifted):
 - **Summon time** grows with power: about 1-2s for light units, 3.5-4.5s for the tanks.
 - Every unit uses `attackSpeed: secondsToFrame(0.3)` and `range: NaN` (melee). `foodConsumptionOnCast: NaN`.
 
-Time helpers (`src/shared/seconds.ts`, 32 ticks per second): `secondsToFrame(s)` for summon and attack times,
+Time helpers (`client/src/shared/seconds.ts`, 32 ticks per second): `secondsToFrame(s)` for summon and attack times,
 `castSpeedFromSeconds(s)` for `castSpeed`, the cast happening every `s` seconds. `castSpeed: NaN` means no cast.
 
 The shop: `TShopBlueprint(price, share)`. Units cost 15, 20 for the rare ones; `share` weighs how often it is
@@ -92,22 +92,22 @@ only through `this.hooks` (`addAreaEffect`, `addProjectile`, ally/enemy searches
 - a different look for a phase: set `this.idleSheet = UnitResources.<variant>Sheet` (or
   `SpriteSheet.still(<other image>)` for a unit without idle animation), the variant being a second still image and
   sheet in `unit.resources.ts`. Cut the variant from the same grid in the generator, before `breath_out`, so the
-  images and sheets stay in sync (`scripts/generate-white-stag.py`).
-- an object left on the ground: a new class in `src/engine/area-effect/implementation/`, added to the
+  images and sheets stay in sync (`client/scripts/generate-white-stag.py`).
+- an object left on the ground: a new class in `client/src/engine/area-effect/implementation/`, added to the
   `AreaEffect` union, drawn at `DrawPriority.CarpetStyleGridElement` so units walk over it.
 
 The description is three short lines (about 20 characters each): `new UnitDescription(name, [lines], this)`.
 
 ## Sprite
 
-The reference is `public/resources/units/dragon.png`; the ent, choupisson, brewmaster and white stag follow it.
+The reference is `client/public/resources/units/dragon.png`; the ent, choupisson, brewmaster and white stag follow it.
 
 - **A character grid, upscaled 4x** with nearest neighbor: one character per sprite pixel, `.` transparent. 16x16
   is the norm (64x64 PNG). A big creature may take more (the white stag is 23x23 for its antlers and long legs),
   never smaller pixels. A 16x16 stag was judged "poor": don't squeeze a detailed creature into the minimum grid.
 - **Outline**: leave the first and last rows and columns empty and let `outline(SPRITE, "#")` from
-  `scripts/sprite_sheet.py` draw the near-black `(29, 29, 28)` outline around the silhouette. Write the image with
-  `to_pixels(..., scale=4)` and `voxel_sprite.write_png`. Template: `scripts/generate-brewmaster.py`.
+  `client/scripts/sprite_sheet.py` draw the near-black `(29, 29, 28)` outline around the silhouette. Write the image with
+  `to_pixels(..., scale=4)` and `voxel_sprite.write_png`. Template: `client/scripts/generate-brewmaster.py`.
 - **Colors**: flat, one or two shades per part, light from the top left (lighter left and top, darker right and
   bottom). Reuse existing colors: the dragon's amber `(241, 147, 25)` for gold, the towers' mint
   `(143, 226, 185)` for magic glows, the ent's bark browns, the skin `(255, 205, 166)`.
@@ -150,7 +150,7 @@ For stat tuning, compare `run` results with the same seed and board before and a
 When an old sprite is small or blurry but the user likes its drawing (the fox), **don't redraw it**: transcribe
 the PNG pixel for pixel into a grid (`read_png`, one letter per color) and write it at 4x. My redraws of the fox
 and the priest were rejected as much worse than the originals; the 1:1 upscale was approved. Redraw only when the
-user asks for a new design. Old images stay in git: `git show HEAD:public/resources/units/<unit>.png`.
+user asks for a new design. Old images stay in git: `git show HEAD:client/public/resources/units/<unit>.png`.
 
 ### Idle animation
 

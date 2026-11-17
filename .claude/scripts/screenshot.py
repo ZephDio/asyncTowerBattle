@@ -37,7 +37,7 @@ def server_up(url: str) -> bool:
 def start_server(url: str) -> subprocess.Popen:
 	proc = subprocess.Popen(
 		["pnpm", "exec", "vite", "--strictPort", "--port", url.split(":")[-1].split("/")[0]],
-		cwd=ROOT,
+		cwd=ROOT / "client",
 		stdout=subprocess.DEVNULL,
 		stderr=subprocess.DEVNULL,
 		start_new_session=True,

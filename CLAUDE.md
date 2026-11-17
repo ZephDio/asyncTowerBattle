@@ -2,14 +2,24 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Layout
+
+This is a pnpm workspace with two packages that share their tooling config at the root:
+- `client/`: the browser game (Vite, plain TypeScript on a canvas). The local `@ddd-ts/traits` package is `client/traits`.
+- `server/`: asyncTowerBattleServer, a NestJS app on port 6868 that trades boards for opponent boards. See `server/README.md`.
+
+Shared at the root: `tsconfig.base.json` (both `tsconfig.json` files extend it), `biome.json`, `devenv.nix`, `pnpm-workspace.yaml`, the lockfile, and the TypeScript, Jest and SWC dev dependencies in `package.json`. Package-specific settings stay in each package: module system (the client is bundled by Vite, the server is Node ESM), `jest.config.json`, `nest-cli.json`.
+
 ## Commands
 
-The package manager is pnpm. A devenv/direnv shell provides Node 22 and pnpm; `devenv up` runs the Vite server as a process.
+The package manager is pnpm. A devenv/direnv shell provides Node 22 and pnpm; `devenv up` runs both the Vite client and the server as processes. Run commands from the root unless noted.
 
-- `pnpm start`: start the Vite dev server. It serves `index.html`, which loads `src/index.ts` and draws to a `<canvas>`.
-- `pnpm typecheck`: run `tsc --noEmit`. The VS Code task runs it with `--watch`. The tsconfig is strict, including `noUnusedLocals`, `noUnusedParameters`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` and `noImplicitOverride`.
-- `pnpm format`: run the Biome formatter over `src`. It uses tabs, a 120-column line width and double quotes.
-- Running the game: the `atb-game` MCP server (`.mcp.json`, `.claude/mcp/server.py`) keeps the game open in headless Chromium from `.claude/playwright.nix` and starts Vite if nothing answers on port 5173. Its tools:
+- `pnpm start`: start the Vite client and the server together. `pnpm start:client` and `pnpm start:server` start one. The client serves `client/index.html`, which loads `client/src/index.ts` and draws to a `<canvas>`.
+- `pnpm typecheck`: run `tsc --noEmit` in both packages. The VS Code task runs the client's with `--watch`. The shared tsconfig is strict, including `noUnusedLocals`, `noUnusedParameters`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` and `noImplicitOverride`.
+- `pnpm format`: run the Biome formatter over `client/src` and `server/src`. It uses tabs, a 120-column line width and double quotes.
+- `pnpm test` runs both packages' tests. For a single file, run Jest from the package: `cd client && pnpm exec jest src/shared/hitboxes.spec.ts`. Jest uses `@swc/jest`, roots at each package's `src` and matches `*.spec.ts`. There are very few client tests.
+- `pnpm build` builds the server into `server/dist`.
+- Running the game: the `atb-game` MCP server (`.mcp.json`, `.claude/mcp/server.py`) keeps the game open in headless Chromium from `.claude/playwright.nix` and starts Vite in `client/` if nothing answers on port 5173. Its tools:
   - `start` begins a seeded game.
   - `state`, `ascii` and `inspect` read the game as JSON or text.
   - `screenshot` captures the page, optionally cropped to a grid.
@@ -18,17 +28,16 @@ The package manager is pnpm. A devenv/direnv shell provides Node 22 and pnpm; `d
   - `start_battle` (paused), `step` and `run` control battle ticks.
   - `eval` runs JavaScript in the page.
 
-  The game-testing skill covers using them, including the `.claude/mcp/call.py` fallback for sessions where the tools aren't loaded. The tools call the debug bridge `src/debug/bridge.ts`, which the game installs as `window.__atb` when opened with `?debug`. Add new reads or actions there. `python .claude/mcp/smoke.py OUT_DIR` in that Nix shell plays a round through the tools. For one-off screenshots without the server, use `nix-shell .claude/playwright.nix --run "python .claude/scripts/screenshot.py --help"`.
-- `pnpm exec jest` runs the tests and `pnpm exec jest src/shared/hitboxes.spec.ts` runs a single file. There is no test script in `package.json`. Jest uses `@swc/jest`, roots at `src` and matches `*.spec.ts`. There are very few tests.
+  The game-testing skill covers using them, including the `.claude/mcp/call.py` fallback for sessions where the tools aren't loaded. The tools call the debug bridge `client/src/debug/bridge.ts`, which the game installs as `window.__atb` when opened with `?debug`. Add new reads or actions there. `python .claude/mcp/smoke.py OUT_DIR` in that Nix shell plays a round through the tools. For one-off screenshots without the server, use `nix-shell .claude/playwright.nix --run "python .claude/scripts/screenshot.py --help"`.
 
-## Architecture
+## Client architecture
 
-This is an async auto-battler played in the browser. The player builds an army on a grid during a shop phase. The army then fights an AI-supplied opponent army in an automatic battle. The code has no framework: plain TypeScript classes render to a 2D canvas.
+Paths below are relative to `client/`. This is an async auto-battler played in the browser. The player builds an army on a grid during a shop phase. The army then fights an AI-supplied opponent army in an automatic battle. The code has no framework: plain TypeScript classes render to a 2D canvas.
 
 ### Top-level loop
 - `src/index.ts` wires up `GameWrapper`, `CanvasRenderer`, `InputToIntent` and `MouseEventHandler`.
 - `GameWrapper` (`src/engine/wrap.ts`) switches between `MainMenu` and `Game`.
-- `Game` (`src/engine/game.ts`) runs the phase cycle `ShopPhase` → `Battle` → `BattleSummary` → shop again. Only one phase field is non-null at a time. The player has 5 lives and loses one per defeat. Opponents come from `RemoteMatchMaker`, which POSTs the player's serialized board and win/loss record to asyncTowerBattleServer and gets an opponent board back. When the server is unreachable it falls back to `LocalMatchMaker`, which keeps hard-coded enemy armies per round in `src/engine/match-maker/`.
+- `Game` (`src/engine/game.ts`) runs the phase cycle `ShopPhase` → `Battle` → `BattleSummary` → shop again. Only one phase field is non-null at a time. The player has 5 lives and loses one per defeat. Opponents come from `RemoteMatchMaker`, which POSTs the player's serialized board and win/loss record to the server (`server/`) and gets an opponent board back. When the server is unreachable it falls back to `LocalMatchMaker`, which keeps hard-coded enemy armies per round in `src/engine/match-maker/`.
 - `Battle` ticks the `Battlefield` with `setTimeout` at 32 ticks per second. Battle randomness must go through `BattleRandomSeed` so battles stay deterministic. `src/shared/seconds.ts` converts between seconds, frames and cast speed.
 - Rendering is pull-based. `CanvasRenderer` calls `gameWrap.getRenderState()` every frame. The active phase returns a `RenderableState`, which is a list of grids with their drawables plus free renderables. Drawables are sorted by `drawPriority` and then by y position.
 - Game coordinates are y-up: in `Cell` and `GridPosition`, y + 1 is the cell above on screen (`Cell.up()`), so "below" means negative y in grid shapes, pattern cells and hitbox offsets. The game keeps its own position frame and `TDrawable.getCanvasPosition` (`src/shared/traits/render/drawable.ts`) converts it to y-down canvas coordinates only when drawing.

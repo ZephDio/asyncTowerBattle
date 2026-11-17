@@ -1,6 +1,6 @@
 # asyncTowerBattleServer
 
-NestJS server for asyncTowerBattle.
+NestJS server for asyncTowerBattle. It is the `server` package of the monorepo; shared tooling config lives at the root.
 
 - `pnpm start`: run the server on port 6868 (override with `PORT`), restarting on file changes
 - `pnpm build` then `pnpm start:prod`: build and run the compiled server

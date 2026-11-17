@@ -9,7 +9,7 @@ mirrored together through the building's orientation.
 
 ## How orientation works today
 
-- `Orientable` (`src/shared/traits/engine/core/orientable.ts`) stores an angle. Its default is `3π/2` ("down", which
+- `Orientable` (`client/src/shared/traits/engine/core/orientable.ts`) stores an angle. Its default is `3π/2` ("down", which
   shows the front view). `GridElement` requires it, so every recruit, battle construct and castle carries one.
 - Right-click while holding calls `TTokenDrag.rotate()` (`token-drag.ts:57`), which turns the held token by −π/2. On
   release, `moveRecruit(hooks, position, orientation, grid)` copies that angle onto the recruit.
@@ -76,14 +76,14 @@ Each step should end with `pnpm typecheck` and `pnpm exec jest` green, and be on
 
 ### 1. Remove the rotate input
 
-- `src/control/translators/shop-input-translator.ts:181`: delete the "holding → rotate" branch of
+- `client/src/control/translators/shop-input-translator.ts:181`: delete the "holding → rotate" branch of
   `handleMouseRightClick`. Right-click while holding does nothing; right-click on a placed path tile still cycles it.
-- `src/engine/shop/holder/token-drag/token-drag.ts`: delete `rotate()`.
+- `client/src/engine/shop/holder/token-drag/token-drag.ts`: delete `rotate()`.
 - From here every piece keeps the default orientation, so the game already plays with fixed shapes.
 
 ### 2. Introduce `BoardOrientation` on grid elements
 
-- New `src/shared/traits/engine/core/board-orientation.ts`: the `BoardOrientation` type and a `TBoardOriented` trait
+- New `client/src/shared/traits/engine/core/board-orientation.ts`: the `BoardOrientation` type and a `TBoardOriented` trait
   (`orientation: BoardOrientation = "normal"`, plus `get mirrored()`). It replaces `Orientable` in `GridElement`.
 - `GridShape` (`grid-element.ts`): `getVectorialCells(orientation)`, `getOccupiedCellsFrom(cell, orientation)`,
   `getCenterPosition(cell, orientation)` take a `BoardOrientation` and negate the cells when mirrored.
@@ -126,7 +126,7 @@ Each step should end with `pnpm typecheck` and `pnpm exec jest` green, and be on
   `isEnemy` parameter and the per-side wrappers in `getAlliedHooks/getEnemyHooks` if nothing else needs them.
 - Battle positions: `battle-totem.ts:17`, `brewery.ts`, `obelisk.ts`, `witch-house.ts` pass the orientation to
   `getCenterPosition`.
-- Add `src/shared/traits/engine/core/grid-shape.spec.ts`: a mirrored 2-cell footprint occupies the flipped cells, and
+- Add `client/src/shared/traits/engine/core/grid-shape.spec.ts`: a mirrored 2-cell footprint occupies the flipped cells, and
   a mirrored pattern with a top-right cell targets the bottom-left neighbour, both through `BattleGrid`.
 
 ### 5. Piece composition
@@ -163,13 +163,13 @@ Each step should end with `pnpm typecheck` and `pnpm exec jest` green, and be on
 ### 8. Assets
 
 - For every piece with four views, copy `front-view.png` to `<piece>.png` next to its folder, e.g.
-  `public/resources/towers/blue.png`, `public/resources/house/red.png`, `public/resources/totem/anvil.png`. Keep the
+  `client/public/resources/towers/blue.png`, `client/public/resources/house/red.png`, `client/public/resources/totem/anvil.png`. Keep the
   folders and the other views.
 - `mine.png` and `obelisk.png` stay as they are.
 
 ### 9. Opponent armies
 
-- `src/engine/match-maker/local-match-maker.ts`: the cells are rewritten to keep today's gameplay, so only the
+- `client/src/engine/match-maker/local-match-maker.ts`: the cells are rewritten to keep today's gameplay, so only the
   obelisk can change. Check that any hard-coded obelisk still fits the grid now that it is vertical, and that the
   round 6 witch house is unchanged.
 
@@ -198,4 +198,4 @@ Each step should end with `pnpm typecheck` and `pnpm exec jest` green, and be on
 6. Enemy art is rotated by π with its footprint, which also works for an L-shaped monument.
 
 7. The vertical obelisk checks both sides and above, as written.
-8. The old `public/resources/totem/brewery.png` was removed, so `brewery.png` is free for the front view.
+8. The old `client/public/resources/totem/brewery.png` was removed, so `brewery.png` is free for the front view.

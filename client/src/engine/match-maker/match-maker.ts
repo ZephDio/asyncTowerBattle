@@ -2,7 +2,7 @@ import { Army } from "../army/army";
 
 export type Opponent = { army: Army; randomSeed: number };
 
-// How the player did so far in the game. Keep in sync with asyncTowerBattleServer's src/opponents/domain/player-board.ts.
+// How the player did so far in the game. Keep in sync with server/src/opponents/domain/player-board.ts.
 export type GamePerformance = { wins: number; losses: number };
 
 export abstract class MatchMaker {

@@ -1,6 +1,6 @@
 """MCP server that runs the game in one long-lived headless Chromium page.
 
-It talks to the debug bridge the game installs as `window.__atb` when opened with `?debug` (src/debug/bridge.ts).
+It talks to the debug bridge the game installs as `window.__atb` when opened with `?debug` (client/src/debug/bridge.ts).
 Reading goes through the bridge; clicks and drags are real mouse events at page pixels the bridge computes, so they
 go through MouseEventHandler and the input translators like a player's would.
 
@@ -72,7 +72,7 @@ class Session:
         if not server_up():
             self.vite = subprocess.Popen(
                 ["pnpm", "exec", "vite", "--strictPort", "--port", str(PORT)],
-                cwd=ROOT,
+                cwd=ROOT / "client",
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 start_new_session=True,

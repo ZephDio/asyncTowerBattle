@@ -15,10 +15,11 @@
   # Biome from nixpkgs: the npm package ships a generic-linux binary that NixOS can't run
   packages = [ pkgs.biome ];
 
-  processes.vite.exec = "pnpm start";
+  processes.vite.exec = "pnpm start:client";
+  processes.server.exec = "pnpm start:server";
 
   enterShell = ''
     echo "node $(node --version) / pnpm $(pnpm --version)"
-    echo "Run 'pnpm start' (or 'devenv up') to launch the dev server"
+    echo "Run 'devenv up' to launch the Vite client (port 5173) and the server (port 6868)"
   '';
 }

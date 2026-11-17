@@ -9,7 +9,7 @@ const DEFAULT_SERVER_URL = "http://localhost:6868";
 // BattleRandomSeed works modulo 2**31.
 const RANDOM_SEED_RANGE = 0x80000000;
 
-// Trades the player's board with the opponent server (asyncTowerBattleServer) for a board of the round: the server
+// Trades the player's board with the opponent server (server/) for a board of the round: the server
 // keeps the player's board for the next players. When the server can't be reached, the game still plays against the
 // local boards.
 export class RemoteMatchMaker extends MatchMaker {

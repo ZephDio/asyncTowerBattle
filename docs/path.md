@@ -47,26 +47,26 @@ o o o      right-click the o below E: E turns down too, and the path takes the b
 
 ## Drawing
 
-- Each path tile draws a **straight** or **turn** image rotated to match its two directions (`pathShapeVariant` in `src/engine/tile/path-shape.ts`).
+- Each path tile draws a **straight** or **turn** image rotated to match its two directions (`pathShapeVariant` in `client/src/engine/tile/path-shape.ts`).
   - `{name}-straight.png` connects up and down.
   - `{name}-turn.png` connects up and right.
   - Rotations are counterclockwise in quarter turns.
   - The full `{name}.png` is still used for shop icons.
-- In the shop, white dots mark junctions (`PathPreview`, `src/engine/path/army/path-preview.ts`).
+- In the shop, white dots mark junctions (`PathPreview`, `client/src/engine/path/army/path-preview.ts`).
 - In battle, the battle tiles copy the recruit's directions. Directions on the enemy side are reversed, since that half of the grid is rotated by π.
 
-The straight and turn images in `public/resources/path/` are placeholders cut from the full textures. When replacing them, keep the same layout: straight is vertical, and turn connects up and right.
+The straight and turn images in `client/public/resources/path/` are placeholders cut from the full textures. When replacing them, keep the same layout: straight is vertical, and turn connects up and right.
 
 ## Code map
 
 | What | Where |
 |---|---|
-| Directions, junctions, path following, right-click changes | `PathNetwork`, `src/engine/path/army/path-network.ts` |
-| Army entry points: `pathNetwork`, `path`, `partialPath`, `pathJunctions`, `refreshPathConnections`, `cyclePathAt` | `src/engine/army/army.ts` |
-| `connectionChoice`, reset on move | `PathTile`, `src/engine/tile/recruit/tile.ts` |
-| `pathConnections` and the image choice | `TPathConnections` and `TPathShape`, `src/engine/tile/path-shape.ts` |
-| Generic image swap hook used by `TImageDrawable` | `TImageVariant`, `src/shared/traits/render/image-variant.ts` |
-| Image resources | `PathResources`, `src/renderer/resources/path.resources.ts` |
+| Directions, junctions, path following, right-click changes | `PathNetwork`, `client/src/engine/path/army/path-network.ts` |
+| Army entry points: `pathNetwork`, `path`, `partialPath`, `pathJunctions`, `refreshPathConnections`, `cyclePathAt` | `client/src/engine/army/army.ts` |
+| `connectionChoice`, reset on move | `PathTile`, `client/src/engine/tile/recruit/tile.ts` |
+| `pathConnections` and the image choice | `TPathConnections` and `TPathShape`, `client/src/engine/tile/path-shape.ts` |
+| Generic image swap hook used by `TImageDrawable` | `TImageVariant`, `client/src/shared/traits/render/image-variant.ts` |
+| Image resources | `PathResources`, `client/src/renderer/resources/path.resources.ts` |
 | Right-click handling | `ShopInputToIntentTranslator.handleMouseRightClick` |
 | Per-frame refresh in the shop | `ShopPhase.getPathPreview` |
 | Battle tiles and battle path | `Battlefield` constructor, `BattlePath.toAllied` / `toEnemy` |

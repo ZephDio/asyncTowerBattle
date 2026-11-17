@@ -1,21 +1,21 @@
 ---
 name: pixel-art-assets
-description: Create or restyle game sprites (towers, barracks/houses, totems, units...) as pixel art matching the existing tower and house art, from a sketch or description. Covers style analysis, procedural PNG generation with a Python script, previewing next to references, and wiring the single front-view image into src/renderer/resources. Use when asked to draw, update, redesign or restyle a resource visual / asset / sprite.
+description: Create or restyle game sprites (towers, barracks/houses, totems, units...) as pixel art matching the existing tower and house art, from a sketch or description. Covers style analysis, procedural PNG generation with a Python script, previewing next to references, and wiring the single front-view image into client/src/renderer/resources. Use when asked to draw, update, redesign or restyle a resource visual / asset / sprite.
 ---
 
 # Pixel art assets
 
-Sprites are PNGs in `public/resources/`, loaded by `src/renderer/resources/*.resources.ts`. There is no image
+Sprites are PNGs in `client/public/resources/`, loaded by `client/src/renderer/resources/*.resources.ts`. There is no image
 editor in the loop: art is drawn procedurally by a Python script, checked visually by reading a scaled preview
 image, and iterated on.
 
 ## Tooling
 
 - `python3` (stdlib only) is always available: generator scripts must use only the stdlib, writing PNGs with
-  `zlib` + `struct`, so anyone can rerun them. See `scripts/generate-gobelin-portal.py` (`write_png`).
+  `zlib` + `struct`, so anyone can rerun them. See `client/scripts/generate-gobelin-portal.py` (`write_png`).
 - Pillow is not installed globally. Use the skill's nix shell for analysis and previews:
   ```sh
-  nix-shell .claude/skills/pixel-art-assets/shell.nix --run "python3 .claude/skills/pixel-art-assets/scripts/analyze.py public/resources/towers/blue.png"
+  nix-shell .claude/skills/pixel-art-assets/shell.nix --run "python3 .claude/skills/pixel-art-assets/scripts/analyze.py client/public/resources/towers/blue.png"
   ```
   The first call can take a while to fetch from the binary cache; give it a long timeout.
 - `scripts/analyze.py <png>...`: size, bbox, run-length histogram (pixel scale) and palette.
@@ -23,12 +23,12 @@ image, and iterated on.
   most common color adjacencies, compared with the house style below.
 - `scripts/preview.py <out.png> <png>...`: composite side by side on a grass background, upscaled 3x
   nearest-neighbor. Write `<out.png>` to the scratchpad, then **Read it** to look at the result.
-  Always include a reference sprite (e.g. `public/resources/towers/blue.png`) to compare style.
+  Always include a reference sprite (e.g. `client/public/resources/towers/blue.png`) to compare style.
 
 ## House style (towers, houses)
 
-The references are `public/resources/towers/blue.png` (stone tower on a wooden palisade) and
-`public/resources/house/blue.png` (thatched cottage). Both were measured with `analyze.py` and
+The references are `client/public/resources/towers/blue.png` (stone tower on a wooden palisade) and
+`client/public/resources/house/blue.png` (thatched cottage). Both were measured with `analyze.py` and
 `scripts/style_check.py`; the numbers below come from them.
 
 ### Pixels
@@ -178,17 +178,17 @@ Carrying these rules into the voxel renderer:
 
 ## Unit style (dragon)
 
-Units are a different, chunkier style, matched on `public/resources/units/dragon.png`: a 16x16 front-facing
+Units are a different, chunkier style, matched on `client/public/resources/units/dragon.png`: a 16x16 front-facing
 sprite upscaled 4x to 64x64 (`analyze.py` shows runs of 4), flat colors with one or two shades per part,
 light from the top left, a near-black `(29, 29, 28)` outline around the silhouette, no ground shadow, and a
 single image like every other piece. The voxel renderer is overkill at
 that size: hand place the pixels as a character grid and let a script add the outline and upscale, see
-`scripts/generate-ent.py`. Preview with `--scale 6` next to the dragon.
+`client/scripts/generate-ent.py`. Preview with `--scale 6` next to the dragon.
 
 ## One front view
 
 Pieces cannot be rotated, so every piece ships a single image, the front view facing the camera, as
-`<piece>.png` next to its folder (e.g. `public/resources/towers/blue.png`, `public/resources/totem/anvil.png`),
+`<piece>.png` next to its folder (e.g. `client/public/resources/towers/blue.png`, `client/public/resources/totem/anvil.png`),
 loaded with `createImage(...)` in its `*.resources.ts` entry. On the opponent board the same image is drawn rotated
 by π with the piece's mirrored footprint, so don't draw a back view. Older pieces still keep their unused
 `front-view.png`, `back-view.png`, `left-view.png` and `right-view.png` in a folder; new pieces don't need one.
@@ -226,12 +226,12 @@ The working oblique projection (x right, y away from camera, z up, all in pixels
 
 ## Generator approach (what worked)
 
-Write `scripts/generate-<asset>.py` in the repo, with tunable constants at the top (palette, sizes, shape
+Write `client/scripts/generate-<asset>.py` in the repo, with tunable constants at the top (palette, sizes, shape
 parameters) and a docstring explaining the outputs. The camera, ray casting, normals, outlines and PNG writing
-live in the shared `scripts/voxel_sprite.py` (`VoxelGrid`, `render`, `Hit`, `outline`, `write_png`): a
+live in the shared `client/scripts/voxel_sprite.py` (`VoxelGrid`, `render`, `Hit`, `outline`, `write_png`): a
 generator only builds the voxel model and a `shade(hit)` function. Examples, about 2s each:
-`scripts/generate-gobelin-portal.py` (stone ring on a plinth, emissive ether, block cracks) and
-`scripts/generate-crops-field.py` (framed soil bed with wheat tufts, thin shapes, square footprint).
+`client/scripts/generate-gobelin-portal.py` (stone ring on a plinth, emissive ether, block cracks) and
+`client/scripts/generate-crops-field.py` (framed soil bed with wheat tufts, thin shapes, square footprint).
 
 1. **Voxel model**: fill a `bytearray` 3D grid with small int labels (step, stone block id, ether...). Build
    shapes from simple math: boxes for plinths, polar segments for stone blocks (each block bulging out for a

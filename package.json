@@ -1,0 +1,21 @@
+{
+  "name": "async-tower-battle",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "pnpm --parallel --filter ./client --filter ./server start",
+    "start:client": "pnpm --filter ./client start",
+    "start:server": "pnpm --filter ./server start",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "format": "biome format --write client/src server/src"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.16.22",
+    "@swc/jest": "^0.2.39",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.5.2",
+    "typescript": "^6.0.3"
+  }
+}

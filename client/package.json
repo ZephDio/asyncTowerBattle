@@ -1,7 +1,7 @@
 {
-  "name": "async-tower-battle",
+  "name": "@async-tower-battle/client",
   "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "start": "vite",
@@ -11,14 +11,9 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@swc/jest": "^0.2.36",
-    "@types/jest": "^29.5.12",
-    "jest": "^29.7.0",
-    "typescript": "^5.4.2",
     "vite": "^5.2.6"
   },
   "dependencies": {
-    "@ddd-ts/traits": "file:./traits",
-    "ts-node": "^10.9.2"
+    "@ddd-ts/traits": "workspace:*"
   }
 }

@@ -19,25 +19,25 @@ Do the phases in order. Each phase should leave the game playable.
 ## Current state (reference)
 
 ### Grid
-- `ArmyGrid` (`src/engine/grid/grid.ts`) defaults to 13×6. Its screen position comes from `PercentToReal({ x: 35, y: 28 })`.
-- `STANDARD_CELL_SIZE = 4.9` (`src/engine/grid/tgrid.ts`) is the cell size in grid space. `cellSize` is a separate screen scale, so `screenToGridPosition` and `gridToScreenPosition` scale by `cellSize / STANDARD_CELL_SIZE`.
-- The grid grows during a run. `RoundsTracker` (`src/engine/rounds/tracker.ts`) calls `grid.roundOne/Two/Three`, which set the size by hand (8×6 in round 2, 11 wide in round 3) and add path tiles to extend the path.
-- Grid sizes are hard-coded in many fixtures: `src/engine/army/army-fixtures.ts`, and each enemy round in `src/engine/match-maker/local-match-maker.ts` (7×5, 8×6, 11×6).
-- `BattleGrid.fromArmyGrids` (`src/engine/grid/battle-grid.ts`) requires the allied and enemy grids to have **identical** width and height. It stacks them vertically, and `BattleGrid.flip` mirrors the enemy side.
+- `ArmyGrid` (`client/src/engine/grid/grid.ts`) defaults to 13×6. Its screen position comes from `PercentToReal({ x: 35, y: 28 })`.
+- `STANDARD_CELL_SIZE = 4.9` (`client/src/engine/grid/tgrid.ts`) is the cell size in grid space. `cellSize` is a separate screen scale, so `screenToGridPosition` and `gridToScreenPosition` scale by `cellSize / STANDARD_CELL_SIZE`.
+- The grid grows during a run. `RoundsTracker` (`client/src/engine/rounds/tracker.ts`) calls `grid.roundOne/Two/Three`, which set the size by hand (8×6 in round 2, 11 wide in round 3) and add path tiles to extend the path.
+- Grid sizes are hard-coded in many fixtures: `client/src/engine/army/army-fixtures.ts`, and each enemy round in `client/src/engine/match-maker/local-match-maker.ts` (7×5, 8×6, 11×6).
+- `BattleGrid.fromArmyGrids` (`client/src/engine/grid/battle-grid.ts`) requires the allied and enemy grids to have **identical** width and height. It stacks them vertically, and `BattleGrid.flip` mirrors the enemy side.
 - Fixed anchor cells: the castle sits at `(0, height-1)` (`getCastleCell`) and the enemy door at `(width-1, height-1)` (`getEnemyDoorCell`).
 - `Battle.init` and `Game.handleSummaryQuit` animate the grid to hard-coded screen percentages.
 
 ### Construct shapes
-- `GridShape` (`src/shared/traits/engine/core/grid-element.ts`) is a list of relative cells, rotated with `Physic.getProjectionCellsFromOrientation` (90° steps via `Math.round`). Its default is a single `(0,0)` cell.
+- `GridShape` (`client/src/shared/traits/engine/core/grid-element.ts`) is a list of relative cells, rotated with `Physic.getProjectionCellsFromOrientation` (90° steps via `Math.round`). Its default is a single `(0,0)` cell.
 - Only 3 constructs override it, all with 2 cells: `brewery` (vertical), `obelisk` (vertical) and `witch-house` (horizontal).
 - The shape lives on the **recruit** (`override gridShape = ...`). `BattleTower` copies it from the recruit.
 - Hitboxes and images are sized separately on the **blueprint** (e.g. `Rectangle({ width: 4, height: 6 })`, `TImageDrawable(..., size, ...)`). They are not derived from the shape.
 - Placement validation is `grid.validateGridElementPlacement(element, cell, orientation)`. Hover projection is `hold.getProjectionCells`. Synergy patterns use `patternEffect.getRelativeCells(orientation)`.
 
 ### Path
-- Path tiles are 1×1 `PathTile` recruits (basic, slowing, trap) in `src/engine/tile/`.
-- `Army.path` (`src/engine/army/army.ts`) chains tiles from `getEnemyDoorCell()` to `castle.cell.down()` with `BattlePath.chainTiles` (`src/engine/path/battle/battle-path.ts`). This is a greedy walk over adjacent tiles, memoized by `@MemorizePath`, and it throws if the chain breaks.
-- Path layouts are hard-coded cell lists in `src/engine/path/army/path-fixtures.ts` and in the `grid.roundX` methods.
+- Path tiles are 1×1 `PathTile` recruits (basic, slowing, trap) in `client/src/engine/tile/`.
+- `Army.path` (`client/src/engine/army/army.ts`) chains tiles from `getEnemyDoorCell()` to `castle.cell.down()` with `BattlePath.chainTiles` (`client/src/engine/path/battle/battle-path.ts`). This is a greedy walk over adjacent tiles, memoized by `@MemorizePath`, and it throws if the chain breaks.
+- Path layouts are hard-coded cell lists in `client/src/engine/path/army/path-fixtures.ts` and in the `grid.roundX` methods.
 - `BattlePath.toEnemy` flips cells. The battle path is `[enemyCastle, ...tiles, alliedCastle]`.
 
 ---
@@ -47,7 +47,7 @@ Do the phases in order. Each phase should leave the game playable.
 Goal: one larger default grid size that drives everything else, with no size hard-coded across the codebase.
 
 - [x] Choose the target default size and on-screen scale: 8×6 → 9×7 → 13×7, with every board drawn 30 units tall.
-- [x] Put grid dimensions in a single source: `src/engine/grid/grid-sizes.ts` (`ARMY_GRID_SIZES`, `fitCellSize`). `ArmyGrid`, `ArmyFactory`, the match-maker boards, castle cells and environment ranges all read from it.
+- [x] Put grid dimensions in a single source: `client/src/engine/grid/grid-sizes.ts` (`ARMY_GRID_SIZES`, `fitCellSize`). `ArmyGrid`, `ArmyFactory`, the match-maker boards, castle cells and environment ranges all read from it.
 - [x] Keep per-round growth with the scaled sizes. `ArmyGrid.resize(size)` sets width, height and cell size together.
 - [x] `BattleGrid` fits: allied + enemy height = 60 units, the same as round 1 before. The battle translate animation (`y: 25.5`) is now exact for every round.
 - [x] Update the enemy boards: grid sizes, castle cells (`(0, height-1)`) and the `PathFactory` layouts. The existing tower, barrack and totem positions are unchanged, and none of them overlap the new paths.

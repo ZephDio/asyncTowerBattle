@@ -16,7 +16,7 @@
 				"clear": true
 			},
 			"type": "shell",
-			"command": "pnpm typecheck --watch",
+			"command": "pnpm --filter ./client typecheck --watch",
 			"problemMatcher": [
 				"$tsc-watch"
 			],

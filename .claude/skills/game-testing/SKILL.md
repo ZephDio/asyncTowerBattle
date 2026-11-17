@@ -6,7 +6,7 @@ description: Run, play and screenshot the game in a headless browser through the
 # Game testing
 
 The `atb-game` MCP server (`.mcp.json`, `.claude/mcp/server.py`) keeps the game open in one headless Chromium page
-and starts Vite on port 5173 if nothing answers there. Its tools call the debug bridge `src/debug/bridge.ts`, which
+and starts Vite on port 5173 if nothing answers there. Its tools call the debug bridge `client/src/debug/bridge.ts`, which
 the game installs as `window.__atb` when opened with `?debug`. Clicks and drags are real mouse events at pixels the
 bridge computes, so they go through `MouseEventHandler` and the input translators.
 
@@ -35,7 +35,7 @@ server's boards. Before such a test:
 1. Run a healthcheck: `curl -sf localhost:6868/health`.
 2. If it answers, the user is running the server: use that one and leave it running at the end.
 3. If it doesn't, start the server for the test. Run this with Bash and `run_in_background: true`:
-   `cd ~/workspace/asyncTowerBattleServer && pnpm build && exec node dist/main.js`
+   `cd server && pnpm build && exec node dist/main.js` (from the repo root)
    Then poll `/health` until it answers (a few seconds).
 4. At the end of the test, stop the server you started, and only that one. Kill the process listening on the port,
    then confirm the port is free:

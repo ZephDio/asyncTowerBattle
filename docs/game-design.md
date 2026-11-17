@@ -217,7 +217,7 @@ The piece set was built to exercise the engine, not as a balanced first set. Kno
 
 ### House style for buildings
 
-The references are the stone Blue Tower on its wooden palisade (`public/resources/towers/blue.png`) and the thatched cottage (`public/resources/house/blue.png`). In short:
+The references are the stone Blue Tower on its wooden palisade (`client/public/resources/towers/blue.png`) and the thatched cottage (`client/public/resources/house/blue.png`). In short:
 
 - Native 1 px pixels, no anti-aliasing, no gradients, no dithering. Chunky 2–3 px shapes.
 - A **2 px ink outline**, `(22, 28, 46)`, around every silhouette. Ink also separates materials.
@@ -236,4 +236,4 @@ The full rules and the generator workflow are in `.claude/skills/pixel-art-asset
 
 ### Asset locations
 
-- `public/resources/towers/`, `house/` (barracks), `totem/`, `castle/`, `units/` (with `.sheet.png` animation sheets), `projectiles/`, `path/`, `environment/` (rock, forest), `hud/`, `button/`, `economy/`, `verdict/` (victory and defeat banners).
+- `client/public/resources/towers/`, `house/` (barracks), `totem/`, `castle/`, `units/` (with `.sheet.png` animation sheets), `projectiles/`, `path/`, `environment/` (rock, forest), `hud/`, `button/`, `economy/`, `verdict/` (victory and defeat banners).

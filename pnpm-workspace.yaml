@@ -1,4 +1,11 @@
+packages:
+  - client
+  - client/traits
+  - server
+
 allowBuilds:
   '@biomejs/biome': true
+  '@nestjs/core': true
+  '@parcel/watcher': false
   '@swc/core': true
   esbuild: true
