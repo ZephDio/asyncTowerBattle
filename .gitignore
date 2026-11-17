@@ -1,0 +1,6 @@
+node_modules
+dist
+coverage
+.devenv
+.devenv.flake.nix
+.direnv
