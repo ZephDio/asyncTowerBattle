@@ -35,7 +35,7 @@ The package manager is pnpm. A devenv/direnv shell provides Node 22 and pnpm; `d
 Paths below are relative to `client/`. This is an async auto-battler played in the browser. The player builds an army on a grid during a shop phase. The army then fights an AI-supplied opponent army in an automatic battle. The code has no framework: plain TypeScript classes render to a 2D canvas.
 
 ### Page shell
-- `src/main.tsx` mounts the React app in `src/app/`, styled with Tailwind (`src/index.css`, `vite.config.mts`). `App` lays out the foldable `SideMenu` and `GameCanvas`, which renders the game's container and `<canvas>` and calls `startGame` once. The game itself stays plain TypeScript; React only owns the page around the canvas.
+- `src/main.tsx` mounts the React app in `src/app/`, styled with Tailwind (`src/index.css`, `vite.config.mts`). `App` lays out `GameCanvas` and the `SideMenu` drawer, which floats over the game so opening it never moves the canvas. `GameCanvas` renders the game's container and `<canvas>` and calls `startGame` once. The game itself stays plain TypeScript; React only owns the page around the canvas.
 - `MouseEventHandler` listens for presses on the game container only, so clicks on the page shell never reach the game, and for moves and releases on the whole window. Canvas page coordinates come from `CanvasRenderer.pageOrigin()`.
 
 ### Top-level loop
