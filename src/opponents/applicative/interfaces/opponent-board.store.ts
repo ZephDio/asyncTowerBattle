@@ -1,9 +1,13 @@
-import type { SerializedBoard } from "../../domain/serialized-board.js";
+import type { PlayerBoard } from "../../domain/player-board.js";
 
-// Output port of the opponent use cases: where boards are kept. Abstract so it can be used as the injection token.
+export type StoredPlayerBoard = PlayerBoard & { id: string };
+
+// Output port of the opponent use cases: the boards still available as opponents. Abstract so it can be used as the
+// injection token.
 export abstract class OpponentBoardStore {
-	abstract add(board: SerializedBoard): void;
-	abstract findByRound(round: number): SerializedBoard[];
+	abstract add(playerBoard: PlayerBoard): void;
+	abstract findByRound(round: number): StoredPlayerBoard[];
+	abstract remove(id: string): void;
 	// Every round that has at least one board.
 	abstract rounds(): number[];
 }
