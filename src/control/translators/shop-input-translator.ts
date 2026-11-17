@@ -10,6 +10,7 @@ import { TGrid } from "../../engine/grid/tgrid";
 import { TRecruit } from "../../shared/traits/engine/recruit";
 import { DescriptionHud, TDescriptor } from "../../shared/traits/render/huds/item-descriptor";
 import { TSynergy } from "../../shared/traits/engine/synergy";
+import { TTargeting } from "../../shared/traits/engine/targeting";
 import { Inventory } from "../../engine/grid/inventory/unit-inventory";
 import { RetailGrid } from "../../engine/grid/retail-grid";
 import { Buyable } from "../../engine/shop/retail/buyable";
@@ -95,6 +96,10 @@ export class ShopInputToIntentTranslator {
 						patternEffect.patternCondition,
 					);
 				}
+				const targetZone = shop.holderControl.hold.getTargetZone();
+				if (targetZone && projectionCells[0]) {
+					focus.grid.addTargetTiles(projectionCells[0], targetZone, BoardOrientation.Normal);
+				}
 
 				return;
 			}
@@ -111,6 +116,12 @@ export class ShopInputToIntentTranslator {
 						patternEffect.getRelativeCells(focus.element.orientation),
 						condition,
 					);
+				}
+				if (implementsTrait(focus.element, TTargeting)) {
+					focus.grid.setOveredTile([
+						...focus.element.gridShape.getOccupiedCellsFrom(focus.element.cell, focus.element.orientation),
+					]);
+					focus.grid.addTargetTiles(focus.element.cell, focus.element.targetZone, focus.element.orientation);
 				}
 				if (implementsTrait(described, TDescriptor)) {
 					shop.setDescriptionHud(new DescriptionHud(described));

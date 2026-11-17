@@ -12,8 +12,9 @@ import { TGrid } from "../../../grid/tgrid";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { HTBaseStats } from "../../../stats/base-stats";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
+import { HTTargeting } from "../../../../shared/traits/engine/targeting";
 
-export const Tower = Subtrait([RecruitCaster, TRecruit, HTBaseStats, HTTag], (base) => {
+export const Tower = Subtrait([RecruitCaster, TRecruit, HTBaseStats, HTTag, HTTargeting], (base) => {
 	abstract class ITower extends base {
 		abstract toAllied(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;
 		abstract toEnemy(grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower;

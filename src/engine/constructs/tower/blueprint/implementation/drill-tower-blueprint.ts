@@ -11,12 +11,18 @@ import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { DrillTower } from "../../recruit/implementation/drill-tower";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
 import { Rock } from "../../../../environment/rock";
+import { TargetZone } from "../../../../target-zone/target-zone";
+import { GRID_GROWTH_CYCLE } from "../../../../grid/grid-sizes";
+
+// Long enough to reach the bottom of the tallest board.
+const DRILL_REACH = Math.max(...GRID_GROWTH_CYCLE.map(({ size }) => size.height));
 
 const cellRectangle = () => new Rectangle({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE });
 
@@ -46,6 +52,7 @@ export class DrillTowerBlueprint extends Derive(
 	}),
 	TSynergy,
 	TowerTag,
+	TTargeting,
 ) {
 	// A rock on the star cell speeds the cast up from every 6 seconds to every 4.5 seconds
 	rockCastSpeedPercent = (6 / 4.5 - 1) * 100;
@@ -60,6 +67,9 @@ export class DrillTowerBlueprint extends Derive(
 		this.patternCondition.bind(this),
 	);
 
+	// The column under the drill rig, which is the cell below the tower
+	override targetZone = TargetZone.columnBelow(new Cell({ x: 0, y: -2 }), DRILL_REACH);
+
 	toRecruit(cell: Cell) {
 		return new DrillTower(cell, this);
 	}
@@ -67,7 +77,8 @@ export class DrillTowerBlueprint extends Derive(
 	description = new TowerDescription(
 		"Drill Tower",
 		[
-			"A tower that shoots",
+			"When an enemy is in",
+			"its target zone, shoots",
 			"a giant drill straight",
 			"ahead, piercing every",
 			"enemy on its way",

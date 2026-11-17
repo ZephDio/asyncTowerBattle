@@ -1,5 +1,4 @@
 import { Derive } from "@ddd-ts/traits";
-import { Physic } from "../../../../../shared/physic";
 import { GreenTower } from "../../recruit/implementation/green-tower";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
@@ -45,8 +44,8 @@ export class GreenBattleTower extends Derive(BattleTower) {
 		this.finishCast(sucess);
 	}
 
-	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
-		return enemyUnit.isAlive() && distanceSqrd < 20 * 20;
+	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit) {
+		return enemyUnit.isAlive() && this.isInTargetZone(this.hooks.gridHooks.getCell(enemyUnit.position));
 	}
 
 	setTarget(enemyUnit: AnyBattleUnit | null) {
@@ -54,14 +53,11 @@ export class GreenBattleTower extends Derive(BattleTower) {
 	}
 
 	onCastResolve(): void {
-		if (
-			this.target &&
-			this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
-		) {
+		if (this.target && this.doesTargetMatchesRule(this.target)) {
 			this.attack(this.target);
 			return;
 		}
-		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule);
+		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule.bind(this));
 		this.setTarget(target);
 		if (this.target) {
 			this.attack(this.target);

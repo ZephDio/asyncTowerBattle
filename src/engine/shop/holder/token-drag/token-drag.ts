@@ -7,6 +7,8 @@ import { Buyable } from "../../retail/buyable";
 import { TokenHooks } from "../holder";
 import { STANDARD_CELL_SIZE, TGrid } from "../../../grid/tgrid";
 import { PatternEffect } from "../../../pattern-effect/pattern-effect";
+import { TargetZone } from "../../../target-zone/target-zone";
+import { TTargeting } from "../../../../shared/traits/engine/targeting";
 import { TImageVariant } from "../../../../shared/traits/render/image-variant";
 
 type Holdable = Buyable | AnyRecruit;
@@ -23,6 +25,11 @@ export const TTokenDrag = Subtrait([THudRenderable, HTImageDrawable, TImageVaria
 		}
 		abstract onRelease(position?: GridPosition, grid?: ImplementsTrait<typeof TGrid>): void;
 		abstract getPatternEffect(): PatternEffect | undefined;
+
+		getTargetZone(): TargetZone | undefined {
+			const held = this.holded instanceof Buyable ? this.holded.entity : this.holded;
+			return implementsTrait(held, TTargeting) ? held.targetZone : undefined;
+		}
 
 		// Draws what the held item would draw, e.g. a path tile's straight image rather than its full tile image.
 		getImageVariant() {

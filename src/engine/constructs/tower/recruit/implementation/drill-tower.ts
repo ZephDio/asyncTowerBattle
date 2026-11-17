@@ -29,6 +29,7 @@ export class DrillTower extends Derive(Tower, HTSynergy, RecruitBattleStart) {
 			statsHolder: tower,
 			tagHolder: tower,
 			rarityHolder: tower,
+			targeting: tower,
 			synergy: tower,
 		});
 	}

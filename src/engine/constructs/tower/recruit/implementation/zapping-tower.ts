@@ -21,6 +21,7 @@ export class ZappingTower extends Derive(Tower) {
 			statsHolder: tower,
 			tagHolder: tower,
 			rarityHolder: tower,
+			targeting: tower,
 		});
 	}
 

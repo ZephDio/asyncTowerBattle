@@ -14,6 +14,7 @@ import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 
 export class GreenTowerBlueprint extends Derive(
 	TRarity(Rarity.Common),
@@ -33,6 +34,7 @@ export class GreenTowerBlueprint extends Derive(
 		range: 20,
 	}),
 	TowerTag,
+	TTargeting,
 ) {
 	description = new TowerDescription("Green Tower", ["A tower that shoots", "auto-guided fast", "bullets"], this);
 

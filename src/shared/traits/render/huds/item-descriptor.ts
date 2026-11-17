@@ -169,7 +169,6 @@ export type TowerLinesDescription = {
 	damage: string;
 	"cast speed": string;
 	"food consumption": string;
-	range: string;
 };
 export class TowerDescription extends Description {
 	constructor(name: string, description: string[], tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
@@ -177,7 +176,6 @@ export class TowerDescription extends Description {
 			damage: `${tower.stats.damage}`,
 			"cast speed": `${castSpeedToSecond(tower.stats.castSpeed)}s`,
 			"food consumption": `${tower.stats.foodConsumptionOnCast}`,
-			range: `${tower.stats.range}`,
 		};
 		super(name, description, extraLines);
 	}

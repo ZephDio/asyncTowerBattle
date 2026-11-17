@@ -13,6 +13,7 @@ import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 
 export class FrostTowerBlueprint extends Derive(
 	TRarity(Rarity.Rare),
@@ -32,6 +33,7 @@ export class FrostTowerBlueprint extends Derive(
 		range: 20,
 	}),
 	TowerTag,
+	TTargeting,
 ) {
 	toRecruit(cell: Cell) {
 		return new FrostTower(cell, this);

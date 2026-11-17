@@ -3,7 +3,7 @@ import { Cell, ScreenPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { TGrid } from "./tgrid";
 import { GridSize, armyGridSize, fitCellSize } from "./grid-sizes";
-import { SynergyEffectHud } from "./grid-effects/synergy-effect";
+import { SynergyEffectHud, TARGET_ICONS } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
 import { AnyCastle, Castle } from "../castle/recruit/castle-recruit";
 import { Tower } from "../constructs/tower/recruit/tower";
@@ -16,6 +16,8 @@ import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
 import { TRecruit } from "../../shared/traits/engine/recruit";
 import { TEnvironmentElement } from "../environment/environment";
 import { Totem } from "../constructs/totem/recruit/totem";
+import { BoardOrientation } from "../../shared/traits/engine/core/board-orientation";
+import { TargetZone } from "../target-zone/target-zone";
 
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();
@@ -105,6 +107,16 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 			const activated = element !== undefined && !counted.has(element) && isActivated(element);
 			if (activated) counted.add(element);
 			this.synergiesEffects.push(new SynergyEffectHud(synergyCell, this, activated));
+		}
+	}
+
+	// Added on top of the synergy stars, so call it after setSynergiesTiles. Target cells off the grid are not drawn.
+	addTargetTiles(cell: Cell, targetZone: TargetZone, orientation: BoardOrientation) {
+		for (const relativeCell of targetZone.getRelativeCells(orientation)) {
+			const targetCell = cell.add(relativeCell);
+			if (targetCell.x < 0 || targetCell.x >= this.width || targetCell.y < 0 || targetCell.y >= this.height) continue;
+			const activated = targetZone.isTargetable(this.tiles.get(ArmyGrid.posToString(targetCell)));
+			this.synergiesEffects.push(new SynergyEffectHud(targetCell, this, activated, TARGET_ICONS));
 		}
 	}
 

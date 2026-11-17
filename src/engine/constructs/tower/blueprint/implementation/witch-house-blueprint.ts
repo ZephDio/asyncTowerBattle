@@ -1,5 +1,5 @@
 import { Rarity, TRarity } from "../../../../../shared/traits/engine/rarity";
-import { Derive, ImplementsTrait } from "@ddd-ts/traits";
+import { Derive } from "@ddd-ts/traits";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
@@ -7,16 +7,14 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 
 import { WitchHouse } from "../../recruit/implementation/witch-house";
-import { TSynergy } from "../../../../../shared/traits/engine/synergy";
-import { BasicPathTile } from "../../../../tile/recruit/implementation/basic-tile";
-import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, TowerDescription } from "../../../../../shared/traits/render/huds/item-descriptor";
-import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
+import { TargetZone } from "../../../../target-zone/target-zone";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 
 export class WitchHouseBlueprint extends Derive(
 	TRarity(Rarity.Rare),
@@ -24,7 +22,6 @@ export class WitchHouseBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 10 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	TImageDrawable(TowerResources.witchHouse.image, TowerResources.witchHouse.size, DrawPriority.NormalGridElement),
-	TSynergy,
 	TBaseStats({
 		health: NaN,
 		damage: 6,
@@ -37,17 +34,17 @@ export class WitchHouseBlueprint extends Derive(
 		range: NaN,
 	}),
 	TowerTag,
+	TTargeting,
 ) {
-	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
-		return gridElement instanceof BasicPathTile;
-	};
-	patternEffect = new PatternEffect(
-		[new Cell({ x: 1, y: 0 }), new Cell({ x: -1, y: 0 }), new Cell({ x: 0, y: -1 })],
-		this.patternCondition.bind(this),
-	);
+	// The cells on each side of the house's bottom cell and the one below it.
+	override targetZone = new TargetZone([
+		new Cell({ x: 1, y: 0 }),
+		new Cell({ x: -1, y: 0 }),
+		new Cell({ x: 0, y: -1 }),
+	]);
 	description = new TowerDescription(
 		"Witch House",
-		["This tower make", "some poison puddles", "on path around it"],
+		["When an enemy is in", "its target zone, makes", "poison puddles on", "every path of the zone"],
 		this,
 	);
 	toRecruit(cell: Cell) {

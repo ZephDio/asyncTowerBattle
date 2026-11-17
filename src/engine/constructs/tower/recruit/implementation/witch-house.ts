@@ -7,24 +7,23 @@ import { Derive } from "@ddd-ts/traits";
 import { WitchHouseBlueprint } from "../../blueprint/implementation/witch-house-blueprint";
 
 import { PoisonGround } from "../../../../area-effect/implementation/poison-ground";
-import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { GridShape } from "../../../../../shared/traits/engine/core/grid-element";
 import { BattleWitchHouse } from "../../battle/implementation/battle-witch-house";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
-export class WitchHouse extends Derive(Tower, HTSynergy) {
+export class WitchHouse extends Derive(Tower) {
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: 1 })]);
 	constructor(
 		public cell: Cell,
 		public tower: WitchHouseBlueprint = new WitchHouseBlueprint({}),
 	) {
 		super({
-			synergy: tower,
 			imageDrawable: tower,
 			hitboxHolder: tower,
 			descriptor: tower,
 			statsHolder: tower,
 			tagHolder: tower,
 			rarityHolder: tower,
+			targeting: tower,
 		});
 	}
 

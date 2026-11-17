@@ -5,6 +5,7 @@ import { WitchHouse } from "../../recruit/implementation/witch-house";
 import { BasicBattlePathTile } from "../../../../tile/battle/implementation/basic-battle-tile";
 import { BattleTower } from "../battle-tower";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
+import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 
 export class BattleWitchHouse extends Derive(BattleTower) {
 	constructor(
@@ -38,7 +39,7 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 	private attack() {
 		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
 			this.cell,
-			this.recruit.patternEffect.getRelativeCells(this.orientation),
+			this.targetZone.getRelativeCells(this.orientation),
 		);
 		let sucess: boolean = false;
 		if (neighbors.some((neighbor) => neighbor instanceof BasicBattlePathTile)) {
@@ -55,8 +56,14 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 		}
 		this.finishCast(sucess);
 	}
+
+	private isEnemyInTargetZone(enemyUnit: AnyBattleUnit) {
+		return enemyUnit.isAlive() && this.isInTargetZone(this.hooks.gridHooks.getCell(enemyUnit.position));
+	}
+
+	// Waits, with the cast ready, until an enemy walks into the target zone
 	onCastResolve(): void {
+		if (!this.hooks.searchTarget(this.position, this.isEnemyInTargetZone.bind(this))) return;
 		this.attack();
-		this.finishCast();
 	}
 }

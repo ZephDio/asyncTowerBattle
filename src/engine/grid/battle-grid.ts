@@ -123,6 +123,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	getAlliedHooks(): GridHooks {
 		return {
 			getRealPosition: this.cellToGrid.bind(this),
+			getCell: this.gridPositionToCell.bind(this),
 			getRelativeNeighborsInArmy: this.getRelativeNeighborsInArmy.bind(this),
 			getRelativeNeighborsInBattle: this.getRelativeNeighborsInBattle.bind(this),
 			getRelativeDirection: () => this.getRelativeDirection(false),
@@ -133,6 +134,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	getEnemyHooks(): GridHooks {
 		return {
 			getRealPosition: this.cellToGrid.bind(this),
+			getCell: this.gridPositionToCell.bind(this),
 			getRelativeNeighborsInArmy: this.getRelativeNeighborsInArmy.bind(this),
 			getRelativeNeighborsInBattle: this.getRelativeNeighborsInBattle.bind(this),
 			getRelativeDirection: () => this.getRelativeDirection(true),
@@ -147,6 +149,7 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 export type GridHooks = {
 	getRealPosition: (cell: Cell) => GridPosition;
+	getCell: (position: GridPosition) => Cell | undefined;
 	getRelativeNeighborsInBattle: (cell: Cell, relativePositions: Cell[]) => (BattleGridElement | undefined)[];
 	getRelativeNeighborsInArmy: (cell: Cell, relativePositions: Cell[]) => (BattleGridElement | undefined)[];
 	getRelativeDirection: () => { above: GridPosition; below: GridPosition; left: GridPosition; right: GridPosition };

@@ -8,6 +8,7 @@ import { DrillTower } from "../../recruit/implementation/drill-tower";
 import { BattleTower } from "../battle-tower";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
+import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 
 export class BattleDrillTower extends Derive(BattleTower, BattleStartTrigger) {
 	constructor(
@@ -59,7 +60,13 @@ export class BattleDrillTower extends Derive(BattleTower, BattleStartTrigger) {
 		this.hooks.addProjectile(new BattleDrill(new Drill(), start, this.hooks, this.stats.attack, below), this);
 	}
 
+	private isEnemyInTargetZone(enemyUnit: AnyBattleUnit) {
+		return enemyUnit.isAlive() && this.isInTargetZone(this.hooks.gridHooks.getCell(enemyUnit.position));
+	}
+
+	// Waits, with the cast ready, until an enemy walks into the column under the drill
 	onCastResolve(): void {
+		if (!this.hooks.searchTarget(this.position, this.isEnemyInTargetZone.bind(this))) return;
 		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 		if (sucess) this.shootDrill();
 		this.finishCast(sucess);

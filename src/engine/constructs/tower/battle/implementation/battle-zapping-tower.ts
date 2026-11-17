@@ -3,7 +3,6 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { ZappingTower } from "../../recruit/implementation/zapping-tower";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
-import { Physic } from "../../../../../shared/physic";
 import { BattleTower } from "../battle-tower";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
@@ -48,19 +47,16 @@ export class ZappingBattleTower extends Derive(BattleTower) {
 		this.finishCast(sucess);
 	}
 
-	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit, distanceSqrd: number) {
-		return enemyUnit.isAlive() && distanceSqrd < 20 * 20;
+	private doesTargetMatchesRule(enemyUnit: AnyBattleUnit) {
+		return enemyUnit.isAlive() && this.isInTargetZone(this.hooks.gridHooks.getCell(enemyUnit.position));
 	}
 
 	onCastResolve(): void {
-		if (
-			this.target &&
-			this.doesTargetMatchesRule(this.target, Physic.getDistanceSqrd(this.position, this.target.position))
-		) {
+		if (this.target && this.doesTargetMatchesRule(this.target)) {
 			this.attack(this.target);
 			return;
 		}
-		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule);
+		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule.bind(this));
 		this.setTarget(target);
 		if (this.target) {
 			this.attack(this.target);

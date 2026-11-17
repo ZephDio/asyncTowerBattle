@@ -22,6 +22,7 @@ export class FrostTower extends Derive(Tower) {
 			statsHolder: tower,
 			tagHolder: tower,
 			rarityHolder: tower,
+			targeting: tower,
 		});
 	}
 

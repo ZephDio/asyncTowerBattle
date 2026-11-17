@@ -13,6 +13,7 @@ import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 
 export class ZappingTowerBlueprint extends Derive(
 	TRarity(Rarity.Uncommon),
@@ -32,6 +33,7 @@ export class ZappingTowerBlueprint extends Derive(
 		range: 20,
 	}),
 	TowerTag,
+	TTargeting,
 ) {
 	toRecruit(cell: Cell) {
 		return new ZappingTower(cell, this);

@@ -57,5 +57,6 @@ Entities never hold references to the army or battlefield. Instead they receive 
 - `src/engine/stats/`: `Stats` covers health, attack, speed, cast and attack speed, food cost, range, conditions and boons. Statuses (frozen, rooted, stunned, stone shield, etc.) are in `status/`. `BaseStats` holds the blueprint values.
 - `src/engine/grid/`: `ArmyGrid` (shop), `BattleGrid`, `RetailGrid` (shop offers) and `Inventory`. They share the `TGrid` trait and handle element placement and validation.
 - `src/engine/pattern-effect/` and the `TSynergy` trait: adjacency and pattern synergies between pieces on the grid.
+- `src/engine/target-zone/` and the `TTargeting` trait: towers find enemies in a set of cells relative to their anchor (`TargetZone`), not within a distance. The default is the 8 cells around the tower. The shop shows each target cell as a bow, red when it holds a path tile and grey otherwise (`ArmyGrid.addTargetTiles`).
 - Economy: gold (`src/engine/gold`) is spent in the shop and food (`src/engine/food`) is consumed by casts during battle.
 - HUD elements are in `src/shared/hud-element/` and the screen-percentage helpers (`PercentToReal`, etc.) are in `canvas-renderer.ts`.
