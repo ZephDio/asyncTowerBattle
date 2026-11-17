@@ -37,7 +37,7 @@ export class DwarfBlueprint extends Derive(
 	}),
 	KinfolkTag,
 ) {
-	description = new UnitDescription("Dwarf", ["A unit that cast", "a healing area", "area around him"], this);
+	description = new UnitDescription("Dwarf", ["A unit that spawn", "with a stone shield"], this);
 
 	toBattle(gridPosition: GridPosition, enemyPath: BattlePath, hooks: BattleArmyHooks) {
 		return new BattleDwarf(this, gridPosition, enemyPath, hooks);
