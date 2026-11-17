@@ -27,7 +27,7 @@ export class FurryHud extends Derive(TRenderable, TDrawable) {
 		const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		this.drawImage(context, canvasSize, canvasFurryIconPosition, this.furryIcon);
 		context.textAlign = "center";
-		context.font = `bold ${canvasSize.height / 1.6}px text`;
+		context.font = `${canvasSize.height / 1.6}px text`;
 		context.fillStyle = "green";
 		context.fillText(
 			`${Math.round(this.furry.amount)}`,
