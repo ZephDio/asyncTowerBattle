@@ -18,7 +18,8 @@ The package manager is pnpm. A devenv/direnv shell provides Node 22 and pnpm; `d
 - `pnpm typecheck`: run `tsc --noEmit` in both packages. The VS Code task runs the client's with `--watch`. The shared tsconfig is strict, including `noUnusedLocals`, `noUnusedParameters`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` and `noImplicitOverride`.
 - `pnpm format`: run the Biome formatter over `client/src` and `server/src`. It uses tabs, a 120-column line width and double quotes.
 - `pnpm test` runs both packages' tests. For a single file, run Jest from the package: `cd client && pnpm exec jest src/shared/hitboxes.spec.ts`. Jest uses `@swc/jest`, roots at each package's `src` and matches `*.spec.ts`. There are very few client tests.
-- `pnpm build` builds the server into `server/dist`.
+- `pnpm build` builds the server into `server/dist` and the client into `client/dist`.
+- `docker-compose.yml` at the root runs the whole app (Postgres, the server, and the built client in nginx, which proxies `/api` to the server) for a Portainer stack deployed from the repository; the `Dockerfile` builds both images. It needs `JWT_SECRET`, see the file's header. Vite listens on every interface so players on the local network can join a dev game.
 - Running the game: the `atb-game` MCP server (`.mcp.json`, `.claude/mcp/server.py`) keeps the game open in headless Chromium from `.claude/playwright.nix` and starts Vite in `client/` if nothing answers on port 5173. Its tools:
   - `start` begins a seeded game.
   - `state`, `ascii` and `inspect` read the game as JSON or text.

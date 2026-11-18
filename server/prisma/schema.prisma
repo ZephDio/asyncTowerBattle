@@ -4,6 +4,8 @@ generator client {
   provider     = "prisma-client"
   output       = "../src/database/generated/prisma"
   moduleFormat = "esm"
+  // Imports between the generated files end in .js, so they still resolve once `nest build` compiles them to dist.
+  importFileExtension = "js"
 }
 
 // The server gives every row its id with its IdProvider (src/shared), so no id column has a default.

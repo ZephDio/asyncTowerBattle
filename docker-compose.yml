@@ -1,0 +1,52 @@
+# The whole app, for a Portainer stack (deployed from the Git repository, so it can build the images) or
+# `docker compose up -d --build`. The game is served on APP_PORT and reaches the server through /api.
+#
+# Environment:
+# - JWT_SECRET (required): signs the server's access tokens.
+# - POSTGRES_PASSWORD: the database password, `atb` by default. The database is not published outside the stack.
+# - GOOGLE_CLIENT_ID: the OAuth client ID, built into the game for the sign-in button and checked by the server.
+#   Google sign-in is off while it is empty; guests can still play.
+# - APP_PORT: the host port of the game, 8080 by default.
+services:
+  postgres:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: atb
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-atb}
+      POSTGRES_DB: atb
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U atb -d atb"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+  server:
+    build:
+      context: .
+      target: server
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://atb:${POSTGRES_PASSWORD:-atb}@postgres:5432/atb
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  client:
+    build:
+      context: .
+      target: client
+      args:
+        VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    depends_on:
+      - server
+
+volumes:
+  postgres-data:

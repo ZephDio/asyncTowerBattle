@@ -1,0 +1,7 @@
+**/node_modules
+**/dist
+server/src/database/generated
+.git
+.devenv
+.direnv
+.claude

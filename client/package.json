@@ -6,6 +6,7 @@
   "scripts": {
     "start": "vite",
     "start:dev": "vite --open /?dev",
+    "build": "vite build",
     "format": "biome format src --write",
     "typecheck": "tsc --noEmit",
     "test": "jest",

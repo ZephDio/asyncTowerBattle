@@ -4,4 +4,6 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [react(), tailwindcss()],
+	// Listen on every interface so players on the local network can open the game.
+	server: { host: true },
 });
