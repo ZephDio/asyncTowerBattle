@@ -12,6 +12,7 @@ import { InMemoryLegacyBoardStore } from "../../infrastructure/in-memory-legacy-
 import { InMemoryOpponentBoardStore } from "../../infrastructure/in-memory-opponent-board.store.js";
 import { InMemoryPlayerNames } from "../../infrastructure/in-memory-player-names.js";
 import { UuidProvider } from "../../../shared/infrastructure/uuid-provider.js";
+import { ROUND_POOL_SIZE } from "../../domain/round-pool.js";
 import { PullOpponent } from "./pull-opponent.use-case.js";
 
 const board = (round: number, randomSeed = round): SerializedBoard => ({
@@ -24,10 +25,12 @@ const board = (round: number, randomSeed = round): SerializedBoard => ({
 
 const performance: GamePerformance = { wins: 2, losses: 1 };
 
-const setup = (...boards: SerializedBoard[]) => {
-	const opponentBoards = InMemoryOpponentBoardStore.seeded(
-		boards.map((stored) => ({ board: checkBoard(stored), performance: { wins: 0, losses: 0 } })),
-	);
+// Stores the boards as bot boards, like the seed boards.
+const setup = (...boards: SerializedBoard[]) =>
+	setupStored(boards.map((stored) => ({ board: checkBoard(stored), performance: { wins: 0, losses: 0 }, bot: true })));
+
+const setupStored = (stored: Omit<PlayerBoard, "id" | "pulledBy">[]) => {
+	const opponentBoards = InMemoryOpponentBoardStore.seeded(stored);
 	const legacyBoards = new InMemoryLegacyBoardStore();
 	const playerNames = new InMemoryPlayerNames({ alice: "Alice" });
 	return {
@@ -48,9 +51,23 @@ const testPull = (useCase: PullOpponent, round: number) =>
 const guestPull = (useCase: PullOpponent, round: number) =>
 	useCase.execute({ round, board: board(round, 100 + round), performance, test: false });
 
+// Boards of round 2 another player built.
+const playerBoards = (count: number) =>
+	Array.from({ length: count }, (_, index) => ({
+		board: checkBoard(board(2, 1000 + index)),
+		performance,
+		playerId: "carol",
+		bot: false,
+	}));
+
 const withoutId = ({ board, performance }: PlayerBoard) => ({ board, performance });
 
 describe("PullOpponent", () => {
+	const random = Math.random;
+	afterEach(() => {
+		Math.random = random;
+	});
+
 	it("gives a board of the round", async () => {
 		expect(await pull(setup(board(1), board(2), board(3)).useCase, 2)).toEqual({ board: board(2) });
 	});
@@ -72,19 +89,55 @@ describe("PullOpponent", () => {
 
 		await pull(useCase, 2, 42);
 
-		expect((await opponentBoards.findByRound(2)).map(withoutId)).toEqual([{ board: board(2, 42), performance }]);
+		const stored = (await opponentBoards.findByRound(2)).filter(({ bot }) => !bot);
+		expect(stored.map(withoutId)).toEqual([{ board: board(2, 42), performance }]);
 		expect(await pull(useCase, 2)).toEqual({ board: board(2, 42) });
 	});
 
-	it("moves the opponent to the legacy store, pulled by the player's board", async () => {
-		const { opponentBoards, legacyBoards, useCase } = setup(board(1, 10), board(3, 30));
+	it("prefers a player board to a bot board of the round", async () => {
+		const { useCase } = setup(board(2, 20), board(2, 21));
+		await pull(useCase, 2, 22, "alice");
 
-		await pull(useCase, 3);
+		for (let pulls = 0; pulls < 5; pulls++) {
+			expect((await pull(useCase, 2, 23, "bob")).board.randomSeed).toBe(22);
+		}
+	});
 
-		const [playerBoard] = await opponentBoards.findByRound(3);
-		expect(playerBoard?.board.randomSeed).toBe(103);
-		expect(legacyBoards.all().map(withoutId)).toEqual([{ board: board(3, 30), performance: { wins: 0, losses: 0 } }]);
-		expect(legacyBoards.all()[0]?.pulledBy).toBe(playerBoard?.id);
+	it(`keeps the opponent available while its round holds no more than ${ROUND_POOL_SIZE} boards`, async () => {
+		const { opponentBoards, legacyBoards, useCase } = setup(board(3, 30));
+
+		await pull(useCase, 3, 31, "alice");
+		await pull(useCase, 3, 32, "alice");
+
+		const stored = await opponentBoards.findByRound(3);
+		const aliceBoards = stored.filter(({ bot }) => !bot).map(({ id }) => id);
+		expect(stored.find(({ bot }) => bot)?.pulledBy).toEqual(aliceBoards);
+		expect(legacyBoards.all()).toEqual([]);
+	});
+
+	it(`still keeps the opponent when the player's board brings its round to ${ROUND_POOL_SIZE} boards`, async () => {
+		const { opponentBoards, legacyBoards, useCase } = setupStored(playerBoards(ROUND_POOL_SIZE - 1));
+
+		await pull(useCase, 2);
+
+		expect(await opponentBoards.count(2)).toBe(ROUND_POOL_SIZE);
+		expect(legacyBoards.all()).toEqual([]);
+	});
+
+	it(`moves the opponent to the legacy store once its round holds more than ${ROUND_POOL_SIZE} boards`, async () => {
+		const { opponentBoards, legacyBoards, useCase } = setupStored(playerBoards(ROUND_POOL_SIZE));
+		const [pulledOnce] = await opponentBoards.findByRound(2);
+		await opponentBoards.markPulled(pulledOnce!.id, "earlier-puller");
+
+		// The use case picks the first board.
+		Math.random = () => 0;
+
+		expect(await pull(useCase, 2)).toEqual({ board: pulledOnce?.board, playerName: undefined });
+		const consumed = legacyBoards.all().find(({ id }) => id === pulledOnce?.id);
+		expect(consumed?.pulledBy).toHaveLength(2);
+		expect(consumed?.pulledBy[0]).toBe("earlier-puller");
+		expect(await opponentBoards.count(2)).toBe(ROUND_POOL_SIZE);
+		expect((await opponentBoards.findByRound(2)).map(({ id }) => id)).not.toContain(pulledOnce?.id);
 	});
 
 	it("gives the name of the player who built the opponent, and none for a seed board", async () => {
@@ -106,11 +159,12 @@ describe("PullOpponent", () => {
 
 		await pull(useCase, 1, 7, "alice");
 
-		expect((await opponentBoards.findByRound(1)).map(({ playerId }) => playerId)).toEqual(["alice"]);
+		const stored = (await opponentBoards.findByRound(1)).filter(({ bot }) => !bot);
+		expect(stored.map(({ playerId }) => playerId)).toEqual(["alice"]);
 	});
 
 	it("never gives a logged-in player a board of theirs from an earlier request", async () => {
-		const { useCase } = setup(board(2, 20), board(3, 30));
+		const { useCase } = setup(board(2, 20));
 		await pull(useCase, 3, 31, "alice");
 
 		// Round 3 only has alice's board left, so she falls back to round 2.

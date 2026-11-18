@@ -12,6 +12,7 @@
     "build:docker": "start-docker && JWT_SECRET=${JWT_SECRET:-unused} docker compose build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
+    "test:integration": "pnpm --filter ./server test:integration",
     "format": "biome format --write client/src server/src"
   },
   "devDependencies": {

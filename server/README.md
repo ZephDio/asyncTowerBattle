@@ -14,11 +14,12 @@ The opponent boards live in Postgres, in the `player_board` table. Prisma owns t
 - `pnpm start:infra` (from the repository root): start the daemon if needed, then Postgres, then apply the migrations
 - `pnpm db:migrate`: apply the pending migrations. The first ones create `player_board` and seed it with the default board of each round
 - `pnpm db:migrate:dev --name <change>`: create a migration after changing the schema
+- `pnpm test:integration` (also from the repository root): migrate the `atb_test` database of the same Postgres (`TEST_DATABASE_URL`, set by the devenv shell) and run the `*.int-spec.ts` tests on the Prisma stores. They empty that database down to the seed boards before each test
 - `pnpm db:generate`: regenerate the client in `src/database/generated/prisma` (also run on install, gitignored)
 
 The database generates no ids: the use cases give each new entity (player, refresh token, board) its id from the `IdProvider` of `src/shared/`, a `UuidProvider`, before storing it.
 
-A board is an opponent until another player pulls it, then a legacy board with `pulled_at` set and `pulled_by` naming the board its puller sent in the same request. `player_id` is the logged-in player who sent a board (null for the seed boards). `POST /opponents/:round` reads an optional access token for it and never gives a player one of their own boards. Only a logged-in player's request trades boards: a guest's, or one with `?test=true` (the client's dev mode), gets an opponent without storing its board or consuming the opponent, so guests and dev runs are free reads for trying the game. The tests use the in-memory stores and need no database.
+Each pull adds the board its puller sent in the same request to the opponent's `pulled_by` array. A round keeps its boards available while it holds no more than 50 (`ROUND_POOL_SIZE`), so they can be pulled many times; past that, a pull consumes the opponent, which becomes a legacy board with `pulled_at` set. `round_board_count` is the projection of each round's available boards, which the board store updates in the same transaction as the rows. The seed boards are tagged `bot`: a pull only gives a bot board when the round has no player board. `player_id` is the logged-in player who sent a board (null for the bot boards). `POST /opponents/:round` reads an optional access token for it and never gives a player one of their own boards. Only a logged-in player's request trades boards: a guest's, or one with `?test=true` (the client's dev mode), gets an opponent without storing its board or consuming the opponent, so guests and dev runs are free reads for trying the game. The tests use the in-memory stores and need no database.
 
 ## Players
 

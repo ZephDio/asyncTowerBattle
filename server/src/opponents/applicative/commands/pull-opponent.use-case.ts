@@ -7,23 +7,26 @@ import { InvalidPerformanceError, InvalidRoundError } from "../../domain/opponen
 import { checkBoard, sameGridSize } from "../../domain/checked-board.js";
 import type { Opponent } from "../../domain/opponent.js";
 import type { PlayerBoard } from "../../domain/player-board.js";
+import { preferPlayerBoards, pullConsumes } from "../../domain/round-pool.js";
 import type { SerializedBoard } from "../../domain/serialized-board.js";
 import { BoardRoundMismatchError, NoOpponentError } from "../opponent-errors.js";
 
 // A test request, from a game in dev mode, gets an opponent but leaves both stores as they were, and so does a guest's:
 // only a logged-in player's boards are stored and only they consume opponents, so guests and dev runs read for free.
-export type PullOpponentRequest = Omit<PlayerBoard, "id" | "board"> & {
+export type PullOpponentRequest = Pick<PlayerBoard, "performance" | "playerId"> & {
 	round: number;
 	board: SerializedBoard;
 	test: boolean;
 };
 
 // Every request's board must have the grid size of its round and a valid random seed, see checkBoard.
-// Trades a logged-in player's board for an opponent: the player's board becomes available to the next players of the round,
-// and the opponent, a board of the round or of the latest earlier round of the same grid size that has one, moves to
-// the legacy store so no one else gets it, marked as pulled by the player's board. The opponent is picked before the player's board is stored,
-// so a player never meets the board they just sent, and a logged-in player never meets any board of theirs. The opponent
-// comes with the name of the player who built it.
+// Trades a logged-in player's board for an opponent: the player's board becomes available to the next players of the
+// round, and the opponent, a board of the round or of the latest earlier round of the same grid size that has one, is
+// marked as pulled by the player's board. The opponent is a player board unless its round only has bot boards. Once its
+// round holds more than ROUND_POOL_SIZE boards, the opponent also moves to the legacy store so no one else gets it;
+// until then it stays available. The opponent is picked before the player's board is stored, so a player never meets
+// the board they just sent, and a logged-in player never meets any board of theirs. The opponent comes with the name
+// of the player who built it.
 @Injectable()
 export class PullOpponent {
 	constructor(
@@ -47,10 +50,21 @@ export class PullOpponent {
 			return this.withPlayerName(opponent);
 		}
 		const boardId = this.ids.next();
-		await this.opponentBoards.add({ id: boardId, board: checkedBoard, performance, playerId });
+		await this.opponentBoards.add({
+			id: boardId,
+			board: checkedBoard,
+			performance,
+			playerId,
+			bot: false,
+			pulledBy: [],
+		});
 		if (!opponent) throw new NoOpponentError(round);
-		await this.opponentBoards.remove(opponent.id, boardId);
-		await this.legacyBoards.add({ ...opponent, pulledBy: boardId });
+		if (pullConsumes(await this.opponentBoards.count(opponent.board.round))) {
+			await this.opponentBoards.remove(opponent.id, boardId);
+			await this.legacyBoards.add({ ...opponent, pulledBy: [...opponent.pulledBy, boardId] });
+		} else {
+			await this.opponentBoards.markPulled(opponent.id, boardId);
+		}
 		return this.withPlayerName(opponent);
 	}
 
@@ -64,7 +78,7 @@ export class PullOpponent {
 			(stored) => stored <= round && sameGridSize(stored, round),
 		);
 		if (earlierRounds.length === 0) return undefined;
-		const opponents = await this.opponentBoards.findByRound(Math.max(...earlierRounds), playerId);
+		const opponents = preferPlayerBoards(await this.opponentBoards.findByRound(Math.max(...earlierRounds), playerId));
 		return opponents[Math.floor(Math.random() * opponents.length)];
 	}
 }

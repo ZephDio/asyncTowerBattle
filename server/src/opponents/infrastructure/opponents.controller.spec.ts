@@ -37,7 +37,9 @@ describe("POST /opponents/:round", () => {
 		const moduleRef = await Test.createTestingModule({ imports: [OpponentsModule] })
 			.overrideProvider(OpponentBoardStore)
 			.useValue(
-				InMemoryOpponentBoardStore.seeded(SEED_BOARDS.map((board) => ({ board, performance: { wins: 0, losses: 0 } }))),
+				InMemoryOpponentBoardStore.seeded(
+					SEED_BOARDS.map((board) => ({ board, performance: { wins: 0, losses: 0 }, bot: true })),
+				),
 			)
 			.overrideProvider(LegacyBoardStore)
 			.useValue(new InMemoryLegacyBoardStore())
@@ -89,8 +91,9 @@ describe("POST /opponents/:round", () => {
 		const first = await pull(3, { board: playerBoard(3, 1), performance }, alice).expect(200);
 		const second = await pull(3, { board: playerBoard(3, 2), performance }, alice).expect(200);
 
+		// The round's only player board is alice's, so she meets the bot board again.
 		expect(first.body).toEqual({ board: seeded });
-		expect(second.body.board.round).toBe(2);
+		expect(second.body).toEqual({ board: seeded });
 	});
 
 	it("refuses an invalid access token", async () => {

@@ -9,10 +9,10 @@ import type { PlayerBoard } from "../domain/player-board.js";
 export class InMemoryOpponentBoardStore extends OpponentBoardStore {
 	private readonly boardsByRound = new Map<number, Map<string, string>>();
 
-	// For the tests: gives the boards their ids, like the seed migration does.
-	static seeded(playerBoards: Omit<PlayerBoard, "id">[], ids: IdProvider = new UuidProvider()) {
+	// For the tests: gives the boards their ids, like the seed migration does, and no puller yet.
+	static seeded(playerBoards: Omit<PlayerBoard, "id" | "pulledBy">[], ids: IdProvider = new UuidProvider()) {
 		const store = new InMemoryOpponentBoardStore();
-		for (const playerBoard of playerBoards) store.addNow({ ...playerBoard, id: ids.next() });
+		for (const playerBoard of playerBoards) store.addNow({ ...playerBoard, id: ids.next(), pulledBy: [] });
 		return store;
 	}
 
@@ -26,13 +26,27 @@ export class InMemoryOpponentBoardStore extends OpponentBoardStore {
 		this.boardsByRound.set(playerBoard.board.round, boards);
 	}
 
+	async count(round: number) {
+		return this.boardsByRound.get(round)?.size ?? 0;
+	}
+
 	async findByRound(round: number, notOwnedBy?: string): Promise<PlayerBoard[]> {
 		return [...(this.boardsByRound.get(round)?.values() ?? [])]
 			.map((board): PlayerBoard => JSON.parse(board))
 			.filter((board) => notOwnedBy === undefined || board.playerId !== notOwnedBy);
 	}
 
-	// Nothing keeps the pulled boards, so `pulledBy` only matters to the legacy store.
+	async markPulled(id: string, pulledBy: string) {
+		for (const boards of this.boardsByRound.values()) {
+			const stored = boards.get(id);
+			if (stored === undefined) continue;
+			const playerBoard: PlayerBoard = JSON.parse(stored);
+			boards.set(id, JSON.stringify({ ...playerBoard, pulledBy: [...playerBoard.pulledBy, pulledBy] }));
+			return;
+		}
+	}
+
+	// Nothing keeps the consumed boards, so `pulledBy` only matters to the legacy store.
 	async remove(id: string, _pulledBy: string) {
 		for (const [round, boards] of this.boardsByRound) {
 			if (!boards.delete(id)) continue;

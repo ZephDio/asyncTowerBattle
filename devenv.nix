@@ -21,6 +21,8 @@
     PRISMA_SCHEMA_ENGINE_BINARY = "${pkgs.prisma-engines}/bin/schema-engine";
     # The database of server/docker-compose.yml.
     DATABASE_URL = "postgresql://atb:atb@localhost:5432/atb";
+    # The database of the server's integration tests, in the same Postgres. They empty it, so it is never the one above.
+    TEST_DATABASE_URL = "postgresql://atb:atb@localhost:5432/atb_test";
     # Signs the server's access tokens. A deployed server sets its own.
     JWT_SECRET = "atb-dev-secret";
     # The game's OAuth client ID from the Google Cloud console (a "Web application" client with

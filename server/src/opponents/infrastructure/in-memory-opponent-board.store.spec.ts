@@ -2,7 +2,7 @@ import { checkBoard, roundGridSize } from "../domain/checked-board.js";
 import type { PlayerBoard } from "../domain/player-board.js";
 import { InMemoryOpponentBoardStore } from "./in-memory-opponent-board.store.js";
 
-const playerBoard = (round: number, randomSeed = round): Omit<PlayerBoard, "id"> => ({
+const playerBoard = (round: number, randomSeed = round): Omit<PlayerBoard, "id" | "pulledBy"> => ({
 	board: checkBoard({
 		round,
 		faction: "Dwarf",
@@ -11,9 +11,10 @@ const playerBoard = (round: number, randomSeed = round): Omit<PlayerBoard, "id">
 		elements: [{ kind: "castle", cell: { x: 0, y: 5 } }],
 	}),
 	performance: { wins: 1, losses: 0 },
+	bot: false,
 });
 
-const withoutId = ({ board, performance }: PlayerBoard) => ({ board, performance });
+const withoutId = ({ board, performance, bot }: PlayerBoard) => ({ board, performance, bot });
 
 describe("InMemoryOpponentBoardStore", () => {
 	it("groups the boards by round", async () => {
@@ -33,6 +34,26 @@ describe("InMemoryOpponentBoardStore", () => {
 
 		await store.remove(second!.id, "puller");
 		expect(await store.rounds()).toEqual([1]);
+	});
+
+	it("counts the boards of a round", async () => {
+		const store = InMemoryOpponentBoardStore.seeded([playerBoard(1), playerBoard(3, 30), playerBoard(3, 31)]);
+		const [first] = await store.findByRound(3);
+
+		expect(await store.count(3)).toBe(2);
+		await store.remove(first!.id, "puller");
+		expect(await store.count(3)).toBe(1);
+		expect(await store.count(2)).toBe(0);
+	});
+
+	it("keeps a board marked as pulled, with every puller", async () => {
+		const store = InMemoryOpponentBoardStore.seeded([playerBoard(1)]);
+		const [stored] = await store.findByRound(1);
+
+		await store.markPulled(stored!.id, "first");
+		await store.markPulled(stored!.id, "second");
+
+		expect(await store.findByRound(1)).toEqual([{ ...stored, pulledBy: ["first", "second"] }]);
 	});
 
 	it("leaves out the boards of a player", async () => {

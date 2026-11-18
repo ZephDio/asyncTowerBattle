@@ -16,29 +16,38 @@ datasource db {
 }
 
 // A board a player sent when asking for an opponent, with their performance at the time. It is an opponent board
-// until another player pulls it, then a legacy board.
+// until a pull consumes it, then a legacy board. A round's boards are only consumed once it holds more than 50.
 model PlayerBoard {
-  id        String       @id @db.Uuid
+  id        String    @id @db.Uuid
   round     Int
   // The SerializedBoard as JSON.
   board     Json
   wins      Int
   losses    Int
-  createdAt DateTime     @default(now()) @map("created_at")
-  // When the board was pulled as an opponent, null while it is still available.
-  pulledAt  DateTime?    @map("pulled_at")
-  // The player who built the board, null for a guest's board and the seed boards. A player never pulls their own.
-  playerId  String?      @map("player_id") @db.Uuid
-  player    Player?      @relation(fields: [playerId], references: [id], onDelete: SetNull)
-  // The board whose player pulled this one as their opponent, sent in the same request. Null while still available,
-  // and for the boards pulled before the column existed.
-  pulledBy  String?      @unique @map("pulled_by") @db.Uuid
-  puller    PlayerBoard? @relation("PulledBy", fields: [pulledBy], references: [id], onDelete: SetNull)
-  pulled    PlayerBoard? @relation("PulledBy")
+  createdAt DateTime  @default(now()) @map("created_at")
+  // When a pull consumed the board, null while it is still available.
+  pulledAt  DateTime? @map("pulled_at")
+  // The player who built the board, null for a guest's board and the bot boards. A player never pulls their own.
+  playerId  String?   @map("player_id") @db.Uuid
+  player    Player?   @relation(fields: [playerId], references: [id], onDelete: SetNull)
+  // A board no player built, such as the seed boards. A pull only gives one when its round has no player board.
+  bot       Boolean   @default(false)
+  // The boards whose players pulled this one as their opponent, each sent in the same request, oldest first. Empty for
+  // the boards pulled before the column held several.
+  pulledBy  String[]  @default([]) @map("pulled_by") @db.Uuid
 
   @@index([round, pulledAt])
   @@index([playerId])
   @@map("player_board")
+}
+
+// The projection of how many available (not consumed) boards each round holds, which PrismaOpponentBoardStore keeps
+// up to date along with the player_board rows.
+model RoundBoardCount {
+  round Int @id
+  count Int
+
+  @@map("round_board_count")
 }
 
 // A player with an account, who signs in with Google or with their email and password. Guests play without one.
