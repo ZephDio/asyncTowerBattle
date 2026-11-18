@@ -8,3 +8,4 @@ AGENTS.md
 .direnv
 __pycache__
 server/src/database/generated
+.env
