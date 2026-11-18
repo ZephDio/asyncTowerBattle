@@ -5,7 +5,7 @@ import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
+import { CAST_TIME, CasterDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { Bakery } from "../../recruit/implementation/backery";
@@ -38,12 +38,11 @@ export class BakeryBlueprint extends Derive(
 	FoodTag,
 	TotemTag,
 ) {
-	description = new Description("Bakery Wryy", [
-		"Every 4 seconds :",
-		"consume 5🌽 and gain",
-		"2💚 for units, otherwise",
-		"produce 3🌽",
-	]);
+	description = new CasterDescription(
+		"Bakery Wryy",
+		[`Every ${CAST_TIME} seconds :`, "consume 5🌽 and gain", "2💚 for units, otherwise", "produce 3🌽"],
+		this,
+	);
 
 	toRecruit(cell: Cell) {
 		return new Bakery(cell, this);

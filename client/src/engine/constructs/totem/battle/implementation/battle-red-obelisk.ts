@@ -1,13 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
-import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
-import { BattleTotem } from "../battle-totem";
+import { Cast } from "../../../../../shared/traits/engine/cast";
+import { CasterTotem } from "../battle-totem";
 import { RedObelisk } from "../../recruit/implementation/obelisk";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
-export class BattleRedObelisk extends Derive(BattleTotem, Caster, HTSynergy, TStatsRenderable) {
+export class BattleRedObelisk extends Derive(CasterTotem, HTSynergy, TStatsRenderable) {
 	hasTriggered = false;
 
 	constructor(

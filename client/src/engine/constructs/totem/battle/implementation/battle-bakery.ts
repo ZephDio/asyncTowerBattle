@@ -1,13 +1,13 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
-import { BattleTotem } from "../battle-totem";
+import { Cast } from "../../../../../shared/traits/engine/cast";
+import { CasterTotem } from "../battle-totem";
 import { Bakery } from "../../recruit/implementation/backery";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
-export class BattleBakery extends Derive(BattleTotem, Caster, TStatsRenderable) {
+export class BattleBakery extends Derive(CasterTotem, TStatsRenderable) {
 	vitalityBuffAmount: number = 2;
 	constructor(
 		public bakery: Bakery,

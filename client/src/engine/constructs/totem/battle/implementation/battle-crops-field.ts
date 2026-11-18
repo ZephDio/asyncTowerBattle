@@ -2,12 +2,12 @@ import { Derive } from "@ddd-ts/traits";
 import { CropsField } from "../../recruit/implementation/crops-field";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
-import { BattleTotem } from "../battle-totem";
+import { Cast } from "../../../../../shared/traits/engine/cast";
+import { CasterTotem } from "../battle-totem";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
-export class BattleCropsField extends Derive(BattleTotem, Caster, TStatsRenderable) {
+export class BattleCropsField extends Derive(CasterTotem, TStatsRenderable) {
 	foodProduction: number = 5;
 	constructor(
 		public cropsField: CropsField,
@@ -36,6 +36,7 @@ export class BattleCropsField extends Derive(BattleTotem, Caster, TStatsRenderab
 	}
 
 	tick() {
+		this.stats.tick();
 		this.tickCast();
 	}
 

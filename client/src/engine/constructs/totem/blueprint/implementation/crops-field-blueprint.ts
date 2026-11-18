@@ -5,7 +5,7 @@ import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
+import { CAST_TIME, CasterDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { CropsField } from "../../recruit/implementation/crops-field";
@@ -38,7 +38,7 @@ export class CropsFieldBlueprint extends Derive(
 	FoodTag,
 	TotemTag,
 ) {
-	description = new Description("Crops Field", ["Every 3.5 seconds :", "produce 5🌽"]);
+	description = new CasterDescription("Crops Field", [`Every ${CAST_TIME} seconds :`, "produce 5🌽"], this);
 
 	toRecruit(cell: Cell) {
 		return new CropsField(cell, this);

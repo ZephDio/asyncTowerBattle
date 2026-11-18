@@ -7,7 +7,7 @@ import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
-import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
+import { CAST_TIME, CasterDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
@@ -57,13 +57,17 @@ export class RedObeliskBlueprint extends Derive(
 	toRecruit(cell: Cell) {
 		return new RedObelisk(cell, this);
 	}
-	description = new Description("Red Obelisk", [
-		"every 5 seconds :",
-		"destroy a random unit",
-		"of yours, if succeed",
-		"trigger your furry",
-		"",
-		"Trigger 10% faster",
-		"for each ▣ evil monument",
-	]);
+	description = new CasterDescription(
+		"Red Obelisk",
+		[
+			`Every ${CAST_TIME} seconds :`,
+			"destroy a random unit",
+			"of yours, if succeed",
+			"trigger your furry",
+			"",
+			"Trigger 10% faster",
+			"for each ▣ evil monument",
+		],
+		this,
+	);
 }

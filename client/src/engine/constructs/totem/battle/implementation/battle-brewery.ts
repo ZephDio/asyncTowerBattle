@@ -1,14 +1,14 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import { Cast, Caster } from "../../../../../shared/traits/engine/cast";
-import { BattleTotem } from "../battle-totem";
+import { Cast } from "../../../../../shared/traits/engine/cast";
+import { CasterTotem } from "../battle-totem";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { Brewery } from "../../recruit/implementation/brewery";
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
-export class BattleBrewery extends Derive(BattleTotem, HTSynergy, Caster, BattleStartTrigger, TStatsRenderable) {
+export class BattleBrewery extends Derive(CasterTotem, HTSynergy, BattleStartTrigger, TStatsRenderable) {
 	vitalityBuffAmount: number = 2;
 	constructor(
 		public brewery: Brewery,

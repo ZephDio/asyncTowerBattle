@@ -5,7 +5,7 @@ import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import { Description, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
+import { CAST_TIME, CasterDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
@@ -40,15 +40,19 @@ export class BreweryBlueprint extends Derive(
 		range: NaN,
 	}),
 ) {
-	description = new Description("Cow-boy Brewery", [
-		"Every 5 seconds :",
-		"produce 0.5🌽 for each",
-		"units you control (max 8🌽)",
-		"if you hit the max, gain 🥾",
-		"",
-		"start of battle : gain 🥾",
-		"for each ▣ barracks",
-	]);
+	description = new CasterDescription(
+		"Cow-boy Brewery",
+		[
+			`Every ${CAST_TIME} seconds :`,
+			"produce 0.5🌽 for each",
+			"units you control (max 8🌽)",
+			"if you hit the max, gain 🥾",
+			"",
+			"start of battle : gain 🥾",
+			"for each ▣ barracks",
+		],
+		this,
+	);
 
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		if (!gridElement) return false;

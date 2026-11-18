@@ -45,6 +45,19 @@ export const TLiveDescriptor = Trait((base) => {
 	return ILiveDescriptor;
 });
 
+// A description line is plain text, or segments where live values are drawn in their trend color.
+export type DescriptionLine = string | (string | LiveLine)[];
+
+// Implemented by battle entities whose description text holds values that change during the battle.
+// These lines are read every frame and replace the static description lines.
+export const TLiveDescriptionText = Trait((base) => {
+	abstract class ILiveDescriptionText extends base {
+		abstract liveDescription(): DescriptionLine[];
+	}
+
+	return ILiveDescriptionText;
+});
+
 export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 	abstract class IDescriptor extends base {
 		description: Description;
@@ -87,17 +100,22 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		return { ...staticLines, ...this.item.liveLines() };
 	}
 
+	get descriptionLines(): DescriptionLine[] {
+		if (!implementsTrait(this.item, TLiveDescriptionText)) return this.item.description.description;
+		return this.item.liveDescription();
+	}
+
 	getLinesPositions() {
 		const positions = [];
 		const { statColumns } = this.item.description;
 		const statCount = Object.keys(this.extraLines).length;
 		for (let index = 0; index < statCount; index++) {
 			const row = Math.floor(index / statColumns) + 1;
-			const x = -7 + (index % statColumns) * (16 / statColumns);
+			const x = -7 + (index % statColumns) * (14 / statColumns);
 			positions.push(this.linesOrigin.add(new ScreenPosition({ x, y: -2.1 * (row + 0.1) })));
 		}
 		let i = Math.ceil(statCount / statColumns);
-		this.item.description.description.forEach(() => {
+		this.descriptionLines.forEach(() => {
 			i++;
 			positions.push(this.linesOrigin.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.8) })));
 		});
@@ -125,7 +143,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		context.textBaseline = "alphabetic";
 		// Description lines
 		const lines = [...Object.entries(this.extraLines)];
-		const description = this.item.description.description;
+		const description = this.descriptionLines;
 		const descriptionFontSize = this.getCanvasSize(context, 14, 1.6, scale);
 		const statFontSize = this.getCanvasSize(context, 14 / this.item.description.statColumns, 1.6, scale);
 		const { statLabels } = this.item.description;
@@ -159,7 +177,23 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		description.forEach((line, index) => {
 			const descriptionPosition = descriptionPositions[index];
 			if (!descriptionPosition) return;
-			context.fillText(line, descriptionPosition.x, descriptionPosition.y, descriptionFontSize.width);
+			if (typeof line === "string") {
+				context.fillText(line, descriptionPosition.x, descriptionPosition.y, descriptionFontSize.width);
+				return;
+			}
+			// Segments share the line's width, squeezed together when the line is too long.
+			const texts = line.map((segment) => (typeof segment === "string" ? segment : segment.value));
+			const widths = texts.map((text) => context.measureText(text).width);
+			const totalWidth = widths.reduce((sum, width) => sum + width, 0);
+			const squeeze = Math.min(1, descriptionFontSize.width / Math.max(totalWidth, 1));
+			let x = descriptionPosition.x;
+			line.forEach((segment, segmentIndex) => {
+				const width = (widths[segmentIndex] ?? 0) * squeeze;
+				context.fillStyle = typeof segment === "string" ? "#000000" : TrendColors[segment.trend];
+				context.fillText(texts[segmentIndex] ?? "", x, descriptionPosition.y, Math.max(width, 1));
+				x += width;
+			});
+			context.fillStyle = "#000000";
 		});
 		// Tags
 		const tagsPosition = this.getCanvasPosition(context, this.tagsPosition);
@@ -180,6 +214,34 @@ export class Description {
 
 		public extraLines?: Record<string, string>,
 	) {}
+}
+
+// Marks where a caster's cast time, in seconds, goes in its description lines.
+export const CAST_TIME = "{cast time}";
+
+// A description whose CAST_TIME lines show the blueprint's cast time, and the live one during battle.
+export class CasterDescription extends Description {
+	private readonly template: string[];
+	private readonly baseCastSpeed: number;
+
+	constructor(name: string, description: string[], caster: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
+		const castTime = `${castSpeedToSecond(caster.stats.castSpeed)}`;
+		super(
+			name,
+			description.map((line) => line.replace(CAST_TIME, castTime)),
+		);
+		this.template = description;
+		this.baseCastSpeed = caster.stats.castSpeed;
+	}
+
+	liveDescription(castSpeed: number): DescriptionLine[] {
+		return this.template.map((line) => {
+			const [before, after] = line.split(CAST_TIME);
+			if (after === undefined) return line;
+			if (castSpeed <= 0) return [liveStat("Stopped", castSpeed, this.baseCastSpeed)];
+			return [before ?? "", liveStat(`${castSpeedToSecond(castSpeed)}`, castSpeed, this.baseCastSpeed), after];
+		});
+	}
 }
 
 export type TowerLinesDescription = {
