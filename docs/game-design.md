@@ -226,7 +226,7 @@ The references are the stone Blue Tower on its wooden palisade (`client/public/r
 - Masonry, plank and thatch textures with 1 px strokes in the neighboring ramp step.
 - A single semi-transparent shadow color, `(22, 28, 46, 80)`, shaped like the piece seen from above, even on left and right, scaled with the piece's height.
 
-The full rules and the generator workflow are in `.claude/skills/pixel-art-assets/SKILL.md`.
+The full rules and the generator workflow are in `.agents/skills/pixel-art-assets/SKILL.md`.
 
 ### Color coding
 

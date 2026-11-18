@@ -175,9 +175,9 @@ Each step should end with `pnpm typecheck` and `pnpm exec jest` green, and be on
 
 ### 10. Docs and tooling
 
-- `CLAUDE.md`: replace "The enemy version is flipped with `BattleGrid.flip` and rotated by π" with the board
+- `AGENTS.md`: replace "The enemy version is flipped with `BattleGrid.flip` and rotated by π" with the board
   orientation description, and drop the four-orientation wording.
-- `.claude/skills/pixel-art-assets`: it produces four orientation views and wires them into the resources; change it
+- `.agents/skills/pixel-art-assets`: it produces four orientation views and wires them into the resources; change it
   to a single front-view `<piece>.png`.
 
 ### 11. Final check

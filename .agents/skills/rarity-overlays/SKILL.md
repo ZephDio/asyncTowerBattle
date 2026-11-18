@@ -33,7 +33,7 @@ Paths in this file are relative to this skill directory unless explicitly descri
 Use Nix-managed dependencies, not global installs or pip. From the repository root:
 
 ```sh
-nix-shell .claude/skills/rarity-overlays/shell.nix --run 'python3 .claude/skills/rarity-overlays/scripts/composite.py --help'
+nix-shell .agents/skills/rarity-overlays/shell.nix --run 'python3 .agents/skills/rarity-overlays/scripts/composite.py --help'
 ```
 
 The shell provides Python/Pillow and `rsvg-convert`. Add missing tooling to `shell.nix` or the project's devenv configuration. A compositing script does not generate finished artwork. If drawing new art without an image-generation tool, explain the procedural/vector approach and get agreement.
@@ -43,9 +43,9 @@ The shell provides Python/Pillow and `rsvg-convert`. Add missing tooling to `she
 From the repository root, with the bundled tools available:
 
 ```sh
-python3 .claude/skills/rarity-overlays/scripts/composite.py \
+python3 .agents/skills/rarity-overlays/scripts/composite.py \
   --base client/public/resources/hud/banner-descriptor/common.png \
-  --overlay .claude/skills/rarity-overlays/assets/overlays/legendary.png \
+  --overlay .agents/skills/rarity-overlays/assets/overlays/legendary.png \
   --output /tmp/legendary-final.png
 ```
 
@@ -56,8 +56,8 @@ The compositor rejects mismatched dimensions, missing transparency, empty overla
 Run this only when re-extraction is necessary. Choose a NEW staging directory:
 
 ```sh
-nix-shell .claude/skills/rarity-overlays/shell.nix --run \
-  'python3 .claude/skills/rarity-overlays/scripts/fix_footer_overlap.py --destination /tmp/rarity-rebuild'
+nix-shell .agents/skills/rarity-overlays/shell.nix --run \
+  'python3 .agents/skills/rarity-overlays/scripts/fix_footer_overlap.py --destination /tmp/rarity-rebuild'
 ```
 
 This extracts the four references in memory, aligns each side, applies the approved legendary raised/outer placement, extends lower tails beneath the footer, and applies foreground occlusion. It creates `overlays/<rarity>.png`, `output/<rarity>.png`, and `footer-validation.json` inside the destination. It checks both contacts with the footer and verifies that foreground-footer pixels remain identical to the base. It refuses existing delivery files.
@@ -72,8 +72,8 @@ This extracts the four references in memory, aligns each side, applies the appro
 4. Test the compositor from repository root:
 
    ```sh
-   nix-shell .claude/skills/rarity-overlays/shell.nix --run \
-     'python3 -m unittest discover -s .claude/skills/rarity-overlays/tests -v'
+   nix-shell .agents/skills/rarity-overlays/shell.nix --run \
+     'python3 -m unittest discover -s .agents/skills/rarity-overlays/tests -v'
    ```
 
 5. Deliver the composed PNG first and the overlay second. When replacing game assets, install the final PNGs under `client/public/resources/hud/banner-descriptor/` with the existing rarity names. Keep only approved overlays in `assets/overlays/`, and keep supporting metadata separate. State what was actually validated; do not claim an in-game visual check unless performed.

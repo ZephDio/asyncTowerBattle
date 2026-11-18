@@ -2,7 +2,6 @@ node_modules
 build
 dist
 coverage
-AGENTS.md
 .devenv
 .devenv.flake.nix
 .direnv

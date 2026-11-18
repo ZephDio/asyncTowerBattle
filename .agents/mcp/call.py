@@ -1,8 +1,8 @@
 """Call the atb-game MCP server's tools in sequence, for sessions where its tools are not loaded (MCP servers load
-when Claude Code starts). Goes through the real MCP protocol, one server and one page for the whole sequence.
+when the agent starts). Goes through the real MCP protocol, one server and one page for the whole sequence.
 
-nix-shell .claude/playwright.nix --run "python .claude/mcp/call.py start '{\"seed\": 1}' start_battle run \
-    screenshot '{\"region\": \"battle\"}' --out .claude/screenshots/end.png"
+nix-shell .agents/playwright.nix --run "python .agents/mcp/call.py start '{\"seed\": 1}' start_battle run \
+    screenshot '{\"region\": \"battle\"}' --out .agents/screenshots/end.png"
 
 Arguments are tool names, each optionally followed by its JSON arguments. Image results are written to --out (with
 a -2, -3... suffix after the first one); text results are printed.
@@ -36,7 +36,7 @@ def parse_calls(items: list[str]):
 async def main(calls, out: Path):
     params = StdioServerParameters(
         command="nix-shell",
-        args=["-I", "nixpkgs=flake:nixpkgs", str(ROOT / ".claude/playwright.nix"), "--run", "exec python .claude/mcp/server.py"],
+        args=["-I", "nixpkgs=flake:nixpkgs", str(ROOT / ".agents/playwright.nix"), "--run", "exec python .agents/mcp/server.py"],
         cwd=str(ROOT),
         # The whole environment, so ATB_PORT and ATB_SERVER_URL reach the server.
         env=dict(os.environ),

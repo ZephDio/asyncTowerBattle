@@ -94,11 +94,11 @@ RGBA rows, and make `write_sheet` use it so the JSON is written in one place.
 ## Verification for each unit
 
 Pillow is only available in the skill's nix shell:
-`nix-shell .claude/skills/pixel-art-assets/shell.nix --run "..."`.
+`nix-shell .agents/skills/pixel-art-assets/shell.nix --run "..."`.
 
 1. **Frame 1 equals the still image**: crop the first frame from the sheet and compare it with `<unit>.png`, pixel by
    pixel. Treat any two fully transparent pixels as equal, whatever their RGB.
-2. **Preview**: `python3 .claude/skills/pixel-art-assets/scripts/preview.py --scale <s> <out.png>
+2. **Preview**: `python3 .agents/skills/pixel-art-assets/scripts/preview.py --scale <s> <out.png>
    client/public/resources/units/<unit>.png client/public/resources/units/<unit>.sheet.png`, writing `<out.png>` to the scratchpad.
    Then Read the image and check that frame 2 drops the head, keeps the feet, and shows no seam or cut detail.
    Use `--scale` 4 to 8 for small sprites and 1 for the big ones.

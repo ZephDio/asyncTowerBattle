@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": {
+    "paths": [".agents/skills"]
+  },
+  "mcp": {
+    "atb-game": {
+      "type": "local",
+      "command": ["nix-shell", "-I", "nixpkgs=flake:nixpkgs", ".agents/playwright.nix", "--run", "exec python .agents/mcp/server.py"],
+      "enabled": true
+    }
+  }
+}

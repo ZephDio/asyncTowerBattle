@@ -5,7 +5,7 @@ description: Run, play and screenshot the game in a headless browser through the
 
 # Game testing
 
-The `atb-game` MCP server (`.mcp.json`, `.claude/mcp/server.py`) keeps the game open in one headless Chromium page
+The `atb-game` MCP server (`.mcp.json`, `.agents/mcp/server.py`) keeps the game open in one headless Chromium page
 and starts Vite on port 5173 if nothing answers there. Its tools call the debug bridge `client/src/debug/bridge.ts`, which
 the game installs as `window.__atb` when opened with `?debug`. Clicks and drags are real mouse events at pixels the
 bridge computes, so they go through `MouseEventHandler` and the input translators.
@@ -17,8 +17,8 @@ added or changed, or failed to start), use the fallback CLI. It runs the same se
 sequence:
 
 ```
-nix-shell .claude/playwright.nix --run "python .claude/mcp/call.py start '{\"seed\": 7}' start_battle run \
-    screenshot --out .claude/screenshots/end.png"
+nix-shell .agents/playwright.nix --run "python .agents/mcp/call.py start '{\"seed\": 7}' start_battle run \
+    screenshot --out .agents/screenshots/end.png"
 ```
 
 Each tool name is followed by optional JSON arguments. Text results are printed and images are written to `--out`,
@@ -116,10 +116,10 @@ server unavailable" warning.
   `drag` the unit from `inventory` onto the barrack's cell on `army`. `eval atb.byId("<barrack id>").unitRecruit`
   confirms it, and the barrack then summons it in battle.
 - **`step` needs a started battle.** It fails during the intro animation. `start_battle` already waits for that.
-- **Save screenshots meant for the user** in `.claude/screenshots/`. Throwaway ones go in the scratchpad.
+- **Save screenshots meant for the user** in `.agents/screenshots/`. Throwaway ones go in the scratchpad.
 
 ## Extending
 
 Add a read or an action as a method on `DebugBridge` (return JSON-safe values; `describe` and `statsOf` serialize
 entities), then a thin `@mcp.tool()` in `server.py` that calls it through `session.call`. Run `pnpm typecheck`,
-then `python .claude/mcp/smoke.py OUT_DIR` in the Nix shell, which plays a round through the tools.
+then `python .agents/mcp/smoke.py OUT_DIR` in the Nix shell, which plays a round through the tools.

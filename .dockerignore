@@ -5,3 +5,7 @@ server/src/database/generated
 .devenv
 .direnv
 .claude
+.agents
+.pi
+AGENTS.md
+opencode.json

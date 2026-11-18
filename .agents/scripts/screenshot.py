@@ -1,7 +1,7 @@
 """Open the game in headless Chromium, optionally click through it, and save screenshots.
 
 Run inside the Nix shell:
-    nix-shell .claude/playwright.nix --run "python .claude/scripts/screenshot.py -o shot.png"
+    nix-shell .agents/playwright.nix --run "python .agents/scripts/screenshot.py -o shot.png"
 
 If no Vite server answers on --url, one is started with `pnpm start` and stopped at the end.
 

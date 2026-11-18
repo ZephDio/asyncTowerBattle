@@ -25,7 +25,7 @@ xssx
 - The drawing is the **player's view**, the piece as written in code. The opponent's copy is its point mirror,
   which `BoardOrientation.Mirrored` produces. Never draw or code it separately.
 - **Rows go down the screen, and game coordinates are y-up**: the top row has the highest y and each row
-  below is y - 1. Columns go left to right with x + 1. See the y-up note in `CLAUDE.md`.
+  below is y - 1. Columns go left to right with x + 1. See the y-up note in `AGENTS.md`.
 - The drawing doesn't mark the anchor `(0, 0)`. Pick one of the `o` cells as the anchor, usually the main
   building cell (the tower, the part that acts), and write every other cell relative to it:
   `x = column - anchorColumn`, `y = anchorRow - row`.
@@ -89,4 +89,4 @@ Also check it in the game with the game-testing skill:
   image is drawn.
 - The sprite covers the bounding box of the `o` cells, one image quadrant per cell, and `x` cells inside it stay
   transparent. The `pixel-art-assets` skill covers drawing it.
-- Then follow the "Adding a new piece" checklist in `CLAUDE.md` (union type, fixtures, resources, retail pool).
+- Then follow the "Adding a new piece" checklist in `AGENTS.md` (union type, fixtures, resources, retail pool).

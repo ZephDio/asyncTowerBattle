@@ -5,7 +5,7 @@ description: Design, add, replace or rebalance a battle unit (dragon, fox, ent, 
 
 # Unit design
 
-A unit is a shop piece that walks the enemy path in battle. It lives in three layers (see CLAUDE.md, "Three-layer
+A unit is a shop piece that walks the enemy path in battle. It lives in three layers (see AGENTS.md, "Three-layer
 entity model"), plus one image. This skill covers the gameplay side (stats, tags, cast, files) and the sprite.
 For idle animation sheets, see `docs/unit-idle-animation.md`. For general pixel art tooling (preview, analyze,
 nix shell), see the `pixel-art-assets` skill.

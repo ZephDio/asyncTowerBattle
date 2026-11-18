@@ -1,5 +1,5 @@
 # Headless browser shell for Claude to run the game and take screenshots.
-# Usage: nix-shell .claude/playwright.nix --run "python .claude/scripts/screenshot.py --help"
+# Usage: nix-shell .agents/playwright.nix --run "python .agents/scripts/screenshot.py --help"
 # Python playwright and the Chromium build come from the same nixpkgs, so their versions match:
 # the npm playwright package downloads a generic-linux Chromium that NixOS can't run.
 { pkgs ? import <nixpkgs> { } }:

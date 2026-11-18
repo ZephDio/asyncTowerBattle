@@ -1,5 +1,5 @@
 # From the repository root:
-# nix-shell .claude/skills/rarity-overlays/shell.nix --run "python3 ..."
+# nix-shell .agents/skills/rarity-overlays/shell.nix --run "python3 ..."
 { pkgs ? import <nixpkgs> { } }:
 pkgs.mkShell {
   packages = [

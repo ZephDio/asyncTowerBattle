@@ -1,4 +1,4 @@
-// Debug bridge for the game MCP server (.claude/mcp/server.py). Opening the game with `?debug` in the URL installs
+// Debug bridge for the game MCP server (.agents/mcp/server.py). Opening the game with `?debug` in the URL installs
 // `window.__atb`: a small API that reads the game as plain JSON, gives page pixels for cells and HUD elements so the
 // server can send real mouse events, and steps battles tick by tick. Every return value must survive JSON.
 import { implementsTrait } from "@ddd-ts/traits";

@@ -1,6 +1,6 @@
 """Smoke test of the game MCP server: plays a shop round and a battle through its tools, saving screenshots.
 
-nix-shell .claude/playwright.nix --run "python .claude/mcp/smoke.py OUT_DIR"
+nix-shell .agents/playwright.nix --run "python .agents/mcp/smoke.py OUT_DIR"
 """
 
 import asyncio

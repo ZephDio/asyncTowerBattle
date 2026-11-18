@@ -15,7 +15,7 @@ image, and iterated on.
   `zlib` + `struct`, so anyone can rerun them. See `client/scripts/generate-gobelin-portal.py` (`write_png`).
 - Pillow is not installed globally. Use the skill's nix shell for analysis and previews:
   ```sh
-  nix-shell .claude/skills/pixel-art-assets/shell.nix --run "python3 .claude/skills/pixel-art-assets/scripts/analyze.py client/public/resources/towers/blue.png"
+  nix-shell .agents/skills/pixel-art-assets/shell.nix --run "python3 .agents/skills/pixel-art-assets/scripts/analyze.py client/public/resources/towers/blue.png"
   ```
   The first call can take a while to fetch from the binary cache; give it a long timeout.
 - `scripts/analyze.py <png>...`: size, bbox, run-length histogram (pixel scale) and palette.
