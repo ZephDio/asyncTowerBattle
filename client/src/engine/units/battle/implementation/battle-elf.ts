@@ -40,7 +40,7 @@ export class BattleElf extends Derive(TBattleUnit, Caster) {
 	shootArrow() {
 		const vector = this.hooks.gridHooks.getRelativeDirection().below;
 		this.hooks.addProjectile(
-			new BattleArrow(this.recruit.getProjectile(), this.position.clone(), this.hooks, 3, vector),
+			new BattleArrow(this.recruit.getProjectile(), this.position.clone(), this.hooks, this.recruit.arrowDamage, vector),
 			this,
 		);
 		this.finishCast();

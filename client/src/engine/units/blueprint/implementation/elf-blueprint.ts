@@ -7,7 +7,7 @@ import { GridPosition } from "../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/image-drawable";
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
-import { secondsToFrame } from "../../../../shared/seconds";
+import { castSpeedToSecond, secondsToFrame } from "../../../../shared/seconds";
 import { BattleElf } from "../../battle/implementation/battle-elf";
 import { BattlePath } from "../../../path/battle/battle-path";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
@@ -39,7 +39,17 @@ export class ElfBlueprint extends Derive(
 	}),
 	KinfolkTag,
 ) {
-	description = new UnitDescription("Elf", ["A lame unit", "that doesn't do", "anything special"], this);
+	arrowDamage = 3;
+
+	description = new UnitDescription(
+		"Elf",
+		[
+			`every ${castSpeedToSecond(this.stats.castSpeed)} seconds`,
+			"shoot an arrow",
+			`dealing ${this.arrowDamage} damage`,
+		],
+		this,
+	);
 
 	toBattle(gridPosition: GridPosition, enemyPath: BattlePath, hooks: BattleArmyHooks) {
 		return new BattleElf(this, gridPosition, enemyPath, hooks);
