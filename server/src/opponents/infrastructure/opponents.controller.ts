@@ -9,7 +9,9 @@ import {
 	ParseIntPipe,
 	Post,
 	Query,
+	UseGuards,
 } from "@nestjs/common";
+import { OptionalAccessTokenGuard, PlayerId } from "../../players/infrastructure/access-token.guard.js";
 import { PullOpponent } from "../applicative/commands/pull-opponent.use-case.js";
 import { BoardRoundMismatchError, NoOpponentError } from "../applicative/opponent-errors.js";
 import { InvalidPerformanceError, InvalidRoundError } from "../domain/opponent-errors.js";
@@ -21,12 +23,15 @@ export class OpponentsController {
 	constructor(private readonly pullOpponent: PullOpponent) {}
 
 	// The player sends their board of the round and their performance, and gets an opponent board back. With
-	// `?test=true` the board is neither stored nor taken from the others, so test runs don't publish their boards.
+	// `?test=true` the board is neither stored nor taken from the others, so test runs don't publish their boards. A
+	// logged-in player sends their access token, so their board is stored as theirs and they never get one of theirs.
 	@Post(":round")
 	@HttpCode(200)
+	@UseGuards(OptionalAccessTokenGuard)
 	async pull(
 		@Param("round", ParseIntPipe) round: number,
-		@Body() body: PlayerBoard,
+		@Body() body: Pick<PlayerBoard, "board" | "performance">,
+		@PlayerId() playerId: string | undefined,
 		@Query("test", new ParseBoolPipe({ optional: true })) test?: boolean,
 	): Promise<SerializedBoard> {
 		if (typeof body?.board !== "object" || typeof body?.performance !== "object") {
@@ -37,6 +42,7 @@ export class OpponentsController {
 				round,
 				board: body.board,
 				performance: body.performance,
+				playerId,
 				test: test ?? false,
 			});
 		} catch (error) {

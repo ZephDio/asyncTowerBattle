@@ -1,15 +1,21 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../database/prisma.service.js";
-import type { PlayerBoard as PlayerBoardRow } from "../../generated/prisma/client.js";
-import { OpponentBoardStore, type StoredPlayerBoard } from "../applicative/interfaces/opponent-board.store.js";
+import type { PlayerBoard as PlayerBoardRow } from "../../database/generated/prisma/client.js";
+import { OpponentBoardStore } from "../applicative/interfaces/opponent-board.store.js";
 import type { PlayerBoard } from "../domain/player-board.js";
 import type { SerializedBoard } from "../domain/serialized-board.js";
 
-const toStoredPlayerBoard = ({ id, board, wins, losses }: PlayerBoardRow): StoredPlayerBoard => ({
+const toPlayerBoard = ({ id, board, wins, losses, playerId }: PlayerBoardRow): PlayerBoard => ({
 	id,
 	board: board as SerializedBoard,
 	performance: { wins, losses },
+	...(playerId && { playerId }),
 });
+
+// A guest's board and the seed boards have no player, so they are never left out. A bare `not` would leave them out
+// too, since SQL compares null to nothing.
+const notOwnedByFilter = (notOwnedBy: string | undefined) =>
+	notOwnedBy === undefined ? {} : { OR: [{ playerId: null }, { playerId: { not: notOwnedBy } }] };
 
 // The opponent boards are the player_board rows not pulled yet.
 @Injectable()
@@ -18,27 +24,30 @@ export class PrismaOpponentBoardStore extends OpponentBoardStore {
 		super();
 	}
 
-	async add({ board, performance }: PlayerBoard) {
+	async add({ id, board, performance, playerId }: PlayerBoard) {
 		await this.prisma.playerBoard.create({
-			data: { round: board.round, board, wins: performance.wins, losses: performance.losses },
+			data: { id, round: board.round, board, wins: performance.wins, losses: performance.losses, playerId },
 		});
 	}
 
-	async findByRound(round: number) {
+	async findByRound(round: number, notOwnedBy?: string) {
 		const rows = await this.prisma.playerBoard.findMany({
-			where: { round, pulledAt: null },
+			where: { round, pulledAt: null, ...notOwnedByFilter(notOwnedBy) },
 			orderBy: { createdAt: "asc" },
 		});
-		return rows.map(toStoredPlayerBoard);
+		return rows.map(toPlayerBoard);
 	}
 
-	async remove(id: string) {
-		await this.prisma.playerBoard.updateMany({ where: { id, pulledAt: null }, data: { pulledAt: new Date() } });
+	async remove(id: string, pulledBy: string) {
+		await this.prisma.playerBoard.updateMany({
+			where: { id, pulledAt: null },
+			data: { pulledAt: new Date(), pulledBy },
+		});
 	}
 
-	async rounds() {
+	async rounds(notOwnedBy?: string) {
 		const rows = await this.prisma.playerBoard.findMany({
-			where: { pulledAt: null },
+			where: { pulledAt: null, ...notOwnedByFilter(notOwnedBy) },
 			distinct: ["round"],
 			select: { round: true },
 		});

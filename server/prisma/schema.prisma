@@ -2,9 +2,11 @@
 
 generator client {
   provider     = "prisma-client"
-  output       = "../src/generated/prisma"
+  output       = "../src/database/generated/prisma"
   moduleFormat = "esm"
 }
+
+// The server gives every row its id with its IdProvider (src/shared), so no id column has a default.
 
 // The URL comes from DATABASE_URL, see prisma.config.ts.
 datasource db {
@@ -14,16 +16,54 @@ datasource db {
 // A board a player sent when asking for an opponent, with their performance at the time. It is an opponent board
 // until another player pulls it, then a legacy board.
 model PlayerBoard {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String       @id @db.Uuid
   round     Int
   // The SerializedBoard as JSON.
   board     Json
   wins      Int
   losses    Int
-  createdAt DateTime  @default(now()) @map("created_at")
+  createdAt DateTime     @default(now()) @map("created_at")
   // When the board was pulled as an opponent, null while it is still available.
-  pulledAt  DateTime? @map("pulled_at")
+  pulledAt  DateTime?    @map("pulled_at")
+  // The player who built the board, null for a guest's board and the seed boards. A player never pulls their own.
+  playerId  String?      @map("player_id") @db.Uuid
+  player    Player?      @relation(fields: [playerId], references: [id], onDelete: SetNull)
+  // The board whose player pulled this one as their opponent, sent in the same request. Null while still available,
+  // and for the boards pulled before the column existed.
+  pulledBy  String?      @unique @map("pulled_by") @db.Uuid
+  puller    PlayerBoard? @relation("PulledBy", fields: [pulledBy], references: [id], onDelete: SetNull)
+  pulled    PlayerBoard? @relation("PulledBy")
 
   @@index([round, pulledAt])
+  @@index([playerId])
   @@map("player_board")
+}
+
+// A player with an account. Guests play without one.
+model Player {
+  id            String         @id @db.Uuid
+  // The Google account's `sub`, stable across email changes.
+  googleId      String         @unique @map("google_id")
+  email         String
+  name          String
+  createdAt     DateTime       @default(now()) @map("created_at")
+  refreshTokens RefreshToken[]
+  boards        PlayerBoard[]
+
+  @@map("player")
+}
+
+// A refresh token of a player's session, stored as its SHA-256 hash. It is used once: refreshing revokes it and
+// issues the next one.
+model RefreshToken {
+  id        String    @id @db.Uuid
+  playerId  String    @map("player_id") @db.Uuid
+  player    Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  @@index([playerId])
+  @@map("refresh_token")
 }

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import type { Account } from "./app";
 
 // Placeholder entries until the menu gets real features.
 const entries = [
@@ -7,7 +8,18 @@ const entries = [
 ];
 
 // A drawer floating over the game: opening it never resizes or moves the canvas, and the game stays playable beside it.
-export function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function SideMenu({
+	open,
+	onClose,
+	account,
+	onLogOut,
+}: {
+	open: boolean;
+	onClose: () => void;
+	account: Account;
+	// Logging out a guest brings the login screen back too.
+	onLogOut: () => void;
+}) {
 	useEffect(() => {
 		if (!open) return;
 		const closeOnEscape = (event: KeyboardEvent) => event.key === "Escape" && onClose();
@@ -43,6 +55,19 @@ export function SideMenu({ open, onClose }: { open: boolean; onClose: () => void
 					</li>
 				))}
 			</ul>
+			{(account.kind === "player" || account.kind === "guest") && (
+				<footer className="mt-auto flex items-center gap-3 border-t border-white/10 p-4">
+					<span className="min-w-0 flex-1 truncate font-text text-lg text-neutral-300">
+						{account.kind === "player" ? account.player.name : "Guest"}
+					</span>
+					<button
+						className="cursor-pointer rounded-lg px-3 py-1.5 font-text text-neutral-400 transition-colors hover:bg-white/8 hover:text-white focus-visible:bg-white/8 focus-visible:outline-none"
+						onClick={onLogOut}
+					>
+						{account.kind === "player" ? "Log out" : "Log in"}
+					</button>
+				</footer>
+			)}
 		</nav>
 	);
 }

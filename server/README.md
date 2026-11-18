@@ -14,8 +14,22 @@ The opponent boards live in Postgres, in the `player_board` table. Prisma owns t
 - `pnpm start:infra` (from the repository root): start the daemon if needed, then Postgres, then apply the migrations
 - `pnpm db:migrate`: apply the pending migrations. The first ones create `player_board` and seed it with the default board of each round
 - `pnpm db:migrate:dev --name <change>`: create a migration after changing the schema
-- `pnpm db:generate`: regenerate the client in `src/generated/prisma` (also run on install, gitignored)
+- `pnpm db:generate`: regenerate the client in `src/database/generated/prisma` (also run on install, gitignored)
 
-A board is an opponent until another player pulls it, then a legacy board with `pulled_at` set. The tests use the in-memory stores and need no database.
+The database generates no ids: the use cases give each new entity (player, refresh token, board) its id from the `IdProvider` of `src/shared/`, a `UuidProvider`, before storing it.
+
+A board is an opponent until another player pulls it, then a legacy board with `pulled_at` set and `pulled_by` naming the board its puller sent in the same request. `player_id` is the logged-in player who sent a board (null for guests and the seed boards). `POST /opponents/:round` reads an optional access token for it and never gives a player one of their own boards. The tests use the in-memory stores and need no database.
+
+## Players
+
+Players sign in with Google only; guests play without an account. The client's Google button gives an ID token (the `credential`), which the server checks against `GOOGLE_CLIENT_ID` with `google-auth-library`. A player is a `player` row (id, Google `sub`, email, name), created on register.
+
+- `POST /auth/google/register` `{ credential, name }`: create the player (409 if the Google account already has one, 400 for a name outside 2 to 20 characters)
+- `POST /auth/google/login` `{ credential }`: log in (404 if the account has no player yet)
+- `POST /auth/refresh` `{ refreshToken }`: trade a refresh token for a new session (401 if unknown, expired or already used)
+- `POST /auth/logout` `{ refreshToken }`: revoke the refresh token
+- `GET /players/me` with `Authorization: Bearer <access token>`: the player's profile
+
+The three first routes answer with a session, `{ player, accessToken, refreshToken }`, that the client keeps in localStorage. The access token is a 15-minute JWT signed with `JWT_SECRET`, with the player id as subject; `AccessTokenGuard` checks it. The refresh token lasts 30 days, is stored hashed in `refresh_token` and is used once: each refresh revokes it and issues the next one. `JWT_SECRET` is required to start; without `GOOGLE_CLIENT_ID` the sign-in routes fail but the rest of the server works. The devenv shell sets both (fill in `GOOGLE_CLIENT_ID` in `devenv.nix`).
 
 `GET /health` returns `{ "status": "ok", "uptime": <seconds> }`.

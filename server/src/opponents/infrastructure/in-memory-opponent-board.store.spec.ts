@@ -1,7 +1,7 @@
 import type { PlayerBoard } from "../domain/player-board.js";
 import { InMemoryOpponentBoardStore } from "./in-memory-opponent-board.store.js";
 
-const playerBoard = (round: number, randomSeed = round): PlayerBoard => ({
+const playerBoard = (round: number, randomSeed = round): Omit<PlayerBoard, "id"> => ({
 	board: {
 		round,
 		faction: "Dwarf",
@@ -27,11 +27,24 @@ describe("InMemoryOpponentBoardStore", () => {
 		const store = InMemoryOpponentBoardStore.seeded([playerBoard(1), playerBoard(3, 30), playerBoard(3, 31)]);
 		const [first, second] = await store.findByRound(3);
 
-		await store.remove(first!.id);
+		await store.remove(first!.id, "puller");
 		expect(await store.findByRound(3)).toEqual([second]);
 
-		await store.remove(second!.id);
+		await store.remove(second!.id, "puller");
 		expect(await store.rounds()).toEqual([1]);
+	});
+
+	it("leaves out the boards of a player", async () => {
+		const store = InMemoryOpponentBoardStore.seeded([
+			playerBoard(1),
+			{ ...playerBoard(2, 20), playerId: "alice" },
+			{ ...playerBoard(2, 21), playerId: "bob" },
+			{ ...playerBoard(3, 30), playerId: "alice" },
+		]);
+
+		expect(await store.rounds("alice")).toEqual([1, 2]);
+		expect((await store.findByRound(2, "alice")).map(({ board }) => board.randomSeed)).toEqual([21]);
+		expect(await store.rounds()).toEqual([1, 2, 3]);
 	});
 
 	it("hands out copies of the stored boards", async () => {

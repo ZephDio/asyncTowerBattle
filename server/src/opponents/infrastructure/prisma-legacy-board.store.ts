@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../database/prisma.service.js";
-import { LegacyBoardStore } from "../applicative/interfaces/legacy-board.store.js";
-import type { StoredPlayerBoard } from "../applicative/interfaces/opponent-board.store.js";
+import { LegacyBoardStore, type LegacyPlayerBoard } from "../applicative/interfaces/legacy-board.store.js";
 
 // The legacy boards are the pulled player_board rows. PrismaOpponentBoardStore.remove already marks a pulled board,
 // so adding it here only writes the row when it isn't in the table yet.
@@ -11,7 +10,7 @@ export class PrismaLegacyBoardStore extends LegacyBoardStore {
 		super();
 	}
 
-	async add({ id, board, performance }: StoredPlayerBoard) {
+	async add({ id, board, performance, playerId, pulledBy }: LegacyPlayerBoard) {
 		await this.prisma.playerBoard.upsert({
 			where: { id },
 			create: {
@@ -20,7 +19,9 @@ export class PrismaLegacyBoardStore extends LegacyBoardStore {
 				board,
 				wins: performance.wins,
 				losses: performance.losses,
+				playerId,
 				pulledAt: new Date(),
+				pulledBy,
 			},
 			update: {},
 		});

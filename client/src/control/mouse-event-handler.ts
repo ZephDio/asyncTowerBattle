@@ -5,26 +5,39 @@ import { InputToIntent } from "./input-to-intent-translator";
 export type MouseEventType = "down" | "up" | "move" | "right-click";
 
 export class MouseEventHandler {
+	// Whether the left button went down inside the game area and is still held.
+	private pressing = false;
+
 	constructor(
 		private readonly renderer: CanvasRenderer,
 		private readonly inputToIntentTranslator: InputToIntent,
 	) {
-		// Presses start a gesture only inside the game area, so clicks on the side menu stay out of the game. Moves and
-		// releases are read on the whole window, so a drag keeps going when the cursor leaves the canvas.
+		// Presses start a gesture only inside the game area, so clicks on the side menu or the login screen stay out of
+		// the game. Moves and releases are read on the whole window, so a drag keeps going when the cursor leaves the
+		// canvas, but only reach the game during such a drag or, for moves, over the game area itself: an element
+		// covering the canvas, such as the login screen, takes them.
 		renderer.container.addEventListener("mousedown", (event) => {
 			if (event.button === 2) return;
+			this.pressing = true;
 			this.onMouseEvent(event, "down");
 		});
 
 		window.addEventListener("mouseup", (event) => {
-			if (event.button === 2) return;
+			if (event.button === 2 || !this.pressing) return;
+			this.pressing = false;
 			this.onMouseEvent(event, "up");
 		});
-		window.addEventListener("mousemove", (event) => this.onMouseEvent(event, "move"));
+		window.addEventListener("mousemove", (event) => {
+			if (this.pressing || this.isOverGame(event)) this.onMouseEvent(event, "move");
+		});
 		renderer.container.addEventListener("contextmenu", (event) => {
 			event.preventDefault();
 			this.onMouseEvent(event, "right-click");
 		});
+	}
+
+	private isOverGame(event: MouseEvent) {
+		return event.target instanceof Node && this.renderer.container.contains(event.target);
 	}
 
 	onMouseEvent(event: MouseEvent, type: MouseEventType) {

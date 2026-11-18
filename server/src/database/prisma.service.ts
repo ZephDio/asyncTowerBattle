@@ -1,6 +1,6 @@
 import { Injectable, type OnModuleDestroy } from "@nestjs/common";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../generated/prisma/client.js";
+import { PrismaClient } from "./generated/prisma/client.js";
 
 // The Prisma client of the Postgres database at DATABASE_URL. It connects on its first query.
 @Injectable()

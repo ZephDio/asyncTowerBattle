@@ -95,7 +95,7 @@
 			"**",
 			"!**/node_modules/**",
 			"!**/dist/**",
-			"!**/src/generated/**",
+			"!**/src/database/generated/**",
 			"!**/*.json",
 			"!**/.env"
 		]

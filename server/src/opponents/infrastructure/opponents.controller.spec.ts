@@ -2,6 +2,7 @@ import "reflect-metadata";
 import type { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
+import { AccessTokens } from "../../players/applicative/interfaces/access-tokens.js";
 import { LegacyBoardStore } from "../applicative/interfaces/legacy-board.store.js";
 import { OpponentBoardStore } from "../applicative/interfaces/opponent-board.store.js";
 import type { SerializedBoard } from "../domain/serialized-board.js";
@@ -22,6 +23,11 @@ const performance = { wins: 1, losses: 2 };
 
 describe("POST /opponents/:round", () => {
 	let app: INestApplication;
+	let accessTokens: AccessTokens;
+
+	beforeAll(() => {
+		process.env["JWT_SECRET"] = "test-secret";
+	});
 
 	beforeEach(async () => {
 		// In-memory stores seeded like the seed migration, so the test needs no database.
@@ -34,6 +40,7 @@ describe("POST /opponents/:round", () => {
 			.useValue(new InMemoryLegacyBoardStore())
 			.compile();
 		app = moduleRef.createNestApplication();
+		accessTokens = moduleRef.get(AccessTokens);
 		await app.init();
 	});
 
@@ -41,8 +48,10 @@ describe("POST /opponents/:round", () => {
 		await app.close();
 	});
 
-	const pull = (round: number | string, body: object) =>
-		request(app.getHttpServer()).post(`/opponents/${round}`).send(body);
+	const pull = (round: number | string, body: object, accessToken?: string) => {
+		const post = request(app.getHttpServer()).post(`/opponents/${round}`);
+		return (accessToken ? post.set("Authorization", `Bearer ${accessToken}`) : post).send(body);
+	};
 
 	it("sends the seeded board of the round, then the board the previous player sent", async () => {
 		const first = await pull(3, { board: playerBoard(3, 1), performance }).expect(200);
@@ -50,6 +59,21 @@ describe("POST /opponents/:round", () => {
 
 		const second = await pull(3, { board: playerBoard(3, 2), performance }).expect(200);
 		expect(second.body).toEqual(playerBoard(3, 1));
+	});
+
+	it("never sends a logged-in player a board of theirs", async () => {
+		const alice = await accessTokens.issue("alice");
+		const seeded = SEED_BOARDS.find((board) => board.round === 3);
+
+		const first = await pull(3, { board: playerBoard(3, 1), performance }, alice).expect(200);
+		const second = await pull(3, { board: playerBoard(3, 2), performance }, alice).expect(200);
+
+		expect(first.body).toEqual(seeded);
+		expect(second.body.round).toBe(2);
+	});
+
+	it("refuses an invalid access token", async () => {
+		await pull(3, { board: playerBoard(3, 1), performance }, "not-a-token").expect(401);
 	});
 
 	it("leaves the boards as they were for a test request", async () => {

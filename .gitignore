@@ -7,4 +7,4 @@ AGENTS.md
 .devenv.flake.nix
 .direnv
 __pycache__
-server/src/generated
+server/src/database/generated
