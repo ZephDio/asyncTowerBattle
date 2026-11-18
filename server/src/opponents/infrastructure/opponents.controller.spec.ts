@@ -54,11 +54,27 @@ describe("POST /opponents/:round", () => {
 	};
 
 	it("sends the seeded board of the round, then the board the previous player sent", async () => {
-		const first = await pull(3, { board: playerBoard(3, 1), performance }).expect(200);
+		const first = await pull(3, { board: playerBoard(3, 1), performance }, await accessTokens.issue("alice")).expect(
+			200,
+		);
 		expect(first.body).toEqual(SEED_BOARDS.find((board) => board.round === 3));
 
-		const second = await pull(3, { board: playerBoard(3, 2), performance }).expect(200);
+		const second = await pull(3, { board: playerBoard(3, 2), performance }, await accessTokens.issue("bob")).expect(
+			200,
+		);
 		expect(second.body).toEqual(playerBoard(3, 1));
+	});
+
+	it("leaves the boards as they were for a guest", async () => {
+		const seeded = SEED_BOARDS.find((board) => board.round === 3);
+
+		const first = await pull(3, { board: playerBoard(3, 1), performance }).expect(200);
+		const second = await pull(3, { board: playerBoard(3, 2), performance }, await accessTokens.issue("bob")).expect(
+			200,
+		);
+
+		expect(first.body).toEqual(seeded);
+		expect(second.body).toEqual(seeded);
 	});
 
 	it("never sends a logged-in player a board of theirs", async () => {
@@ -79,8 +95,14 @@ describe("POST /opponents/:round", () => {
 	it("leaves the boards as they were for a test request", async () => {
 		const seeded = SEED_BOARDS.find((board) => board.round === 3);
 
-		const first = await pull("3?test=true", { board: playerBoard(3, 1), performance }).expect(200);
-		const second = await pull(3, { board: playerBoard(3, 2), performance }).expect(200);
+		const first = await pull(
+			"3?test=true",
+			{ board: playerBoard(3, 1), performance },
+			await accessTokens.issue("alice"),
+		).expect(200);
+		const second = await pull(3, { board: playerBoard(3, 2), performance }, await accessTokens.issue("bob")).expect(
+			200,
+		);
 
 		expect(first.body).toEqual(seeded);
 		expect(second.body).toEqual(seeded);

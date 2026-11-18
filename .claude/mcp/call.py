@@ -12,6 +12,7 @@ import argparse
 import asyncio
 import base64
 import json
+import os
 from pathlib import Path
 
 from mcp import ClientSession, StdioServerParameters
@@ -37,6 +38,8 @@ async def main(calls, out: Path):
         command="nix-shell",
         args=["-I", "nixpkgs=flake:nixpkgs", str(ROOT / ".claude/playwright.nix"), "--run", "exec python .claude/mcp/server.py"],
         cwd=str(ROOT),
+        # The whole environment, so ATB_PORT and ATB_SERVER_URL reach the server.
+        env=dict(os.environ),
     )
     images = 0
     async with stdio_client(params) as (read, write):

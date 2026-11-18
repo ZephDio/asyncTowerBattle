@@ -22,9 +22,10 @@ import type { SerializedBoard } from "../domain/serialized-board.js";
 export class OpponentsController {
 	constructor(private readonly pullOpponent: PullOpponent) {}
 
-	// The player sends their board of the round and their performance, and gets an opponent board back. With
-	// `?test=true` the board is neither stored nor taken from the others, so test runs don't publish their boards. A
-	// logged-in player sends their access token, so their board is stored as theirs and they never get one of theirs.
+	// The player sends their board of the round and their performance, and gets an opponent board back. A logged-in
+	// player sends their access token: their board is stored as theirs, for the next players, the opponent is taken from
+	// the others, and they never get one of theirs. A guest's request, or one with `?test=true` (dev mode), only reads:
+	// the board is neither stored nor taken from the others.
 	@Post(":round")
 	@HttpCode(200)
 	@UseGuards(OptionalAccessTokenGuard)

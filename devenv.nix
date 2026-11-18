@@ -28,6 +28,9 @@
     # it to the sign-in button. Google sign-in is off while it is empty; guests can still play.
     GOOGLE_CLIENT_ID = "851929848198-651ujp6ruq78tm3n6foo2v6ktdj23qd7.apps.googleusercontent.com";
     VITE_GOOGLE_CLIENT_ID = config.env.GOOGLE_CLIENT_ID;
+    # Also accepts the credential `google:<id>` as the Google account <id>, so the headless game tools can play as a
+    # registered player. Never set it on a deployed server.
+    FAKE_GOOGLE_SIGN_IN = "true";
     # The project's own Docker daemon, so the docker CLI never talks to a system one.
     DOCKER_HOST = "unix://${config.env.DEVENV_RUNTIME}/docker.sock";
     DOCKERD_ROOTLESS_ROOTLESSKIT_STATE_DIR = "${config.env.DEVENV_RUNTIME}/dockerd-rootless";

@@ -1,6 +1,6 @@
 import { resumeSession } from "../../auth/auth-api";
 import { storedTokens } from "../../auth/session";
-import { DEBUG_BRIDGE } from "../../debug/debug-flag";
+import { DEV_START } from "../../shared/dev-start";
 import { SERVER_URL } from "../../shared/server-url";
 import { Army } from "../army/army";
 import { deserializeBoard, serializeBoard } from "./board-serializer";
@@ -16,17 +16,17 @@ const authorization = (): Record<string, string> => {
 	return tokens ? { Authorization: `Bearer ${tokens.accessToken}` } : {};
 };
 
-// Trades the player's board with the opponent server (server/) for a board of the round: the server
-// keeps the player's board for the next players. A logged-in player sends their access token, so the server stores the
-// board as theirs and never gives them one of theirs. When the server can't be reached, the game still plays against
-// the local boards.
+// Trades the player's board with the opponent server (server/) for a board of the round. A logged-in player sends their
+// access token: the server keeps the board as theirs for the next players, consumes the opponent, and never gives them
+// one of theirs. A guest's or a dev mode request only reads, so playing as a guest or in dev mode changes nothing on
+// the server. When the server can't be reached, the game still plays against the local boards.
 export class RemoteMatchMaker extends MatchMaker {
 	constructor(
 		private serverUrl = SERVER_URL,
 		private fallback: MatchMaker = new LocalMatchMaker(),
-		// Test requests get an opponent without publishing the player's board or consuming the opponent's. Debug runs,
-		// such as the headless game tools, send them.
-		private test = DEBUG_BRIDGE,
+		// Test requests get an opponent without publishing the player's board or consuming the opponent's, even for a
+		// logged-in player. Games in dev mode (`?dev`) send them.
+		private test = DEV_START,
 	) {
 		super();
 	}

@@ -7,10 +7,11 @@ import type { PlayerBoard } from "../../domain/player-board.js";
 import { BoardRoundMismatchError, NoOpponentError } from "../opponent-errors.js";
 import type { SerializedBoard } from "../../domain/serialized-board.js";
 
-// A test request, from a headless or debug run, gets an opponent but leaves both stores as they were.
+// A test request, from a game in dev mode, gets an opponent but leaves both stores as they were, and so does a guest's:
+// only a logged-in player's boards are stored and only they consume opponents, so guests and dev runs read for free.
 export type PullOpponentRequest = Omit<PlayerBoard, "id"> & { round: number; test: boolean };
 
-// Trades the player's board for an opponent: the player's board becomes available to the next players of the round,
+// Trades a logged-in player's board for an opponent: the player's board becomes available to the next players of the round,
 // and the opponent, a board of the round or of the latest earlier round that has one, moves to the legacy store so no
 // one else gets it, marked as pulled by the player's board. The opponent is picked before the player's board is stored,
 // so a player never meets the board they just sent, and a logged-in player never meets any board of theirs.
@@ -30,7 +31,7 @@ export class PullOpponent {
 		}
 
 		const opponent = await this.pickOpponent(round, playerId);
-		if (test) {
+		if (test || !playerId) {
 			if (!opponent) throw new NoOpponentError(round);
 			return opponent.board;
 		}

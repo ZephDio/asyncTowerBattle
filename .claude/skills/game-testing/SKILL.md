@@ -51,8 +51,16 @@ server unavailable" warning.
 
 ## Tools
 
-- `start(faction="Elf", dev=True, seed=None, menu=False)` reloads the page and starts a game in the shop.
+- `start(faction="Elf", dev=True, seed=None, menu=False, player=None)` reloads the page and starts a game in the shop.
   - `dev` gives 10025 gold and flat rarity odds. Pass `dev=False` for a real first round (105 gold).
+  - `player` plays logged in as that player, registered on first use through the server's fake Google sign-in
+    (`FAKE_GOOGLE_SIGN_IN=true`, set by the devenv shell; set `ATB_SERVER_URL` to use a server other than port 6868).
+    Without it the game plays as a guest. The result's `savesBoards` says which mode the game is in:
+    - Guest or `dev=True`: pulling an opponent is a free read. No board is stored or consumed. Use it to test game
+      mechanics.
+    - `player` with `dev=False`: the board is stored as the player's and the opponent is consumed, as in a real game.
+      Use it to test saving boards. It changes the dev database: delete the test player's boards afterwards and put
+      back the boards they pulled (clear `pulled_at` and `pulled_by` where `pulled_by` is one of their boards).
   - `seed` seeds `Math.random`, so the same seed gives the same shop offers and environment. The seed is returned:
     reuse it to reproduce a run.
   - `menu=True` stays on the main menu. Then `click_hud SelectElfButton` / `SelectDwarfButton` and

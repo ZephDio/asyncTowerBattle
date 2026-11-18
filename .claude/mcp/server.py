@@ -12,6 +12,7 @@ import os
 import random
 import signal
 import subprocess
+import urllib.error
 import urllib.request
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -22,6 +23,20 @@ from playwright.async_api import async_playwright
 ROOT = Path(__file__).resolve().parents[2]
 PORT = int(os.environ.get("ATB_PORT", "5173"))
 URL = f"http://localhost:{PORT}/"
+# The game server (server/), for the sessions of `start(player=...)`.
+GAME_SERVER_URL = os.environ.get("ATB_SERVER_URL", "http://localhost:6868")
+
+# Puts the session in the game's storage before it loads, or removes any, once per page: the game rotates the refresh
+# token when it resumes the session, so a reload must keep the rotated one.
+SESSION_SCRIPT = """
+(() => {
+  if (sessionStorage.getItem("atb.mcp.session")) return;
+  sessionStorage.setItem("atb.mcp.session", "1");
+  const session = %s;
+  if (session) localStorage.setItem("atb.session", JSON.stringify(session));
+  else localStorage.removeItem("atb.session");
+})();
+"""
 
 # Replaces Math.random with a seeded generator before the game loads, for reproducible shops and environments.
 SEED_SCRIPT = """
@@ -80,12 +95,13 @@ class Session:
         self.playwright = await async_playwright().start()
         self.browser = await self.playwright.chromium.launch()
 
-    async def open(self, query: str, seed: int | None, width: int, height: int):
+    async def open(self, query: str, seed: int | None, width: int, height: int, tokens: dict | None = None):
         await self.ensure_browser()
         await wait_for_server()
         if self.page:
             await self.page.close()
         page = await self.browser.new_page(viewport={"width": width, "height": height})
+        await page.add_init_script(SESSION_SCRIPT % json.dumps(tokens))
         if seed is not None:
             await page.add_init_script(SEED_SCRIPT % seed)
         page.on("console", lambda m: self.log(f"[{m.type}] {m.text}") if m.type in ("error", "warning") else None)
@@ -122,6 +138,32 @@ def server_up() -> bool:
         return True
     except Exception:
         return False
+
+
+def post_game_server(path: str, body: dict) -> tuple[int, dict]:
+    request = urllib.request.Request(
+        GAME_SERVER_URL + path,
+        data=json.dumps(body).encode(),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=5) as response:
+            return response.status, json.loads(response.read())
+    except urllib.error.HTTPError as error:
+        return error.code, json.loads(error.read() or b"{}")
+
+
+def player_session(player: str) -> dict:
+    """Logs in as the player with the fake Google credential, registering them the first time."""
+    credential = f"google:{player}"
+    status, body = post_game_server("/auth/google/login", {"credential": credential})
+    if status == 404:
+        status, body = post_game_server("/auth/google/register", {"credential": credential, "name": player[:20]})
+    if status not in (200, 201):
+        hint = " (is the server running with FAKE_GOOGLE_SIGN_IN=true?)" if status == 401 else ""
+        raise RuntimeError(f"Could not open a session for {player}: {status} {body.get('message')}{hint}")
+    return body
 
 
 async def wait_for_server():
@@ -170,6 +212,7 @@ async def start(
     dev: bool = True,
     seed: int | None = None,
     menu: bool = False,
+    player: str | None = None,
     width: int = 1600,
     height: int = 900,
 ) -> str:
@@ -177,11 +220,19 @@ async def start(
 
     faction: "Elf" or "Dwarf". dev: open with `?dev` (lots of gold, flat rarity odds). seed: seed Math.random so the
     shop offers and environment are reproducible (battles are already deterministic). menu: stay on the main menu.
+    player: play logged in as this player (2 to 20 characters), registered on first use through the server's fake
+    Google sign-in. Without one the game plays as a guest.
+
+    Only a logged-in player without dev mode stores their boards on the server and consumes the opponents they pull.
+    A guest or dev mode game reads opponents for free, so use `player` with `dev=False` to test saving boards.
     """
     seed = seed if seed is not None else random.randrange(2**31)
-    await session.open("debug" + ("&dev" if dev else ""), seed, width, height)
+    account = player_session(player) if player else None
+    tokens = {key: account[key] for key in ("accessToken", "refreshToken")} if account else None
+    await session.open("debug" + ("&dev" if dev else ""), seed, width, height, tokens)
     result = await session.call("state") if menu else await session.call("startGame", faction)
-    return dump({"seed": seed, **result})
+    saves_boards = account is not None and not dev
+    return dump({"seed": seed, "player": account and account["player"], "savesBoards": saves_boards, **result})
 
 
 @mcp.tool()

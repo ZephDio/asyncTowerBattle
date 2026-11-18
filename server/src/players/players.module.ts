@@ -14,6 +14,7 @@ import { GetPlayer } from "./applicative/queries/get-player.use-case.js";
 import { SessionOpener } from "./applicative/session-opener.js";
 import { AccessTokenGuard, OptionalAccessTokenGuard } from "./infrastructure/access-token.guard.js";
 import { AuthController } from "./infrastructure/auth.controller.js";
+import { FakeGoogleIdentityVerifier } from "./infrastructure/fake-google-identity.verifier.js";
 import { GoogleAuthLibraryVerifier } from "./infrastructure/google-auth-library.verifier.js";
 import { JwtAccessTokens } from "./infrastructure/jwt-access-tokens.js";
 import { PlayersController } from "./infrastructure/players.controller.js";
@@ -46,7 +47,15 @@ const ACCESS_TOKEN_LIFETIME_S = 15 * 60;
 		AccessTokenGuard,
 		OptionalAccessTokenGuard,
 		{ provide: AccessTokens, useClass: JwtAccessTokens },
-		{ provide: GoogleIdentityVerifier, useClass: GoogleAuthLibraryVerifier },
+		{
+			provide: GoogleIdentityVerifier,
+			// FAKE_GOOGLE_SIGN_IN=true lets anyone sign in as any account with the credential `google:<id>`, for the
+			// headless game tools. Only the devenv shell sets it.
+			useFactory: () =>
+				process.env["FAKE_GOOGLE_SIGN_IN"] === "true"
+					? new FakeGoogleIdentityVerifier(new GoogleAuthLibraryVerifier())
+					: new GoogleAuthLibraryVerifier(),
+		},
 		{ provide: PlayerStore, useClass: PrismaPlayerStore },
 		{ provide: RefreshTokenStore, useClass: PrismaRefreshTokenStore },
 	],

@@ -25,11 +25,16 @@ const setup = (...boards: SerializedBoard[]) => {
 	return { opponentBoards, legacyBoards, useCase: new PullOpponent(opponentBoards, legacyBoards, new UuidProvider()) };
 };
 
-const pull = (useCase: PullOpponent, round: number, randomSeed = 100 + round, playerId?: string) =>
+// A logged-in player's pull, by a new player unless one is given.
+let players = 0;
+const pull = (useCase: PullOpponent, round: number, randomSeed = 100 + round, playerId = `player-${++players}`) =>
 	useCase.execute({ round, board: board(round, randomSeed), performance, playerId, test: false });
 
 const testPull = (useCase: PullOpponent, round: number) =>
-	useCase.execute({ round, board: board(round, 100 + round), performance, test: true });
+	useCase.execute({ round, board: board(round, 100 + round), performance, playerId: "alice", test: true });
+
+const guestPull = (useCase: PullOpponent, round: number) =>
+	useCase.execute({ round, board: board(round, 100 + round), performance, test: false });
 
 const withoutId = ({ board, performance }: PlayerBoard) => ({ board, performance });
 
@@ -85,8 +90,6 @@ describe("PullOpponent", () => {
 		// Round 2 only has alice's board left, so she falls back to round 1.
 		expect((await pull(useCase, 2, 22, "alice")).randomSeed).toBe(10);
 		expect([21, 22]).toContain((await pull(useCase, 2, 23, "bob")).randomSeed);
-		// A guest has no boards to leave out.
-		expect([21, 22, 23]).toContain((await pull(useCase, 2, 24)).randomSeed);
 	});
 
 	it("still stores the player's board when there is no opponent", async () => {
@@ -109,6 +112,22 @@ describe("PullOpponent", () => {
 		const { opponentBoards, useCase } = setup();
 
 		await expect(testPull(useCase, 1)).rejects.toThrow(NoOpponentError);
+		expect(await opponentBoards.rounds()).toEqual([]);
+	});
+
+	it("gives a guest an opponent without storing or consuming any board", async () => {
+		const { opponentBoards, legacyBoards, useCase } = setup(board(2, 20));
+
+		expect(await guestPull(useCase, 2)).toEqual(board(2, 20));
+		expect(await guestPull(useCase, 2)).toEqual(board(2, 20));
+		expect((await opponentBoards.findByRound(2)).map((stored) => stored.board)).toEqual([board(2, 20)]);
+		expect(legacyBoards.all()).toEqual([]);
+	});
+
+	it("doesn't store a guest's board when there is no opponent", async () => {
+		const { opponentBoards, useCase } = setup();
+
+		await expect(guestPull(useCase, 1)).rejects.toThrow(NoOpponentError);
 		expect(await opponentBoards.rounds()).toEqual([]);
 	});
 

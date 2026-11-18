@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { logout, resumeSession } from "../auth/auth-api";
-import type { Player, Session } from "../auth/session";
+import { type Player, type Session, storedTokens } from "../auth/session";
 import { DEBUG_BRIDGE } from "../debug/debug-flag";
 import { GameCanvas } from "./game-canvas";
 import { LoginScreen } from "./login-screen";
@@ -13,8 +13,10 @@ export type Account =
 	| { kind: "guest" }
 	| { kind: "player"; player: Player };
 
-// Debug runs, such as the headless game tools, play as a guest without the login screen.
-const initialAccount: Account = DEBUG_BRIDGE ? { kind: "guest" } : { kind: "resuming" };
+// Debug runs, such as the headless game tools, never show the login screen: they resume the stored session, which the
+// tools put there to play as a registered player, and play as a guest without one.
+const initialAccount: Account = DEBUG_BRIDGE && !storedTokens() ? { kind: "guest" } : { kind: "resuming" };
+const withoutSession: Account = DEBUG_BRIDGE ? { kind: "guest" } : { kind: "choosing" };
 
 export function App() {
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -25,7 +27,7 @@ export function App() {
 		if (initialAccount.kind !== "resuming") return;
 		resumeSession()
 			.catch(() => undefined)
-			.then((session) => setAccount(session ? { kind: "player", player: session.player } : { kind: "choosing" }));
+			.then((session) => setAccount(session ? { kind: "player", player: session.player } : withoutSession));
 	}, []);
 
 	const onSession = useCallback((session: Session) => setAccount({ kind: "player", player: session.player }), []);
