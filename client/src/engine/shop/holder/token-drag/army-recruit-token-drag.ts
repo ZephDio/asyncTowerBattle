@@ -46,6 +46,8 @@ export class RecruitTokenDrag extends Derive(TTokenDrag) {
 
 			if (implementsTrait(element, TRecruit)) {
 				const onAbort = () => {
+					// With a full inventory, the swapped-out recruit stays in hand until it is placed.
+					if (!this.hooks.shopPhaseHooks.armyHooks.hasInventoryRoomFor(element)) return;
 					this.hooks.shopPhaseHooks.armyHooks.pushToInventory(element);
 					this.hooks.holderHooks.removeHold();
 				};

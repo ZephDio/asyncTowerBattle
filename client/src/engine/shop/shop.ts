@@ -26,6 +26,13 @@ type ArmyHooks = {
 	addRecruit: (recruit: AnyRecruit, grid: ImplementsTrait<typeof TGrid>) => void;
 	getArmyGrid: () => ArmyGrid;
 	pushToInventory: (recruit: AnyRecruit) => void;
+	hasInventoryRoomFor: (recruit: AnyRecruit) => boolean;
+	placeOver: (
+		recruit: AnyRecruit,
+		cell: Cell,
+		grid: ImplementsTrait<typeof TGrid>,
+		elements: AnyRecruit[],
+	) => AnyRecruit | undefined;
 	addUnit: (unit: AnyUnit) => void;
 };
 
@@ -62,6 +69,8 @@ export class ShopPhase {
 		// The battle needs a door-to-castle path; the shop shows "Path invalid" until there is one.
 		if (!this.army.pathNetwork.complete) return;
 		this.holderControl.exit();
+		// A swapped-out recruit with no room in the inventory is still in hand.
+		if (this.holderControl.hold) return;
 		this.onShopExit();
 	}
 
@@ -142,6 +151,8 @@ export class ShopPhase {
 			economyHooks: this.economyHooks,
 			armyHooks: {
 				pushToInventory: this.army.pushToInventory.bind(this.army),
+				hasInventoryRoomFor: this.army.hasInventoryRoomFor.bind(this.army),
+				placeOver: this.army.placeOver.bind(this.army),
 				isValidDestinationCell: this.army.isValidDestinationCell.bind(this.army),
 				removeRecruit: this.army.removeRecruit.bind(this.army),
 				addRecruit: this.army.addRecruit.bind(this.army),

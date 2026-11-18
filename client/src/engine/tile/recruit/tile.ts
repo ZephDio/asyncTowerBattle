@@ -1,4 +1,4 @@
-import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { Cell, GridPosition } from "../../../shared/position";
 import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { AnyBattleTile } from "../battle/battle-tile";
@@ -35,18 +35,9 @@ export const PathTile = Subtrait([TRecruit, TPathConnections, TTrapHolder], (bas
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
 				const { valid, elements } = grid.validateGridElementPlacement(this, cell);
 				if (!valid) throw new Error("Invalid condition");
-				elements.forEach((element) => {
-					if (implementsTrait(element, TRecruit)) {
-						hooks.shopPhaseHooks.armyHooks.removeRecruit(element);
-						hooks.shopPhaseHooks.armyHooks.pushToInventory(element);
-						return undefined;
-					}
-					throw new Error(`Element found in swap ${element}`);
-				});
-				this.cell = cell.clone();
+				const held = hooks.shopPhaseHooks.armyHooks.placeOver(this, cell, grid, elements);
 				this.connectionChoice = null;
-				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
-				return elements[0];
+				return held;
 			}
 			throw new Error("No Case Matched");
 		}

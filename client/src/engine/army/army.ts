@@ -142,6 +142,23 @@ export class Army {
 		}
 	}
 
+	// Puts the recruit on the cell over the elements it covers: the first one is returned for the hand and the others
+	// go to the inventory. When the inventory has no room for them, nothing moves and this throws.
+	placeOver(recruit: AnyRecruit, cell: Cell, grid: ImplementsTrait<typeof TGrid>, elements: AnyRecruit[]) {
+		const [held, ...stored] = elements;
+		const taken = grid instanceof Inventory ? recruit.gridShape.getOccupiedCellsFrom(cell, recruit.orientation) : [];
+		if (!this.inventory.hasRoomForAll(stored, elements, taken)) throw new Error("No room in inventory");
+		elements.forEach((element) => this.removeRecruit(element));
+		recruit.cell = cell.clone();
+		this.addRecruit(recruit, grid);
+		stored.forEach((element) => this.pushToInventory(element));
+		return held;
+	}
+
+	hasInventoryRoomFor(recruit: AnyRecruit) {
+		return this.inventory.hasRoomFor(recruit);
+	}
+
 	pushToInventory(recruit: AnyRecruit) {
 		this.join(recruit);
 		this.inventory.add(recruit);

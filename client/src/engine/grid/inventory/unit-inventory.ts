@@ -7,6 +7,7 @@ import { SynergyEffectHud } from "../grid-effects/synergy-effect";
 import { HoverEffect } from "../grid-effects/hover-effect";
 import { AnyRecruit } from "../../../shared/traits/engine/recruit";
 import { TRenderable } from "../../../shared/traits/render/renderable";
+import { ArmyGrid } from "../grid";
 
 export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, AnyRecruit> = new Map();
@@ -22,7 +23,7 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 		super({ cellSize, height, width, position: screenPosition });
 	}
 
-	getNextValidPosition(recruit: AnyRecruit) {
+	getNextValidPosition(recruit: AnyRecruit, isTaken = (cell: Cell) => this.getElement(cell) !== undefined) {
 		const cells = recruit.gridShape.getVectorialCells();
 		for (let y = 0; y < this.height; y++) {
 			for (let x = 0; x < this.width; x++) {
@@ -38,7 +39,7 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 						valid = false;
 						break;
 					}
-					if (this.getElement(cellInShape)) {
+					if (isTaken(cellInShape)) {
 						valid = false;
 						break;
 					}
@@ -52,6 +53,23 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 	hasRoomFor(recruit: AnyRecruit) {
 		return this.getNextValidPosition(recruit) !== undefined;
+	}
+
+	// Whether the recruits all fit at once, after the freed elements leave the inventory and the taken cells fill.
+	hasRoomForAll(recruits: AnyRecruit[], freed: AnyRecruit[] = [], taken: Cell[] = []) {
+		const occupied = new Set<string>();
+		this.tiles.forEach((element, key) => {
+			if (!freed.includes(element)) occupied.add(key);
+		});
+		taken.forEach((cell) => occupied.add(ArmyGrid.posToString(cell)));
+		for (const recruit of recruits) {
+			const freeCell = this.getNextValidPosition(recruit, (cell) => occupied.has(ArmyGrid.posToString(cell)));
+			if (!freeCell) return false;
+			recruit.gridShape
+				.getVectorialCells()
+				.forEach((offset) => occupied.add(ArmyGrid.posToString(freeCell.add(offset))));
+		}
+		return true;
 	}
 
 	add(recruit: AnyRecruit) {

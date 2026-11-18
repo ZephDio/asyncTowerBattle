@@ -47,13 +47,7 @@ export const Trap = Subtrait([TRecruit, TPathConnections], (base) => {
 			if (grid instanceof ArmyGrid) throw new Error("A trap goes on a path tile");
 			const { valid, elements } = grid.validateGridElementPlacement(this, cell);
 			if (!valid) throw new Error("Invalid condition");
-			elements.forEach((element) => {
-				hooks.shopPhaseHooks.armyHooks.removeRecruit(element);
-				hooks.shopPhaseHooks.armyHooks.pushToInventory(element);
-			});
-			this.cell = cell.clone();
-			hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
-			return elements[0];
+			return hooks.shopPhaseHooks.armyHooks.placeOver(this, cell, grid, elements);
 		}
 
 		toHash() {

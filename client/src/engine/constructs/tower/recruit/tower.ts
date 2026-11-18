@@ -1,7 +1,7 @@
 import { AnyBattleTower } from "../battle/battle-tower";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattleGrid } from "../../../grid/battle-grid";
-import { implementsTrait, ImplementsTrait, Subtrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { TRecruit } from "../../../../shared/traits/engine/recruit";
 import { GridPosition } from "../../../../shared/position";
 import { RetailGrid } from "../../../grid/retail-grid";
@@ -31,17 +31,7 @@ export const Tower = Subtrait([RecruitCaster, TRecruit, HTBaseStats, HTTag, HTTa
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
 				const { valid, elements } = grid.validateGridElementPlacement(this, cell);
 				if (!valid) throw new Error("Invalid condition");
-				this.cell = cell.clone();
-				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
-				elements.forEach((element) => {
-					if (implementsTrait(element, TRecruit)) {
-						hooks.shopPhaseHooks.armyHooks.removeRecruit(element);
-						hooks.shopPhaseHooks.armyHooks.pushToInventory(element);
-						return undefined;
-					}
-					throw new Error(`Element found in swap ${element}`);
-				});
-				return elements[0];
+				return hooks.shopPhaseHooks.armyHooks.placeOver(this, cell, grid, elements);
 			}
 			throw new Error("No Case Matched");
 		}

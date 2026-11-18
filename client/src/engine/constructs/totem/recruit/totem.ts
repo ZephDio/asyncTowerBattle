@@ -1,6 +1,6 @@
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
 import { BattleGrid } from "../../../grid/battle-grid";
-import { ImplementsTrait, Subtrait, implementsTrait } from "@ddd-ts/traits";
+import { ImplementsTrait, Subtrait } from "@ddd-ts/traits";
 import { TRecruit } from "../../../../shared/traits/engine/recruit";
 import { GridPosition } from "../../../../shared/position";
 import { RetailGrid } from "../../../grid/retail-grid";
@@ -27,17 +27,7 @@ export const Totem = Subtrait([TRecruit], (base) => {
 			if (grid instanceof ArmyGrid || grid instanceof Inventory) {
 				const { valid, elements } = grid.validateGridElementPlacement(this, cell);
 				if (!valid) throw new Error("Invalid condition");
-				elements.forEach((element) => {
-					if (implementsTrait(element, TRecruit)) {
-						hooks.shopPhaseHooks.armyHooks.removeRecruit(element);
-						hooks.shopPhaseHooks.armyHooks.pushToInventory(element);
-						return undefined;
-					}
-					throw new Error(`Element found in swap ${element}`);
-				});
-				this.cell = cell.clone();
-				hooks.shopPhaseHooks.armyHooks.addRecruit(this, grid);
-				return elements[0];
+				return hooks.shopPhaseHooks.armyHooks.placeOver(this, cell, grid, elements);
 			}
 			throw new Error("No Case Matched");
 		}
