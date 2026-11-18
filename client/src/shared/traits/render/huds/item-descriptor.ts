@@ -4,7 +4,7 @@ import { PercentToReal } from "../../../../renderer/implementation/canvas-render
 import { BannerBackground } from "./banner-background";
 import { Tag, Tagged } from "../../engine/tags/tagged";
 import { TBaseStats } from "../../../../engine/stats/base-stats";
-import { castSpeedToSecond, frameToSeconds, secondsToFrame } from "../../../seconds";
+import { castSpeedToSecond, frameToSeconds } from "../../../seconds";
 import { TagBadge, drawTagBadgeRows, sortTags } from "./tag-badge";
 import { rarityOf } from "../../engine/rarity";
 import { HudElementResources } from "../../../../renderer/resources/hud-element.resources";
@@ -60,6 +60,8 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 export class DescriptionHud extends Derive(BannerBackground) {
 	drawPriority: 9;
 	titlePosition: ScreenPosition;
+	// The stat and description lines start below this point, under the scroll's top roll.
+	linesOrigin: ScreenPosition;
 	linesPosition: ScreenPosition[];
 	tagsPosition: ScreenPosition;
 	tags: Tag[];
@@ -71,7 +73,8 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	) {
 		super({});
 		this.bannerImage = HudElementResources.descriptorBanner[rarityOf(this.item)].image;
-		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 10 }));
+		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 13.9 }));
+		this.linesOrigin = this.position.add(new ScreenPosition({ x: 0, y: 10.8 }));
 		this.linesPosition = this.getLinesPositions();
 		this.tags = implementsTrait(this.item, Tagged) ? this.item.tags : [];
 		this.tagBadges = sortTags(this.tags).map((tag) => new TagBadge(tag));
@@ -86,14 +89,17 @@ export class DescriptionHud extends Derive(BannerBackground) {
 
 	getLinesPositions() {
 		const positions = [];
-		let i = 0;
-		for (const [_] of Object.entries(this.extraLines)) {
-			i++;
-			positions.push(this.titlePosition.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.1) })));
+		const { statColumns } = this.item.description;
+		const statCount = Object.keys(this.extraLines).length;
+		for (let index = 0; index < statCount; index++) {
+			const row = Math.floor(index / statColumns) + 1;
+			const x = -7 + (index % statColumns) * (16 / statColumns);
+			positions.push(this.linesOrigin.add(new ScreenPosition({ x, y: -2.1 * (row + 0.1) })));
 		}
+		let i = Math.ceil(statCount / statColumns);
 		this.item.description.description.forEach(() => {
 			i++;
-			positions.push(this.titlePosition.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.8) })));
+			positions.push(this.linesOrigin.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.8) })));
 		});
 		return positions;
 	}
@@ -106,15 +112,23 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		// Title
 		const titlePosition = this.getCanvasPosition(context, this.titlePosition);
 		const title = this.item.description.name;
-		const titleFontSize = this.getCanvasSize(context, 14, 2, scale);
+		// Long titles get a smaller font so they fit between the roll's curls instead of being squeezed.
+		const titleFontSize = this.getCanvasSize(context, 11.5, 2.4, scale);
 		context.font = `${titleFontSize.height}px title`;
+		const titleWidth = context.measureText(title).width;
+		const titleHeight = titleFontSize.height * Math.min(1, titleFontSize.width / titleWidth);
+		context.font = `${titleHeight}px title`;
 		context.textAlign = "center";
+		context.textBaseline = "middle";
 		context.fillStyle = "#000000";
-		context.fillText(title, titlePosition.x, titlePosition.y, titleFontSize.width);
+		context.fillText(title, titlePosition.x, titlePosition.y);
+		context.textBaseline = "alphabetic";
 		// Description lines
 		const lines = [...Object.entries(this.extraLines)];
 		const description = this.item.description.description;
 		const descriptionFontSize = this.getCanvasSize(context, 14, 1.6, scale);
+		const statFontSize = this.getCanvasSize(context, 14 / this.item.description.statColumns, 1.6, scale);
+		const { statLabels } = this.item.description;
 		context.font = `${descriptionFontSize.height}px text`;
 		context.textAlign = "left";
 		const linesPosition = lines.map((_, index) =>
@@ -126,19 +140,19 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		lines.forEach(([key, value], index) => {
 			const linePosition = linesPosition[index];
 			if (!linePosition) return;
+			const label = `${statLabels[key] ?? key}: `;
 			if (typeof value === "string") {
-				context.fillText(`${key}: ${value}`, linePosition.x, linePosition.y, descriptionFontSize.width);
+				context.fillText(`${label}${value}`, linePosition.x, linePosition.y, statFontSize.width);
 				return;
 			}
-			const label = `${key}: `;
-			const labelWidth = Math.min(context.measureText(label).width, descriptionFontSize.width);
-			context.fillText(label, linePosition.x, linePosition.y, descriptionFontSize.width);
+			const labelWidth = Math.min(context.measureText(label).width, statFontSize.width);
+			context.fillText(label, linePosition.x, linePosition.y, statFontSize.width);
 			context.fillStyle = TrendColors[value.trend];
 			context.fillText(
 				value.value,
 				linePosition.x + labelWidth,
 				linePosition.y,
-				Math.max(0, descriptionFontSize.width - labelWidth),
+				Math.max(0, statFontSize.width - labelWidth),
 			);
 			context.fillStyle = "#000000";
 		});
@@ -156,6 +170,10 @@ export class DescriptionHud extends Derive(BannerBackground) {
 }
 
 export class Description {
+	// Extra lines are drawn as "label: value", statColumns per row. A line without a label shows its key.
+	statLabels: Record<string, string> = {};
+	statColumns = 1;
+
 	constructor(
 		public name: string,
 		public description: string[],
@@ -169,7 +187,16 @@ export type TowerLinesDescription = {
 	"cast speed": string;
 	"food consumption": string;
 };
+const TowerStatLabels: TowerLinesDescription = {
+	damage: "⚔️",
+	"cast speed": "💠",
+	"food consumption": "🌽",
+};
+
 export class TowerDescription extends Description {
+	override statLabels: Record<string, string> = TowerStatLabels;
+	override statColumns = 2;
+
 	constructor(name: string, description: string[], tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
 		const extraLines: TowerLinesDescription = {
 			damage: `${tower.stats.damage}`,
@@ -187,7 +214,19 @@ export type UnitLinesDescription = {
 	"food consumption": string;
 	"production time": string;
 };
+// Units eat every 2 seconds (BattleUnit.consumeFood).
+const UnitStatLabels: UnitLinesDescription = {
+	health: "💚",
+	damage: "🗡️",
+	"move speed": "🥾",
+	"food consumption": "🌽/2s",
+	"production time": "🕒",
+};
+
 export class UnitDescription extends Description {
+	override statLabels: Record<string, string> = UnitStatLabels;
+	override statColumns = 2;
+
 	constructor(name: string, description: string[], unit: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
 		const extraLines: UnitLinesDescription = {
 			health: `${unit.stats.health}`,
@@ -196,7 +235,6 @@ export class UnitDescription extends Description {
 			"food consumption": `${unit.stats.foodConsumption}`,
 			"production time": `${frameToSeconds(unit.stats.summonTime)}s`,
 		};
-		secondsToFrame(unit.stats.summonTime);
 		super(name, description, extraLines);
 	}
 }
