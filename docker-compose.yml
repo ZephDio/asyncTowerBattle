@@ -27,6 +27,8 @@ services:
     build:
       context: .
       target: server
+    # Rebuild on every deploy: an image left from an earlier deploy would otherwise be reused as is.
+    pull_policy: build
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://atb:${POSTGRES_PASSWORD:-atb}@postgres:5432/atb
@@ -42,6 +44,7 @@ services:
       target: client
       args:
         VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+    pull_policy: build
     restart: unless-stopped
     ports:
       - "${APP_PORT:-8080}:80"
