@@ -64,8 +64,8 @@ export class TotemResources {
 
 	static mine: ShapedResource = {
 		size: {
-			width: 5,
-			height: 5,
+			width: 4.9,
+			height: 4.9,
 		},
 		image: createImage("/resources/totem/mine.png"),
 		shape: "ellipse",
