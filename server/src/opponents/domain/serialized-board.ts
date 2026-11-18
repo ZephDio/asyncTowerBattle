@@ -17,7 +17,15 @@ export type SerializedTotemType =
 	| "powder-magazine"
 	| "windmill";
 export type SerializedBarrackType = "basic" | "veterant" | "wave";
-export type SerializedUnitType = "brewmaster" | "choupisson" | "dragon" | "ent" | "fox" | "white-stag";
+export type SerializedUnitType =
+	| "brewmaster"
+	| "choupisson"
+	| "dragon"
+	| "ent"
+	| "fox"
+	| "go-goat"
+	| "paradise-bird"
+	| "white-stag";
 export type SerializedTrapType = "slowing" | "stun";
 export type SerializedEnvironmentType = "forest" | "rock";
 

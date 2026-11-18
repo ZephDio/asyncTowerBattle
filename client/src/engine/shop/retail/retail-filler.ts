@@ -98,6 +98,9 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 	},
 ];
 
+// Everything the shop sells, so the tests can check each piece survives a trip through the opponent server.
+export const shopBlueprints = () => pool.flatMap(({ value }) => value);
+
 type Candidate = { blueprint: AnyBlueprint; rarity: Rarity; share: number };
 
 // Each slot rolls a rarity from the round's odds, then an item of that rarity. An item is offered at most once per

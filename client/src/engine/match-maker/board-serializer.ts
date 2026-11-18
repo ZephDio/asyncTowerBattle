@@ -41,6 +41,8 @@ import { Choupisson } from "../units/recruit/implementation/choupisson";
 import { Dragon } from "../units/recruit/implementation/dragon";
 import { Ent } from "../units/recruit/implementation/ent";
 import { Fox } from "../units/recruit/implementation/fox";
+import { GoGoat } from "../units/recruit/implementation/go-goat";
+import { ParadiseBird } from "../units/recruit/implementation/paradise-bird";
 import { WhiteStag } from "../units/recruit/implementation/white-stag";
 import { AnyUnit } from "../units/recruit/unit";
 import { Opponent } from "./match-maker";
@@ -92,6 +94,8 @@ const units: Record<SerializedUnitType, Constructor<AnyUnit>> = {
 	dragon: Dragon,
 	ent: Ent,
 	fox: Fox,
+	"go-goat": GoGoat,
+	"paradise-bird": ParadiseBird,
 	"white-stag": WhiteStag,
 };
 
