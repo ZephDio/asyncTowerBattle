@@ -73,7 +73,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 	) {
 		super({});
 		this.bannerImage = HudElementResources.descriptorBanner[rarityOf(this.item)].image;
-		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 13.9 }));
+		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 14.4 }));
 		this.linesOrigin = this.position.add(new ScreenPosition({ x: 0, y: 10.8 }));
 		this.linesPosition = this.getLinesPositions();
 		this.tags = implementsTrait(this.item, Tagged) ? this.item.tags : [];
