@@ -34,6 +34,8 @@ export class Battle {
 		public randomSeed: BattleRandomSeed,
 		public onBattleOver: Game["handleEndBattle"],
 		public setDescriptionHud: Game["setDescriptionHud"],
+		// The names shown above each castle's health.
+		public playerNames: { allied: string; enemy: string },
 	) {
 		this.battlefield = new Battlefield(
 			this.alliedArmy,
@@ -44,8 +46,16 @@ export class Battle {
 		);
 		this.battleClock = new BattleClockHud(this.timer);
 		this.speedCursor = new SliderBattleSpeed(PercentToReal({ x: 10, y: 96 }), this.changeSpeed.bind(this));
-		this.alliedArmyResume = new ArmyResume(this.battlefield.alliedArmy, PercentToReal({ x: 11, y: 32 }));
-		this.enemyArmyResume = new ArmyResume(this.battlefield.enemyArmy, PercentToReal({ x: 89, y: 32 }));
+		this.alliedArmyResume = new ArmyResume(
+			this.battlefield.alliedArmy,
+			PercentToReal({ x: 11, y: 32 }),
+			playerNames.allied,
+		);
+		this.enemyArmyResume = new ArmyResume(
+			this.battlefield.enemyArmy,
+			PercentToReal({ x: 89, y: 32 }),
+			playerNames.enemy,
+		);
 	}
 
 	init() {

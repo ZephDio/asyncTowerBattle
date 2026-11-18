@@ -14,6 +14,7 @@ import { Army } from "./army/army";
 import { ArmyFactory } from "./army/army-fixtures";
 import { TranslateAnimation } from "./translate-animation/translate-animation";
 import { PercentToReal } from "../renderer/implementation/canvas-renderer";
+import { loggedInPlayer } from "../auth/session";
 
 export class Game {
 	army: Army;
@@ -134,13 +135,14 @@ export class Game {
 		this.battleSummary = new BattleSummary(battle, battleVerdict, this.handleSummaryQuit.bind(this), this.life);
 	}
 
-	startBattle({ army, randomSeed }: Opponent) {
+	startBattle({ army, randomSeed, playerName }: Opponent) {
 		this.battle = new Battle(
 			this.army,
 			army,
 			new BattleRandomSeed(randomSeed),
 			this.handleEndBattle.bind(this),
 			this.setDescriptionHud.bind(this),
+			{ allied: loggedInPlayer()?.name ?? "Guest", enemy: playerName },
 		);
 		this.battle.init();
 	}

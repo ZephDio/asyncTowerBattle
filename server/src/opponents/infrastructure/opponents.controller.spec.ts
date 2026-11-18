@@ -5,16 +5,19 @@ import request from "supertest";
 import { AccessTokens } from "../../players/applicative/interfaces/access-tokens.js";
 import { LegacyBoardStore } from "../applicative/interfaces/legacy-board.store.js";
 import { OpponentBoardStore } from "../applicative/interfaces/opponent-board.store.js";
+import { PlayerNames } from "../applicative/interfaces/player-names.js";
+import { roundGridSize } from "../domain/checked-board.js";
 import type { SerializedBoard } from "../domain/serialized-board.js";
 import { OpponentsModule } from "../opponents.module.js";
 import { InMemoryLegacyBoardStore } from "./in-memory-legacy-board.store.js";
 import { InMemoryOpponentBoardStore } from "./in-memory-opponent-board.store.js";
+import { InMemoryPlayerNames } from "./in-memory-player-names.js";
 import { SEED_BOARDS } from "./seed-boards.js";
 
 const playerBoard = (round: number, randomSeed: number): SerializedBoard => ({
 	round,
 	faction: "Elf",
-	size: { width: 8, height: 6 },
+	size: roundGridSize(round),
 	randomSeed,
 	elements: [{ kind: "castle", cell: { x: 0, y: 5 } }],
 });
@@ -38,6 +41,8 @@ describe("POST /opponents/:round", () => {
 			)
 			.overrideProvider(LegacyBoardStore)
 			.useValue(new InMemoryLegacyBoardStore())
+			.overrideProvider(PlayerNames)
+			.useValue(new InMemoryPlayerNames({ alice: "Alice" }))
 			.compile();
 		app = moduleRef.createNestApplication();
 		accessTokens = moduleRef.get(AccessTokens);
@@ -53,16 +58,16 @@ describe("POST /opponents/:round", () => {
 		return (accessToken ? post.set("Authorization", `Bearer ${accessToken}`) : post).send(body);
 	};
 
-	it("sends the seeded board of the round, then the board the previous player sent", async () => {
+	it("sends the seeded board of the round, then the board the previous player sent with their name", async () => {
 		const first = await pull(3, { board: playerBoard(3, 1), performance }, await accessTokens.issue("alice")).expect(
 			200,
 		);
-		expect(first.body).toEqual(SEED_BOARDS.find((board) => board.round === 3));
+		expect(first.body).toEqual({ board: SEED_BOARDS.find((board) => board.round === 3) });
 
 		const second = await pull(3, { board: playerBoard(3, 2), performance }, await accessTokens.issue("bob")).expect(
 			200,
 		);
-		expect(second.body).toEqual(playerBoard(3, 1));
+		expect(second.body).toEqual({ board: playerBoard(3, 1), playerName: "Alice" });
 	});
 
 	it("leaves the boards as they were for a guest", async () => {
@@ -73,8 +78,8 @@ describe("POST /opponents/:round", () => {
 			200,
 		);
 
-		expect(first.body).toEqual(seeded);
-		expect(second.body).toEqual(seeded);
+		expect(first.body).toEqual({ board: seeded });
+		expect(second.body).toEqual({ board: seeded });
 	});
 
 	it("never sends a logged-in player a board of theirs", async () => {
@@ -84,8 +89,8 @@ describe("POST /opponents/:round", () => {
 		const first = await pull(3, { board: playerBoard(3, 1), performance }, alice).expect(200);
 		const second = await pull(3, { board: playerBoard(3, 2), performance }, alice).expect(200);
 
-		expect(first.body).toEqual(seeded);
-		expect(second.body.round).toBe(2);
+		expect(first.body).toEqual({ board: seeded });
+		expect(second.body.board.round).toBe(2);
 	});
 
 	it("refuses an invalid access token", async () => {
@@ -104,8 +109,8 @@ describe("POST /opponents/:round", () => {
 			200,
 		);
 
-		expect(first.body).toEqual(seeded);
-		expect(second.body).toEqual(seeded);
+		expect(first.body).toEqual({ board: seeded });
+		expect(second.body).toEqual({ board: seeded });
 	});
 
 	it("refuses a test flag that isn't a boolean", async () => {
@@ -117,7 +122,7 @@ describe("POST /opponents/:round", () => {
 
 		const response = await pull(lastRound + 5, { board: playerBoard(lastRound + 5, 1), performance }).expect(200);
 
-		expect(response.body.round).toBe(lastRound);
+		expect(response.body.board.round).toBe(lastRound);
 	});
 
 	it.each(["0", "-1", "first"])("refuses round %s", async (round) => {
@@ -126,6 +131,15 @@ describe("POST /opponents/:round", () => {
 
 	it("refuses a board of another round", async () => {
 		await pull(2, { board: playerBoard(1, 1), performance }).expect(400);
+	});
+
+	it("refuses a board without the grid size of its round", async () => {
+		await pull(3, { board: { ...playerBoard(3, 1), size: { width: 8, height: 6 } }, performance }).expect(400);
+		await pull(3, { board: { ...playerBoard(3, 1), size: undefined }, performance }).expect(400);
+	});
+
+	it.each([-1, 0.5, 2 ** 31, "seed"])("refuses random seed %p", async (randomSeed) => {
+		await pull(3, { board: { ...playerBoard(3, 1), randomSeed }, performance }).expect(400);
 	});
 
 	it("refuses a request without a board or a performance", async () => {

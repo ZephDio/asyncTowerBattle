@@ -2,12 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../database/prisma.service.js";
 import type { PlayerBoard as PlayerBoardRow } from "../../database/generated/prisma/client.js";
 import { OpponentBoardStore } from "../applicative/interfaces/opponent-board.store.js";
+import type { CheckedBoard } from "../domain/checked-board.js";
 import type { PlayerBoard } from "../domain/player-board.js";
-import type { SerializedBoard } from "../domain/serialized-board.js";
 
+// Only checked boards are stored, and the player_board_board_check constraint refuses any other.
 const toPlayerBoard = ({ id, board, wins, losses, playerId }: PlayerBoardRow): PlayerBoard => ({
 	id,
-	board: board as SerializedBoard,
+	board: board as CheckedBoard,
 	performance: { wins, losses },
 	...(playerId && { playerId }),
 });

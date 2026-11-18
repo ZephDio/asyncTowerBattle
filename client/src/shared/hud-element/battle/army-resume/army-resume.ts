@@ -18,6 +18,7 @@ export class ArmyResume extends Derive(BannerBackground) {
 	constructor(
 		public army: BattleArmy,
 		public position: ScreenPosition,
+		public playerName: string,
 	) {
 		super({});
 		this.castleLifeBar = new CastleLifeBar(
@@ -48,9 +49,25 @@ export class ArmyResume extends Derive(BannerBackground) {
 		const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawBanner(context, canvasSize, canvasPosition);
+		this.drawPlayerName(context, position, scale);
 		this.castleLifeBar.render(context);
 		this.foodBar.render(context);
 		this.armyBuffHud.render(context);
 		this.furryHud.render(context);
+	}
+
+	// Above the castle's health bar, as wide as the bar.
+	private drawPlayerName(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
+		const size = this.getCanvasSize(context, 14, 2.2, scale);
+		const canvasPosition = this.getCanvasPosition(
+			context,
+			position.add(new ScreenPosition({ x: 0, y: this.size.height / 3 + 3.5 })),
+		);
+		context.fillStyle = "black";
+		context.textAlign = "center";
+		context.textBaseline = "middle";
+		context.font = `${size.height}px title`;
+		context.fillText(this.playerName, canvasPosition.x, canvasPosition.y, size.width);
+		context.textBaseline = "alphabetic";
 	}
 }

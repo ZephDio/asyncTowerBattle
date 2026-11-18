@@ -15,11 +15,11 @@ import { TowerBuilder } from "../constructs/tower/recruit/tower-fixtures";
 import { DwarfBlueprint } from "../units/blueprint/implementation/dwarf-blueprint";
 import { ElfBlueprint } from "../units/blueprint/implementation/elf-blueprint";
 import { UnitRecruitFixture } from "../units/recruit/unit-fixtures";
-import { MatchMaker } from "./match-maker";
+import { BOT_NAME, MatchMaker } from "./match-maker";
 
 export class LocalMatchMaker extends MatchMaker {
 	async getOpponent(round: number) {
-		return LocalMatchMaker.board(round);
+		return { ...LocalMatchMaker.board(round), playerName: BOT_NAME };
 	}
 
 	static board(round: number) {

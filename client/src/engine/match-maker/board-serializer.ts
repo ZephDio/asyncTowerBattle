@@ -202,7 +202,7 @@ const deserializeElement = (element: SerializedElement, faction: SerializedFacti
 	}
 };
 
-export const deserializeBoard = (board: SerializedBoard): Opponent => {
+export const deserializeBoard = (board: SerializedBoard): Omit<Opponent, "playerName"> => {
 	const grid = ArmyGrid.sized(board.size);
 	board.elements.forEach((element) => grid.setElement(deserializeElement(element, board.faction)));
 	const army = new Army(grid, new Inventory(), factions[board.faction].defaultUnit());

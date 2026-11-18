@@ -1,14 +1,15 @@
+import { checkBoard, roundGridSize } from "../domain/checked-board.js";
 import type { PlayerBoard } from "../domain/player-board.js";
 import { InMemoryOpponentBoardStore } from "./in-memory-opponent-board.store.js";
 
 const playerBoard = (round: number, randomSeed = round): Omit<PlayerBoard, "id"> => ({
-	board: {
+	board: checkBoard({
 		round,
 		faction: "Dwarf",
-		size: { width: 8, height: 6 },
+		size: roundGridSize(round),
 		randomSeed,
 		elements: [{ kind: "castle", cell: { x: 0, y: 5 } }],
-	},
+	}),
 	performance: { wins: 1, losses: 0 },
 });
 

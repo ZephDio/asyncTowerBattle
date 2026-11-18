@@ -5,7 +5,7 @@ import { SERVER_URL } from "../../shared/server-url";
 import { Army } from "../army/army";
 import { deserializeBoard, serializeBoard } from "./board-serializer";
 import { LocalMatchMaker } from "./local-match-maker";
-import { GamePerformance, MatchMaker, Opponent } from "./match-maker";
+import { BOT_NAME, GamePerformance, MatchMaker, Opponent } from "./match-maker";
 import { SerializedBoard } from "./serialized-board";
 
 // BattleRandomSeed works modulo 2**31.
@@ -48,8 +48,9 @@ export class RemoteMatchMaker extends MatchMaker {
 				response = await post();
 			}
 			if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-			const opponent: SerializedBoard = await response.json();
-			return deserializeBoard(opponent);
+			// A seed board has no player, so no name.
+			const { board: opponent, playerName }: { board: SerializedBoard; playerName?: string } = await response.json();
+			return { ...deserializeBoard(opponent), playerName: playerName ?? BOT_NAME };
 		} catch (error) {
 			console.warn(`Opponent server unavailable, using a local board for round ${round}`, error);
 			return this.fallback.getOpponent(round, army, performance);
