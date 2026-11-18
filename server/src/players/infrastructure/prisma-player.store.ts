@@ -25,4 +25,19 @@ export class PrismaPlayerStore extends PlayerStore {
 		const row = await this.prisma.player.findUnique({ where: { googleId } });
 		return row ? toPlayer(row) : undefined;
 	}
+
+	async findByEmail(email: string) {
+		const row = await this.prisma.player.findUnique({ where: { email } });
+		return row ? toPlayer(row) : undefined;
+	}
+
+	async findByName(name: string) {
+		const row = await this.prisma.player.findFirst({ where: { name: { equals: name, mode: "insensitive" } } });
+		return row ? toPlayer(row) : undefined;
+	}
+
+	async findPasswordLogin(email: string) {
+		const row = await this.prisma.player.findUnique({ where: { email } });
+		return row?.passwordHash ? { player: toPlayer(row), passwordHash: row.passwordHash } : undefined;
+	}
 }

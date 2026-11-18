@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a pnpm workspace with two packages that share their tooling config at the root:
 - `client/`: the browser game (Vite, plain TypeScript on a canvas inside a React and Tailwind page shell). The local `@ddd-ts/traits` package is `client/traits`.
-- `server/`: asyncTowerBattleServer, a NestJS app on port 6868 that trades boards for opponent boards and holds the player accounts (Google sign-in, sessions). It stores them in Postgres (docker compose, Prisma migrations). See `server/README.md`.
+- `server/`: asyncTowerBattleServer, a NestJS app on port 6868 that trades boards for opponent boards and holds the player accounts (Google or email and password sign-in, sessions). It stores them in Postgres (docker compose, Prisma migrations). See `server/README.md`.
 
 Shared at the root: `tsconfig.base.json` (both `tsconfig.json` files extend it), `biome.json`, `devenv.nix`, `pnpm-workspace.yaml`, the lockfile, and the TypeScript, Jest and SWC dev dependencies in `package.json`. Package-specific settings stay in each package: module system (the client is bundled by Vite, the server is Node ESM), `jest.config.json`, `nest-cli.json`.
 
@@ -37,7 +37,7 @@ Paths below are relative to `client/`. This is an async auto-battler played in t
 
 ### Page shell
 - `src/main.tsx` mounts the React app in `src/app/`, styled with Tailwind (`src/index.css`, `vite.config.mts`). `App` lays out `GameCanvas` and the `SideMenu` drawer, which floats over the game so opening it never moves the canvas. `GameCanvas` renders the game's container and `<canvas>` and calls `startGame` once. The game itself stays plain TypeScript; React only owns the page around the canvas.
-- Before playing, `LoginScreen` asks the player to log in or register with Google (`google-button.tsx`, Google Identity Services) or to play as a guest. `src/auth/` talks to the server's `/auth` routes and keeps the session tokens in localStorage; on load `App` resumes a stored session with its refresh token. Games opened with `?debug` never show the login screen: they resume a stored session, which the game tools' `start(player=...)` puts there, and play as a guest without one. The game itself does not know about the player yet. Only a logged-in player outside dev mode stores boards on the server and consumes opponents; guest and `?dev` games read opponents for free.
+- Before playing, `LoginScreen` asks the player to log in or register with their email and password or with Google (`google-button.tsx`, Google Identity Services), or to play as a guest. `src/auth/` talks to the server's `/auth` routes and keeps the session tokens in localStorage; on load `App` resumes a stored session with its refresh token. Games opened with `?debug` never show the login screen: they resume a stored session, which the game tools' `start(player=...)` puts there, and play as a guest without one. The game itself does not know about the player yet. Only a logged-in player outside dev mode stores boards on the server and consumes opponents; guest and `?dev` games read opponents for free.
 - `MouseEventHandler` listens for presses on the game container only, so clicks on the page shell never reach the game, and for moves and releases on the whole window. Canvas page coordinates come from `CanvasRenderer.pageOrigin()`.
 
 ### Top-level loop

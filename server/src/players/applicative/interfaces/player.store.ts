@@ -5,4 +5,10 @@ export abstract class PlayerStore {
 	abstract create(account: PlayerAccount): Promise<void>;
 	abstract findById(id: string): Promise<Player | undefined>;
 	abstract findByGoogleId(googleId: string): Promise<Player | undefined>;
+	// `email` is in lower case, as playerEmail gives it.
+	abstract findByEmail(email: string): Promise<Player | undefined>;
+	// Ignores case.
+	abstract findByName(name: string): Promise<Player | undefined>;
+	// The player who signs in with this email and a password, with the hash of their password.
+	abstract findPasswordLogin(email: string): Promise<{ player: Player; passwordHash: string } | undefined>;
 }

@@ -16,7 +16,24 @@ export class InMemoryPlayerStore extends PlayerStore {
 	}
 
 	async findByGoogleId(googleId: string) {
-		const player = [...this.players.values()].find((stored) => stored.googleId === googleId);
+		return this.find((stored) => stored.googleId === googleId);
+	}
+
+	async findByEmail(email: string) {
+		return this.find((stored) => stored.email === email);
+	}
+
+	async findByName(name: string) {
+		return this.find((stored) => stored.name.toLowerCase() === name.toLowerCase());
+	}
+
+	async findPasswordLogin(email: string) {
+		const player = [...this.players.values()].find((stored) => stored.email === email);
+		return player?.passwordHash ? { player: this.toPlayer(player), passwordHash: player.passwordHash } : undefined;
+	}
+
+	private find(matches: (stored: PlayerAccount) => boolean) {
+		const player = [...this.players.values()].find(matches);
 		return player && this.toPlayer(player);
 	}
 

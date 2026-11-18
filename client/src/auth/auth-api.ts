@@ -1,8 +1,9 @@
 import { SERVER_URL } from "../shared/server-url";
 import { forgetTokens, type Session, storedTokens, storeTokens } from "./session";
 
-// A refusal from the server, with its HTTP status: 401 for an invalid credential or token, 404 for a Google account
-// with no player, 409 for one that already has a player.
+// A refusal from the server, with its HTTP status: 400 for an invalid name, email or password, 401 for an invalid
+// credential, token or password, 404 for a Google account with no player, 409 for a Google account that already has a
+// player or a taken email or name.
 export class AuthError extends Error {
 	constructor(
 		readonly status: number,
@@ -36,6 +37,12 @@ export const loginWithGoogle = (credential: string) => openSession("/auth/google
 
 export const registerWithGoogle = (credential: string, name: string) =>
 	openSession("/auth/google/register", { credential, name });
+
+export const loginWithPassword = (email: string, password: string) =>
+	openSession("/auth/password/login", { email, password });
+
+export const registerWithPassword = (email: string, name: string, password: string) =>
+	openSession("/auth/password/register", { email, name, password });
 
 // Reopens the stored session, or gives undefined when there is none or the server refused it. Throws when the server
 // can't be reached, keeping the tokens for the next try.

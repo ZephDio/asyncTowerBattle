@@ -99,6 +99,57 @@ describe("auth and player routes", () => {
 		await post("/auth/refresh", { refreshToken: session.refreshToken }).expect(401);
 	});
 
+	describe("with a password", () => {
+		const registerPassword = (body: Partial<Record<"email" | "name" | "password", string>> = {}) =>
+			post("/auth/password/register", { email: "zeph@example.com", name: "Zeph", password: "hunter22", ...body });
+
+		it("registers a player with their email in lower case, and logs them in with any case", async () => {
+			const { body: registered } = await registerPassword({ email: " Zeph@Example.com " }).expect(201);
+
+			expect(registered.player).toEqual({ id: expect.any(String), email: "zeph@example.com", name: "Zeph" });
+			await me(registered.accessToken).expect(200);
+			const login = { email: "ZEPH@example.com", password: "hunter22" };
+			const { body: session } = await post("/auth/password/login", login).expect(200);
+			expect(session.player).toEqual(registered.player);
+		});
+
+		it("refuses a wrong password and an unknown email alike", async () => {
+			await registerPassword().expect(201);
+
+			const wrongPassword = await post("/auth/password/login", { email: "zeph@example.com", password: "hunter23" });
+			const unknownEmail = await post("/auth/password/login", { email: "who@example.com", password: "hunter22" });
+
+			expect(wrongPassword.status).toBe(401);
+			expect(unknownEmail.status).toBe(401);
+			expect(unknownEmail.body.message).toBe(wrongPassword.body.message);
+		});
+
+		it("refuses a taken email or name, the name ignoring case", async () => {
+			await registerPassword().expect(201);
+
+			await registerPassword({ name: "Other" }).expect(409);
+			await registerPassword({ email: "other@example.com", name: "ZEPH" }).expect(409);
+		});
+
+		it("shares the emails and names with the Google players", async () => {
+			await register("1", "Zeph").expect(201);
+
+			await registerPassword({ email: "other@example.com" }).expect(409);
+			await registerPassword({ email: "1@example.com", name: "Other" }).expect(409);
+			await register("2", "zeph").expect(409);
+		});
+
+		it("does not log a Google player in with a password", async () => {
+			await register("1").expect(201);
+
+			await post("/auth/password/login", { email: "1@example.com", password: "hunter22" }).expect(401);
+		});
+
+		it.each([{ email: "not-an-email" }, { password: "short" }, { name: "Z" }])("refuses %p", async (body) => {
+			await registerPassword(body).expect(400);
+		});
+	});
+
 	it("refuses the profile route without a valid access token", async () => {
 		await request(app.getHttpServer()).get("/players/me").expect(401);
 		await me("not-a-jwt").expect(401);

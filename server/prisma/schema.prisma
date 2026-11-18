@@ -41,13 +41,17 @@ model PlayerBoard {
   @@map("player_board")
 }
 
-// A player with an account. Guests play without one.
+// A player with an account, who signs in with Google or with their email and password. Guests play without one.
 model Player {
   id            String         @id @db.Uuid
-  // The Google account's `sub`, stable across email changes.
-  googleId      String         @unique @map("google_id")
-  email         String
-  name          String
+  // The Google account's `sub`, stable across email changes. Null for a player who signs in with a password.
+  googleId      String?        @unique @map("google_id")
+  // The password's scrypt hash with its salt and parameters. Null for a player who signs in with Google.
+  passwordHash  String?        @map("password_hash")
+  // Lower case.
+  email         String         @unique
+  // Unique ignoring case, which the register use cases check: the index only refuses exact duplicates.
+  name          String         @unique
   createdAt     DateTime       @default(now()) @map("created_at")
   refreshTokens RefreshToken[]
   boards        PlayerBoard[]

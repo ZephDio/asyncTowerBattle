@@ -3,11 +3,14 @@ import { JwtModule } from "@nestjs/jwt";
 import { DatabaseModule } from "../database/database.module.js";
 import { SharedModule } from "../shared/shared.module.js";
 import { LoginWithGoogle } from "./applicative/commands/login-with-google.use-case.js";
+import { LoginWithPassword } from "./applicative/commands/login-with-password.use-case.js";
 import { Logout } from "./applicative/commands/logout.use-case.js";
 import { RefreshSession } from "./applicative/commands/refresh-session.use-case.js";
 import { RegisterWithGoogle } from "./applicative/commands/register-with-google.use-case.js";
+import { RegisterWithPassword } from "./applicative/commands/register-with-password.use-case.js";
 import { AccessTokens } from "./applicative/interfaces/access-tokens.js";
 import { GoogleIdentityVerifier } from "./applicative/interfaces/google-identity.verifier.js";
+import { PasswordHasher } from "./applicative/interfaces/password-hasher.js";
 import { PlayerStore } from "./applicative/interfaces/player.store.js";
 import { RefreshTokenStore } from "./applicative/interfaces/refresh-token.store.js";
 import { GetPlayer } from "./applicative/queries/get-player.use-case.js";
@@ -20,6 +23,7 @@ import { JwtAccessTokens } from "./infrastructure/jwt-access-tokens.js";
 import { PlayersController } from "./infrastructure/players.controller.js";
 import { PrismaPlayerStore } from "./infrastructure/prisma-player.store.js";
 import { PrismaRefreshTokenStore } from "./infrastructure/prisma-refresh-token.store.js";
+import { ScryptPasswordHasher } from "./infrastructure/scrypt-password-hasher.js";
 
 const ACCESS_TOKEN_LIFETIME_S = 15 * 60;
 
@@ -40,6 +44,8 @@ const ACCESS_TOKEN_LIFETIME_S = 15 * 60;
 	providers: [
 		RegisterWithGoogle,
 		LoginWithGoogle,
+		RegisterWithPassword,
+		LoginWithPassword,
 		RefreshSession,
 		Logout,
 		GetPlayer,
@@ -56,6 +62,7 @@ const ACCESS_TOKEN_LIFETIME_S = 15 * 60;
 					? new FakeGoogleIdentityVerifier(new GoogleAuthLibraryVerifier())
 					: new GoogleAuthLibraryVerifier(),
 		},
+		{ provide: PasswordHasher, useClass: ScryptPasswordHasher },
 		{ provide: PlayerStore, useClass: PrismaPlayerStore },
 		{ provide: RefreshTokenStore, useClass: PrismaRefreshTokenStore },
 	],
