@@ -6,9 +6,11 @@ from pathlib import Path
 from voxel_sprite import VoxelGrid, outline, render, write_png
 
 OUT = Path(__file__).resolve().parents[1] / 'public/resources/towers/blacksmith.png'
-# Drawn centered at the original pixel scale. Extra transparent canvas below
-# raises the whole construct 24 native pixels without moving any model part.
-WIDTH, HEIGHT, ORIGIN_Y = 194, 188, 115
+# The width still maps to two cells. With the smaller final draw scale, leave
+# just enough transparent canvas below to keep the prior bottom clearance.
+WIDTH, HEIGHT, ORIGIN_Y = 232, 172, 115
+YARD_X, SHOP_X = -22, 16
+PORCH_EXTENSION = 26
 INK = (22, 28, 46, 255)
 OAK, STEEL, STONE, TILE, LINEN, HIDE, RED, SKIN, SOOT, EMBER, GOLD, PANTS = range(1, 13)
 
@@ -99,15 +101,32 @@ def bellows(g):
     limb(g,(55,-23,39),(62,-23,39),2,3,STEEL)
 
 
+class Bay:
+    """Place a group of unscaled models together, including their textures."""
+    def __init__(self, grid, x):
+        self.grid, self.x = grid, x
+
+    def set(self,x,y,z,m):
+        self.grid.set(x+self.x,y,z,m)
+
+    def box(self,x0,x1,y0,y1,z0,z1,m):
+        self.grid.box(x0+self.x,x1+self.x,y0,y1,z0,z1,m)
+
+
 def forge(g):
     box = g.box
     # The front wall stops short on the left: a recessed porch with an
     # unobstructed entrance from the smith's side, not a front-painted door.
-    box(31,89,26,33,0,84,OAK)
+    box(31-PORCH_EXTENSION,89,26,33,0,84,OAK)
     box(83,89,-5,28,0,84,STONE)
-    box(32,37,-5,0,0,84,OAK)
-    box(29,92,-6,34,75,83,OAK)
-    limb(g,(35,-2,60),(46,-2,77),2.6,3,OAK)
+    post = 32-PORCH_EXTENSION
+    box(post,post+5,-5,0,0,84,OAK)
+    box(29-PORCH_EXTENSION,92,-6,34,75,83,OAK)
+    limb(g,(post+3,-2,60),(post+14,-2,77),2.6,3,OAK)
+    # A low timber bench under the extended eave; leave the entry floor open.
+    box(12,34,8,24,18,23,OAK)
+    for leg in (14,29):
+        box(leg,leg+3,10,14,0,18,OAK)
     hearth(g)
     bellows(g)
     # Rack in the entry recess: a peel and a fork, backed by oak.
@@ -122,13 +141,13 @@ def forge(g):
     # and a projecting lip cast small contact shadows between courses.
     for y in range(-12,42):
         run = 27-abs(y-15)
-        for x in range(26,94):
+        for x in range(26-PORCH_EXTENSION,94):
             course = max(0,run)//9
             u = (x+6*(course%2))%12
             top = 83+round(run*.85)+(1 if u in (1,10) else 2 if 2<=u<=9 else 0)
             top += 2 if run%9<2 else 0
             box(x,x+1,y,y+1,top-5,top,TILE)
-    box(25,94,13,18,106,111,TILE)
+    box(25-PORCH_EXTENSION,94,13,18,106,111,TILE)
     box(68,84,18,31,96,123,STONE)
     box(66,86,16,33,119,124,STONE)
     box(70,82,20,29,124,125,SOOT)
@@ -175,15 +194,15 @@ def anvil(g):
                 g.set(*station(x,y,z),m)
 
 
-def spare_tools(g):
+def spare_tools(yard,shop):
     # Cross-peen sledge laid by the stump, clear of both boots.
-    limb(g,(-72,-15,3),(-57,-25,2),2,2,OAK)
-    g.box(-77,-69,-20,-10,0,6,STEEL)
+    limb(yard,(-72,-15,3),(-57,-25,2),2,2,OAK)
+    yard.box(-77,-69,-20,-10,0,6,STEEL)
     # Coal shovel leans against the closed cheek, blade on the ground.
-    limb(g,(83,-25,7),(77,-21,40),1.8,2,OAK)
+    limb(shop,(83,-25,7),(77,-21,40),1.8,2,OAK)
     for z in range(1,12):
         r = min(5,z+2)
-        g.box(82-r,82+r,-26+z//4,-23+z//4,z,z+1,STEEL)
+        shop.box(82-r,82+r,-26+z//4,-23+z//4,z,z+1,STEEL)
 
 
 def worker(g):
@@ -240,6 +259,7 @@ def worker(g):
 
 def shade(hit):
     m,x,y,z = hit.label,hit.mx,hit.my,hit.z
+    x -= SHOP_X if x>=SHOP_X+25-PORCH_EXTENSION else YARD_X
     if m == SOOT:
         return INK
     if m in (EMBER,GOLD):
@@ -274,17 +294,20 @@ def shade(hit):
 def shadow(x,y):
     def rim(x0,x1,y0,y1):
         return (max(0,x0-x,x-x1)+max(0,y0-y,y-y1))/4
-    return min(rim(31,88,-7,33),rim(51,88,-17,20),rim(79,85,-26,-23),
-               rim(-76,-70,-19,-11),hypot((x+55)/21,(y+13-ANVIL_Y)/20),
+    x -= SHOP_X
+    shop = min(rim(31-PORCH_EXTENSION,88,-7,33),rim(51,88,-17,20),rim(79,85,-26,-23))
+    x += SHOP_X-YARD_X
+    return min(shop,rim(-76,-70,-19,-11),hypot((x+55)/21,(y+13-ANVIL_Y)/20),
                hypot((x+15)/11,(y+9)/7),hypot((x-18)/11,(y-8)/7))
 
 
 if __name__ == '__main__':
     grid = VoxelGrid(128)
-    forge(grid)
-    anvil(grid)
-    spare_tools(grid)
-    worker(grid)
+    yard,shop = Bay(grid,YARD_X),Bay(grid,SHOP_X)
+    forge(shop)
+    anvil(yard)
+    spare_tools(yard,shop)
+    worker(yard)
     sprite = render(grid,0,WIDTH,HEIGHT,ORIGIN_Y,shade,(1,1),shadow_shape=shadow,shadow_jitter=.2)
     def seam(a,b):
         if a==b or {a,b}=={EMBER,GOLD}:
