@@ -15,7 +15,7 @@ export type Resource = {
 export class TowerResources {
 	// Visual only: reserved for a future two-cell blacksmith tower.
 	static blacksmith: ShapedResource = {
-		size: { width: 9.8, height: 6.023 },
+		size: { width: 9.8, height: 5.052 },
 		image: createImage("/resources/towers/blacksmith.png"),
 		shape: "rectangle",
 	};

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Generate an outdoor, left-facing two-cell blacksmith workshop visual.
+"""Generate the visual-only, two-cell outdoor blacksmith workshop.
 
-Run python3 client/scripts/generate-blacksmith-tower.py. A kerchief-clad smith
-strikes the large foreground anvil; sparks fly left. A small forge, water tub
-and spare tools stand in a grassy yard. This image defines no game mechanics.
+The anvil occupies the left half with its horn toward the viewer, a smith faces
+left to strike it, and a free-standing forge opens toward the left. The ground
+is transparent except for shadows beneath the equipment. Run from any directory
+with python3 client/scripts/generate-blacksmith-tower.py.
 """
 import math
 from pathlib import Path
@@ -11,23 +12,14 @@ from pathlib import Path
 from voxel_sprite import EMPTY, Hit, VoxelGrid, outline, render, write_png
 
 OUTPUT = Path(__file__).resolve().parent.parent / "public/resources/towers/blacksmith.png"
-WIDTH, HEIGHT, ORIGIN_Y = 192, 118, 85
-GRASS = [(52,70,78,255), (60,104,76,255), (92,146,74,255), (146,190,90,255), (196,222,124,255)]
-WOOD = [(90,70,70,255), (134,99,83,255), (180,131,85,255), (218,181,112,255)]
-IRON = [(38,42,58,255), (58,64,86,255), (84,92,116,255), (120,128,152,255), (168,176,196,255)]
-STONE = [(72,63,97,255), (67,91,125,255), (68,142,159,255), (90,185,187,255), (143,226,185,255)]
-CLOTH = [(72,63,97,255), (67,91,125,255), (68,142,159,255), (90,185,187,255)]
-SKIN = [(110,65,57,255), (166,99,72,255), (211,150,100,255), (245,194,139,255)]
-FIRE = [(184,76,38,255), (226,126,42,255), (246,192,65,255), (255,239,160,255)]
-LAWN, TIMBER, METAL, SHIRT, APRON, FLESH, SCARF, HANDLE, HOT, MASONRY, SOOT, EYE, WATER = range(1, 14)
-
-
-def noise(x, y):
-    h = ((x * 73856093) ^ (y * 19349663)) & 0xffffffff
-    h ^= h >> 16
-    h = (h * 0x7feb352d) & 0xffffffff
-    h ^= h >> 15
-    return (h & 255) / 255
+WIDTH, HEIGHT, ORIGIN_Y = 194, 100, 75
+WOOD = [(77,57,55,255), (119,81,62,255), (166,113,74,255), (211,165,106,255)]
+IRON = [(38,36,43,255), (61,59,66,255), (91,89,94,255), (130,127,125,255), (177,172,161,255)]
+STONE = [(67,57,62,255), (100,83,77,255), (140,119,103,255), (178,154,128,255), (213,192,158,255)]
+CLOTH = [(63,48,53,255), (100,67,61,255), (146,92,69,255), (186,131,91,255)]
+SKIN = [(108,65,54,255), (163,98,70,255), (208,146,98,255), (241,190,134,255)]
+FIRE = [(163,58,35,255), (220,102,36,255), (248,172,54,255), (255,232,150,255)]
+WOOD_L, IRON_L, STONE_L, CLOTH_L, SKIN_L, HOT_L, DARK_L = range(1, 8)
 
 
 def ellipsoid(g, cx, cy, cz, rx, ry, rz, label):
@@ -39,124 +31,113 @@ def ellipsoid(g, cx, cy, cz, rx, ry, rz, label):
 
 
 def rod(g, a, b, radius, label):
-    length = math.dist(a, b)
-    for i in range(math.ceil(length * 2) + 1):
-        t = i / max(1, math.ceil(length * 2))
+    steps = max(1, math.ceil(math.dist(a, b) * 2))
+    for i in range(steps + 1):
+        t = i / steps
         x, y, z = (a[j] + (b[j]-a[j])*t for j in range(3))
         ellipsoid(g, x, y, z, radius, radius, radius, label)
 
 
 def build():
     g = VoxelGrid(128)
-    # Same ragged, shallow lawn as the witch house, not a floating deck or wall.
-    for y in range(-40, 42):
-        for x in range(-94, 94):
-            edge = min(x+94, 93-x, y+40, 41-y)
-            if edge < 3 and noise(x//2,y//2) < .5-edge*.15:
-                continue
-            g.box(x,x+1,y,y+1,0,3,LAWN)
-
-    # The small stone smelter sits behind and to the right, separate from the anvil.
-    g.box(56,86,11,37,3,30,MASONRY)
-    g.box(60,83,14,35,30,49,MASONRY)
-    g.box(65,79,19,32,49,75,MASONRY)
-    g.box(62,82,16,34,73,77,MASONRY)
-    g.box(67,77,20,30,75,78,SOOT)
-    # Fire opening faces the camera: black mouth, coals and rising flame.
-    g.box(61,81,10,13,10,26,SOOT)
-    g.box(64,78,9,11,11,15,HOT)
-    g.box(68,75,9,11,15,21,HOT)
-    g.box(70,73,9,11,21,24,HOT)
-
-    # Quenching tub at the left rear, with two loose long-handled tools beside it.
-    ellipsoid(g,-75,20,10,12,10,9,TIMBER)
-    g.box(-84,-66,13,27,12,15,WATER)
-    rod(g,(-84,26,4),(-87,28,35),1.3,HANDLE)
-    rod(g,(-79,29,4),(-73,29,33),1.2,METAL)
-    rod(g,(-73,29,33),(-77,29,39),1.0,METAL)
-    rod(g,(-73,29,33),(-69,29,39),1.0,METAL)
-
-    # Large anvil in front: long axis runs front-to-back, with its horn toward
-    # the viewer (90 degrees to the original). Broad face, waist, stump and horn.
-    ellipsoid(g,-29,-14,13,19,17,11,TIMBER)
-    g.box(-43,-15,-26,-2,20,28,METAL)
+    # Left half: a large anvil on an end-grain stump. Its horn retains the
+    # previous front-to-back rotation, tapering toward the viewer.
+    ellipsoid(g,-55,-8,12,19,17,12,WOOD_L)
+    g.box(-70,-40,-20,5,20,28,IRON_L)
     for z in range(28,39):
         half = 12 + (z-28)*8//11
-        g.box(-29-half,-29+half,-27,-1,z,z+1,METAL)
-    g.box(-51,-7,-30,5,39,47,METAL)
-    # Tapered conical horn, distinct against the grass in the foreground.
-    for y in range(-48,-30):
-        half = max(1, (y+48)*17//18)
-        g.box(-29-half,-29+half,y,y+1,41,45,METAL)
-    # Hot workpiece on the upper face.
-    g.box(-37,-19,-15,-9,47,49,HOT)
+        g.box(-55-half,-55+half,-22,4,z,z+1,IRON_L)
+    g.box(-77,-33,-25,12,39,47,IRON_L)
+    for y in range(-44,-25):
+        half = max(1,(y+44)*17//19)
+        g.box(-55-half,-55+half,y,y+1,41,45,IRON_L)
+    g.box(-64,-47,-9,-3,47,49,HOT_L)
 
-    # A stocky person rather than a box: separated boots, tapered apron, rounded
-    # shoulders and head, a kerchief hiding hair and ears, and a left-facing nose.
-    g.box(18,30,-3,11,3,10,METAL)
-    g.box(41,53,-3,11,3,10,METAL)
-    ellipsoid(g,24,4,19,7,7,13,SHIRT)
-    ellipsoid(g,46,4,19,7,7,13,SHIRT)
-    ellipsoid(g,35,7,39,22,11,22,SHIRT)
-    for z in range(14,49):
-        half = 15 if z < 29 else 13
-        g.box(35-half,35+half,-8,-5,z,z+1,APRON)
-    # Leather straps across chest, and a neck under the head.
-    rod(g,(25,-9,46),(31,-9,34),1.2,TIMBER)
-    rod(g,(45,-9,46),(39,-9,34),1.2,TIMBER)
-    ellipsoid(g,32,4,60,6,6,7,FLESH)
-    ellipsoid(g,30,3,70,10,8,11,FLESH)
-    g.box(18,25,-2,4,67,71,FLESH)
-    # Kerchief cap and tied back, leaving face, jaw and eye exposed.
-    for z in range(75,83):
-        for y in range(-6,13):
-            for x in range(20,41):
-                if ((x+.5-30)/11)**2 + ((y+.5-3)/10)**2 + ((z+.5-75)/8)**2 <= 1:
-                    g.set(x,y,z,SCARF)
-    g.box(36,42,-2,10,68,77,SCARF)
-    g.box(40,47,2,9,70,75,SCARF)
-    g.box(24,27,-6,-4,71,74,EYE)
-    # Sleeve, bent arm, hand and diagonal hammer, with striking face on hot iron.
-    ellipsoid(g,19,-2,47,9,9,9,SHIRT)
-    rod(g,(17,-5,47),(7,-11,56),5,FLESH)
-    rod(g,(7,-11,56),(-1,-13,62),4,FLESH)
-    ellipsoid(g,-2,-13,62,4,4,4,FLESH)
-    rod(g,(-2,-13,62),(-27,-13,50),2,HANDLE)
-    g.box(-34,-23,-19,-8,48,56,METAL)
-    # Airborne sparks go left; their position doesn't contribute to the yard.
-    for x,y,z in [(-46,-18,56),(-57,-18,61),(-68,-19,58),(-78,-20,65)]:
-        g.box(x,x+4,y,y+3,z,z+3,HOT)
+    # Right half: squat, free-standing masonry forge. Its hood/chimney sits to
+    # the right of a low open hearth; the fire and working ledge face left.
+    g.box(37,85,-14,25,0,7,STONE_L)
+    g.box(54,85,-8,24,7,35,STONE_L)
+    g.box(47,85,5,24,35,42,STONE_L)
+    g.box(63,84,9,24,42,67,STONE_L)
+    g.box(60,87,6,27,65,71,STONE_L)
+    g.box(65,82,11,22,69,72,DARK_L)
+    # Left-facing entry: dark recessed bed and hot coals on the horizontal
+    # hearth. A low front rim preserves the readable opening in this camera.
+    g.box(38,58,-10,11,7,11,IRON_L)
+    g.box(44,61,-6,13,11,13,DARK_L)
+    g.box(46,57,-4,8,13,15,HOT_L)
+    g.box(51,56,0,5,15,20,HOT_L)
+    g.box(39,62,-14,-10,7,14,STONE_L)
+    # Spare tongs on the near side of the forge.
+    rod(g,(74,-15,6),(70,-15,28),1.1,IRON_L)
+    rod(g,(70,-15,28),(66,-15,34),1.0,IRON_L)
+    rod(g,(70,-15,28),(73,-15,35),1.0,IRON_L)
+
+    # Stocky side profile, oriented toward x-negative, from feet to shoulder.
+    # Staggered legs and feet point left instead of a front-facing apron.
+    rod(g,(5,5,21),(0,1,7),5,CLOTH_L)
+    rod(g,(14,10,21),(17,12,7),5,CLOTH_L)
+    g.box(-6,7,-5,7,1,7,IRON_L)
+    g.box(11,23,6,17,1,7,IRON_L)
+    ellipsoid(g,9,6,34,13,10,18,CLOTH_L)
+    # Side-on leather apron hangs down at the anvil-facing side of the body.
+    g.box(-3,5,-5,10,13,42,WOOD_L)
+    rod(g,(4,-5,44),(2,-6,34),1.2,WOOD_L)
+    ellipsoid(g,5,6,54,6,6,7,SKIN_L)
+    ellipsoid(g,1,5,64,9,8,10,SKIN_L)
+    g.box(-11,-5,0,6,61,65,SKIN_L)
+    # Rounded kerchief, tied at the back; no ears or hair identify the species.
+    for z in range(68,77):
+        for y in range(-4,15):
+            for x in range(-9,12):
+                if ((x+.5-1)/11)**2 + ((y+.5-5)/10)**2 + ((z+.5-68)/9)**2 <= 1:
+                    g.set(x,y,z,CLOTH_L)
+    g.box(7,14,0,13,62,71,CLOTH_L)
+    g.box(12,19,4,11,65,70,CLOTH_L)
+    g.box(-6,-3,-4,-2,65,68,DARK_L)
+    # Near arm and hammer extend left toward the work, hand above the anvil.
+    ellipsoid(g,0,-2,43,7,7,8,CLOTH_L)
+    rod(g,(-2,-4,45),(-15,-8,53),4.2,SKIN_L)
+    rod(g,(-15,-8,53),(-25,-10,59),3.5,SKIN_L)
+    ellipsoid(g,-25,-10,59,4,4,4,SKIN_L)
+    rod(g,(-25,-10,59),(-50,-10,49),1.8,WOOD_L)
+    g.box(-57,-46,-16,-5,48,56,IRON_L)
+    # Small sparks escaping left of the hammer.
+    for x,y,z in [(-70,-14,55),(-79,-15,60),(-88,-16,57),(-95,-18,64)]:
+        g.box(x,x+3,y,y+3,z,z+3,HOT_L)
     return g
 
 
 def shade(hit: Hit):
-    ramps = {LAWN:GRASS, TIMBER:WOOD, METAL:IRON, SHIRT:CLOTH, APRON:WOOD,
-             FLESH:SKIN, SCARF:CLOTH, HANDLE:WOOD, HOT:FIRE, MASONRY:STONE,
-             SOOT:IRON, EYE:IRON, WATER:CLOTH}
-    if hit.label in (SOOT, EYE):
+    ramps = {WOOD_L:WOOD, IRON_L:IRON, STONE_L:STONE, CLOTH_L:CLOTH, SKIN_L:SKIN, HOT_L:FIRE}
+    if hit.label == DARK_L:
         return (22,28,46,255)
-    if hit.label == HOT:
-        return FIRE[3 if hit.mx > -50 else 2]
-    if hit.label == LAWN:
-        if hit.neighbor(0,0,1) != EMPTY:
-            return GRASS[1]
-        return GRASS[3] if noise(hit.mx//3,hit.my//7) > .94 else GRASS[2]
-    light = hit.light(hit.normal())
+    if hit.label == HOT_L:
+        return FIRE[3] if hit.mx > -70 else FIRE[2]
     ramp = ramps[hit.label]
+    light = hit.light(hit.normal())
     index = min(len(ramp)-1, sum(light >= t for t in (0.1, 0.45, 0.75, 0.93)))
-    if hit.label == MASONRY and (hit.z % 7 == 0 or (hit.mx + (hit.z//7%2)*5) % 10 == 0):
+    if hit.label == STONE_L and (hit.z % 7 == 0 or (hit.mx + (hit.z//7%2)*5) % 11 == 0):
         index = max(0,index-1)
     return ramp[index]
 
 
 def crack(a, b):
-    if a == b or LAWN in (a,b):
-        return None
-    return (22,28,46,255)
+    return (22,28,46,255) if a != b else None
+
+
+def shadow(x, y):
+    # Union of forge and stump footprints, each expanded evenly with an L1
+    # margin. Airborne sparks, hammer and tools do not create ground shadows.
+    def box_distance(x0, x1, y0, y1):
+        return (max(x0-x,0,x-x1) + max(y0-y,0,y-y1)) / 4
+    stump = math.hypot((x + 55) / 21, (y + 10) / 19)
+    smith = math.hypot((x - 9) / 17, (y - 4) / 13)
+    return min(box_distance(37,85,-16,25), stump, smith)
 
 
 def main():
-    sprite = render(build(), 0, WIDTH, HEIGHT, ORIGIN_Y, shade, (1,1))
+    sprite = render(build(), 0, WIDTH, HEIGHT, ORIGIN_Y, shade, (1,1), shadow_shape=shadow, shadow_jitter=0.2)
     outline(sprite, crack, depth_gap=8, depth_width=1)
     write_png(OUTPUT, sprite.pixels)
     print(f"wrote {OUTPUT}")
