@@ -47,6 +47,43 @@ def limb(g, a, b, ra, rb, mat):
         egg(g,center,(r,r,r),mat)
 
 
+# Travel on the ground plane only. Use the same transform for the tooling,
+# impact point, material highlights and contact shadow as for the stump.
+ANVIL_Y = 21
+
+
+def station(x,y,z):
+    return x,y+ANVIL_Y,z
+
+
+def station_box(g,x0,x1,y0,y1,z0,z1,mat):
+    g.box(x0,x1,y0+ANVIL_Y,y1+ANVIL_Y,z0,z1,mat)
+
+
+def hearth(g):
+    # A splayed jamb: the throat runs mostly right, a little back. The
+    # camera can see into its near cheek without turning the building.
+    for x in range(35,89):
+        for y in range(-21,26):
+            depth = .84*(x-62)+.54*(y+4)
+            cross = .54*(x-62)-.84*(y+4)
+            if depth < -13 or abs(cross)>19:
+                continue
+            for z in range(0,77):
+                arch = hypot(cross,max(0,z-29))
+                if depth < -2:
+                    if 7<=z<12 and abs(cross)<15:
+                        g.set(x,y,z,STEEL)
+                    elif z<7 and depth>=-8 and abs(cross)<14:
+                        g.set(x,y,z,STONE)
+                elif depth>=0 or arch<19 and z<49:
+                    if z<12 or depth>17 or arch>=13:
+                        g.set(x,y,z,SOOT if arch<13 and 17<depth<19 and z>=12 else STONE)
+    for x,y,h in [(57,1,11),(61,6,18),(64,-3,17),(66,-7,13),(60,-2,9)]:
+        limb(g,(x,y,12),(x+2,y,12+h),4,1,EMBER)
+        limb(g,(x-2,y-2,12),(x,y-2,13+h//2),3,1,GOLD)
+
+
 def forge(g):
     box = g.box
     # The front wall stops short on the left: a recessed porch with an
@@ -56,22 +93,7 @@ def forge(g):
     box(32,37,-5,0,0,84,OAK)
     box(29,92,-6,34,75,83,OAK)
     limb(g,(35,-2,60),(46,-2,77),2.6,3,OAK)
-    box(48,88,-6,24,0,77,STONE)
-    # Cut the vaulted fire chamber out of both wall and arch ring. Leave a
-    # dark throat and projecting individual voussoirs around the springline.
-    for x in range(47,89):
-        for z in range(8,54):
-            r = hypot(x-68,max(0,z-28))
-            if r < 13:
-                box(x,x+1,-12,14,z,z+1,0)
-                box(x,x+1,14,15,z,z+1,SOOT)
-            elif r < 19:
-                box(x,x+1,-10,-5,z,z+1,STONE)
-    box(48,88,-14,14,3,10,STONE)
-    box(54,83,-15,12,10,13,STEEL)
-    for x,y,h in [(60,4,12),(68,8,19),(77,7,14),(65,0,9),(73,2,12)]:
-        limb(g,(x,y,13),(x+2,y,13+h),5,1,EMBER)
-        limb(g,(x,y-3,13),(x+1,y-3,14+h//2),3,1,GOLD)
+    hearth(g)
     # Rack in the entry recess: a peel and a fork, backed by oak.
     box(36,49,16,20,41,45,STEEL)
     for x in (39,46):
@@ -97,26 +119,39 @@ def forge(g):
 
 
 def anvil(g):
+    def box(*args):
+        station_box(g,*args)
     # End grain and binding ring below four squat feet and a concave web.
     for z in range(26):
         r = 17 + (2 if z<3 or 13<=z<17 else 0)
         for y in range(-31,10):
             for x in range(-76,-34):
                 if hypot(x+55,(y+11)*1.05)<r:
-                    g.set(x,y,z,STEEL if 13<=z<17 else OAK)
-    g.box(-72,-38,-26,5,25,30,STEEL)
+                    g.set(*station(x,y,z),STEEL if 13<=z<17 else OAK)
+    box(-72,-38,-26,5,25,30,STEEL)
     for z in range(30,44):
         r = 8+abs(z-36)*.9
-        g.box(-55-int(r),-55+int(r),-22,3,z,z+1,STEEL)
-    g.box(-73,-37,-24,14,43,50,STEEL)
-    g.box(-45,-41,6,11,48,50,SOOT)
+        box(-55-int(r),-55+int(r),-22,3,z,z+1,STEEL)
+    box(-73,-37,-24,14,43,50,STEEL)
+    box(-45,-41,6,11,48,50,SOOT)
     for y in range(-50,-23):
         t = (y+51)/27
         r = max(1,round(16*t))
         for x in range(-55-r,-54+r):
             h = sqrt(max(0,1-((x+55)/r)**2))
             for z in range(45-round(6*t*h),47+round(2*t*h)):
-                g.set(x,y,z,STEEL)
+                g.set(*station(x,y,z),STEEL)
+
+
+def spare_tools(g):
+    # Cross-peen sledge laid by the stump, clear of both boots.
+    limb(g,(-72,-15,3),(-57,-25,2),2,2,OAK)
+    g.box(-77,-69,-20,-10,0,6,STEEL)
+    # Coal shovel leans against the closed cheek, blade on the ground.
+    limb(g,(83,-25,7),(77,-21,40),1.8,2,OAK)
+    for z in range(1,12):
+        r = min(5,z+2)
+        g.box(82-r,82+r,-26+z//4,-23+z//4,z,z+1,STEEL)
 
 
 def worker(g):
@@ -156,19 +191,19 @@ def worker(g):
     bone((-9,8,53),(-17,7,37),5,4,SKIN)
     bone((-17,7,37),(-27,-2,40),4,3.5,SKIN)
     for y in (-4,2):
-        bone((-26,y,40),(-45,-1,50),1.7,1.8,STEEL)
-    g.box(-62,-44,-6,4,50,53,EMBER)
-    g.box(-62,-51,-6,-2,52,54,GOLD)
+        bone((-26,y,40),station(-43,-9,51),1.7,1.8,STEEL)
+    station_box(g,-63,-42,-11,1,50,53,EMBER)
+    station_box(g,-63,-51,-11,-6,52,54,GOLD)
     # Near sleeve, elbow and fist form a zigzag and break the torso outline.
     egg(g,(-6,-6,56),(7,6,7),LINEN)
     bone((-9,-7,54),(-15,-11,48),5.3,4.6,SKIN)
     bone((-15,-11,48),(-30,-9,60),4.6,3.6,SKIN)
-    bone((-26,-9,62),(-56,-4,57),2.1,2.2,OAK)
+    bone((-26,-9,62),station(-56,-4,57),2.1,2.2,OAK)
     egg(g,(-30,-9,60),(4,4,4.6),SKIN)
-    g.box(-61,-51,-8,1,53,63,STEEL)
+    station_box(g,-61,-51,-8,1,53,63,STEEL)
     for a,b in [((-65,-6,56),(-74,-6,62)),((-79,-5,64),(-87,-5,68)),
                 ((-71,-8,55),(-82,-8,56)),((-68,-11,53),(-76,-14,52))]:
-        bone(a,b,1.6,1,GOLD)
+        bone(station(*a),station(*b),1.6,1,GOLD)
 
 
 def shade(hit):
@@ -181,14 +216,20 @@ def shade(hit):
     light = hit.light(n)
     step = sum(light>t for t in (.15,.50,.79))
     # Cold plane of the face and rounded bick catch different bands of light.
-    if m==STEEL and x < -35 and 43<=z<=50 and y < 15:
+    if m==STEEL and x < -35 and 43<=z<=50 and y < 15+ANVIL_Y:
+        y -= ANVIL_Y
         if y>=-24 and n[2]>.7:
             step = 3 if x<-68 else 2
         elif y < -24:
             radius = max(1,16*(y+51)/27)
             step = 3 if x+55 < -radius*.15 else 2 if x+55 < radius*.45 else 1
     if m==STONE:
-        if z%8==0 or (x+5*(z//8%2))%13==0:
+        # Lay masonry courses around the furnace, in its local axes.
+        joint = x
+        if z<77 and x>=35 and y<26:
+            cross = .54*(x-62)-.84*(y+4)
+            joint = floor(cross if abs(cross)<18 else .84*x+.54*y)
+        if z%8==0 or (joint+5*(z//8%2))%13==0:
             step -= 1
     if m==TILE and y not in range(13,18):
         run = 27-abs(y-15)
@@ -202,7 +243,8 @@ def shade(hit):
 def shadow(x,y):
     def rim(x0,x1,y0,y1):
         return (max(0,x0-x,x-x1)+max(0,y0-y,y-y1))/4
-    return min(rim(31,88,-7,33),rim(48,88,-16,12),hypot((x+55)/21,(y+13)/20),
+    return min(rim(31,88,-7,33),rim(65,88,-22,12),rim(79,85,-26,-23),
+               rim(-76,-70,-19,-11),hypot((x+55)/21,(y+13-ANVIL_Y)/20),
                hypot((x+15)/11,(y+9)/7),hypot((x-18)/11,(y-8)/7))
 
 
@@ -210,6 +252,7 @@ if __name__ == '__main__':
     grid = VoxelGrid(128)
     forge(grid)
     anvil(grid)
+    spare_tools(grid)
     worker(grid)
     sprite = render(grid,0,WIDTH,HEIGHT,ORIGIN_Y,shade,(1,1),shadow_shape=shadow,shadow_jitter=.2)
     def seam(a,b):
