@@ -3,10 +3,10 @@ import { ShapedResource } from "./tower.resources";
 
 export class BarrackResources {
 	static basic: ShapedResource = {
-		// 108x119 image, one cell wide
+		// 110x143 image, one cell wide
 		size: {
 			width: 4.9,
-			height: 5.399,
+			height: 6.37,
 		},
 		image: createImage("/resources/house/barracks.png"),
 		shape: "rectangle",
