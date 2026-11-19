@@ -18,7 +18,7 @@ mill = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mill)
 
 WIDTH, HEIGHT, ORIGIN_Y = 104, 142, 106
-PLATFORM, TIMBER, IRON, BOLT, STRING = range(40, 45)
+TIMBER, IRON, BOLT, STRING, DEBRIS = range(40, 45)
 
 
 def rod(grid: VoxelGrid, a: tuple[int, int, int], b: tuple[int, int, int], radius: int, label: int) -> None:
@@ -71,38 +71,48 @@ def damage_structure(grid: VoxelGrid) -> None:
             for z in range(mill.GALLERY_Z, mill.GALLERY_Z + mill.GALLERY_THICKNESS):
                 if x + y > 8 + (z % 2) and grid.get(x, y, z) == mill.GALLERY_LABEL:
                     grid.set(x, y, z, EMPTY)
-    # Small shell gouge in the right-hand thatch, leaving the roof and weapon supported.
-    for x in range(12, 24):
-        for y in range(-23, -7):
-            for z in range(86, 97):
-                if abs(x - 17) + abs(z - 91) < 6 and grid.get(x, y, z) == mill.CAP_LABEL:
+    # Tear away the roof peak and irregular chunks of the thatch, exposing the rafters.
+    # The varying cutoff leaves jagged, uneven fragments around the circumference.
+    for x in range(-26, 27):
+        for y in range(-26, 27):
+            cutoff = 91 + ((x // 4 + y // 5) % 3) * 2
+            if x > 4 and y < 5:
+                cutoff -= 5
+            for z in range(cutoff, 115):
+                if grid.get(x, y, z) in (mill.CAP_LABEL, mill.FINIAL_LABEL):
                     grid.set(x, y, z, EMPTY)
+            # Two wide tears run down the front of the roof, with splintered edges.
+            for z in range(83, 98):
+                left_tear = -13 <= x <= -6 and z >= 83 + (x + 13) // 2
+                right_tear = 5 <= x <= 14 and z >= 84 + (14 - x) // 3
+                if y < 6 and (left_tear or right_tear) and grid.get(x, y, z) == mill.CAP_LABEL:
+                    grid.set(x, y, z, EMPTY)
+    # Exposed broken rafters jut out of the torn roof; they also cradle the weapon.
+    rod(grid, (-19, -9, 87), (-4, 4, 102), 1, DEBRIS)
+    rod(grid, (18, -9, 86), (4, 4, 100), 1, DEBRIS)
+    rod(grid, (-15, 13, 90), (3, 2, 102), 1, DEBRIS)
+    rod(grid, (15, 12, 90), (1, -2, 101), 1, DEBRIS)
+    rod(grid, (-13, -4, 94), (13, 3, 96), 1, DEBRIS)
 
 
 def build_model() -> VoxelGrid:
     grid = mill.build_model()
     damage_sails(grid)
     damage_structure(grid)
-    # A stout octagonal firing platform bolted onto the mill's roof.
-    for x in range(-17, 18):
-        for y in range(-17, 18):
-            if mill.octagon(x + 0.5, y + 0.5) <= 16:
-                grid.box(x, x + 1, y, y + 1, 107, 111, PLATFORM)
-    # Pedestal and the crossbow's stock, pointing toward the camera (-y).
-    grid.box(-3, 4, -2, 5, 111, 119, IRON)
-    grid.box(-3, 4, -19, 15, 118, 122, TIMBER)
-    grid.box(-2, 3, -22, 13, 122, 124, IRON)
+    # The crossbow stock sits directly on the surviving rafters, pointing toward the camera (-y).
+    grid.box(-3, 4, -19, 15, 102, 106, TIMBER)
+    grid.box(-2, 3, -22, 13, 106, 108, IRON)
     # Curved steel prod: arms sweep back toward their tips. The taut string returns to the nut.
     for sign in (-1, 1):
-        points = [(0, -12, 123), (sign * 12, -11, 123), (sign * 22, -6, 124), (sign * 27, 1, 125)]
+        points = [(0, -12, 107), (sign * 12, -11, 107), (sign * 22, -6, 108), (sign * 27, 1, 109)]
         for a, b in zip(points, points[1:]):
             rod(grid, a, b, 1, IRON)
-        rod(grid, points[-1], (0, 13, 124), 0, STRING)
+        rod(grid, points[-1], (0, 13, 108), 0, STRING)
     # Loaded bolt, with a broad, pale metal point at the front.
-    grid.box(-1, 2, -27, 10, 124, 126, TIMBER)
+    grid.box(-1, 2, -27, 10, 108, 110, TIMBER)
     for y in range(-33, -26):
         half = max(1, (y + 33) // 2)
-        grid.box(-half, half + 1, y, y + 1, 124, 127, BOLT)
+        grid.box(-half, half + 1, y, y + 1, 108, 111, BOLT)
     # Iron bands brace the wooden tower for recoil.
     for z in (22, 24, 52, 54):
         for x in range(-27, 28):
@@ -115,8 +125,8 @@ def build_model() -> VoxelGrid:
 
 
 def shade(hit: Hit) -> tuple[int, int, int, int]:
-    if hit.label == PLATFORM:
-        return mill.WOOD[3] if mill.is_top(hit) else mill.WOOD[1]
+    if hit.label == DEBRIS:
+        return mill.WOOD[3] if mill.is_top(hit) else mill.WOOD[1] if hit.mx > 0 else mill.WOOD[2]
     if hit.label == TIMBER:
         return mill.WOOD[3] if mill.is_top(hit) else mill.WOOD[2] if hit.mx < 0 else mill.WOOD[1]
     if hit.label == IRON:
@@ -127,7 +137,7 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
 
 
 def crack(label: int, other: int) -> tuple[int, int, int, int] | None:
-    if label >= PLATFORM and other >= PLATFORM:
+    if label >= TIMBER and other >= TIMBER:
         return None
     return mill.crack(label, other)
 
