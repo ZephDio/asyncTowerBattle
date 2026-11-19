@@ -13,6 +13,16 @@ export type Resource = {
 };
 
 export class TowerResources {
+	// Visual for a future windmill turret; no tower currently uses this resource.
+	static windmillTurret: ShapedResource = {
+		size: {
+			width: 5.2,
+			height: 7.1,
+		},
+		image: createImage("/resources/towers/windmill-turret.png"),
+		shape: "rectangle",
+	};
+
 	static blue: ShapedResource = {
 		size: {
 			width: 5,
