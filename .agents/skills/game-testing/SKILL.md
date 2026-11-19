@@ -107,7 +107,7 @@ server unavailable" warning.
 
 ## Pitfalls
 
-- **Ids are per page.** Ids such as `BlueTower#10` are handed out in the order objects are first seen and reset on
+- **Ids are per page.** Ids such as `BlacksmithTower#10` are handed out in the order objects are first seen and reset on
   `start`. Take them from the latest `state` or `ascii`.
 - **Offers are random.** Only a seed makes them repeatable. Read their ids from `state.offers`, never assume a slot.
 - **The summary hides the board.** The verdict banner covers the battlefield: `click_hud HideHud` before a

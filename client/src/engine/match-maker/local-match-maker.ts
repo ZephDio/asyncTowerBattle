@@ -130,7 +130,7 @@ const EnemyArmyFixtures = {
 			//TowerFixtures.centerTower,
 			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildWindmillTurret(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
-			new TowerBuilder().celled(new Cell({ x: 2, y: 1 })).buildBlue(),
+			new TowerBuilder().celled(new Cell({ x: 6, y: 2 })).buildBlacksmith(),
 			//new TotemBuilder()
 		];
 		const barracks = [
@@ -168,7 +168,7 @@ const EnemyArmyFixtures = {
 			//TowerFixtures.centerTower,
 			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildWindmillTurret(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
-			new TowerBuilder().celled(new Cell({ x: 6, y: 2 })).buildBlue(),
+			new TowerBuilder().celled(new Cell({ x: 6, y: 2 })).buildBlacksmith(),
 			new TowerBuilder().celled(new Cell({ x: 2, y: 1 })).buildZapping(),
 			//new TotemBuilder()
 		];
@@ -210,7 +210,7 @@ const EnemyArmyFixtures = {
 			//TowerFixtures.centerTower,
 			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildWindmillTurret(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
-			new TowerBuilder().celled(new Cell({ x: 6, y: 2 })).buildBlue(),
+			new TowerBuilder().celled(new Cell({ x: 6, y: 2 })).buildBlacksmith(),
 			new TowerBuilder().celled(new Cell({ x: 2, y: 1 })).buildZapping(),
 			//new TotemBuilder()
 		];

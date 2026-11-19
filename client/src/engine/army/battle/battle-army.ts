@@ -40,6 +40,7 @@ export type BattleArmyHooks = {
 	getAlliedCastle: () => AnyBattleCastle;
 	triggerFurry: () => void;
 	onEnemyCastleHit: (listener: () => void) => void;
+	onUnitAdded: (listener: (unit: AnyBattleUnit) => void) => void;
 	notifyEnemyCastleHit: () => void;
 	alliedArmyBuffHooks: ArmyBuffHooks;
 	enemyArmyBuffHooks: ArmyBuffHooks;
@@ -64,6 +65,7 @@ export class BattleArmy {
 	totems: AnyBattleTotem[];
 	furry: Furry;
 	private enemyCastleHitListeners: Array<() => void> = [];
+	private unitAddedListeners: Array<(unit: AnyBattleUnit) => void> = [];
 
 	constructor(
 		public foodEconomy: BattleFoodEconomy,
@@ -133,6 +135,11 @@ export class BattleArmy {
 		this.enemyCastleHitListeners.push(listener);
 	}
 
+	// Called for every unit that joins the army from now on.
+	onUnitAdded(listener: (unit: AnyBattleUnit) => void) {
+		this.unitAddedListeners.push(listener);
+	}
+
 	notifyEnemyCastleHit() {
 		for (const listener of [...this.enemyCastleHitListeners]) listener();
 	}
@@ -157,6 +164,7 @@ export class BattleArmy {
 		entityRecruit.initArmyBuffs(this.armyBuff.getUnitArmyBuffs());
 		this.addFurryBuff(entityRecruit);
 		this.units.set(entityRecruit, source);
+		for (const listener of [...this.unitAddedListeners]) listener(entityRecruit);
 	}
 
 	removeUnit(entityRecruit: AnyBattleUnit) {
@@ -211,6 +219,7 @@ export class BattleArmy {
 			getAlliedUnits: () => [...this.units.keys()],
 			triggerFurry: () => this.furry.increaseFurry(),
 			onEnemyCastleHit: this.onEnemyCastleHit.bind(this),
+			onUnitAdded: this.onUnitAdded.bind(this),
 			notifyEnemyCastleHit: this.notifyEnemyCastleHit.bind(this),
 			alliedArmyBuffHooks: this.alliedArmyBuffHooks,
 			enemyArmyBuffHooks: this.enemyArmyBuffHooks,

@@ -1,4 +1,4 @@
-import { BlueTower } from "./implementation/blue-tower";
+import { BlacksmithTower } from "./implementation/blacksmith-tower";
 import { WindmillTurret } from "./implementation/windmill-turret";
 import { WindmillTurretBlueprint } from "../blueprint/implementation/windmill-turret-blueprint";
 import { Cell } from "../../../../shared/position";
@@ -9,7 +9,7 @@ import { ZappingTowerBlueprint } from "../blueprint/implementation/zapping-tower
 import { ZappingTower } from "./implementation/zapping-tower";
 import { FrostTowerBlueprint } from "../blueprint/implementation/frost-tower-blueprint";
 import { FrostTower } from "./implementation/frost-tower";
-import { BlueTowerBlueprint } from "../blueprint/implementation/blue-tower-blueprint";
+import { BlacksmithTowerBlueprint } from "../blueprint/implementation/blacksmith-tower-blueprint";
 import { DrillTowerBlueprint } from "../blueprint/implementation/drill-tower-blueprint";
 import { DrillTower } from "./implementation/drill-tower";
 
@@ -19,8 +19,8 @@ export class TowerBuilder {
 		this.cell = position;
 		return this;
 	}
-	buildBlue(tower?: BlueTowerBlueprint) {
-		return new BlueTower(this.cell, tower);
+	buildBlacksmith(tower?: BlacksmithTowerBlueprint) {
+		return new BlacksmithTower(this.cell, tower);
 	}
 	buildFrost(tower?: FrostTowerBlueprint) {
 		return new FrostTower(this.cell, tower);
@@ -41,7 +41,7 @@ export class TowerBuilder {
 
 export class TowerFixtures {
 	static get centerTower() {
-		return new TowerBuilder().celled(new Cell({ x: 1, y: 2 })).buildBlue(TowerBlueprintFixtures.blue);
+		return new TowerBuilder().celled(new Cell({ x: 1, y: 2 })).buildBlacksmith(TowerBlueprintFixtures.blacksmith);
 	}
 	static get bottomLeftTower() {
 		return new TowerBuilder()

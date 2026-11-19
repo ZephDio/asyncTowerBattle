@@ -49,7 +49,7 @@ export class ArmyFixture {
 	static get enemy() {
 		const grid = new ArmyGrid();
 		const towers = [
-			new TowerBuilder().celled(new Cell({ x: 5, y: 5 })).buildBlue(TowerBlueprintFixtures.blue),
+			new TowerBuilder().celled(new Cell({ x: 5, y: 5 })).buildBlacksmith(TowerBlueprintFixtures.blacksmith),
 			//new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildOrange(TowerBlueprintFixtures.orange),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 3 })).buildZapping(TowerBlueprintFixtures.zapping),
 		];

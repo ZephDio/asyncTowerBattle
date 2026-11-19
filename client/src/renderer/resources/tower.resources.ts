@@ -23,6 +23,13 @@ export class TowerResources {
 		shape: "rectangle",
 	};
 
+	// A horizontal 2x1 piece: two cells wide, drawn taller than its footprint
+	static blacksmithTower: ShapedResource = {
+		size: { width: 9.8, height: (9.8 * 172) / 232 },
+		image: createImage("/resources/towers/blacksmith-tower.png"),
+		shape: "rectangle",
+	};
+
 	static blue: ShapedResource = {
 		size: {
 			width: 5,

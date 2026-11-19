@@ -269,6 +269,26 @@ export class TowerDescription extends Description {
 	}
 }
 
+// The blacksmith tower's description: the max health it gives to Kinfolk units, which grows during the battle.
+export class BlacksmithDescription extends TowerDescription {
+	constructor(name: string, tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
+		super(name, BlacksmithDescription.lines("0"), tower);
+	}
+
+	private static lines(value: string) {
+		return ["Your Kinfolk units", `receive ${value}💚,`, "increase this value", "by 1 every 4 casts"];
+	}
+
+	liveDescription(value: number): DescriptionLine[] {
+		return [
+			"Your Kinfolk units",
+			["receive ", liveStat(`${value}`, value, 0), "💚,"],
+			"increase this value",
+			"by 1 every 4 casts",
+		];
+	}
+}
+
 export type UnitLinesDescription = {
 	health: string;
 	"castle damage": string;

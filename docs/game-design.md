@@ -123,7 +123,7 @@ Prices are in gold. "Every Xs" is the cast time. Food is the food spent per cast
 | Tower | Rarity | Price | Damage | Every | Food | Effect |
 |---|---|---|---|---|---|---|
 | Miller's Bolt | Common | 10 | 10 | 1.5 s | 1.5 | Fast homing bullets. The first time an allied unit hits the enemy castle, gain 20 food. Tagged Food. |
-| Blue Tower | Common | 10 | 7 | 2.5 s | 3 | Rocket that explodes in an area. |
+| Blacksmith Tower | Common | 10 | 4 per spark | 1.5 s | 3 | Horizontal 2x1. Every cast (no target needed) shoots 7 sparks from its anvil in a wide cone (59 degrees above and 71 below the left direction) toward the 3 cells on the left of its left cell. The cone is cut in 7 equal slices and each spark takes a random direction in its own slice, and a random range (from the battle's seeded random). A spark stops on the first enemy it touches and hurts it. Kinfolk units also get max health from it: 0 at first, +1 every 4 casts (new Kinfolk units get the value reached so far). |
 | Zapping Tower | Uncommon | 10 | 15 | 3.5 s | 3 | Lightning that chains between nearby enemies. |
 | Frost Tower | Rare | 10 | 4 | 3 s | 3.5 | A frost boulder falls and explodes, slowing enemies. |
 | Witch House | Rare | 10 | 6 | 6 s | 5 | Two cells tall. Targets the cells on either side of and below its base. Fills every path cell of its zone with poison puddles. |

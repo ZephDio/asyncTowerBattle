@@ -25,6 +25,17 @@ describe("board serializer", () => {
 		expect(opponent.army.defaultUnit.constructor).toBe(army.defaultUnit.constructor);
 	});
 
+	it("serializes and rebuilds the blacksmith tower under its own type", () => {
+		const { army, randomSeed } = LocalMatchMaker.board(4);
+		const board = serializeBoard(army, 4, randomSeed);
+		const blacksmiths = board.elements.filter((element) => element.kind === "tower" && element.type === "blacksmith");
+
+		const opponent = deserializeBoard(JSON.parse(JSON.stringify(board)));
+
+		expect(blacksmiths).toHaveLength(1);
+		expect(opponent.army.grid.getRecruits().map((recruit) => recruit.constructor.name)).toContain("BlacksmithTower");
+	});
+
 	it("knows every unit the shop sells", () => {
 		expect(shopUnits.map((unit) => unit.constructor.name)).toEqual(expect.arrayContaining(["GoGoat", "ParadiseBird"]));
 	});

@@ -31,7 +31,7 @@ async def main(out: Path):
         state = json.loads(await server.state())
         offer = state["offers"][0]
         show("buy first offer into inventory", await server.drag(offer["id"], "retail", "inventory", 0, 0))
-        show("give", await server.give("Blue Tower", 3, 5))
+        show("give", await server.give("Blacksmith Tower", 3, 5))
         show("ascii after", await server.ascii())
         show("start battle", await server.start_battle())
         await shot("battle-0", "battle")

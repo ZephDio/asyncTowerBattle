@@ -20,7 +20,7 @@ import { RedObelisk } from "../constructs/totem/recruit/implementation/obelisk";
 import { PowderMagazine } from "../constructs/totem/recruit/implementation/powder-magazine";
 import { Windmill } from "../constructs/totem/recruit/implementation/windmill";
 import { AnyTotem } from "../constructs/totem/recruit/totem";
-import { BlueTower } from "../constructs/tower/recruit/implementation/blue-tower";
+import { BlacksmithTower } from "../constructs/tower/recruit/implementation/blacksmith-tower";
 import { DrillTower } from "../constructs/tower/recruit/implementation/drill-tower";
 import { FrostTower } from "../constructs/tower/recruit/implementation/frost-tower";
 import { WindmillTurret } from "../constructs/tower/recruit/implementation/windmill-turret";
@@ -63,7 +63,7 @@ import {
 type Constructor<T> = new (cell: Cell) => T;
 
 const towers: Record<SerializedTowerType, Constructor<AnyTower>> = {
-	blue: BlueTower,
+	blacksmith: BlacksmithTower,
 	drill: DrillTower,
 	frost: FrostTower,
 	"windmill-turret": WindmillTurret,

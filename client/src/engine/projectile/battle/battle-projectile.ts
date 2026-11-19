@@ -5,6 +5,7 @@ import { BattleFrostSpike } from "./implementation/battle-frost-spike";
 import { BattleSpine } from "./implementation/battle-spine";
 import { BattleArrow } from "./implementation/battle-arrow";
 import { BattleDrill } from "./implementation/battle-drill";
+import { BattleSparkShot } from "./implementation/battle-spark-shot";
 
 export type AnyBattleProjectile =
 	| BattleRocket
@@ -13,4 +14,5 @@ export type AnyBattleProjectile =
 	| BattleSpark
 	| BattleSpine
 	| BattleArrow
-	| BattleDrill;
+	| BattleDrill
+	| BattleSparkShot;

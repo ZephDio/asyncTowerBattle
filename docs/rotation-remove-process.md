@@ -110,7 +110,7 @@ Each step should end with `pnpm typecheck` and `pnpm exec jest` green, and be on
 ### 4. Battle layer: mirror through the building's orientation
 
 - `toAllied` builds `"normal"`, `toEnemy` builds `"mirrored"` (anchor still flipped with `BattleGrid.flip`):
-  - towers: `blue-tower`, `frost-tower`, `windmill-turret`, `zapping-tower`, `witch-house`;
+  - towers: `blacksmith-tower`, `frost-tower`, `windmill-turret`, `zapping-tower`, `witch-house`;
   - totems: `anvil`, `backery`, `brewery`, `crops-field`, `gobelin-portal`, `mine`, `obelisk`, `powder-magazine`,
     `windmill`;
   - barracks: `basic-barrack`, `veterant-barrack`, `wave-barrack`;

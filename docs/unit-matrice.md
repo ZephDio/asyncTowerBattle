@@ -72,7 +72,7 @@ Budget rule: a common unit has about **12–13 stars plus one simple effect**. A
 
 ### Unit notes
 
-**Wolf (rush).** The purest tempo unit: cheap, very fast, fragile. It hits harder while food is high, which is exactly the start-of-battle window a rush exploits. Its low base life means fury barely helps it, so it wants the game to end before 20 s. It is weak to area towers (Blue, Zapping) and slows.
+**Wolf (rush).** The purest tempo unit: cheap, very fast, fragile. It hits harder while food is high, which is exactly the start-of-battle window a rush exploits. Its low base life means fury barely helps it, so it wants the game to end before 20 s. It is weak to area towers (Blacksmith, Zapping) and slows.
 
 **Bandit (food war).** A raider: every Bandit that gets through costs the enemy 6🌽, almost one full tick of castle production. It complements the Glutton Fox, which drains food over time instead of on a hit. Its secondary axis is rush, because it is cheap and food-efficient.
 

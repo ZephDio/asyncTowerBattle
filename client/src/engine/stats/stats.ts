@@ -226,7 +226,8 @@ export class Stats {
 			return;
 		}
 
-		this.basePercentStat.maxHealth += rawGain;
+		// A flat gain is a share of the base max health, since max health is scaled by its percent.
+		this.basePercentStat.maxHealth += (rawGain / this._maxHealth) * 100;
 		this._health += rawGain;
 	}
 
