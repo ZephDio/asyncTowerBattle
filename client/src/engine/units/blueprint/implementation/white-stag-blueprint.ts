@@ -25,7 +25,7 @@ export class WhiteStagBlueprint extends Derive(
 	TImageDrawable(UnitResources.whiteStag.image, UnitResources.whiteStag.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 42,
-		speed: 0.13,
+		speed: 2,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: castSpeedFromSeconds(2),
 		damage: 1.5,

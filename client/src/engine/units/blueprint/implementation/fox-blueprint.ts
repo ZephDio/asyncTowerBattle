@@ -25,7 +25,7 @@ export class FoxBlueprint extends Derive(
 	TBaseStats({
 		health: 22,
 		damage: 1.5,
-		speed: 0.18,
+		speed: 2.8,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: castSpeedFromSeconds(4.5),
 		foodConsumption: 0.5,

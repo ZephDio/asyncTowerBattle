@@ -23,7 +23,7 @@ export class EntBlueprint extends Derive(
 	TImageDrawable(UnitResources.ent.image, UnitResources.ent.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 45,
-		speed: 0.13,
+		speed: 2,
 		castSpeed: castSpeedFromSeconds(6),
 		attackSpeed: secondsToFrame(0.3),
 		damage: 3,

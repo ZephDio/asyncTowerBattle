@@ -23,7 +23,7 @@ export class ChoupissonBlueprint extends Derive(
 	TImageDrawable(UnitResources.choupisson.image, UnitResources.choupisson.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 18,
-		speed: 0.25,
+		speed: 3.8,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: NaN,
 		damage: 3,

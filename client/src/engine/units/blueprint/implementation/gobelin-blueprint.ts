@@ -29,7 +29,7 @@ export class GobelinBlueprint extends Derive(
 	TBaseStats({
 		health: 10,
 		damage: 1,
-		speed: 0.4,
+		speed: 6.2,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: NaN,
 		foodConsumption: 1,

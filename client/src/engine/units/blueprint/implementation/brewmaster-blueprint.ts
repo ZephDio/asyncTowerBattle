@@ -23,7 +23,7 @@ export class BrewmasterBlueprint extends Derive(
 	TImageDrawable(UnitResources.brewmaster.image, UnitResources.brewmaster.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 40,
-		speed: 0.22,
+		speed: 3.4,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: castSpeedFromSeconds(2),
 		damage: 3.5,

@@ -24,7 +24,7 @@ export class ParadiseBirdBlueprint extends Derive(
 	TImageDrawable(UnitResources.paradiseBird.image, UnitResources.paradiseBird.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 10,
-		speed: 0.4,
+		speed: 6.2,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: NaN,
 		damage: 1,

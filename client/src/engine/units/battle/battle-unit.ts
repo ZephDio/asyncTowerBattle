@@ -9,6 +9,7 @@ import { BattleArmyHooks } from "../../army/battle/battle-army";
 import { BattlePath } from "../../path/battle/battle-path";
 import { PathFinder } from "../../battle/path-finder";
 import { Action } from "../../../shared/action";
+import { movementSpeedToDistancePerTick } from "../../../shared/seconds";
 import {
 	HTDescriptor,
 	LiveLine,
@@ -77,7 +78,10 @@ export const TBattleUnit = Subtrait(
 
 			followPath(): void {
 				if (this.canMove() && !this.pathFinder.isArrived) {
-					const newPosition = this.pathFinder.getNextPosition(this.position, this.stats.movementSpeed);
+					const newPosition = this.pathFinder.getNextPosition(
+						this.position,
+						movementSpeedToDistancePerTick(this.stats.movementSpeed),
+					);
 					this.move(newPosition);
 				}
 			}

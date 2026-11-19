@@ -25,7 +25,7 @@ export class DragonBlueprint extends Derive(
 	TImageDrawable(UnitResources.dragon.image, UnitResources.dragon.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 18,
-		speed: 0.25,
+		speed: 3.8,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: 4,
 		damage: 3,

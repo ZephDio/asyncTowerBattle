@@ -28,7 +28,7 @@ export class DwarfBlueprint extends Derive(
 		health: 14,
 		damage: 1.2,
 		attackSpeed: secondsToFrame(0.3),
-		speed: 0.13,
+		speed: 2,
 		castSpeed: NaN,
 		foodConsumption: 0.4,
 		foodConsumptionOnCast: NaN,

@@ -29,7 +29,7 @@ export class ElfBlueprint extends Derive(
 	TBaseStats({
 		health: 10,
 		damage: 1,
-		speed: 0.32,
+		speed: 2.5,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: secondsToFrame(0.1),
 		foodConsumption: 0.4,
