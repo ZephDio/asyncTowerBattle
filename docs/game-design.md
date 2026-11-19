@@ -217,7 +217,7 @@ The piece set was built to exercise the engine, not as a balanced first set. Kno
 
 ### House style for buildings
 
-The references are the stone Blue Tower on its wooden palisade (`client/public/resources/towers/blue.png`) and the thatched cottage (`client/public/resources/house/blue.png`). In short:
+For new artwork, use Windmill (`client/public/resources/totem/windmill.png`), Bosquet (`client/public/resources/totem/bosquet.png`) and Cropfield (`client/public/resources/totem/crops-field.png`) together to calibrate lighting, voxel density, amount of detail and shadow treatment. They guide how a piece is rendered, not what it depicts: the subject, silhouette and composition come from its own brief. The older tower and cottage established the following pixel-art conventions; their exact measurements are not requirements for matching the newer sprites:
 
 - Native 1 px pixels, no anti-aliasing, no gradients, no dithering. Chunky 2–3 px shapes.
 - A **2 px ink outline**, `(22, 28, 46)`, around every silhouette. Ink also separates materials.

@@ -16,7 +16,7 @@ voxel_sprite.py, which holds the camera, lighting and outlines.
 import math
 from pathlib import Path
 
-from voxel_sprite import EMPTY, Hit, VoxelGrid, outline, render, write_png
+from voxel_sprite import DEPTH_SCALE, EMPTY, HEIGHT_SCALE, Hit, Sprite, VoxelGrid, outline, render, write_png
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "public" / "resources" / "totem" / "obelisk.png"
@@ -27,7 +27,10 @@ HALF_Y = 96
 
 # New ramps: the darkest step leans toward violet, lighter steps get warmer
 # Dark basalt for the platform and obelisk, a gloomier take on the shared stone ramp
-BASALT = [(36, 32, 52, 255), (52, 46, 72, 255), (72, 62, 94, 255), (98, 86, 118, 255), (136, 120, 148, 255)]
+BASALT = [(37, 32, 53, 255), (57, 53, 76, 255), (77, 78, 99, 255), (105, 110, 125, 255), (153, 152, 154, 255)]
+# Garnet facets and aged brass trim, kept warmer than the surrounding ashlar.
+GARNET = [(53, 31, 54, 255), (92, 38, 60, 255), (141, 48, 66, 255), (187, 67, 73, 255)]
+BRASS = [(94, 65, 69, 255), (166, 116, 80, 255), (226, 179, 110, 255)]
 BLOOD = [(74, 28, 50, 255), (122, 30, 44, 255), (176, 38, 42, 255), (226, 76, 56, 255), (255, 156, 104, 255)]
 # Bone uses the shared thatch ramp
 BONE = [(94, 71, 78, 255), (138, 103, 99, 255), (175, 140, 121, 255), (227, 193, 140, 255), (245, 239, 169, 255)]
@@ -50,7 +53,7 @@ OBELISK_BASE_HALF = 10
 OBELISK_TOP_HALF = 6
 OBELISK_SHAFT_TOP = 120
 OBELISK_TIP = 134
-RUNE_ROWS = (108, 92, 76, 60)  # top z of each rune
+RUNE_ROWS = (111, 92, 73, 54)  # top z of each rune
 
 # Altar on the front cell
 ALTAR_Y = -34
@@ -81,7 +84,8 @@ SHADOW_JITTER = 0.3
     SOCKET_LABEL,
     CANDLE_LABEL,
     FLAME_LABEL,
-) = range(1, 11)
+    ENAMEL_LABEL,
+) = range(1, 12)
 
 # Rune glyphs, 3x5 cells of 2x2 voxels, carved down the front face of the obelisk
 RUNES = (
@@ -151,7 +155,7 @@ def build_obelisk(grid: VoxelGrid) -> None:
                     continue
                 for dz in range(3):
                     z = top - row * 3 - dz
-                    front = OBELISK_Y - round(obelisk_half(z))
+                    front = OBELISK_Y - round(obelisk_half(z)) - 1
                     for dx in range(2):
                         grid.set(col * 2 - 3 + dx, front, z, RUNE_LABEL)
 
@@ -180,24 +184,32 @@ def skull(grid: VoxelGrid, cx: int, cy: int, z0: int) -> None:
             for x in range(cx - 8, cx + 8):
                 if math.dist((x + 0.5, (y + 0.5 - cy) * 1.1 + cy, z + 0.5), (cx, cy, z0 + 8.5)) <= 6:
                     grid.set(x, y, z, BONE_LABEL)
-    grid.box(cx - 4, cx + 4, cy - 6, cy + 2, z0, z0 + 5, BONE_LABEL)
+    # Arch the jaw back at each side, narrowing below the cheeks to a short chin.
+    for z, half in enumerate((2, 3, 3, 4, 4, 4)):
+        for x in range(-half, half):
+            front = -6 + int(abs(x + 0.5) ** 2 / 5) + (z == 0)
+            grid.box(cx + x, cx + x + 1, cy + front, cy + 1, z0 + z, z0 + z + 1, BONE_LABEL)
     # Eye sockets and nose hole, sunk into the face toward the camera
     for ex in (cx - 4, cx + 1):
-        for y in range(cy - 8, cy - 2):
-            grid.box(ex, ex + 3, y, y + 1, z0 + 6, z0 + 10, SOCKET_LABEL if grid.get(ex + 1, y, z0 + 8) else EMPTY)
+        for y in range(cy - 7, cy - 2):
+            for x in range(ex, ex + 3):
+                for z in range(z0 + 8, z0 + 13):
+                    if grid.get(x, y, z) == BONE_LABEL:
+                        grid.set(x, y, z, SOCKET_LABEL)
     for y in range(cy - 8, cy - 3):
         if grid.get(cx, y, z0 + 5):
             grid.box(cx - 1, cx + 1, y, y + 1, z0 + 4, z0 + 6, SOCKET_LABEL)
-    # Teeth gap
-    grid.box(cx - 3, cx + 3, cy - 6, cy - 5, z0 + 2, z0 + 3, SOCKET_LABEL)
+    # A shallow, broken ridge leaves bone showing below the tooth row.
+    for x in (-2, 0, 2):
+        grid.box(cx + x, cx + x + 1, cy - 7, cy - 5, z0 + 3, z0 + 5, ENAMEL_LABEL)
 
 
 def build_props(grid: VoxelGrid) -> None:
-    for x, y, extra in SKULLS:
-        skull(grid, x, y, PLATFORM_HEIGHT + extra)
+    # Render the bottom-left face once; the other three are placed after outlining.
+    x, y, extra = SKULLS[0]
+    skull(grid, x, y, PLATFORM_HEIGHT + extra)
     px, py, height = PIKE
     grid.box(px - 1, px + 1, py - 1, py + 1, PLATFORM_HEIGHT, PLATFORM_HEIGHT + height, PIKE_LABEL)
-    skull(grid, px, py, PLATFORM_HEIGHT + height - 3)
     for x, y in CANDLES:
         grid.box(x - 2, x + 2, y - 2, y + 2, PLATFORM_HEIGHT, PLATFORM_HEIGHT + CANDLE_HEIGHT, CANDLE_LABEL)
         grid.box(x - 1, x + 1, y - 1, y + 1, PLATFORM_HEIGHT + CANDLE_HEIGHT, PLATFORM_HEIGHT + CANDLE_HEIGHT + 5,
@@ -247,20 +259,37 @@ def blood_stain(x: int, y: int) -> bool:
     return blob or trail
 
 
-def shade(hit: Hit) -> tuple[int, int, int, int]:
+def paving(x: int, y: int) -> tuple[int, int, int, int]:
+    # Raised coping around quieter, staggered slabs. Highlights break at each joint.
+    edge = min(PLATFORM_HALF_X - 1 - abs(x), PLATFORM_BACK - 1 - y, y - PLATFORM_FRONT)
+    row, v = divmod(y - PLATFORM_FRONT, 15)
+    col, u = divmod(x + 44 + 9 * (row % 2), 21)
+    mark = noise(col, row, 2)
+    value = 2 if mark < 0.24 else 3
+    if edge < 5:
+        value = 1 if edge == 4 else 4 if edge == 1 else 2
+    elif u == 0 or v == 0:
+        value = 1
+    elif (v == 14 and 2 < u < 14) or (u == 1 and 8 < v < 13 and mark > 0.5):
+        value = 4
+    # Short cast shadows to the lower right, anchored at the objects' feet.
+    if (abs(x - 4) < 17 and abs(y - OBELISK_Y + 6) < 16 or
+        math.hypot(x - 3, y - ALTAR_Y + 5) < ALTAR_RADIUS + 3 or
+        any((x - sx - 3)**2 + (y - sy + 4)**2 < 49 for sx, sy, _ in SKULLS)):
+        value = max(1, value - 2)
+    return BASALT[value]
+
+
+def shade(hit: Hit, mirrored_skull: bool = False) -> tuple[int, int, int, int]:
     orientation = face(hit)
 
     if hit.label in (PLATFORM_LABEL, STAIR_LABEL):
         if orientation == "top":
             if blood_stain(hit.mx, hit.my):
                 return BLOOD[1] if noise(hit.mx // 2, hit.my // 2, 9) > 0.75 else BLOOD[2]
-            index = 3
-            # Paving slabs with joints one step lower, lighter toward the left
-            if hit.label == PLATFORM_LABEL and ((hit.mx + 64) % 14 == 0 or (hit.my + 128) % 12 == 0):
-                index = 2
-            if noise(hit.mx // 7, hit.my // 6, 2) > 0.85:
-                index -= 1
-            return step(BASALT, index)
+            if hit.label == PLATFORM_LABEL:
+                return paving(hit.mx, hit.my)
+            return BASALT[4 if (hit.my - PLATFORM_FRONT) % STAIR_DEPTH == 0 else 3]
         if orientation == "front":
             # Blood running down the stair risers
             if hit.label == STAIR_LABEL and abs(hit.mx + 2) < 3:
@@ -277,36 +306,34 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
         return step(BASALT, 1 if orientation == "left" else 0)
 
     if hit.label == OBELISK_LABEL:
+        # Garnet shaft cut with a broad lit bevel and a narrow shaded bevel.
+        if hit.z >= PLATFORM_HEIGHT + OBELISK_PLINTH[1] + 2:
+            h = obelisk_half(min(hit.z, OBELISK_SHAFT_TOP))
+            if hit.z in (37, 38, 115, 116):
+                return BRASS[2 if hit.mx < -2 else 1 if hit.mx < 3 else 0]
+            facet = 3 if hit.mx < -h / 2 else 2 if hit.mx < 1 else 1 if hit.mx < h / 2 else 0
+            if hit.z >= OBELISK_SHAFT_TOP:
+                if hit.mx < 0 and hit.z + hit.mx > OBELISK_TIP - 8:
+                    return BLOOD[4]
+                facet = 3 if hit.mx < 0 else 1
+            return GARNET[facet]
         if orientation == "top":
-            return BASALT[4] if hit.z >= OBELISK_SHAFT_TOP else BASALT[3]
-        # Polished black stone: the left edge catches a streak of light, the right side sinks into shade
-        index = {"front": 2, "left": 3, "right": 1}[orientation]
-        if orientation == "front":
-            h = obelisk_half(hit.z)
-            if hit.mx < -h + 2:
-                index = 3
-            elif hit.mx > h - 3:
-                index = 1
-        if hit.z >= OBELISK_SHAFT_TOP and orientation != "right":
-            index += 1
-        # Contact shadow at the foot of the shaft
-        if PLATFORM_HEIGHT + OBELISK_PLINTH[1] + 2 <= hit.z < PLATFORM_HEIGHT + OBELISK_PLINTH[1] + 8:
-            index -= 1
-        return step(BASALT, index)
+            return BASALT[4] if hit.mx < 0 else BASALT[3]
+        return BASALT[1 if hit.mx > 9 or hit.z < PLATFORM_HEIGHT + 2 else 2]
 
     if hit.label == RUNE_LABEL:
         # Glowing runes, brighter at the top of each stroke
-        return BLOOD[4] if hit.neighbor(0, 0, 1) != RUNE_LABEL else BLOOD[3]
+        return (255, 210, 138, 255) if hit.neighbor(0, 0, 1) != RUNE_LABEL else BLOOD[4]
 
     if hit.label == ALTAR_LABEL:
         x, y = hit.mx + 0.5, hit.my + 0.5 - ALTAR_Y
         if orientation == "top":
             if pentagram(x, y):
-                return BLOOD[3]
-            # Dried blood around the star
-            if math.hypot(x, y) < PENTAGRAM_RADIUS + 2 and noise(hit.mx // 2, hit.my // 2, 5) > 0.8:
-                return BLOOD[1]
-            return BASALT[4] if x < -6 else BASALT[3]
+                return BLOOD[4] if x + y < 0 else BLOOD[3]
+            radius = math.hypot(x, y)
+            if radius > ALTAR_SLAB_RADIUS - 2:
+                return BRASS[2 if x < 1 else 1]
+            return GARNET[0] if radius < PENTAGRAM_RADIUS else BASALT[2]
         # Blood running down the drum
         if noise(hit.mx // 2, 13) > 0.72 and hit.z > ALTAR_TOP - ALTAR_SLAB - 8 - (hit.mx * 7 % 6):
             return BLOOD[2] if hit.mx < 0 else BLOOD[1]
@@ -318,12 +345,14 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
         return step(BASALT, index)
 
     if hit.label == BONE_LABEL:
-        normal = hit.normal()
-        light = hit.light(normal)
+        nx, ny, nz = hit.normal()
+        light = hit.light((-nx if mirrored_skull else nx, ny, nz))
         return step(BONE, 4 if light > 0.75 else 3 if light > 0.4 else 2 if light > 0 else 1)
 
     if hit.label == SOCKET_LABEL:
         return BLOOD[0]
+    if hit.label == ENAMEL_LABEL:
+        return (236, 216, 178, 255)
 
     if hit.label == PIKE_LABEL:
         return WOOD[2] if hit.neighbor(-1, 0, 0) == EMPTY else WOOD[0]
@@ -344,7 +373,7 @@ def crack(label: int, other: int) -> tuple[int, int, int, int] | None:
     stone = {PLATFORM_LABEL, STAIR_LABEL}
     if label == other or {label, other} <= stone:
         return None
-    if {RUNE_LABEL, FLAME_LABEL, SOCKET_LABEL} & {label, other}:
+    if {RUNE_LABEL, FLAME_LABEL, SOCKET_LABEL, ENAMEL_LABEL} & {label, other}:
         return None
     return (22, 28, 46, 255)
 
@@ -363,11 +392,34 @@ def footprint_shadow(x: float, y: float) -> float:
     return distance / SHADOW_MARGIN
 
 
+def repeat_skull(sprite: Sprite, relit: Sprite) -> None:
+    # Subpixel camera sampling changes a one-pixel tooth or eye at different
+    # depths. Reuse the approved pixels, not the surrounding candle or paving.
+    sx, sy, sz = SKULLS[0]
+    center = WIDTH // 2 + sx
+    mask = {BONE_LABEL, SOCKET_LABEL, ENAMEL_LABEL}
+    face_pixels = [(x - center, y, sprite.pixels[y][x], relit.pixels[y][x])
+                   for y, row in enumerate(sprite.labels)
+                   for x, label in enumerate(row) if label in mask]
+    px, py, height = PIKE
+    for x, y, z in (*SKULLS[1:], (px, py, height - 3)):
+        dy = round((sy - y) * DEPTH_SCALE + (sz - z) * HEIGHT_SCALE)
+        for dx, row, color, mirrored_color in face_pixels:
+            offset = -1 - dx if x > 0 else dx  # mirror the two right-hand skulls
+            sprite.pixels[row + dy][WIDTH // 2 + x + offset] = mirrored_color if x > 0 else color
+
+
 def main() -> None:
     grid = build_model()
     # shadow_radii is ignored, footprint_shadow gives the shape
     sprite = render(grid, 0, WIDTH, HEIGHT, ORIGIN_Y, shade, (1, 1), SHADOW_JITTER, shadow_shape=footprint_shadow)
     outline(sprite, crack, depth_gap=6, depth_width=1)
+    # Reflect the bone normals before lighting the source for the flipped faces.
+    # Screen-space mirroring then preserves the scene's upper-left light.
+    relit = render(grid, 0, WIDTH, HEIGHT, ORIGIN_Y, lambda hit: shade(hit, mirrored_skull=True),
+                   (1, 1), SHADOW_JITTER, shadow_shape=footprint_shadow)
+    outline(relit, crack, depth_gap=6, depth_width=1)
+    repeat_skull(sprite, relit)
     write_png(OUTPUT, sprite.pixels)
     print(f"wrote {OUTPUT.relative_to(ROOT)}")
 

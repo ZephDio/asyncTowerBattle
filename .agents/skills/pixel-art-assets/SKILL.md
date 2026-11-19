@@ -1,6 +1,6 @@
 ---
 name: pixel-art-assets
-description: Create or restyle game sprites (towers, barracks/houses, totems, units...) as pixel art matching the existing tower and house art, from a sketch or description. Covers style analysis, procedural PNG generation with a Python script, previewing next to references, and wiring the single front-view image into client/src/renderer/resources. Use when asked to draw, update, redesign or restyle a resource visual / asset / sprite.
+description: Create or restyle game sprites (towers, barracks/houses, totems, units...) from a sketch or description. Use Windmill, Bosquet and Cropfield to guide rendering style, not subject design. Covers style analysis, procedural PNG generation with a Python script, previewing next to references, and wiring the single front-view image into client/src/renderer/resources. Use when asked to draw, update, redesign or restyle a resource visual / asset / sprite.
 ---
 
 # Pixel art assets
@@ -15,7 +15,7 @@ image, and iterated on.
   `zlib` + `struct`, so anyone can rerun them. See `client/scripts/generate-gobelin-portal.py` (`write_png`).
 - Pillow is not installed globally. Use the skill's nix shell for analysis and previews:
   ```sh
-  nix-shell .agents/skills/pixel-art-assets/shell.nix --run "python3 .agents/skills/pixel-art-assets/scripts/analyze.py client/public/resources/towers/blue.png"
+  nix-shell .agents/skills/pixel-art-assets/shell.nix --run "python3 .agents/skills/pixel-art-assets/scripts/analyze.py client/public/resources/totem/{windmill,bosquet,crops-field}.png"
   ```
   The first call can take a while to fetch from the binary cache; give it a long timeout.
 - `scripts/analyze.py <png>...`: size, bbox, run-length histogram (pixel scale) and palette.
@@ -23,13 +23,27 @@ image, and iterated on.
   most common color adjacencies, compared with the house style below.
 - `scripts/preview.py <out.png> <png>...`: composite side by side on a grass background, upscaled 3x
   nearest-neighbor. Write `<out.png>` to the scratchpad, then **Read it** to look at the result.
-  Always include a reference sprite (e.g. `client/public/resources/towers/blue.png`) to compare style.
+  Preview the candidate alongside the three sprites below. At game scale, compare how they are rendered, not how closely their shapes match.
 
-## House style (towers, houses)
+## Art direction: rendering, not subject matter
 
-The references are `client/public/resources/towers/blue.png` (stone tower on a wooden palisade) and
-`client/public/resources/house/blue.png` (thatched cottage). Both were measured with `analyze.py` and
-`scripts/style_check.py`; the numbers below come from them.
+Design the subject, silhouette, props and composition from the brief or sketch. Do not use any of these sprites as a starting image, or borrow motifs just to make a new piece fit the set:
+
+- Windmill — `client/public/resources/totem/windmill.png`
+- Bosquet — `client/public/resources/totem/bosquet.png`
+- Cropfield — `client/public/resources/totem/crops-field.png`
+
+Read the three together for lighting (which faces catch light and how strongly), voxel density (how coarse the forms appear at tile size), detail density (where small accents sit against broad quiet surfaces), and shadows (contrast, edge treatment and how the piece sits on the ground). Apply those observations to the new geometry: its shadow should describe its own shape, not trace one of theirs.
+
+### Refining small repeated props
+
+- Keep a before render. Inspect the whole sprite at game size, then compare a nearest-neighbor enlargement before proposing a revision. At skull scale, a bright block meant as teeth can read as a second jaw; a few short, muted enamel marks leave the eye sockets readable. Iterate if the detail disappears or dominates.
+- When one instance is approved, use that face as the master. The same voxels at another depth can sample differently and lose a one-pixel feature. If needed, reuse just the masked prop pixels, not the nearby floor, cast shadow or other props.
+- Mirror the **form**, not the light. For a flipped prop, recompute shading with the reflected surface normals under the same scene light; for hand-drawn pixels, repaint the highlights and shade after flipping. Check both orientations side by side: the lit edges should still face the same light source. See `client/scripts/generate-obelisk.py` (`repeat_skull`).
+
+### Earlier tower and house measurements
+
+The pixel and palette measurements below describe the older tower and cottage, not the three current references. When judging a new sprite, compare it directly with the current references rather than enforcing a legacy measurement.
 
 ### Pixels
 
@@ -173,8 +187,7 @@ Pitfalls:
 - Some older totems (bakery...) are painted/high-res and are **not** the reference style.
 
 Run `analyze.py` and `style_check.py` on a reference before starting; don't trust this section blindly if
-the art has changed. Run `style_check.py` on every new sprite too: off-palette colors, a run length of 1
-as the most common outline run, or non-ink silhouette edges mean the sprite drifted from the style.
+the art has changed. Run `style_check.py` on every new sprite too: compare its results with the range across the three art-direction references before treating a legacy palette or outline warning as a style mismatch.
 
 Carrying these rules into the voxel renderer:
 - `outline(sprite, crack, depth_gap, width=2, depth_width=2)` draws the 2px silhouette by growing it 1px outward,
@@ -339,7 +352,7 @@ Pitfalls met so far:
 - Anything 1 voxel thick (reed stems, grass blades) comes out as solid ink, even with `depth_width=1`: make it
   2 voxels thick.
 
-Then: run the generator, run `preview.py` with a reference sprite, Read the preview, adjust constants, repeat.
+Then: run the generator, run `preview.py` with the three art-direction references, Read the preview, adjust constants, repeat.
 Write straight to the piece's real PNG (the one its `*.resources.ts` entry loads, the pink placeholder at first)
 and, after every round, reload the game, `give` the piece and take `screenshot army` next to the zoomed preview:
 the user wants to see each version in the game. When the canvas size changes, update the resource `size` so it
