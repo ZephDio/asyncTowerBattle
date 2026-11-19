@@ -1,6 +1,6 @@
 ---
 name: layering-design
-description: Extract or create rarity decorations as transparent overlays and deliver final PNGs composited over the unchanged common image. Use for parchment descriptor sheets, rarity borders, vines, and layered game assets, preserving the foreground scroll footer.
+description: Extract or create rarity decorations as transparent overlays and deliver final PNGs composited over the unchanged common image, and print 16x16 icons on a reusable shield background layer. Use for parchment descriptor sheets, rarity borders, vines, layered game assets and army-buff icons, preserving the foreground scroll footer.
 compatibility: Python 3 with Pillow; optional librsvg for SVG artwork. A Nix shell is bundled.
 ---
 
@@ -77,3 +77,16 @@ This extracts the four references in memory, aligns each side, applies the appro
    ```
 
 5. Deliver the composed PNG first and the overlay second. When replacing game assets, install the final PNGs under `client/public/resources/hud/banner-descriptor/` with the existing rarity names. Keep only approved overlays in `assets/overlays/`, and keep supporting metadata separate. State what was actually validated; do not claim an in-game visual check unless performed.
+
+## 16x16 icons printed on a shield (army-buff icons)
+
+A second use of layering: one reusable single-layer background, and each icon is composited over it. Delivered icons are 64x64 nearest-neighbour PNGs, like the other files in `client/public/resources/icons/`.
+
+- Background: `assets/icon-shield.png`, a quartered 16x16 shield on the full canvas (rim, 1 px dividers on column 7 and row 6, so it is intentionally not perfectly quartered). `scripts/icon_shield.py OUT_DIR` regenerates it. To try another background, add a PNG and point `"shield"` (spec-wide or per icon) at it.
+- Spec: `assets/icon-shield-spec.json` lists every installed icon and how it is placed. It reproduces `client/public/resources/icons/army-buff/` exactly. Modes per icon:
+  - `glyph`: hand-drawn character grid with a `palette` and an `origin` (the approved heart is 10x9 at (3,3), centred with 3 px each side; odd widths cannot centre on a 16 px shield).
+  - `downscale`: an existing icon cropped to its opaque box, resampled to `size` (`nearest|box|bilinear|lanczos`), alpha snapped, placed at `origin`. Used for the boot (box, 11x10 at (2,3)).
+  - `full`: the existing icon at its own size, centred, covering most of the shield. Used for the sword and the gears.
+- Builder: `scripts/build_shield_icons.py --spec assets/icon-shield-spec.json --out DIR [--only NAME ...] [--preview]`. Run it through the Nix shell from the repository root.
+- Choosing a mode for a new icon: `--try NAME` writes `NAME-compare.png` (full size, nearest, box, bilinear, lanczos side by side, 12x) plus one PNG per variant. Show the sheet and let the user pick: the outcome depends on the sprite (thin sprites like the sword blur when downscaled, flat ones like the boot survive box), and a downscale is never assumed. If no mode reads well, draw a `glyph` by hand in the icon's own palette.
+- Workflow: iterate in `tmp/` (git-ignored), show an enlarged preview after each change, install into `army-buff/` only what the user picked, then record the pick in the spec so the folder stays reproducible. Never overwrite an installed icon without saving the previous one in `tmp/` first, and clear `tmp/` when asked.

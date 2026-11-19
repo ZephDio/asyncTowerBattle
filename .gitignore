@@ -8,3 +8,6 @@ coverage
 __pycache__
 server/src/database/generated
 .env
+
+# layering-design skill scratch iterations
+.agents/skills/layering-design/tmp/

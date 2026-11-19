@@ -37,7 +37,7 @@ export class GoGoatBlueprint extends Derive(
 	MountainTag,
 	MonsterTag,
 ) {
-	description = new UnitDescription("Go-Goat", ["When it hits the", "enemy castle :", "gain 🥾"], this);
+	description = new UnitDescription("Go-Goat", ["When it hits the", "enemy castle :", "gain 👢"], this);
 
 	toRecruit(cell: Cell) {
 		return new GoGoat(cell, this);

@@ -41,7 +41,7 @@ export class BakeryBlueprint extends Derive(
 ) {
 	description = new CasterDescription(
 		"Bakery Wryy",
-		[`Every ${CAST_TIME} seconds :`, "consume 5🌽 and gain", "2💚 for units, otherwise", "produce 3🌽"],
+		[`Every ${CAST_TIME} seconds :`, "consume 5🌽 and gain", "2💖 for units, otherwise", "produce 3🌽"],
 		this,
 	);
 
