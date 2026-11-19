@@ -13,6 +13,13 @@ export type Resource = {
 };
 
 export class TowerResources {
+	// Visual only: reserved for a future two-cell blacksmith tower.
+	static blacksmith: ShapedResource = {
+		size: { width: 9.8, height: 5.613 },
+		image: createImage("/resources/towers/blacksmith.png"),
+		shape: "rectangle",
+	};
+
 	// Visual for a future windmill turret; no tower currently uses this resource.
 	static windmillTurret: ShapedResource = {
 		size: {
