@@ -33,12 +33,11 @@ def hall(g):
     # Cross beam and diagonal knees over the rack. The blue fascia ends at the entry bay.
     b(-46, 4, 0, 5, 42, 49, OAK)
     b(-46, 4, -1, 3, 46, 49, BLUE)
-    # Let the left knee spring lower and meet the beam farther from its
-    # post: the plaster triangle must survive the eave and outline pixels.
-    for i in range(20):
-        b(-42+i, -39+i, 1, 3, 23+i, 27+i, OAK)
     for i in range(13):
-        b(-3-i, 1-i, 1, 3, 29+i, 34+i, OAK)
+        b(-43+i, -39+i, 1, 3, 29+i, 34+i, OAK)
+    # A longer right knee leaves plaster visible beside the doorway post.
+    for i in range(20):
+        b(-7-i, -4-i, 1, 3, 23+i, 27+i, OAK)
     # Split the span between the outer posts into two 15-voxel plaster bays.
     b(-25, -21, 1, 4, 49, 78, OAK)
     for left in (-40, -21):
