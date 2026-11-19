@@ -127,6 +127,11 @@ def forge(g):
     box(12,34,8,24,18,23,OAK)
     for leg in (14,29):
         box(leg,leg+3,10,14,0,18,OAK)
+    # Two steel billets support a third across their seam. Step in the upper
+    # edges to catch the light and separate the cap from the darker feet.
+    for x,y,z in ((12,12,23),(24,12,23),(18,14,29)):
+        box(x,x+10,y,y+9,z,z+3,STEEL)
+        box(x+1,x+9,y+1,y+8,z+3,z+6,STEEL)
     hearth(g)
     bellows(g)
     # Rack in the entry recess: a peel and a fork, backed by oak.
