@@ -2,7 +2,7 @@
 """Generate the visual-only, two-cell outdoor blacksmith workshop.
 
 The anvil occupies the left half with its horn toward the viewer, a smith faces
-left to strike it, and a free-standing forge opens toward the left. The ground
+left to strike it, and an open-sided forge building opens toward the left. The ground
 is transparent except for shadows beneath the equipment. Run from any directory
 with python3 client/scripts/generate-blacksmith-tower.py.
 """
@@ -12,14 +12,15 @@ from pathlib import Path
 from voxel_sprite import EMPTY, Hit, VoxelGrid, outline, render, write_png
 
 OUTPUT = Path(__file__).resolve().parent.parent / "public/resources/towers/blacksmith.png"
-WIDTH, HEIGHT, ORIGIN_Y = 194, 100, 75
+WIDTH, HEIGHT, ORIGIN_Y = 194, 136, 113
 WOOD = [(77,57,55,255), (119,81,62,255), (166,113,74,255), (211,165,106,255)]
 IRON = [(38,36,43,255), (61,59,66,255), (91,89,94,255), (130,127,125,255), (177,172,161,255)]
 STONE = [(67,57,62,255), (100,83,77,255), (140,119,103,255), (178,154,128,255), (213,192,158,255)]
 CLOTH = [(63,48,53,255), (100,67,61,255), (146,92,69,255), (186,131,91,255)]
 SKIN = [(108,65,54,255), (163,98,70,255), (208,146,98,255), (241,190,134,255)]
 FIRE = [(163,58,35,255), (220,102,36,255), (248,172,54,255), (255,232,150,255)]
-WOOD_L, IRON_L, STONE_L, CLOTH_L, SKIN_L, HOT_L, DARK_L = range(1, 8)
+ROOF = [(73,47,51,255), (110,61,54,255), (155,86,62,255), (195,128,84,255)]
+WOOD_L, IRON_L, STONE_L, CLOTH_L, SKIN_L, HOT_L, DARK_L, ROOF_L = range(1, 9)
 
 
 def ellipsoid(g, cx, cy, cz, rx, ry, rz, label):
@@ -53,14 +54,25 @@ def build():
         g.box(-55-half,-55+half,y,y+1,41,45,IRON_L)
     g.box(-64,-47,-9,-3,47,49,HOT_L)
 
-    # Right half: squat, free-standing masonry forge. Its hood/chimney sits to
-    # the right of a low open hearth; the fire and working ledge face left.
+    # Open-sided timber forge building. The shelter has a pitched shingle roof,
+    # posts and braces, but no enclosing walls or floor. Its left end is open
+    # toward the smith and anvil. The hearth below is part of the building.
+    for x in (31, 84):
+        for y in (-2, 30):
+            g.box(x,x+5,y,y+5,0,91,WOOD_L)
+    g.box(29,91,-4,36,87,92,WOOD_L)
+    for x in (32, 82):
+        rod(g,(x,-2,68),(x+7,-2,88),2,WOOD_L)
+    for y in range(-8, 42):
+        top = 112 - round(abs(y-17) * .65)
+        g.box(25,94,y,y+1,top-4,top,ROOF_L)
+    # Masonry hearth and chimney inside the shelter, opening left.
     g.box(37,85,-14,25,0,7,STONE_L)
     g.box(54,85,-8,24,7,35,STONE_L)
     g.box(47,85,5,24,35,42,STONE_L)
-    g.box(63,84,9,24,42,67,STONE_L)
-    g.box(60,87,6,27,65,71,STONE_L)
-    g.box(65,82,11,22,69,72,DARK_L)
+    g.box(63,80,14,25,42,120,STONE_L)
+    g.box(60,83,11,28,117,122,STONE_L)
+    g.box(65,78,15,24,120,123,DARK_L)
     # Left-facing entry: dark recessed bed and hot coals on the horizontal
     # hearth. A low front rim preserves the readable opening in this camera.
     g.box(38,58,-10,11,7,11,IRON_L)
@@ -97,8 +109,8 @@ def build():
     g.box(-6,-3,-4,-2,65,68,DARK_L)
     # Near arm and hammer extend left toward the work, hand above the anvil.
     ellipsoid(g,0,-2,43,7,7,8,CLOTH_L)
-    rod(g,(-2,-4,45),(-15,-8,53),4.2,SKIN_L)
-    rod(g,(-15,-8,53),(-25,-10,59),3.5,SKIN_L)
+    rod(g,(-2,-4,45),(-9,-8,42),4.2,SKIN_L)
+    rod(g,(-9,-8,42),(-25,-10,59),3.5,SKIN_L)
     ellipsoid(g,-25,-10,59,4,4,4,SKIN_L)
     rod(g,(-25,-10,59),(-50,-10,49),1.8,WOOD_L)
     g.box(-57,-46,-16,-5,48,56,IRON_L)
@@ -109,7 +121,7 @@ def build():
 
 
 def shade(hit: Hit):
-    ramps = {WOOD_L:WOOD, IRON_L:IRON, STONE_L:STONE, CLOTH_L:CLOTH, SKIN_L:SKIN, HOT_L:FIRE}
+    ramps = {WOOD_L:WOOD, IRON_L:IRON, STONE_L:STONE, CLOTH_L:CLOTH, SKIN_L:SKIN, HOT_L:FIRE, ROOF_L:ROOF}
     if hit.label == DARK_L:
         return (22,28,46,255)
     if hit.label == HOT_L:
@@ -117,6 +129,8 @@ def shade(hit: Hit):
     ramp = ramps[hit.label]
     light = hit.light(hit.normal())
     index = min(len(ramp)-1, sum(light >= t for t in (0.1, 0.45, 0.75, 0.93)))
+    if hit.label == ROOF_L and (hit.my % 8 == 0 or (hit.mx + (hit.my//8%2)*6) % 12 == 0):
+        index = max(0,index-1)
     if hit.label == STONE_L and (hit.z % 7 == 0 or (hit.mx + (hit.z//7%2)*5) % 11 == 0):
         index = max(0,index-1)
     return ramp[index]
@@ -133,7 +147,7 @@ def shadow(x, y):
         return (max(x0-x,0,x-x1) + max(y0-y,0,y-y1)) / 4
     stump = math.hypot((x + 55) / 21, (y + 10) / 19)
     smith = math.hypot((x - 9) / 17, (y - 4) / 13)
-    return min(box_distance(37,85,-16,25), stump, smith)
+    return min(box_distance(29,89,-6,36), stump, smith)
 
 
 def main():
