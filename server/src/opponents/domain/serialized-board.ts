@@ -9,6 +9,7 @@ export type SerializedTowerType = "blue" | "drill" | "frost" | "windmill-turret"
 export type SerializedTotemType =
 	| "anvil"
 	| "bakery"
+	| "bosquet"
 	| "brewery"
 	| "crops-field"
 	| "gobelin-portal"

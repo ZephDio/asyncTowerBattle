@@ -23,6 +23,7 @@ import { DrillTowerBlueprint } from "../../constructs/tower/blueprint/implementa
 import { ChoupissonBlueprint } from "../../units/blueprint/implementation/choupisson-blueprint";
 import { VeterantBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/veteran-barrack-blueprint";
 import { AnyTotemBlueprint } from "../../constructs/totem/blueprint/totem-blueprint";
+import { BosquetBlueprint } from "../../constructs/totem/blueprint/implementation/bosquet-blueprint";
 import { AnvilTotemBlueprint } from "../../constructs/totem/blueprint/implementation/anvil-blueprint";
 import { GobelinPortalBlueprint } from "../../constructs/totem/blueprint/implementation/gobelin-portal-blueprint";
 import { CropsFieldBlueprint } from "../../constructs/totem/blueprint/implementation/crops-field-blueprint";
@@ -61,6 +62,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			BreweryBlueprint,
 			PowderMagazineBlueprint,
 			RedObeliskBlueprint,
+			BosquetBlueprint,
 		],
 		share: 100,
 	},

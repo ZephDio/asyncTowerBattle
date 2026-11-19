@@ -11,6 +11,7 @@ import { VeterantBarrack } from "../constructs/barrack/recruit/implementation/ve
 import { WaveBarrack } from "../constructs/barrack/recruit/implementation/wave-barrack";
 import { AnvilTotem } from "../constructs/totem/recruit/implementation/anvil";
 import { Bakery } from "../constructs/totem/recruit/implementation/backery";
+import { Bosquet } from "../constructs/totem/recruit/implementation/bosquet";
 import { Brewery } from "../constructs/totem/recruit/implementation/brewery";
 import { CropsField } from "../constructs/totem/recruit/implementation/crops-field";
 import { GobelinPortal } from "../constructs/totem/recruit/implementation/gobelin-portal";
@@ -73,6 +74,7 @@ const towers: Record<SerializedTowerType, Constructor<AnyTower>> = {
 const totems: Record<SerializedTotemType, Constructor<AnyTotem>> = {
 	anvil: AnvilTotem,
 	bakery: Bakery,
+	bosquet: Bosquet,
 	brewery: Brewery,
 	"crops-field": CropsField,
 	"gobelin-portal": GobelinPortal,

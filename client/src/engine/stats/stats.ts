@@ -105,6 +105,11 @@ export class Stats {
 		range: 100,
 	};
 
+	// Flat bonuses added before the percent modifiers.
+	public flatStat = {
+		castleDamage: 0,
+	};
+
 	public conditions: Map<string, ImplementsTrait<typeof Status>> = new Map();
 	public boons: Map<string, ImplementsTrait<typeof Status>> = new Map();
 
@@ -174,7 +179,7 @@ export class Stats {
 
 	// Damage a unit deals to the enemy castle when it arrives.
 	get castleDamage() {
-		return this._castleDamage * Math.max(0, this.basePercentStat.castleDamage / 100);
+		return (this._castleDamage + this.flatStat.castleDamage) * Math.max(0, this.basePercentStat.castleDamage / 100);
 	}
 
 	// Damage of the projectiles and area effects a piece fires. Independent from castleDamage.

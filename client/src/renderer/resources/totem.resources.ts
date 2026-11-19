@@ -78,4 +78,14 @@ export class TotemResources {
 		image: createImage("/resources/totem/gobelin-portal.png"),
 		shape: "ellipse",
 	};
+
+	// Placeholder art: a flat pink square until the Bosquet gets its own sprite.
+	static bosquet: ShapedResource = {
+		size: {
+			width: 4.9,
+			height: 4.9,
+		},
+		image: createImage("/resources/totem/bosquet.png"),
+		shape: "rectangle",
+	};
 }
