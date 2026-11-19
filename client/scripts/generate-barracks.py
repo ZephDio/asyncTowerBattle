@@ -17,6 +17,7 @@ WOOD = ('51404a', '77534b', 'a77855', 'd4a470')
 STONE = ('504c60', '737380', '96969d', 'b8b7b3', 'd6d3c5')
 TILES = ('583c48', '885852', 'b47a5e', 'daa876', 'f0ce96')
 T_STONE, T_POST, T_ROOM, T_RAIL, T_CAP, T_PIN = range(14, 20)
+SACK = 20
 LOOKOUT_WOOD = ('5a4646', '866353', 'b48355', 'dab570')
 LOOKOUT_STONE = ('3a3648', '585666', '7c7a86', 'a4a2a6', 'cccac2')
 CX, CY = 2, -34  # straw figure
@@ -32,9 +33,12 @@ def hall(g):
     # Cross beam and diagonal knees over the rack. The blue fascia ends at the entry bay.
     b(-46, 4, 0, 5, 42, 49, OAK)
     b(-46, 4, -1, 3, 46, 49, BLUE)
+    # Let the left knee spring lower and meet the beam farther from its
+    # post: the plaster triangle must survive the eave and outline pixels.
+    for i in range(20):
+        b(-42+i, -39+i, 1, 3, 23+i, 27+i, OAK)
     for i in range(13):
-        for x in (-43+i, -3-i):
-            b(x, x+4, 1, 3, 29+i, 34+i, OAK)
+        b(-3-i, 1-i, 1, 3, 29+i, 34+i, OAK)
     # Split the span between the outer posts into two 15-voxel plaster bays.
     b(-25, -21, 1, 4, 49, 78, OAK)
     for left in (-40, -21):
@@ -98,18 +102,22 @@ def training(g):
             for i, w in enumerate((1, 2, 2, 2, 1, 1, 0)):
                 b(x-w, x+w+1, -7, -4, h+i, h+i+1, STEEL)
 
-    # Tied bundles on a pegged spar. Narrow neck and gaps below the arms
-    # preserve the head-and-shoulders silhouette even at one-cell scale.
-    b(CX-7, CX+8, CY-2, CY+3, 2, 4, OAK)
-    b(CX-2, CX+3, CY-2, CY+2, 4, 29, OAK)
-    for dx, zc, rx, ry, rz in ((0, 15, 6, 4, 8), (0, 29, 5, 4, 5),
-                               (-9, 19, 6, 3, 3), (9, 19, 6, 3, 3)):
-        for x in range(-rx, rx+1):
-            for y in range(-ry, ry+1):
-                for z in range(-rz, rz+1):
-                    if (x/rx)**2+(y/ry)**2+(z/rz)**2 <= 1:
-                        tied = (dx == 0 and zc == 15 and z in (-3, -2)) or (dx and abs(x+dx) == 11)
-                        g.set(CX+dx+x, CY+y, zc+z, CORD if tied else STRAW)
+    # Stuffed sack on one stake. Broad shoulders pinch down to a bound hem.
+    b(CX-2, CX+3, CY-1, CY+2, 3, 13, OAK)
+    for z in range(11, 40):
+        if z < 28:
+            width = min(8, 4 + (z-11)//2) if z < 26 else 7 - (z-26)*2
+        else:
+            width = (3, 3, 4, 5, 5, 5, 5, 5, 4, 4, 3, 2)[z-28]
+        for x in range(-width, width+1):
+            depth = round(3.5 * math.sqrt(1 - (x/(width+.5))**2))
+            mat = CORD if z in (12, 28, 29) else SACK
+            b(CX+x, CX+x+1, CY-depth, CY+depth+1, z, z+1, mat)
+    for side in (-1, 1):
+        for z in range(21, 27):
+            reach = (10, 12, 10, 13, 11, 10)[z-21]
+            for d in range(7, reach+1):
+                b(CX+side*d, CX+side*d+1, CY-1, CY+2, z, z+1, STRAW if d >= 9 else SACK)
 
 
 def tile_color(base, along, course):
@@ -169,6 +177,19 @@ def shade(h):
         return WOOD[3 if top else 1 if (x*7+z//7)%11 < 2 else 2]
     if mat == LIME:
         return 'c6bfb3' if z >= 74 or (x//4 + z//3*7)%41 == 0 else 'ece6d4'
+    if mat == SACK:
+        dx = x - CX
+        if y < CY:
+            if z < 28:
+                radius = math.hypot(dx, (z-21)*.8)
+                if 3.1 <= radius <= 4.9 or radius <= 1.4:
+                    return '733d34'
+                if dx == 0 and z % 3 and z < 17:
+                    return '825344'
+            elif z == 34 and abs(dx) == 2:
+                return '563d38'
+        light = h.light(h.normal())
+        return ('8b5944','ad7851','c99565','d9ac78')[int(light > .12)+int(light > .50)+int(light > .79)]
     if mat == STRAW:
         light = h.light(h.normal())
         return ('98714f','c89651','e8bd6b','f3da91')[min(3, int(light > .15)+int(light > .48)+int(light > .75))]
@@ -187,7 +208,7 @@ if __name__ == '__main__':
         return min(max(abs(x)-47, -45-y, y-44)/2, max(abs(x)-46, -y, y-44)/5,
                    max(-49-x, x+34, -45-y, y+28)/3)
     def seam(a, b):
-        return None if {a, b} <= {CORD, STRAW, OAK} else OUTLINE
+        return None if {a, b} <= {CORD, STRAW, SACK, OAK} else OUTLINE
     def rgba(h):
         return (*bytes.fromhex(shade(h)), 255)
     sprite = render(g, 0, WIDTH, HEIGHT, ORIGIN, rgba, (1, 1), .2, shadow)
