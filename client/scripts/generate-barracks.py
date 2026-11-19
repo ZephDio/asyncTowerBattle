@@ -17,7 +17,7 @@ WOOD = ('51404a', '77534b', 'a77855', 'd4a470')
 STONE = ('504c60', '737380', '96969d', 'b8b7b3', 'd6d3c5')
 TILES = ('583c48', '885852', 'b47a5e', 'daa876', 'f0ce96')
 T_STONE, T_POST, T_ROOM, T_RAIL, T_CAP, T_PIN = range(14, 20)
-SACK = 20
+SACK, HAFT = 20, 21
 LOOKOUT_WOOD = ('5a4646', '866353', 'b48355', 'dab570')
 LOOKOUT_STONE = ('3a3648', '585666', '7c7a86', 'a4a2a6', 'cccac2')
 CX, CY = 2, -34  # straw figure
@@ -92,10 +92,10 @@ def training(g):
     for z in (5, 15):
         b(-31, -6, -5, -2, z, z+4, OAK)
     for x, h in ((-26, 30), (-19, 23), (-12, 34)):
-        b(x-1, x+2, -7, -4, 4, h, OAK if x != -19 else STEEL)
+        b(x-1, x+2, -7, -4, 4, h, HAFT if x != -19 else STEEL)
         if x == -19:
-            b(x-3, x+4, -7, -4, h-3, h, OAK)
-            b(x-1, x+2, -7, -4, h, h+5, OAK)
+            b(x-3, x+4, -7, -4, h-3, h, HAFT)
+            b(x-1, x+2, -7, -4, h, h+5, HAFT)
         else:
             for i, w in enumerate((1, 2, 2, 2, 1, 1, 0)):
                 b(x-w, x+w+1, -7, -4, h+i, h+i+1, STEEL)
@@ -171,6 +171,8 @@ def shade(h):
         if z in (11, 12, 35, 36) or x == ENTRY:
             return '52454b'
         return WOOD[1 if (x-ENTRY)%5 == 0 or z > 50 else 2]
+    if mat == HAFT:
+        return '77513d' if top else '56382d'
     if mat == OAK:
         return WOOD[3 if top else 1 if (x*7+z//7)%11 < 2 else 2]
     if mat == LIME:
@@ -206,7 +208,7 @@ if __name__ == '__main__':
         return min(max(abs(x)-47, -45-y, y-44)/2, max(abs(x)-46, -y, y-44)/5,
                    max(-49-x, x+34, -45-y, y+28)/3)
     def seam(a, b):
-        return None if {a, b} <= {CORD, STRAW, SACK, OAK} else OUTLINE
+        return None if {a, b} <= {CORD, STRAW, SACK, OAK, HAFT} else OUTLINE
     def rgba(h):
         return (*bytes.fromhex(shade(h)), 255)
     sprite = render(g, 0, WIDTH, HEIGHT, ORIGIN, rgba, (1, 1), .2, shadow)
