@@ -5,7 +5,7 @@ from pathlib import Path
 
 from voxel_sprite import VoxelGrid, outline, render, write_png
 
-OUT = Path(__file__).resolve().parents[1] / 'public/resources/towers/blacksmith.png'
+OUT = Path(__file__).resolve().parents[1] / 'public/resources/towers/blacksmith-tower.png'
 # The width still maps to two cells. With the smaller final draw scale, leave
 # just enough transparent canvas below to keep the prior bottom clearance.
 WIDTH, HEIGHT, ORIGIN_Y = 232, 172, 115
