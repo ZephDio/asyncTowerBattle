@@ -15,6 +15,7 @@ import { Rock } from "../../../../environment/rock";
 import { Mine } from "../../recruit/implementation/mine";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { MountainTag } from "../../../../../shared/traits/engine/tags/biome/biome-tags";
 
 export class MineBlueprint extends Derive(
 	TRarity(Rarity.Legendary),
@@ -28,6 +29,7 @@ export class MineBlueprint extends Derive(
 	TImageDrawable(TotemResources.mine.image, TotemResources.mine.size, DrawPriority.NormalGridElement),
 	TSynergy,
 	TotemTag,
+	MountainTag,
 ) {
 	description = new Description("Gold Mine", [
 		"Shop entered : gain 5 🪙",
