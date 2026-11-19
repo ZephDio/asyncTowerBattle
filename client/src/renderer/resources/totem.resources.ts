@@ -46,8 +46,8 @@ export class TotemResources {
 	};
 	static windmill: ShapedResource = {
 		size: {
-			width: 6.4,
-			height: 6.4,
+			width: 5.2,
+			height: 6.35,
 		},
 		image: createImage("/resources/totem/windmill.png"),
 		shape: "rectangle",
