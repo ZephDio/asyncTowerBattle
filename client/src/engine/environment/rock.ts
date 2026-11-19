@@ -4,11 +4,13 @@ import { TEnvironmentElement } from "./environment";
 import { Cell } from "../../shared/position";
 import { BattleGrid } from "../grid/battle-grid";
 import { EnvironmentResources } from "../../renderer/resources/environment.resources";
+import { MountainTag } from "../../shared/traits/engine/tags/biome/biome-tags";
 import { Description, TDescriptor } from "../../shared/traits/render/huds/item-descriptor";
 
 export class Rock extends Derive(
 	TEnvironmentElement,
 	TDescriptor,
+	MountainTag,
 	TImageDrawable(EnvironmentResources.rock.image, EnvironmentResources.rock.size, DrawPriority.NormalGridElement),
 ) {
 	type = "rock" as const;

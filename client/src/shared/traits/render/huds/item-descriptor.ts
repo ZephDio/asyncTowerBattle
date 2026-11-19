@@ -245,12 +245,12 @@ export class CasterDescription extends Description {
 }
 
 export type TowerLinesDescription = {
-	damage: string;
+	"projectile damage": string;
 	"cast speed": string;
 	"food consumption": string;
 };
 const TowerStatLabels: TowerLinesDescription = {
-	damage: "⚔️",
+	"projectile damage": "⚔️",
 	"cast speed": "💠",
 	"food consumption": "🌽",
 };
@@ -261,7 +261,7 @@ export class TowerDescription extends Description {
 
 	constructor(name: string, description: string[], tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
 		const extraLines: TowerLinesDescription = {
-			damage: `${tower.stats.damage}`,
+			"projectile damage": `${tower.stats.projectileDamage}`,
 			"cast speed": `${castSpeedToSecond(tower.stats.castSpeed)}s`,
 			"food consumption": `${tower.stats.foodConsumptionOnCast}`,
 		};
@@ -271,7 +271,7 @@ export class TowerDescription extends Description {
 
 export type UnitLinesDescription = {
 	health: string;
-	damage: string;
+	"castle damage": string;
 	"move speed": string;
 	"food consumption": string;
 	"production time": string;
@@ -279,7 +279,7 @@ export type UnitLinesDescription = {
 // Units eat every 2 seconds (BattleUnit.consumeFood).
 const UnitStatLabels: UnitLinesDescription = {
 	health: "💚",
-	damage: "🗡️",
+	"castle damage": "🗡️",
 	"move speed": "🥾",
 	"food consumption": "🌽/2s",
 	"production time": "🕒",
@@ -292,12 +292,40 @@ export class UnitDescription extends Description {
 	constructor(name: string, description: string[], unit: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
 		const extraLines: UnitLinesDescription = {
 			health: `${unit.stats.health}`,
-			damage: `${unit.stats.damage}`,
+			"castle damage": `${unit.stats.castleDamage}`,
 			"move speed": `${unit.stats.speed}`,
 			"food consumption": `${unit.stats.foodConsumption}`,
 			"production time": `${frameToSeconds(unit.stats.summonTime)}s`,
 		};
 		super(name, description, extraLines);
+	}
+}
+
+// Marks where a unit's projectile damage goes in its description lines.
+export const PROJECTILE_DAMAGE = "{projectile damage}";
+
+// A unit description whose PROJECTILE_DAMAGE lines show the blueprint's projectile damage, and the live one during battle.
+export class ProjectileUnitDescription extends UnitDescription {
+	private readonly template: string[];
+	private readonly baseProjectileDamage: number;
+
+	constructor(name: string, description: string[], unit: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
+		const damage = formatStat(unit.stats.projectileDamage);
+		super(
+			name,
+			description.map((line) => line.replace(PROJECTILE_DAMAGE, damage)),
+			unit,
+		);
+		this.template = description;
+		this.baseProjectileDamage = unit.stats.projectileDamage;
+	}
+
+	liveDescription(projectileDamage: number): DescriptionLine[] {
+		return this.template.map((line) => {
+			const [before, after] = line.split(PROJECTILE_DAMAGE);
+			if (after === undefined) return line;
+			return [before ?? "", liveStat(formatStat(projectileDamage), projectileDamage, this.baseProjectileDamage), after];
+		});
 	}
 }
 

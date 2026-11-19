@@ -18,6 +18,13 @@ export class Cast extends Action {
 			// What goes past the cost is not lost: the caster's next cast starts with it.
 			const overflow = this.progress - this._cost;
 			this.resolve();
+			if (this.caster.castInProgress === this) {
+				// The cast resolved without finishing (a tower with no target): it stays ready and retries next tick,
+				// instead of piling up progress that the next casts would all spend at once.
+				this.progress = this._cost - this.caster.castSpeed;
+				this.caster.castOverflow = 0;
+				return;
+			}
 			this.caster.castOverflow = overflow;
 		}
 	}

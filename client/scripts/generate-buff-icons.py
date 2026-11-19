@@ -8,6 +8,7 @@ Outputs, in public/resources/icons/:
 - unit-health.png: a green heart, the unit vitality buff.
 - tower-cast-speed.png: three cannonballs flying with speed streaks, the tower cast speed buff.
 - tower-attack.png: a sword, the tower attack buff.
+- unit-castle-damage.png: a bomb, the unit castle damage.
 
 They follow the corn and heart container icons (see generate-corn.py): 16x16 sprites upscaled 4x, flat colors with
 one or two shades per part, light from the top left, and the icons' dark ink outline drawn around the silhouette.
@@ -138,11 +139,33 @@ TOWER_ATTACK = [
     "................",
 ]
 
+# A round cast iron bomb in the cannonballs' iron, lit from the top left, with a gold neck, a leather fuse curling up
+# and right, and a spark at its tip: the unit castle damage icon.
+UNIT_CASTLE_DAMAGE = [
+    "................",
+    "..........o.....",
+    ".........oGo....",
+    ".........lo.....",
+    "........m.......",
+    "......Ggo.......",
+    "....22333.......",
+    "...2112334......",
+    "..211233344.....",
+    "..223333444.....",
+    "..233334444.....",
+    "..333344444.....",
+    "..334444444.....",
+    "...4444444......",
+    "....44444.......",
+    "................",
+]
+
 ICONS: dict[str, Frame] = {
     "unit-speed.png": UNIT_SPEED,
     "unit-health.png": UNIT_HEALTH,
     "tower-cast-speed.png": TOWER_CAST_SPEED,
     "tower-attack.png": TOWER_ATTACK,
+    "unit-castle-damage.png": UNIT_CASTLE_DAMAGE,
 }
 
 

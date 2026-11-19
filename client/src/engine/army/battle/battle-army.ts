@@ -39,6 +39,8 @@ export type BattleArmyHooks = {
 	getAlliedUnits: () => AnyBattleUnit[];
 	getAlliedCastle: () => AnyBattleCastle;
 	triggerFurry: () => void;
+	onEnemyCastleHit: (listener: () => void) => void;
+	notifyEnemyCastleHit: () => void;
 	alliedArmyBuffHooks: ArmyBuffHooks;
 	enemyArmyBuffHooks: ArmyBuffHooks;
 	alliedFoodHooks: FoodHooks;
@@ -61,6 +63,7 @@ export class BattleArmy {
 	armyBuff: ArmyBuff;
 	totems: AnyBattleTotem[];
 	furry: Furry;
+	private enemyCastleHitListeners: Array<() => void> = [];
 
 	constructor(
 		public foodEconomy: BattleFoodEconomy,
@@ -124,6 +127,14 @@ export class BattleArmy {
 				element.onBattleStart();
 			}
 		}
+	}
+
+	onEnemyCastleHit(listener: () => void) {
+		this.enemyCastleHitListeners.push(listener);
+	}
+
+	notifyEnemyCastleHit() {
+		for (const listener of [...this.enemyCastleHitListeners]) listener();
 	}
 
 	addFurryBuff(unit: AnyBattleUnit) {
@@ -199,6 +210,8 @@ export class BattleArmy {
 			getAlliedCastle: () => this.castle,
 			getAlliedUnits: () => [...this.units.keys()],
 			triggerFurry: () => this.furry.increaseFurry(),
+			onEnemyCastleHit: this.onEnemyCastleHit.bind(this),
+			notifyEnemyCastleHit: this.notifyEnemyCastleHit.bind(this),
 			alliedArmyBuffHooks: this.alliedArmyBuffHooks,
 			enemyArmyBuffHooks: this.enemyArmyBuffHooks,
 			alliedFoodHooks: this.foodEconomy.getHooks(),

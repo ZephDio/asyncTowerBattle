@@ -8,7 +8,7 @@ import { BasicTileBlueprint } from "../../tile/blueprint/implementation/basic-pa
 import { SlowingTrapBlueprint } from "../../trap/blueprint/implementation/slowing-trap-blueprint";
 import { AnyPathTileBlueprint } from "../../tile/blueprint/tile";
 import { BlueTowerBlueprint } from "../../constructs/tower/blueprint/implementation/blue-tower-blueprint";
-import { GreenTowerBlueprint } from "../../constructs/tower/blueprint/implementation/green-tower-blueprint";
+import { WindmillTurretBlueprint } from "../../constructs/tower/blueprint/implementation/windmill-turret-blueprint";
 import { WitchHouseBlueprint } from "../../constructs/tower/blueprint/implementation/witch-house-blueprint";
 import { AnyTowerBlueprint } from "../../constructs/tower/blueprint/tower-blueprint";
 import { DragonBlueprint } from "../../units/blueprint/implementation/dragon-blueprint";
@@ -23,6 +23,7 @@ import { DrillTowerBlueprint } from "../../constructs/tower/blueprint/implementa
 import { ChoupissonBlueprint } from "../../units/blueprint/implementation/choupisson-blueprint";
 import { VeterantBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/veteran-barrack-blueprint";
 import { AnyTotemBlueprint } from "../../constructs/totem/blueprint/totem-blueprint";
+import { BosquetBlueprint } from "../../constructs/totem/blueprint/implementation/bosquet-blueprint";
 import { AnvilTotemBlueprint } from "../../constructs/totem/blueprint/implementation/anvil-blueprint";
 import { GobelinPortalBlueprint } from "../../constructs/totem/blueprint/implementation/gobelin-portal-blueprint";
 import { CropsFieldBlueprint } from "../../constructs/totem/blueprint/implementation/crops-field-blueprint";
@@ -61,6 +62,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			BreweryBlueprint,
 			PowderMagazineBlueprint,
 			RedObeliskBlueprint,
+			BosquetBlueprint,
 		],
 		share: 100,
 	},
@@ -69,7 +71,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			ZappingTowerBlueprint,
 			WitchHouseBlueprint,
 			BlueTowerBlueprint,
-			GreenTowerBlueprint,
+			WindmillTurretBlueprint,
 			FrostTowerBlueprint,
 			DrillTowerBlueprint,
 		],

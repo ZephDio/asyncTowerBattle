@@ -20,31 +20,18 @@ export const ROUND_GRID_SIZES = [
 export const roundGridSize = (round: number): GridSize =>
 	ROUND_GRID_SIZES[Math.min(round, ROUND_GRID_SIZES.length) - 1] ?? ROUND_GRID_SIZES[0];
 
-// Two boards can only fight on grids of the same size.
-export const sameGridSize = (round: number, otherRound: number) => {
-	const size = roundGridSize(round);
-	const otherSize = roundGridSize(otherRound);
-	return size.width === otherSize.width && size.height === otherSize.height;
-};
-
 // The client's BattleRandomSeed works modulo 2**31, so a seed is an integer of [0, 2**31).
 export const RANDOM_SEED_RANGE = 2 ** 31;
 
-declare const checked: unique symbol;
-
-// A board whose grid has the size of its round and whose random seed is one BattleRandomSeed takes. Only checkBoard
-// makes one, and the board stores only take this type, so no other board can be stored.
-export type CheckedBoard = SerializedBoard & { readonly [checked]: true };
-
-// The board comes from the request's JSON, so its fields may be missing or of another type whatever its type says.
-export const checkBoard = (board: SerializedBoard): CheckedBoard => {
+// The rules every stored board follows: its round starts at 1, its grid has the size of its round and its random seed is
+// one BattleRandomSeed takes. Throws the error of the first rule it breaks.
+export const assertBoardRules = (board: SerializedBoard) => {
 	if (!Number.isInteger(board.round) || board.round < 1) throw new InvalidRoundError(board.round);
 	const size = roundGridSize(board.round);
-	if (board.size?.width !== size.width || board.size?.height !== size.height) {
+	if (board.size.width !== size.width || board.size.height !== size.height) {
 		throw new InvalidBoardSizeError(board.round, size, board.size);
 	}
 	if (!Number.isInteger(board.randomSeed) || board.randomSeed < 0 || board.randomSeed >= RANDOM_SEED_RANGE) {
 		throw new InvalidRandomSeedError(board.randomSeed);
 	}
-	return board as CheckedBoard;
 };

@@ -13,20 +13,20 @@ export type Resource = {
 };
 
 export class TowerResources {
-	// Visual only: reserved for a future two-cell blacksmith tower.
-	static blacksmithTower: ShapedResource = {
-		size: { width: 9.8, height: (9.8 * 172) / 232 },
-		image: createImage("/resources/towers/blacksmith-tower.png"),
-		shape: "rectangle",
-	};
-
-	// Visual for a future windmill turret; no tower currently uses this resource.
+	// Visual of the windmill turret, which replaces the green tower (same stats, same "green" serialized key).
 	static windmillTurret: ShapedResource = {
 		size: {
 			width: 5.2,
 			height: 7.1,
 		},
 		image: createImage("/resources/towers/windmill-turret.png"),
+		shape: "rectangle",
+	};
+
+	// A horizontal 2x1 piece: two cells wide, drawn taller than its footprint
+	static blacksmithTower: ShapedResource = {
+		size: { width: 9.8, height: (9.8 * 172) / 232 },
+		image: createImage("/resources/towers/blacksmith-tower.png"),
 		shape: "rectangle",
 	};
 
@@ -46,15 +46,6 @@ export class TowerResources {
 		},
 		image: createImage("/resources/towers/frost.png"),
 		shape: "ellipse",
-	};
-
-	static green: ShapedResource = {
-		size: {
-			width: 5,
-			height: 8,
-		},
-		image: createImage("/resources/towers/green.png"),
-		shape: "rectangle",
 	};
 
 	static witchHouse: ShapedResource = {

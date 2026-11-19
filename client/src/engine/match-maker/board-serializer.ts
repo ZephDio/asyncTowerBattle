@@ -11,6 +11,7 @@ import { VeterantBarrack } from "../constructs/barrack/recruit/implementation/ve
 import { WaveBarrack } from "../constructs/barrack/recruit/implementation/wave-barrack";
 import { AnvilTotem } from "../constructs/totem/recruit/implementation/anvil";
 import { Bakery } from "../constructs/totem/recruit/implementation/backery";
+import { Bosquet } from "../constructs/totem/recruit/implementation/bosquet";
 import { Brewery } from "../constructs/totem/recruit/implementation/brewery";
 import { CropsField } from "../constructs/totem/recruit/implementation/crops-field";
 import { GobelinPortal } from "../constructs/totem/recruit/implementation/gobelin-portal";
@@ -22,7 +23,7 @@ import { AnyTotem } from "../constructs/totem/recruit/totem";
 import { BlueTower } from "../constructs/tower/recruit/implementation/blue-tower";
 import { DrillTower } from "../constructs/tower/recruit/implementation/drill-tower";
 import { FrostTower } from "../constructs/tower/recruit/implementation/frost-tower";
-import { GreenTower } from "../constructs/tower/recruit/implementation/green-tower";
+import { WindmillTurret } from "../constructs/tower/recruit/implementation/windmill-turret";
 import { WitchHouse } from "../constructs/tower/recruit/implementation/witch-house";
 import { ZappingTower } from "../constructs/tower/recruit/implementation/zapping-tower";
 import { AnyTower } from "../constructs/tower/recruit/tower";
@@ -65,7 +66,7 @@ const towers: Record<SerializedTowerType, Constructor<AnyTower>> = {
 	blue: BlueTower,
 	drill: DrillTower,
 	frost: FrostTower,
-	green: GreenTower,
+	"windmill-turret": WindmillTurret,
 	"witch-house": WitchHouse,
 	zapping: ZappingTower,
 };
@@ -73,6 +74,7 @@ const towers: Record<SerializedTowerType, Constructor<AnyTower>> = {
 const totems: Record<SerializedTotemType, Constructor<AnyTotem>> = {
 	anvil: AnvilTotem,
 	bakery: Bakery,
+	bosquet: Bosquet,
 	brewery: Brewery,
 	"crops-field": CropsField,
 	"gobelin-portal": GobelinPortal,

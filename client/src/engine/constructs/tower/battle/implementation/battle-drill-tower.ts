@@ -25,7 +25,8 @@ export class BattleDrillTower extends Derive(BattleTower, BattleStartTrigger) {
 			battleStartRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: recruit.stats.health,
-			attack: recruit.stats.damage,
+			castleDamage: recruit.stats.castleDamage,
+			projectileDamage: recruit.stats.projectileDamage,
 			movementSpeed: recruit.stats.speed,
 			castSpeed: recruit.stats.castSpeed,
 			attackSpeed: recruit.stats.attackSpeed,
@@ -57,7 +58,7 @@ export class BattleDrillTower extends Derive(BattleTower, BattleStartTrigger) {
 			x: anchor.x + below.x * STANDARD_CELL_SIZE,
 			y: anchor.y + below.y * STANDARD_CELL_SIZE,
 		});
-		this.hooks.addProjectile(new BattleDrill(new Drill(), start, this.hooks, this.stats.attack, below), this);
+		this.hooks.addProjectile(new BattleDrill(new Drill(), start, this.hooks, this.stats.projectileDamage, below), this);
 	}
 
 	private isEnemyInTargetZone(enemyUnit: AnyBattleUnit) {

@@ -35,7 +35,8 @@ export class WindmillBlueprint extends Derive(
 		"gain 25% cast speed",
 		"",
 		"Gains 5max 🌽",
-		"for each ▣ food monuments",
+		"for each ▣ food",
+		"monuments",
 	]);
 
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {

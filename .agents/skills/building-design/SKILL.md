@@ -90,3 +90,10 @@ Also check it in the game with the game-testing skill:
 - The sprite covers the bounding box of the `o` cells, one image quadrant per cell, and `x` cells inside it stay
   transparent. The `pixel-art-assets` skill covers drawing it.
 - Then follow the "Adding a new piece" checklist in `AGENTS.md` (union type, fixtures, resources, retail pool).
+
+## Placeholder sprite
+
+When the user designs a new monument (totem, tower, barrack...) and gives no art ("no resources for now"), don't
+borrow another piece's image. Use a flat pink square (`#ff69b4`, 64x64 PNG) at `client/public/resources/<kind>/<piece>.png`
+and a `<Kind>Resources` entry sized to the footprint (see `TotemResources.bosquet`). Say it is a placeholder; the
+`pixel-art-assets` skill replaces it later.

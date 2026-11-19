@@ -24,7 +24,8 @@ export class FoxBlueprint extends Derive(
 	TImageDrawable(UnitResources.fox.image, UnitResources.fox.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 22,
-		damage: 1.5,
+		castleDamage: 1.5,
+		projectileDamage: NaN,
 		speed: 2.8,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: castSpeedFromSeconds(4.5),

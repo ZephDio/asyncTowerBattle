@@ -56,7 +56,7 @@ export class OrangeTotemBuff extends Derive(Status) {
 	tick() {
 		this.clock++;
 		if (this.stackApplied >= this.stackCount) return;
-		this.stats.basePercentStat.attack += 30;
+		this.stats.basePercentStat.projectileDamage += 30;
 		this.stackApplied++;
 	}
 
@@ -65,6 +65,6 @@ export class OrangeTotemBuff extends Derive(Status) {
 	}
 
 	override onRemove(): void {
-		this.stats.basePercentStat.attack -= 30 * this.stackCount;
+		this.stats.basePercentStat.projectileDamage -= 30 * this.stackCount;
 	}
 }

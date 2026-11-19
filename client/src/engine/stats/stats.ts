@@ -58,7 +58,8 @@ export const HaveStats = Trait((base) => {
 
 		constructor(props: {
 			maxHealth: number;
-			attack: number;
+			castleDamage: number;
+			projectileDamage: number;
 			movementSpeed: number;
 			attackSpeed: number;
 			castSpeed: number;
@@ -69,7 +70,8 @@ export const HaveStats = Trait((base) => {
 			super(props);
 			this.stats = new Stats(
 				props.maxHealth,
-				props.attack,
+				props.castleDamage,
+				props.projectileDamage,
 				props.movementSpeed,
 				props.castSpeed,
 				props.attackSpeed,
@@ -85,7 +87,8 @@ export const HaveStats = Trait((base) => {
 export class Stats {
 	private _health: number;
 	private _maxHealth: number;
-	private _attack: number;
+	private _castleDamage: number;
+	private _projectileDamage: number;
 	private _movementSpeed: number;
 	private _foodCost: number;
 	private _castSpeed: number;
@@ -93,7 +96,8 @@ export class Stats {
 	private _range: number;
 
 	public basePercentStat = {
-		attack: 100,
+		castleDamage: 100,
+		projectileDamage: 100,
 		movementSpeed: 100,
 		maxHealth: 100,
 		foodCost: 100,
@@ -101,12 +105,18 @@ export class Stats {
 		range: 100,
 	};
 
+	// Flat bonuses added before the percent modifiers.
+	public flatStat = {
+		castleDamage: 0,
+	};
+
 	public conditions: Map<string, ImplementsTrait<typeof Status>> = new Map();
 	public boons: Map<string, ImplementsTrait<typeof Status>> = new Map();
 
 	constructor(
 		maxHealth: number,
-		attack: number,
+		castleDamage: number,
+		projectileDamage: number,
 		speed: number,
 		castSpeed: number,
 		attackSpeed: number,
@@ -116,7 +126,8 @@ export class Stats {
 	) {
 		this._health = maxHealth;
 		this._maxHealth = maxHealth;
-		this._attack = attack;
+		this._castleDamage = castleDamage;
+		this._projectileDamage = projectileDamage;
 		this._movementSpeed = speed;
 		this._castSpeed = castSpeed;
 		this._attackSpeed = attackSpeed;
@@ -136,8 +147,11 @@ export class Stats {
 				case "vitality":
 					this.addMaxHealth(3 * amount, true);
 					break;
-				case "attack":
-					this.basePercentStat.attack += amount * 4;
+				case "castle-damage":
+					this.basePercentStat.castleDamage += amount * 4;
+					break;
+				case "projectile-damage":
+					this.basePercentStat.projectileDamage += amount * 4;
 					break;
 			}
 		});
@@ -146,7 +160,8 @@ export class Stats {
 	get base() {
 		return {
 			maxHealth: this._maxHealth,
-			attack: this._attack,
+			castleDamage: this._castleDamage,
+			projectileDamage: this._projectileDamage,
 			movementSpeed: this._movementSpeed,
 			castSpeed: this._castSpeed,
 			foodCost: this._foodCost,
@@ -162,8 +177,14 @@ export class Stats {
 		return this._maxHealth * Math.max(0, this.basePercentStat.maxHealth / 100);
 	}
 
-	get attack() {
-		return this._attack * Math.max(0, this.basePercentStat.attack / 100);
+	// Damage a unit deals to the enemy castle when it arrives.
+	get castleDamage() {
+		return (this._castleDamage + this.flatStat.castleDamage) * Math.max(0, this.basePercentStat.castleDamage / 100);
+	}
+
+	// Damage of the projectiles and area effects a piece fires. Independent from castleDamage.
+	get projectileDamage() {
+		return this._projectileDamage * Math.max(0, this.basePercentStat.projectileDamage / 100);
 	}
 
 	get movementSpeed() {

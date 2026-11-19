@@ -29,7 +29,8 @@ export class RedObeliskBlueprint extends Derive(
 	TotemTag,
 	TBaseStats({
 		health: NaN,
-		damage: NaN,
+		castleDamage: NaN,
+		projectileDamage: NaN,
 		castSpeed: castSpeedFromSeconds(5),
 		attackSpeed: NaN,
 		speed: NaN,

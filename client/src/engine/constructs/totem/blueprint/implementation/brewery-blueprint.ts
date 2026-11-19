@@ -30,7 +30,8 @@ export class BreweryBlueprint extends Derive(
 	TotemTag,
 	TBaseStats({
 		health: NaN,
-		damage: NaN,
+		castleDamage: NaN,
+		projectileDamage: NaN,
 		castSpeed: castSpeedFromSeconds(5),
 		attackSpeed: NaN,
 		speed: NaN,
@@ -44,12 +45,13 @@ export class BreweryBlueprint extends Derive(
 		"Cow-boy Brewery",
 		[
 			`Every ${CAST_TIME} seconds :`,
-			"produce 0.5🌽 for each",
-			"units you control (max 8🌽)",
-			"if you hit the max, gain 🥾",
+			"produce 0.5 🌽 per",
+			"unit (max 8 🌽)",
+			"At the max, gain 1 👢",
 			"",
-			"start of battle : gain 🥾",
-			"for each ▣ barracks",
+			"Start of battle,",
+			"gain 1 👢 for each",
+			"▣ barracks",
 		],
 		this,
 	);

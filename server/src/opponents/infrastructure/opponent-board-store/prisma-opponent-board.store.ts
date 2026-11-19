@@ -1,22 +1,23 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../../database/prisma.service.js";
-import type { PlayerBoard as PlayerBoardRow } from "../../database/generated/prisma/client.js";
-import { OpponentBoardStore } from "../applicative/interfaces/opponent-board.store.js";
-import type { CheckedBoard } from "../domain/checked-board.js";
-import type { PlayerBoard } from "../domain/player-board.js";
+import { PrismaService } from "../../../database/prisma.service.js";
+import { RandomProvider } from "../../../shared/applicative/interfaces/random-provider.js";
+import type { PlayerBoard as PlayerBoardRow } from "../../../database/generated/prisma/client.js";
+import { OpponentBoardStore } from "../../applicative/interfaces/opponent-board.store.js";
+import { PlayerBoard } from "../../domain/player-board.js";
+import type { SerializedBoard } from "../../domain/serialized-board.js";
 
-// Only checked boards are stored, and the player_board_board_check constraint refuses any other.
-const toPlayerBoard = ({ id, board, wins, losses, playerId, bot, pulledBy }: PlayerBoardRow): PlayerBoard => ({
-	id,
-	board: board as CheckedBoard,
-	performance: { wins, losses },
-	...(playerId && { playerId }),
-	bot,
-	pulledBy,
-});
+// A row holds a valid board, which only PlayerBoard makes and the player_board_board_check constraint also enforces.
+const toPlayerBoard = ({ id, board, wins, losses, playerId, pulledBy }: PlayerBoardRow) =>
+	new PlayerBoard({
+		id,
+		board: board as SerializedBoard,
+		performance: { wins, losses },
+		playerId: playerId ?? undefined,
+		pulledBy,
+	});
 
-// A guest's board and the seed boards have no player, so they are never left out. A bare `not` would leave them out
-// too, since SQL compares null to nothing.
+// A board whose player was deleted has no player, so it is never left out. A bare `not` would leave it out too, since
+// SQL compares null to nothing.
 const notOwnedByFilter = (notOwnedBy: string | undefined) =>
 	notOwnedBy === undefined ? {} : { OR: [{ playerId: null }, { playerId: { not: notOwnedBy } }] };
 
@@ -24,11 +25,14 @@ const notOwnedByFilter = (notOwnedBy: string | undefined) =>
 // projection in the same transaction, so counting a round's boards reads one row.
 @Injectable()
 export class PrismaOpponentBoardStore extends OpponentBoardStore {
-	constructor(private readonly prisma: PrismaService) {
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly random: RandomProvider,
+	) {
 		super();
 	}
 
-	async add({ id, board, performance, playerId, bot, pulledBy }: PlayerBoard) {
+	async add({ id, board, performance, playerId, pulledBy }: PlayerBoard) {
 		await this.prisma.$transaction([
 			this.prisma.playerBoard.create({
 				data: {
@@ -38,8 +42,7 @@ export class PrismaOpponentBoardStore extends OpponentBoardStore {
 					wins: performance.wins,
 					losses: performance.losses,
 					playerId,
-					bot,
-					pulledBy,
+					pulledBy: [...pulledBy],
 				},
 			}),
 			this.prisma.roundBoardCount.upsert({
@@ -55,12 +58,16 @@ export class PrismaOpponentBoardStore extends OpponentBoardStore {
 		return row?.count ?? 0;
 	}
 
-	async findByRound(round: number, notOwnedBy?: string) {
-		const rows = await this.prisma.playerBoard.findMany({
-			where: { round, pulledAt: null, ...notOwnedByFilter(notOwnedBy) },
-			orderBy: { createdAt: "asc" },
-		});
-		return rows.map(toPlayerBoard);
+	// Counts the round's available boards on the (round, pulled_at) index, then reads only the one at a random offset.
+	// A round holds about ROUND_POOL_SIZE available boards, so the offset stays short.
+	async pickOne(round: number, notOwnedBy?: string) {
+		const where = { round, pulledAt: null, ...notOwnedByFilter(notOwnedBy) };
+		const count = await this.prisma.playerBoard.count({ where });
+		if (count === 0) return undefined;
+		const pick = (skip: number) => this.prisma.playerBoard.findFirst({ where, orderBy: { createdAt: "asc" }, skip });
+		// A concurrent pull may have consumed boards since the count: then take the first one left.
+		const row = (await pick(Math.floor(this.random.next() * count))) ?? (await pick(0));
+		return row ? toPlayerBoard(row) : undefined;
 	}
 
 	// Also records the puller of a board a concurrent pull consumed since it was found.
@@ -86,14 +93,5 @@ export class PrismaOpponentBoardStore extends OpponentBoardStore {
 				await transaction.playerBoard.updateMany({ where: { id }, data: { pulledBy: { push: pulledBy } } });
 			}
 		});
-	}
-
-	async rounds(notOwnedBy?: string) {
-		const rows = await this.prisma.playerBoard.findMany({
-			where: { pulledAt: null, ...notOwnedByFilter(notOwnedBy) },
-			distinct: ["round"],
-			select: { round: true },
-		});
-		return rows.map(({ round }) => round);
 	}
 }

@@ -26,7 +26,8 @@ export class CropsFieldBlueprint extends Derive(
 	TImageDrawable(TotemResources.cropsfield.image, TotemResources.cropsfield.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: NaN,
+		castleDamage: NaN,
+		projectileDamage: NaN,
 		castSpeed: castSpeedFromSeconds(3.5),
 		attackSpeed: NaN,
 		speed: NaN,

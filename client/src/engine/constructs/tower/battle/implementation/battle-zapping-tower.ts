@@ -22,7 +22,8 @@ export class ZappingBattleTower extends Derive(BattleTower) {
 			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: recruit.stats.health,
-			attack: recruit.stats.damage,
+			castleDamage: recruit.stats.castleDamage,
+			projectileDamage: recruit.stats.projectileDamage,
 			movementSpeed: recruit.stats.speed,
 			castSpeed: recruit.stats.castSpeed,
 			attackSpeed: recruit.stats.attackSpeed,
@@ -41,7 +42,7 @@ export class ZappingBattleTower extends Derive(BattleTower) {
 	private attack(target: AnyBattleUnit) {
 		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 		if (sucess) {
-			const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
+			const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.projectileDamage);
 			this.hooks.addProjectile(projectile, this);
 		}
 		this.finishCast(sucess);

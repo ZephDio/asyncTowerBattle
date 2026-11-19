@@ -1,6 +1,6 @@
 import { BlueTowerBlueprint } from "./implementation/blue-tower-blueprint";
 import { DrillTowerBlueprint } from "./implementation/drill-tower-blueprint";
-import { GreenTowerBlueprint } from "./implementation/green-tower-blueprint";
+import { WindmillTurretBlueprint } from "./implementation/windmill-turret-blueprint";
 import { WitchHouseBlueprint } from "./implementation/witch-house-blueprint";
 import { ZappingTowerBlueprint } from "./implementation/zapping-tower-blueprint";
 
@@ -11,8 +11,8 @@ export class TowerBlueprintBuilder {
 	buildBlue() {
 		return new BlueTowerBlueprint({});
 	}
-	buildGreen() {
-		return new GreenTowerBlueprint({});
+	buildWindmillTurret() {
+		return new WindmillTurretBlueprint({});
 	}
 	buildZapping() {
 		return new ZappingTowerBlueprint({});
@@ -23,8 +23,8 @@ export class TowerBlueprintBuilder {
 }
 
 export class TowerBlueprintFixtures {
-	static get green() {
-		return new TowerBlueprintBuilder().buildGreen();
+	static get windmillTurret() {
+		return new TowerBlueprintBuilder().buildWindmillTurret();
 	}
 	static get blue() {
 		return new TowerBlueprintBuilder().buildBlue();

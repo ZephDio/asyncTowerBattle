@@ -21,7 +21,8 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: recruit.stats.health,
-			attack: recruit.stats.damage,
+			castleDamage: recruit.stats.castleDamage,
+			projectileDamage: recruit.stats.projectileDamage,
 			movementSpeed: recruit.stats.speed,
 			castSpeed: recruit.stats.castSpeed,
 			attackSpeed: recruit.stats.attackSpeed,
@@ -48,7 +49,7 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 				for (const neighbor of neighbors) {
 					if (neighbor instanceof BasicBattlePathTile) {
 						const position = this.hooks.gridHooks.getRealPosition(neighbor.cell);
-						const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.stats.attack);
+						const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.stats.projectileDamage);
 						this.hooks.addAreaEffect(areaEffects, this);
 					}
 				}

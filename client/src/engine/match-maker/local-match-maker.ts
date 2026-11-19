@@ -44,7 +44,7 @@ const EnemyArmyFixtures = {
 		const castle = CastleFactory.dwarf(size);
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
-			new TowerBuilder().celled(new Cell({ x: 3, y: 2 })).buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 3, y: 2 })).buildWindmillTurret(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
 			// Covers (3, 4), (4, 4) and (4, 3), its star on the rock at (2, 4)
 			new TowerBuilder().celled(new Cell({ x: 4, y: 4 })).buildDrill(),
@@ -66,7 +66,7 @@ const EnemyArmyFixtures = {
 		const castle = CastleFactory.elf(size);
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
-			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildWindmillTurret(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
 		];
 		const barracks = [
@@ -92,7 +92,7 @@ const EnemyArmyFixtures = {
 		const castle = CastleFactory.dwarf(size);
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
-			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildWindmillTurret(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
 		];
 		const barracks = [
@@ -128,7 +128,7 @@ const EnemyArmyFixtures = {
 		const castle = CastleFactory.elf(size);
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
-			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildWindmillTurret(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
 			new TowerBuilder().celled(new Cell({ x: 2, y: 1 })).buildBlue(),
 			//new TotemBuilder()
@@ -166,7 +166,7 @@ const EnemyArmyFixtures = {
 		const castle = CastleFactory.dwarf(size);
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
-			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildWindmillTurret(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
 			new TowerBuilder().celled(new Cell({ x: 6, y: 2 })).buildBlue(),
 			new TowerBuilder().celled(new Cell({ x: 2, y: 1 })).buildZapping(),
@@ -208,7 +208,7 @@ const EnemyArmyFixtures = {
 		const castle = CastleFactory.dwarf(size);
 		const towers: AnyTower[] = [
 			//TowerFixtures.centerTower,
-			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildGreen(),
+			new TowerBuilder().celled(new Cell({ x: 3, y: 3 })).buildWindmillTurret(),
 			new TowerBuilder().celled(new Cell({ x: 4, y: 2 })).buildFrost(),
 			new TowerBuilder().celled(new Cell({ x: 6, y: 2 })).buildBlue(),
 			new TowerBuilder().celled(new Cell({ x: 2, y: 1 })).buildZapping(),

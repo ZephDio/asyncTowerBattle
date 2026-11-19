@@ -27,7 +27,8 @@ export class GoGoatBlueprint extends Derive(
 		speed: 3.8,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: NaN,
-		damage: 2,
+		castleDamage: 2,
+		projectileDamage: NaN,
 		foodConsumptionOnCast: NaN,
 		foodConsumption: 3,
 		summonTime: secondsToFrame(2),
@@ -36,7 +37,7 @@ export class GoGoatBlueprint extends Derive(
 	MountainTag,
 	MonsterTag,
 ) {
-	description = new UnitDescription("Go-Goat", ["When it hits the", "enemy castle :", "gain 🥾"], this);
+	description = new UnitDescription("Go-Goat", ["When it hits the", "enemy castle :", "gain 👢"], this);
 
 	toRecruit(cell: Cell) {
 		return new GoGoat(cell, this);

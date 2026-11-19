@@ -186,7 +186,8 @@ export class DebugBridge {
 		const values: Record<string, number> = {
 			hp: stats.health,
 			maxHp: stats.maxHealth,
-			attack: stats.attack,
+			castleDamage: stats.castleDamage,
+			projectileDamage: stats.projectileDamage,
 			movementSpeed: stats.movementSpeed,
 			castSpeed: stats.castSpeed,
 			attackSpeed: stats.attackSpeed,

@@ -1,6 +1,6 @@
 import { BlueTower } from "./implementation/blue-tower";
-import { GreenTower } from "./implementation/green-tower";
-import { GreenTowerBlueprint } from "../blueprint/implementation/green-tower-blueprint";
+import { WindmillTurret } from "./implementation/windmill-turret";
+import { WindmillTurretBlueprint } from "../blueprint/implementation/windmill-turret-blueprint";
 import { Cell } from "../../../../shared/position";
 import { TowerBlueprintFixtures } from "../blueprint/tower-fixtures";
 import { WitchHouseBlueprint } from "../blueprint/implementation/witch-house-blueprint";
@@ -25,8 +25,8 @@ export class TowerBuilder {
 	buildFrost(tower?: FrostTowerBlueprint) {
 		return new FrostTower(this.cell, tower);
 	}
-	buildGreen(tower?: GreenTowerBlueprint) {
-		return new GreenTower(this.cell, tower);
+	buildWindmillTurret(tower?: WindmillTurretBlueprint) {
+		return new WindmillTurret(this.cell, tower);
 	}
 	buildYellow(tower?: WitchHouseBlueprint) {
 		return new WitchHouse(this.cell, tower);
@@ -44,10 +44,14 @@ export class TowerFixtures {
 		return new TowerBuilder().celled(new Cell({ x: 1, y: 2 })).buildBlue(TowerBlueprintFixtures.blue);
 	}
 	static get bottomLeftTower() {
-		return new TowerBuilder().celled(new Cell({ x: 1, y: 2 })).buildGreen(TowerBlueprintFixtures.green);
+		return new TowerBuilder()
+			.celled(new Cell({ x: 1, y: 2 }))
+			.buildWindmillTurret(TowerBlueprintFixtures.windmillTurret);
 	}
 	static get bottomMiddleTower() {
-		return new TowerBuilder().celled(new Cell({ x: 5, y: 3 })).buildGreen(TowerBlueprintFixtures.green);
+		return new TowerBuilder()
+			.celled(new Cell({ x: 5, y: 3 }))
+			.buildWindmillTurret(TowerBlueprintFixtures.windmillTurret);
 	}
 	static get bottomLeftYellowTower() {
 		return new TowerBuilder().celled(new Cell({ x: 3, y: 1 })).buildYellow(TowerBlueprintFixtures.yellow);

@@ -78,4 +78,13 @@ export class TotemResources {
 		image: createImage("/resources/totem/gobelin-portal.png"),
 		shape: "ellipse",
 	};
+
+	static bosquet: ShapedResource = {
+		size: {
+			width: 4.9,
+			height: 5.075,
+		},
+		image: createImage("/resources/totem/bosquet.png"),
+		shape: "rectangle",
+	};
 }

@@ -4,11 +4,13 @@ import { TEnvironmentElement } from "./environment";
 import { Cell } from "../../shared/position";
 import { BattleGrid } from "../grid/battle-grid";
 import { EnvironmentResources } from "../../renderer/resources/environment.resources";
+import { ForestTag } from "../../shared/traits/engine/tags/biome/biome-tags";
 import { Description, TDescriptor } from "../../shared/traits/render/huds/item-descriptor";
 
 export class Forest extends Derive(
 	TEnvironmentElement,
 	TDescriptor,
+	ForestTag,
 	TImageDrawable(EnvironmentResources.forest.image, EnvironmentResources.forest.size, DrawPriority.NormalGridElement),
 ) {
 	type = "forest" as const;

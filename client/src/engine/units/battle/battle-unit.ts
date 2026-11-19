@@ -95,14 +95,15 @@ export const TBattleUnit = Subtrait(
 						stats.health,
 						stats.base.maxHealth,
 					),
-					damage: liveStat(formatStat(stats.attack), stats.attack, stats.base.attack),
+					"castle damage": liveStat(formatStat(stats.castleDamage), stats.castleDamage, stats.base.castleDamage),
 					"move speed": liveStat(formatStat(stats.movementSpeed), stats.movementSpeed, stats.base.movementSpeed),
 					"food consumption": liveStat(formatStat(stats.foodCost), stats.foodCost, stats.base.foodCost, false),
 				};
 			}
 
 			attackCastle() {
-				this.enemyPath.alliedCastle.takeHit(this.stats.attack);
+				this.enemyPath.alliedCastle.takeHit(this.stats.castleDamage);
+				this.hooks.notifyEnemyCastleHit();
 				this.hooks.removeUnit(this);
 				this.stats.die(); // TODO
 			}

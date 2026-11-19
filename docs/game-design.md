@@ -122,7 +122,7 @@ Prices are in gold. "Every Xs" is the cast time. Food is the food spent per cast
 
 | Tower | Rarity | Price | Damage | Every | Food | Effect |
 |---|---|---|---|---|---|---|
-| Green Tower | Common | 10 | 10 | 1.5 s | 1.5 | Fast homing bullets. |
+| Miller's Bolt | Common | 10 | 10 | 1.5 s | 1.5 | Fast homing bullets. The first time an allied unit hits the enemy castle, gain 20 food. Tagged Food. |
 | Blue Tower | Common | 10 | 7 | 2.5 s | 3 | Rocket that explodes in an area. |
 | Zapping Tower | Uncommon | 10 | 15 | 3.5 s | 3 | Lightning that chains between nearby enemies. |
 | Frost Tower | Rare | 10 | 4 | 3 s | 3.5 | A frost boulder falls and explodes, slowing enemies. |

@@ -26,7 +26,8 @@ export class BakeryBlueprint extends Derive(
 	TImageDrawable(TotemResources.bakery.image, TotemResources.bakery.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: NaN,
+		castleDamage: NaN,
+		projectileDamage: NaN,
 		castSpeed: castSpeedFromSeconds(4),
 		attackSpeed: NaN,
 		speed: NaN,
@@ -40,7 +41,7 @@ export class BakeryBlueprint extends Derive(
 ) {
 	description = new CasterDescription(
 		"Bakery Wryy",
-		[`Every ${CAST_TIME} seconds :`, "consume 5🌽 and gain", "2💚 for units, otherwise", "produce 3🌽"],
+		[`Every ${CAST_TIME} seconds :`, "consume 5🌽 and gain", "2💖 for units, otherwise", "produce 3🌽"],
 		this,
 	);
 

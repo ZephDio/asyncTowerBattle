@@ -27,10 +27,12 @@ export class PowderMagazineBlueprint extends Derive(
 		return new PowderMagazine(cell, this);
 	}
 	description = new Description("Powder Magazine", [
-		"Start of battle :",
-		"gain 4💠or 4⚔️ for towers",
+		"Start of battle,",
+		"towers randomly get",
+		"4 🏹 or 4 🔮",
 		"",
-		"15 seconds reached :",
-		"gain 8💠or 8⚔️ for towers",
+		"After 15 seconds,",
+		"towers randomly get",
+		"8 🏹 or 8 🔮",
 	]);
 }

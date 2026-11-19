@@ -24,7 +24,8 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 			casterRecruit: barrack,
 			imageDrawable: barrack,
 			maxHealth: barrack.stats.health,
-			attack: barrack.stats.damage,
+			castleDamage: barrack.stats.castleDamage,
+			projectileDamage: barrack.stats.projectileDamage,
 			movementSpeed: barrack.stats.speed,
 			castSpeed: barrack.stats.castSpeed,
 			attackSpeed: barrack.stats.attackSpeed,
@@ -67,7 +68,7 @@ export class VeterantBuff extends Derive(Status) {
 		this.clock++;
 		if (this.hasTriggered) return;
 		this.stats.basePercentStat.movementSpeed -= 10;
-		this.stats.basePercentStat.attack += 20;
+		this.stats.basePercentStat.castleDamage += 20;
 		this.stats.addMaxHealth(130, true);
 		this.hasTriggered = true;
 	}
@@ -76,6 +77,6 @@ export class VeterantBuff extends Derive(Status) {
 
 	onRemove() {
 		this.stats.basePercentStat.movementSpeed += 10;
-		this.stats.basePercentStat.attack -= 20;
+		this.stats.basePercentStat.castleDamage -= 20;
 	}
 }

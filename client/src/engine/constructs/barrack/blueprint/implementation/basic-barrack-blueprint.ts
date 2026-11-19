@@ -20,7 +20,8 @@ export class BasicBarrackBlueprint extends Derive(
 	TImageDrawable(BarrackResources.basic.image, BarrackResources.basic.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: NaN,
+		castleDamage: NaN,
+		projectileDamage: NaN,
 		castSpeed: 1,
 		attackSpeed: NaN,
 		speed: NaN,

@@ -20,7 +20,8 @@ export class VeterantBarrackBlueprint extends Derive(
 	TImageDrawable(BarrackResources.veterant.image, BarrackResources.veterant.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: NaN,
+		castleDamage: NaN,
+		projectileDamage: NaN,
 		castSpeed: 0.6,
 		attackSpeed: NaN,
 		speed: NaN,

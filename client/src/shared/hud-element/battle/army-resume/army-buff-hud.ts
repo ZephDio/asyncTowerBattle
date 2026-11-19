@@ -41,7 +41,7 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 		if (castSpeedUnitBuffs) {
 			this.drawUnitCastSpeedBuff(context, position, scale, castSpeedUnitBuffs);
 		}
-		const damageTowerBuffs = this.armyBuff.towerArmyBuff.getBuff("attack");
+		const damageTowerBuffs = this.armyBuff.towerArmyBuff.getBuff("projectile-damage");
 		if (damageTowerBuffs) {
 			this.drawAttackTowerBuff(context, position, scale, damageTowerBuffs);
 		}

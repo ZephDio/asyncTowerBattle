@@ -1,0 +1,14 @@
+{
+  "shield": "assets/icon-shield.png",
+  "icons": {
+    "unit-health": {
+      "mode": "glyph",
+      "origin": [3, 3],
+      "palette": {"O": "#181425", "L": "#9cdb43", "M": "#59c135", "D": "#14a02e", "W": "#e6ffd2"},
+      "grid": [".OOO..OOO.", "OLWLOOLLDO", "OLMMMMMMDO", "OMMMMMMMDO", "OMMMMMMDDO", ".OMMMMMDO.", "..OMMMDO..", "...OMDO...", "....OO...."]
+    },
+    "unit-speed": {"mode": "downscale", "source": "client/public/resources/icons/unit-speed.png", "size": [11, 10], "resample": "box", "origin": [2, 3]},
+    "tower-attack": {"mode": "full", "source": "client/public/resources/icons/tower-attack.png"},
+    "tower-cast-speed": {"mode": "full", "source": "client/public/resources/icons/tower-cast-speed.png"}
+  }
+}

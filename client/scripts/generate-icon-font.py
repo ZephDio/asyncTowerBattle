@@ -10,7 +10,7 @@ Outputs:
   color is a layer made of the icon's pixels as squares, so the glyph is the pixel art itself at any font size. The
   ink silhouette under everything keeps antialiased seams between colors dark instead of letting the background
   show through the 1px outline. U+FE0F (emoji presentation selector) maps to an empty zero-width glyph so
-  "⚔️" draws like "⚔".
+  "⚔️" draws like "⚔" (same for "🗡️").
 - public/font/icons.css: @font-face rules adding icons.ttf to the "text" and "title" families, limited by
   unicode-range to the emoji below. Canvas text set in those fonts then draws the icons for these characters and
   the regular font for everything else, so a description can just write "produce 5🌽".
@@ -42,9 +42,16 @@ EMOJI = {
     "🥾": "unit-speed",
     "💚": "unit-health",
     "⚔": "tower-attack",
+    "🗡": "unit-castle-damage",
     "💠": "tower-cast-speed",
     "▣": "pattern-star-active",
     "☆": "pattern-star-inactive",
+    # Army buffs: the same sprites printed on a shield (public/resources/icons/army-buff/), so a buff a piece grants
+    # reads differently from the plain stat on a unit or tower.
+    "👢": "army-buff/unit-speed",
+    "💖": "army-buff/unit-health",
+    "🏹": "army-buff/tower-attack",
+    "🔮": "army-buff/tower-cast-speed",
 }
 VARIATION_SELECTOR = 0xFE0F
 
@@ -142,8 +149,9 @@ def main() -> None:
     palette: list[Color] = []
     layers: dict[str, list[tuple[str, int]]] = {}
 
-    for emoji, icon in EMOJI.items():
-        pixels = sprite_pixels(ICONS_DIR / f"{icon}.png")
+    for emoji, icon_path in EMOJI.items():
+        icon = icon_path.replace("/", "-")  # glyph name
+        pixels = sprite_pixels(ICONS_DIR / f"{icon_path}.png")
         size = len(pixels)
         by_color: dict[Color, set[tuple[int, int]]] = {}
         for y, row in enumerate(pixels):

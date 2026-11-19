@@ -1,15 +1,17 @@
 import { Derive } from "@ddd-ts/traits";
-import { GreenTower } from "../../recruit/implementation/green-tower";
+import { WindmillTurret } from "../../recruit/implementation/windmill-turret";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import { BattleTower } from "../battle-tower";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
-export class GreenBattleTower extends Derive(BattleTower) {
+const FOOD_ON_FIRST_CASTLE_HIT = 20;
+
+export class WindmillTurretBattle extends Derive(BattleTower) {
 	target = null as null | AnyBattleUnit;
 	constructor(
-		private readonly recruit: GreenTower,
+		private readonly recruit: WindmillTurret,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
@@ -21,7 +23,8 @@ export class GreenBattleTower extends Derive(BattleTower) {
 			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: recruit.stats.health,
-			attack: recruit.stats.damage,
+			castleDamage: recruit.stats.castleDamage,
+			projectileDamage: recruit.stats.projectileDamage,
 			movementSpeed: recruit.stats.speed,
 			attackSpeed: recruit.stats.attackSpeed,
 			castSpeed: recruit.stats.castSpeed,
@@ -33,12 +36,18 @@ export class GreenBattleTower extends Derive(BattleTower) {
 			tagHolder: recruit,
 			rarityHolder: recruit,
 		});
+		let hasTriggered = false;
+		this.hooks.onEnemyCastleHit(() => {
+			if (hasTriggered) return;
+			hasTriggered = true;
+			this.hooks.alliedFoodHooks.addFood(FOOD_ON_FIRST_CASTLE_HIT);
+		});
 	}
 
 	private attack(target: AnyBattleUnit) {
 		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 		if (sucess) {
-			const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.attack);
+			const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.projectileDamage);
 			this.hooks.addProjectile(projectile, this);
 		}
 		this.finishCast(sucess);

@@ -3,18 +3,18 @@ import type { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
 import { PrismaService } from "../../database/prisma.service.js";
+import { assertTestDatabase } from "../../database/test-database.js";
 import { AccessTokens } from "../../players/applicative/interfaces/access-tokens.js";
 import { OpponentBoardStore } from "../applicative/interfaces/opponent-board.store.js";
-import { checkBoard, roundGridSize } from "../domain/checked-board.js";
+import { roundGridSize } from "../domain/board-rules.js";
+import { defaultBoard } from "../domain/default-boards.js";
 import { ROUND_POOL_SIZE } from "../domain/round-pool.js";
 import type { SerializedBoard } from "../domain/serialized-board.js";
+import { PlayerBoard } from "../domain/player-board.js";
 import { OpponentsModule } from "../opponents.module.js";
 
-// Runs the route on the Prisma stores, against the database that `pnpm test:integration` migrates. Every test empties
-// it down to the seed boards, so it must never be the dev database.
-if (!process.env["DATABASE_URL"]?.includes("_test")) {
-	throw new Error(`The integration tests empty their database, refusing DATABASE_URL ${process.env["DATABASE_URL"]}`);
-}
+// Runs the route on the Prisma stores, against the database that `pnpm test:integration` migrates.
+assertTestDatabase();
 
 const ROUND = 5;
 
@@ -48,14 +48,12 @@ describe("POST /opponents/:round on Postgres", () => {
 		await app.close();
 	});
 
-	// Back to the state the migrations leave: the seed boards, available and never pulled, and their counts.
+	// Back to the state the migrations leave: no board, no player, no count.
 	beforeEach(async () => {
 		await prisma.$transaction([
-			prisma.playerBoard.deleteMany({ where: { bot: false } }),
-			prisma.playerBoard.updateMany({ data: { pulledAt: null, pulledBy: [] } }),
+			prisma.playerBoard.deleteMany(),
 			prisma.player.deleteMany(),
 			prisma.roundBoardCount.deleteMany(),
-			prisma.$executeRaw`INSERT INTO "round_board_count" SELECT "round", count(*) FROM "player_board" GROUP BY "round"`,
 		]);
 	});
 
@@ -73,19 +71,12 @@ describe("POST /opponents/:round on Postgres", () => {
 	const boardsOf = (playerId: string) =>
 		prisma.playerBoard.findMany({ where: { playerId }, orderBy: { createdAt: "asc" } });
 
-	const botBoard = () => prisma.playerBoard.findFirstOrThrow({ where: { round: ROUND, bot: true } });
-
 	// Stores boards of the round through the store, as the route would, so they count in the projection.
 	const storeBoards = async (playerId: string, count: number) => {
 		for (let index = 0; index < count; index++) {
-			await opponentBoards.add({
-				id: crypto.randomUUID(),
-				board: checkBoard(playerBoard(1000 + index)),
-				performance,
-				playerId,
-				bot: false,
-				pulledBy: [],
-			});
+			await opponentBoards.add(
+				new PlayerBoard({ id: crypto.randomUUID(), board: playerBoard(1000 + index), performance, playerId }),
+			);
 		}
 	};
 
@@ -102,22 +93,20 @@ describe("POST /opponents/:round on Postgres", () => {
 
 	const roundCount = async () => (await prisma.roundBoardCount.findUniqueOrThrow({ where: { round: ROUND } })).count;
 
-	it("keeps the bot board available, with each board that pulled it", async () => {
+	it("sends the default board while the round has no other player's board, and still stores the player's", async () => {
 		const alice = await createPlayer("alice");
 
 		const first = await pull({ board: playerBoard(1), performance }, alice.token);
 		const second = await pull({ board: playerBoard(2), performance }, alice.token);
 
-		const bot = await botBoard();
-		expect(first.body).toEqual({ board: bot.board });
-		expect(second.body).toEqual({ board: bot.board });
-		expect(bot.pulledAt).toBeNull();
-		expect(bot.pulledBy).toEqual((await boardsOf(alice.id)).map(({ id }) => id));
-		expect(await roundCount()).toBe(3);
+		expect(first.body).toEqual({ board: defaultBoard(ROUND) });
+		expect(second.body).toEqual({ board: defaultBoard(ROUND) });
+		expect((await boardsOf(alice.id)).map(({ board }) => board)).toEqual([playerBoard(1), playerBoard(2)]);
+		expect(await roundCount()).toBe(2);
 		await expectProjectionToMatchRows();
 	});
 
-	it("prefers a player's board to the bot board", async () => {
+	it("sends another player's board, which stays available with each board that pulled it", async () => {
 		const alice = await createPlayer("alice");
 		const bob = await createPlayer("bob");
 		await pull({ board: playerBoard(1), performance }, alice.token);
@@ -133,8 +122,8 @@ describe("POST /opponents/:round on Postgres", () => {
 	it(`consumes nothing while the round holds no more than ${ROUND_POOL_SIZE} boards`, async () => {
 		const carol = await createPlayer("carol");
 		const bob = await createPlayer("bob");
-		// With the bot board and bob's, the round holds exactly ROUND_POOL_SIZE.
-		await storeBoards(carol.id, ROUND_POOL_SIZE - 2);
+		// With bob's, the round holds exactly ROUND_POOL_SIZE.
+		await storeBoards(carol.id, ROUND_POOL_SIZE - 1);
 
 		await pull({ board: playerBoard(1), performance }, bob.token);
 
@@ -146,14 +135,14 @@ describe("POST /opponents/:round on Postgres", () => {
 	it(`consumes the opponent once the round holds more than ${ROUND_POOL_SIZE} boards`, async () => {
 		const carol = await createPlayer("carol");
 		const bob = await createPlayer("bob");
-		await storeBoards(carol.id, ROUND_POOL_SIZE - 1);
+		await storeBoards(carol.id, ROUND_POOL_SIZE);
 
 		const response = await pull({ board: playerBoard(1), performance }, bob.token);
 
 		const consumed = await prisma.playerBoard.findMany({ where: { pulledAt: { not: null } } });
 		const [bobBoard] = await boardsOf(bob.id);
 		expect(consumed).toHaveLength(1);
-		expect(consumed[0]).toMatchObject({ playerId: carol.id, bot: false, pulledBy: [bobBoard?.id] });
+		expect(consumed[0]).toMatchObject({ playerId: carol.id, pulledBy: [bobBoard?.id] });
 		expect(response.body).toEqual({ board: consumed[0]?.board, playerName: "carol" });
 		expect(await roundCount()).toBe(ROUND_POOL_SIZE);
 		await expectProjectionToMatchRows();
@@ -178,7 +167,7 @@ describe("POST /opponents/:round on Postgres", () => {
 
 		const response = await pull({ board: playerBoard(1), performance });
 
-		expect(response.body).toEqual({ board: (await botBoard()).board });
+		expect(response.body).toEqual({ board: defaultBoard(ROUND) });
 		expect(await prisma.playerBoard.findMany({ orderBy: { id: "asc" } })).toEqual(before);
 		await expectProjectionToMatchRows();
 	});

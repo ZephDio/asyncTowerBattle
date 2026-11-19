@@ -8,7 +8,11 @@ import { DrawPriority, TImageDrawable } from "../../../../shared/traits/render/i
 import { TDrawable } from "../../../../shared/traits/render/drawable";
 import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint";
 import { Choupisson } from "../../recruit/implementation/choupisson";
-import { TDescriptor, UnitDescription } from "../../../../shared/traits/render/huds/item-descriptor";
+import {
+	PROJECTILE_DAMAGE,
+	ProjectileUnitDescription,
+	TDescriptor,
+} from "../../../../shared/traits/render/huds/item-descriptor";
 import { secondsToFrame } from "../../../../shared/seconds";
 import { TBaseStats } from "../../../stats/base-stats";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
@@ -26,7 +30,8 @@ export class ChoupissonBlueprint extends Derive(
 		speed: 2.4,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: NaN,
-		damage: 3,
+		castleDamage: 3,
+		projectileDamage: 9,
 		foodConsumptionOnCast: NaN,
 		foodConsumption: 1.8,
 		summonTime: secondsToFrame(3.5),
@@ -34,9 +39,9 @@ export class ChoupissonBlueprint extends Derive(
 	}),
 	AnimalTag,
 ) {
-	override description = new UnitDescription(
+	override description = new ProjectileUnitDescription(
 		"Choupisson",
-		["Throw 3 projectiles", "in a cone on enemies", "when damaged"],
+		["Throw 3 projectiles", "when damaged, each", `dealing ${PROJECTILE_DAMAGE} damage`],
 		this,
 	);
 	toRecruit(cell: Cell) {

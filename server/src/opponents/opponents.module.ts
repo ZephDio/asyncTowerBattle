@@ -7,8 +7,8 @@ import { LegacyBoardStore } from "./applicative/interfaces/legacy-board.store.js
 import { OpponentBoardStore } from "./applicative/interfaces/opponent-board.store.js";
 import { PlayerNames } from "./applicative/interfaces/player-names.js";
 import { OpponentsController } from "./infrastructure/opponents.controller.js";
-import { PrismaLegacyBoardStore } from "./infrastructure/prisma-legacy-board.store.js";
-import { PrismaOpponentBoardStore } from "./infrastructure/prisma-opponent-board.store.js";
+import { PrismaLegacyBoardStore } from "./infrastructure/legacy-board-store/prisma-legacy-board.store.js";
+import { PrismaOpponentBoardStore } from "./infrastructure/opponent-board-store/prisma-opponent-board.store.js";
 import { PrismaPlayerNames } from "./infrastructure/prisma-player-names.js";
 
 @Module({
