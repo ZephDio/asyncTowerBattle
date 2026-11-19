@@ -4,7 +4,8 @@ export class BaseStats {
 	private _health: number;
 	private _speed: number;
 	private _castSpeed: number;
-	private _damage: number;
+	private _castleDamage: number;
+	private _projectileDamage: number;
 	private _foodConsumptionOnCast: number;
 	private _foodConsumption: number;
 	private _summonTime: number;
@@ -16,7 +17,8 @@ export class BaseStats {
 		speed: number,
 		attackSpeed: number,
 		castSpeed: number,
-		damage: number,
+		castleDamage: number,
+		projectileDamage: number,
 		foodConsumptionOnCast: number,
 		foodConsumption: number,
 		summonTime: number,
@@ -26,7 +28,8 @@ export class BaseStats {
 		this._speed = speed;
 		this._attackSpeed = attackSpeed;
 		this._castSpeed = castSpeed;
-		this._damage = damage;
+		this._castleDamage = castleDamage;
+		this._projectileDamage = projectileDamage;
 		this._foodConsumptionOnCast = foodConsumptionOnCast;
 		this._foodConsumption = foodConsumption;
 		this._summonTime = summonTime;
@@ -49,8 +52,12 @@ export class BaseStats {
 		return this._castSpeed;
 	}
 
-	get damage() {
-		return this._damage;
+	get castleDamage() {
+		return this._castleDamage;
+	}
+
+	get projectileDamage() {
+		return this._projectileDamage;
 	}
 
 	get foodConsumptionOnCast() {
@@ -69,8 +76,12 @@ export class BaseStats {
 		return this._range;
 	}
 
-	hasDamage() {
-		return !Number.isNaN(this.damage);
+	hasCastleDamage() {
+		return !Number.isNaN(this.castleDamage);
+	}
+
+	hasProjectileDamage() {
+		return !Number.isNaN(this.projectileDamage);
 	}
 }
 
@@ -79,7 +90,8 @@ export type BaseStatsProps = {
 	speed: number;
 	attackSpeed: number;
 	castSpeed: number;
-	damage: number;
+	castleDamage: number;
+	projectileDamage: number;
 	foodConsumptionOnCast: number;
 	foodConsumption: number;
 	summonTime: number;
@@ -94,7 +106,8 @@ export const TBaseStats = (baseStat: BaseStatsProps) =>
 				baseStat.speed,
 				baseStat.attackSpeed,
 				baseStat.castSpeed,
-				baseStat.damage,
+				baseStat.castleDamage,
+				baseStat.projectileDamage,
 				baseStat.foodConsumptionOnCast,
 				baseStat.foodConsumption,
 				baseStat.summonTime,

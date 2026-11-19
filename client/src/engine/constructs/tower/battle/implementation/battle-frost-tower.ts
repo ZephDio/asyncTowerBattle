@@ -20,7 +20,8 @@ export class FrostBattleTower extends Derive(BattleTower) {
 			hitboxHolder: recruit,
 			imageDrawable: recruit,
 			maxHealth: recruit.stats.health,
-			attack: recruit.stats.damage,
+			castleDamage: recruit.stats.castleDamage,
+			projectileDamage: recruit.stats.projectileDamage,
 			movementSpeed: recruit.stats.speed,
 			foodCost: recruit.stats.foodConsumptionOnCast,
 			castSpeed: recruit.stats.castSpeed,
@@ -37,7 +38,12 @@ export class FrostBattleTower extends Derive(BattleTower) {
 		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 		if (sucess) {
 			const IceSpikeSpawnLocation = new GridPosition({ x: target.position.x, y: target.position.y + 9 });
-			const projectile = this.recruit.getProjectile(this.hooks, target, IceSpikeSpawnLocation, this.stats.attack);
+			const projectile = this.recruit.getProjectile(
+				this.hooks,
+				target,
+				IceSpikeSpawnLocation,
+				this.stats.projectileDamage,
+			);
 			this.hooks.addProjectile(projectile, this);
 		}
 		this.finishCast(sucess);

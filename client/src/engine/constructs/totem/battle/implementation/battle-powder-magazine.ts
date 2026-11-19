@@ -32,7 +32,7 @@ export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger
 	onBattleStart() {
 		const rand = this.hooks.random();
 		if (rand < 0.5) {
-			this.hooks.alliedArmyBuffHooks.addTowerBuff("attack", 4);
+			this.hooks.alliedArmyBuffHooks.addTowerBuff("projectile-damage", 4);
 			return;
 		}
 		this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", 4);
@@ -41,7 +41,7 @@ export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger
 	onTrigger() {
 		const rand = this.hooks.random();
 		if (rand < 0.5) {
-			this.hooks.alliedArmyBuffHooks.addTowerBuff("attack", 8);
+			this.hooks.alliedArmyBuffHooks.addTowerBuff("projectile-damage", 8);
 			return;
 		}
 		this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", 8);

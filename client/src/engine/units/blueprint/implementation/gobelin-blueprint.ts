@@ -28,7 +28,8 @@ export class GobelinBlueprint extends Derive(
 	TokenUnit,
 	TBaseStats({
 		health: 10,
-		damage: 1,
+		castleDamage: 1,
+		projectileDamage: NaN,
 		speed: 6.2,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: NaN,

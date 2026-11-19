@@ -24,7 +24,8 @@ export class WitchHouseBlueprint extends Derive(
 	TImageDrawable(TowerResources.witchHouse.image, TowerResources.witchHouse.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: 6,
+		castleDamage: NaN,
+		projectileDamage: 6,
 		attackSpeed: NaN,
 		castSpeed: castSpeedFromSeconds(6),
 		speed: NaN,

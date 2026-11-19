@@ -10,7 +10,7 @@ Outputs:
   color is a layer made of the icon's pixels as squares, so the glyph is the pixel art itself at any font size. The
   ink silhouette under everything keeps antialiased seams between colors dark instead of letting the background
   show through the 1px outline. U+FE0F (emoji presentation selector) maps to an empty zero-width glyph so
-  "⚔️" draws like "⚔".
+  "⚔️" draws like "⚔" (same for "🗡️").
 - public/font/icons.css: @font-face rules adding icons.ttf to the "text" and "title" families, limited by
   unicode-range to the emoji below. Canvas text set in those fonts then draws the icons for these characters and
   the regular font for everything else, so a description can just write "produce 5🌽".
@@ -42,6 +42,7 @@ EMOJI = {
     "🥾": "unit-speed",
     "💚": "unit-health",
     "⚔": "tower-attack",
+    "🗡": "unit-castle-damage",
     "💠": "tower-cast-speed",
     "▣": "pattern-star-active",
     "☆": "pattern-star-inactive",

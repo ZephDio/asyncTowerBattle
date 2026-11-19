@@ -23,7 +23,8 @@ export class FrostTowerBlueprint extends Derive(
 	TImageDrawable(TowerResources.frost.image, TowerResources.blue.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: 4,
+		castleDamage: NaN,
+		projectileDamage: 4,
 		attackSpeed: NaN,
 		castSpeed: castSpeedFromSeconds(3),
 		speed: NaN,

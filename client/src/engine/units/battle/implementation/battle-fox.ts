@@ -22,7 +22,8 @@ export class BattleFox extends Derive(TBattleUnit, Caster) {
 			casterRecruit: recruit,
 			imageDrawable: recruit,
 			maxHealth: recruit.stats.health,
-			attack: recruit.stats.damage,
+			castleDamage: recruit.stats.castleDamage,
+			projectileDamage: recruit.stats.projectileDamage,
 			movementSpeed: recruit.stats.speed,
 			attackSpeed: recruit.stats.attackSpeed,
 			castSpeed: recruit.stats.castSpeed,
@@ -38,7 +39,7 @@ export class BattleFox extends Derive(TBattleUnit, Caster) {
 	}
 
 	eatOpponentFood() {
-		this.hooks.enemyFoodHooks.removeFood((this.stats.basePercentStat.attack / 100) * this.foodConsume);
+		this.hooks.enemyFoodHooks.removeFood((this.stats.basePercentStat.castleDamage / 100) * this.foodConsume);
 		this.finishCast();
 	}
 

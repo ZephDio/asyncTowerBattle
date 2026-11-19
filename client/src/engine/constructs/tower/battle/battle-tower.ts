@@ -71,7 +71,11 @@ export const BattleTower = Subtrait(
 				const { stats } = this;
 				const castTime = stats.castSpeed > 0 ? `${castSpeedToSecond(stats.castSpeed)}s` : "stopped";
 				return {
-					damage: liveStat(formatStat(stats.attack), stats.attack, stats.base.attack),
+					"projectile damage": liveStat(
+						formatStat(stats.projectileDamage),
+						stats.projectileDamage,
+						stats.base.projectileDamage,
+					),
 					"cast speed": liveStat(castTime, stats.castSpeed, stats.base.castSpeed),
 					"food consumption": liveStat(formatStat(stats.foodCost), stats.foodCost, stats.base.foodCost, false),
 				};

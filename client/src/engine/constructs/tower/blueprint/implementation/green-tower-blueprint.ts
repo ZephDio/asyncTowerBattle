@@ -24,7 +24,8 @@ export class GreenTowerBlueprint extends Derive(
 	TImageDrawable(TowerResources.green.image, TowerResources.green.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: 10,
+		castleDamage: NaN,
+		projectileDamage: 10,
 		attackSpeed: NaN,
 		castSpeed: castSpeedFromSeconds(1.5),
 		speed: NaN,

@@ -23,7 +23,8 @@ export class ZappingTowerBlueprint extends Derive(
 	TImageDrawable(TowerResources.purple.image, TowerResources.purple.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: 15,
+		castleDamage: NaN,
+		projectileDamage: 15,
 		attackSpeed: NaN,
 		castSpeed: castSpeedFromSeconds(3.5),
 		speed: NaN,

@@ -28,7 +28,8 @@ export class ElfBlueprint extends Derive(
 	RecruitCaster,
 	TBaseStats({
 		health: 10,
-		damage: 1,
+		castleDamage: 1,
+		projectileDamage: 3,
 		speed: 2.5,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: castSpeedFromSeconds(3),
@@ -39,14 +40,12 @@ export class ElfBlueprint extends Derive(
 	}),
 	KinfolkTag,
 ) {
-	arrowDamage = 3;
-
 	description = new UnitDescription(
 		"Elf",
 		[
 			`every ${castSpeedToSecond(this.stats.castSpeed)} seconds`,
 			"shoot an arrow",
-			`dealing ${this.arrowDamage} damage`,
+			`dealing ${this.stats.projectileDamage} damage`,
 		],
 		this,
 	);

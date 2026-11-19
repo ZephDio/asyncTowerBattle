@@ -17,7 +17,8 @@ export class ElfCastleBlueprint extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TBaseStats({
 		health: 20,
-		damage: NaN,
+		castleDamage: NaN,
+		projectileDamage: NaN,
 		castSpeed: 1,
 		attackSpeed: NaN,
 		speed: NaN,

@@ -20,7 +20,8 @@ export class BattleGobelin extends Derive(TBattleUnit) {
 		super({
 			imageDrawable: recruit,
 			maxHealth: recruit.stats.health,
-			attack: recruit.stats.damage,
+			castleDamage: recruit.stats.castleDamage,
+			projectileDamage: recruit.stats.projectileDamage,
 			movementSpeed: recruit.stats.speed,
 			attackSpeed: recruit.stats.attackSpeed,
 			castSpeed: recruit.stats.castSpeed,

@@ -23,7 +23,8 @@ export class BlueTowerBlueprint extends Derive(
 	TImageDrawable(TowerResources.blue.image, TowerResources.blue.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: 7,
+		castleDamage: NaN,
+		projectileDamage: 7,
 		castSpeed: castSpeedFromSeconds(2.5),
 		attackSpeed: NaN,
 		speed: NaN,

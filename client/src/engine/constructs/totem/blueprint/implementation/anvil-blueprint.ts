@@ -27,7 +27,7 @@ export class AnvilTotemBlueprint extends Derive(
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		if (!gridElement) return false;
 		if (implementsTrait(gridElement, HTBaseStats)) {
-			return gridElement.stats.hasDamage();
+			return gridElement.stats.hasProjectileDamage();
 		}
 		return false;
 	};
@@ -38,6 +38,6 @@ export class AnvilTotemBlueprint extends Derive(
 	toRecruit(cell: Cell) {
 		return new AnvilTotem(cell, this);
 	}
-	description = new Description("Forging Anvil", ["A totem that boosts", "damage of ▣ towers", "by 30%"]);
+	description = new Description("Forging Anvil", ["A totem that boosts", "projectile damage of", "▣ pieces by 30%"]);
 	projectile = undefined;
 }

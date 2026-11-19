@@ -21,7 +21,8 @@ export class BattleElf extends Derive(TBattleUnit, Caster) {
 		super({
 			imageDrawable: recruit,
 			maxHealth: recruit.stats.health,
-			attack: recruit.stats.damage,
+			castleDamage: recruit.stats.castleDamage,
+			projectileDamage: recruit.stats.projectileDamage,
 			movementSpeed: recruit.stats.speed,
 			attackSpeed: recruit.stats.attackSpeed,
 			castSpeed: recruit.stats.castSpeed,
@@ -40,7 +41,13 @@ export class BattleElf extends Derive(TBattleUnit, Caster) {
 	shootArrow() {
 		const vector = this.hooks.gridHooks.getRelativeDirection().below;
 		this.hooks.addProjectile(
-			new BattleArrow(this.recruit.getProjectile(), this.position.clone(), this.hooks, this.recruit.arrowDamage, vector),
+			new BattleArrow(
+				this.recruit.getProjectile(),
+				this.position.clone(),
+				this.hooks,
+				this.stats.projectileDamage,
+				vector,
+			),
 			this,
 		);
 		this.finishCast();

@@ -8,8 +8,8 @@ export type ArmyBuffHooks = {
 };
 export type Buff = UnitBuff | TowerBuff;
 
-export type UnitBuff = "movement-speed" | "cast-speed" | "vitality";
-export type TowerBuff = "attack" | "cast-speed";
+export type UnitBuff = "movement-speed" | "cast-speed" | "vitality" | "castle-damage";
+export type TowerBuff = "projectile-damage" | "cast-speed";
 
 export class ArmyBuff {
 	unitArmyBuff: UnitArmyBuff = new UnitArmyBuff();

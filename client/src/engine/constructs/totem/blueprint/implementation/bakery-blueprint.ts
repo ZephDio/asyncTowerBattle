@@ -26,7 +26,8 @@ export class BakeryBlueprint extends Derive(
 	TImageDrawable(TotemResources.bakery.image, TotemResources.bakery.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: NaN,
+		castleDamage: NaN,
+		projectileDamage: NaN,
 		castSpeed: castSpeedFromSeconds(4),
 		attackSpeed: NaN,
 		speed: NaN,

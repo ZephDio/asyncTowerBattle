@@ -26,7 +26,8 @@ export class DwarfBlueprint extends Derive(
 	TokenUnit,
 	TBaseStats({
 		health: 14,
-		damage: 1.2,
+		castleDamage: 1.2,
+		projectileDamage: NaN,
 		attackSpeed: secondsToFrame(0.3),
 		speed: 2,
 		castSpeed: NaN,

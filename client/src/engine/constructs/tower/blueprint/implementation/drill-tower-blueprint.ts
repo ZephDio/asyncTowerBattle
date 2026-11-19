@@ -41,7 +41,8 @@ export class DrillTowerBlueprint extends Derive(
 	TImageDrawable(TowerResources.drill.image, TowerResources.drill.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
-		damage: 25,
+		castleDamage: NaN,
+		projectileDamage: 25,
 		attackSpeed: NaN,
 		castSpeed: castSpeedFromSeconds(6),
 		speed: NaN,
