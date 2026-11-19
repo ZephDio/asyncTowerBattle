@@ -244,6 +244,16 @@ ground shadow.
   out of the silhouette, like an owl's ear tufts, needs a notch cut between them: the camera sees the top of the
   head, which otherwise hides them.
 
+### Lessons from the barracks
+
+See `client/scripts/generate-barracks.py` for the approved one-cell hall and training yard.
+
+- **Read the sketch in screen space.** The photo supplied the half-timbered hall; the sketch specified which walls to keep. In the revised sketch the hall dominates and the paved yard is a shallow strip. Compare those visible heights in the render, not just the model's floor dimensions. Keep the front and right open so the training props read against the paving.
+- **Change roof shape and color separately.** A short ridge and differently lit hip faces gave the roof depth. When the earlier colors were preferred, we restored the mottled brown and tan tiles without flattening the new roof. Likewise, reuse an approved submodel (the sentinel tower) rather than approximating it from memory.
+- **Use the gaps to judge timber framing.** Center each window between the inner edges of its own posts, not across the whole façade. Under the crossbeam, leave a visible triangle of pale plaster between each diagonal and its post. If the outline swallows the gap at native size, lengthen the brace down the post and along the beam. Match the two openings when symmetry is intended.
+- **Separate props by value, not just outlines.** Oak-colored spear shafts disappeared against the oak rack. Giving only the shafts and hilt a darker wood shade kept both the weapons and the lighter rails legible. For the dummy, a tapered sack on a single post and one painted chest ring conveyed more at tile size than fine stitching.
+- **Check the change in context.** Compare the revision with the last approved render at the same scale, then place it on the army board with its normal unit portrait. A close-up shows the joinery; the board view tells you whether the props still read. Portrait overlap alone is not a reason to change an approved silhouette.
+
 ## Transforming an existing building
 
 When a request describes a transformed version of an existing piece, preserve enough of its recognizable structure,
