@@ -6,6 +6,7 @@ Writes public/resources/towers/windmill-turret.png. This is a visual resource, n
 """
 
 import importlib.util
+import math
 from pathlib import Path
 
 from voxel_sprite import EMPTY, Hit, VoxelGrid, outline, render, write_png
@@ -18,7 +19,7 @@ mill = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mill)
 
 WIDTH, HEIGHT, ORIGIN_Y = 104, 142, 106
-TIMBER, IRON, BOLT, STRING, DEBRIS = range(40, 45)
+TIMBER, IRON, BOLT, STRING, DEBRIS, AMMO = range(40, 46)
 
 
 def rod(grid: VoxelGrid, a: tuple[int, int, int], b: tuple[int, int, int], radius: int, label: int) -> None:
@@ -95,10 +96,38 @@ def damage_structure(grid: VoxelGrid) -> None:
     rod(grid, (-13, -4, 94), (13, 3, 96), 1, DEBRIS)
 
 
+def battlefield_remains(grid: VoxelGrid) -> None:
+    """A fallen sail spar and a rack of spare crossbow bolts, instead of the mill's grain sacks."""
+    # The heavy broken sail spar lies diagonally on the ground to the left of the mill.
+    rod(grid, (-39, -29, 2), (-19, -40, 2), 2, DEBRIS)
+    # Crossbars and a jagged splinter make it read as wreckage from the lattice sail.
+    rod(grid, (-34, -32, 3), (-38, -39, 3), 1, TIMBER)
+    rod(grid, (-25, -37, 3), (-28, -43, 3), 1, TIMBER)
+    rod(grid, (-20, -40, 2), (-15, -43, 2), 0, DEBRIS)
+
+    # Open-fronted wooden rack with three oversized upright bolts, silhouettes readable at game scale.
+    grid.box(20, 36, -36, -26, 0, 3, TIMBER)
+    grid.box(20, 23, -36, -26, 3, 11, TIMBER)
+    grid.box(33, 36, -36, -26, 3, 11, TIMBER)
+    grid.box(20, 36, -28, -26, 3, 11, TIMBER)
+    grid.box(20, 36, -37, -35, 4, 7, IRON)
+    for x, top in ((23, 25), (28, 31), (33, 24)):
+        grid.box(x, x + 2, -35, -32, 7, top - 5, DEBRIS)
+        # Broad steel arrowhead tapers to a point above a visible wooden shaft.
+        for z in range(top - 5, top):
+            half = 2 if z < top - 2 else 1
+            grid.box(x + 1 - half, x + 1 + half, -35, -32, z, z + 1, AMMO)
+
+
 def build_model() -> VoxelGrid:
-    grid = mill.build_model()
+    # Build the mill without its food-themed sacks; the ordinary windmill remains unchanged.
+    grid = VoxelGrid()
+    mill.build_tower(grid)
+    mill.build_cap(grid)
+    mill.build_sails(grid)
     damage_sails(grid)
     damage_structure(grid)
+    battlefield_remains(grid)
     # The crossbow stock sits directly on the surviving rafters, pointing toward the camera (-y).
     grid.box(-3, 4, -19, 15, 102, 106, TIMBER)
     grid.box(-2, 3, -22, 13, 106, 108, IRON)
@@ -131,7 +160,7 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
         return mill.WOOD[3] if mill.is_top(hit) else mill.WOOD[2] if hit.mx < 0 else mill.WOOD[1]
     if hit.label == IRON:
         return mill.IRON[3] if mill.is_top(hit) else mill.IRON[2] if hit.mx < 0 else mill.IRON[1]
-    if hit.label in (BOLT, STRING):
+    if hit.label in (BOLT, STRING, AMMO):
         return mill.IRON[3]
     return mill.shade(hit)
 
@@ -142,9 +171,21 @@ def crack(label: int, other: int) -> tuple[int, int, int, int] | None:
     return mill.crack(label, other)
 
 
+def footprint_shadow(x: float, y: float) -> float:
+    """Shadow follows the mill, fallen spar and ammunition rack, not the airborne sails."""
+    x, y = x - mill.SHADOW_OFFSET[0], y - mill.SHADOW_OFFSET[1]
+    mill_distance = max(0, mill.octagon(x, y) - mill.PLINTH_APOTHEM) / mill.SHADOW_MARGIN
+    rack_distance = max(20 - x, x - 36, -37 - y, y + 26, 0) / 3
+    # Distance to the fallen spar's center line, with a small ground-level margin.
+    ax, ay, bx, by = -39, -29, -19, -40
+    t = max(0, min(1, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2)))
+    spar_distance = max(0, math.hypot(x - (ax + t * (bx - ax)), y - (ay + t * (by - ay))) - 4) / 2
+    return min(mill_distance, rack_distance, spar_distance)
+
+
 def main() -> None:
     sprite = render(build_model(), 0, WIDTH, HEIGHT, ORIGIN_Y, shade, (1, 1), mill.SHADOW_JITTER,
-                    shadow_shape=mill.footprint_shadow)
+                    shadow_shape=footprint_shadow)
     outline(sprite, crack, depth_gap=6, depth_width=1)
     write_png(OUTPUT, sprite.pixels)
     print(f"wrote {OUTPUT.relative_to(ROOT)}")
