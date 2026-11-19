@@ -6,7 +6,9 @@ from pathlib import Path
 from voxel_sprite import VoxelGrid, outline, render, write_png
 
 OUT = Path(__file__).resolve().parents[1] / 'public/resources/towers/blacksmith.png'
-WIDTH, HEIGHT, ORIGIN_Y = 194, 136, 113  # camera and framing of 05a938b
+# Drawn centered at the original pixel scale. Extra transparent canvas below
+# raises the whole construct 24 native pixels without moving any model part.
+WIDTH, HEIGHT, ORIGIN_Y = 194, 188, 115
 INK = (22, 28, 46, 255)
 OAK, STEEL, STONE, TILE, LINEN, HIDE, RED, SKIN, SOOT, EMBER, GOLD, PANTS = range(1, 13)
 
@@ -118,29 +120,45 @@ def forge(g):
     box(70,82,20,29,124,125,SOOT)
 
 
+def anvil_axes(x,y):
+    # Length runs from the round near bick to the square far heel. Cant just
+    # the iron on its stump so the throat shows beside (not behind) the horn.
+    dx,dy = x+55,y+7
+    return .6*dx+.8*dy, .8*dx-.6*dy
+
+
 def anvil(g):
-    def box(*args):
-        station_box(g,*args)
-    # End grain and binding ring below four squat feet and a concave web.
-    for z in range(26):
+    # End grain and binding ring below the iron casting.
+    for z in range(21):
         r = 17 + (2 if z<3 or 13<=z<17 else 0)
         for y in range(-31,10):
             for x in range(-76,-34):
                 if hypot(x+55,(y+11)*1.05)<r:
                     g.set(*station(x,y,z),STEEL if 13<=z<17 else OAK)
-    box(-72,-38,-26,5,25,30,STEEL)
-    for z in range(30,44):
-        r = 8+abs(z-36)*.9
-        box(-55-int(r),-55+int(r),-22,3,z,z+1,STEEL)
-    box(-73,-37,-24,14,43,50,STEEL)
-    box(-45,-41,6,11,48,50,SOOT)
-    for y in range(-50,-23):
-        t = (y+51)/27
-        r = max(1,round(16*t))
-        for x in range(-55-r,-54+r):
-            h = sqrt(max(0,1-((x+55)/r)**2))
-            for z in range(45-round(6*t*h),47+round(2*t*h)):
-                g.set(*station(x,y,z),STEEL)
+    for x in range(-87,-29):
+        for y in range(-52,24):
+            along,across = anvil_axes(x+.5,y+.5)
+            for z in range(21,50):
+                if z>=43 and -12<=along<23 and abs(across)<11:
+                    # Tool slot in the heel, clear of the glowing stock.
+                    m = SOOT if z>=48 and 15<along<20 and -6<across<-1 else STEEL
+                elif -36<along<-12:
+                    radius = 8*(along+36)/24
+                    if hypot(across,z-45)>radius or z>48:
+                        continue
+                    m = STEEL
+                else:
+                    # Undercuts either end of the table; the base spreads
+                    # again into toes with a notch between each pair.
+                    if z>=43:
+                        continue
+                    flare = max(0,(32-z)/11,(z-35)/9)
+                    if abs(along)>7+9*flare or abs(across)>5+9*flare:
+                        continue
+                    if z<28 and (abs(along)>8 and abs(across)<5 or abs(across)>8 and abs(along)<4):
+                        continue
+                    m = STEEL
+                g.set(*station(x,y,z),m)
 
 
 def spare_tools(g):
@@ -216,13 +234,17 @@ def shade(hit):
     light = hit.light(n)
     step = sum(light>t for t in (.15,.50,.79))
     # Cold plane of the face and rounded bick catch different bands of light.
-    if m==STEEL and x < -35 and 43<=z<=50 and y < 15+ANVIL_Y:
-        y -= ANVIL_Y
-        if y>=-24 and n[2]>.7:
-            step = 3 if x<-68 else 2
-        elif y < -24:
-            radius = max(1,16*(y+51)/27)
-            step = 3 if x+55 < -radius*.15 else 2 if x+55 < radius*.45 else 1
+    if m==STEEL and x < -29 and 21<=z<50:
+        along,across = anvil_axes(x+.5,y+.5-ANVIL_Y)
+        if along<-12 and z>=37:
+            radius = max(1,8*(along+36)/24)
+            step = 3 if -.65*radius<across<0 else 2 if across<.45*radius else 1
+        elif z==49:
+            step = 3 if abs(across)>8 or along>20 else 2
+        elif 29<=z<=42:
+            step = min(step,1)
+        elif z<=28:
+            step = 2 if n[2]>.55 else 1
     if m==STONE:
         # Lay masonry courses around the furnace, in its local axes.
         joint = x
