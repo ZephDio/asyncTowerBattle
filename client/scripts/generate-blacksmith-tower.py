@@ -63,27 +63,40 @@ def station_box(g,x0,x1,y0,y1,z0,z1,mat):
 
 
 def hearth(g):
-    # A splayed jamb: the throat runs mostly right, a little back. The
-    # camera can see into its near cheek without turning the building.
-    for x in range(35,89):
-        for y in range(-21,26):
-            depth = .84*(x-62)+.54*(y+4)
-            cross = .54*(x-62)-.84*(y+4)
-            if depth < -13 or abs(cross)>19:
-                continue
-            for z in range(0,77):
-                arch = hypot(cross,max(0,z-29))
-                if depth < -2:
-                    if 7<=z<12 and abs(cross)<15:
-                        g.set(x,y,z,STEEL)
-                    elif z<7 and depth>=-8 and abs(cross)<14:
-                        g.set(x,y,z,STONE)
-                elif depth>=0 or arch<19 and z<49:
-                    if z<12 or depth>17 or arch>=13:
-                        g.set(x,y,z,SOOT if arch<13 and 17<depth<19 and z>=12 else STONE)
-    for x,y,h in [(57,1,11),(61,6,18),(64,-3,17),(66,-7,13),(60,-2,9)]:
-        limb(g,(x,y,12),(x+2,y,12+h),4,1,EMBER)
-        limb(g,(x-2,y-2,12),(x,y-2,13+h//2),3,1,GOLD)
+    # The only open end is the x-minus end. From the camera a solid cheek
+    # masks the firebox: only coals at the projecting lip show past its edge.
+    box = g.box
+    box(51,89,-15,25,0,16,STONE)
+    box(51,89,-15,-10,16,77,STONE)
+    box(51,89,18,25,16,77,STONE)
+    box(76,89,-10,18,16,77,STONE)
+    box(49,89,-15,25,40,77,STONE)
+    box(43,52,-13,18,9,14,STONE)
+    box(40,76,-14,18,14,17,STEEL)
+    for x,y,h in [(46,5,8),(49,10,12),(50,-2,8)]:
+        limb(g,(x,y,17),(x+1,y,17+h),3,1,EMBER)
+        egg(g,(x-1,y-1,19),(2,2,3),GOLD)
+
+
+def bellows(g):
+    # Side-on double-board bellows. Boards hinge together at the iron nose;
+    # three projecting folds follow the expanding space between the leaves.
+    for x in range(61,87):
+        spread = (x-61)/25
+        half = 2+round(10*spread)
+        for z in range(-half-2,half+3):
+            board = abs(z)>=half
+            phase = (z/half*1.5+.5)%1
+            fold = round(4*(1-abs(2*phase-1)))
+            front = -28 if board else -24-fold
+            g.box(x,x+1,front,-17,39+z,40+z,OAK if board else HIDE)
+    for h in (27,51):
+        g.box(86,93,-25,-21,h-1,h+2,OAK)
+    g.box(61,65,-29,-27,37,41,STEEL)  # pivot pin
+    # The iron blast pipe turns through the cheek, into the coal bed. A
+    # collar at the elbow keeps the nozzle readable against the masonry.
+    g.box(52,57,-26,-14,35,43,STEEL)
+    limb(g,(55,-23,39),(62,-23,39),2,3,STEEL)
 
 
 def forge(g):
@@ -96,6 +109,7 @@ def forge(g):
     box(29,92,-6,34,75,83,OAK)
     limb(g,(35,-2,60),(46,-2,77),2.6,3,OAK)
     hearth(g)
+    bellows(g)
     # Rack in the entry recess: a peel and a fork, backed by oak.
     box(36,49,16,20,41,45,STEEL)
     for x in (39,46):
@@ -246,12 +260,7 @@ def shade(hit):
         elif z<=28:
             step = 2 if n[2]>.55 else 1
     if m==STONE:
-        # Lay masonry courses around the furnace, in its local axes.
-        joint = x
-        if z<77 and x>=35 and y<26:
-            cross = .54*(x-62)-.84*(y+4)
-            joint = floor(cross if abs(cross)<18 else .84*x+.54*y)
-        if z%8==0 or (joint+5*(z//8%2))%13==0:
+        if z%8==0 or (x+5*(z//8%2))%13==0:
             step -= 1
     if m==TILE and y not in range(13,18):
         run = 27-abs(y-15)
@@ -265,7 +274,7 @@ def shade(hit):
 def shadow(x,y):
     def rim(x0,x1,y0,y1):
         return (max(0,x0-x,x-x1)+max(0,y0-y,y-y1))/4
-    return min(rim(31,88,-7,33),rim(65,88,-22,12),rim(79,85,-26,-23),
+    return min(rim(31,88,-7,33),rim(51,88,-17,20),rim(79,85,-26,-23),
                rim(-76,-70,-19,-11),hypot((x+55)/21,(y+13-ANVIL_Y)/20),
                hypot((x+15)/11,(y+9)/7),hypot((x-18)/11,(y-8)/7))
 
