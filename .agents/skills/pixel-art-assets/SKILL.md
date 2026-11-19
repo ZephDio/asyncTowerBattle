@@ -71,6 +71,11 @@ value and shift hue toward warm or yellow as they get lighter, and the darkest s
 violet/blue so it sits well next to the ink. Reuse the existing ramps first: wood and stone are shared by
 every piece.
 
+When the user gives a photo or a colored sketch for a material, derive its ramp from the reference, keeping the
+dark end leaning violet: the Bosquet's owl statue got a sandstone ramp from the user's photo
+`(76,64,74)` → `(114,100,100)` → `(156,142,130)` → `(196,184,162)` → `(228,220,194)`, and its boulder a grey granite
+`(58,54,72)` → `(88,86,102)` → `(124,122,134)` → `(164,162,166)` → `(204,202,194)` (see `generate-bosquet.py`).
+
 ### Light and form
 
 Each face gets a flat base step from its orientation, then texture. Faces have no smooth shading.
@@ -136,6 +141,7 @@ What worked, piece by piece:
 | Crops field (low box) | thin square rim, 1-3px on the right and bottom | `square_shadow`: `max(abs(x - ox), abs(y - oy)) / (HALF_SIZE + 2)`, offset `(1, -2)` |
 | Obelisk (raised platform with a stair) | even 2-3px rim on the left, right and bottom, around the stair too | `footprint_shadow`: min over the platform and stair boxes of the distance outside them, margin 3, offset `(0, -2)`, jitter 0.3 |
 | Witch house (lawn yard) | none | the yard is already ground, `shadow_radii=(1, 1)` hides it under the base |
+| Bosquet (grove with a pond) | blobs under each canopy, the bush, the owl and the boulder; none under the flat pond | `ground_shadow`: min over round blobs, canopies dropped `-3` toward the camera |
 
 Pitfalls:
 - A round margin (Euclidean distance) around a pointed footprint turns it into a capsule: the user asked for
@@ -160,6 +166,9 @@ Pitfalls:
   height and overhangs the walls by about 10px on each side.
 - The silhouette is readable at small size: one big shape, a few protrusions (merlons, roof tufts) and one
   focal detail in the lower middle (door or window).
+- A scene of several objects on one cell (the Bosquet: trees, a pond, a bush, a statue) puts the tall things at
+  the back and the low details (water, rocks, a statue) in a front strip. Pushing the trees back (and their trunks
+  a little taller) frees room in front: the oblique camera draws far objects higher on the image.
 - Canvas: towers 128x256, houses 128x192, gobelin portal 128x160.
 - Some older totems (bakery...) are painted/high-res and are **not** the reference style.
 
@@ -175,6 +184,52 @@ Carrying these rules into the voxel renderer:
   not only by the light dot product. Then add mortar, grain or strands in model coordinates, one step
   lower or higher.
 - Apply the cylinder edge darkening and the contact shadow as explicit step offsets.
+
+## From a user sketch
+
+When the user sketches a building or a scene, read the sketch for its **layout, proportions and colors** (what
+stands where, which part is bigger or lighter, the materials) and build the voxel model directly from that. Don't
+trace the sketch into pixels first: the Bosquet's traced raster looked like the drawing but the user found its 3D
+"mediocre", and the voxel model reused none of its pixels. Tracing first only helps for 16x16 icons (see the unit
+style and the buff icons).
+
+Mapping the sketch to the model is done by eye: left and right on the drawing is x, and higher on the drawing is
+either further back (y) or taller (z). Expect a few rounds of moving things after each preview. The user's
+paint-overs on a preview (a blob where a rock goes, water extended to the back, a reference photo pasted over a
+part) are the clearest instructions: follow them literally.
+
+How a voxel model is put together, in plain terms, so you can explain it to the user. Each object is a few simple
+3D shapes filled into a grid of small cubes (voxels):
+- a tree is a cylinder trunk flaring at the roots plus a canopy of one big sphere and about ten smaller spheres
+  around it;
+- a pond is a flat shape one voxel thick on the ground, its outline an ellipse made irregular by a few sine waves;
+- a bush or a boulder is a cluster of overlapping spheres;
+- a statue is stacked horizontal slices whose width follows a profile by height (feet, belly, head), with small
+  cones for protrusions;
+- small props (a lotus, reeds, lily pads) are placed by hand.
+
+The renderer then shoots one ray per pixel from the towers' camera angle, colors the first voxel it hits by which
+way its surface faces (a step of the material's ramp), paints carvings on top, and adds the ink outline and the
+ground shadow.
+
+### Recipes from the Bosquet
+
+- **Water**: no rim of stones around a pond, which makes it read as a pool. The water lies almost level with the
+  ground (1 voxel), inside an irregular shoreline (an ellipse scaled by a sum of a few sines of the angle). Shade a
+  dark band along the back shore (reflecting the bank and trees) and a lighter ragged band of shallows along the
+  front, by testing whether the water continues a few voxels behind or in front of the hit. Scatter a few pebbles,
+  grass tufts or reeds on the bank instead of a continuous border. Stretch the water toward the back with a second
+  overlapping shape.
+- **Organic bushes**: build them from clumps like the tree canopies (a core sphere and spheres of different sizes
+  around and on top of it), not one ellipsoid with noise, which reads as a ball.
+- **Small round props on a surface** (fruits on a bush): march from the bush center out to its real surface, sink
+  the prop only about 20%, space them apart, and use about 5 on a small bush. Sunk halfway or crowded, they merge
+  with their ink seams into one squiggle.
+- **Carved statues at small size**: carvings must be big (eyes about 4 voxels in radius, a lit rim, a shaded
+  socket and a dark pupil). Give the front face one flat lit step (lighter on the left edge, darker on the right)
+  instead of shading it by the estimated normal, and keep weathering flecks off the face. Anything meant to stick
+  out of the silhouette, like an owl's ear tufts, needs a notch cut between them: the camera sees the top of the
+  head, which otherwise hides them.
 
 ## Transforming an existing building
 
@@ -281,8 +336,14 @@ Pitfalls met so far:
 - Thin shapes (1-2 voxel stems, ears) get noisy estimated normals: shade them from their empty neighbors
   instead (top/left empty → lit, right occupied → shade).
 - The depth outline (`depth_gap`) on dense foliage paints everything dark; raise the gap for such sprites.
+- Anything 1 voxel thick (reed stems, grass blades) comes out as solid ink, even with `depth_width=1`: make it
+  2 voxels thick.
 
 Then: run the generator, run `preview.py` with a reference sprite, Read the preview, adjust constants, repeat.
+Write straight to the piece's real PNG (the one its `*.resources.ts` entry loads, the pink placeholder at first)
+and, after every round, reload the game, `give` the piece and take `screenshot army` next to the zoomed preview:
+the user wants to see each version in the game. When the canvas size changes, update the resource `size` so it
+keeps the image's aspect ratio (the Bosquet went from 112x112 to 112x116, `{ width: 4.9, height: 5.075 }`).
 Finally update the `*.resources.ts` entry, `git rm` the replaced image, and run `pnpm typecheck`.
 Then check the sprite in the real game with the game-testing skill. For a shop piece, `give` it and take
 `screenshot army`. For a battle look, `start_battle`, `step` and take `screenshot battle`. Scale and draw order
