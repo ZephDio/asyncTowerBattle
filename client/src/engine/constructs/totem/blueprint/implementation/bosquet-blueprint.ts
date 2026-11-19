@@ -23,7 +23,7 @@ import { Bosquet } from "../../recruit/implementation/bosquet";
 // sos
 // xsx
 export class BosquetBlueprint extends Derive(
-	TRarity(Rarity.Rare),
+	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
 	THitbox(
 		new HitBox([
