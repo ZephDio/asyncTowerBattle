@@ -7,16 +7,15 @@ import { CasterTotem } from "../battle-totem";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
 import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
-import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
-import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
+import { withTag } from "../../../../../shared/traits/engine/tags/tagged";
+import { PermanentBuff } from "../../../../army/battle/permanent-buff";
 
 const CASTLE_DAMAGE_BONUS = 1;
+const isAnimal = withTag("Animal");
 const BASE_HEAL = 5;
 const CAST_SPEED_BONUS_PER_FOREST = 10;
 
 export class BattleBosquet extends Derive(CasterTotem, HTSynergy, TStatsRenderable) {
-	// Units already given the castle damage bonus, since units keep spawning during the battle.
-	private blessed = new WeakSet<AnyBattleUnit>();
 	private hasCountedForests = false;
 
 	constructor(
@@ -45,7 +44,11 @@ export class BattleBosquet extends Derive(CasterTotem, HTSynergy, TStatsRenderab
 			descriptor: bosquet,
 		});
 		this.gridShape = bosquet.gridShape;
+		this.animalCastleDamage = new PermanentBuff(hooks, isAnimal, "castleDamage", CASTLE_DAMAGE_BONUS);
 	}
+
+	// Every Animal that joins the army deals more damage to the enemy castle.
+	readonly animalCastleDamage: PermanentBuff;
 
 	tick() {
 		if (!this.hasCountedForests) {
@@ -54,19 +57,10 @@ export class BattleBosquet extends Derive(CasterTotem, HTSynergy, TStatsRenderab
 		}
 		this.stats.tick();
 		this.tickCast();
-		this.blessNewAnimals();
 	}
 
 	private animals() {
-		return this.hooks.getAlliedUnits().filter((unit) => hasTag(unit, "Animal"));
-	}
-
-	private blessNewAnimals() {
-		for (const animal of this.animals()) {
-			if (this.blessed.has(animal)) continue;
-			this.blessed.add(animal);
-			animal.stats.flatStat.castleDamage += CASTLE_DAMAGE_BONUS;
-		}
+		return this.hooks.getAlliedUnits().filter(isAnimal);
 	}
 
 	private forestCount() {

@@ -27,4 +27,10 @@ export function hasTag(element: object, tag: Tag): boolean {
 	return implementsTrait(element, Tagged) && element.tags.includes(tag);
 }
 
+// A filter on one tag, for the effects that pick their elements by tag.
+export const withTag =
+	(tag: Tag) =>
+	(element: object): boolean =>
+		hasTag(element, tag);
+
 export type Tag = BiomeTag | SpeciesTag | AlignmentType | BuildingTag;

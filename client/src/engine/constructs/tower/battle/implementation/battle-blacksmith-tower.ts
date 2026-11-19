@@ -2,21 +2,21 @@ import { Derive } from "@ddd-ts/traits";
 import { BlacksmithTower } from "../../recruit/implementation/blacksmith-tower";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
+import { PermanentBuff } from "../../../../army/battle/permanent-buff";
 import {
 	BlacksmithDescription,
 	DescriptionLine,
 	TLiveDescriptionText,
 } from "../../../../../shared/traits/render/huds/item-descriptor";
-import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
+import { withTag } from "../../../../../shared/traits/engine/tags/tagged";
 import { BattleSparkShot } from "../../../../projectile/battle/implementation/battle-spark-shot";
 import { BattleTower } from "../battle-tower";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BattleBlacksmithTower extends Derive(BattleTower, TLiveDescriptionText) {
 	// The max health this tower gives to every Kinfolk unit, +1 every 4 casts.
-	kinfolkHealth = 0;
+	private readonly kinfolkHealthBuff: PermanentBuff;
 	private castCount = 0;
 
 	constructor(
@@ -45,24 +45,17 @@ export class BattleBlacksmithTower extends Derive(BattleTower, TLiveDescriptionT
 			tagHolder: recruit,
 			rarityHolder: recruit,
 		});
-		// Units that join later get the value reached so far.
-		this.hooks.onUnitAdded((unit) => {
-			if (this.kinfolkHealth > 0 && hasTag(unit, "Kinfolk")) this.giveHealth(unit, this.kinfolkHealth);
-		});
+		this.kinfolkHealthBuff = new PermanentBuff(hooks, withTag("Kinfolk"), "maxHealth");
 	}
 
-	private giveHealth(unit: AnyBattleUnit, amount: number) {
-		// Flat max health, as a percent of the unit's base max health.
-		unit.stats.addMaxHealth((amount / unit.stats.base.maxHealth) * 100, true);
+	get kinfolkHealth() {
+		return this.kinfolkHealthBuff.amount;
 	}
 
 	private countCast() {
 		this.castCount++;
 		if (this.castCount % this.recruit.tower.castsPerHealth !== 0) return;
-		this.kinfolkHealth++;
-		for (const unit of this.hooks.getAlliedUnits()) {
-			if (hasTag(unit, "Kinfolk")) this.giveHealth(unit, 1);
-		}
+		this.kinfolkHealthBuff.raise(1);
 	}
 
 	liveDescription(): DescriptionLine[] {

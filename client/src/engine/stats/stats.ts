@@ -84,6 +84,16 @@ export const HaveStats = Trait((base) => {
 	return HaveStats;
 });
 
+// The stats that take flat bonuses and percent modifiers.
+export type FlatStat =
+	| "castleDamage"
+	| "projectileDamage"
+	| "movementSpeed"
+	| "maxHealth"
+	| "foodCost"
+	| "castSpeed"
+	| "range";
+
 export class Stats {
 	private _health: number;
 	private _maxHealth: number;
@@ -105,9 +115,15 @@ export class Stats {
 		range: 100,
 	};
 
-	// Flat bonuses added before the percent modifiers.
-	public flatStat = {
+	// Flat bonuses, added to the base value before the percent modifiers: (base + flat) * percent.
+	public flatStat: Record<FlatStat, number> = {
 		castleDamage: 0,
+		projectileDamage: 0,
+		movementSpeed: 0,
+		maxHealth: 0,
+		foodCost: 0,
+		castSpeed: 0,
+		range: 0,
 	};
 
 	public conditions: Map<string, ImplementsTrait<typeof Status>> = new Map();
@@ -173,26 +189,39 @@ export class Stats {
 		return this._health;
 	}
 
+	// The base value plus the flat bonuses, before any percent modifier.
+	private flatValue(stat: FlatStat) {
+		return this.base[stat] + this.flatStat[stat];
+	}
+
+	private percentOf(stat: FlatStat) {
+		return Math.max(0, this.basePercentStat[stat] / 100);
+	}
+
+	private boosted(stat: FlatStat) {
+		return this.flatValue(stat) * this.percentOf(stat);
+	}
+
 	get maxHealth() {
-		return this._maxHealth * Math.max(0, this.basePercentStat.maxHealth / 100);
+		return this.boosted("maxHealth");
 	}
 
 	// Damage a unit deals to the enemy castle when it arrives.
 	get castleDamage() {
-		return (this._castleDamage + this.flatStat.castleDamage) * Math.max(0, this.basePercentStat.castleDamage / 100);
+		return this.boosted("castleDamage");
 	}
 
 	// Damage of the projectiles and area effects a piece fires. Independent from castleDamage.
 	get projectileDamage() {
-		return this._projectileDamage * Math.max(0, this.basePercentStat.projectileDamage / 100);
+		return this.boosted("projectileDamage");
 	}
 
 	get movementSpeed() {
-		return this._movementSpeed * Math.max(0, this.basePercentStat.movementSpeed / 100);
+		return this.boosted("movementSpeed");
 	}
 
 	get castSpeed() {
-		return this._castSpeed * Math.max(0, this.basePercentStat.castSpeed / 100);
+		return this.boosted("castSpeed");
 	}
 
 	get attackSpeed() {
@@ -200,11 +229,18 @@ export class Stats {
 	}
 
 	get foodCost() {
-		return this._foodCost * Math.max(0, this.basePercentStat.foodCost / 100);
+		return this.boosted("foodCost");
 	}
 
 	get range() {
-		return this._range * Math.max(0, this.basePercentStat.range / 100);
+		return this.boosted("range");
+	}
+
+	// A permanent flat bonus, applied before the percent modifiers. More max health comes with as much health.
+	addFlat(stat: FlatStat, amount: number) {
+		const before = this.maxHealth;
+		this.flatStat[stat] += amount;
+		this._health += this.maxHealth - before;
 	}
 
 	takeDamage(damage: number) {
@@ -219,16 +255,14 @@ export class Stats {
 	}
 
 	addMaxHealth(amount: number, percent: boolean = false) {
-		const rawGain = percent ? amount * (this._maxHealth / 100) : amount;
-		if (percent) {
-			this.basePercentStat.maxHealth += amount;
-			this._health += rawGain;
-			return;
-		}
+		if (!percent) return this.addFlat("maxHealth", amount);
+		this.addPercentMaxHealth(amount);
+	}
 
-		// A flat gain is a share of the base max health, since max health is scaled by its percent.
-		this.basePercentStat.maxHealth += (rawGain / this._maxHealth) * 100;
-		this._health += rawGain;
+	// A percent of the base max health plus its flat bonuses, with as much health.
+	private addPercentMaxHealth(amount: number) {
+		this.basePercentStat.maxHealth += amount;
+		this._health += amount * (this.flatValue("maxHealth") / 100);
 	}
 
 	heal(amount: number) {
