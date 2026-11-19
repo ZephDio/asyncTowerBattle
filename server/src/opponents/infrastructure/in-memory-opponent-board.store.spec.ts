@@ -1,20 +1,19 @@
-import { checkBoard, roundGridSize } from "../domain/checked-board.js";
-import type { PlayerBoard } from "../domain/player-board.js";
+import { roundGridSize } from "../domain/board-rules.js";
+import { PlayerBoard, type PlayerBoardProps } from "../domain/player-board.js";
 import { InMemoryOpponentBoardStore } from "./in-memory-opponent-board.store.js";
 
-const playerBoard = (round: number, randomSeed = round): Omit<PlayerBoard, "id" | "pulledBy"> => ({
-	board: checkBoard({
+const playerBoard = (round: number, randomSeed = round): Omit<PlayerBoardProps, "id" | "pulledBy"> => ({
+	board: {
 		round,
 		faction: "Dwarf",
 		size: roundGridSize(round),
 		randomSeed,
 		elements: [{ kind: "castle", cell: { x: 0, y: 5 } }],
-	}),
+	},
 	performance: { wins: 1, losses: 0 },
-	bot: false,
 });
 
-const withoutId = ({ board, performance, bot }: PlayerBoard) => ({ board, performance, bot });
+const withoutId = ({ board, performance }: PlayerBoard) => ({ board, performance });
 
 describe("InMemoryOpponentBoardStore", () => {
 	it("groups the boards by round", async () => {
@@ -53,7 +52,7 @@ describe("InMemoryOpponentBoardStore", () => {
 		await store.markPulled(stored!.id, "first");
 		await store.markPulled(stored!.id, "second");
 
-		expect(await store.findByRound(1)).toEqual([{ ...stored, pulledBy: ["first", "second"] }]);
+		expect(await store.findByRound(1)).toEqual([stored?.pulledByBoard("first").pulledByBoard("second")]);
 	});
 
 	it("leaves out the boards of a player", async () => {
@@ -67,6 +66,31 @@ describe("InMemoryOpponentBoardStore", () => {
 		expect(await store.rounds("alice")).toEqual([1, 2]);
 		expect((await store.findByRound(2, "alice")).map(({ board }) => board.randomSeed)).toEqual([21]);
 		expect(await store.rounds()).toEqual([1, 2, 3]);
+	});
+
+	it("picks a board of the round only, leaving out a player's", async () => {
+		const store = InMemoryOpponentBoardStore.seeded([
+			playerBoard(2, 20),
+			{ ...playerBoard(3, 30), playerId: "alice" },
+			playerBoard(5, 50),
+		]);
+
+		expect((await store.pickOne(3))?.board.randomSeed).toBe(30);
+		expect(await store.pickOne(3, "alice")).toBeUndefined();
+		expect(await store.pickOne(4)).toBeUndefined();
+	});
+
+	it("picks the board at the random offset among the round's boards", async () => {
+		const offsets = [0, 0.5, 0.99];
+		const store = new InMemoryOpponentBoardStore({ next: () => offsets.shift() ?? 0 });
+		for (const randomSeed of [20, 21, 22]) {
+			await store.add(new PlayerBoard({ ...playerBoard(2, randomSeed), id: `board-${randomSeed}` }));
+		}
+
+		const picked = [];
+		for (let pulls = 0; pulls < 3; pulls++) picked.push((await store.pickOne(2))?.board.randomSeed);
+
+		expect(picked).toEqual([20, 21, 22]);
 	});
 
 	it("hands out copies of the stored boards", async () => {

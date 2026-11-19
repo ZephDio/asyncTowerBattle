@@ -1,17 +1,10 @@
-import { checkBoard, roundGridSize } from "../../domain/checked-board.js";
-import {
-	InvalidBoardSizeError,
-	InvalidPerformanceError,
-	InvalidRandomSeedError,
-	InvalidRoundError,
-} from "../../domain/opponent-errors.js";
-import type { GamePerformance, PlayerBoard } from "../../domain/player-board.js";
-import { BoardRoundMismatchError, NoOpponentError } from "../opponent-errors.js";
+import { roundGridSize } from "../../domain/board-rules.js";
+import { type GamePerformance, PlayerBoard, type PlayerBoardProps } from "../../domain/player-board.js";
 import type { SerializedBoard } from "../../domain/serialized-board.js";
 import { InMemoryLegacyBoardStore } from "../../infrastructure/in-memory-legacy-board.store.js";
 import { InMemoryOpponentBoardStore } from "../../infrastructure/in-memory-opponent-board.store.js";
 import { InMemoryPlayerNames } from "../../infrastructure/in-memory-player-names.js";
-import { UuidProvider } from "../../../shared/infrastructure/uuid-provider.js";
+import { defaultBoard } from "../../domain/default-boards.js";
 import { ROUND_POOL_SIZE } from "../../domain/round-pool.js";
 import { PullOpponent } from "./pull-opponent.use-case.js";
 
@@ -25,39 +18,43 @@ const board = (round: number, randomSeed = round): SerializedBoard => ({
 
 const performance: GamePerformance = { wins: 2, losses: 1 };
 
-// Stores the boards as bot boards, like the seed boards.
+// Stores the boards as dave's, a player without a name, so his boards come without one.
 const setup = (...boards: SerializedBoard[]) =>
-	setupStored(boards.map((stored) => ({ board: checkBoard(stored), performance: { wins: 0, losses: 0 }, bot: true })));
+	setupStored(boards.map((stored) => ({ board: stored, performance: { wins: 0, losses: 0 }, playerId: "dave" })));
 
-const setupStored = (stored: Omit<PlayerBoard, "id" | "pulledBy">[]) => {
+const setupStored = (stored: Omit<PlayerBoardProps, "id" | "pulledBy">[]) => {
 	const opponentBoards = InMemoryOpponentBoardStore.seeded(stored);
 	const legacyBoards = new InMemoryLegacyBoardStore();
 	const playerNames = new InMemoryPlayerNames({ alice: "Alice" });
 	return {
 		opponentBoards,
 		legacyBoards,
-		useCase: new PullOpponent(opponentBoards, legacyBoards, playerNames, new UuidProvider()),
+		useCase: new PullOpponent(opponentBoards, legacyBoards, playerNames),
 	};
 };
+
+// The board a request sends, as the controller makes it.
+let sent = 0;
+const sentBoard = (round: number, randomSeed: number, playerId?: string) =>
+	new PlayerBoard({ id: `sent-${++sent}`, board: board(round, randomSeed), performance, playerId });
 
 // A logged-in player's pull, by a new player unless one is given.
 let players = 0;
 const pull = (useCase: PullOpponent, round: number, randomSeed = 100 + round, playerId = `player-${++players}`) =>
-	useCase.execute({ round, board: board(round, randomSeed), performance, playerId, test: false });
+	useCase.execute({ playerBoard: sentBoard(round, randomSeed, playerId), test: false });
 
 const testPull = (useCase: PullOpponent, round: number) =>
-	useCase.execute({ round, board: board(round, 100 + round), performance, playerId: "alice", test: true });
+	useCase.execute({ playerBoard: sentBoard(round, 100 + round, "alice"), test: true });
 
 const guestPull = (useCase: PullOpponent, round: number) =>
-	useCase.execute({ round, board: board(round, 100 + round), performance, test: false });
+	useCase.execute({ playerBoard: sentBoard(round, 100 + round), test: false });
 
 // Boards of round 2 another player built.
 const playerBoards = (count: number) =>
 	Array.from({ length: count }, (_, index) => ({
-		board: checkBoard(board(2, 1000 + index)),
+		board: board(2, 1000 + index),
 		performance,
 		playerId: "carol",
-		bot: false,
 	}));
 
 const withoutId = ({ board, performance }: PlayerBoard) => ({ board, performance });
@@ -72,35 +69,34 @@ describe("PullOpponent", () => {
 		expect(await pull(setup(board(1), board(2), board(3)).useCase, 2)).toEqual({ board: board(2) });
 	});
 
-	it("falls back to the latest earlier round", async () => {
-		const { useCase } = setup(board(1), board(4), board(8));
+	it("never gives a board of another round, even of the same grid size", async () => {
+		// Rounds 2 and 3 are both 9x7.
+		const { useCase } = setup(board(2), board(8));
 
-		expect(await pull(useCase, 12)).toEqual({ board: board(8) });
-	});
-
-	it("only falls back to rounds of the same grid size", async () => {
-		// Rounds 2 and 3 are 9x7, round 4 is 11x7.
-		expect(await guestPull(setup(board(2)).useCase, 3)).toEqual({ board: board(2) });
-		await expect(guestPull(setup(board(3)).useCase, 4)).rejects.toThrow(NoOpponentError);
+		expect(await guestPull(useCase, 3)).toEqual({ board: defaultBoard(3) });
+		expect(await guestPull(useCase, 12)).toEqual({ board: defaultBoard(12) });
 	});
 
 	it("stores the player's board for the next players of the round", async () => {
-		const { opponentBoards, useCase } = setup(board(2));
+		const { opponentBoards, useCase } = setup();
 
 		await pull(useCase, 2, 42);
 
-		const stored = (await opponentBoards.findByRound(2)).filter(({ bot }) => !bot);
+		const stored = await opponentBoards.findByRound(2);
 		expect(stored.map(withoutId)).toEqual([{ board: board(2, 42), performance }]);
 		expect(await pull(useCase, 2)).toEqual({ board: board(2, 42) });
 	});
 
-	it("prefers a player board to a bot board of the round", async () => {
-		const { useCase } = setup(board(2, 20), board(2, 21));
-		await pull(useCase, 2, 22, "alice");
+	it("gives the round's default board when no stored board fits", async () => {
+		expect(await pull(setup().useCase, 2)).toEqual({ board: defaultBoard(2) });
+		expect(await guestPull(setup().useCase, 5)).toEqual({ board: defaultBoard(5) });
+		expect(await testPull(setup().useCase, 3)).toEqual({ board: defaultBoard(3) });
+	});
 
-		for (let pulls = 0; pulls < 5; pulls++) {
-			expect((await pull(useCase, 2, 23, "bob")).board.randomSeed).toBe(22);
-		}
+	it("gives the last default board past the last round that has one", async () => {
+		const last = defaultBoard(Number.MAX_SAFE_INTEGER);
+
+		expect(await guestPull(setup().useCase, last.round + 4)).toEqual({ board: last });
 	});
 
 	it(`keeps the opponent available while its round holds no more than ${ROUND_POOL_SIZE} boards`, async () => {
@@ -110,8 +106,8 @@ describe("PullOpponent", () => {
 		await pull(useCase, 3, 32, "alice");
 
 		const stored = await opponentBoards.findByRound(3);
-		const aliceBoards = stored.filter(({ bot }) => !bot).map(({ id }) => id);
-		expect(stored.find(({ bot }) => bot)?.pulledBy).toEqual(aliceBoards);
+		const aliceBoards = stored.filter(({ playerId }) => playerId === "alice").map(({ id }) => id);
+		expect(stored.find(({ playerId }) => playerId === "dave")?.pulledBy).toEqual(aliceBoards);
 		expect(legacyBoards.all()).toEqual([]);
 	});
 
@@ -140,18 +136,15 @@ describe("PullOpponent", () => {
 		expect((await opponentBoards.findByRound(2)).map(({ id }) => id)).not.toContain(pulledOnce?.id);
 	});
 
-	it("gives the name of the player who built the opponent, and none for a seed board", async () => {
-		const { useCase } = setup(board(1, 10), board(2, 21));
-		await pull(useCase, 2, 20, "alice");
+	it("gives the name of the player who built the opponent, and none for a default board", async () => {
+		const { useCase } = setupStored([{ board: board(2, 20), performance, playerId: "alice" }]);
 
 		expect(await pull(useCase, 2)).toEqual({ board: board(2, 20), playerName: "Alice" });
-		expect(await guestPull(useCase, 1)).toEqual({ board: board(1, 10) });
+		expect(await guestPull(useCase, 1)).toEqual({ board: defaultBoard(1) });
 	});
 
 	it("never gives the player the board they just sent", async () => {
-		const { useCase } = setup();
-
-		await expect(pull(useCase, 1)).rejects.toThrow(NoOpponentError);
+		expect(await pull(setup().useCase, 1)).toEqual({ board: defaultBoard(1) });
 	});
 
 	it("stores the board as the logged-in player's", async () => {
@@ -159,7 +152,7 @@ describe("PullOpponent", () => {
 
 		await pull(useCase, 1, 7, "alice");
 
-		const stored = (await opponentBoards.findByRound(1)).filter(({ bot }) => !bot);
+		const stored = (await opponentBoards.findByRound(1)).filter(({ playerId }) => playerId !== "dave");
 		expect(stored.map(({ playerId }) => playerId)).toEqual(["alice"]);
 	});
 
@@ -167,16 +160,17 @@ describe("PullOpponent", () => {
 		const { useCase } = setup(board(2, 20));
 		await pull(useCase, 3, 31, "alice");
 
-		// Round 3 only has alice's board left, so she falls back to round 2.
-		expect((await pull(useCase, 3, 32, "alice")).board.randomSeed).toBe(20);
+		// Round 3 only has alice's board, so she gets the default board.
+		expect(await pull(useCase, 3, 32, "alice")).toEqual({ board: defaultBoard(3) });
 		expect([31, 32]).toContain((await pull(useCase, 3, 33, "bob")).board.randomSeed);
 	});
 
-	it("still stores the player's board when there is no opponent", async () => {
-		const { opponentBoards, useCase } = setup(board(2));
+	it("still stores the player's board when the opponent is a default board", async () => {
+		const { opponentBoards, legacyBoards, useCase } = setup(board(2));
 
-		await expect(pull(useCase, 1, 7)).rejects.toThrow(NoOpponentError);
+		expect(await pull(useCase, 1, 7)).toEqual({ board: defaultBoard(1) });
 		expect((await opponentBoards.findByRound(1)).map(withoutId)).toEqual([{ board: board(1, 7), performance }]);
+		expect(legacyBoards.all()).toEqual([]);
 	});
 
 	it("gives an opponent to a test request without storing or consuming any board", async () => {
@@ -188,10 +182,10 @@ describe("PullOpponent", () => {
 		expect(legacyBoards.all()).toEqual([]);
 	});
 
-	it("doesn't store a test request's board when there is no opponent", async () => {
+	it("doesn't store a test request's board when the opponent is a default board", async () => {
 		const { opponentBoards, useCase } = setup();
 
-		await expect(testPull(useCase, 1)).rejects.toThrow(NoOpponentError);
+		await testPull(useCase, 1);
 		expect(await opponentBoards.rounds()).toEqual([]);
 	});
 
@@ -204,73 +198,10 @@ describe("PullOpponent", () => {
 		expect(legacyBoards.all()).toEqual([]);
 	});
 
-	it("doesn't store a guest's board when there is no opponent", async () => {
+	it("doesn't store a guest's board when the opponent is a default board", async () => {
 		const { opponentBoards, useCase } = setup();
 
-		await expect(guestPull(useCase, 1)).rejects.toThrow(NoOpponentError);
+		await guestPull(useCase, 1);
 		expect(await opponentBoards.rounds()).toEqual([]);
-	});
-
-	it.each([0, -1, 1.5])("refuses round %d", async (round) => {
-		await expect(pull(setup(board(1)).useCase, round)).rejects.toThrow(InvalidRoundError);
-	});
-
-	it("refuses a board of another round", async () => {
-		const { opponentBoards, useCase } = setup(board(1));
-
-		await expect(useCase.execute({ round: 2, board: board(1), performance, test: false })).rejects.toThrow(
-			BoardRoundMismatchError,
-		);
-		expect(await opponentBoards.findByRound(1)).toHaveLength(1);
-	});
-
-	it("refuses a board without the grid size of its round, and stores nothing", async () => {
-		const { opponentBoards, useCase } = setup(board(1));
-
-		await expect(
-			useCase.execute({
-				round: 4,
-				board: { ...board(4), size: { width: 9, height: 7 } },
-				performance,
-				playerId: "alice",
-				test: false,
-			}),
-		).rejects.toThrow(InvalidBoardSizeError);
-		expect(await opponentBoards.rounds()).toEqual([1]);
-	});
-
-	it("takes the last size past the last round of the growth cycle", async () => {
-		expect((await pull(setup(board(8)).useCase, 12)).board.round).toBe(8);
-		await expect(
-			setup(board(8)).useCase.execute({
-				round: 12,
-				board: { ...board(12), size: { width: 11, height: 7 } },
-				performance,
-				test: false,
-			}),
-		).rejects.toThrow(InvalidBoardSizeError);
-	});
-
-	it.each([-1, 1.5, 2 ** 31, Number.NaN])("refuses random seed %d", async (randomSeed) => {
-		const { opponentBoards, useCase } = setup(board(1));
-
-		await expect(pull(useCase, 1, randomSeed)).rejects.toThrow(InvalidRandomSeedError);
-		expect(await opponentBoards.findByRound(1)).toHaveLength(1);
-	});
-
-	it("takes the bounds of the random seed range", async () => {
-		const { useCase } = setup(board(1), board(1));
-
-		await pull(useCase, 1, 0);
-		await pull(useCase, 1, 2 ** 31 - 1);
-	});
-
-	it.each([
-		{ wins: -1, losses: 0 },
-		{ wins: 0, losses: 0.5 },
-	])("refuses performance %o", async (invalid) => {
-		await expect(
-			setup(board(1)).useCase.execute({ round: 1, board: board(1), performance: invalid, test: false }),
-		).rejects.toThrow(InvalidPerformanceError);
 	});
 });

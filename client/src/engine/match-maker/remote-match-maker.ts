@@ -48,7 +48,7 @@ export class RemoteMatchMaker extends MatchMaker {
 				response = await post();
 			}
 			if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-			// A seed board has no player, so no name.
+			// A default board has no player, so no name.
 			const { board: opponent, playerName }: { board: SerializedBoard; playerName?: string } = await response.json();
 			return { ...deserializeBoard(opponent), playerName: playerName ?? BOT_NAME };
 		} catch (error) {

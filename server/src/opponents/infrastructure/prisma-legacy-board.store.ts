@@ -11,7 +11,7 @@ export class PrismaLegacyBoardStore extends LegacyBoardStore {
 		super();
 	}
 
-	async add({ id, board, performance, playerId, bot, pulledBy }: PlayerBoard) {
+	async add({ id, board, performance, playerId, pulledBy }: PlayerBoard) {
 		await this.prisma.playerBoard.upsert({
 			where: { id },
 			create: {
@@ -21,9 +21,8 @@ export class PrismaLegacyBoardStore extends LegacyBoardStore {
 				wins: performance.wins,
 				losses: performance.losses,
 				playerId,
-				bot,
 				pulledAt: new Date(),
-				pulledBy,
+				pulledBy: [...pulledBy],
 			},
 			update: {},
 		});

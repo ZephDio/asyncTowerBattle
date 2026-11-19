@@ -27,11 +27,9 @@ model PlayerBoard {
   createdAt DateTime  @default(now()) @map("created_at")
   // When a pull consumed the board, null while it is still available.
   pulledAt  DateTime? @map("pulled_at")
-  // The player who built the board, null for a guest's board and the bot boards. A player never pulls their own.
+  // The player who built the board, null once that player is deleted. A player never pulls their own.
   playerId  String?   @map("player_id") @db.Uuid
   player    Player?   @relation(fields: [playerId], references: [id], onDelete: SetNull)
-  // A board no player built, such as the seed boards. A pull only gives one when its round has no player board.
-  bot       Boolean   @default(false)
   // The boards whose players pulled this one as their opponent, each sent in the same request, oldest first. Empty for
   // the boards pulled before the column held several.
   pulledBy  String[]  @default([]) @map("pulled_by") @db.Uuid
