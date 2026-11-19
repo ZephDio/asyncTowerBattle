@@ -15,7 +15,10 @@ WIDTH, HEIGHT, ORIGIN = 110, 143, 108
 PAVE, ROCK, LIME, OAK, ROOF, PANE, BLUE, DOOR, ARCH, STEEL, STRAW, CORD, DARK = range(1, 14)
 WOOD = ('51404a', '77534b', 'a77855', 'd4a470')
 STONE = ('504c60', '737380', '96969d', 'b8b7b3', 'd6d3c5')
-TILES = ('654551', '916457', 'b88463', 'd6a776', 'e7c798')
+TILES = ('583c48', '885852', 'b47a5e', 'daa876', 'f0ce96')
+T_STONE, T_POST, T_ROOM, T_RAIL, T_CAP, T_PIN = range(14, 20)
+LOOKOUT_WOOD = ('5a4646', '866353', 'b48355', 'dab570')
+LOOKOUT_STONE = ('3a3648', '585666', '7c7a86', 'a4a2a6', 'cccac2')
 CX, CY = 2, -34  # straw figure
 ENTRY = 21
 
@@ -32,10 +35,13 @@ def hall(g):
     for i in range(13):
         for x in (-43+i, -3-i):
             b(x, x+4, 1, 3, 29+i, 34+i, OAK)
-    for x in (-27, -11):
-        b(x-5, x+5, 1, 4, 56, 72, OAK)
-        b(x-3, x+3, 0, 3, 59, 70, PANE)
-        b(x-6, x+6, -1, 2, 55, 58, OAK)
+    # Split the span between the outer posts into two 15-voxel plaster bays.
+    b(-25, -21, 1, 4, 49, 78, OAK)
+    for left in (-40, -21):
+        x = left + 7
+        b(x-4, x+5, 1, 4, 56, 72, OAK)
+        b(x-2, x+3, 0, 3, 59, 70, PANE)
+        b(x-5, x+6, -1, 2, 55, 58, OAK)
     b(-45, 46, 0, 43, 78, 84, OAK)
     # Tall arch: straight jambs and individual wedge joints above the spring line.
     for dx in range(-17, 18):
@@ -60,15 +66,21 @@ def lookout(g):
     b(-47, -40, -31, 5, 2, 22, ROCK)
     for y in range(-28, 4, 9):
         b(-47, -43, y, y+4, 22, 27, ROCK)
-    b(-49, -34, -43, -28, 1, 26, ROCK)
-    b(-43, -40, -43, -42, 10, 19, DARK)
-    b(-50, -33, -44, -27, 26, 30, OAK)
-    for x in (-49, -37):
-        for y in (-43, -31):
-            b(x, x+3, y, y+3, 30, 42, OAK)
+    # Composition 1 sentinel, translated to the end of this curtain wall.
+    x, y = -41, -35
+    b(x-8, x+8, y-8, y+8, 3, 22, T_STONE)
+    b(x-1, x+2, y-8, y-6, 8, 16, 0)
+    b(x-1, x+2, y-6, y-5, 8, 16, DARK)
+    b(x-9, x+9, y-9, y+9, 22, 24, T_POST)
+    b(x-6, x+6, y-6, y+6, 24, 35, T_ROOM)
+    for px in (x-8, x+5):
+        for py in (y-8, y+5):
+            b(px, px+3, py, py+3, 24, 35, T_POST)
+    b(x-8, x+8, y-8, y-6, 24, 27, T_RAIL)
     for i in range(13):
-        half = 10-i*0.7
-        b(round(-41.5-half), round(-41.5+half), round(-35.5-half), round(-35.5+half), 42+i, 43+i, ROOF)
+        h = math.ceil(10 * (1-i/13) + .5)
+        b(x-h, x+h, y-h, y+h, 35+i, 36+i, T_CAP)
+    b(x-1, x+1, y-1, y+1, 48, 51, T_PIN)
 
 
 def training(g):
@@ -100,21 +112,42 @@ def training(g):
                         g.set(CX+dx+x, CY+y, zc+z, CORD if tied else STRAW)
 
 
+def tile_color(base, along, course):
+    row, v = divmod(course, 3)
+    col = (along + 64 + 2*(row%2)) // 4
+    # Composition 1's deterministic mottling: one mark per individual tile.
+    n = 2166136261
+    for value in (col, row, 5):
+        n = ((n ^ value) * 16777619) & 0xffffffff
+    mark = (((n ^ (n >> 13)) * 1274126177) & 0xffff) / 65535
+    return TILES[max(0, min(4, base - (mark < .38) + (mark > .93) - (v == 0)))]
+
+
 def shade(h):
     x, y, z, mat = h.mx, h.my, h.z, h.label
     top = not h.neighbor(0, 0, 1)
     if mat == ROOF:
-        tower = y < -10
-        lateral = 50-abs(x) < min(y+3, 47-y) if not tower else abs(x+41.5) > abs(y+35.5)
-        along = y if lateral else x
-        course = z if tower else 50-abs(x) if lateral else y+3
-        row, v = divmod(course, 4)
-        tile, u = divmod(along + 3*(row%2), 6)
-        seed = (tile*37 + row*53 + tile*row*11) % 29
-        index = 3 + (seed > 25) - (seed < 8) - (v == 0) - (lateral and x > 0)
-        if lateral and x < 0 and seed > 10:
-            index += 1
-        return TILES[max(0, min(4, index))]
+        lateral = 50-abs(x) < min(y+3, 47-y)
+        return tile_color((4 if x < 0 else 2) if lateral else 3,
+                          y if lateral else x, 50-abs(x) if lateral else y+3)
+    if mat == T_CAP:
+        dx, dy = x+41.5, y+35.5
+        side = abs(dx) > abs(dy)
+        base = (3 if dx < 0 else 1) if side else (3 if dy < 0 else 2)
+        return tile_color(1 if z == 35 else base, y if side else x, z)
+    if mat == T_STONE:
+        if top:
+            return LOOKOUT_STONE[4 if not h.neighbor(0, -1, 0) else 3]
+        joint = z%5 == 0 or (x + 5*((z//5)%2) + 64)%10 == 0
+        return LOOKOUT_STONE[3 - joint]
+    if mat == T_POST:
+        return LOOKOUT_WOOD[3 if top else 2 - ((x*7+z//5)%11 == 0)]
+    if mat == T_ROOM:
+        return LOOKOUT_WOOD[0 if (x+64)%4 == 0 else 1]
+    if mat == T_RAIL:
+        return LOOKOUT_WOOD[1 if (y+64)%4 == 0 else 3]
+    if mat == T_PIN:
+        return LOOKOUT_WOOD[3 if top or not h.neighbor(-1, 0, 0) else 2]
     if mat in (PAVE, ROCK):
         v, u = (y, x) if top else (z, x)
         row, dv = divmod(v, 8 if mat == PAVE else 6)
