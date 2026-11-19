@@ -3,7 +3,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "pnpm --parallel --filter ./client --filter ./server start",
+    "start": "pnpm start:infra && pnpm start:apps",
+    "start:apps": "pnpm --parallel --filter ./client --filter ./server start",
     "start:client": "pnpm --filter ./client start",
     "start:client:dev": "pnpm --filter ./client start:dev",
     "start:server": "pnpm --filter ./server start",
