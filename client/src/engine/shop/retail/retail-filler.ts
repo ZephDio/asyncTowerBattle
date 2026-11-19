@@ -8,7 +8,7 @@ import { BasicTileBlueprint } from "../../tile/blueprint/implementation/basic-pa
 import { SlowingTrapBlueprint } from "../../trap/blueprint/implementation/slowing-trap-blueprint";
 import { AnyPathTileBlueprint } from "../../tile/blueprint/tile";
 import { BlueTowerBlueprint } from "../../constructs/tower/blueprint/implementation/blue-tower-blueprint";
-import { GreenTowerBlueprint } from "../../constructs/tower/blueprint/implementation/green-tower-blueprint";
+import { WindmillTurretBlueprint } from "../../constructs/tower/blueprint/implementation/windmill-turret-blueprint";
 import { WitchHouseBlueprint } from "../../constructs/tower/blueprint/implementation/witch-house-blueprint";
 import { AnyTowerBlueprint } from "../../constructs/tower/blueprint/tower-blueprint";
 import { DragonBlueprint } from "../../units/blueprint/implementation/dragon-blueprint";
@@ -69,7 +69,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			ZappingTowerBlueprint,
 			WitchHouseBlueprint,
 			BlueTowerBlueprint,
-			GreenTowerBlueprint,
+			WindmillTurretBlueprint,
 			FrostTowerBlueprint,
 			DrillTowerBlueprint,
 		],

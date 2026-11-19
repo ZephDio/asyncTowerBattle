@@ -1,15 +1,17 @@
 import { Derive } from "@ddd-ts/traits";
-import { GreenTower } from "../../recruit/implementation/green-tower";
+import { WindmillTurret } from "../../recruit/implementation/windmill-turret";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import { BattleTower } from "../battle-tower";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
-export class GreenBattleTower extends Derive(BattleTower) {
+const FOOD_ON_FIRST_CASTLE_HIT = 20;
+
+export class WindmillTurretBattle extends Derive(BattleTower) {
 	target = null as null | AnyBattleUnit;
 	constructor(
-		private readonly recruit: GreenTower,
+		private readonly recruit: WindmillTurret,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
@@ -33,6 +35,12 @@ export class GreenBattleTower extends Derive(BattleTower) {
 			descriptor: recruit,
 			tagHolder: recruit,
 			rarityHolder: recruit,
+		});
+		let hasTriggered = false;
+		this.hooks.onEnemyCastleHit(() => {
+			if (hasTriggered) return;
+			hasTriggered = true;
+			this.hooks.alliedFoodHooks.addFood(FOOD_ON_FIRST_CASTLE_HIT);
 		});
 	}
 

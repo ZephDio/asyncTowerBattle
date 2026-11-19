@@ -2,7 +2,7 @@
 """Build a war-ready windmill with a mounted arbalest, using the windmill's voxel model.
 
 Run from anywhere: python3 client/scripts/generate-windmill-turret.py
-Writes public/resources/towers/windmill-turret.png. This is a visual resource, not a playable tower.
+Writes public/resources/towers/windmill-turret.png, the sprite of the windmill turret tower.
 """
 
 import importlib.util

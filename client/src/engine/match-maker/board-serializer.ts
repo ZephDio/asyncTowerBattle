@@ -22,7 +22,7 @@ import { AnyTotem } from "../constructs/totem/recruit/totem";
 import { BlueTower } from "../constructs/tower/recruit/implementation/blue-tower";
 import { DrillTower } from "../constructs/tower/recruit/implementation/drill-tower";
 import { FrostTower } from "../constructs/tower/recruit/implementation/frost-tower";
-import { GreenTower } from "../constructs/tower/recruit/implementation/green-tower";
+import { WindmillTurret } from "../constructs/tower/recruit/implementation/windmill-turret";
 import { WitchHouse } from "../constructs/tower/recruit/implementation/witch-house";
 import { ZappingTower } from "../constructs/tower/recruit/implementation/zapping-tower";
 import { AnyTower } from "../constructs/tower/recruit/tower";
@@ -65,7 +65,7 @@ const towers: Record<SerializedTowerType, Constructor<AnyTower>> = {
 	blue: BlueTower,
 	drill: DrillTower,
 	frost: FrostTower,
-	green: GreenTower,
+	"windmill-turret": WindmillTurret,
 	"witch-house": WitchHouse,
 	zapping: ZappingTower,
 };

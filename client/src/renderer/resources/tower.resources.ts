@@ -13,7 +13,7 @@ export type Resource = {
 };
 
 export class TowerResources {
-	// Visual for a future windmill turret; no tower currently uses this resource.
+	// Visual of the windmill turret, which replaces the green tower (same stats, same "green" serialized key).
 	static windmillTurret: ShapedResource = {
 		size: {
 			width: 5.2,
@@ -39,15 +39,6 @@ export class TowerResources {
 		},
 		image: createImage("/resources/towers/frost.png"),
 		shape: "ellipse",
-	};
-
-	static green: ShapedResource = {
-		size: {
-			width: 5,
-			height: 8,
-		},
-		image: createImage("/resources/towers/green.png"),
-		shape: "rectangle",
 	};
 
 	static witchHouse: ShapedResource = {

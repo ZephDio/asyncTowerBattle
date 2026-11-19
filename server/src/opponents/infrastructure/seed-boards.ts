@@ -12,7 +12,7 @@ export const SEED_BOARDS = (
 			randomSeed: 123456,
 			elements: [
 				{ kind: "castle", cell: { x: 0, y: 5 } },
-				{ kind: "tower", type: "green", cell: { x: 3, y: 2 } },
+				{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 2 } },
 				{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 				{ kind: "tower", type: "drill", cell: { x: 4, y: 4 } },
 				{ kind: "totem", type: "crops-field", cell: { x: 1, y: 3 } },
@@ -49,7 +49,7 @@ export const SEED_BOARDS = (
 			randomSeed: 123456,
 			elements: [
 				{ kind: "castle", cell: { x: 0, y: 6 } },
-				{ kind: "tower", type: "green", cell: { x: 3, y: 3 } },
+				{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 				{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 				{ kind: "totem", type: "crops-field", cell: { x: 1, y: 3 } },
 				{ kind: "totem", type: "crops-field", cell: { x: 1, y: 2 } },
@@ -90,7 +90,7 @@ export const SEED_BOARDS = (
 			randomSeed: 123456,
 			elements: [
 				{ kind: "castle", cell: { x: 0, y: 6 } },
-				{ kind: "tower", type: "green", cell: { x: 3, y: 3 } },
+				{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 				{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 				{ kind: "totem", type: "crops-field", cell: { x: 1, y: 3 } },
 				{ kind: "totem", type: "crops-field", cell: { x: 1, y: 2 } },
@@ -134,7 +134,7 @@ export const SEED_BOARDS = (
 			randomSeed: 123456,
 			elements: [
 				{ kind: "castle", cell: { x: 0, y: 6 } },
-				{ kind: "tower", type: "green", cell: { x: 3, y: 3 } },
+				{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 				{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 				{ kind: "tower", type: "blue", cell: { x: 2, y: 1 } },
 				{ kind: "totem", type: "crops-field", cell: { x: 1, y: 3 } },
@@ -183,7 +183,7 @@ export const SEED_BOARDS = (
 			randomSeed: 123456,
 			elements: [
 				{ kind: "castle", cell: { x: 0, y: 6 } },
-				{ kind: "tower", type: "green", cell: { x: 3, y: 3 } },
+				{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 				{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 				{ kind: "tower", type: "blue", cell: { x: 6, y: 2 } },
 				{ kind: "tower", type: "zapping", cell: { x: 2, y: 1 } },
@@ -234,7 +234,7 @@ export const SEED_BOARDS = (
 			randomSeed: 123456,
 			elements: [
 				{ kind: "castle", cell: { x: 0, y: 6 } },
-				{ kind: "tower", type: "green", cell: { x: 3, y: 3 } },
+				{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 				{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 				{ kind: "tower", type: "blue", cell: { x: 6, y: 2 } },
 				{ kind: "tower", type: "zapping", cell: { x: 2, y: 1 } },
@@ -287,7 +287,7 @@ export const SEED_BOARDS = (
 			randomSeed: 123456,
 			elements: [
 				{ kind: "castle", cell: { x: 0, y: 6 } },
-				{ kind: "tower", type: "green", cell: { x: 3, y: 3 } },
+				{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 				{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 				{ kind: "tower", type: "blue", cell: { x: 6, y: 2 } },
 				{ kind: "tower", type: "zapping", cell: { x: 2, y: 1 } },
@@ -342,7 +342,7 @@ export const SEED_BOARDS = (
 			randomSeed: 123456,
 			elements: [
 				{ kind: "castle", cell: { x: 0, y: 7 } },
-				{ kind: "tower", type: "green", cell: { x: 3, y: 4 } },
+				{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 4 } },
 				{ kind: "tower", type: "frost", cell: { x: 4, y: 3 } },
 				{ kind: "tower", type: "blue", cell: { x: 6, y: 3 } },
 				{ kind: "tower", type: "zapping", cell: { x: 2, y: 2 } },

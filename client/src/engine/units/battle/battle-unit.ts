@@ -103,6 +103,7 @@ export const TBattleUnit = Subtrait(
 
 			attackCastle() {
 				this.enemyPath.alliedCastle.takeHit(this.stats.castleDamage);
+				this.hooks.notifyEnemyCastleHit();
 				this.hooks.removeUnit(this);
 				this.stats.die(); // TODO
 			}

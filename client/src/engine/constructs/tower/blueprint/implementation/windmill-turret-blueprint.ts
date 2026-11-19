@@ -7,21 +7,25 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 
 import { Bullet } from "../../../../projectile/blueprint/implementation/bullet";
-import { GreenTower } from "../../recruit/implementation/green-tower";
+import { WindmillTurret } from "../../recruit/implementation/windmill-turret";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, TowerDescription } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
-import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { FoodTag, TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 
-export class GreenTowerBlueprint extends Derive(
+export class WindmillTurretBlueprint extends Derive(
 	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 4, height: 6 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
-	TImageDrawable(TowerResources.green.image, TowerResources.green.size, DrawPriority.NormalGridElement),
+	TImageDrawable(
+		TowerResources.windmillTurret.image,
+		TowerResources.windmillTurret.size,
+		DrawPriority.NormalGridElement,
+	),
 	TBaseStats({
 		health: NaN,
 		castleDamage: NaN,
@@ -35,12 +39,17 @@ export class GreenTowerBlueprint extends Derive(
 		range: 20,
 	}),
 	TowerTag,
+	FoodTag,
 	TTargeting,
 ) {
-	description = new TowerDescription("Green Tower", ["A tower that shoots", "auto-guided fast", "bullets"], this);
+	description = new TowerDescription(
+		"Miller's Bolt",
+		["A windmill that shoots", "auto-guided fast bolts.", "The first time an ally", "hits the enemy castle,", "gain 20 🌽"],
+		this,
+	);
 
 	toRecruit(cell: Cell) {
-		return new GreenTower(cell, this);
+		return new WindmillTurret(cell, this);
 	}
 	projectile = new Bullet();
 }
