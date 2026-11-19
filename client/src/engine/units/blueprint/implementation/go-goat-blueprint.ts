@@ -24,7 +24,7 @@ export class GoGoatBlueprint extends Derive(
 	TImageDrawable(UnitResources.goGoat.image, UnitResources.goGoat.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: 20,
-		speed: 3.4,
+		speed: 3.8,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: NaN,
 		damage: 2,

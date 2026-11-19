@@ -15,7 +15,10 @@ export class Cast extends Action {
 	override tick() {
 		this.progress += this.caster.castSpeed;
 		if (this.progress >= this._cost) {
+			// What goes past the cost is not lost: the caster's next cast starts with it.
+			const overflow = this.progress - this._cost;
 			this.resolve();
+			this.caster.castOverflow = overflow;
 		}
 	}
 
@@ -30,6 +33,8 @@ export const Caster = Subtrait([HaveStats], (base, _props) => {
 			super(props);
 		}
 		castInProgress = null as null | Cast;
+		/** Progress past the cost of the cast that just resolved, handed to the next cast when it starts right away. */
+		castOverflow = 0;
 		subscribers: Set<{ subscriber: any; callback: () => void }> = new Set();
 
 		abstract casts(): void;
@@ -53,7 +58,15 @@ export const Caster = Subtrait([HaveStats], (base, _props) => {
 			if (this.castInProgress) {
 				return this.castInProgress.tick();
 			}
+			const overflow = this.castOverflow;
+			this.castOverflow = 0;
 			this.casts();
+			// A cast that starts this tick also progresses this tick, and keeps the previous cast's overflow.
+			const started = this.castInProgress as null | Cast;
+			if (started) {
+				started.progress = overflow;
+				started.tick();
+			}
 		}
 
 		get castSpeed() {
