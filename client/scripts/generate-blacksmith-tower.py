@@ -2,7 +2,7 @@
 """Generate the visual-only, two-cell outdoor blacksmith workshop.
 
 The anvil occupies the left half with its horn toward the viewer, a smith faces
-left to strike it, and an open-sided forge building opens toward the left. The ground
+left to strike it outdoors, and a walled smithy opens toward the left. The ground
 is transparent except for shadows beneath the equipment. Run from any directory
 with python3 client/scripts/generate-blacksmith-tower.py.
 """
@@ -54,13 +54,19 @@ def build():
         g.box(-55-half,-55+half,y,y+1,41,45,IRON_L)
     g.box(-64,-47,-9,-3,47,49,HOT_L)
 
-    # Open-sided timber forge building. The shelter has a pitched shingle roof,
-    # posts and braces, but no enclosing walls or floor. Its left end is open
-    # toward the smith and anvil. The hearth below is part of the building.
+    # Walled smithy occupies only the right half. A rear wall and right end
+    # close the workshop; its left end remains an entrance facing the smith.
+    # There is no floor or wall behind the outdoor anvil and smith.
+    g.box(32,89,30,35,0,87,STONE_L)
+    g.box(84,89,-2,35,0,87,STONE_L)
+    # Timber frame and pitched shingle roof.
     for x in (31, 84):
         for y in (-2, 30):
             g.box(x,x+5,y,y+5,0,91,WOOD_L)
     g.box(29,91,-4,36,87,92,WOOD_L)
+    g.box(32,89,29,31,49,53,WOOD_L)
+    for x in (32, 58, 84):
+        g.box(x,x+4,28,31,0,87,WOOD_L)
     for x in (32, 82):
         rod(g,(x,-2,68),(x+7,-2,88),2,WOOD_L)
     for y in range(-8, 42):
