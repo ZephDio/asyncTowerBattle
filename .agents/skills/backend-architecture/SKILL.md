@@ -19,7 +19,8 @@ it, and don't copy its older patterns into new code.
     commands/        use cases (one class per use case, `execute`)
     queries/         read-only use cases
     interfaces/      output ports: stores, providers (abstract classes)
-  infrastructure/    controllers, request parsers, Prisma and in-memory stores, provider implementations
+  infrastructure/    controllers, request parsers, provider implementations
+    <port>-store/    one folder per store port: its Prisma and in-memory implementations
   <module>.module.ts composition root: binds each port to its implementation
 ```
 
@@ -126,9 +127,11 @@ private async recordPull(opponent: PlayerBoard, boardId: string) {
   `Math.random` at call time in the implementation so tests can still replace it.
 - Stores take and return entities. They persist `toProps()` and rebuild with `new Entity(...)` when loading, so loaded
   data goes through the same invariants. In-memory stores keep JSON strings so callers never share a stored object.
-- Every store port has a Prisma implementation (`infrastructure/prisma-*.store.ts`) and an in-memory one
-  (`infrastructure/in-memory-*.store.ts`) for the unit tests. Test-only helpers (`findByRound`, `rounds`, `seeded`) live
-  on the in-memory class, not on the port.
+- Every store port has a Prisma implementation and an in-memory one for the unit tests, together in one
+  infrastructure folder per port, with their specs: `infrastructure/opponent-board-store/` holds
+  `prisma-opponent-board.store.ts`, `in-memory-opponent-board.store.ts` and its spec, and
+  `infrastructure/legacy-board-store/` the legacy ones. Test-only helpers (`findByRound`, `rounds`, `seeded`) live on
+  the in-memory class, not on the port.
 - Projections (`round_board_count`) are updated in the same transaction as the rows they count.
 
 ## Static reference data lives in the domain code
@@ -157,7 +160,11 @@ never consumed or counted, and changing it is a code change, not a migration.
   validation is tested where it lives.
 - **Controller**: Nest testing module with in-memory stores, checking statuses and bodies, 400s included.
 - **Integration**: `*.int-spec.ts` on the `atb_test` database (`pnpm test:integration`) for the Prisma stores and
-  migrations. Each test empties the tables it uses.
+  migrations. Each test empties the tables it uses. Guard the file with `assertTestDatabase()`
+  (`database/test-database.ts`).
+- **Store suites**: a store port's behavior is one shared suite (`<port>.test-suite.ts`) that the in-memory spec and
+  the Prisma `int-spec` both run, the in-memory store behaving exactly like the Prisma one. See the
+  integration-test-suite skill.
 - Run `pnpm typecheck`, `pnpm test` and `pnpm test:integration` from the root after a server change, and hit the
   running server on port 6868 with `curl` for the changed route.
 

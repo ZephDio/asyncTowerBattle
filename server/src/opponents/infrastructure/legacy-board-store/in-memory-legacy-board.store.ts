@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { LegacyBoardStore } from "../applicative/interfaces/legacy-board.store.js";
-import { PlayerBoard } from "../domain/player-board.js";
+import { LegacyBoardStore } from "../../applicative/interfaces/legacy-board.store.js";
+import { PlayerBoard } from "../../domain/player-board.js";
 
 // Keeps every board as its JSON string, like InMemoryOpponentBoardStore.
 @Injectable()

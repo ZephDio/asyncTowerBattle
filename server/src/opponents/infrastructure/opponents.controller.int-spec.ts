@@ -3,6 +3,7 @@ import type { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
 import { PrismaService } from "../../database/prisma.service.js";
+import { assertTestDatabase } from "../../database/test-database.js";
 import { AccessTokens } from "../../players/applicative/interfaces/access-tokens.js";
 import { OpponentBoardStore } from "../applicative/interfaces/opponent-board.store.js";
 import { roundGridSize } from "../domain/board-rules.js";
@@ -12,11 +13,8 @@ import type { SerializedBoard } from "../domain/serialized-board.js";
 import { PlayerBoard } from "../domain/player-board.js";
 import { OpponentsModule } from "../opponents.module.js";
 
-// Runs the route on the Prisma stores, against the database that `pnpm test:integration` migrates. Every test empties
-// it, so it must never be the dev database.
-if (!process.env["DATABASE_URL"]?.includes("_test")) {
-	throw new Error(`The integration tests empty their database, refusing DATABASE_URL ${process.env["DATABASE_URL"]}`);
-}
+// Runs the route on the Prisma stores, against the database that `pnpm test:integration` migrates.
+assertTestDatabase();
 
 const ROUND = 5;
 

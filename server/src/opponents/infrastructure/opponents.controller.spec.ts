@@ -10,8 +10,8 @@ import { roundGridSize } from "../domain/board-rules.js";
 import { DEFAULT_BOARDS, defaultBoard } from "../domain/default-boards.js";
 import type { SerializedBoard } from "../domain/serialized-board.js";
 import { OpponentsModule } from "../opponents.module.js";
-import { InMemoryLegacyBoardStore } from "./in-memory-legacy-board.store.js";
-import { InMemoryOpponentBoardStore } from "./in-memory-opponent-board.store.js";
+import { InMemoryLegacyBoardStore } from "./legacy-board-store/in-memory-legacy-board.store.js";
+import { InMemoryOpponentBoardStore } from "./opponent-board-store/in-memory-opponent-board.store.js";
 import { InMemoryPlayerNames } from "./in-memory-player-names.js";
 
 const playerBoard = (round: number, randomSeed: number): SerializedBoard => ({

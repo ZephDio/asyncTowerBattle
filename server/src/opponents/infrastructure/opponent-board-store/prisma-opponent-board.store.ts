@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../../database/prisma.service.js";
-import { RandomProvider } from "../../shared/applicative/interfaces/random-provider.js";
-import type { PlayerBoard as PlayerBoardRow } from "../../database/generated/prisma/client.js";
-import { OpponentBoardStore } from "../applicative/interfaces/opponent-board.store.js";
-import { PlayerBoard } from "../domain/player-board.js";
-import type { SerializedBoard } from "../domain/serialized-board.js";
+import { PrismaService } from "../../../database/prisma.service.js";
+import { RandomProvider } from "../../../shared/applicative/interfaces/random-provider.js";
+import type { PlayerBoard as PlayerBoardRow } from "../../../database/generated/prisma/client.js";
+import { OpponentBoardStore } from "../../applicative/interfaces/opponent-board.store.js";
+import { PlayerBoard } from "../../domain/player-board.js";
+import type { SerializedBoard } from "../../domain/serialized-board.js";
 
 // A row holds a valid board, which only PlayerBoard makes and the player_board_board_check constraint also enforces.
 const toPlayerBoard = ({ id, board, wins, losses, playerId, pulledBy }: PlayerBoardRow) =>

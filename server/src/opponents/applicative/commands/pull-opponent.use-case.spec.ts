@@ -1,8 +1,8 @@
 import { roundGridSize } from "../../domain/board-rules.js";
 import { type GamePerformance, PlayerBoard, type PlayerBoardProps } from "../../domain/player-board.js";
 import type { SerializedBoard } from "../../domain/serialized-board.js";
-import { InMemoryLegacyBoardStore } from "../../infrastructure/in-memory-legacy-board.store.js";
-import { InMemoryOpponentBoardStore } from "../../infrastructure/in-memory-opponent-board.store.js";
+import { InMemoryLegacyBoardStore } from "../../infrastructure/legacy-board-store/in-memory-legacy-board.store.js";
+import { InMemoryOpponentBoardStore } from "../../infrastructure/opponent-board-store/in-memory-opponent-board.store.js";
 import { InMemoryPlayerNames } from "../../infrastructure/in-memory-player-names.js";
 import { defaultBoard } from "../../domain/default-boards.js";
 import { ROUND_POOL_SIZE } from "../../domain/round-pool.js";
