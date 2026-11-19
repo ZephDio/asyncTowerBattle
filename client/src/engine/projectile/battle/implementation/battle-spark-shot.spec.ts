@@ -2,7 +2,7 @@
 import "../../../match-maker/board-serializer";
 import { GridPosition } from "../../../../shared/position";
 import type { BattleArmyHooks } from "../../../army/battle/battle-army";
-import { Spark } from "../../blueprint/implementation/spark";
+import { EmberSpark } from "../../blueprint/implementation/ember-spark";
 import { BattleSparkShot } from "./battle-spark-shot";
 
 type Enemy = {
@@ -32,7 +32,7 @@ const setup = (enemies: Enemy[], direction = new GridPosition({ x: -1, y: 0 }), 
 			enemies.filter((found) => Math.hypot(found.position.x - area.x, found.position.y - area.y) <= 2),
 		removeProjectile: (projectile: unknown) => removed.push(projectile),
 	} as unknown as BattleArmyHooks;
-	const spark = new BattleSparkShot(new Spark(1.5), new GridPosition({ x: 30, y: 10 }), hooks, 4, direction, range);
+	const spark = new BattleSparkShot(new EmberSpark(1.5), new GridPosition({ x: 30, y: 10 }), hooks, 4, direction, range);
 	return { spark, removed };
 };
 
@@ -62,7 +62,9 @@ describe("BattleSparkShot", () => {
 
 		expect(removed).toEqual([spark]);
 		expect(ticks).toBe(Math.ceil(20 / 1.5));
-		expect(spark.position.x).toBeCloseTo(30 - ticks * 1.5);
+		// 20 units, in steps of 1.5: the last step is shortened so the spark ends exactly at its range.
+		expect(spark.position.x).toBeCloseTo(30 - 20);
+		expect(spark.travelled).toBeCloseTo(20);
 	});
 
 	it("hurts the enemy on its way by its damage, once, and goes out on it", () => {

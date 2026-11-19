@@ -38,6 +38,16 @@ export class ProjectileResources {
 		},
 	};
 
+	// The blacksmith's hammer sparks: a short ember comet, much shorter than the Zapping Tower's lightning.
+	static emberSpark: ShapedResource = {
+		image: createImage("/resources/projectiles/ember-spark.png"),
+		shape: "rectangle",
+		size: {
+			width: 1.2,
+			height: 0.52,
+		},
+	};
+
 	static spine: ShapedResource = {
 		image: createImage("/resources/projectiles/spine.png"),
 		shape: "rectangle",

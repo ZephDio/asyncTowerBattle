@@ -121,8 +121,8 @@ describe("BlacksmithTower", () => {
 	});
 
 	describe("volley", () => {
-		const UP = 59;
-		const DOWN = 71;
+		const UP = 68;
+		const DOWN = 70;
 		const CONE = UP + DOWN;
 		// The angle of a spark from the direction of "left", in degrees.
 		const angleFromLeft = (spark: BattleSparkShot, left: number) => {
@@ -153,7 +153,7 @@ describe("BlacksmithTower", () => {
 			}
 		});
 
-		it("opens in a cone toward the left, 59 degrees up and 71 degrees down", () => {
+		it("opens in a cone toward the left, 68 degrees up and 70 degrees down", () => {
 			const { tower, projectiles } = setup();
 
 			for (let cast = 0; cast < 30; cast++) tower.onCastResolve();
@@ -184,19 +184,48 @@ describe("BlacksmithTower", () => {
 			expect(new Set(firstSlice).size).toBeGreaterThan(1);
 		});
 
-		it("gives every spark its own range, within the limits", () => {
+		it("sends every spark to the flat far edge of the zone's cells, unless the top or bottom stops it first", () => {
 			const { tower, projectiles, blueprint } = setup();
+			const rowCenter = at(new Cell({ x: 5, y: 5 })).y;
+			const limit = blueprint.sparkVerticalLimit * STANDARD_CELL_SIZE;
 
-			for (let cast = 0; cast < 10; cast++) tower.onCastResolve();
+			for (let cast = 0; cast < 20; cast++) tower.onCastResolve();
 
-			const { minSparkRange, maxSparkRange } = blueprint;
-			const ranges = projectiles.map((spark) => spark.range / STANDARD_CELL_SIZE);
-			for (const range of ranges) {
-				expect(range).toBeGreaterThanOrEqual(minSparkRange);
-				expect(range).toBeLessThanOrEqual(maxSparkRange);
+			const center = at(new Cell({ x: 5, y: 5 }));
+			let reachingTheEdge = 0;
+			for (const spark of projectiles) {
+				const endX = spark.position.x + Math.cos(spark.orientation) * spark.range;
+				const endY = spark.position.y + Math.sin(spark.orientation) * spark.range;
+				const farEdge = center.x - blueprint.sparkReach * STANDARD_CELL_SIZE;
+				// Never short of the far edge, except when stopped by the top or the bottom, and never beyond it.
+				expect(endX).toBeGreaterThanOrEqual(farEdge - 1e-9);
+				const tip = (blueprint.projectile.drawable.size.width / 2) * Math.abs(Math.sin(spark.orientation));
+				const stoppedVertically = Math.abs(Math.abs(endY - rowCenter) + tip - limit) < 1e-6;
+				if (stoppedVertically) continue;
+				expect(endX).toBeCloseTo(farEdge);
+				reachingTheEdge++;
 			}
-			expect(new Set(ranges).size).toBeGreaterThan(1);
+			expect(reachingTheEdge).toBeGreaterThan(projectiles.length / 2);
 		});
+
+		it.each([BoardOrientation.Normal, BoardOrientation.Mirrored])(
+			"never lets a spark go above or below the zone's cells (%s)",
+			(orientation) => {
+				const { tower, projectiles, blueprint } = setup({ orientation });
+
+				for (let cast = 0; cast < 40; cast++) tower.onCastResolve();
+
+				const rowCenter = at(new Cell({ x: 5, y: 5 })).y;
+				const limit = blueprint.sparkVerticalLimit * STANDARD_CELL_SIZE;
+				for (const spark of projectiles) {
+					const endY = spark.position.y + Math.sin(spark.orientation) * spark.range;
+					// The drawn streak, not only its middle, stays inside the cells above and under the tower.
+					const tip = (blueprint.projectile.drawable.size.width / 2) * Math.abs(Math.sin(spark.orientation));
+					expect(endY + tip).toBeLessThanOrEqual(rowCenter + limit + 1e-9);
+					expect(endY - tip).toBeGreaterThanOrEqual(rowCenter - limit - 1e-9);
+				}
+			},
+		);
 
 		it("throws the same cone on a replay with the same seed", () => {
 			const first = setup({ random: seededRandom(7) });

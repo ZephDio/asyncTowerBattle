@@ -82,11 +82,12 @@ export class BattleBlacksmithTower extends Derive(BattleTower, TLiveDescriptionT
 	}
 
 	// One spark of the cone. The cone is cut into one slice per spark of the volley and each spark takes a random
-	// direction inside its own slice, so the volley fans out evenly while no two volleys look alike. The range is random
-	// too. All from the army's seeded random, so that a replay of the same battle throws the same volley.
+	// direction inside its own slice, so the volley fans out evenly while no two volleys look alike. The direction comes
+	// from the army's seeded random, so that a replay of the same battle throws the same volley. The range follows from
+	// it: to the far edge of the zone, or to the top or bottom of it.
 	private shootSpark(origin: GridPosition, slice: number) {
 		const { random, gridHooks } = this.hooks;
-		const { cone, minSparkRange, maxSparkRange, sparksPerVolley } = this.recruit.tower;
+		const { cone, sparkReach, sparkVerticalLimit, sparksPerVolley, anvilOffset } = this.recruit.tower;
 		const { left } = gridHooks.getRelativeDirection();
 		// Positive angles turn toward the bottom of the army's board, negative ones toward the top.
 		const degrees = -cone.up + ((slice + random()) / sparksPerVolley) * (cone.up + cone.down);
@@ -95,7 +96,19 @@ export class BattleBlacksmithTower extends Derive(BattleTower, TLiveDescriptionT
 			x: left.x * Math.cos(angle) - left.y * Math.sin(angle),
 			y: left.x * Math.sin(angle) + left.y * Math.cos(angle),
 		});
-		const range = STANDARD_CELL_SIZE * (minSparkRange + random() * (maxSparkRange - minSparkRange));
+		// From the anvil, which is a little left of the middle of the left cell, to the flat far edge of the zone.
+		const reach = STANDARD_CELL_SIZE * sparkReach - anvilOffset.left;
+		const flatEdgeRange = reach / Math.cos(angle);
+		// Stops at the top or bottom of the zone's cells if the spark would go further that way. The spark is drawn as a
+		// streak around its position, so it stops that much earlier: its drawn tip stays inside the cells too.
+		const rowCenter = gridHooks.getRealPosition(this.cell).y;
+		const halfLength = this.recruit.tower.projectile.drawable.size.width / 2;
+		const limit = STANDARD_CELL_SIZE * sparkVerticalLimit - halfLength * Math.abs(direction.y);
+		const verticalRange =
+			direction.y === 0
+				? Number.POSITIVE_INFINITY
+				: Math.max(0, ((direction.y > 0 ? rowCenter + limit : rowCenter - limit) - origin.y) / direction.y);
+		const range = Math.min(flatEdgeRange, verticalRange);
 		this.hooks.addProjectile(
 			new BattleSparkShot(
 				this.recruit.tower.projectile,

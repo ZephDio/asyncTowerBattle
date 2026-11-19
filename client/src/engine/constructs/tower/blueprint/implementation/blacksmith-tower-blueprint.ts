@@ -14,7 +14,7 @@ import { TowerResources } from "../../../../../renderer/resources/tower.resource
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 import { TargetZone } from "../../../../target-zone/target-zone";
-import { Spark } from "../../../../projectile/blueprint/implementation/spark";
+import { EmberSpark } from "../../../../projectile/blueprint/implementation/ember-spark";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 
 const cellRectangle = () => new Rectangle({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE });
@@ -60,16 +60,17 @@ export class BlacksmithTowerBlueprint extends Derive(
 
 	// Sparks in a volley, shot from the anvil in a cone.
 	sparksPerVolley = 7;
-	// The opening of the cone around the direction of "left", in degrees: this far up and this far down. A bit wider
-	// toward the bottom, like the design.
-	cone = { up: 59, down: 71 };
-	// How far a spark flies, in cells: between these two, picked at random.
-	minSparkRange = 2;
-	maxSparkRange = 4.5;
+	// The opening of the cone around the direction of "left", in degrees: this far up and this far down.
+	cone = { up: 68, down: 70 };
+	// Where the sparks stop at the latest, in cells to the left of the middle of the left cell: the far edge of the
+	// zone's cells, so every spark crosses them whole. The edge is flat, so a slanted spark flies longer to reach it.
+	sparkReach = 1.5;
+	// A spark never goes above or below the cells of the zone: this far, in cells, from the middle of the left cell.
+	sparkVerticalLimit = 1.5;
 	// Where the anvil is drawn, from the center of the left cell: this far to its left and this far above it.
 	anvilOffset = { left: 0.9, above: 1.1 };
 
-	projectile = new Spark(1.5);
+	projectile = new EmberSpark(1.5);
 
 	toRecruit(cell: Cell) {
 		return new BlacksmithTower(cell, this);
