@@ -79,11 +79,10 @@ export class TotemResources {
 		shape: "ellipse",
 	};
 
-	// Placeholder art: a flat pink square until the Bosquet gets its own sprite.
 	static bosquet: ShapedResource = {
 		size: {
 			width: 4.9,
-			height: 4.9,
+			height: 5.075,
 		},
 		image: createImage("/resources/totem/bosquet.png"),
 		shape: "rectangle",
