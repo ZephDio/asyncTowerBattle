@@ -176,6 +176,27 @@ Carrying these rules into the voxel renderer:
   lower or higher.
 - Apply the cylinder edge darkening and the contact shadow as explicit step offsets.
 
+## Transforming an existing building
+
+When a request describes a transformed version of an existing piece, preserve enough of its recognizable structure,
+materials, proportions and footprint to show its origin; change the parts that explain its new purpose. Inspect the
+original generator and image first. Prefer reusing its model-building functions, palette and camera in a separate
+variant generator so the original asset stays unchanged. A visual design alone does not imply new game mechanics:
+register the resource as appropriate, but don't invent stats or replace a playable piece without a request.
+
+For the windmill-to-war-turret example (`generate-windmill-turret.py`), the transformation evolved through feedback:
+- Start with the mill's base, timber body and sails, add an arbalest, then make the damage structural rather than
+  just a new weapon on an intact building. Break both upper sails into stubs and make the lower remnants unequal;
+  keep the hub and enough of the original silhouette to recognize the mill.
+- Rip open the roof with irregular missing sections and exposed rafters; seat the weapon on the wreckage, not a
+  separate platform. Replace the food sacks with a bolt rack and add a fallen sail spar. These are choices for this
+  design, not requirements for every damaged building. Build damage and props in model space, with a ground shadow
+  that follows the remaining base and ground debris, not airborne parts.
+- Use deliberately readable shapes for small props (visible bolt shafts and tips), then inspect the variant next to
+  the original both in a nearest-neighbor preview and at actual game scale. If there is no playable variant, a
+  temporary existing-piece image substitution can check scale and layering; restore it afterward and don't mistake
+  that visual check for a gameplay test. Check the browser console too.
+
 ## Unit style (dragon)
 
 Units are a different, chunkier style, matched on `client/public/resources/units/dragon.png`: a 16x16 front-facing
@@ -215,6 +236,15 @@ look lost on its tile even when the resource size matches the cell.
 The resource `size` is in grid units; keep `width / height` equal to the image aspect ratio
 (e.g. 128x160 → `{ width: 5, height: 6.25 }`) so the art is not stretched. The hitbox lives in the blueprint
 and is independent of the drawn size.
+
+Related variants with the same building base need the same **ground anchor**, not merely similar bottom padding.
+Images are drawn centered on their position (`TDrawable.drawImage`), so for the same camera and pixel-to-grid scale,
+match `ORIGIN_Y - HEIGHT / 2` between generators. The windmill turret uses
+`ORIGIN_Y = HEIGHT / 2 + (windmill.ORIGIN_Y - windmill.HEIGHT / 2)` while keeping both sprites at the same
+pixels per grid unit. Otherwise a taller canvas moves its foundation even if the model is unchanged. This may
+require transparent padding beyond the usual tight crop: don't rescale or crop it away at the expense of alignment.
+Check the shared foundation side by side in-game, not the lowest pixel of loose debris or shadow. Mirrored pieces
+rotate around the same center, so preserve the existing centered drawing convention.
 
 ## Camera
 
