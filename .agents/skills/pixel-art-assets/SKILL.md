@@ -161,7 +161,7 @@ Pitfalls:
 - The silhouette is readable at small size: one big shape, a few protrusions (merlons, roof tufts) and one
   focal detail in the lower middle (door or window).
 - Canvas: towers 128x256, houses 128x192, gobelin portal 128x160.
-- Some older totems (windmill...) are painted/high-res and are **not** the reference style.
+- Some older totems (bakery...) are painted/high-res and are **not** the reference style.
 
 Run `analyze.py` and `style_check.py` on a reference before starting; don't trust this section blindly if
 the art has changed. Run `style_check.py` on every new sprite too: off-palette colors, a run length of 1
