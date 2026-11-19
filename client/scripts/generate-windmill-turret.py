@@ -8,7 +8,7 @@ Writes public/resources/towers/windmill-turret.png. This is a visual resource, n
 import importlib.util
 from pathlib import Path
 
-from voxel_sprite import Hit, VoxelGrid, outline, render, write_png
+from voxel_sprite import EMPTY, Hit, VoxelGrid, outline, render, write_png
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "public/resources/towers/windmill-turret.png"
@@ -29,8 +29,60 @@ def rod(grid: VoxelGrid, a: tuple[int, int, int], b: tuple[int, int, int], radiu
         grid.box(x - radius, x + radius + 1, y - radius, y + radius + 1, z - radius, z + radius + 1, label)
 
 
+def damage_sails(grid: VoxelGrid) -> None:
+    """Break both upper arms near the hub and leave two unequal, ragged lower sails.
+
+    Coordinates follow the original mill's four arms (45, 135, 225, 315 degrees).
+    Only sail voxels are removed: the hub and the structure behind them stay intact.
+    """
+    lengths = (10, 12, 27, 43)
+    sail_labels = (mill.STOCK_LABEL, mill.FRAME_LABEL, mill.CLOTH_LABEL)
+    for x in range(-mill.SAIL_REACH - 2, mill.SAIL_REACH + 2):
+        for z in range(mill.HUB_Z - mill.SAIL_REACH - 2, mill.HUB_Z + mill.SAIL_REACH + 2):
+            coordinates = mill.sail_coordinates(x + 0.5, z + 0.5 - mill.HUB_Z)
+            for index, (along, across) in enumerate(coordinates):
+                if along < 0 or not (-mill.STOCK_HALF <= across <= mill.STOCK_HALF + mill.SAIL_WIDTH):
+                    continue
+                # Uneven splinters along the broken edge, rather than a neat square cut.
+                cutoff = lengths[index] + (int(across * 2) % 5 - 2)
+                # A torn corner on the longer lower sail makes the loss obvious at game scale.
+                torn = index == 3 and along > 27 and across > mill.STOCK_HALF + 8
+                if along > cutoff or torn:
+                    for y in range(mill.SAIL_FRONT, mill.SAIL_FRONT + mill.SAIL_DEPTH):
+                        if grid.get(x, y, z) in sail_labels:
+                            grid.set(x, y, z, EMPTY)
+                break
+
+
+def damage_structure(grid: VoxelGrid) -> None:
+    """A splintered wall breach and missing sections of gallery and thatch."""
+    # Gouge through the front-left weatherboards, with dark recessed wood behind it.
+    for z in range(27, 40):
+        for x in range(-18, -7):
+            if abs(x + 13) + abs(z - 33) * 0.65 > 5 + (z % 3 == 0):
+                continue
+            for y in range(-32, -14):
+                if grid.get(x, y, z) == mill.TOWER_LABEL:
+                    grid.set(x, y, z, EMPTY)
+            grid.set(x, -14, z, mill.HUB_LABEL)
+    # Knock a jagged chunk out of the right side of the gallery.
+    for x in range(19, 32):
+        for y in range(-21, -3):
+            for z in range(mill.GALLERY_Z, mill.GALLERY_Z + mill.GALLERY_THICKNESS):
+                if x + y > 8 + (z % 2) and grid.get(x, y, z) == mill.GALLERY_LABEL:
+                    grid.set(x, y, z, EMPTY)
+    # Small shell gouge in the right-hand thatch, leaving the roof and weapon supported.
+    for x in range(12, 24):
+        for y in range(-23, -7):
+            for z in range(86, 97):
+                if abs(x - 17) + abs(z - 91) < 6 and grid.get(x, y, z) == mill.CAP_LABEL:
+                    grid.set(x, y, z, EMPTY)
+
+
 def build_model() -> VoxelGrid:
     grid = mill.build_model()
+    damage_sails(grid)
+    damage_structure(grid)
     # A stout octagonal firing platform bolted onto the mill's roof.
     for x in range(-17, 18):
         for y in range(-17, 18):
