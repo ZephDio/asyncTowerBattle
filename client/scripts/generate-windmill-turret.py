@@ -18,7 +18,9 @@ assert spec and spec.loader
 mill = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mill)
 
-WIDTH, HEIGHT, ORIGIN_Y = 104, 142, 106
+WIDTH, HEIGHT = 104, 142
+# Images are drawn centered: keep the ground at the same offset from center as the windmill.
+ORIGIN_Y = HEIGHT / 2 + (mill.ORIGIN_Y - mill.HEIGHT / 2)
 TIMBER, IRON, BOLT, STRING, DEBRIS, AMMO = range(40, 46)
 
 
