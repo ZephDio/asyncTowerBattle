@@ -138,7 +138,7 @@ A barrack summons the unit placed into it (or the default unit). The unit's summ
 | Basic Barrack | Common | 10 | 4 | One unit at a time. |
 | Wave Barrack | Uncommon | 10 | 3 | Units come out 3 at a time. |
 | Veteran Barrack | Epic | 10 | 5 | Slower (×0.6). Summons a giant version of its unit: slower, much more health. |
-| Rush Barrack | Common | 15 | 3 | Two cells wide (`oo`). Faster (×1.2). Each unit it summons eats +1 food more at its 2 s upkeep for as long as it lives (a corn over the unit); short of food, it goes hungry like any unit. |
+| Rush Barrack | Common | 15 | 3 | Two cells wide (`oo`). Faster (×1.2). Each unit it summons eats +1 food more at its 2 s upkeep for as long as it lives (a permanent buff on its upkeep, no icon); short of food, it goes hungry like any unit. |
 
 ### Units
 

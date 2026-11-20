@@ -5,10 +5,11 @@ import { Derive } from "@ddd-ts/traits";
 import { BattleBarrack } from "../battle-barrack";
 import { RushBarrack } from "../../recruit/implementation/rush-barrack";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
-import { Ravenous } from "../../../../stats/status/ravenous";
+import { PermanentBuff } from "../../../../army/battle/permanent-buff";
 import { RUSH_BARRACK } from "../../blueprint/implementation/rush-barrack-tuning";
 
-// Summons like the basic barrack at its faster cast speed, and every unit it summons is Ravenous.
+// Summons like the basic barrack at its faster cast speed, and every unit it summons eats more: a permanent buff
+// on its food upkeep (paid every 2 seconds) for as long as it lives.
 export class RushBattleBarrack extends Derive(BattleBarrack) {
 	castCost: number;
 
@@ -39,13 +40,16 @@ export class RushBattleBarrack extends Derive(BattleBarrack) {
 		});
 		this.castCost = this.bondedUnit.stats.summonTime;
 		this.gridShape = barrack.gridShape;
+		this.summonedUpkeep = new PermanentBuff(hooks, null, "foodCost", RUSH_BARRACK.extraFoodPerUnit);
 	}
+
+	readonly summonedUpkeep: PermanentBuff;
 
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
 		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
 		const unit = this.bondedUnit.toBattle(spawnPoint, path, this.hooks);
-		unit.addBoon(new Ravenous(RUSH_BARRACK.extraFoodPerUnit));
+		this.summonedUpkeep.target(unit);
 		this.hooks.addUnits(unit, this);
 		this.finishCast();
 	}

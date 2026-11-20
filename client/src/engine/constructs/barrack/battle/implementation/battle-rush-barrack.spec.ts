@@ -3,7 +3,6 @@ import "../../../../match-maker/board-serializer";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { BattleFoodEconomy } from "../../../../food/battle-food-economy";
 import { UnitRecruitFixture } from "../../../../units/recruit/unit-fixtures";
-import { Ravenous } from "../../../../stats/status/ravenous";
 import { RushBarrack } from "../../recruit/implementation/rush-barrack";
 import { BasicBarrack } from "../../recruit/implementation/basic-barrack";
 import { RUSH_BARRACK } from "../../blueprint/implementation/rush-barrack-tuning";
@@ -11,10 +10,12 @@ import type { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import type { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import type { AnyBarrack } from "../../recruit/barrack";
 
-// An army with just what a barrack and its units read: the path, the castle, the food and the spawned units.
+// An army with just what a barrack and its units read: the path, the castle, the food and the spawned units, which
+// join the army at once.
 const setup = (options: { food?: number; barrack?: AnyBarrack } = {}) => {
 	const food = new BattleFoodEconomy(options.food ?? 1000);
 	const spawned: AnyBattleUnit[] = [];
+	const unitAddedListeners: ((unit: AnyBattleUnit) => void)[] = [];
 	const far = new GridPosition({ x: 1000, y: 0 });
 	const hooks = {
 		getEnemyPath: () => ({ getNodes: () => [far] }),
@@ -22,7 +23,12 @@ const setup = (options: { food?: number; barrack?: AnyBarrack } = {}) => {
 		getDefaultUnit: () => UnitRecruitFixture.dragon,
 		alliedFoodHooks: food.getHooks(),
 		alliedEconomyHooks: { getEconomy: () => ({ amount: 0 }) },
-		addUnits: (unit: AnyBattleUnit) => spawned.push(unit),
+		addUnits: (unit: AnyBattleUnit) => {
+			spawned.push(unit);
+			for (const listener of unitAddedListeners) listener(unit);
+		},
+		getAlliedUnits: () => spawned,
+		onUnitAdded: (listener: (unit: AnyBattleUnit) => void) => unitAddedListeners.push(listener),
 		removeUnit: () => {},
 	} as unknown as BattleArmyHooks;
 	const recruit = options.barrack ?? new RushBarrack(new Cell({ x: 2, y: 1 }));
@@ -41,6 +47,8 @@ const ticksToFirstSummon = (barrack: AnyBarrack) => {
 	}
 	return ticks;
 };
+
+const upkeep = UnitRecruitFixture.dragon.stats.foodConsumption;
 
 describe("RushBarrack", () => {
 	it("is a horizontal 2x1 piece anchored on its left cell", () => {
@@ -61,33 +69,27 @@ describe("RushBarrack", () => {
 		expect(basic).toBe(Math.ceil(UnitRecruitFixture.dragon.stats.summonTime));
 	});
 
-	it("gives every unit it summons the Ravenous boon", () => {
+	it("makes every unit it summons eat 1 food more, without any status", () => {
 		const { barrack, spawned } = setup();
 
 		barrack.onCastResolve();
 		barrack.onCastResolve();
 
 		expect(spawned).toHaveLength(2);
-		for (const unit of spawned) expect(unit.stats.boons.get("ravenous")).toBeInstanceOf(Ravenous);
+		for (const unit of spawned) {
+			expect(unit.stats.foodCost).toBeCloseTo(upkeep + RUSH_BARRACK.extraFoodPerUnit);
+			expect(unit.stats.boons.size).toBe(0);
+		}
 	});
 });
 
-describe("Ravenous", () => {
+describe("The Rush Barrack's upkeep buff", () => {
 	const summon = (food?: number) => {
 		const { barrack, spawned, food: economy } = setup({ food });
 		barrack.onCastResolve();
 		const unit = spawned[0] as AnyBattleUnit;
 		return { unit, food: economy };
 	};
-	const upkeep = UnitRecruitFixture.dragon.stats.foodConsumption;
-
-	it("adds 1 food to the unit's upkeep from its first tick", () => {
-		const { unit } = summon();
-
-		unit.tick();
-
-		expect(unit.stats.foodCost).toBeCloseTo(upkeep + 1);
-	});
 
 	it("drains the upkeep plus 1 food every 2 seconds while the unit lives", () => {
 		const { unit, food } = summon(100);
@@ -108,14 +110,11 @@ describe("Ravenous", () => {
 		expect(unit.stats.health).toBeCloseTo(health - 6);
 	});
 
-	it("gives the food back when removed, and is not counted twice", () => {
-		const { unit } = summon();
-		unit.addBoon(new Ravenous());
-		unit.tick();
-		expect(unit.stats.foodCost).toBeCloseTo(upkeep + 1);
+	it("leaves the units of other barracks alone", () => {
+		const { barrack, spawned } = setup({ barrack: new BasicBarrack(new Cell({ x: 2, y: 1 })) });
 
-		unit.removeBoon(unit.stats.boons.get("ravenous") as Ravenous);
+		barrack.onCastResolve();
 
-		expect(unit.stats.foodCost).toBeCloseTo(upkeep);
+		expect(spawned[0]?.stats.foodCost).toBeCloseTo(upkeep);
 	});
 });

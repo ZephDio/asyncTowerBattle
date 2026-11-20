@@ -82,6 +82,42 @@ describe("PermanentBuff", () => {
 		expect(late.stats.maxHealth).toBeCloseTo(14);
 	});
 
+	it("gives its amount to a targeted unit when it joins, and only to it", () => {
+		const { hooks, add } = army();
+		const buff = new PermanentBuff(hooks, null, "foodCost", 1);
+		const summoned = new FakeUnit(["Kinfolk"]);
+		buff.target(summoned as unknown as AnyBattleUnit);
+
+		add(summoned);
+		const other = add(new FakeUnit(["Kinfolk"]));
+
+		expect(summoned.stats.foodCost).toBeCloseTo(1);
+		expect(other.stats.foodCost).toBeCloseTo(0);
+	});
+
+	it("gives its amount at once to a targeted unit already in the army, once", () => {
+		const { hooks, add } = army();
+		const buff = new PermanentBuff(hooks, null, "foodCost", 1);
+		const unit = add(new FakeUnit(["Kinfolk"]));
+
+		buff.target(unit as unknown as AnyBattleUnit);
+		buff.target(unit as unknown as AnyBattleUnit);
+		buff.raise(1);
+
+		expect(unit.stats.foodCost).toBeCloseTo(2);
+	});
+
+	it("does not give twice to a targeted unit that its filter also matches", () => {
+		const { hooks, add } = army();
+		const buff = new PermanentBuff(hooks, withTag("Animal"), "castleDamage", 1);
+		const fox = new FakeUnit(["Animal"]);
+		buff.target(fox as unknown as AnyBattleUnit);
+
+		add(fox);
+
+		expect(fox.stats.castleDamage).toBeCloseTo(3);
+	});
+
 	it("stacks with another buff on the same stat", () => {
 		const { hooks, add } = army();
 		new PermanentBuff(hooks, withTag("Animal"), "castleDamage", 1);
