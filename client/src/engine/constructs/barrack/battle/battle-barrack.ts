@@ -2,6 +2,7 @@ import { Subtrait, implementsTrait } from "@ddd-ts/traits";
 import { BasicBattleBarrack } from "./implementation/battle-basic-barrack";
 import { VeterantBattleBarrack } from "./implementation/battle-veterant-barrack";
 import { WaveBattleBarrack } from "./implementation/battle-wave-barrack";
+import { RushBattleBarrack } from "./implementation/battle-rush-barrack";
 import { TCollider } from "../../../../shared/traits/engine/core/TCollider";
 import { HTHitbox } from "../../../../shared/traits/engine/core/THitbox";
 import { Cast, Caster } from "../../../../shared/traits/engine/cast";
@@ -24,7 +25,7 @@ import { AnyBarrack } from "../recruit/barrack";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 import { HTRarity } from "../../../../shared/traits/engine/rarity";
 
-export type AnyBattleBarrack = BasicBattleBarrack | WaveBattleBarrack | VeterantBattleBarrack;
+export type AnyBattleBarrack = BasicBattleBarrack | WaveBattleBarrack | VeterantBattleBarrack | RushBattleBarrack;
 
 export const BattleBarrack = Subtrait(
 	[

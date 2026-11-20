@@ -17,7 +17,7 @@ export type SerializedTotemType =
 	| "red-obelisk"
 	| "powder-magazine"
 	| "windmill";
-export type SerializedBarrackType = "basic" | "veterant" | "wave";
+export type SerializedBarrackType = "basic" | "rush" | "veterant" | "wave";
 export type SerializedUnitType =
 	| "brewmaster"
 	| "choupisson"

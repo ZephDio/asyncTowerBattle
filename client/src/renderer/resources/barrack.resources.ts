@@ -29,4 +29,14 @@ export class BarrackResources {
 		image: createImage("/resources/house/yellow.png"),
 		shape: "rectangle",
 	};
+
+	// Two cells wide. The image is a placeholder copy of barracks.png until new-barrack-art draws it and sets the size.
+	static rush: ShapedResource = {
+		size: {
+			width: 9.8,
+			height: 6.37,
+		},
+		image: createImage("/resources/house/rush-barracks.png"),
+		shape: "rectangle",
+	};
 }

@@ -9,6 +9,7 @@ import { AnyBarrack } from "../constructs/barrack/recruit/barrack";
 import { BasicBarrack } from "../constructs/barrack/recruit/implementation/basic-barrack";
 import { VeterantBarrack } from "../constructs/barrack/recruit/implementation/veterant-barrack";
 import { WaveBarrack } from "../constructs/barrack/recruit/implementation/wave-barrack";
+import { RushBarrack } from "../constructs/barrack/recruit/implementation/rush-barrack";
 import { AnvilTotem } from "../constructs/totem/recruit/implementation/anvil";
 import { Bakery } from "../constructs/totem/recruit/implementation/backery";
 import { Bosquet } from "../constructs/totem/recruit/implementation/bosquet";
@@ -86,6 +87,7 @@ const totems: Record<SerializedTotemType, Constructor<AnyTotem>> = {
 
 const barracks: Record<SerializedBarrackType, Constructor<AnyBarrack>> = {
 	basic: BasicBarrack,
+	rush: RushBarrack,
 	veterant: VeterantBarrack,
 	wave: WaveBarrack,
 };
