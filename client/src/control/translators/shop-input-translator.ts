@@ -15,6 +15,7 @@ import { Inventory } from "../../engine/grid/inventory/unit-inventory";
 import { RetailGrid } from "../../engine/grid/retail-grid";
 import { Buyable } from "../../engine/shop/retail/buyable";
 import { PathTile } from "../../engine/tile/recruit/tile";
+import { Trap } from "../../engine/trap/recruit/trap";
 import { BoardOrientation } from "../../shared/traits/engine/core/board-orientation";
 import { DefaultUnitHud } from "../../shared/hud-element/default-unit-hud";
 
@@ -56,7 +57,7 @@ export class ShopInputToIntentTranslator {
 		if (shop.holderControl.hold) return;
 		if (focus.cell && (focus.grid instanceof ArmyGrid || focus.grid instanceof Inventory)) {
 			const element = this.trapOr(focus.element, focus.grid, screenPosition);
-			if (element && implementsTrait(element, TRecruit)) {
+			if (element && implementsTrait(element, TRecruit) && !this.isLockedTile(element, focus.grid)) {
 				shop.setHoldFromArmyRecruit(element, screenPosition, focus.grid);
 			}
 		}
@@ -216,6 +217,13 @@ export class ShopInputToIntentTranslator {
 		shop.army.grid.clearSynergiesTiles();
 		shop.army.grid.setOveredTile(null);
 		shop.army.inventory.setOveredTile([]);
+	}
+
+	// The tile on the army grid's locked cell stays put. A trap it carries is not locked and can still be grabbed.
+	isLockedTile(element: ImplementsTrait<typeof TRecruit>, grid: ImplementsTrait<typeof TGrid>) {
+		if (!(grid instanceof ArmyGrid)) return false;
+		if (implementsTrait(element, Trap)) return false;
+		return grid.isLocked(element);
 	}
 
 	// On a path tile carrying a trap, the middle of the tile stands for the trap: clicking there grabs only the trap

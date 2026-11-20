@@ -5,6 +5,8 @@ import { TGrid } from "./tgrid";
 import { GridSize, armyGridSize, fitCellSize } from "./grid-sizes";
 import { SynergyEffectHud, TARGET_ICONS } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
+import { LockedCellEffect } from "./grid-effects/locked-cell-effect";
+import { CastleEntryPathResources, DoorPathResources } from "../../renderer/resources/path.resources";
 import { AnyCastle, Castle } from "../castle/recruit/castle-recruit";
 import { Tower } from "../constructs/tower/recruit/tower";
 import { Barrack } from "../constructs/barrack/recruit/barrack";
@@ -80,6 +82,45 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	getEnemyDoorCell() {
 		return new Cell({ x: this.width - 1, y: this.height - 1 });
+	}
+
+	// The path always ends on the cell under the castle.
+	getCastleEntryCell() {
+		return this.getCastleCell().down();
+	}
+
+	// The two ends of the path, the enemy door cell and the castle entry cell, are locked: their tiles can't be picked
+	// up or replaced. The lock follows the cells, which move when the grid grows, not the tiles.
+	getLockedCells() {
+		return [
+			{ cell: this.getEnemyDoorCell(), images: DoorPathResources },
+			{ cell: this.getCastleEntryCell(), images: CastleEntryPathResources },
+		];
+	}
+
+	isLockedCell(cell: Cell) {
+		return this.getLockedCells().some((locked) => locked.cell.equals(cell));
+	}
+
+	isLocked(element: ImplementsTrait<typeof GridElement>) {
+		return element.gridShape
+			.getOccupiedCellsFrom(element.cell, element.orientation)
+			.some((cell) => this.isLockedCell(cell));
+	}
+
+	override validateGridElementPlacement(gridElement: ImplementsTrait<typeof GridElement>, cell: Cell) {
+		const covers = gridElement.gridShape.getOccupiedCellsFrom(cell);
+		if (covers.some((covered) => this.isLockedCell(covered))) return { valid: false, elements: [] };
+		return super.validateGridElementPlacement(gridElement, cell);
+	}
+
+	// The tiles on the locked cells are drawn as stone roads, from the enemy half and into the castle.
+	override getCellOverlays() {
+		return this.getLockedCells().flatMap(({ cell, images }) => {
+			const tile = this.getElement(cell);
+			if (!tile || !implementsTrait(tile, PathTile)) return [];
+			return [new LockedCellEffect(cell, tile.pathConnections, images)];
+		});
 	}
 	setOveredTile(cells: Cell[] | null) {
 		this.hoverEffect = [];

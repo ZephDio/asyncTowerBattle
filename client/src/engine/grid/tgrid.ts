@@ -126,13 +126,24 @@ export const TGrid = Trait((base) => {
 				}
 			}
 		}
+		// Drawn over the elements of some cells, under the traps. See ArmyGrid's locked cell.
+		getCellOverlays(): ImplementsTrait<typeof TRenderable>[] {
+			return [];
+		}
+
 		getDrawables(): ImplementsTrait<typeof TRenderable>[] {
 			const elements = [...this.tiles.values()];
 			// Traps come after the elements so they are drawn over the path tile carrying them.
 			const traps = elements.flatMap((element) =>
 				implementsTrait(element, TTrapHolder) && element.trap ? [element.trap] : [],
 			);
-			return [...elements, ...traps, ...this.synergiesEffects, ...(this.hoverEffect ? [...this.hoverEffect] : [])];
+			return [
+				...elements,
+				...this.getCellOverlays(),
+				...traps,
+				...this.synergiesEffects,
+				...(this.hoverEffect ? [...this.hoverEffect] : []),
+			];
 		}
 
 		translate() {
