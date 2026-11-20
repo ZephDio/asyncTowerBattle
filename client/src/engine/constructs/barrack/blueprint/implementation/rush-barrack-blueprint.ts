@@ -1,4 +1,4 @@
-import { TRarity } from "../../../../../shared/traits/engine/rarity";
+import { Rarity, TRarity } from "../../../../../shared/traits/engine/rarity";
 import { Derive } from "@ddd-ts/traits";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { Cell, GridPosition } from "../../../../../shared/position";
@@ -12,11 +12,10 @@ import { TBaseStats } from "../../../../stats/base-stats";
 import { BarrackResources } from "../../../../../renderer/resources/barrack.resources";
 import { BarrackTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
-import { RUSH_BARRACK } from "./rush-barrack-tuning";
 
 export class RushBarrackBlueprint extends Derive(
-	TRarity(RUSH_BARRACK.rarity),
-	TShopBlueprint(RUSH_BARRACK.price, RUSH_BARRACK.shopShare),
+	TRarity(Rarity.Common),
+	TShopBlueprint(15, 10),
 	TDescriptor,
 	// One cell square per footprint cell: the anchor and the cell on its right.
 	THitbox(
@@ -33,7 +32,7 @@ export class RushBarrackBlueprint extends Derive(
 		health: NaN,
 		castleDamage: NaN,
 		projectileDamage: NaN,
-		castSpeed: RUSH_BARRACK.castSpeed,
+		castSpeed: 1.2,
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,
@@ -43,12 +42,15 @@ export class RushBarrackBlueprint extends Derive(
 	}),
 	BarrackTag,
 ) {
+	// The food each unit it summons eats on top of its own upkeep, every 2 seconds while it lives (a PermanentBuff).
+	readonly extraFoodPerUnit = 1;
+
 	description = new BarrackDescription(
 		"Rush Barrack",
 		[
 			"A barrack that spawn",
 			"units faster. Each",
-			`unit eats +${RUSH_BARRACK.extraFoodPerUnit}🌽 more`,
+			`unit eats +${this.extraFoodPerUnit}🌽 more`,
 			"every 2s while alive",
 		],
 		this,

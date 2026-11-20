@@ -6,7 +6,6 @@ import { BattleBarrack } from "../battle-barrack";
 import { RushBarrack } from "../../recruit/implementation/rush-barrack";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 import { PermanentBuff } from "../../../../army/battle/permanent-buff";
-import { RUSH_BARRACK } from "../../blueprint/implementation/rush-barrack-tuning";
 
 // Summons like the basic barrack at its faster cast speed, and every unit it summons eats more: a permanent buff
 // on its food upkeep (paid every 2 seconds) for as long as it lives.
@@ -40,7 +39,7 @@ export class RushBattleBarrack extends Derive(BattleBarrack) {
 		});
 		this.castCost = this.bondedUnit.stats.summonTime;
 		this.gridShape = barrack.gridShape;
-		this.summonedUpkeep = new PermanentBuff(hooks, null, "foodCost", RUSH_BARRACK.extraFoodPerUnit);
+		this.summonedUpkeep = new PermanentBuff(hooks, null, "foodCost", barrack.blueprint.extraFoodPerUnit);
 	}
 
 	readonly summonedUpkeep: PermanentBuff;

@@ -5,7 +5,6 @@ import { BattleFoodEconomy } from "../../../../food/battle-food-economy";
 import { UnitRecruitFixture } from "../../../../units/recruit/unit-fixtures";
 import { RushBarrack } from "../../recruit/implementation/rush-barrack";
 import { BasicBarrack } from "../../recruit/implementation/basic-barrack";
-import { RUSH_BARRACK } from "../../blueprint/implementation/rush-barrack-tuning";
 import type { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import type { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 import type { AnyBarrack } from "../../recruit/barrack";
@@ -64,7 +63,7 @@ describe("RushBarrack", () => {
 		const rush = ticksToFirstSummon(new RushBarrack(new Cell({ x: 2, y: 1 })));
 		const basic = ticksToFirstSummon(new BasicBarrack(new Cell({ x: 2, y: 1 })));
 
-		expect(RUSH_BARRACK.castSpeed).toBe(1.2);
+		expect(new RushBarrack(new Cell({ x: 2, y: 1 })).stats.castSpeed).toBe(1.2);
 		expect(rush).toBe(Math.ceil(UnitRecruitFixture.dragon.stats.summonTime / 1.2));
 		expect(basic).toBe(Math.ceil(UnitRecruitFixture.dragon.stats.summonTime));
 	});
@@ -77,7 +76,7 @@ describe("RushBarrack", () => {
 
 		expect(spawned).toHaveLength(2);
 		for (const unit of spawned) {
-			expect(unit.stats.foodCost).toBeCloseTo(upkeep + RUSH_BARRACK.extraFoodPerUnit);
+			expect(unit.stats.foodCost).toBeCloseTo(upkeep + 1);
 			expect(unit.stats.boons.size).toBe(0);
 		}
 	});
