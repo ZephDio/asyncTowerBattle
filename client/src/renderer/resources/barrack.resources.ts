@@ -31,10 +31,11 @@ export class BarrackResources {
 	};
 
 	// Two cells wide. The image is a placeholder copy of barracks.png until new-barrack-art draws it and sets the size.
+	// Placeholder: a flat pink rectangle over the 2-cell footprint until new-barrack-art draws the sprite.
 	static rush: ShapedResource = {
 		size: {
 			width: 9.8,
-			height: 6.37,
+			height: 4.9,
 		},
 		image: createImage("/resources/house/rush-barracks.png"),
 		shape: "rectangle",
