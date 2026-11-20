@@ -8,11 +8,11 @@ import { getRelativePositionPercent } from "../../../../renderer/implementation/
 import { IconResources } from "../../../../renderer/resources/icons.resources";
 
 export class ArmyBuffHud extends Derive(TRenderable) {
-	speedIcon = IconResources.movespeed.image;
-	vitalityIcon = IconResources.vitality.image;
+	speedIcon = IconResources.armyBuffMovespeed.image;
+	vitalityIcon = IconResources.armyBuffVitality.image;
 	castSpeedIcon = IconResources.castSpeed.image;
-	towerCastSpeedIcon = IconResources.towerCastSpeed.image;
-	attackIcon = IconResources.attack.image;
+	towerCastSpeedIcon = IconResources.armyBuffTowerCastSpeed.image;
+	attackIcon = IconResources.armyBuffAttack.image;
 
 	towerIcon = IconResources.tower.image;
 	unitIcon = IconResources.unit.image;

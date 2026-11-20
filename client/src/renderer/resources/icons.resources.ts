@@ -29,6 +29,18 @@ export class IconResources {
 	static attack: IconResource = {
 		image: createImage("/resources/icons/tower-attack.png"),
 	};
+	static armyBuffMovespeed: IconResource = {
+		image: createImage("/resources/icons/army-buff/unit-speed.png"),
+	};
+	static armyBuffVitality: IconResource = {
+		image: createImage("/resources/icons/army-buff/unit-health.png"),
+	};
+	static armyBuffTowerCastSpeed: IconResource = {
+		image: createImage("/resources/icons/army-buff/tower-cast-speed.png"),
+	};
+	static armyBuffAttack: IconResource = {
+		image: createImage("/resources/icons/army-buff/tower-attack.png"),
+	};
 	static tower: IconResource = {
 		image: createImage("/resources/hud/tower.svg"),
 	};
