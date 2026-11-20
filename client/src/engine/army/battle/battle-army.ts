@@ -18,11 +18,12 @@ import { BattleStartTrigger } from "../../../shared/traits/engine/battle-start";
 import { TokenUnit } from "../../../shared/traits/engine/token-unit";
 import { Furry } from "./furry";
 import { AnyBattleCastle } from "../../castle/battle";
+import { SpawnQueue } from "./spawn-queue";
 
 export type BattleArmyHooks = {
 	random: () => number;
 	timer: () => { clock: number };
-	addUnits: BattleArmy["addUnit"];
+	addUnits: BattleArmy["enqueueUnit"];
 	getDefaultUnit: BattleArmy["getDefaultUnit"];
 	removeUnit: BattleArmy["removeUnit"];
 	addProjectile: BattleArmy["addProjectile"];
@@ -66,6 +67,7 @@ export class BattleArmy {
 	furry: Furry;
 	private enemyCastleHitListeners: Array<() => void> = [];
 	private unitAddedListeners: Array<(unit: AnyBattleUnit) => void> = [];
+	private spawnQueue = new SpawnQueue(this.addUnit.bind(this));
 
 	constructor(
 		public foodEconomy: BattleFoodEconomy,
@@ -160,6 +162,15 @@ export class BattleArmy {
 		});
 	}
 
+	// Units added through the hooks wait in the spawn queue, which makes them join with `addUnit` a few ticks apart.
+	enqueueUnit(entityRecruit: AnyBattleUnit, source: any) {
+		this.spawnQueue.enqueue(entityRecruit, source);
+	}
+
+	tickSpawnQueue() {
+		this.spawnQueue.tick();
+	}
+
 	addUnit(entityRecruit: AnyBattleUnit, source: any) {
 		entityRecruit.initArmyBuffs(this.armyBuff.getUnitArmyBuffs());
 		this.addFurryBuff(entityRecruit);
@@ -201,7 +212,7 @@ export class BattleArmy {
 		return {
 			random: this.random.bind(this),
 			timer: this.getTimer.bind(this),
-			addUnits: this.addUnit.bind(this),
+			addUnits: this.enqueueUnit.bind(this),
 			getDefaultUnit: this.getDefaultUnit.bind(this),
 			removeUnit: this.removeUnit.bind(this),
 			addProjectile: this.addProjectile.bind(this),

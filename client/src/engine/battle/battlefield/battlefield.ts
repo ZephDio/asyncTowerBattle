@@ -154,6 +154,7 @@ export class Battlefield {
 
 	tick() {
 		this.tickBarracks();
+		this.tickSpawnQueues();
 		this.tickProjectiles();
 		this.tickUnits();
 		this.tickTowers();
@@ -281,6 +282,12 @@ export class Battlefield {
 		for (const barrack of this.enemyArmy.barracks) {
 			barrack.tick();
 		}
+	}
+
+	// Right after the barracks, so a unit cast into an idle queue still joins on the frame it was cast.
+	tickSpawnQueues() {
+		this.alliedArmy.tickSpawnQueue();
+		this.enemyArmy.tickSpawnQueue();
 	}
 
 	tickPathTiles() {
