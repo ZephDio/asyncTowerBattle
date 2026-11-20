@@ -37,7 +37,7 @@ export class RushBarrackBlueprint extends Derive(
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,
-		foodConsumptionOnCast: RUSH_BARRACK.foodPerSummon,
+		foodConsumptionOnCast: NaN,
 		summonTime: NaN,
 		range: NaN,
 	}),

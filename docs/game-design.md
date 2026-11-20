@@ -58,7 +58,7 @@ Gold buys pieces and refreshes the shop (5 gold). Most pieces cost 10 or 15 gold
 
 Each army starts the battle with **100 food (full)** and a maximum of 100. The castle produces food over time: 3.5 per second for the Dwarf, 4 per second for the Elf.
 
-- **Towers, barracks and some totems spend food each time they cast.** A building that cannot pay does not act.
+- **Towers and some totems spend food each time they cast.** A building that cannot pay does not act. Barracks summon for free: their units only pay their upkeep.
 - **Every unit eats** its upkeep every 2 seconds. If fed, it heals 1 HP. If not, it takes hunger damage that grows each time (2, 4, 6…).
 
 So the starting food is a buffer. An aggressive board spends it fast with many units. A long-game board builds food production. A food-war board drains the opponent (the Glutton Fox steals food) so their units starve and their towers stop.
@@ -133,12 +133,12 @@ Prices are in gold. "Every Xs" is the cast time. Food is the food spent per cast
 
 A barrack summons the unit placed into it (or the default unit). The unit's summon time sets the pace.
 
-| Barrack | Rarity | Price | Food / summon | Effect |
-|---|---|---|---|---|
-| Basic Barrack | Common | 10 | 4 | One unit at a time. |
-| Wave Barrack | Uncommon | 10 | 3 | Units come out 3 at a time. |
-| Veteran Barrack | Epic | 10 | 5 | Slower (×0.6). Summons a giant version of its unit: slower, much more health. |
-| Rush Barrack | Common | 15 | 3 | Two cells wide (`oo`). Faster (×1.2). Each unit it summons eats +1 food more at its 2 s upkeep for as long as it lives (a permanent buff on its upkeep, no icon); short of food, it goes hungry like any unit. |
+| Barrack | Rarity | Price | Effect |
+|---|---|---|---|
+| Basic Barrack | Common | 10 | One unit at a time. |
+| Wave Barrack | Uncommon | 10 | Units come out 3 at a time. |
+| Veteran Barrack | Epic | 10 | Slower (×0.6). Summons a giant version of its unit: slower, much more health. |
+| Rush Barrack | Common | 15 | Two cells wide (`oo`). Faster (×1.2). Each unit it summons eats +1 food more at its 2 s upkeep for as long as it lives (a permanent buff on its upkeep, no icon); short of food, it goes hungry like any unit. |
 
 ### Units
 

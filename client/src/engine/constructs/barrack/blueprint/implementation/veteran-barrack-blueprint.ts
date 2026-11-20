@@ -26,7 +26,7 @@ export class VeterantBarrackBlueprint extends Derive(
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,
-		foodConsumptionOnCast: 5,
+		foodConsumptionOnCast: NaN,
 		summonTime: NaN,
 		range: NaN,
 	}),

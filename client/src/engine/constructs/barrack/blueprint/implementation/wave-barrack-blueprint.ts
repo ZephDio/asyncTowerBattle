@@ -26,7 +26,7 @@ export class WaveBarrackBlueprint extends Derive(
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,
-		foodConsumptionOnCast: 3,
+		foodConsumptionOnCast: NaN,
 		summonTime: NaN,
 		range: NaN,
 	}),

@@ -26,7 +26,7 @@ export class BasicBarrackBlueprint extends Derive(
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,
-		foodConsumptionOnCast: 4,
+		foodConsumptionOnCast: NaN,
 		summonTime: NaN,
 		range: NaN,
 	}),

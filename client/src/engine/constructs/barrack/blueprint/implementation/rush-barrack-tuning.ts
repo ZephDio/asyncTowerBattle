@@ -5,7 +5,6 @@ export const RUSH_BARRACK = {
 	rarity: Rarity.Common,
 	price: 15,
 	shopShare: 10,
-	foodPerSummon: 3,
 	castSpeed: 1.2,
 	// The food each unit it summons eats on top of its own upkeep, every 2 seconds while it lives (a PermanentBuff).
 	extraFoodPerUnit: 1,
