@@ -233,6 +233,9 @@ export class DebugBridge {
 		const field = battle.battlefield;
 		const side = (army: BattleArmy, name: "allied" | "enemy") => ({
 			castle: { id: this.idOf(army.castle), ...this.statsOf(army.castle) },
+			food: round(army.foodEconomy.food),
+			maxFood: round(army.foodEconomy.maxFood),
+			famine: army.foodEconomy.isFamine(),
 			units: [...army.units.keys()].map((unit) => ({
 				...this.describe(unit),
 				pos: [
