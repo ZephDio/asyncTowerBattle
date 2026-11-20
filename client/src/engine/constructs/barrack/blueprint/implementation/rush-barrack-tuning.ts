@@ -1,6 +1,6 @@
 import { Rarity } from "../../../../../shared/traits/engine/rarity";
 
-// The Rush Barrack's tuning, in one place. foodPerSummon is still provisional.
+// The Rush Barrack's tuning, in one place.
 export const RUSH_BARRACK = {
 	rarity: Rarity.Common,
 	price: 15,
