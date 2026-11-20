@@ -44,8 +44,8 @@ export class Battlefield {
 		const enemyArmyBuff = new ArmyBuff();
 		const enemyArmyBuffHooks = enemyArmyBuff.getHooks();
 
-		const alliedFoodEconomy = alliedArmy.foodEconomy.toBattle();
-		const enemyFoodEconomy = enemyArmy.foodEconomy.toBattle();
+		const alliedFoodEconomy = alliedArmy.foodEconomy.toBattle(() => this.timer);
+		const enemyFoodEconomy = enemyArmy.foodEconomy.toBattle(() => this.timer);
 
 		const enemyBattleCastle = enemyArmy.castle.toEnemy(
 			grid,

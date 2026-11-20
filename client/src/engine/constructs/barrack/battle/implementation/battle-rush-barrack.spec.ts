@@ -12,7 +12,7 @@ import type { AnyBarrack } from "../../recruit/barrack";
 // An army with just what a barrack and its units read: the path, the castle, the food and the spawned units, which
 // join the army at once.
 const setup = (options: { food?: number; barrack?: AnyBarrack } = {}) => {
-	const food = new BattleFoodEconomy(options.food ?? 1000);
+	const food = new BattleFoodEconomy(options.food ?? 1000, () => ({ clock: 0 }));
 	const spawned: AnyBattleUnit[] = [];
 	const unitAddedListeners: ((unit: AnyBattleUnit) => void)[] = [];
 	const far = new GridPosition({ x: 1000, y: 0 });

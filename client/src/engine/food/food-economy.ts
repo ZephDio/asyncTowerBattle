@@ -5,8 +5,8 @@ export class ArmyFoodEconomy {
 
 	constructor() {}
 
-	toBattle() {
-		return new BattleFoodEconomy(this.maxFood);
+	toBattle(getTimer: () => { clock: number }) {
+		return new BattleFoodEconomy(this.maxFood, getTimer);
 	}
 
 	addMaxFood(amount: number) {

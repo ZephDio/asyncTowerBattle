@@ -1,3 +1,5 @@
+import { secondsToFrame } from "../../shared/seconds";
+
 export type FoodHooks = {
 	getFood: () => number;
 	addFood: (amount: number) => void;
@@ -6,10 +8,23 @@ export type FoodHooks = {
 	addMaxFood: (amount: number) => void;
 };
 
+// How long a famine alert lasts once a consumer fails to find enough food.
+export const FAMINE_DURATION = secondsToFrame(3);
+
 export class BattleFoodEconomy {
 	public food: number = 0;
-	constructor(public maxFood: number) {
+	// The battle clock at which the current famine alert ends (none while the clock is past it).
+	private famineEnd = -Infinity;
+
+	constructor(
+		public maxFood: number,
+		private getTimer: () => { clock: number },
+	) {
 		this.food = maxFood;
+	}
+
+	isFamine() {
+		return this.getTimer().clock < this.famineEnd;
 	}
 
 	getFood() {
@@ -24,8 +39,14 @@ export class BattleFoodEconomy {
 		this.food -= Math.min(this.food, amount);
 	}
 
+	// All or nothing. A consumer that can't pay triggers a famine alert: for FAMINE_DURATION, every consumeFood
+	// fails without eating, so the army refills instead of edging at 0 where each payer's luck depended on its order.
 	consumeFood(amount: number): boolean {
+		if (this.isFamine()) {
+			return false;
+		}
 		if (this.food < amount) {
+			this.famineEnd = this.getTimer().clock + FAMINE_DURATION;
 			return false;
 		}
 		this.food -= amount;

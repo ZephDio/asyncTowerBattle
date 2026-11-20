@@ -60,6 +60,7 @@ Each army starts the battle with **100 food (full)** and a maximum of 100. The c
 
 - **Towers and some totems spend food each time they cast.** A building that cannot pay does not act. Barracks summon for free: their units only pay their upkeep.
 - **Every unit eats** its upkeep every 2 seconds. If fed, it heals 1 HP. If not, it takes hunger damage that grows each time (2, 4, 6…).
+- **Famine alert.** Payment is all or nothing. When anything (a unit's upkeep, a tower's or totem's cast) can't pay, the army enters a **3-second famine**: every payment in the army fails without eating, even one that could afford it. Production and theft continue, so the army refills, and when the famine ends payers eat again. This replaces the edging at 0 food, where who got fed depended on update order. A red FAMINE label shows above the food bar while it lasts.
 
 So the starting food is a buffer. An aggressive board spends it fast with many units. A long-game board builds food production. A food-war board drains the opponent (the Glutton Fox steals food) so their units starve and their towers stop.
 
