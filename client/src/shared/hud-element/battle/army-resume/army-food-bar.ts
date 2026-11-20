@@ -49,5 +49,11 @@ export class FoodBarHud extends Derive(TRenderable, TDrawable) {
 			canvasPosition.y + size.height / 2,
 			size.width,
 		);
+
+		// The famine alert: a red label just above the bar while the army's food payments are blocked.
+		if (this.economy.isFamine()) {
+			context.fillStyle = "red";
+			context.fillText("FAMINE", canvasPosition.x, canvasPosition.y - size.height * 0.8, size.width);
+		}
 	}
 }
