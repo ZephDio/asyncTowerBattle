@@ -12,6 +12,16 @@ export class BarrackResources {
 		shape: "rectangle",
 	};
 
+	static rush: ShapedResource = {
+		// 220x143 image, two cells wide, same scale and ground row as the basic barracks
+		size: {
+			width: 9.8,
+			height: 6.37,
+		},
+		image: createImage("/resources/house/rush-barracks.png"),
+		shape: "rectangle",
+	};
+
 	static wave: ShapedResource = {
 		size: {
 			width: 5,
@@ -27,17 +37,6 @@ export class BarrackResources {
 			height: 8,
 		},
 		image: createImage("/resources/house/yellow.png"),
-		shape: "rectangle",
-	};
-
-	// Two cells wide. The image is a placeholder copy of barracks.png until new-barrack-art draws it and sets the size.
-	// Placeholder: a flat pink rectangle over the 2-cell footprint until new-barrack-art draws the sprite.
-	static rush: ShapedResource = {
-		size: {
-			width: 9.8,
-			height: 4.9,
-		},
-		image: createImage("/resources/house/rush-barracks.png"),
 		shape: "rectangle",
 	};
 }
