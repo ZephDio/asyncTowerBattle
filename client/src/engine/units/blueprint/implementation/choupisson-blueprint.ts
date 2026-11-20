@@ -31,7 +31,7 @@ export class ChoupissonBlueprint extends Derive(
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: NaN,
 		castleDamage: 3,
-		projectileDamage: 9,
+		projectileDamage: 3,
 		foodConsumptionOnCast: NaN,
 		foodConsumption: 1.8,
 		summonTime: secondsToFrame(3.5),
