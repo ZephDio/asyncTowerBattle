@@ -43,7 +43,7 @@ export class RushBarrackBlueprint extends Derive(
 	BarrackTag,
 ) {
 	// The food each unit it summons eats on top of its own upkeep, every 2 seconds while it lives (a PermanentBuff).
-	readonly extraFoodPerUnit = 1;
+	readonly extraFoodPerUnit = 0.4;
 
 	description = new BarrackDescription(
 		"Rush Barrack",
