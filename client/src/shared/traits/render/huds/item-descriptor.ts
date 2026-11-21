@@ -70,6 +70,9 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 	return IDescriptor;
 });
 
+// The space before a new section of description lines, in lines.
+const SECTION_GAP = 0.5;
+
 export class DescriptionHud extends Derive(BannerBackground) {
 	drawPriority: 9;
 	titlePosition: ScreenPosition;
@@ -115,7 +118,9 @@ export class DescriptionHud extends Derive(BannerBackground) {
 			positions.push(this.linesOrigin.add(new ScreenPosition({ x, y: -2.1 * (row + 0.1) })));
 		}
 		let i = Math.ceil(statCount / statColumns);
-		this.descriptionLines.forEach(() => {
+		const { sectionStarts } = this.item.description;
+		this.descriptionLines.forEach((_, index) => {
+			if (sectionStarts.includes(index)) i += SECTION_GAP;
 			i++;
 			positions.push(this.linesOrigin.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.8) })));
 		});
@@ -207,6 +212,8 @@ export class Description {
 	// Extra lines are drawn as "label: value", statColumns per row. A line without a label shows its key.
 	statLabels: Record<string, string> = {};
 	statColumns = 1;
+	// The description lines that start a new section, e.g. an effect after the weapon: a little space comes before them.
+	sectionStarts: number[] = [];
 
 	constructor(
 		public name: string,
@@ -286,6 +293,19 @@ export class BlacksmithDescription extends TowerDescription {
 			"increase this value",
 			"by 1 every 4 casts",
 		];
+	}
+}
+
+// The lighthouse's description: what its beams do, then, a little apart, its effect.
+export class LighthouseDescription extends TowerDescription {
+	override sectionStarts = [3];
+
+	constructor(name: string, tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
+		super(
+			name,
+			["Each cast, two beams", "sweep left and right,", "then top and bottom", "Every 10 enemies hit:", "gain 1 🏹"],
+			tower,
+		);
 	}
 }
 
