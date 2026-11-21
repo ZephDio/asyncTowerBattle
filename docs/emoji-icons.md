@@ -28,6 +28,7 @@ Use these for the stat rows of a unit or tower, and when a description talks abo
 | 🗡️ | unit castle damage (the bomb) | `unit-castle-damage.png` |
 | ⚔️ | tower projectile damage | `tower-attack.png` |
 | 💠 | tower cast speed | `tower-cast-speed.png` |
+| ⏱️ | unit production time (how long a barrack takes to ready it) | `production-time.png` |
 
 ### Army buffs (the same sprites printed on a shield)
 
@@ -48,10 +49,6 @@ The unit `castle-damage` and `cast-speed` buffs have no shield icon yet.
 | --- | --- | --- |
 | ▣ | a synergy cell, the yellow star | `pattern-star-active.png` |
 | ☆ | an unmet synergy cell, the grey star | `pattern-star-inactive.png` |
-
-### Not icons
-
-`🕒` (production time in `UnitStatLabels`) has no icon in the font and falls back to the system emoji.
 
 ## Adding or changing an icon
 

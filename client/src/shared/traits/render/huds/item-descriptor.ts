@@ -302,7 +302,7 @@ const UnitStatLabels: UnitLinesDescription = {
 	"castle damage": "🗡️",
 	"move speed": "🥾",
 	"food consumption": "🌽/2s",
-	"production time": "🕒",
+	"production time": "⏱",
 };
 
 export class UnitDescription extends Description {

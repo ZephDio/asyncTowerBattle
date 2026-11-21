@@ -40,7 +40,7 @@ const unitLegend: Legend[] = [
 	{ icon: IconResources.vitality.image, label: "Unit's health" },
 	{ icon: IconResources.castleDamage.image, label: "Unit's damage to castle" },
 	{ icon: IconResources.movespeed.image, label: "Unit's move speed" },
-	{ icon: "🕒", label: "Unit's recruiting time" },
+	{ icon: "⏱", label: "Unit's recruiting time" },
 ];
 const towerLegend: Legend[] = [
 	{ icon: IconResources.attack.image, label: "Tower's damage" },

@@ -2,10 +2,10 @@
 @font-face {
 	font-family: "text";
 	src: url("/font/icons.ttf");
-	unicode-range: U+25A3, U+2606, U+2694, U+2764, U+FE0F, U+1F33D, U+1F3F9, U+1F462, U+1F496, U+1F49A, U+1F4A0, U+1F52E, U+1F5A4, U+1F5E1, U+1F97E, U+1FA99;
+	unicode-range: U+23F1, U+25A3, U+2606, U+2694, U+2764, U+FE0F, U+1F33D, U+1F3F9, U+1F462, U+1F496, U+1F49A, U+1F4A0, U+1F52E, U+1F5A4, U+1F5E1, U+1F97E, U+1FA99;
 }
 @font-face {
 	font-family: "title";
 	src: url("/font/icons.ttf");
-	unicode-range: U+25A3, U+2606, U+2694, U+2764, U+FE0F, U+1F33D, U+1F3F9, U+1F462, U+1F496, U+1F49A, U+1F4A0, U+1F52E, U+1F5A4, U+1F5E1, U+1F97E, U+1FA99;
+	unicode-range: U+23F1, U+25A3, U+2606, U+2694, U+2764, U+FE0F, U+1F33D, U+1F3F9, U+1F462, U+1F496, U+1F49A, U+1F4A0, U+1F52E, U+1F5A4, U+1F5E1, U+1F97E, U+1FA99;
 }

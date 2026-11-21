@@ -44,6 +44,7 @@ EMOJI = {
     "⚔": "tower-attack",
     "🗡": "unit-castle-damage",
     "💠": "tower-cast-speed",
+    "⏱": "production-time",
     "▣": "pattern-star-active",
     "☆": "pattern-star-inactive",
     # Army buffs: the same sprites printed on a shield (public/resources/icons/army-buff/), so a buff a piece grants
