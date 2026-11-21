@@ -48,6 +48,8 @@ const ticksToFirstSummon = (barrack: AnyBarrack) => {
 };
 
 const upkeep = UnitRecruitFixture.dragon.stats.foodConsumption;
+// What each unit it summons eats on top of its own upkeep, as tuned in RushBarrackBlueprint.
+const extra = new RushBarrack(new Cell({ x: 0, y: 0 })).blueprint.extraFoodPerUnit;
 
 describe("RushBarrack", () => {
 	it("is a horizontal 2x1 piece anchored on its left cell", () => {
@@ -68,7 +70,7 @@ describe("RushBarrack", () => {
 		expect(basic).toBe(Math.ceil(UnitRecruitFixture.dragon.stats.summonTime));
 	});
 
-	it("makes every unit it summons eat 1 food more, without any status", () => {
+	it("makes every unit it summons eat its extra food on top of its upkeep, without any status", () => {
 		const { barrack, spawned } = setup();
 
 		barrack.onCastResolve();
@@ -76,7 +78,7 @@ describe("RushBarrack", () => {
 
 		expect(spawned).toHaveLength(2);
 		for (const unit of spawned) {
-			expect(unit.stats.foodCost).toBeCloseTo(upkeep + 1);
+			expect(unit.stats.foodCost).toBeCloseTo(upkeep + extra);
 			expect(unit.stats.boons.size).toBe(0);
 		}
 	});
@@ -90,22 +92,24 @@ describe("The Rush Barrack's upkeep buff", () => {
 		return { unit, food: economy };
 	};
 
-	it("drains the upkeep plus 1 food every 2 seconds while the unit lives", () => {
+	it("drains the upkeep plus the extra food every 2 seconds while the unit lives", () => {
 		const { unit, food } = summon(100);
 
 		for (let tick = 0; tick < 64 * 3; tick++) unit.tick();
 
-		expect(food.getFood()).toBeCloseTo(100 - 3 * (upkeep + 1));
+		expect(food.getFood()).toBeCloseTo(100 - 3 * (upkeep + extra));
 	});
 
 	it("starves the unit like any hungry unit when the army cannot pay the whole meal", () => {
-		const { unit, food } = summon(upkeep + 0.5);
+		// Enough for the unit's own upkeep, but not for the whole meal with the extra food.
+		const short = upkeep + extra - 0.1;
+		const { unit, food } = summon(short);
 		const health = unit.stats.health;
 
 		for (let tick = 0; tick < 64 * 2; tick++) unit.tick();
 
 		// Nothing is eaten, and the hunger damage grows by 2 each missed meal: 2 then 4.
-		expect(food.getFood()).toBeCloseTo(upkeep + 0.5);
+		expect(food.getFood()).toBeCloseTo(short);
 		expect(unit.stats.health).toBeCloseTo(health - 6);
 	});
 
