@@ -6,11 +6,12 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { Derive } from "@ddd-ts/traits";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
-import { MagicLighthouseDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
+import { LighthouseDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds, secondsToFrame } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { MagicTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
 import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 import { TargetZone } from "../../../../target-zone/target-zone";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
@@ -64,6 +65,7 @@ export class MagicLighthouseBlueprint extends Derive(
 		range: NaN,
 	}),
 	TowerTag,
+	MagicTag,
 	TTargeting,
 ) {
 	// Every cast lights one pair of sides, the next cast the other pair.
@@ -87,5 +89,5 @@ export class MagicLighthouseBlueprint extends Derive(
 		return new MagicLighthouse(cell, this);
 	}
 
-	description = new MagicLighthouseDescription("Magic Lighthouse", this);
+	description = new LighthouseDescription("Lighthouse", this);
 }

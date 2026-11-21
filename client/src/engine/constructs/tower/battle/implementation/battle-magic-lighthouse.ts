@@ -1,11 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import {
-	DescriptionLine,
-	MagicLighthouseDescription,
-	TLiveDescriptionText,
-} from "../../../../../shared/traits/render/huds/item-descriptor";
 import { BattleTower } from "../battle-tower";
 import { BoardOrientation, orientCell } from "../../../../../shared/traits/engine/core/board-orientation";
 import { MagicLighthouse } from "../../recruit/implementation/magic-lighthouse";
@@ -13,7 +8,7 @@ import { LIGHTHOUSE_BEAMS, LighthouseSide } from "../../blueprint/implementation
 import { LighthouseBeam } from "../../../../area-effect/implementation/lighthouse-beam";
 import type { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 
-export class BattleMagicLighthouse extends Derive(BattleTower, TLiveDescriptionText) {
+export class BattleMagicLighthouse extends Derive(BattleTower) {
 	// The pair of sides the next cast lights, an index in the blueprint's beamPairs.
 	private nextPair = 0;
 	// The distinct enemy units the beams of this lighthouse lit during the battle.
@@ -49,11 +44,6 @@ export class BattleMagicLighthouse extends Derive(BattleTower, TLiveDescriptionT
 
 	get enemiesLit() {
 		return this.lit.size;
-	}
-
-	liveDescription(): DescriptionLine[] {
-		if (!(this.description instanceof MagicLighthouseDescription)) return this.description.description;
-		return this.description.liveDescription(this.enemiesLit);
 	}
 
 	// The battle cells of one side's beam, in sweep order. The mirrored lighthouse of the opponent lights the point

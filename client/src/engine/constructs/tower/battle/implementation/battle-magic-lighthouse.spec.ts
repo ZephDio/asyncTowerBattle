@@ -136,7 +136,11 @@ describe("MagicLighthouse", () => {
 
 			expect(blueprint.rarity).toBe(Rarity.Uncommon);
 			expect(blueprint.price).toBe(20);
-			expect(blueprint.description.name).toBe("Magic Lighthouse");
+			expect(blueprint.description.name).toBe("Lighthouse");
+		});
+
+		it("is a magic tower", () => {
+			expect(new MagicLighthouseBlueprint({}).tags).toEqual(["Tower", "Magic"]);
 		});
 
 		it("targets the 10 beam cells, so the shop shows them", () => {
@@ -405,21 +409,16 @@ describe("MagicLighthouse", () => {
 	});
 
 	describe("description", () => {
-		it("counts the distinct enemies lit, live during the battle", () => {
-			const { tower, cast, enemyOn } = setup();
-			enemyOn(LEFT[0] as Cell);
-			enemyOn(RIGHT[0] as Cell);
-
-			cast();
-
-			const lines = tower.liveDescription();
-			expect(lines[lines.length - 1]).toEqual(["Enemies lit: ", { value: "2", trend: "better" }]);
-		});
-
-		it("starts at 0 in the shop", () => {
+		it("tells the beams, then a little apart the effect, without a counter", () => {
 			const { recruit } = setup();
 
-			expect(recruit.description.description.at(-1)).toBe("Enemies lit: 0");
+			expect(recruit.description.description).toEqual([
+				"Each cast, two beams",
+				"sweep left and right,",
+				"then top and bottom",
+				"Every 10 enemies hit: +1🏹",
+			]);
+			expect(recruit.description.sectionStarts).toEqual([3]);
 		});
 	});
 });
