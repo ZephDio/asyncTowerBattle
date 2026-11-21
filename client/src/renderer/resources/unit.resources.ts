@@ -3,10 +3,11 @@ import { SpriteSheet } from "../../shared/sprite-sheet";
 import { ShapedResource } from "./tower.resources";
 
 export class UnitResources {
+	// A blond chibi archer, 72x80 pixels. Drawn smaller than 21 px per unit so it doesn't fill the path.
 	static elf: ShapedResource = {
 		size: {
-			width: 3,
-			height: 3,
+			width: 2.4,
+			height: 2.67,
 		},
 		shape: "ellipse",
 		image: createImage("/resources/units/elf.png"),
