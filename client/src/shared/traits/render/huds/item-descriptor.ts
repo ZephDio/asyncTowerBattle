@@ -303,7 +303,7 @@ export class LighthouseDescription extends TowerDescription {
 	constructor(name: string, tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
 		super(
 			name,
-			["Each cast, two beams", "sweep left and right,", "then top and bottom", "Every 10 enemies hit: +1🏹"],
+			["Each cast, two beams", "sweep left and right,", "then top and bottom", "Every 10 enemies hit:", "gain 1🏹"],
 			tower,
 		);
 	}

@@ -416,7 +416,8 @@ describe("MagicLighthouse", () => {
 				"Each cast, two beams",
 				"sweep left and right,",
 				"then top and bottom",
-				"Every 10 enemies hit: +1🏹",
+				"Every 10 enemies hit:",
+				"gain 1🏹",
 			]);
 			expect(recruit.description.sectionStarts).toEqual([3]);
 		});
