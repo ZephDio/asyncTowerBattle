@@ -242,10 +242,10 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		context.lineWidth = Math.max(1, 0.15 * u);
 		context.strokeRect(x, y, width, height);
 		// The crop includes both off-grid castles; the arrows follow the outer path columns.
-		this.arrow(context, x + width * 0.215, y + height * 0.44, x + width * 0.215, y + height * 0.12, ALLIED);
-		this.arrow(context, x + width * 0.785, y + height * 0.56, x + width * 0.785, y + height * 0.88, ENEMY);
-		this.label(context, "OPPONENT", x + width / 2, y + height * 0.22);
-		this.label(context, "YOU", x + width / 2, y + height * 0.78);
+		this.arrow(context, x + width * 0.233, y + height * 0.44, x + width * 0.233, y + height * 0.12, ALLIED);
+		this.arrow(context, x + width * 0.767, y + height * 0.56, x + width * 0.767, y + height * 0.88, ENEMY);
+		this.label(context, "OPPONENT", x + width / 2, y + height * 0.08);
+		this.label(context, "YOU", x + width / 2, y + height * 0.92);
 	}
 
 	private label(context: CanvasRenderingContext2D, text: string, x: number, y: number) {
