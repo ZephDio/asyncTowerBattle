@@ -4,9 +4,9 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
-import { MagicLighthouse } from "../../recruit/implementation/magic-lighthouse";
-import { MagicLighthouseBlueprint } from "../../blueprint/implementation/magic-lighthouse-blueprint";
-import { BattleMagicLighthouse } from "./battle-magic-lighthouse";
+import { Lighthouse } from "../../recruit/implementation/lighthouse";
+import { LighthouseBlueprint } from "../../blueprint/implementation/lighthouse-blueprint";
+import { BattleLighthouse } from "./battle-lighthouse";
 import { LighthouseBeam } from "../../../../area-effect/implementation/lighthouse-beam";
 import { Rarity } from "../../../../../shared/traits/engine/rarity";
 import type { BattleArmyHooks } from "../../../../army/battle/battle-army";
@@ -90,8 +90,8 @@ const setup = (options: { food?: number; orientation?: BoardOrientation; cell?: 
 	} as unknown as BattleArmyHooks;
 	const orientation = options.orientation ?? BoardOrientation.Normal;
 	const cell = options.cell ?? new Cell({ x: 5, y: 5 });
-	const recruit = new MagicLighthouse(cell);
-	const tower = new BattleMagicLighthouse(recruit, hooks, recruit.position, cell, orientation);
+	const recruit = new Lighthouse(cell);
+	const tower = new BattleLighthouse(recruit, hooks, recruit.position, cell, orientation);
 	const enemyOn = (cell: Cell) => {
 		const enemy = new FakeEnemy(at(cell));
 		enemies.push(enemy);
@@ -112,7 +112,7 @@ const setup = (options: { food?: number; orientation?: BoardOrientation; cell?: 
 
 const coords = (cells: Cell[]) => cells.map(({ x, y }) => [x, y]);
 
-describe("MagicLighthouse", () => {
+describe("Lighthouse", () => {
 	describe("blueprint", () => {
 		it("is a vertical 1x2 piece, anchored on its bottom cell", () => {
 			const { recruit } = setup();
@@ -124,7 +124,7 @@ describe("MagicLighthouse", () => {
 		});
 
 		it("casts every 2 seconds for 2.5 food, and hurts by 7", () => {
-			const { stats } = new MagicLighthouseBlueprint({});
+			const { stats } = new LighthouseBlueprint({});
 
 			expect(stats.castSpeed).toBe(castSpeedFromSeconds(2));
 			expect(stats.foodConsumptionOnCast).toBe(2.5);
@@ -132,7 +132,7 @@ describe("MagicLighthouse", () => {
 		});
 
 		it("is an uncommon tower for 20 gold", () => {
-			const blueprint = new MagicLighthouseBlueprint({});
+			const blueprint = new LighthouseBlueprint({});
 
 			expect(blueprint.rarity).toBe(Rarity.Uncommon);
 			expect(blueprint.price).toBe(20);
@@ -140,7 +140,7 @@ describe("MagicLighthouse", () => {
 		});
 
 		it("is a magic tower", () => {
-			expect(new MagicLighthouseBlueprint({}).tags).toEqual(["Tower", "Magic"]);
+			expect(new LighthouseBlueprint({}).tags).toEqual(["Tower", "Magic"]);
 		});
 
 		it("targets the 10 beam cells, so the shop shows them", () => {
@@ -323,7 +323,7 @@ describe("MagicLighthouse", () => {
 		const crowd = (enemyOn: (cell: Cell) => FakeEnemy, count: number) =>
 			Array.from({ length: count }, () => enemyOn(LEFT[0] as Cell));
 
-		it("gives nothing for 9 distinct enemies", () => {
+		it("gives nothing for 9 enemy hits", () => {
 			const { cast, enemyOn, buffs } = setup();
 			crowd(enemyOn, 9);
 
@@ -332,38 +332,56 @@ describe("MagicLighthouse", () => {
 			expect(buffs).toEqual([]);
 		});
 
-		it("gives +1 tower projectile damage for 10 distinct enemies", () => {
+		it("gives +1 tower projectile damage for 10 enemy hits", () => {
 			const { cast, enemyOn, buffs, tower } = setup();
 			crowd(enemyOn, 10);
 
 			cast();
 
 			expect(buffs).toEqual([["projectile-damage", 1]]);
-			expect(tower.enemiesLit).toBe(10);
+			expect(tower.enemiesHit).toBe(10);
 		});
 
-		it("doesn't count an enemy hit again, and gives +2 at 20", () => {
+		it("counts an enemy again when another cast lights it", () => {
+			const { cast, enemyOn, buffs, tower } = setup();
+			crowd(enemyOn, 5);
+
+			// Left and right, top and bottom, then left and right again: the same 5 enemies are hit twice.
+			cast();
+			cast();
+			cast();
+
+			expect(tower.enemiesHit).toBe(10);
+			expect(buffs).toEqual([["projectile-damage", 1]]);
+		});
+
+		it("gives +2 at 20 hits", () => {
 			const { cast, enemyOn, buffs, tower } = setup();
 			crowd(enemyOn, 10);
 			cast();
 			cast();
 			cast();
-			expect(buffs).toHaveLength(1);
-			expect(tower.enemiesLit).toBe(10);
 
-			crowd(enemyOn, 10);
-			// Top and bottom, then left and right again.
-			cast();
-			cast();
-
+			expect(tower.enemiesHit).toBe(20);
 			expect(buffs).toEqual([
 				["projectile-damage", 1],
 				["projectile-damage", 1],
 			]);
-			expect(tower.enemiesLit).toBe(20);
 		});
 
-		it("counts distinct enemies over every side", () => {
+		it("counts a unit once per beam, even one walking along the sweep", () => {
+			const { tower, beams, enemyOn } = setup();
+			const walker = enemyOn(LEFT[0] as Cell);
+
+			tower.onCastResolve();
+			for (const beam of [...beams]) beam.tick();
+			walker.position = at(LEFT[1] as Cell);
+			for (let tick = 0; beams.length; tick++) for (const beam of [...beams]) beam.tick();
+
+			expect(tower.enemiesHit).toBe(1);
+		});
+
+		it("counts hits over every side", () => {
 			const { cast, enemyOn, buffs } = setup();
 			[...LEFT, ...RIGHT, ...TOP, ...BOTTOM].map(enemyOn);
 

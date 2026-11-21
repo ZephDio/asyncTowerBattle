@@ -3,19 +3,19 @@ import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { BattleTower } from "../battle-tower";
 import { BoardOrientation, orientCell } from "../../../../../shared/traits/engine/core/board-orientation";
-import { MagicLighthouse } from "../../recruit/implementation/magic-lighthouse";
-import { LIGHTHOUSE_BEAMS, LighthouseSide } from "../../blueprint/implementation/magic-lighthouse-blueprint";
+import { Lighthouse } from "../../recruit/implementation/lighthouse";
+import { LIGHTHOUSE_BEAMS, LighthouseSide } from "../../blueprint/implementation/lighthouse-blueprint";
 import { LighthouseBeam } from "../../../../area-effect/implementation/lighthouse-beam";
-import type { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 
-export class BattleMagicLighthouse extends Derive(BattleTower) {
+export class BattleLighthouse extends Derive(BattleTower) {
 	// The pair of sides the next cast lights, an index in the blueprint's beamPairs.
 	private nextPair = 0;
-	// The distinct enemy units the beams of this lighthouse lit during the battle.
-	private readonly lit = new Set<AnyBattleUnit>();
+	// The enemy hits of this lighthouse's beams during the battle. A beam hits a unit at most once, but every beam that
+	// hits it counts: the same unit lit by two casts counts twice.
+	private hits = 0;
 
 	constructor(
-		private readonly recruit: MagicLighthouse,
+		private readonly recruit: Lighthouse,
 		private readonly hooks: BattleArmyHooks,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
@@ -42,8 +42,8 @@ export class BattleMagicLighthouse extends Derive(BattleTower) {
 		});
 	}
 
-	get enemiesLit() {
-		return this.lit.size;
+	get enemiesHit() {
+		return this.hits;
 	}
 
 	// The battle cells of one side's beam, in sweep order. The mirrored lighthouse of the opponent lights the point
@@ -52,11 +52,10 @@ export class BattleMagicLighthouse extends Derive(BattleTower) {
 		return LIGHTHOUSE_BEAMS[side].map((relative) => orientCell(relative, this.orientation).add(this.cell));
 	}
 
-	// Every 10th distinct enemy unit lit raises the army's tower projectile damage by one.
-	private countHit(unit: AnyBattleUnit) {
-		if (this.lit.has(unit)) return;
-		this.lit.add(unit);
-		if (this.lit.size % this.recruit.tower.enemiesPerBuff !== 0) return;
+	// Every 10th enemy hit raises the army's tower projectile damage by one.
+	private countHit() {
+		this.hits++;
+		if (this.hits % this.recruit.tower.enemiesPerBuff !== 0) return;
 		this.hooks.alliedArmyBuffHooks.addTowerBuff("projectile-damage", 1);
 	}
 

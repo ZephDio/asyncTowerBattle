@@ -9,7 +9,7 @@ export type SerializedTowerType =
 	| "blacksmith"
 	| "drill"
 	| "frost"
-	| "magic-lighthouse"
+	| "lighthouse"
 	| "windmill-turret"
 	| "witch-house"
 	| "zapping";

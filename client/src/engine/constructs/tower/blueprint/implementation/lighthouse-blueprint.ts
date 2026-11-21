@@ -15,7 +15,7 @@ import { MagicTag } from "../../../../../shared/traits/engine/tags/alignment/ali
 import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 import { TargetZone } from "../../../../target-zone/target-zone";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
-import { MagicLighthouse } from "../../recruit/implementation/magic-lighthouse";
+import { Lighthouse } from "../../recruit/implementation/lighthouse";
 
 const cellRectangle = () => new Rectangle({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE });
 const cells = (...coords: [number, number][]) => coords.map(([x, y]) => new Cell({ x, y }));
@@ -36,7 +36,7 @@ export const LIGHTHOUSE_BEAMS: Record<LighthouseSide, Cell[]> = {
 	bottom: cells([1, -1], [0, -1], [-1, -1]),
 };
 
-export class MagicLighthouseBlueprint extends Derive(
+export class LighthouseBlueprint extends Derive(
 	TRarity(Rarity.Uncommon),
 	TShopBlueprint(20, 10),
 	// One square per cell of the vertical 1x2 piece, relative to the anchor cell (the bottom one)
@@ -47,11 +47,7 @@ export class MagicLighthouseBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(
-		TowerResources.magicLighthouse.image,
-		TowerResources.magicLighthouse.size,
-		DrawPriority.NormalGridElement,
-	),
+	TImageDrawable(TowerResources.lighthouse.image, TowerResources.lighthouse.size, DrawPriority.NormalGridElement),
 	TBaseStats({
 		health: NaN,
 		castleDamage: NaN,
@@ -82,11 +78,11 @@ export class MagicLighthouseBlueprint extends Derive(
 	// How long the streak stays on screen after the sweep, fading, in battle ticks. It hits nothing then.
 	fadeTicks = 6;
 
-	// Every this many distinct enemy units lit in a battle, the army's towers gain one projectile damage buff.
+	// Every this many enemy hits in a battle (a unit lit by two casts counts twice), the army's towers gain one projectile damage buff.
 	enemiesPerBuff = 10;
 
 	toRecruit(cell: Cell) {
-		return new MagicLighthouse(cell, this);
+		return new Lighthouse(cell, this);
 	}
 
 	description = new LighthouseDescription("Lighthouse", this);

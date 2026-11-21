@@ -10,7 +10,7 @@ import type { AnyBattleUnit } from "../../units/battle/battle-unit";
 // How far behind its front the streak trails, in cells.
 const TRAIL_CELLS = 1.3;
 
-// One beam of the magic lighthouse: a streak of light that sweeps a straight line of cells, in order, in `sweepTicks`
+// One beam of the lighthouse: a streak of light that sweeps a straight line of cells, in order, in `sweepTicks`
 // battle ticks. Each tick it lights one cell (the cells share the sweep evenly) and hits the enemy units standing on
 // it, each unit at most once. Then it fades for `fadeTicks` without hitting anything, and goes away.
 export class LighthouseBeam extends Derive(TDrawable, TRenderable) {
