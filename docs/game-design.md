@@ -164,11 +164,11 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Crops Field | Common | 10 | Every 3.5 s: +5 food. | none |
 | Windmill | Common | 10 | Food buildings on its stars cast 25% faster. +5 max food per Food building on its stars. | a cross 2 cells long in each direction |
 | Bakery | Uncommon | 10 | Every 4 s: spend 5 food to give units +2 vitality, or produce 3 food if it can't. | none |
+| Powder Magazine | Uncommon | 15 | Start of battle: towers get 4 🏹 projectile damage (+16%). At 15 s: 5 🔮 cast speed (+10%). | none |
 | Brewery | Epic | 15 | Every 5 s: +0.5 food per allied unit (max 8). Hitting the max gives units speed. Start of battle: units gain speed per barrack on its stars. | 4 cells around and below |
 | Gobelin Portal | Epic | 10 | When a caster on a star triggers: 30% chance to summon a Gobelin. | the 4 diagonals |
 | Forging Anvil | Legendary | 10 | Damage towers on its stars deal +30% damage. | left and right |
 | Gold Mine | Legendary | 15 | Shop entered: +5 gold if a rock is on its star, plus 1 gold per 10 gold owned (interest). | right |
-| Powder Magazine | Legendary | 10 | Start of battle: towers get +4 cast speed or +4 attack. At 15 s: +8 more. | none |
 | Red Obelisk | Legendary | 10 | Every 5 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
 
 ### Path tiles and traps

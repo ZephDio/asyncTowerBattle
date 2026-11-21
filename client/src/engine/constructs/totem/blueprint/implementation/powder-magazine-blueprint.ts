@@ -12,8 +12,8 @@ import { TotemResources } from "../../../../../renderer/resources/totem.resource
 import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 
 export class PowderMagazineBlueprint extends Derive(
-	TRarity(Rarity.Legendary),
-	TShopBlueprint(10, 10),
+	TRarity(Rarity.Uncommon),
+	TShopBlueprint(15, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	TImageDrawable(
@@ -26,13 +26,17 @@ export class PowderMagazineBlueprint extends Derive(
 	toRecruit(cell: Cell) {
 		return new PowderMagazine(cell, this);
 	}
+	// Tower projectile-damage stacks (🏹) given at the start of battle.
+	readonly startDamageStacks = 4;
+	// Seconds into the battle when it gives its tower cast-speed stacks (🔮).
+	readonly lateTriggerSeconds = 15;
+	readonly lateCastSpeedStacks = 5;
+
 	description = new Description("Powder Magazine", [
 		"Start of battle,",
-		"towers randomly get",
-		"4 🏹 or 4 🔮",
+		`towers get ${this.startDamageStacks} 🏹`,
 		"",
-		"After 15 seconds,",
-		"towers randomly get",
-		"8 🏹 or 8 🔮",
+		`After ${this.lateTriggerSeconds} seconds,`,
+		`towers get ${this.lateCastSpeedStacks} 🔮`,
 	]);
 }

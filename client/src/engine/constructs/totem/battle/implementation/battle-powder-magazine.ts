@@ -8,7 +8,6 @@ import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-s
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
 export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger) {
-	vitalityBuffAmount: number = 2;
 	triggered = false;
 
 	constructor(
@@ -30,26 +29,16 @@ export class BattlePowderMagazine extends Derive(BattleTotem, BattleStartTrigger
 	}
 
 	onBattleStart() {
-		const rand = this.hooks.random();
-		if (rand < 0.5) {
-			this.hooks.alliedArmyBuffHooks.addTowerBuff("projectile-damage", 4);
-			return;
-		}
-		this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", 4);
+		this.hooks.alliedArmyBuffHooks.addTowerBuff("projectile-damage", this.powderMagazine.blueprint.startDamageStacks);
 	}
 
 	onTrigger() {
-		const rand = this.hooks.random();
-		if (rand < 0.5) {
-			this.hooks.alliedArmyBuffHooks.addTowerBuff("projectile-damage", 8);
-			return;
-		}
-		this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", 8);
+		this.hooks.alliedArmyBuffHooks.addTowerBuff("cast-speed", this.powderMagazine.blueprint.lateCastSpeedStacks);
 	}
 
 	tick() {
 		const timer = this.hooks.timer().clock;
-		if (timer > secondsToFrame(15) && !this.triggered) {
+		if (timer > secondsToFrame(this.powderMagazine.blueprint.lateTriggerSeconds) && !this.triggered) {
 			this.onTrigger();
 			this.triggered = true;
 		}
