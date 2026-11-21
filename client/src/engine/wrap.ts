@@ -1,10 +1,15 @@
 import { Game } from "./game";
 import { MainMenu } from "./menu/main-menu";
+import { TutorialPanelHud } from "../shared/hud-element/tutorial-panel-hud";
 
 export class GameWrapper {
 	state: "game" | "mainMenu" = "mainMenu";
 	game = null as null | Game;
 	mainMenu: MainMenu;
+	// Shown over every phase while the page's "?" button is hovered or pinned, until a click on the canvas.
+	tutorial: TutorialPanelHud | null = null;
+	// Told whenever the tutorial opens or closes, so the page's "?" button can follow a close made in the game.
+	private tutorialListeners: ((open: boolean) => void)[] = [];
 	constructor() {
 		this.mainMenu = new MainMenu();
 	}
@@ -19,7 +24,36 @@ export class GameWrapper {
 		this.state = "mainMenu";
 	}
 
+	openTutorial() {
+		if (this.tutorial) return;
+		this.tutorial = new TutorialPanelHud({});
+		this.notifyTutorial();
+	}
+
+	closeTutorial() {
+		if (!this.tutorial) return;
+		this.tutorial = null;
+		this.notifyTutorial();
+	}
+
+	onTutorialChange(listener: (open: boolean) => void) {
+		this.tutorialListeners.push(listener);
+		return () => {
+			this.tutorialListeners = this.tutorialListeners.filter((other) => other !== listener);
+		};
+	}
+
+	private notifyTutorial() {
+		for (const listener of [...this.tutorialListeners]) listener(this.tutorial !== null);
+	}
+
 	getRenderState() {
+		const state = this.phaseRenderState();
+		if (!this.tutorial) return state;
+		return { ...state, renderables: [...state.renderables, this.tutorial] };
+	}
+
+	private phaseRenderState() {
 		if (this.state === "game" && this.game) return this.game.getRenderState();
 		if (this.mainMenu) return this.mainMenu.getRenderState();
 		throw new Error("GameWrapper.getRenderState: invalid state");

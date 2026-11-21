@@ -3,6 +3,8 @@ import { logout, resumeSession } from "../auth/auth-api";
 import { type Player, type Session, storedTokens } from "../auth/session";
 import { DEBUG_BRIDGE } from "../debug/debug-flag";
 import { GameCanvas } from "./game-canvas";
+import { HelpButton } from "./help-button";
+import type { GameLink } from "../control/input-to-intent-translator";
 import { LoginScreen } from "./login-screen";
 import { MenuToggle, SideMenu } from "./side-menu";
 
@@ -22,6 +24,7 @@ export function App() {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const closeMenu = useCallback(() => setMenuOpen(false), []);
 	const [account, setAccount] = useState<Account>(initialAccount);
+	const [game, setGame] = useState<GameLink | null>(null);
 
 	useEffect(() => {
 		if (initialAccount.kind !== "resuming") return;
@@ -42,8 +45,9 @@ export function App() {
 			{/* The left padding keeps a strip for the menu toggle, so it never covers the canvas. */}
 			<div className="h-full py-[2vh] pr-[2vw] pl-20">
 				{/* Mounted from the start and never unmounted, since the game has no teardown: the login screen covers it. */}
-				<GameCanvas />
+				<GameCanvas onStart={setGame} />
 			</div>
+			<HelpButton game={game} />
 			<SideMenu open={menuOpen} onClose={closeMenu} account={account} onLogOut={logOut} />
 			<MenuToggle open={menuOpen} onToggle={() => setMenuOpen(!menuOpen)} />
 			{account.kind === "choosing" && (

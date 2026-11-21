@@ -31,6 +31,11 @@ export class HudElementResources {
 		image: createImage("/resources/hud/banner.png"),
 	};
 
+	// A battle captured in the game, shown in the tutorial to explain who walks where.
+	static tutorialBattle: IconResource = {
+		image: createImage("/resources/hud/tutorial-battle.png"),
+	};
+
 	static descriptorBanner: Record<Rarity, IconResource> = {
 		[Rarity.Common]: { image: createImage("/resources/hud/banner-descriptor/common.png") },
 		[Rarity.Uncommon]: { image: createImage("/resources/hud/banner-descriptor/uncommon.png") },

@@ -20,6 +20,12 @@ export class IconResources {
 	static vitality: IconResource = {
 		image: createImage("/resources/icons/unit-health.png"),
 	};
+	static castleDamage: IconResource = {
+		image: createImage("/resources/icons/unit-castle-damage.png"),
+	};
+	static patternStar: IconResource = {
+		image: createImage("/resources/icons/pattern-star-active.png"),
+	};
 	static castSpeed: IconResource = {
 		image: createImage("/resources/hud/cast-speed.svg"),
 	};
