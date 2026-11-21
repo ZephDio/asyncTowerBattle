@@ -87,10 +87,11 @@ export class UnitResources {
 		"/resources/units/gobelin.sheet.json",
 	);
 
+	// A helmeted dwarf with an orange beard, 72x68 pixels. Drawn smaller than 21 px per unit so it doesn't fill the path.
 	static dwarf: ShapedResource = {
 		size: {
-			width: 3,
-			height: 3,
+			width: 2.4,
+			height: 2.267,
 		},
 		image: createImage("/resources/units/dwarf.png"),
 		shape: "rectangle",
