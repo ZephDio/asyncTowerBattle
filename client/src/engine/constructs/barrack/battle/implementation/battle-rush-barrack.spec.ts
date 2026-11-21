@@ -18,7 +18,7 @@ const setup = (options: { food?: number; barrack?: AnyBarrack } = {}) => {
 	const far = new GridPosition({ x: 1000, y: 0 });
 	const hooks = {
 		getEnemyPath: () => ({ getNodes: () => [far] }),
-		getAlliedCastle: () => ({ position: new GridPosition({ x: 0, y: 0 }) }),
+		getAlliedCastle: () => ({ spawnPosition: new GridPosition({ x: 0, y: 0 }) }),
 		getDefaultUnit: () => UnitRecruitFixture.dragon,
 		alliedFoodHooks: food.getHooks(),
 		alliedEconomyHooks: { getEconomy: () => ({ amount: 0 }) },

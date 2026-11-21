@@ -222,7 +222,7 @@ export class DebugBridge {
 				pathComplete: army.pathNetwork.complete,
 				holding: shop.holderControl.hold ? this.describe(shop.holderControl.hold.holded) : null,
 				offers: this.uniqueElements(shop.retail.grid).map((offer) => this.describe(offer)),
-				army: this.uniqueElements(army.grid)
+				army: [army.castle, ...this.uniqueElements(army.grid)]
 					.filter((element) => !army.environment.includes(element as never) && !implementsTrait(element, PathTile))
 					.map((element) => this.describe(element)),
 				pathTiles: army.pathTiles.map((tile) => [tile.cell.x, tile.cell.y]),

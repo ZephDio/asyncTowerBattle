@@ -5,6 +5,7 @@ import { BattleGrid } from "../../../grid/battle-grid";
 import { Castle } from "../castle-recruit";
 import { DwarfCastleBlueprint } from "../../blueprint/dwarf-castle-blueprint";
 import { BattleDwarfCastle } from "../../battle/battle-dwarf-castle";
+import { castleGeometry } from "../../castle-geometry";
 import { BoardOrientation } from "../../../../shared/traits/engine/core/board-orientation";
 
 export class DwarfCastle extends Derive(Castle) {
@@ -23,14 +24,31 @@ export class DwarfCastle extends Derive(Castle) {
 	}
 
 	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleDwarfCastle {
-		const position = grid.cellToGrid(this.cell);
-		return new BattleDwarfCastle(this, onDeath, this.cell.clone(), position, BoardOrientation.Normal, foodHooks);
+		const { position, doorPosition, spawnPosition } = castleGeometry(this.cell, BoardOrientation.Normal, grid.width);
+		return new BattleDwarfCastle(
+			this,
+			onDeath,
+			this.cell.clone(),
+			position,
+			doorPosition,
+			spawnPosition,
+			BoardOrientation.Normal,
+			foodHooks,
+		);
 	}
 
 	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleDwarfCastle {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const position = grid.cellToGrid(cell);
-		const battleCastle = new BattleDwarfCastle(this, onDeath, cell, position, BoardOrientation.Mirrored, foodHooks);
-		return battleCastle;
+		const { position, doorPosition, spawnPosition } = castleGeometry(cell, BoardOrientation.Mirrored, grid.width);
+		return new BattleDwarfCastle(
+			this,
+			onDeath,
+			cell,
+			position,
+			doorPosition,
+			spawnPosition,
+			BoardOrientation.Mirrored,
+			foodHooks,
+		);
 	}
 }

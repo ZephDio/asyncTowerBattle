@@ -1,5 +1,4 @@
 import { Derive } from "@ddd-ts/traits";
-import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { TDrawable } from "../traits/render/drawable";
 import { HitBox } from "../hitbox/hitboxe";
 import { Rectangle } from "../hitbox/shapes/rectangle";
@@ -17,10 +16,10 @@ const BODY_TEXT_WIDTH = 0.7;
 // The amount's height for a short amount, as a fraction of the image; wider amounts shrink to fit the body
 const TEXT_HEIGHT = 0.28;
 
-// The player's gold, written with a coin on a purse in the top left corner of the shop.
+// The player's gold, written with a coin on a purse in the bottom left corner of the shop.
 export class GoldHud extends Derive(
 	TCollider,
-	THitbox(new HitBox([[new Rectangle({ width: 8.5, height: 8.5 }), new ScreenPosition({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Rectangle({ width: 7.5, height: 7.5 }), new ScreenPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TRenderable,
 ) {
@@ -63,6 +62,7 @@ export class GoldHud extends Derive(
 		context.restore();
 	}
 	public type = "goldDisplay";
-	public position = PercentToReal({ x: 6, y: 89.5 });
-	public size = { width: 8.5, height: 8.5 };
+	// Bottom left corner
+	public position = new ScreenPosition({ x: 6.7, y: 4.5 });
+	public size = { width: 7.5, height: 7.5 };
 }

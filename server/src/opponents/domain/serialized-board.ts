@@ -1,5 +1,5 @@
 // An opponent board as plain JSON, the way the opponent server stores and sends it. Cells are in the board's own
-// frame (y up, castle in the bottom-left corner), before any battle mirroring.
+// frame (y up, castle beside the top-left cell, off the grid), before any battle mirroring.
 // Keep in sync with client/src/engine/match-maker/serialized-board.ts.
 
 export type SerializedCell = { x: number; y: number };

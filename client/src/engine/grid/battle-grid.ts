@@ -21,6 +21,8 @@ export type BattleGridElement =
 	| ImplementsTrait<typeof TEnvironmentElement>;
 export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, BattleGridElement> = new Map();
+	// The castles stand off the board, beside the top rows, so they are not in `tiles`. See castle-geometry.ts.
+	castles: AnyBattleCastle[] = [];
 	hoverEffect: HoverEffect[];
 	synergiesEffects: SynergyEffectHud[] = [];
 	constructor(
@@ -53,13 +55,12 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		enemyArmy: BattleArmy,
 		environmentElements: ImplementsTrait<typeof TEnvironmentElement>[],
 	) {
+		this.castles = [alliedArmy.castle, enemyArmy.castle];
 		const gridElements = [
-			alliedArmy.castle,
 			...alliedArmy.towers,
 			...alliedArmy.tiles,
 			...alliedArmy.barracks,
 			...alliedArmy.totems,
-			enemyArmy.castle,
 			...enemyArmy.towers,
 			...enemyArmy.tiles,
 			...enemyArmy.barracks,
@@ -69,6 +70,10 @@ export class BattleGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		for (const gridElement of gridElements) {
 			this.setElement(gridElement);
 		}
+	}
+
+	override getDrawables() {
+		return [...super.getDrawables(), ...this.castles];
 	}
 
 	// The relative positions are already mirrored by the piece's board orientation.

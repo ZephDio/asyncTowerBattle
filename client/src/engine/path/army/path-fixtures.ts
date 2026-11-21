@@ -12,6 +12,7 @@ const trapped = (tile: BasicPathTile, trap: AnyTrap) => {
 export class PathFixture {
 	static get default() {
 		return [
+			new BasicPathTile(new Cell({ x: 0, y: 5 })),
 			new BasicPathTile(new Cell({ x: 0, y: 4 })),
 			trapped(new BasicPathTile(new Cell({ x: 0, y: 3 })), new SlowingTrap(new Cell({ x: 0, y: 3 }))),
 			trapped(new BasicPathTile(new Cell({ x: 1, y: 3 })), new SlowingTrap(new Cell({ x: 1, y: 3 }))),
@@ -36,11 +37,13 @@ export class PathFixture {
 	}
 }
 
-// Paths go from the enemy door (width-1, height-1) to castle.cell.down(), see Army.path.
+// Paths go from the enemy door (width-1, height-1) to the castle's anchor cell, the top left one (0, height-1), which
+// they leave by its left edge into the castle. See Army.path.
 export class PathFactory {
 	// 8x6 board
 	static get default() {
 		return [
+			new BasicPathTile(new Cell({ x: 0, y: 5 })),
 			new BasicPathTile(new Cell({ x: 0, y: 4 })),
 			new BasicPathTile(new Cell({ x: 0, y: 3 })),
 			new BasicPathTile(new Cell({ x: 0, y: 2 })),
@@ -64,6 +67,7 @@ export class PathFactory {
 	// 9x7 board
 	static get round2() {
 		return [
+			new BasicPathTile(new Cell({ x: 0, y: 6 })),
 			new BasicPathTile(new Cell({ x: 0, y: 5 })),
 			new BasicPathTile(new Cell({ x: 0, y: 4 })),
 			new BasicPathTile(new Cell({ x: 0, y: 3 })),

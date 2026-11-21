@@ -12,6 +12,7 @@ export const DEFAULT_BOARDS: readonly SerializedBoard[] = [
 		randomSeed: 123456,
 		elements: [
 			{ kind: "castle", cell: { x: 0, y: 5 } },
+			{ kind: "path", cell: { x: 0, y: 5 }, trap: null, connectionChoice: null },
 			{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 2 } },
 			{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 			{ kind: "tower", type: "drill", cell: { x: 4, y: 4 } },
@@ -49,6 +50,7 @@ export const DEFAULT_BOARDS: readonly SerializedBoard[] = [
 		randomSeed: 123456,
 		elements: [
 			{ kind: "castle", cell: { x: 0, y: 6 } },
+			{ kind: "path", cell: { x: 0, y: 6 }, trap: null, connectionChoice: null },
 			{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 			{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 			{ kind: "totem", type: "crops-field", cell: { x: 1, y: 3 } },
@@ -90,6 +92,7 @@ export const DEFAULT_BOARDS: readonly SerializedBoard[] = [
 		randomSeed: 123456,
 		elements: [
 			{ kind: "castle", cell: { x: 0, y: 6 } },
+			{ kind: "path", cell: { x: 0, y: 6 }, trap: null, connectionChoice: null },
 			{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 			{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 			{ kind: "totem", type: "crops-field", cell: { x: 1, y: 3 } },
@@ -134,6 +137,7 @@ export const DEFAULT_BOARDS: readonly SerializedBoard[] = [
 		randomSeed: 123456,
 		elements: [
 			{ kind: "castle", cell: { x: 0, y: 6 } },
+			{ kind: "path", cell: { x: 0, y: 6 }, trap: null, connectionChoice: null },
 			{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 			{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 			{ kind: "tower", type: "blacksmith", cell: { x: 6, y: 2 } },
@@ -183,6 +187,7 @@ export const DEFAULT_BOARDS: readonly SerializedBoard[] = [
 		randomSeed: 123456,
 		elements: [
 			{ kind: "castle", cell: { x: 0, y: 6 } },
+			{ kind: "path", cell: { x: 0, y: 6 }, trap: null, connectionChoice: null },
 			{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 			{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 			{ kind: "tower", type: "blacksmith", cell: { x: 6, y: 2 } },
@@ -234,6 +239,7 @@ export const DEFAULT_BOARDS: readonly SerializedBoard[] = [
 		randomSeed: 123456,
 		elements: [
 			{ kind: "castle", cell: { x: 0, y: 6 } },
+			{ kind: "path", cell: { x: 0, y: 6 }, trap: null, connectionChoice: null },
 			{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 			{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 			{ kind: "tower", type: "blacksmith", cell: { x: 6, y: 2 } },
@@ -287,6 +293,7 @@ export const DEFAULT_BOARDS: readonly SerializedBoard[] = [
 		randomSeed: 123456,
 		elements: [
 			{ kind: "castle", cell: { x: 0, y: 6 } },
+			{ kind: "path", cell: { x: 0, y: 6 }, trap: null, connectionChoice: null },
 			{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 3 } },
 			{ kind: "tower", type: "frost", cell: { x: 4, y: 2 } },
 			{ kind: "tower", type: "blacksmith", cell: { x: 6, y: 2 } },
@@ -342,6 +349,7 @@ export const DEFAULT_BOARDS: readonly SerializedBoard[] = [
 		randomSeed: 123456,
 		elements: [
 			{ kind: "castle", cell: { x: 0, y: 7 } },
+			{ kind: "path", cell: { x: 0, y: 7 }, trap: null, connectionChoice: null },
 			{ kind: "tower", type: "windmill-turret", cell: { x: 3, y: 4 } },
 			{ kind: "tower", type: "frost", cell: { x: 4, y: 3 } },
 			{ kind: "tower", type: "blacksmith", cell: { x: 6, y: 3 } },

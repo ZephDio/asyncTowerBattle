@@ -44,7 +44,13 @@ export class WindmillTurretBlueprint extends Derive(
 ) {
 	description = new TowerDescription(
 		"Miller's Bolt",
-		["A windmill that shoots", "auto-guided fast bolts.", "The first time an ally", "hits the enemy castle,", "gain 20 🌽"],
+		[
+			"A windmill that shoots",
+			"auto-guided fast bolts.",
+			"The first time an ally",
+			"hits the enemy castle,",
+			"gain 20 🌽",
+		],
 		this,
 	);
 

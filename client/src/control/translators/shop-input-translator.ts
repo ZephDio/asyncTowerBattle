@@ -21,7 +21,14 @@ import { DefaultUnitHud } from "../../shared/hud-element/default-unit-hud";
 
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
+		shop.signHovered = shop.sign.contains(screenPosition);
 		const state = shop.getState();
+		if (eventType === "move" && !shop.holderControl.hold && shop.army.grid.isOverCastle(screenPosition)) {
+			// The castle stands off the grid, so it is hovered apart from the cells.
+			this.clearHover(shop);
+			shop.setDescriptionHud(new DescriptionHud(shop.army.castle));
+			return;
+		}
 		const focus = this.determinateFocus(shop, state, screenPosition);
 		if (eventType === "move") {
 			this.handleMouseMove(shop, focus, screenPosition);

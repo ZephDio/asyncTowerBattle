@@ -104,11 +104,10 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		y += startHeight + 1.2 * u;
 
 		// The battle schema, with its explanation beside it.
-		const schemaHeight = 21.5 * u;
-		const schemaWidth = (schemaHeight * 567) / 848;
-		this.drawBattleSchema(context, x, y, schemaWidth, schemaHeight);
-		const textX = x + schemaWidth + 1.6 * u;
-		const textWidth = width - schemaWidth - 1.6 * u;
+		const schemaSize = 18.5 * u;
+		this.drawBattleSchema(context, x, y, schemaSize, schemaSize);
+		const textX = x + schemaSize + 1.6 * u;
+		const textWidth = width - schemaSize - 1.6 * u;
 		let textY = y + 1.5 * u;
 		context.fillStyle = ALLIED;
 		textY = this.paragraph(context, "Your units walk up the opponent's path to their castle.", textX, textY, textWidth);
@@ -122,7 +121,7 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 			textY + 0.6 * u,
 			textWidth,
 		);
-		y += schemaHeight + 1.2 * u;
+		y += 21.5 * u + 1.2 * u;
 
 		y = this.iconParagraph(
 			context,
@@ -242,9 +241,9 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		context.strokeStyle = INK;
 		context.lineWidth = Math.max(1, 0.15 * u);
 		context.strokeRect(x, y, width, height);
-		// The paths run along the board's sides, 6.5% of its width in.
-		this.arrow(context, x + width * 0.065, y + height * 0.44, x + width * 0.065, y + height * 0.12, ALLIED);
-		this.arrow(context, x + width * 0.935, y + height * 0.56, x + width * 0.935, y + height * 0.88, ENEMY);
+		// The crop includes both off-grid castles; the arrows follow the outer path columns.
+		this.arrow(context, x + width * 0.215, y + height * 0.44, x + width * 0.215, y + height * 0.12, ALLIED);
+		this.arrow(context, x + width * 0.785, y + height * 0.56, x + width * 0.785, y + height * 0.88, ENEMY);
 		this.label(context, "OPPONENT", x + width / 2, y + height * 0.22);
 		this.label(context, "YOU", x + width / 2, y + height * 0.78);
 	}

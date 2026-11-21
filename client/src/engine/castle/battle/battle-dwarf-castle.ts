@@ -11,6 +11,8 @@ export class BattleDwarfCastle extends Derive(TBattleCastle) {
 		public onDeath: () => void,
 		public cell: Cell,
 		public position: GridPosition,
+		public doorPosition: GridPosition,
+		public spawnPosition: GridPosition,
 		orientation: BoardOrientation,
 		public foodHooks: FoodHooks,
 	) {

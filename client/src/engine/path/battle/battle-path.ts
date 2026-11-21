@@ -1,6 +1,9 @@
 import { Cell, GridPosition } from "../../../shared/position";
 import { AnyBattleCastle } from "../../castle/battle";
 import { BattleGrid } from "../../grid/battle-grid";
+// The route the units of an army follow to the castle of the army the path belongs to (`alliedCastle`). They spawn at
+// the other castle's spawn point (`enemyCastle`), on the outer edge of this path's first cell (the board's door cell),
+// walk this path, and leave its last cell through its outer edge, the door of `alliedCastle`.
 export class BattlePath {
 	constructor(
 		public pathTileNodes: GridPosition[],
@@ -9,7 +12,7 @@ export class BattlePath {
 	) {}
 
 	getNodes() {
-		return [this.enemyCastle.position, ...this.pathTileNodes, this.alliedCastle.position];
+		return [...this.pathTileNodes, this.alliedCastle.doorPosition];
 	}
 
 	static toAllied(grid: BattleGrid, cells: Cell[], alliedCastle: AnyBattleCastle, enemyCastle: AnyBattleCastle) {

@@ -46,7 +46,7 @@ export class RushBattleBarrack extends Derive(BattleBarrack) {
 
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
-		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
+		const spawnPoint = this.hooks.getAlliedCastle().spawnPosition.clone();
 		const unit = this.bondedUnit.toBattle(spawnPoint, path, this.hooks);
 		this.summonedUpkeep.target(unit);
 		this.hooks.addUnits(unit, this);

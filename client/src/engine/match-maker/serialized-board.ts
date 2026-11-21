@@ -1,5 +1,5 @@
 // An opponent board as plain JSON, the way the opponent server stores and sends it. Cells are in the board's own
-// frame (y up, castle in the bottom-left corner), before any battle mirroring.
+// frame (y up, castle beside the top-left cell, off the grid), before any battle mirroring.
 // Keep in sync with server/src/opponents/domain/serialized-board.ts.
 
 export type SerializedCell = { x: number; y: number };
@@ -31,6 +31,8 @@ export type SerializedTrapType = "slowing" | "stun";
 export type SerializedEnvironmentType = "forest" | "rock";
 
 export type SerializedElement =
+	// The castle's anchor: the top left cell, where the path ends. It only tells the castle's cell, the castle itself is
+	// off the grid. Boards stored before the castle left the grid lack the path tile on that cell, see deserializeBoard.
 	| { kind: "castle"; cell: SerializedCell }
 	| { kind: "tower"; type: SerializedTowerType; cell: SerializedCell }
 	| { kind: "totem"; type: SerializedTotemType; cell: SerializedCell }

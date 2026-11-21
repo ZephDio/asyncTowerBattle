@@ -1,7 +1,8 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell, ScreenPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
-import { TGrid } from "./tgrid";
+import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
+import { CASTLE_BLOCK_CELLS } from "../castle/castle-geometry";
 import { GridSize, armyGridSize, fitCellSize } from "./grid-sizes";
 import { SynergyEffectHud, TARGET_ICONS } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
@@ -35,12 +36,29 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		super({ width, height, cellSize, position: screenPosition });
 	}
 
+	// The castle is not a grid element: it stands off the board beside the top row (see castle-geometry.ts), so it
+	// is kept apart from the tiles. Placing it with setElement keeps it here.
+	private castleRecruit: AnyCastle | undefined;
+
 	get castle() {
-		const castle = [...this.tiles.values()].find((e): e is AnyCastle => implementsTrait(e, Castle));
-		if (!castle) {
+		if (!this.castleRecruit) {
 			throw new Error("Castle not found");
 		}
-		return castle;
+		return this.castleRecruit;
+	}
+
+	override setElement(gridElement: ImplementsTrait<typeof GridElement>) {
+		if (implementsTrait(gridElement, Castle)) {
+			gridElement.cell = this.getCastleCell();
+			this.castleRecruit = gridElement;
+			return;
+		}
+		super.setElement(gridElement);
+	}
+
+	// The castle is drawn with the grid's elements, off the board.
+	override getDrawables() {
+		return this.castleRecruit ? [...super.getDrawables(), this.castleRecruit] : super.getDrawables();
 	}
 
 	get towers() {
@@ -84,17 +102,19 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return new Cell({ x: this.width - 1, y: this.height - 1 });
 	}
 
-	// The path always ends on the cell under the castle.
+	// The path always ends on the top left cell, the castle's anchor: it leaves the board by that cell's left edge, into
+	// the castle standing beside it.
 	getCastleEntryCell() {
-		return this.getCastleCell().down();
+		return this.getCastleCell();
 	}
 
 	// The two ends of the path, the enemy door cell and the castle entry cell, are locked: their tiles can't be picked
-	// up or replaced. The lock follows the cells, which move when the grid grows, not the tiles.
+	// up or replaced. The lock follows the cells, which move when the grid grows, not the tiles. `outward` is the edge
+	// the path leaves the board by: right at the door, left at the castle.
 	getLockedCells() {
 		return [
-			{ cell: this.getEnemyDoorCell(), images: DoorPathResources },
-			{ cell: this.getCastleEntryCell(), images: CastleEntryPathResources },
+			{ cell: this.getEnemyDoorCell(), images: DoorPathResources, outward: new Cell({ x: 1, y: 0 }) },
+			{ cell: this.getCastleEntryCell(), images: CastleEntryPathResources, outward: new Cell({ x: -1, y: 0 }) },
 		];
 	}
 
@@ -114,12 +134,12 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		return super.validateGridElementPlacement(gridElement, cell);
 	}
 
-	// The tiles on the locked cells are drawn as stone roads, from the enemy half and into the castle.
+	// The tiles on the locked cells are drawn as stone roads, from the enemy half and into the castle (through the top left cell's left edge).
 	override getCellOverlays() {
-		return this.getLockedCells().flatMap(({ cell, images }) => {
+		return this.getLockedCells().flatMap(({ cell, images, outward }) => {
 			const tile = this.getElement(cell);
 			if (!tile || !implementsTrait(tile, PathTile)) return [];
-			return [new LockedCellEffect(cell, tile.pathConnections, images)];
+			return [new LockedCellEffect(cell, tile.pathConnections, images, outward)];
 		});
 	}
 	setOveredTile(cells: Cell[] | null) {
@@ -161,6 +181,14 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		}
 	}
 
+	// Whether a screen position is over the castle's 2x2 block, off the board left of the top row.
+	isOverCastle(position: ScreenPosition) {
+		const { x, y } = this.screenToGridPosition(position);
+		const size = CASTLE_BLOCK_CELLS * STANDARD_CELL_SIZE;
+		const bottom = this.getCastleCell().y * STANDARD_CELL_SIZE;
+		return x >= -size && x < 0 && y >= bottom && y < bottom + size;
+	}
+
 	getCastleCell() {
 		return new Cell({ x: 0, y: this.height - 1 });
 	}
@@ -187,6 +215,8 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		const addedRows = height - this.height;
 		this.resize({ width, height });
 		for (let i = 0; i < addedRows; i++) this.translate();
+		// The castle follows the top row, which moved up with the new rows.
+		if (this.castleRecruit) this.castleRecruit.cell = this.getCastleCell();
 		for (let x = previousWidth; x < width; x++) {
 			this.setElement(new BasicPathTile(new Cell({ x, y: height - 1 })));
 		}

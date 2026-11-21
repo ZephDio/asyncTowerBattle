@@ -14,6 +14,8 @@ export class LockedCellEffect extends Derive(TDrawable, TRenderable) {
 		public cell: Cell,
 		public connections: Cell[],
 		public images: LockedPathResource,
+		// The edge the path leaves the board by, as a unit offset: up for the door, left for the castle.
+		public outward = new Cell({ x: 0, y: 1 }),
 	) {
 		super({});
 	}
@@ -23,18 +25,34 @@ export class LockedCellEffect extends Derive(TDrawable, TRenderable) {
 		context.globalAlpha = 1;
 		const { width, height } = PathResources.normal.size;
 		const size = this.getCanvasSize(context, width, height, scale);
-		this.drawImage(context, size, this.getCanvasPosition(context, position), this.image());
+		this.drawImage(context, size, this.getCanvasPosition(context, position), this.image(), this.theta());
 	}
 
-	// A path end always connects up, out of the grid; the other connection picks the straight or the turn.
+	// The images are drawn with the outward arm up. Another edge turns them by the angle (counterclockwise) that takes
+	// up to that edge: left is a quarter turn.
+	theta() {
+		const theta = Math.atan2(this.outward.y, this.outward.x) - Math.PI / 2;
+		return theta === 0 ? undefined : theta;
+	}
+
+	// A path end always connects outward, out of the grid; the other connection picks the straight or the turn, read in
+	// the images' frame where the outward arm is up.
 	image() {
-		if (this.connects(-1)) return this.images.turnLeft;
-		if (this.connects(1)) return this.images.turnRight;
+		const other = this.otherConnection();
+		if (other.x === -1) return this.images.turnLeft;
+		if (other.x === 1) return this.images.turnRight;
 		return this.images.straight;
 	}
 
-	connects(x: number) {
-		return this.connections.some((offset) => offset.x === x && offset.y === 0);
+	// The connection that is not the outward one, turned into the images' frame (outward = up).
+	otherConnection() {
+		const other = this.connections.find((offset) => !offset.equals(this.outward));
+		if (!other) return new Cell({ x: 0, y: -1 });
+		// Undo the quarter turns that took up to outward.
+		const turns = Math.round((Math.atan2(this.outward.y, this.outward.x) - Math.PI / 2) / (Math.PI / 2));
+		let { x, y } = other;
+		for (let i = 0; i < ((turns % 4) + 4) % 4; i++) [x, y] = [y, -x];
+		return new Cell({ x: x || 0, y: y || 0 });
 	}
 
 	get position() {

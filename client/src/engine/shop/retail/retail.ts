@@ -15,14 +15,14 @@ export class Retail extends Derive(
 	THitbox(new HitBox([[new Rectangle({ width: 50, height: 25 }), new GridPosition({ x: 0, y: 0 })]])),
 ) {
 	slots: Cell[] = [
-		new Cell({ x: 2, y: 1 }),
-		new Cell({ x: 2, y: 3 }),
-		new Cell({ x: 4, y: 1 }),
-		new Cell({ x: 4, y: 3 }),
-		new Cell({ x: 6, y: 1 }),
-		new Cell({ x: 6, y: 3 }),
-		new Cell({ x: 8, y: 1 }),
-		new Cell({ x: 8, y: 3 }),
+		new Cell({ x: 1, y: 1 }),
+		new Cell({ x: 1, y: 3 }),
+		new Cell({ x: 3, y: 1 }),
+		new Cell({ x: 3, y: 3 }),
+		new Cell({ x: 5, y: 1 }),
+		new Cell({ x: 5, y: 3 }),
+		new Cell({ x: 7, y: 1 }),
+		new Cell({ x: 7, y: 3 }),
 	];
 	grid: RetailGrid;
 	retailFiller: RetailFiller;

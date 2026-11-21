@@ -103,7 +103,7 @@ export class Army {
 
 	// Door-to-castle path made by the tiles' connections. See PathNetwork.
 	get pathNetwork() {
-		return new PathNetwork(this.grid.getEnemyDoorCell(), this.castle.cell.down(), this.pathTiles);
+		return new PathNetwork(this.grid.getEnemyDoorCell(), this.grid.getCastleEntryCell(), this.pathTiles);
 	}
 
 	get path() {

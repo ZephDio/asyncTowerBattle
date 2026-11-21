@@ -41,7 +41,7 @@ export class BattleGobelinPortal extends Derive(BattleTotem) {
 
 		const path = this.hooks.getEnemyPath();
 		this.hooks.addUnits(
-			this.portal.recruit.toBattle(this.hooks.getAlliedCastle().position.clone(), path, this.hooks),
+			this.portal.recruit.toBattle(this.hooks.getAlliedCastle().spawnPosition.clone(), path, this.hooks),
 			this,
 		);
 	}

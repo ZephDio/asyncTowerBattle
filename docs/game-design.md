@@ -34,9 +34,9 @@ Each time the board grows, the player receives 2 free path tiles. Trees spawn in
 
 The two boards are joined into one battlefield: the player's board at the bottom, the opponent's board on top, rotated 180°. Each board has:
 
-- a **castle** (the thing to protect, 20 or 25 HP),
+- a **castle** (the thing to protect, 20 or 25 HP), which stands off the board as a block of 2×2 cells left of the top row (right of it on the opponent's board),
 - a **door** in its top-right corner, where the other army's units enter,
-- a **path** of tiles that the player built from the door to their castle.
+- a **path** of tiles that the player built from the door (top right cell) to the top left cell, which it leaves by its left edge into the castle. Enemy units enter the board by the right edge of the door cell and reach the castle through the door on the top left cell's left edge, while the castle's own units spawn at its other door, one cell higher, and enter the opponent's board by the left edge of its door cell; the opponent's board is the point mirror (top right cell, right edge).
 
 **The player builds the maze that the enemy walks.** A player's own units walk the *opponent's* path to the opponent's castle. This makes the path a defensive tool: a long winding path keeps enemies inside tower range longer, but every path tile also takes a cell that a building could use.
 

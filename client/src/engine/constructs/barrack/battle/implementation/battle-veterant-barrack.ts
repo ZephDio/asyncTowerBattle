@@ -43,7 +43,7 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();
-		const spawnPoint = this.hooks.getAlliedCastle().position.clone();
+		const spawnPoint = this.hooks.getAlliedCastle().spawnPosition.clone();
 		const unit = this.unitRecruit
 			? this.unitRecruit.toBattle(spawnPoint, path, this.hooks)
 			: this.hooks.getDefaultUnit().toBattle(spawnPoint, path, this.hooks);

@@ -209,6 +209,10 @@ const deserializeElement = (element: SerializedElement, faction: SerializedFacti
 export const deserializeBoard = (board: SerializedBoard): Omit<Opponent, "playerName"> => {
 	const grid = ArmyGrid.sized(board.size);
 	board.elements.forEach((element) => grid.setElement(deserializeElement(element, board.faction)));
+	// Boards stored before the castle left the grid end their path one cell lower, under the castle that stood on the top
+	// left cell. That cell now carries the last tile of the path, which leaves the board into the castle.
+	const entryCell = grid.getCastleEntryCell();
+	if (!grid.getElement(entryCell)) grid.setElement(new BasicPathTile(entryCell));
 	const army = new Army(grid, new Inventory(), factions[board.faction].defaultUnit());
 	return { army, randomSeed: board.randomSeed };
 };

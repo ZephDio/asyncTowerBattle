@@ -23,6 +23,8 @@ const HEIGHT = LABEL.height + GAP + SLOT;
 // Room kept between the panel and the grid, where the castle overhangs, and between the panel and the screen edge.
 const GRID_MARGIN = 1.8;
 const EDGE_MARGIN = 0.6;
+// How far the panel hangs below the grid's top edge, in the lower half of the left column.
+const TOP_DROP = 10;
 
 // The army's basic unit, the one the castle and the barracks without a unit spawn, shown left of the castle in the
 // shop. It can't be picked up; hovering it shows its description. The army grid widens over the rounds, so the panel
@@ -44,7 +46,7 @@ export class DefaultUnitHud extends Derive(
 		super({});
 		const right = grid.position.x - GRID_MARGIN;
 		this.scale = Math.min(1, (right - EDGE_MARGIN) / LABEL.width);
-		const top = grid.position.y + grid.height * grid.cellSize;
+		const top = grid.position.y + grid.height * grid.cellSize - TOP_DROP;
 		this.position = new ScreenPosition({
 			x: right - (LABEL.width * this.scale) / 2,
 			y: top - (HEIGHT * this.scale) / 2,

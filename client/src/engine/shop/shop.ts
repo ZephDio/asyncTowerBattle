@@ -1,3 +1,6 @@
+import { rarityOdds } from "./retail/rarity-odds";
+import { RarityOddsHud } from "../../shared/hud-element/rarity-odds-hud";
+import { ShopSignHud } from "../../shared/hud-element/shop-sign-hud";
 import { Cell, ScreenPosition } from "../../shared/position";
 import { Army } from "../army/army";
 import { Game } from "../game";
@@ -16,8 +19,6 @@ import { Holder } from "./holder/holder";
 import { EconomyHooks } from "../gold/army-gold-economy";
 import { PathPreview } from "../path/army/path-preview";
 import { PathInvalidHud } from "../../shared/hud-element/path-invalid-hud";
-import { RarityOddsHud } from "../../shared/hud-element/rarity-odds-hud";
-import { rarityOdds } from "./retail/rarity-odds";
 import { DefaultUnitHud } from "../../shared/hud-element/default-unit-hud";
 
 type ArmyHooks = {
@@ -49,6 +50,8 @@ export type ShopPhaseHooks = {
 };
 
 export class ShopPhase {
+	readonly sign = new ShopSignHud({});
+	signHovered = false;
 	public retail: Retail;
 	public holderControl = new Holder();
 	// When the refresh bell was last pressed, for its press animation
@@ -126,9 +129,10 @@ export class ShopPhase {
 			],
 			renderables: [
 				new StartBattleButton({}),
+				this.sign,
+				...(this.signHovered ? [new RarityOddsHud(rarityOdds(this.round), this.sign)] : []),
 				new RefreshBellHud(this.bellPressedAt),
 				new GoldHud(this.army.getEconomyHooks().getEconomy().amount),
-				new RarityOddsHud(rarityOdds(this.round)),
 				this.getDefaultUnitHud(),
 				...(network.complete ? [] : [new PathInvalidHud()]),
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),

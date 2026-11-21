@@ -11,15 +11,16 @@ const DOWN = "0,-1";
 const LEFT = "-1,0";
 const RIGHT = "1,0";
 
-// Square ring around (1,1) between the door (0,2) and the castle end (2,2), both entered from above.
-//   D o E      D = door (0,2), E = castle end (2,2)
+// Square ring around (1,1) between the door (2,2), entered from the right, and the castle end (0,2), left through its left
+// edge into the castle that stands off the board.
+//   E o D      E = castle end (0,2), D = door (2,2)
 //   o . o
 //   o o o
-const from = cell(0, 2);
-const to = cell(2, 2);
-const ring = () => [tile(0, 2), tile(1, 2), tile(2, 2), tile(0, 1), tile(2, 1), tile(0, 0), tile(1, 0), tile(2, 0)];
-const shortcut = ["0,2", "1,2", "2,2"];
-const bigTurn = ["0,2", "0,1", "0,0", "1,0", "2,0", "2,1", "2,2"];
+const from = cell(2, 2);
+const to = cell(0, 2);
+const ring = () => [tile(2, 2), tile(1, 2), tile(0, 2), tile(2, 1), tile(0, 1), tile(2, 0), tile(1, 0), tile(0, 0)];
+const shortcut = ["2,2", "1,2", "0,2"];
+const bigTurn = ["2,2", "2,1", "2,0", "1,0", "0,0", "0,1", "0,2"];
 
 describe("PathNetwork shapes", () => {
 	it("gives every tile a direction, on the path or not", () => {
@@ -37,8 +38,8 @@ describe("PathNetwork shapes", () => {
 
 	it("follows a junction's chosen connection", () => {
 		const tiles = ring();
-		tiles[0]!.connectionChoice = [cell(0, 1), cell(0, -1)]; // door: up and down, the big turn
-		tiles[2]!.connectionChoice = [cell(0, 1), cell(0, -1)]; // castle end: down and up
+		tiles[0]!.connectionChoice = [cell(1, 0), cell(0, -1)]; // door: right and down, the big turn
+		tiles[2]!.connectionChoice = [cell(-1, 0), cell(0, -1)]; // castle end: left, into the castle, and down
 		const network = new PathNetwork(from, to, tiles);
 		expect(route(network)).toEqual(bigTurn);
 		expect(network.complete).toBe(true);
@@ -46,10 +47,10 @@ describe("PathNetwork shapes", () => {
 
 	it("stops where tiles do not point at each other", () => {
 		const tiles = ring();
-		tiles[0]!.connectionChoice = [cell(0, 1), cell(0, -1)]; // door goes down, castle end still faces the shortcut
+		tiles[0]!.connectionChoice = [cell(1, 0), cell(0, -1)]; // door goes down, castle end still faces the shortcut
 		const network = new PathNetwork(from, to, tiles);
 		expect(network.complete).toBe(false);
-		expect(route(network)).toEqual(["0,2", "0,1", "0,0", "1,0", "2,0", "2,1"]);
+		expect(route(network)).toEqual(["2,2", "2,1", "2,0", "1,0", "0,0", "0,1"]);
 	});
 });
 
@@ -67,15 +68,15 @@ describe("PathNetwork right-click", () => {
 			tiles[0]!.connectionChoice = network.nextChoiceAt(from)!.choice;
 		}
 		expect(seen).toEqual(
-			new Set([[UP, RIGHT].sort().join(" "), [UP, DOWN].sort().join(" "), [DOWN, RIGHT].sort().join(" ")]),
+			new Set([[RIGHT, LEFT].sort().join(" "), [RIGHT, DOWN].sort().join(" "), [DOWN, LEFT].sort().join(" ")]),
 		);
 	});
 
 	it("turns a neighboring junction towards a tile it does not connect", () => {
-		// Default is the shortcut, so the door does not connect (0,1). Clicking (0,1) turns the door down, keeping its entry.
-		const change = new PathNetwork(from, to, ring()).nextChoiceAt(cell(0, 1));
+		// Default is the shortcut, so the door does not connect (2,1). Clicking (2,1) turns the door down, keeping its entry.
+		const change = new PathNetwork(from, to, ring()).nextChoiceAt(cell(2, 1));
 		expect(change?.cell).toEqual(from);
-		expect(offsets(change!.choice)).toEqual([UP, DOWN].sort());
+		expect(offsets(change!.choice)).toEqual([RIGHT, DOWN].sort());
 	});
 
 	it("does nothing on a tile already connected to its neighboring junctions", () => {

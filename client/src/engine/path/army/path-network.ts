@@ -6,8 +6,10 @@ export type PathNetworkTile = { cell: Cell; connectionChoice: Cell[] | null };
 // Every path tile always connects two directions (unit offsets), derived from its neighboring tiles:
 // - no neighbor: vertical straight, one neighbor: straight through it, two neighbors: connects both;
 // - three or four neighbors (a junction): its `connectionChoice`, or by default the shortest door-to-castle route.
-// The door tile and the castle-end tile also count an outside neighbor above them (the enemy half, the castle).
-// The path starts at the door and follows tiles that point at each other; it is complete when it leads up into the castle.
+// The door tile counts an outside neighbor on its right (where the enemy units come in, from their castle standing
+// off the board) and the castle-end tile one on its left (our castle, which stands off the board beside it).
+// The path starts at the door and follows tiles that point at each other; it is complete when it leads left, out of the
+// castle-end tile, into the castle.
 export class PathNetwork {
 	private byCell: Map<string, PathNetworkTile>;
 	private neighbors = new Map<string, Cell[]>();
@@ -69,13 +71,15 @@ export class PathNetwork {
 		const index = this.route.findIndex((routeCell) => routeCell.equals(cell));
 		if (index === -1) return undefined;
 		const previous = this.route[index - 1];
-		return previous ? offsetBetween(cell, previous) : UP;
+		return previous ? offsetBetween(cell, previous) : RIGHT;
 	}
 
 	private findNeighbors(cell: Cell) {
 		const offsets = [UP, DOWN, LEFT, RIGHT].filter((offset) => this.byCell.has(cellKey(cell.add(offset))));
-		const outside = cell.equals(this.from) || cell.equals(this.to);
-		return outside && !offsets.some((offset) => offset.equals(UP)) ? [UP, ...offsets] : offsets;
+		const outside = [...(cell.equals(this.from) ? [RIGHT] : []), ...(cell.equals(this.to) ? [LEFT] : [])].filter(
+			(outer) => !offsets.some((offset) => offset.equals(outer)),
+		);
+		return [...outside, ...offsets];
 	}
 
 	private findConnections(tile: PathNetworkTile) {
@@ -100,12 +104,12 @@ export class PathNetwork {
 		const index = route.findIndex((routeCell) => routeCell.equals(cell));
 		const previous = route[index - 1];
 		const next = route[index + 1];
-		return [previous ? offsetBetween(cell, previous) : UP, next ? offsetBetween(cell, next) : UP];
+		return [previous ? offsetBetween(cell, previous) : RIGHT, next ? offsetBetween(cell, next) : LEFT];
 	}
 
 	private walk() {
 		let cell = this.from;
-		let entry = UP;
+		let entry = RIGHT;
 		const visited = new Set<string>();
 		while (this.byCell.has(cellKey(cell)) && !visited.has(cellKey(cell))) {
 			const connections = this.connectionsAt(cell);
@@ -113,7 +117,7 @@ export class PathNetwork {
 			visited.add(cellKey(cell));
 			this.route.push(cell);
 			const exit = connections.find((connection) => !connection.equals(entry)) ?? entry;
-			if (cell.equals(this.to) && exit.equals(UP)) {
+			if (cell.equals(this.to) && exit.equals(LEFT)) {
 				this.complete = true;
 				return;
 			}

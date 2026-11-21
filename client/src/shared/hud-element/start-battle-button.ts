@@ -3,7 +3,6 @@ import { HitBox } from "../hitbox/hitboxe";
 import { Rectangle } from "../hitbox/shapes/rectangle";
 import { TCollider } from "../traits/engine/core/TCollider";
 import { TDrawable } from "../traits/render/drawable";
-import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { ScreenPosition } from "../position";
 import { TRenderable } from "../traits/render/renderable";
 import { THitbox } from "../traits/engine/core/THitbox";
@@ -11,7 +10,7 @@ import { HudElementResources } from "../../renderer/resources/hud-element.resour
 
 export class StartBattleButton extends Derive(
 	TCollider,
-	THitbox(new HitBox([[new Rectangle({ width: 10, height: 4.3 }), new ScreenPosition({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Rectangle({ width: 12, height: 5.15 }), new ScreenPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TRenderable,
 ) {
@@ -24,7 +23,8 @@ export class StartBattleButton extends Derive(
 		this.drawImage(context, size, canvasPosition, image);
 	}
 	public type = "startBattle";
-	public position = PercentToReal({ x: 67, y: 91 });
+	// Upper left, right of the shop panel
+	public position = new ScreenPosition({ x: 61.8, y: 57 });
 
-	size = { width: 10, height: 4.3 };
+	size = { width: 12, height: 5.15 };
 }

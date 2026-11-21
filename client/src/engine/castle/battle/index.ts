@@ -17,6 +17,10 @@ export const TBattleCastle = Subtrait(
 	(base) => {
 		abstract class TBattleCastle extends base {
 			abstract override position: GridPosition;
+			// Where the enemy units strike: this castle's door on the board.
+			abstract doorPosition: GridPosition;
+			// Where the units of this castle's army spawn and enter the opponent's board, above (or, mirrored, below) the door.
+			abstract spawnPosition: GridPosition;
 			abstract produceFood(): void;
 			public hooks: BattleArmyHooks;
 			initHooks(hooks: BattleArmyHooks) {
@@ -46,7 +50,7 @@ export const TBattleCastle = Subtrait(
 
 			onCastResolve() {
 				this.hooks.addUnits(
-					this.hooks.getDefaultUnit().toBattle(this.position.clone(), this.hooks.getEnemyPath(), this.hooks),
+					this.hooks.getDefaultUnit().toBattle(this.spawnPosition.clone(), this.hooks.getEnemyPath(), this.hooks),
 					this,
 				);
 				this.finishCast(true);

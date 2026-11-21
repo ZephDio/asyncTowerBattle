@@ -5,6 +5,7 @@ import { FoodHooks } from "../../../food/battle-food-economy";
 import { BattleElfCastle } from "../../battle/battle-elf-castle";
 import { BattleGrid } from "../../../grid/battle-grid";
 import { Castle } from "../castle-recruit";
+import { castleGeometry } from "../../castle-geometry";
 import { BoardOrientation } from "../../../../shared/traits/engine/core/board-orientation";
 
 export class ElfCastle extends Derive(Castle) {
@@ -23,14 +24,31 @@ export class ElfCastle extends Derive(Castle) {
 	}
 
 	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
-		const position = grid.cellToGrid(this.cell);
-		return new BattleElfCastle(this, onDeath, this.cell.clone(), position, BoardOrientation.Normal, foodHooks);
+		const { position, doorPosition, spawnPosition } = castleGeometry(this.cell, BoardOrientation.Normal, grid.width);
+		return new BattleElfCastle(
+			this,
+			onDeath,
+			this.cell.clone(),
+			position,
+			doorPosition,
+			spawnPosition,
+			BoardOrientation.Normal,
+			foodHooks,
+		);
 	}
 
 	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const position = grid.cellToGrid(cell);
-		const BC = new BattleElfCastle(this, onDeath, cell, position, BoardOrientation.Mirrored, foodHooks);
-		return BC;
+		const { position, doorPosition, spawnPosition } = castleGeometry(cell, BoardOrientation.Mirrored, grid.width);
+		return new BattleElfCastle(
+			this,
+			onDeath,
+			cell,
+			position,
+			doorPosition,
+			spawnPosition,
+			BoardOrientation.Mirrored,
+			foodHooks,
+		);
 	}
 }

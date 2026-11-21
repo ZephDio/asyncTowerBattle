@@ -1,5 +1,5 @@
 import { Derive } from "@ddd-ts/traits";
-import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
+import type { ShopSignHud } from "./shop-sign-hud";
 import { RarityOdds } from "../../engine/shop/retail/rarity-odds";
 import { ScreenPosition } from "../position";
 import { Rarity } from "../traits/engine/rarity";
@@ -21,16 +21,20 @@ const PANEL_RIM = "#c8955a";
 const TEXT = "#fff4dc";
 
 // The shop's chance, in percent, to offer each rarity this round: a badge per rarity on a rounded wooden panel,
-// between the gold and the refresh bell. A rarity the shop can't offer yet is dimmed.
+// beside the hovered shop sign. A rarity the shop can't offer yet is dimmed.
 export class RarityOddsHud extends Derive(TDrawable, TRenderable) {
 	drawPriority = DrawPriority.HUD;
-	position = PercentToReal({ x: 19.5, y: 96 });
-	size = { width: 17, height: 4 };
+	position: ScreenPosition;
+	size = { width: 19, height: 7 };
 	badgeSize = 2.7;
 	badgeSpacing = 3.1;
 
-	constructor(public odds: RarityOdds) {
+	constructor(public odds: RarityOdds, sign: ShopSignHud) {
 		super({});
+		this.position = new ScreenPosition({
+			x: sign.position.x + sign.size.width / 2 + 1.6 + this.size.width / 2,
+			y: sign.position.y - 0.5,
+		});
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
@@ -65,9 +69,13 @@ export class RarityOddsHud extends Derive(TDrawable, TRenderable) {
 
 		const rarities = Object.values(Rarity);
 		const radius = (this.badgeSize * unit) / 2;
-		context.font = `${unit * 1.5}px text`;
 		context.textAlign = "center";
 		context.textBaseline = "middle";
+		context.font = `${unit * 1.8}px title`;
+		context.fillStyle = TEXT;
+		context.fillText("Probability (%)", center.x, center.y - unit * 1.4);
+		context.font = `${unit * 1.5}px text`;
+		const badgeY = center.y + unit * 1.1;
 		rarities.forEach((rarity, index) => {
 			const x = center.x + (index - (rarities.length - 1) / 2) * this.badgeSpacing * unit;
 			const odds = this.odds[rarity];
@@ -75,21 +83,21 @@ export class RarityOddsHud extends Derive(TDrawable, TRenderable) {
 			context.globalAlpha = odds > 0 ? 1 : 0.4;
 
 			context.beginPath();
-			context.arc(x, center.y, radius, 0, 2 * Math.PI);
+			context.arc(x, badgeY, radius, 0, 2 * Math.PI);
 			context.fillStyle = colors.fill;
 			context.fill();
 			context.lineWidth = unit * 0.45;
 			context.strokeStyle = OUTLINE;
 			context.stroke();
 			context.beginPath();
-			context.arc(x, center.y, radius - unit * 0.2, 0, 2 * Math.PI);
+			context.arc(x, badgeY, radius - unit * 0.2, 0, 2 * Math.PI);
 			context.lineWidth = unit * 0.3;
 			context.strokeStyle = colors.border;
 			context.stroke();
 
 			// The font's "middle" baseline sits a bit above the digits' visual center, so nudge them down.
 			const text = Math.round(odds).toString();
-			const textY = center.y + unit * 0.15;
+			const textY = badgeY + unit * 0.15;
 			context.lineWidth = unit * 0.3;
 			context.strokeStyle = OUTLINE;
 			context.strokeText(text, x, textY);
