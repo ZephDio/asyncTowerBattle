@@ -11,14 +11,14 @@ import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
-import { Rock } from "../../../../environment/rock";
 import { Mine } from "../../recruit/implementation/mine";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { MountainTag } from "../../../../../shared/traits/engine/tags/biome/biome-tags";
+import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
 
 export class MineBlueprint extends Derive(
-	TRarity(Rarity.Legendary),
+	TRarity(Rarity.Common),
 	TShopBlueprint(15, 10),
 	THitbox(
 		new HitBox([
@@ -31,18 +31,21 @@ export class MineBlueprint extends Derive(
 	TotemTag,
 	MountainTag,
 ) {
+	// Gold given every time the shop is entered.
+	readonly shopGold = 5;
+	// Unit vitality army-buff stacks (💖) given at the start of battle when the star holds a Mountain.
+	readonly vitalityStacks = 1;
+
 	description = new Description("Gold Mine", [
-		"Shop entered : gain 5 🪙",
-		"if ▣ is a rock",
+		`Shop entered : gain ${this.shopGold} 🪙`,
 		"",
-		"Shop entered : for each",
-		"10🪙 you have, gain 1🪙",
+		"Battle start : if ▣ is",
+		`a Mountain, gain ${this.vitalityStacks} 💖`,
 	]);
 
 	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
 		if (!gridElement) return false;
-		if (gridElement instanceof Rock) return true;
-		return false;
+		return hasTag(gridElement, "Mountain");
 	};
 	override patternEffect: PatternEffect = new PatternEffect(
 		[new Cell({ x: 1, y: 0 })],

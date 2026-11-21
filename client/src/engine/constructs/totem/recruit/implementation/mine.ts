@@ -8,9 +8,10 @@ import { BattleMine } from "../../battle/implementation/battle-mine";
 import { ShopEnterTrigger } from "../../../../../shared/traits/engine/shop-enter";
 import { ArmyHooks } from "../../../../army/army";
 import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
+import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
-export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy) {
+export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy, RecruitBattleStart) {
 	constructor(
 		public cell: Cell,
 		public blueprint: MineBlueprint = new MineBlueprint({}),
@@ -31,21 +32,7 @@ export class Mine extends Derive(Totem, ShopEnterTrigger, HTSynergy) {
 	}
 
 	onShopEnter(hooks: ArmyHooks): void {
-		this.produceOnRock(hooks);
-		this.mineProfit(hooks);
-	}
-
-	produceOnRock(hooks: ArmyHooks): void {
-		const relativeCells = this.getRelativeSynergyCell(this.orientation);
-		const neighbors = hooks.getRelativeNeighborsInGrid(this.cell, relativeCells);
-		const neighbor = neighbors[0];
-		if (!this.patternEffect.patternCondition(neighbor)) return;
-		hooks.economyHooks.addGold(5);
-	}
-
-	mineProfit(hooks: ArmyHooks) {
-		const golds = hooks.economyHooks.getEconomy().amount;
-		hooks.economyHooks.addGold(Math.floor(golds / 10));
+		hooks.economyHooks.addGold(this.blueprint.shopGold);
 	}
 
 	toEnemy(grid: BattleGrid, hooks: BattleArmyHooks) {

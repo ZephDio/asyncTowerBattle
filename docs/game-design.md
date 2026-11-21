@@ -28,7 +28,7 @@ Between rounds the board **grows** and nature **spawns** on it:
 | 7 | 11 × 7 | 1 | 0 |
 | 8+ | 13 × 8 | 0 (2 trees at round 8) | |
 
-Each time the board grows, the player receives 2 free path tiles. Trees spawn in clusters. Rocks spawn apart from other nature. Rocks and trees (forests) take up cells and some pieces care about them (the Gold Mine and the Drill Tower want a rock next to them).
+Each time the board grows, the player receives 2 free path tiles. Trees spawn in clusters. Rocks spawn apart from other nature. Rocks and trees (forests) take up cells and some pieces care about them (the Gold Mine wants a Mountain next to it, the Drill Tower a rock).
 
 ## The battlefield
 
@@ -52,7 +52,7 @@ How a battle plays out:
 
 ### Gold (between battles)
 
-Gold buys pieces and refreshes the shop (5 gold). Most pieces cost 10 or 15 gold, the White Stag 20. Unspent gold carries over, and some pieces reward hoarding (the Gold Mine pays interest, the Dragon gains health per 5 gold owned).
+Gold buys pieces and refreshes the shop (5 gold). Most pieces cost 10 or 15 gold, the White Stag 20. Unspent gold carries over, and some pieces reward hoarding (the Dragon gains health per 5 gold owned).
 
 ### Food (during battles)
 
@@ -168,7 +168,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Brewery | Epic | 15 | Every 5 s: +0.5 food per allied unit (max 8). Hitting the max gives units speed. Start of battle: units gain speed per barrack on its stars. | 4 cells around and below |
 | Gobelin Portal | Epic | 10 | When a caster on a star triggers: 30% chance to summon a Gobelin. | the 4 diagonals |
 | Forging Anvil | Legendary | 10 | Damage towers on its stars deal +30% damage. | left and right |
-| Gold Mine | Legendary | 15 | Shop entered: +5 gold if a rock is on its star, plus 1 gold per 10 gold owned (interest). | right |
+| Gold Mine | Common | 15 | Shop entered: +5 gold. Start of battle: +1 vitality army buff stack (💖) if a Mountain (a Rock or another Gold Mine) is on its star. Each mine stacks. | right |
 | Red Obelisk | Legendary | 10 | Every 5 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
 
 ### Path tiles and traps
@@ -195,7 +195,7 @@ The design intent is that each run leans on one to three of these axes, so board
 - **Fury**: trigger fury early (Red Obelisk) so late units are much bigger.
 - **Anti-scaling** (planned): remove or reduce the opponent's army buffs.
 - **Tag synergies**: totems that reward a species, biome or alignment.
-- **Gold greed**: hold gold for interest (Gold Mine) or power (Dragon) at the cost of a weaker board now.
+- **Gold greed**: hold gold for power (Dragon) at the cost of a weaker board now.
 
 ## Current state and open design questions
 
