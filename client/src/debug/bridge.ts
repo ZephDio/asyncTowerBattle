@@ -210,8 +210,9 @@ export class DebugBridge {
 	state() {
 		const phase = this.phase();
 		const game = this.game;
-		if (!game) return { phase, faction: this.wrap.mainMenu.classesSelectorHud.selectedClass };
-		const base = { phase, round: game.rounds.round, life: game.life };
+		const tutorial = this.wrap.tutorial !== null;
+		if (!game) return { phase, tutorial, faction: this.wrap.mainMenu.classesSelectorHud.selectedClass };
+		const base = { phase, tutorial, round: game.rounds.round, life: game.life };
 		if (phase === "shop" && game.shop) {
 			const shop = game.shop;
 			const army = game.army;
@@ -375,6 +376,13 @@ export class DebugBridge {
 		if (amount > current) hooks.addGold(amount - current);
 		if (amount < current) hooks.spendGold(current - amount);
 		return hooks.getEconomy().amount;
+	}
+
+	// Opens or closes the tutorial panel, as hovering the page's "?" button does.
+	tutorial(open = true) {
+		if (open) this.wrap.openTutorial();
+		else this.wrap.closeTutorial();
+		return this.wrap.tutorial !== null;
 	}
 
 	setLife(life: number) {

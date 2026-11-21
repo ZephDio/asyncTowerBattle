@@ -417,6 +417,12 @@ async def set_life(life: int) -> str:
     return dump(await session.call("setLife", life))
 
 
+@mcp.tool()
+async def tutorial(open: bool = True) -> str:
+    """Open or close the tutorial panel, as hovering the page's "?" button does. Returns whether it is open."""
+    return dump(await session.call("tutorial", open))
+
+
 # --- Battle time -----------------------------------------------------------------------------------------------------
 
 
