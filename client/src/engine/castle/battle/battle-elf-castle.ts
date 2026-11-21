@@ -4,8 +4,10 @@ import { FoodHooks } from "../../food/battle-food-economy";
 import { ElfCastle } from "../recruit/implem/elf-castle";
 import { TBattleCastle } from ".";
 import { BoardOrientation } from "../../../shared/traits/engine/core/board-orientation";
+import { TImageVariant } from "../../../shared/traits/render/image-variant";
+import { CastleResources } from "../../../renderer/resources/castle.resources";
 
-export class BattleElfCastle extends Derive(TBattleCastle) {
+export class BattleElfCastle extends Derive(TBattleCastle, TImageVariant) {
 	constructor(
 		recruit: ElfCastle,
 		public onDeath: () => void,
@@ -35,6 +37,13 @@ export class BattleElfCastle extends Derive(TBattleCastle) {
 		});
 		this.gridShape = recruit.gridShape;
 		this.orientation = orientation;
+	}
+
+	// The opponent's castle has its own image, drawn upright: its doors are on the other rows, and turning the left
+	// castle by π would also turn its light to the right.
+	getImageVariant() {
+		if (this.orientation !== BoardOrientation.Mirrored) return null;
+		return { image: CastleResources.elfBoardRight.image, theta: 0 };
 	}
 
 	produceFood() {

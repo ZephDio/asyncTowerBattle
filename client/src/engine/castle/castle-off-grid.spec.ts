@@ -25,8 +25,8 @@ describe("the castle off the grid", () => {
 
 		expect(army.grid.getElements()).not.toContain(army.castle);
 		expect(army.castle.cell.equals(new Cell({ x: 0, y: H - 1 }))).toBe(true);
-		// The castle is a block of 2x2 cells left of the top row, centred on the row's top edge, and drawn with the grid.
-		expect(army.castle.position).toEqual(at(-S, H * S));
+		// The castle is a sprite overhanging the top row, centred on the row's top edge, and drawn with the grid.
+		expect(army.castle.position).toEqual(at(-S, (H + 0.7) * S));
 		expect(army.grid.getDrawables()).toContain(army.castle);
 	});
 
@@ -67,10 +67,10 @@ describe("the castle off the grid", () => {
 
 	it("is hovered through the block beside the top row, not through the cells", () => {
 		const { grid } = ArmyFactory.default(Faction.Elf);
-		expect(grid.isOverCastle(grid.gridToScreenPosition(at(-S, H * S)))).toBe(true);
-		expect(grid.isOverCastle(grid.gridToScreenPosition(at(-S, (H - 1.5) * S)))).toBe(false);
-		expect(grid.isOverCastle(grid.gridToScreenPosition(at(S / 2, (H - 0.5) * S)))).toBe(false);
-		expect(grid.isOverCastle(grid.gridToScreenPosition(at(-3 * S, H * S)))).toBe(false);
+		expect(grid.isOverCastle(grid.gridToScreenPosition(at(-S, (H + 0.7) * S)))).toBe(true);
+		expect(grid.isOverCastle(grid.gridToScreenPosition(at(-S, (H - 2) * S)))).toBe(false);
+		expect(grid.isOverCastle(grid.gridToScreenPosition(at(S / 4, (H - 0.5) * S)))).toBe(false);
+		expect(grid.isOverCastle(grid.gridToScreenPosition(at(-3.1 * S, H * S)))).toBe(false);
 	});
 });
 
@@ -80,7 +80,8 @@ describe("the castle geometry", () => {
 		const enemy = castleGeometry(new Cell({ x: W - 1, y: H }), BoardOrientation.Mirrored, W);
 		const reflect = (point: GridPosition) => at(W * S - point.x, 2 * H * S - point.y);
 
-		expect(close(reflect(allied.position), enemy.position)).toBe(true);
+		// The artwork is upright and lifted on both sides; only the doors mirror vertically.
+		expect(enemy.position).toEqual(at(W * S - allied.position.x, allied.position.y));
 		expect(close(reflect(allied.doorPosition), enemy.doorPosition)).toBe(true);
 		expect(close(reflect(allied.spawnPosition), enemy.spawnPosition)).toBe(true);
 	});
@@ -115,10 +116,10 @@ describe("the travel of the units", () => {
 		expect(field.grid.castles).toEqual([allied, enemy]);
 		expect([...field.grid.tiles.values()]).not.toContain(allied);
 		expect([...field.grid.tiles.values()]).not.toContain(enemy);
-		expect(allied.position).toEqual(at(-S, H * S));
+		expect(allied.position).toEqual(at(-S, (H + 0.7) * S));
 		expect(allied.doorPosition).toEqual(at(0, (H - 0.5) * S));
 		expect(allied.spawnPosition).toEqual(at(0, (H + 0.5) * S));
-		expect(enemy.position).toEqual(at((W + 1) * S, H * S));
+		expect(enemy.position).toEqual(at((W + 1.125) * S, (H + 0.74) * S));
 		expect(enemy.doorPosition).toEqual(at(W * S, (H + 0.5) * S));
 		expect(enemy.spawnPosition).toEqual(at(W * S, (H - 0.5) * S));
 		expect(enemy.orientation).toBe(BoardOrientation.Mirrored);

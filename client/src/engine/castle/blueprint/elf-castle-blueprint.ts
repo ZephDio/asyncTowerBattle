@@ -12,7 +12,7 @@ import { CastleTag } from "../../../shared/traits/engine/tags/building/building-
 
 export class ElfCastleBlueprint extends Derive(
 	TRarity(Rarity.Common),
-	TImageDrawable(CastleResources.elf.image, CastleResources.elf.size, DrawPriority.NormalGridElement),
+	TImageDrawable(CastleResources.elfBoardLeft.image, CastleResources.elfBoardLeft.size, DrawPriority.NormalGridElement),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TBaseStats({

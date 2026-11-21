@@ -1,3 +1,4 @@
+import { CASTLE_PORTRAIT_HEIGHT } from "./castle-portrait";
 import { ScreenPosition } from "../../../shared/position";
 import { THitbox } from "../../../shared/traits/engine/core/THitbox";
 import { TCollider } from "../../../shared/traits/engine/core/TCollider";
@@ -22,7 +23,7 @@ export class SelectDwarfButton extends Derive(
 	}
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
 		const castlePosition = position.add(new ScreenPosition({ x: 0, y: -1 }));
-		this.castle.draw(context, castlePosition, scale * 1.4);
+		this.castle.draw(context, castlePosition, scale * (CASTLE_PORTRAIT_HEIGHT / this.castle.drawable.size.height));
 		const unitPosition = position.add(new ScreenPosition({ x: 0, y: 3 }));
 		this.defaultUnit.draw(context, unitPosition, scale * 1.4);
 	}

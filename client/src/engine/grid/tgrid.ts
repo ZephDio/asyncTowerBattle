@@ -9,7 +9,8 @@ import { TRecruit } from "../../shared/traits/engine/recruit";
 import { Castle } from "../castle/recruit/castle-recruit";
 import { TTrapHolder } from "../../shared/traits/engine/trap-holder";
 
-export const STANDARD_CELL_SIZE = 4.9;
+import { STANDARD_CELL_SIZE } from "./grid-scale";
+export { STANDARD_CELL_SIZE } from "./grid-scale";
 
 export const TGrid = Trait((base) => {
 	abstract class IGrid extends base {

@@ -2,7 +2,6 @@ import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Cell, ScreenPosition } from "../../shared/position";
 import { TGridDrawable } from "../../shared/traits/render/grid-renderable";
 import { STANDARD_CELL_SIZE, TGrid } from "./tgrid";
-import { CASTLE_BLOCK_CELLS } from "../castle/castle-geometry";
 import { GridSize, armyGridSize, fitCellSize } from "./grid-sizes";
 import { SynergyEffectHud, TARGET_ICONS } from "./grid-effects/synergy-effect";
 import { HoverEffect } from "./grid-effects/hover-effect";
@@ -181,12 +180,14 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		}
 	}
 
-	// Whether a screen position is over the castle's 2x2 block, off the board left of the top row.
+	// Only the off-board part captures hover: overhanging artwork is not a grid element.
 	isOverCastle(position: ScreenPosition) {
 		const { x, y } = this.screenToGridPosition(position);
-		const size = CASTLE_BLOCK_CELLS * STANDARD_CELL_SIZE;
-		const bottom = this.getCastleCell().y * STANDARD_CELL_SIZE;
-		return x >= -size && x < 0 && y >= bottom && y < bottom + size;
+		if (!this.castle) return false;
+		const { width, height } = this.castle.layout;
+		const halfUnit = STANDARD_CELL_SIZE / 2;
+		const center = this.castle?.position;
+		return !!center && x >= center.x - width * halfUnit && x < 0 && Math.abs(y - center.y) < height * halfUnit;
 	}
 
 	getCastleCell() {

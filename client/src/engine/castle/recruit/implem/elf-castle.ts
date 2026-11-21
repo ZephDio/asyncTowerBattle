@@ -1,3 +1,4 @@
+import { ELF_CASTLE_LAYOUT } from "../../../grid/grid-scale";
 import { Derive } from "@ddd-ts/traits";
 import { ElfCastleBlueprint } from "../../blueprint/elf-castle-blueprint";
 import { Cell } from "../../../../shared/position";
@@ -9,6 +10,8 @@ import { castleGeometry } from "../../castle-geometry";
 import { BoardOrientation } from "../../../../shared/traits/engine/core/board-orientation";
 
 export class ElfCastle extends Derive(Castle) {
+	override layout = ELF_CASTLE_LAYOUT;
+
 	constructor(
 		castle: ElfCastleBlueprint,
 		public cell: Cell,
@@ -24,7 +27,7 @@ export class ElfCastle extends Derive(Castle) {
 	}
 
 	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
-		const { position, doorPosition, spawnPosition } = castleGeometry(this.cell, BoardOrientation.Normal, grid.width);
+		const { position, doorPosition, spawnPosition } = castleGeometry(this.cell, BoardOrientation.Normal, grid.width, this.layout);
 		return new BattleElfCastle(
 			this,
 			onDeath,
@@ -39,7 +42,7 @@ export class ElfCastle extends Derive(Castle) {
 
 	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const { position, doorPosition, spawnPosition } = castleGeometry(cell, BoardOrientation.Mirrored, grid.width);
+		const { position, doorPosition, spawnPosition } = castleGeometry(cell, BoardOrientation.Mirrored, grid.width, this.layout);
 		return new BattleElfCastle(
 			this,
 			onDeath,

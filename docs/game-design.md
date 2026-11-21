@@ -34,7 +34,7 @@ Each time the board grows, the player receives 2 free path tiles. Trees spawn in
 
 The two boards are joined into one battlefield: the player's board at the bottom, the opponent's board on top, rotated 180°. Each board has:
 
-- a **castle** (the thing to protect, 20 or 25 HP), which stands off the board as a block of 2×2 cells left of the top row (right of it on the opponent's board),
+- a **castle** (the thing to protect, 20 or 25 HP), which stands off the board with a 3-cell-tall sprite overhanging the path by a quarter cell (Dwarf) or half cell (Elf) left of the top row (right of it on the opponent's board),
 - a **door** in its top-right corner, where the other army's units enter,
 - a **path** of tiles that the player built from the door (top right cell) to the top left cell, which it leaves by its left edge into the castle. Enemy units enter the board by the right edge of the door cell and reach the castle through the door on the top left cell's left edge, while the castle's own units spawn at its other door, one cell higher, and enter the opponent's board by the left edge of its door cell; the opponent's board is the point mirror (top right cell, right edge).
 
