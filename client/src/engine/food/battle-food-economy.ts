@@ -4,6 +4,7 @@ export type FoodHooks = {
 	getFood: () => number;
 	addFood: (amount: number) => void;
 	consumeFood: (amount: number) => boolean;
+	hasHitFamine: () => boolean;
 	removeFood: (amount: number) => void;
 	addMaxFood: (amount: number) => void;
 };
@@ -15,6 +16,8 @@ export class BattleFoodEconomy {
 	public food: number = 0;
 	// The battle clock at which the current famine alert ends (none while the clock is past it).
 	private famineEnd = -Infinity;
+	// True from the first famine to the end of the battle, even once the alert is over (the Bakery Wryy reads it).
+	private famineHit = false;
 
 	constructor(
 		public maxFood: number,
@@ -47,10 +50,15 @@ export class BattleFoodEconomy {
 		}
 		if (this.food < amount) {
 			this.famineEnd = this.getTimer().clock + FAMINE_DURATION;
+			this.famineHit = true;
 			return false;
 		}
 		this.food -= amount;
 		return true;
+	}
+
+	hasHitFamine() {
+		return this.famineHit;
 	}
 
 	addMaxFood(amount: number) {
@@ -68,6 +76,7 @@ export class BattleFoodEconomy {
 			getFood: this.getFood.bind(this),
 			addFood: this.addFood.bind(this),
 			consumeFood: this.consumeFood.bind(this),
+			hasHitFamine: this.hasHitFamine.bind(this),
 			removeFood: this.removeFood.bind(this),
 			addMaxFood: this.addMaxFood.bind(this),
 		};
