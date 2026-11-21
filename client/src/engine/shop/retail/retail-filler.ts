@@ -20,6 +20,7 @@ import { TRecruit } from "../../../shared/traits/engine/recruit";
 import { ZappingTowerBlueprint } from "../../constructs/tower/blueprint/implementation/zapping-tower-blueprint";
 import { FrostTowerBlueprint } from "../../constructs/tower/blueprint/implementation/frost-tower-blueprint";
 import { DrillTowerBlueprint } from "../../constructs/tower/blueprint/implementation/drill-tower-blueprint";
+import { LighthouseBlueprint } from "../../constructs/tower/blueprint/implementation/lighthouse-blueprint";
 import { ChoupissonBlueprint } from "../../units/blueprint/implementation/choupisson-blueprint";
 import { VeterantBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/veteran-barrack-blueprint";
 import { RushBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/rush-barrack-blueprint";
@@ -75,6 +76,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			WindmillTurretBlueprint,
 			FrostTowerBlueprint,
 			DrillTowerBlueprint,
+			LighthouseBlueprint,
 		],
 		share: 100,
 	},
