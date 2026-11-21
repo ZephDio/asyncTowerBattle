@@ -71,8 +71,10 @@ export class Holder {
 		if (implementsTrait(recruit, Castle)) return;
 		if (implementsTrait(recruit, Barrack)) {
 			if (recruit.unitRecruit) {
-				const barrackPosition = grid.cellToGrid(recruit.cell);
-				const unitPosition = new GridPosition({ x: barrackPosition.x, y: grid.cellToGrid(recruit.cell).y + 1.8 });
+				// The unit is drawn 1.8 above the barrack's position (the shape's center for multi-cell barracks).
+				const barrackPosition =
+					recruit.position instanceof GridPosition ? recruit.position : grid.cellToGrid(recruit.cell);
+				const unitPosition = new GridPosition({ x: barrackPosition.x, y: barrackPosition.y + 1.8 });
 				const screenPosition = grid.screenToGridPosition(position);
 				const isClickingOnUnit = Physic.doCollide(unitPosition, recruit.unitRecruit.hitbox, screenPosition);
 				if (isClickingOnUnit) {
