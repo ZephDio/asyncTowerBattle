@@ -67,10 +67,10 @@ export class TowerResources {
 		shape: "rectangle",
 	};
 
-	// A vertical 1x2 piece, one cell wide and two tall. Pink placeholder until the art (initiative lighthouse-art) lands.
+	// A vertical 1x2 piece, one cell wide and two tall. The 90x162 sprite keeps its aspect ratio.
 	static magicLighthouse: ShapedResource = {
-		size: { width: 4.9, height: 9.8 },
-		image: createImage("/resources/towers/lighthouse.png"),
+		size: { width: 4.9, height: (4.9 * 162) / 90 },
+		image: createImage("/resources/towers/magic-lighthouse.png"),
 		shape: "rectangle",
 	};
 
