@@ -12,6 +12,8 @@ import { FrostTower } from "./implementation/frost-tower";
 import { BlacksmithTowerBlueprint } from "../blueprint/implementation/blacksmith-tower-blueprint";
 import { DrillTowerBlueprint } from "../blueprint/implementation/drill-tower-blueprint";
 import { DrillTower } from "./implementation/drill-tower";
+import { MagicLighthouseBlueprint } from "../blueprint/implementation/magic-lighthouse-blueprint";
+import { MagicLighthouse } from "./implementation/magic-lighthouse";
 
 export class TowerBuilder {
 	cell: Cell;
@@ -36,6 +38,9 @@ export class TowerBuilder {
 	}
 	buildDrill(tower?: DrillTowerBlueprint) {
 		return new DrillTower(this.cell, tower);
+	}
+	buildMagicLighthouse(tower?: MagicLighthouseBlueprint) {
+		return new MagicLighthouse(this.cell, tower);
 	}
 }
 

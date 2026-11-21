@@ -5,7 +5,14 @@
 export type SerializedCell = { x: number; y: number };
 
 export type SerializedFaction = "Dwarf" | "Elf";
-export type SerializedTowerType = "blacksmith" | "drill" | "frost" | "windmill-turret" | "witch-house" | "zapping";
+export type SerializedTowerType =
+	| "blacksmith"
+	| "drill"
+	| "frost"
+	| "magic-lighthouse"
+	| "windmill-turret"
+	| "witch-house"
+	| "zapping";
 export type SerializedTotemType =
 	| "anvil"
 	| "bakery"

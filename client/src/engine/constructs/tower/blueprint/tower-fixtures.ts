@@ -1,5 +1,6 @@
 import { BlacksmithTowerBlueprint } from "./implementation/blacksmith-tower-blueprint";
 import { DrillTowerBlueprint } from "./implementation/drill-tower-blueprint";
+import { MagicLighthouseBlueprint } from "./implementation/magic-lighthouse-blueprint";
 import { WindmillTurretBlueprint } from "./implementation/windmill-turret-blueprint";
 import { WitchHouseBlueprint } from "./implementation/witch-house-blueprint";
 import { ZappingTowerBlueprint } from "./implementation/zapping-tower-blueprint";
@@ -20,6 +21,9 @@ export class TowerBlueprintBuilder {
 	buildDrill() {
 		return new DrillTowerBlueprint({});
 	}
+	buildMagicLighthouse() {
+		return new MagicLighthouseBlueprint({});
+	}
 }
 
 export class TowerBlueprintFixtures {
@@ -38,5 +42,8 @@ export class TowerBlueprintFixtures {
 	}
 	static get drill() {
 		return new TowerBlueprintBuilder().buildDrill();
+	}
+	static get magicLighthouse() {
+		return new TowerBlueprintBuilder().buildMagicLighthouse();
 	}
 }

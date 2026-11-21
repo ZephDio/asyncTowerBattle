@@ -67,6 +67,13 @@ export class TowerResources {
 		shape: "rectangle",
 	};
 
+	// A vertical 1x2 piece, one cell wide and two tall. Pink placeholder until the art (initiative lighthouse-art) lands.
+	static magicLighthouse: ShapedResource = {
+		size: { width: 4.9, height: 9.8 },
+		image: createImage("/resources/towers/lighthouse.png"),
+		shape: "rectangle",
+	};
+
 	static purple: ShapedResource = {
 		size: {
 			width: 5,

@@ -289,6 +289,26 @@ export class BlacksmithDescription extends TowerDescription {
 	}
 }
 
+// The magic lighthouse's description: its beams, and the count of distinct enemies they lit, which grows during the
+// battle.
+export class MagicLighthouseDescription extends TowerDescription {
+	constructor(name: string, tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
+		super(name, [...MagicLighthouseDescription.rules, "Enemies lit: 0"], tower);
+	}
+
+	private static readonly rules = [
+		"Each cast, two beams",
+		"sweep left and right,",
+		"then top and bottom",
+		"Every 10 enemies lit:",
+		"+1🏹 to the army",
+	];
+
+	liveDescription(enemiesLit: number): DescriptionLine[] {
+		return [...MagicLighthouseDescription.rules, ["Enemies lit: ", liveStat(`${enemiesLit}`, enemiesLit, 0)]];
+	}
+}
+
 export type UnitLinesDescription = {
 	health: string;
 	"castle damage": string;
