@@ -29,8 +29,8 @@ export class TotemResources {
 	};
 	static bakery: ShapedResource = {
 		size: {
-			width: 6,
-			height: 6,
+			width: 4.9,
+			height: 6.57,
 		},
 		image: createImage("/resources/totem/bakery.png"),
 		shape: "rectangle",
