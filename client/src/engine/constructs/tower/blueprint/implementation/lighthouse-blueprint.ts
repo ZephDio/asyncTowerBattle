@@ -56,7 +56,7 @@ export class LighthouseBlueprint extends Derive(
 		castSpeed: castSpeedFromSeconds(2),
 		speed: NaN,
 		foodConsumption: NaN,
-		foodConsumptionOnCast: 2.5,
+		foodConsumptionOnCast: 3,
 		summonTime: NaN,
 		range: NaN,
 	}),

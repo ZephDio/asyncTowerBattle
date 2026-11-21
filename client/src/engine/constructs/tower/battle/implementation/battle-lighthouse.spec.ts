@@ -123,11 +123,11 @@ describe("Lighthouse", () => {
 			]);
 		});
 
-		it("casts every 2 seconds for 2.5 food, and hurts by 7", () => {
+		it("casts every 2 seconds for 3 food, and hurts by 7", () => {
 			const { stats } = new LighthouseBlueprint({});
 
 			expect(stats.castSpeed).toBe(castSpeedFromSeconds(2));
-			expect(stats.foodConsumptionOnCast).toBe(2.5);
+			expect(stats.foodConsumptionOnCast).toBe(3);
 			expect(stats.projectileDamage).toBe(7);
 		});
 
@@ -167,7 +167,7 @@ describe("Lighthouse", () => {
 	});
 
 	describe("beams", () => {
-		it("hits 3 enemies on the left and 1 on the right for 7 each with the first cast, for 2.5 food", () => {
+		it("hits 3 enemies on the left and 1 on the right for 7 each with the first cast, for 3 food", () => {
 			const { cast, enemyOn, food } = setup();
 			const lefts = [enemyOn(LEFT[0] as Cell), enemyOn(LEFT[0] as Cell), enemyOn(LEFT[1] as Cell)];
 			const right = enemyOn(RIGHT[1] as Cell);
@@ -175,7 +175,7 @@ describe("Lighthouse", () => {
 			cast();
 
 			for (const enemy of [...lefts, right]) expect(enemy.hits).toEqual([7]);
-			expect(food.spent).toBe(2.5);
+			expect(food.spent).toBe(3);
 		});
 
 		it("alternates: left and right, then top and bottom, then left and right again", () => {
@@ -299,17 +299,17 @@ describe("Lighthouse", () => {
 	});
 
 	describe("food", () => {
-		it("still costs 2.5 food with no enemy around, and lights two beams", () => {
+		it("still costs 3 food with no enemy around, and lights two beams", () => {
 			const { tower, food, beams } = setup();
 
 			tower.onCastResolve();
 
-			expect(food.spent).toBe(2.5);
+			expect(food.spent).toBe(3);
 			expect(beams).toHaveLength(2);
 		});
 
-		it("lights nothing with less than 2.5 food", () => {
-			const { cast, tower, beams, enemyOn, food } = setup({ food: 2 });
+		it("lights nothing with less than 3 food", () => {
+			const { cast, tower, beams, enemyOn, food } = setup({ food: 2.5 });
 			const enemy = enemyOn(LEFT[0] as Cell);
 
 			tower.onCastResolve();
@@ -327,7 +327,7 @@ describe("Lighthouse", () => {
 
 			for (let tick = 0; tick < 64 * 3 + 2; tick++) tower.tick();
 
-			expect(food.spent).toBe(2.5 * 3);
+			expect(food.spent).toBe(3 * 3);
 		});
 	});
 
@@ -456,7 +456,7 @@ describe("Lighthouse", () => {
 				"sweep left and right,",
 				"then top and bottom",
 				"Every 10 enemies hit:",
-				"gain 1🏹",
+				"gain 1 🏹",
 			]);
 			expect(recruit.description.sectionStarts).toEqual([3]);
 		});
