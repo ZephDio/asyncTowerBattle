@@ -67,6 +67,13 @@ export class TowerResources {
 		shape: "rectangle",
 	};
 
+	// A vertical 1x2 piece, one cell wide and two tall. The 90x196 sprite keeps its aspect ratio.
+	static lighthouse: ShapedResource = {
+		size: { width: 5.3, height: (5.3 * 196) / 90 },
+		image: createImage("/resources/towers/magic-lighthouse.png"),
+		shape: "rectangle",
+	};
+
 	static purple: ShapedResource = {
 		size: {
 			width: 5,
