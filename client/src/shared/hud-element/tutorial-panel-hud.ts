@@ -46,10 +46,11 @@ const towerLegend: Legend[] = [
 	{ icon: IconResources.attack.image, label: "Tower's damage" },
 	{ icon: IconResources.towerCastSpeed.image, label: "Tower's cast speed" },
 ];
+// Filled row by row, two per row: the unit buffs end up in the left column and the tower buffs in the right one.
 const buffLegend: Legend[] = [
 	{ icon: IconResources.armyBuffVitality.image, label: `Units' health +${ArmyBuffPercent.vitality}%` },
-	{ icon: IconResources.armyBuffMovespeed.image, label: `Units' move speed +${ArmyBuffPercent["movement-speed"]}%` },
 	{ icon: IconResources.armyBuffAttack.image, label: `Towers' damage +${ArmyBuffPercent["projectile-damage"]}%` },
+	{ icon: IconResources.armyBuffMovespeed.image, label: `Units' move speed +${ArmyBuffPercent["movement-speed"]}%` },
 	{ icon: IconResources.armyBuffTowerCastSpeed.image, label: `Towers' cast speed +${ArmyBuffPercent["cast-speed"]}%` },
 ];
 
