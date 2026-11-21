@@ -198,6 +198,37 @@ def hash01(*values: int) -> float:
     return h - math.floor(h)
 
 
+# Strata: a darker seam every STRATA_PERIOD voxels of height, as on the environment rock
+STRATA_PERIOD = 7
+CRACK_SEEDS = [(-30, 52), (-10, 62), (8, 58), (24, 50), (-44, 30), (40, 34), (-20, 40)]
+
+
+def near_polyline(px: float, py: float, line: list[tuple[float, float]], width: float) -> bool:
+    for (ax, ay), (bx, by) in zip(line, line[1:]):
+        dx, dy = bx - ax, by - ay
+        t = max(0, min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)))
+        if math.hypot(px - ax - t * dx, py - ay - t * dy) <= width:
+            return True
+    return False
+
+
+def make_cracks() -> list[list[tuple[float, float]]]:
+    """Cracks as random walks falling from the seeds, polylines in (x, z)."""
+    rng = random.Random(5)
+    cracks = []
+    for x, z in CRACK_SEEDS:
+        line = [(float(x), float(z))]
+        for _ in range(4):
+            x += rng.uniform(-4, 4)
+            z -= rng.uniform(4, 8)
+            line.append((float(x), float(z)))
+        cracks.append(line)
+    return cracks
+
+
+CRACKS = make_cracks()
+
+
 def ramp_index(light: float, top: bool, steps: int) -> int:
     if top:
         return steps - 1
@@ -211,9 +242,27 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
     if label >= BOULDER:
         if abs(mx) <= TUNNEL_HALF_X + 1 and my > FRAME_Y[0] and in_tunnel(mx + 0.5, FRAME_Y[1], z - 1.5):
             return DARK[1] if my < FRAME_Y[1] + 6 else DARK[0]
-        normal = hit.normal(bevel=lambda _: 0.35)
+        # Same granite texture as the environment rock (generate-rock.py): flat tops, strata seams, cracks
+        normal = hit.normal(bevel=lambda _: 0.2)
         light = hit.light(normal)
-        index = 0 if light < -0.35 else 1 if light < 0.1 else 2 if light < 0.5 else 3 if light < 0.85 else 4
+        rock_top = normal[2] > 0.5
+        index = 3 if rock_top else 0 if light < -0.3 else 1 if light < 0.05 else 2 if light < 0.4 else 3
+        if rock_top and light > 0.8:
+            index = 4
+        if not rock_top:
+            layer = z + mx * 0.12 + 3 * hash01(mx // 10, 3, 7)
+            phase = layer % STRATA_PERIOD
+            if phase < 1.2 and hash01(mx // 5, int(layer // STRATA_PERIOD), 1) > 0.15:
+                index -= 1
+            elif phase < 2.4 and index >= 2 and hash01(mx // 7, int(layer // STRATA_PERIOD), 2) > 0.45:
+                index += 1
+        elif hash01(mx // 3, my // 3, z // 3) < 0.07:
+            index -= 1
+        index = max(0, min(4, index))
+        if normal[1] < -0.2 and index >= 2:
+            for line in CRACKS:
+                if near_polyline(mx + 0.5, z + 0.5, line, 0.7):
+                    return ROCK[0]
         if hash01(mx // FLECK_CELL, my // FLECK_CELL, z // FLECK_CELL) < GOLD_FLECKS and index >= 2:
             return GOLD[min(3, index)]
         return ROCK[index]
