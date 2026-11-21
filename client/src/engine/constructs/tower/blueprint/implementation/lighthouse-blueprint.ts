@@ -78,6 +78,10 @@ export class LighthouseBlueprint extends Derive(
 	// How long the streak stays on screen after the sweep, fading, in battle ticks. It hits nothing then.
 	fadeTicks = 6;
 
+	// How far above the middle of the piece the crystal floats, in grid units: the beams start there. The crystal's
+	// centre is on row 18.5 of the 196 rows of the sprite, which is drawn centred on the piece.
+	crystalAbove = (TowerResources.lighthouse.size.height * (196 / 2 - 18.5)) / 196;
+
 	// Every this many enemy hits in a battle (a unit lit by two casts counts twice), the army's towers gain one projectile damage buff.
 	enemiesPerBuff = 10;
 

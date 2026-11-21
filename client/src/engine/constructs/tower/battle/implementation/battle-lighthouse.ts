@@ -59,9 +59,16 @@ export class BattleLighthouse extends Derive(BattleTower) {
 		this.hooks.alliedArmyBuffHooks.addTowerBuff("projectile-damage", 1);
 	}
 
+	// Where the beams start: the crystal floating above the tower (below it for the opponent's tower, drawn upside down).
+	crystalPosition() {
+		const above = this.orientation === BoardOrientation.Mirrored ? -1 : 1;
+		return new GridPosition({ x: this.position.x, y: this.position.y + above * this.recruit.tower.crystalAbove });
+	}
+
 	private fire(side: LighthouseSide) {
 		const { sweepTicks, fadeTicks } = this.recruit.tower;
 		const beam = new LighthouseBeam(
+			this.crystalPosition(),
 			this.beamCells(side),
 			this.stats.projectileDamage,
 			sweepTicks,

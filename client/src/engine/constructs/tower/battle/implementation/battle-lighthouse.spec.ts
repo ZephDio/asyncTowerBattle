@@ -273,16 +273,28 @@ describe("Lighthouse", () => {
 			expect(enemy.hits).toEqual([tower.stats.projectileDamage]);
 		});
 
-		it("draws its streak along the sweep and goes away after a short fade", () => {
+		it("slides the lit spot along its side", () => {
 			const { tower, beams } = setup();
 
 			tower.onCastResolve();
 			const left = beams[0] as LighthouseBeam;
-			const start = left.position.y;
+			const start = left.spot.y;
 			left.tick();
 
-			expect(left.position.y).toBeGreaterThan(start);
-			expect(left.position.x).toBeCloseTo(at(LEFT[0] as Cell).x);
+			expect(left.spot.y).toBeGreaterThan(start);
+			expect(left.spot.x).toBeCloseTo(at(LEFT[0] as Cell).x);
+		});
+
+		it("shines from the crystal above the tower", () => {
+			const { tower, beams } = setup();
+
+			tower.onCastResolve();
+
+			for (const beam of beams) {
+				expect(beam.origin.x).toBeCloseTo(tower.position.x);
+				expect(beam.origin.y).toBeCloseTo(tower.position.y + new LighthouseBlueprint({}).crystalAbove);
+			}
+			expect(new LighthouseBlueprint({}).crystalAbove).toBeGreaterThan(STANDARD_CELL_SIZE * 0.8);
 		});
 	});
 
@@ -394,6 +406,15 @@ describe("Lighthouse", () => {
 	});
 
 	describe("mirrored, on the opponent's board", () => {
+		it("shines from the crystal below the upside-down tower", () => {
+			const { tower, beams } = setup({ orientation: BoardOrientation.Mirrored });
+
+			tower.onCastResolve();
+
+			for (const beam of beams)
+				expect(beam.origin.y).toBeCloseTo(tower.position.y - new LighthouseBlueprint({}).crystalAbove);
+		});
+
 		const mirrored = (cells: Cell[]) => cells.map((cell) => new Cell({ x: 5 - (cell.x - 5), y: 5 - (cell.y - 5) }));
 
 		it("lights the point mirrored cells, sweeping clockwise on screen too", () => {
