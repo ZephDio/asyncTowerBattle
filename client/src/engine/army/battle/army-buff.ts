@@ -11,6 +11,16 @@ export type Buff = UnitBuff | TowerBuff;
 export type UnitBuff = "movement-speed" | "cast-speed" | "vitality" | "castle-damage";
 export type TowerBuff = "projectile-damage" | "cast-speed";
 
+// The percent each stack of a buff adds to the stat (Stats.applyArmyBuffs). The unit and tower "cast-speed" buffs
+// share this entry's value, but each applies only to its own side: tower buffs reach only towers, unit buffs only units.
+export const ArmyBuffPercent: Record<Buff, number> = {
+	"movement-speed": 2,
+	"cast-speed": 2,
+	vitality: 3,
+	"castle-damage": 4,
+	"projectile-damage": 4,
+};
+
 export class ArmyBuff {
 	unitArmyBuff: UnitArmyBuff = new UnitArmyBuff();
 	towerArmyBuff: TowerArmyBuff = new TowerArmyBuff();

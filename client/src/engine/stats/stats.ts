@@ -1,6 +1,6 @@
 import { implementsTrait, ImplementsTrait, Trait } from "@ddd-ts/traits";
 import { Status } from "../../shared/traits/engine/status";
-import { Buff } from "../army/battle/army-buff";
+import { ArmyBuffPercent, Buff } from "../army/battle/army-buff";
 import { TDrawable } from "../../shared/traits/render/drawable";
 
 export const HaveStats = Trait((base) => {
@@ -152,22 +152,23 @@ export class Stats {
 	}
 
 	applyArmyBuffs(buffs: [Buff, number][]) {
-		buffs.forEach(([buff, amount]) => {
+		buffs.forEach(([buff, stacks]) => {
+			const amount = stacks * ArmyBuffPercent[buff];
 			switch (buff) {
 				case "movement-speed":
-					this.basePercentStat.movementSpeed += amount * 2;
+					this.basePercentStat.movementSpeed += amount;
 					break;
 				case "cast-speed":
-					this.basePercentStat.castSpeed += amount * 2;
+					this.basePercentStat.castSpeed += amount;
 					break;
 				case "vitality":
-					this.addMaxHealth(3 * amount, true);
+					this.addMaxHealth(amount, true);
 					break;
 				case "castle-damage":
-					this.basePercentStat.castleDamage += amount * 4;
+					this.basePercentStat.castleDamage += amount;
 					break;
 				case "projectile-damage":
-					this.basePercentStat.projectileDamage += amount * 4;
+					this.basePercentStat.projectileDamage += amount;
 					break;
 			}
 		});
