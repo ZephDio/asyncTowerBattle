@@ -8,11 +8,11 @@ import { drawOutlinedText } from "./pixel-meter";
 
 type ActiveBuff = { icon: HTMLImageElement; amount: number };
 
-const PER_ROW = 3;
-const CELL = { width: 5.2, height: 3.4 };
+const PER_ROW = 2;
+const CELL = { width: 6.6, height: 3.2 };
 const ICON_SIDE = 2.6;
 
-// The army's active buffs, in a fixed order, flowed into centered rows of at most three: absent buffs leave no gap.
+// The army's active buffs, in a fixed order, flowed two per row: absent buffs leave no gap.
 export class ArmyBuffHud extends Derive(TRenderable) {
 	constructor(
 		public armyBuff: ArmyBuff,
@@ -39,17 +39,14 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 		const buffs = this.activeBuffs();
 		if (buffs.length === 0) return;
 		context.globalAlpha = 1;
-		const rows = Math.ceil(buffs.length / PER_ROW);
-		const perRow = Math.ceil(buffs.length / rows);
 		const iconSize = this.getCanvasSize(context, ICON_SIDE, ICON_SIDE, scale);
 		const fontSize = iconSize.height * 0.62;
 		buffs.forEach((buff, index) => {
-			const row = Math.floor(index / perRow);
-			const inRow = Math.min(perRow, buffs.length - row * perRow);
-			const column = index % perRow;
+			const row = Math.floor(index / PER_ROW);
+			const column = index % PER_ROW;
 			const cell = position.add(
 				new ScreenPosition({
-					x: (column - (inRow - 1) / 2) * CELL.width * scale,
+					x: (column - (PER_ROW - 1) / 2) * CELL.width * scale,
 					y: -row * CELL.height * scale,
 				}),
 			);
@@ -61,7 +58,7 @@ export class ArmyBuffHud extends Derive(TRenderable) {
 			drawOutlinedText(
 				context,
 				`${buff.amount}`,
-				iconPosition.x + iconSize.width / 2 + iconSize.width * 0.08,
+				iconPosition.x + iconSize.width / 2 + iconSize.width * 0.25,
 				iconPosition.y + iconSize.height * 0.08,
 				fontSize,
 				undefined,
