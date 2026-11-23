@@ -28,14 +28,14 @@ export class FurryHud extends Derive(TRenderable, TDrawable) {
 		this.drawImage(context, canvasSize, canvasFurryIconPosition, this.furryIcon);
 		context.textAlign = "center";
 		context.font = `${canvasSize.height / 1.6}px text`;
-		context.fillStyle = "green";
+		context.fillStyle = "#fff4dc";
 		context.fillText(
 			`${Math.round(this.furry.amount)}`,
 			canvasFurryIconPosition.x,
 			canvasFurryIconPosition.y + canvasSize.height / 2,
 			canvasSize.width,
 		);
-		context.fillStyle = "black";
+		context.fillStyle = "#fff4dc";
 		context.fillText(
 			`X${Math.round(this.furry.furryIncrease)}`,
 			canvasMultiplierPosition.x,

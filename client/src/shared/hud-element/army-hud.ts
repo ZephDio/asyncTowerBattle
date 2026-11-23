@@ -1,5 +1,7 @@
 import { Derive, ImplementsTrait, implementsTrait } from "@ddd-ts/traits";
 import { Army } from "../../engine/army/army";
+import { DwarfCastle } from "../../engine/castle/recruit/implem/dwarf-castle";
+import { HudElementResources } from "../../renderer/resources/hud-element.resources";
 import { HitBox } from "../hitbox/hitboxe";
 import { Rectangle } from "../hitbox/shapes/rectangle";
 import { ScreenPosition } from "../position";
@@ -12,9 +14,9 @@ import { TRenderable } from "../traits/render/renderable";
 import { Description, TDescriptor } from "../traits/render/huds/item-descriptor";
 import { IconResources } from "../../renderer/resources/icons.resources";
 import { GoldHud } from "./gold-hud";
-import { OUTLINE, TEXT, columnLayout, drawWoodPanel } from "./shop-left-column";
+import { OUTLINE, TEXT, columnLayout } from "./shop-left-column";
 
-// Sizes in screen units at full scale, from the panel's top: the castle life and max food rows, the "Basic unit" label
+// Sizes in screen units at full scale, below the rod: the castle life and max food rows, the "Basic unit" label
 // above the slot showing the unit, then the gold purse.
 const WIDTH = 9;
 const PADDING = 1;
@@ -31,7 +33,9 @@ const PURSE_IMAGE = 7.5;
 const SLOT_TOP = PADDING + 2 * ROW + GAP + LABEL;
 const INDICATOR_TOP = SLOT_TOP + SLOT;
 const PURSE_TOP = INDICATOR_TOP + INDICATOR + GAP;
-const HEIGHT = PURSE_TOP + PURSE + PADDING;
+const BANNER_WIDTH = 12;
+const BANNER_HEIGHT = 31;
+const CONTENT_TOP = 2;
 
 const BASIC_UNIT_DESCRIPTION = new Description("Basic unit", [
 	"Produced by your",
@@ -50,16 +54,13 @@ const BASIC_UNIT_DESCRIPTION = new Description("Basic unit", [
 // left of the grid, which widens over the rounds.
 export class ArmyHud extends Derive(
 	TCollider,
-	THitbox(new HitBox([[new Rectangle({ width: WIDTH, height: HEIGHT }), new ScreenPosition({ x: 0, y: 0 })]])),
+	THitbox(new HitBox([[new Rectangle({ width: BANNER_WIDTH, height: BANNER_HEIGHT }), new ScreenPosition({ x: 0, y: 0 })]])),
 	TDrawable,
 	TRenderable,
 ) {
 	drawPriority = DrawPriority.HUD;
 	position: ScreenPosition;
-	// The panel fills its area; its content grows to the largest scale that fits.
 	scale: number;
-	panelWidth: number;
-	panelHeight: number;
 	unit: ImplementsTrait<typeof TokenUnit>;
 	private purse: GoldHud;
 
@@ -72,18 +73,15 @@ export class ArmyHud extends Derive(
 		this.unit = army.defaultUnit;
 		this.purse = new GoldHud(army.getEconomyHooks().getEconomy().amount);
 		const { left, right, top, bottom } = columnLayout(army.grid);
-		this.panelWidth = right - left;
-		this.panelHeight = top - bottom;
-		this.scale = Math.min(this.panelWidth / WIDTH, this.panelHeight / HEIGHT);
-		this.position = new ScreenPosition({ x: (left + right) / 2, y: (top + bottom) / 2 });
-		this.hitbox = new HitBox([
-			[new Rectangle({ width: this.panelWidth, height: this.panelHeight }), new ScreenPosition({ x: 0, y: 0 })],
-		]);
+		this.scale = Math.min((right - left) / BANNER_WIDTH, (top - bottom) / BANNER_HEIGHT);
+		const size = { width: BANNER_WIDTH * this.scale, height: BANNER_HEIGHT * this.scale };
+		this.position = new ScreenPosition({ x: (left + right) / 2, y: top - size.height / 2 });
+		this.hitbox = new HitBox([[new Rectangle(size), new ScreenPosition({ x: 0, y: 0 })]]);
 	}
 
 	// Screen offset from the panel's center to the center of something `fromTop` units under its top.
 	private offsetTo(fromTop: number) {
-		return new ScreenPosition({ x: 0, y: (HEIGHT / 2 - fromTop) * this.scale });
+		return new ScreenPosition({ x: 0, y: (BANNER_HEIGHT / 2 - CONTENT_TOP - fromTop) * this.scale });
 	}
 
 	private overArea(point: ScreenPosition, fromTop: number, width: number, height: number) {
@@ -105,9 +103,15 @@ export class ArmyHud extends Derive(
 		context.globalAlpha = 1;
 		const unit = this.getCanvasSize(context, 1, 1, this.scale).width;
 		const center = this.getCanvasPosition(context, position);
-		const top = center.y - (HEIGHT * unit) / 2;
-		const panel = this.getCanvasSize(context, this.panelWidth, this.panelHeight, 1);
-		drawWoodPanel(context, center.x - panel.width / 2, center.y - panel.height / 2, panel.width, panel.height, unit);
+		const top = this.getCanvasPosition(context, position.add(this.offsetTo(0))).y;
+		const faction = this.army.castle instanceof DwarfCastle ? "Dwarf" : "Elf";
+		context.imageSmoothingEnabled = false;
+		this.drawImage(
+			context,
+			{ width: BANNER_WIDTH * unit, height: BANNER_HEIGHT * unit },
+			center,
+			HudElementResources.armyBanner[faction].image,
+		);
 
 		context.textAlign = "center";
 		context.textBaseline = "middle";
