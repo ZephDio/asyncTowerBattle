@@ -32,6 +32,11 @@ export class HudElementResources {
 		Dwarf: { image: createImage("/resources/hud/army-dwarf.png") },
 	};
 
+	static battleArmyBanner = {
+		Elf: { image: createImage("/resources/hud/battle-elf.png") },
+		Dwarf: { image: createImage("/resources/hud/battle-dwarf.png") },
+	};
+
 	static banner: IconResource = {
 		image: createImage("/resources/hud/banner.png"),
 	};

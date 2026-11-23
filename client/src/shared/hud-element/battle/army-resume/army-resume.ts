@@ -24,7 +24,7 @@ export class ArmyResume extends Derive(BannerBackground) {
 	) {
 		super({});
 		const faction = army.castle instanceof BattleDwarfCastle ? "Dwarf" : "Elf";
-		this.bannerImage = HudElementResources.armyBanner[faction].image;
+		this.bannerImage = HudElementResources.battleArmyBanner[faction].image;
 		this.castleLifeBar = new CastleLifeBar(
 			army.castle,
 			this.position.add(new ScreenPosition({ x: 0, y: this.size.height / 3 })),

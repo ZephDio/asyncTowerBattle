@@ -1,4 +1,4 @@
-"""Draw the two 60x155 Army HUD banners in public/resources/hud (5 px per HUD unit)."""
+"""Draw faction banners for the shop (60x155) and the larger battle HUD (320x608)."""
 from pathlib import Path
 
 from voxel_sprite import write_png
@@ -68,6 +68,63 @@ def banner(faction):
     return image
 
 
+def battle_hem(d, elf):
+    if not elf:
+        step, inset = divmod(d - 20, 20)
+        return 607 - 12 * step - max(0, inset - 15)
+    if d < 47:
+        return round(533 + 74 * ((d - 20) / 27) ** 0.65)
+    return round(524 + 83 * ((159 - d) / 112) ** 1.6)
+
+
+def battle_banner(faction):
+    width, height = 320, 608
+    image = [[(0, 0, 0, 0)] * width for _ in range(height)]
+    elf = faction == "elf"
+    shade, face, fold, thread = CLOTH[faction]
+    for x in range(width):
+        d = min(x, width - 1 - x)
+        if d >= 20:
+            bottom = battle_hem(d, elf)
+            # Inset the embroidery from both the hem and the risers of each step.
+            inner = min(battle_hem(min(159, max(20, d + dx)), elf) for dx in range(-3, 4))
+            for y in range(16, bottom + 1):
+                gap = inner - y
+                color = face
+                if d < 23 or gap < 2:
+                    color = INK
+                elif d < 27 or y < 24:
+                    color = shade
+                elif d < 32:
+                    color = fold if d < 30 or y % 16 < 8 else shade
+                elif elf and y > 523:
+                    vein = 47 + (607-y)**1.52 / 10
+                    if abs(d - vein) <= 1.6:
+                        color = thread
+                    elif vein-7 < d < vein or gap < 6:
+                        color = fold
+                elif not elf and gap < 12:
+                    color = thread if 5 <= gap <= 7 else shade
+                image[y][x] = (*color, 255)
+
+        # Faceted lance finials, brass collars and stitched cloth loops over the shaft.
+        radius = min(11, d * 0.48) if d < 27 else 12 if d < 32 else 6
+        for dy in range(-int(radius), int(radius) + 1):
+            color = INK if abs(dy) >= radius - 1.5 else BRASS[2 if dy < -1 else 1 if dy <= 2 else 0]
+            if dy < -radius + 4 and abs(dy) < radius - 1.5:
+                color = BRASS[3]
+            image[14 + dy][x] = (*color, 255)
+        if 44 <= d < 80:
+            for y in range(2, 30):
+                edge = min(d-44, 79-d)
+                color = INK if edge < 2 or y in (2, 3, 28, 29) else shade if edge < 5 or y > 24 else fold if y < 10 else face
+                if y == 23 and edge > 5 and d % 7 < 4:
+                    color = fold
+                image[y][x] = (*color, 255)
+    return image
+
+
 if __name__ == "__main__":
     for faction in CLOTH:
         write_png(OUT / f"army-{faction}.png", banner(faction))
+        write_png(OUT / f"battle-{faction}.png", battle_banner(faction))
