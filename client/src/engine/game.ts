@@ -13,7 +13,7 @@ import { Faction } from "./menu/main-menu";
 import { Army } from "./army/army";
 import { ArmyFactory } from "./army/army-fixtures";
 import { TranslateAnimation } from "./translate-animation/translate-animation";
-import { PercentToReal } from "../renderer/implementation/canvas-renderer";
+import { armyGridCenter } from "./grid/grid";
 import { loggedInPlayer } from "../auth/session";
 
 export class Game {
@@ -74,23 +74,22 @@ export class Game {
 
 	handleSummaryQuit() {
 		this.battleSummary = null;
-		const animation = new TranslateAnimation(
-			20,
-			this.army.grid.centerPosition,
-			PercentToReal({ x: 35, y: 28 }),
-			this.army.grid.centerPosition.clone(),
-			() => {
-				this.army.grid.updateCornerPosition();
-			},
-			() => {
-				this.army.grid.updateCornerPosition();
-			},
-		);
-		animation.startAnimation();
+		const from = this.army.grid.centerPosition.clone();
 		if (this.life === 0) {
 			this.endGame();
 		}
+		// The shop grows the grid, so the grid slides from the battle to where the grown grid rests.
 		this.startShop();
+		const grid = this.army.grid;
+		const animation = new TranslateAnimation(
+			20,
+			grid.centerPosition,
+			armyGridCenter(grid),
+			from,
+			() => grid.updateCornerPosition(),
+			() => grid.updateCornerPosition(),
+		);
+		animation.startAnimation();
 	}
 
 	// The shop stays on screen until the opponent board arrives.
@@ -126,6 +125,7 @@ export class Game {
 			this.handleShopQuit.bind(this),
 			this.setDescriptionHud.bind(this),
 			this.rounds.round,
+			this.life,
 		);
 		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
 		this.army.onShopEnter();

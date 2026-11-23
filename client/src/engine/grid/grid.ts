@@ -21,6 +21,14 @@ import { Totem } from "../constructs/totem/recruit/totem";
 import { BoardOrientation } from "../../shared/traits/engine/core/board-orientation";
 import { TargetZone } from "../target-zone/target-zone";
 
+// The shop's army grid keeps its left edge where the first round's grid has it, so it grows to the right and up only.
+export const armyGridCenter = ({ width, height }: GridSize) => {
+	const anchor = PercentToReal({ x: 35, y: 28 });
+	const first = armyGridSize(1);
+	const left = anchor.x - (first.width * fitCellSize(first.height)) / 2;
+	return new ScreenPosition({ x: left + (width * fitCellSize(height)) / 2, y: anchor.y });
+};
+
 export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	tiles: Map<string, ImplementsTrait<typeof GridElement>> = new Map();
 	hoverEffect: HoverEffect[] = [];
@@ -29,7 +37,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	constructor(
 		width: number = armyGridSize(1).width,
 		height: number = armyGridSize(1).height,
-		public screenPosition: ScreenPosition = PercentToReal({ x: 35, y: 28 }),
+		public screenPosition: ScreenPosition = armyGridCenter({ width, height }),
 		cellSize = fitCellSize(height),
 	) {
 		super({ width, height, cellSize, position: screenPosition });
@@ -205,7 +213,7 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	}
 
 	resetPosition() {
-		this.centerPosition = PercentToReal({ x: 35, y: 28 });
+		this.centerPosition = armyGridCenter(this);
 		this.updateCornerPosition();
 	}
 
@@ -215,6 +223,10 @@ export class ArmyGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		const previousWidth = this.width;
 		const addedRows = height - this.height;
 		this.resize({ width, height });
+		const center = armyGridCenter({ width, height });
+		this.centerPosition.x = center.x;
+		this.centerPosition.y = center.y;
+		this.updateCornerPosition();
 		for (let i = 0; i < addedRows; i++) this.translate();
 		// The castle follows the top row, which moved up with the new rows.
 		if (this.castleRecruit) this.castleRecruit.cell = this.getCastleCell();

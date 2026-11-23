@@ -7,7 +7,6 @@ import { Game } from "../game";
 import { Retail } from "./retail/retail";
 import { ShopState } from "../../shared/gamestate";
 import { ImplementsTrait } from "@ddd-ts/traits";
-import { GoldHud } from "../../shared/hud-element/gold-hud";
 import { StartBattleButton } from "../../shared/hud-element/start-battle-button";
 import { TGrid } from "../grid/tgrid";
 import { AnyUnit } from "../units/recruit/unit";
@@ -19,7 +18,7 @@ import { Holder } from "./holder/holder";
 import { EconomyHooks } from "../gold/army-gold-economy";
 import { PathPreview } from "../path/army/path-preview";
 import { PathInvalidHud } from "../../shared/hud-element/path-invalid-hud";
-import { DefaultUnitHud } from "../../shared/hud-element/default-unit-hud";
+import { ArmyHud } from "../../shared/hud-element/army-hud";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -63,6 +62,7 @@ export class ShopPhase {
 
 		public setDescriptionHud: Game["setDescriptionHud"],
 		public round: number,
+		public life: number,
 	) {
 		this.retail = new Retail(round);
 		this.economyHooks = army.getEconomyHooks();
@@ -132,17 +132,16 @@ export class ShopPhase {
 				this.sign,
 				...(this.signHovered ? [new RarityOddsHud(rarityOdds(this.round), this.sign)] : []),
 				new RefreshBellHud(this.bellPressedAt),
-				new GoldHud(this.army.getEconomyHooks().getEconomy().amount),
-				this.getDefaultUnitHud(),
+				this.getArmyHud(),
 				...(network.complete ? [] : [new PathInvalidHud()]),
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
 		};
 	}
 
-	// Built from the grid each time, since the grid widens between rounds.
-	getDefaultUnitHud() {
-		return new DefaultUnitHud(this.army.defaultUnit, this.army.grid);
+	// Built from the army each time, since the grid widens between rounds and the gold changes.
+	getArmyHud() {
+		return new ArmyHud(this.army, this.round, this.life);
 	}
 
 	getPathPreview(network = this.army.pathNetwork) {
@@ -176,7 +175,7 @@ export class ShopPhase {
 			type: "shop",
 			retail: this.retail,
 			hold: this.holderControl.hold,
-			hudElements: [new StartBattleButton({}), new RefreshBellHud(), this.getDefaultUnitHud()],
+			hudElements: [new StartBattleButton({}), new RefreshBellHud(), this.getArmyHud()],
 			towers: this.army.towers,
 			castle: this.army.castle,
 			grid: this.army.grid,
