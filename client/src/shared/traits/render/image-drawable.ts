@@ -21,27 +21,64 @@ export enum DrawPriority {
 	Menu = 7,
 }
 
-export const TImageDrawable = (image: HTMLImageElement, size: Size, priority: number) =>
+// How a piece's image is drawn on the opponent's board, where its footprint is mirrored through a point.
+export enum EnemyRender {
+	// Drawn as on the ally board.
+	Normal = "normal",
+	// Flipped left to right, for pieces whose details depend on their side.
+	AxeFlip = "axe-flip",
+	// Turned by π (flipped on both axes), for complex shapes that a single flip would not suit.
+	FullFlip = "full-flip",
+}
+
+export const TImageDrawable = (
+	image: HTMLImageElement,
+	size: Size,
+	priority: number,
+	enemyRender: EnemyRender = EnemyRender.Normal,
+) =>
 	Subtrait([TDrawable], (base) => {
 		abstract class TImageDrawable extends base {
 			drawable = {
 				image: image,
 				size: size,
 				priority: priority,
+				enemyRender: enemyRender,
 			};
 
 			get drawPriority() {
 				return this.drawable.priority;
 			}
 
-			// A mirrored piece turns by π around its footprint's centre, a projectile faces its flight angle.
+			// A mirrored piece turns by π around its footprint's centre only if it asks for a full flip, a projectile faces
+			// its flight angle.
 			getImageAngle() {
-				if (implementsTrait(this, TBoardOriented)) return this.mirrored ? Math.PI : undefined;
+				if (implementsTrait(this, TBoardOriented)) {
+					return this.mirrored && this.drawable.enemyRender === EnemyRender.FullFlip ? Math.PI : undefined;
+				}
 				if (implementsTrait(this, Orientable)) return this.orientation;
 				return undefined;
 			}
 
 			draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
+				if (
+					implementsTrait(this, TBoardOriented) &&
+					this.mirrored &&
+					this.drawable.enemyRender === EnemyRender.AxeFlip
+				) {
+					const center = this.getCanvasPosition(context, position);
+					context.save();
+					context.translate(center.x, center.y);
+					context.scale(-1, 1);
+					context.translate(-center.x, -center.y);
+					this.drawUnflipped(context, position, scale);
+					context.restore();
+					return;
+				}
+				this.drawUnflipped(context, position, scale);
+			}
+
+			private drawUnflipped(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 				const size = this.getCanvasSize(context, this.drawable.size.width, this.drawable.size.height, scale);
 				const canvasPosition = this.getCanvasPosition(context, position);
 				const sprite = implementsTrait(this, TSpriteAnimation) ? this.getSpriteFrame() : null;

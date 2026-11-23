@@ -3,7 +3,7 @@ import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
+import { DrawPriority, EnemyRender, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { BlacksmithTower } from "../../recruit/implementation/blacksmith-tower";
 import { Derive } from "../../../../../../traits/traits";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
@@ -34,6 +34,7 @@ export class BlacksmithTowerBlueprint extends Derive(
 		TowerResources.blacksmithTower.image,
 		TowerResources.blacksmithTower.size,
 		DrawPriority.NormalGridElement,
+		EnemyRender.AxeFlip,
 	),
 	TBaseStats({
 		health: NaN,

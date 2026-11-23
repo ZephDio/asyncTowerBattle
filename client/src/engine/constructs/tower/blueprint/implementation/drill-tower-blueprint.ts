@@ -5,7 +5,7 @@ import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { THitbox } from "../../../../../shared/traits/engine/core/THitbox";
 import { Cell, GridPosition } from "../../../../../shared/position";
-import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
+import { DrawPriority, EnemyRender, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { TDescriptor, TowerDescription } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
@@ -38,7 +38,7 @@ export class DrillTowerBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(TowerResources.drill.image, TowerResources.drill.size, DrawPriority.NormalGridElement),
+	TImageDrawable(TowerResources.drill.image, TowerResources.drill.size, DrawPriority.NormalGridElement, EnemyRender.FullFlip),
 	TBaseStats({
 		health: NaN,
 		castleDamage: NaN,
