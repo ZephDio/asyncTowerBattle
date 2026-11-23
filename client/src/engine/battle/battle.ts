@@ -27,7 +27,8 @@ export class Battle {
 	speedCursor: SliderBattleSpeed;
 	alliedArmyResume: ArmyResume;
 	enemyArmyResume: ArmyResume;
-	tooltip: HudTooltip | null = null;
+	// The last mouse position over the banners' buffs or Fury, hit-tested again every frame as buffs come and go.
+	hoverPoint: ScreenPosition | null = null;
 
 	timer = { clock: 0 };
 
@@ -116,14 +117,18 @@ export class Battle {
 
 	handleBattleOver(battleVerdict: "Victory" | "Defeat") {
 		this.isOver = true;
-		this.tooltip = null;
+		this.hoverPoint = null;
 		this.onBattleOver(battleVerdict, this);
 	}
 
-	// The tooltip of the banner buff or Fury under the point, or none.
+	// Whether the point is over a banner buff or Fury. The banners only take hovers once their intro slide is over.
 	hoverBanners(point: ScreenPosition) {
-		this.tooltip = this.alliedArmyResume.tooltipAt(point) ?? this.enemyArmyResume.tooltipAt(point);
-		return this.tooltip !== null;
+		this.hoverPoint = this.started && this.tooltipAt(point) ? point : null;
+		return this.hoverPoint !== null;
+	}
+
+	tooltipAt(point: ScreenPosition): HudTooltip | null {
+		return this.alliedArmyResume.tooltipAt(point) ?? this.enemyArmyResume.tooltipAt(point);
 	}
 
 	changeSpeed(speed: number) {
@@ -135,13 +140,14 @@ export class Battle {
 	}
 
 	getDrawables(): RenderableState {
+		const tooltip = this.hoverPoint ? this.tooltipAt(this.hoverPoint) : null;
 		return {
 			renderables: [
 				this.battleClock,
 				this.speedCursor,
 				this.alliedArmyResume,
 				this.enemyArmyResume,
-				...(this.tooltip ? [this.tooltip] : []),
+				...(tooltip ? [tooltip] : []),
 			],
 			grids: this.animationOver
 				? [
