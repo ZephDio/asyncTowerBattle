@@ -13,45 +13,42 @@ type BuffKind = {
 	describe: (stacks: number) => TooltipContent;
 };
 
-const effect = (title: string, target: string, stat: string, buff: Buff, stacks: number): TooltipContent => ({
-	title,
-	lines: [
-		`${target}: +${stacks * ArmyBuffPercent[buff]}% ${stat}`,
-		`${stacks} ${stacks === 1 ? "stack" : "stacks"} × ${ArmyBuffPercent[buff]}%`,
-	],
-});
+// The tutorial's legend phrase, with every stack counted.
+const effect = (label: string, buff: Buff, stacks: number): TooltipContent => [
+	`${label} +${stacks * ArmyBuffPercent[buff]}%`,
+];
 
 // In display order.
 const BuffKinds: BuffKind[] = [
 	{
 		icon: IconResources.armyBuffMovespeed.image,
 		stacks: (armyBuff) => armyBuff.unitArmyBuff.getBuff("movement-speed"),
-		describe: (stacks) => effect("Unit speed", "Your units", "🥾", "movement-speed", stacks),
+		describe: (stacks) => effect("Units' move speed", "movement-speed", stacks),
 	},
 	{
 		icon: IconResources.armyBuffVitality.image,
 		stacks: (armyBuff) => armyBuff.unitArmyBuff.getBuff("vitality"),
-		describe: (stacks) => effect("Unit vitality", "Your units", "💚", "vitality", stacks),
+		describe: (stacks) => effect("Units' health", "vitality", stacks),
 	},
 	{
 		icon: IconResources.castSpeed.image,
 		stacks: (armyBuff) => armyBuff.unitArmyBuff.getBuff("cast-speed"),
-		describe: (stacks) => effect("Unit cast speed", "Your units", "cast speed", "cast-speed", stacks),
+		describe: (stacks) => effect("Units' cast speed", "cast-speed", stacks),
 	},
 	{
 		icon: IconResources.castleDamage.image,
 		stacks: (armyBuff) => armyBuff.unitArmyBuff.getBuff("castle-damage"),
-		describe: (stacks) => effect("Castle damage", "Your units", "🗡️", "castle-damage", stacks),
+		describe: (stacks) => effect("Units' castle damage", "castle-damage", stacks),
 	},
 	{
 		icon: IconResources.armyBuffAttack.image,
 		stacks: (armyBuff) => armyBuff.towerArmyBuff.getBuff("projectile-damage"),
-		describe: (stacks) => effect("Tower damage", "Your towers", "⚔️", "projectile-damage", stacks),
+		describe: (stacks) => effect("Towers' damage", "projectile-damage", stacks),
 	},
 	{
 		icon: IconResources.armyBuffTowerCastSpeed.image,
 		stacks: (armyBuff) => armyBuff.towerArmyBuff.getBuff("cast-speed"),
-		describe: (stacks) => effect("Tower cast speed", "Your towers", "💠", "cast-speed", stacks),
+		describe: (stacks) => effect("Towers' cast speed", "cast-speed", stacks),
 	},
 ];
 

@@ -34,15 +34,10 @@ export class FurryHud extends Derive(TRenderable, TDrawable) {
 			point.y <= this.position.y + half &&
 			point.y >= this.position.y - this.size.height * 1.1;
 		if (!inside) return null;
-		return new HudTooltip(this.position, half, side, () => ({
-			title: "Fury",
-			lines: [
-				`Current: ${Math.round(this.furry.amount)}`,
-				`New units: +${Math.round(this.furry.amount)}% 💚 and 🥾`,
-				`Next trigger: +${this.nextIncrease()}`,
-				"Every 2 s from 20 s",
-			],
-		}));
+		return new HudTooltip(this.position, half, side, () => [
+			`New units spawn with +${Math.round(this.furry.amount)}% 💚 and 🥾.`,
+			`Incoming fury: ${this.nextIncrease()}`,
+		]);
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {

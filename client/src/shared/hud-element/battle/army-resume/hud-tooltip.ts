@@ -3,19 +3,17 @@ import { TRenderable } from "../../../traits/render/renderable";
 import { TDrawable } from "../../../traits/render/drawable";
 import { ScreenPosition } from "../../../position";
 
-export type TooltipContent = { title: string; lines: string[] };
+export type TooltipContent = string[];
 
 // Screen units.
 const PADDING = 0.9;
-const TITLE_SIZE = 1.5;
-const LINE_SIZE = 1.2;
-const LINE_HEIGHT = 1.6;
+const LINE_SIZE = 1.4;
+const LINE_HEIGHT = 1.8;
 const GAP = 0.8;
 
 const INK = "rgb(22,28,46)";
 const PAPER = "rgb(240,230,214)";
 const PAPER_SHADE = "rgb(214,198,182)";
-const BODY = "rgb(64,50,58)";
 
 // A small pixel-art card beside a hovered banner element, on the `side` facing the board. Its content is read every
 // frame, so live values stay current while it is open.
@@ -31,19 +29,18 @@ export class HudTooltip extends Derive(TRenderable, TDrawable) {
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
-		const { title, lines } = this.content();
+		const lines = this.content();
 		const unit = this.getCanvasSize(context, 1, 1, scale).width;
 		context.save();
 		context.globalAlpha = 1;
 		context.textBaseline = "middle";
 		context.textAlign = "left";
-		context.font = `${TITLE_SIZE * unit}px title`;
-		let textWidth = context.measureText(title).width;
 		context.font = `${LINE_SIZE * unit}px text`;
+		let textWidth = 0;
 		for (const line of lines) textWidth = Math.max(textWidth, context.measureText(line).width);
 
 		const width = Math.round(textWidth + 2 * PADDING * unit);
-		const height = Math.round((TITLE_SIZE * 1.3 + lines.length * LINE_HEIGHT + 2 * PADDING - 0.4) * unit);
+		const height = Math.round((lines.length * LINE_HEIGHT + 2 * PADDING - 0.4) * unit);
 		const anchor = this.getCanvasPosition(context, position);
 		const offset = (this.reach + GAP) * unit;
 		let left = this.side === "right" ? anchor.x + offset : anchor.x - offset - width;
@@ -52,12 +49,8 @@ export class HudTooltip extends Derive(TRenderable, TDrawable) {
 		top = Math.round(Math.min(Math.max(top, 0), context.canvas.height - height));
 		this.drawCard(context, left, top, width, height, Math.max(2, Math.round(unit * 0.16)));
 
-		let y = top + (PADDING + TITLE_SIZE * 0.6) * unit;
+		let y = top + (PADDING + LINE_HEIGHT / 2 - 0.2) * unit;
 		context.fillStyle = INK;
-		context.font = `${TITLE_SIZE * unit}px title`;
-		context.fillText(title, left + PADDING * unit, y);
-		y += (TITLE_SIZE * 0.7 + LINE_HEIGHT * 0.75) * unit;
-		context.fillStyle = BODY;
 		context.font = `${LINE_SIZE * unit}px text`;
 		for (const line of lines) {
 			context.fillText(line, left + PADDING * unit, y);
