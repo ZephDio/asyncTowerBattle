@@ -2,119 +2,121 @@ import { Derive } from "@ddd-ts/traits";
 import { TRenderable } from "../../../traits/render/renderable";
 import { ScreenPosition } from "../../../position";
 import { DrawPriority } from "../../../traits/render/image-drawable";
-import { ArmyBuff } from "../../../../engine/army/battle/army-buff";
-import { Size } from "../../../size";
-import { getRelativePositionPercent } from "../../../../renderer/implementation/canvas-renderer";
+import { ArmyBuff, ArmyBuffPercent, Buff } from "../../../../engine/army/battle/army-buff";
 import { IconResources } from "../../../../renderer/resources/icons.resources";
+import { drawOutlinedText } from "./pixel-meter";
+import { HudTooltip, TooltipContent } from "./hud-tooltip";
 
+type BuffKind = {
+	icon: HTMLImageElement;
+	stacks: (armyBuff: ArmyBuff) => number;
+	describe: (stacks: number) => TooltipContent;
+};
+
+// The tutorial's legend phrase, with every stack counted.
+const effect = (label: string, buff: Buff, stacks: number): TooltipContent => [
+	`${label} +${stacks * ArmyBuffPercent[buff]}%`,
+];
+
+// In display order.
+const BuffKinds: BuffKind[] = [
+	{
+		icon: IconResources.armyBuffMovespeed.image,
+		stacks: (armyBuff) => armyBuff.unitArmyBuff.getBuff("movement-speed"),
+		describe: (stacks) => effect("Units' move speed", "movement-speed", stacks),
+	},
+	{
+		icon: IconResources.armyBuffVitality.image,
+		stacks: (armyBuff) => armyBuff.unitArmyBuff.getBuff("vitality"),
+		describe: (stacks) => effect("Units' health", "vitality", stacks),
+	},
+	{
+		icon: IconResources.castSpeed.image,
+		stacks: (armyBuff) => armyBuff.unitArmyBuff.getBuff("cast-speed"),
+		describe: (stacks) => effect("Units' cast speed", "cast-speed", stacks),
+	},
+	{
+		icon: IconResources.castleDamage.image,
+		stacks: (armyBuff) => armyBuff.unitArmyBuff.getBuff("castle-damage"),
+		describe: (stacks) => effect("Units' castle damage", "castle-damage", stacks),
+	},
+	{
+		icon: IconResources.armyBuffAttack.image,
+		stacks: (armyBuff) => armyBuff.towerArmyBuff.getBuff("projectile-damage"),
+		describe: (stacks) => effect("Towers' damage", "projectile-damage", stacks),
+	},
+	{
+		icon: IconResources.armyBuffTowerCastSpeed.image,
+		stacks: (armyBuff) => armyBuff.towerArmyBuff.getBuff("cast-speed"),
+		describe: (stacks) => effect("Towers' cast speed", "cast-speed", stacks),
+	},
+];
+
+const PER_ROW = 2;
+const CELL = { width: 6.6, height: 3.2 };
+const ICON_SIDE = 2.6;
+// The icon and its count, from the icon's center.
+const HOVER = { left: ICON_SIDE / 2, right: ICON_SIDE / 2 + 2.6, half: ICON_SIDE / 2 };
+
+// The army's active buffs, in a fixed order, flowed two per row: absent buffs leave no gap.
 export class ArmyBuffHud extends Derive(TRenderable) {
-	speedIcon = IconResources.armyBuffMovespeed.image;
-	vitalityIcon = IconResources.armyBuffVitality.image;
-	castSpeedIcon = IconResources.castSpeed.image;
-	towerCastSpeedIcon = IconResources.armyBuffTowerCastSpeed.image;
-	attackIcon = IconResources.armyBuffAttack.image;
-
-	towerIcon = IconResources.tower.image;
-	unitIcon = IconResources.unit.image;
-
 	constructor(
 		public armyBuff: ArmyBuff,
 		public position: ScreenPosition,
-		public size: Size,
 	) {
 		super({});
 	}
-	override drawPriority: DrawPriority.HoverHUD;
+	override drawPriority = DrawPriority.HoverHUD;
+
+	// The active buffs with the screen position of their icon's center.
+	layout(position: ScreenPosition, scale = 1) {
+		return BuffKinds.filter((kind) => kind.stacks(this.armyBuff) > 0).map((kind, index) => {
+			const row = Math.floor(index / PER_ROW);
+			const column = index % PER_ROW;
+			const icon = position.add(
+				new ScreenPosition({
+					x: ((column - (PER_ROW - 1) / 2) * CELL.width - CELL.width / 2 + ICON_SIDE / 2 + 0.2) * scale,
+					y: -row * CELL.height * scale,
+				}),
+			);
+			return { kind, icon };
+		});
+	}
+
+	// The tooltip of the buff under the point, opening past the whole buff block so it never hides another buff.
+	tooltipAt(point: ScreenPosition, side: "left" | "right"): HudTooltip | null {
+		const buffs = this.layout(this.position);
+		const hit = buffs.find(
+			({ icon }) =>
+				point.x >= icon.x - HOVER.left && point.x <= icon.x + HOVER.right && Math.abs(point.y - icon.y) <= HOVER.half,
+		);
+		if (!hit) return null;
+		const edges = buffs.map(({ icon }) => (side === "right" ? icon.x + HOVER.right : icon.x - HOVER.left));
+		const x = side === "right" ? Math.max(...edges) : Math.min(...edges);
+		const { kind } = hit;
+		return new HudTooltip(new ScreenPosition({ x, y: hit.icon.y }), 0, side, () =>
+			kind.describe(kind.stacks(this.armyBuff)),
+		);
+	}
+
 	override draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
+		const buffs = this.layout(position, scale);
+		if (buffs.length === 0) return;
 		context.globalAlpha = 1;
-		context.save();
-		context.filter = "invert(1)";
-		this.drawUnitIcon(context, position, scale);
-		this.drawTowerIcon(context, position, scale);
-		context.restore();
-		const speedBuffs = this.armyBuff.unitArmyBuff.getBuff("movement-speed");
-		if (speedBuffs) {
-			this.drawSpeedBuff(context, position, scale, speedBuffs);
-		}
-		const vitalityBuffs = this.armyBuff.unitArmyBuff.getBuff("vitality");
-		if (vitalityBuffs) {
-			this.drawVitalityBuff(context, position, scale, vitalityBuffs);
-		}
-		const castSpeedUnitBuffs = this.armyBuff.unitArmyBuff.getBuff("cast-speed");
-		if (castSpeedUnitBuffs) {
-			this.drawUnitCastSpeedBuff(context, position, scale, castSpeedUnitBuffs);
-		}
-		const damageTowerBuffs = this.armyBuff.towerArmyBuff.getBuff("projectile-damage");
-		if (damageTowerBuffs) {
-			this.drawAttackTowerBuff(context, position, scale, damageTowerBuffs);
-		}
-		const castSpeedTowerBuffs = this.armyBuff.towerArmyBuff.getBuff("cast-speed");
-		if (castSpeedTowerBuffs) {
-			this.drawTowerCastSpeedBuff(context, position, scale, castSpeedTowerBuffs);
-		}
-	}
-
-	drawUnitIcon(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
-		const unitIconPosition = getRelativePositionPercent(position, this.size, { x: 22, y: 90 });
-		const unitIconCanvasPosition = this.getCanvasPosition(context, unitIconPosition);
-		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
-		this.drawImage(context, size, unitIconCanvasPosition, this.unitIcon);
-	}
-
-	drawTowerIcon(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
-		const speedIconPosition = getRelativePositionPercent(position, this.size, { x: 22, y: 65 });
-		const speedIconCanvasPosition = this.getCanvasPosition(context, speedIconPosition);
-		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
-		this.drawImage(context, size, speedIconCanvasPosition, this.towerIcon);
-	}
-
-	drawSpeedBuff(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number, amount: number) {
-		const speedIconPosition = getRelativePositionPercent(position, this.size, { x: 42, y: 90 });
-		const speedIconCanvasPosition = this.getCanvasPosition(context, speedIconPosition);
-		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
-		this.drawImage(context, size, speedIconCanvasPosition, this.speedIcon);
-		context.font = `${size.width / 1.9}px text`;
-		context.fillStyle = "#fff4dc";
-		context.fillText(`${amount}`, speedIconCanvasPosition.x, speedIconCanvasPosition.y, size.width);
-	}
-
-	drawVitalityBuff(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number, amount: number) {
-		const vitalityIconPosition = getRelativePositionPercent(position, this.size, { x: 62, y: 90 });
-		const vitalityIconCanvasPosition = this.getCanvasPosition(context, vitalityIconPosition);
-		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
-		this.drawImage(context, size, vitalityIconCanvasPosition, this.vitalityIcon);
-		context.font = `${size.width / 1.9}px text`;
-		context.fillStyle = "#fff4dc";
-		context.fillText(`${amount}`, vitalityIconCanvasPosition.x, vitalityIconCanvasPosition.y, size.width);
-	}
-
-	drawUnitCastSpeedBuff(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number, amount: number) {
-		const castSpeedIconPosition = getRelativePositionPercent(position, this.size, { x: 82, y: 90 });
-		const castSpeedIconCanvasPosition = this.getCanvasPosition(context, castSpeedIconPosition);
-		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
-		this.drawImage(context, size, castSpeedIconCanvasPosition, this.castSpeedIcon);
-		context.font = `${size.width / 1.9}px text`;
-		context.fillStyle = "#fff4dc";
-		context.fillText(`${amount}`, castSpeedIconCanvasPosition.x, castSpeedIconCanvasPosition.y, size.width);
-	}
-
-	drawAttackTowerBuff(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number, amount: number) {
-		const damageTowerIconPosition = getRelativePositionPercent(position, this.size, { x: 42, y: 65 });
-		const damageTowerIconCanvasPosition = this.getCanvasPosition(context, damageTowerIconPosition);
-		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
-		this.drawImage(context, size, damageTowerIconCanvasPosition, this.attackIcon);
-		context.font = `${size.width / 1.9}px text`;
-		context.fillStyle = "#fff4dc";
-		context.fillText(`${amount}`, damageTowerIconCanvasPosition.x, damageTowerIconCanvasPosition.y, size.width);
-	}
-
-	drawTowerCastSpeedBuff(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number, amount: number) {
-		const castSpeedIconPosition = getRelativePositionPercent(position, this.size, { x: 62, y: 65 });
-		const castSpeedIconCanvasPosition = this.getCanvasPosition(context, castSpeedIconPosition);
-		const size = this.getCanvasSize(context, this.size.width / 7, this.size.width / 7, scale);
-		this.drawImage(context, size, castSpeedIconCanvasPosition, this.towerCastSpeedIcon);
-		context.font = `${size.width / 1.9}px text`;
-		context.fillStyle = "#fff4dc";
-		context.fillText(`${amount}`, castSpeedIconCanvasPosition.x, castSpeedIconCanvasPosition.y, size.width);
+		const iconSize = this.getCanvasSize(context, ICON_SIDE, ICON_SIDE, scale);
+		const fontSize = iconSize.height * 0.62;
+		buffs.forEach(({ kind, icon }) => {
+			const iconPosition = this.getCanvasPosition(context, icon);
+			this.drawImage(context, iconSize, iconPosition, kind.icon);
+			drawOutlinedText(
+				context,
+				`${kind.stacks(this.armyBuff)}`,
+				iconPosition.x + iconSize.width / 2 + iconSize.width * 0.25,
+				iconPosition.y + iconSize.height * 0.08,
+				fontSize,
+				undefined,
+				"left",
+			);
+		});
 	}
 }

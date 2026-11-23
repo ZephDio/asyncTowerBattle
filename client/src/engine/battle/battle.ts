@@ -8,6 +8,8 @@ import { Game } from "../game";
 import { BattleRandomSeed } from "./battle-random-seed";
 import { Battlefield } from "./battlefield/battlefield";
 import { ArmyResume } from "../../shared/hud-element/battle/army-resume/army-resume";
+import { ScreenPosition } from "../../shared/position";
+import { HudTooltip } from "../../shared/hud-element/battle/army-resume/hud-tooltip";
 import { secondsToFrame } from "../../shared/seconds";
 import { TranslateAnimation } from "../translate-animation/translate-animation";
 
@@ -25,6 +27,8 @@ export class Battle {
 	speedCursor: SliderBattleSpeed;
 	alliedArmyResume: ArmyResume;
 	enemyArmyResume: ArmyResume;
+	// The last mouse position over the banners' buffs or Fury, hit-tested again every frame as buffs come and go.
+	hoverPoint: ScreenPosition | null = null;
 
 	timer = { clock: 0 };
 
@@ -113,7 +117,18 @@ export class Battle {
 
 	handleBattleOver(battleVerdict: "Victory" | "Defeat") {
 		this.isOver = true;
+		this.hoverPoint = null;
 		this.onBattleOver(battleVerdict, this);
+	}
+
+	// Whether the point is over a banner buff or Fury. The banners only take hovers once their intro slide is over.
+	hoverBanners(point: ScreenPosition) {
+		this.hoverPoint = this.started && this.tooltipAt(point) ? point : null;
+		return this.hoverPoint !== null;
+	}
+
+	tooltipAt(point: ScreenPosition): HudTooltip | null {
+		return this.alliedArmyResume.tooltipAt(point) ?? this.enemyArmyResume.tooltipAt(point);
 	}
 
 	changeSpeed(speed: number) {
@@ -125,8 +140,15 @@ export class Battle {
 	}
 
 	getDrawables(): RenderableState {
+		const tooltip = this.hoverPoint ? this.tooltipAt(this.hoverPoint) : null;
 		return {
-			renderables: [this.battleClock, this.speedCursor, this.alliedArmyResume, this.enemyArmyResume],
+			renderables: [
+				this.battleClock,
+				this.speedCursor,
+				this.alliedArmyResume,
+				this.enemyArmyResume,
+				...(tooltip ? [tooltip] : []),
+			],
 			grids: this.animationOver
 				? [
 						{

@@ -8,6 +8,7 @@ import { FoodBarHud } from "./army-food-bar";
 import { BannerBackground } from "../../../traits/render/huds/banner-background";
 import { ArmyBuffHud } from "./army-buff-hud";
 import { FurryHud } from "./furry-hud";
+import { HudTooltip } from "./hud-tooltip";
 
 export class ArmyResume extends Derive(BannerBackground) {
 	override drawPriority = 8;
@@ -25,27 +26,10 @@ export class ArmyResume extends Derive(BannerBackground) {
 		super({});
 		const faction = army.castle instanceof BattleDwarfCastle ? "Dwarf" : "Elf";
 		this.bannerImage = HudElementResources.battleArmyBanner[faction].image;
-		this.castleLifeBar = new CastleLifeBar(
-			army.castle,
-			this.position.add(new ScreenPosition({ x: 0, y: this.size.height / 3 })),
-		);
-		this.foodBar = new FoodBarHud(
-			this.army.foodEconomy,
-			this.position.add(new ScreenPosition({ x: 0, y: this.size.height / 6 })),
-		);
-
-		this.armyBuffHud = new ArmyBuffHud(
-			this.army.armyBuff,
-			this.position.add(new ScreenPosition({ x: 0, y: -this.size.height / 6 })),
-			{
-				width: this.size.width * 0.8,
-				height: this.size.height / 2,
-			},
-		);
-		this.furryHud = new FurryHud(
-			this.army.furry,
-			this.position.add(new ScreenPosition({ x: 0, y: -this.size.height / 4 })),
-		);
+		this.castleLifeBar = new CastleLifeBar(army.castle, this.position.add(new ScreenPosition({ x: 0, y: 12.2 })));
+		this.foodBar = new FoodBarHud(this.army.foodEconomy, this.position.add(new ScreenPosition({ x: 0, y: 8.6 })));
+		this.armyBuffHud = new ArmyBuffHud(this.army.armyBuff, this.position.add(new ScreenPosition({ x: 0, y: 3.2 })));
+		this.furryHud = new FurryHud(this.army.furry, this.position.add(new ScreenPosition({ x: 0, y: -7.6 })));
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
@@ -63,13 +47,16 @@ export class ArmyResume extends Derive(BannerBackground) {
 		context.restore();
 	}
 
+	// The tooltip of the buff or Fury under the point, opening toward the board.
+	tooltipAt(point: ScreenPosition): HudTooltip | null {
+		const side = this.position.x < 50 ? "right" : "left";
+		return this.armyBuffHud.tooltipAt(point, side) ?? this.furryHud.tooltipAt(point, side);
+	}
+
 	// Above the castle's health bar, as wide as the bar.
 	private drawPlayerName(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
 		const size = this.getCanvasSize(context, 14, 2.2, scale);
-		const canvasPosition = this.getCanvasPosition(
-			context,
-			position.add(new ScreenPosition({ x: 0, y: this.size.height / 3 + 2.6 })),
-		);
+		const canvasPosition = this.getCanvasPosition(context, position.add(new ScreenPosition({ x: 0, y: 15.2 })));
 		context.fillStyle = "#fff4dc";
 		context.textAlign = "center";
 		context.textBaseline = "middle";

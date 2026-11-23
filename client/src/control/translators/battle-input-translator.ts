@@ -16,6 +16,10 @@ export class BattleInputToIntentTranslator {
 		if (eventType === "up") {
 			battle.speedCursor.focused = false;
 		}
+		if (eventType === "move" && battle.hoverBanners(screenPosition)) {
+			battle.setDescriptionHud(null);
+			return;
+		}
 		if (!focus) {
 			battle.setDescriptionHud(null);
 			return;

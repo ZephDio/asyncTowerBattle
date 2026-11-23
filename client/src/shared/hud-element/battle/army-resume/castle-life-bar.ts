@@ -5,6 +5,7 @@ import { TRenderable } from "../../../traits/render/renderable";
 import { DrawPriority } from "../../../traits/render/image-drawable";
 import { AnyBattleCastle } from "../../../../engine/castle/battle";
 import { IconResources } from "../../../../renderer/resources/icons.resources";
+import { drawPixelMeter, LifeRamp, MeterIconOffset, MeterIconSide, MeterOffset, MeterSize } from "./pixel-meter";
 
 export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 	drawPriority = DrawPriority.HUD;
@@ -18,37 +19,20 @@ export class CastleLifeBar extends Derive(TRenderable, TDrawable) {
 
 	override draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		context.globalAlpha = 1;
-		context.fillStyle = "red";
-		context.strokeStyle = "black";
-		context.lineWidth = 1;
-		const size = this.getCanvasSize(context, 12, 1.3, scale);
-		const canvasPosition = this.getCanvasPosition(context, position);
-		this.drawRectangle(context, size, canvasPosition);
-		context.fillStyle = "green";
-		const lifeProportion = this.castle.stats.health / this.castle.stats.maxHealth;
-		this.drawRectangle(
+		const { health, maxHealth } = this.castle.stats;
+		drawPixelMeter(
 			context,
-			{
-				width: size.width * lifeProportion,
-				height: size.height,
-			},
-			new ScreenPosition({
-				x: canvasPosition.x - lifeProportion - (size.width / 2) * (1 - lifeProportion),
-				y: canvasPosition.y,
-			}),
+			this.getCanvasPosition(context, position.add(new ScreenPosition({ x: MeterOffset, y: 0 }))),
+			this.getCanvasSize(context, MeterSize.width, MeterSize.height, scale),
+			health / maxHealth,
+			LifeRamp,
+			`${Math.max(0, Math.round(health))}/${Math.round(maxHealth)}`,
 		);
-		const iconPosition = this.getCanvasPosition(context, this.position.add(new ScreenPosition({ x: -6, y: 0 })));
-		const iconSide = size.height * 1.5;
-		this.drawImage(context, { width: iconSide, height: iconSide }, iconPosition, this.healthIcon);
-
-		context.fillStyle = "black";
-		context.textAlign = "center";
-		context.font = `${size.height * 1.5}px text`;
-		context.fillText(
-			`${Math.round(this.castle.stats.health)}/${Math.round(this.castle.stats.maxHealth)}`,
-			canvasPosition.x,
-			canvasPosition.y + size.height / 2,
-			size.width,
+		const iconSize = this.getCanvasSize(context, MeterIconSide, MeterIconSide, scale);
+		const iconPosition = this.getCanvasPosition(
+			context,
+			position.add(new ScreenPosition({ x: MeterIconOffset, y: 0 })),
 		);
+		this.drawImage(context, iconSize, iconPosition, this.healthIcon);
 	}
 }
