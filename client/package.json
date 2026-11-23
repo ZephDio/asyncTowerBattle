@@ -10,7 +10,8 @@
     "format": "biome format src --write",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "generate:icon-font": "nix-shell -p 'python3.withPackages (p: [ p.fonttools ])' --run 'python3 scripts/generate-icon-font.py'"
+    "generate:icon-font": "nix-shell -p 'python3.withPackages (p: [ p.fonttools ])' --run 'python3 scripts/generate-icon-font.py'",
+    "generate:digit-font": "nix-shell -p 'python3.withPackages (p: [ p.fonttools ])' --run 'python3 scripts/merge-digit-font.py'"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.5",
