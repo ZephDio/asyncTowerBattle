@@ -5,6 +5,7 @@ import { Furry } from "../../../../engine/army/battle/furry";
 import { ScreenPosition } from "../../../position";
 import { DrawPriority } from "../../../traits/render/image-drawable";
 import { IconResources } from "../../../../renderer/resources/icons.resources";
+import { drawOutlinedText } from "./pixel-meter";
 
 export class FurryHud extends Derive(TRenderable, TDrawable) {
 	furryIcon = IconResources.furry.image;
@@ -18,29 +19,22 @@ export class FurryHud extends Derive(TRenderable, TDrawable) {
 		super({});
 	}
 
+	// The flame shows the Fury the next trigger adds: Furry.increaseFurry increments furryIncrease before adding it.
+	nextIncrease() {
+		return this.furry.furryIncrease + 1;
+	}
+
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		if (this.furry.amount <= 0) return;
-		const furryIconPosition = position.add(new ScreenPosition({ x: 2, y: 0 }));
-		const multiplierPosition = position.add(new ScreenPosition({ x: -2, y: 1 }));
-		const canvasFurryIconPosition = this.getCanvasPosition(context, furryIconPosition);
-		const canvasMultiplierPosition = this.getCanvasPosition(context, multiplierPosition);
+		const canvasPosition = this.getCanvasPosition(context, position);
 		const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);
-		this.drawImage(context, canvasSize, canvasFurryIconPosition, this.furryIcon);
-		context.textAlign = "center";
-		context.font = `${canvasSize.height / 1.6}px text`;
-		context.fillStyle = "#fff4dc";
-		context.fillText(
-			`${Math.round(this.furry.amount)}`,
-			canvasFurryIconPosition.x,
-			canvasFurryIconPosition.y + canvasSize.height / 2,
-			canvasSize.width,
-		);
-		context.fillStyle = "#fff4dc";
-		context.fillText(
-			`X${Math.round(this.furry.furryIncrease)}`,
-			canvasMultiplierPosition.x,
-			canvasMultiplierPosition.y + canvasSize.height / 2,
-			canvasSize.width,
+		this.drawImage(context, canvasSize, canvasPosition, this.furryIcon);
+		drawOutlinedText(
+			context,
+			`+${this.nextIncrease()}`,
+			canvasPosition.x,
+			canvasPosition.y + canvasSize.height * 0.18,
+			canvasSize.height * 0.58,
 		);
 	}
 }

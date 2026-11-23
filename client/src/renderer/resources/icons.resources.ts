@@ -47,12 +47,6 @@ export class IconResources {
 	static armyBuffAttack: IconResource = {
 		image: createImage("/resources/icons/army-buff/tower-attack.png"),
 	};
-	static tower: IconResource = {
-		image: createImage("/resources/hud/tower.svg"),
-	};
-	static unit: IconResource = {
-		image: createImage("/resources/hud/unit.svg"),
-	};
 	static furry: IconResource = {
 		image: createImage("/resources/hud/furry.png"),
 	};
