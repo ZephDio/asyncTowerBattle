@@ -8,6 +8,8 @@ import { Game } from "../game";
 import { BattleRandomSeed } from "./battle-random-seed";
 import { Battlefield } from "./battlefield/battlefield";
 import { ArmyResume } from "../../shared/hud-element/battle/army-resume/army-resume";
+import { ScreenPosition } from "../../shared/position";
+import { HudTooltip } from "../../shared/hud-element/battle/army-resume/hud-tooltip";
 import { secondsToFrame } from "../../shared/seconds";
 import { TranslateAnimation } from "../translate-animation/translate-animation";
 
@@ -25,6 +27,7 @@ export class Battle {
 	speedCursor: SliderBattleSpeed;
 	alliedArmyResume: ArmyResume;
 	enemyArmyResume: ArmyResume;
+	tooltip: HudTooltip | null = null;
 
 	timer = { clock: 0 };
 
@@ -113,7 +116,14 @@ export class Battle {
 
 	handleBattleOver(battleVerdict: "Victory" | "Defeat") {
 		this.isOver = true;
+		this.tooltip = null;
 		this.onBattleOver(battleVerdict, this);
+	}
+
+	// The tooltip of the banner buff or Fury under the point, or none.
+	hoverBanners(point: ScreenPosition) {
+		this.tooltip = this.alliedArmyResume.tooltipAt(point) ?? this.enemyArmyResume.tooltipAt(point);
+		return this.tooltip !== null;
 	}
 
 	changeSpeed(speed: number) {
@@ -126,7 +136,13 @@ export class Battle {
 
 	getDrawables(): RenderableState {
 		return {
-			renderables: [this.battleClock, this.speedCursor, this.alliedArmyResume, this.enemyArmyResume],
+			renderables: [
+				this.battleClock,
+				this.speedCursor,
+				this.alliedArmyResume,
+				this.enemyArmyResume,
+				...(this.tooltip ? [this.tooltip] : []),
+			],
 			grids: this.animationOver
 				? [
 						{

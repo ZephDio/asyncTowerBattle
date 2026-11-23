@@ -8,6 +8,7 @@ import { FoodBarHud } from "./army-food-bar";
 import { BannerBackground } from "../../../traits/render/huds/banner-background";
 import { ArmyBuffHud } from "./army-buff-hud";
 import { FurryHud } from "./furry-hud";
+import { HudTooltip } from "./hud-tooltip";
 
 export class ArmyResume extends Derive(BannerBackground) {
 	override drawPriority = 8;
@@ -44,6 +45,12 @@ export class ArmyResume extends Derive(BannerBackground) {
 		this.armyBuffHud.render(context);
 		this.furryHud.render(context);
 		context.restore();
+	}
+
+	// The tooltip of the buff or Fury under the point, opening toward the board.
+	tooltipAt(point: ScreenPosition): HudTooltip | null {
+		const side = this.position.x < 50 ? "right" : "left";
+		return this.armyBuffHud.tooltipAt(point, side) ?? this.furryHud.tooltipAt(point, side);
 	}
 
 	// Above the castle's health bar, as wide as the bar.
