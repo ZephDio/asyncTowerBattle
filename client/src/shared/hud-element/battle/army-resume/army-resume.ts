@@ -1,4 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
+import { BattleDwarfCastle } from "../../../../engine/castle/battle/battle-dwarf-castle";
+import { HudElementResources } from "../../../../renderer/resources/hud-element.resources";
 import { BattleArmy } from "../../../../engine/army/battle/battle-army";
 import { ScreenPosition } from "../../../position";
 import { CastleLifeBar } from "./castle-life-bar";
@@ -9,7 +11,7 @@ import { FurryHud } from "./furry-hud";
 
 export class ArmyResume extends Derive(BannerBackground) {
 	override drawPriority = 8;
-	size = { width: 22, height: 38 };
+	size = { width: 20, height: 38 };
 	castleLifeBar: CastleLifeBar;
 	foodBar: FoodBarHud;
 	armyBuffHud: ArmyBuffHud;
@@ -21,6 +23,8 @@ export class ArmyResume extends Derive(BannerBackground) {
 		public playerName: string,
 	) {
 		super({});
+		const faction = army.castle instanceof BattleDwarfCastle ? "Dwarf" : "Elf";
+		this.bannerImage = HudElementResources.armyBanner[faction].image;
 		this.castleLifeBar = new CastleLifeBar(
 			army.castle,
 			this.position.add(new ScreenPosition({ x: 0, y: this.size.height / 3 })),
@@ -34,7 +38,7 @@ export class ArmyResume extends Derive(BannerBackground) {
 			this.army.armyBuff,
 			this.position.add(new ScreenPosition({ x: 0, y: -this.size.height / 6 })),
 			{
-				width: this.size.width,
+				width: this.size.width * 0.8,
 				height: this.size.height / 2,
 			},
 		);
@@ -45,7 +49,9 @@ export class ArmyResume extends Derive(BannerBackground) {
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
+		context.save();
 		context.globalAlpha = 1;
+		context.imageSmoothingEnabled = false;
 		const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawBanner(context, canvasSize, canvasPosition);
@@ -54,6 +60,7 @@ export class ArmyResume extends Derive(BannerBackground) {
 		this.foodBar.render(context);
 		this.armyBuffHud.render(context);
 		this.furryHud.render(context);
+		context.restore();
 	}
 
 	// Above the castle's health bar, as wide as the bar.
@@ -61,9 +68,9 @@ export class ArmyResume extends Derive(BannerBackground) {
 		const size = this.getCanvasSize(context, 14, 2.2, scale);
 		const canvasPosition = this.getCanvasPosition(
 			context,
-			position.add(new ScreenPosition({ x: 0, y: this.size.height / 3 + 3.5 })),
+			position.add(new ScreenPosition({ x: 0, y: this.size.height / 3 + 2.6 })),
 		);
-		context.fillStyle = "black";
+		context.fillStyle = "#fff4dc";
 		context.textAlign = "center";
 		context.textBaseline = "middle";
 		context.font = `${size.height}px title`;
