@@ -110,8 +110,8 @@ Pieces carry tags that synergies and future pieces can target.
 
 | Faction | Castle | Castle HP | Food / s | Default unit |
 |---|---|---|---|---|
-| Dwarf | Dwarf Mountain | 25 | 3.5 | Dwarf: slow, tough, spawns with a stone shield that blocks one hit |
-| Elf | Castle | 20 | 4 | Elf: fast and fragile |
+| Dwarf | Dwarf Mountain | 25 | 5 | Dwarf: slow, tough, spawns with a stone shield that blocks one hit |
+| Elf | Castle | 20 | 5 | Elf: fast and fragile |
 
 An empty barrack summons the faction's default unit. Factions are thin for now: castle stats and default unit. Faction-specific pieces are planned.
 
@@ -164,7 +164,8 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Totem | Rarity | Price | Effect | Star pattern |
 |---|---|---|---|---|
 | Crops Field | Common | 10 | Every 3.5 s: +5 food. | none |
-| Windmill | Common | 10 | Food buildings on its stars cast 25% faster. +5 max food per Food building on its stars. | a cross 2 cells long in each direction |
+| Corn Field | Common | 15 | Start of battle: +25 max food (and 25 food). The first time an allied unit hits the enemy castle, units get 2 👢 (+4% speed). Food tag. Placeholder sprite. | none |
+| Windmill | Uncommon | 15 | Food buildings on its stars cast 25% faster. +5 max food per Food building on its stars. | a cross 2 cells long in each direction |
 | Bakery | Uncommon | 10 | Every 4 s: spend 5 food to give units +2 vitality. Once the army hits a famine, it produces 3 food instead, every cast until the end of the battle (the cast whose own payment triggers the first famine is already replaced; the famine happens anyway). | none |
 | Powder Magazine | Uncommon | 15 | Start of battle: towers get 4 🏹 projectile damage (+16%). At 15 s: 5 🔮 cast speed (+10%). | none |
 | Brewery | Epic | 15 | Every 5 s: +0.5 food per allied unit (max 8). Hitting the max gives units speed. Start of battle: units gain speed per barrack on its stars. | 4 cells around and below |

@@ -17,8 +17,8 @@ import { FoodTag, TotemTag } from "../../../../../shared/traits/engine/tags/buil
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
 
 export class WindmillBlueprint extends Derive(
-	TRarity(Rarity.Common),
-	TShopBlueprint(10, 10),
+	TRarity(Rarity.Uncommon),
+	TShopBlueprint(15, 10),
 	THitbox(
 		new HitBox([
 			[new Rectangle({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE }), new GridPosition({ x: 0, y: 0 })],

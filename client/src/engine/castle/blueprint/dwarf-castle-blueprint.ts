@@ -33,7 +33,7 @@ export class DwarfCastleBlueprint extends Derive(
 		"Dwarf Mountain",
 		["A castle that", "you must protect !", "Builds Tower to protect", "yourself and barracks", "to slay your enemies"],
 		{
-			"food production": "3.5/second",
+			"food production": "5/second",
 			health: "25",
 		},
 	);
