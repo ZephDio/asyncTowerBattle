@@ -3,6 +3,7 @@ import { EnvironmentGeneration } from "../environment/env-generation";
 import { roundGrowth } from "../grid/grid-sizes";
 import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
 import { Cell } from "../../shared/position";
+import { runRandom } from "../../shared/run-random";
 
 // Basic path tiles added to the reserve each time the grid grows.
 const GRID_GROWTH_PATH_TILES = 2;
@@ -11,6 +12,7 @@ export class RoundsTracker {
 	constructor(
 		public alliedArmy: Army,
 		public envGenerator: EnvironmentGeneration,
+		public runSeed: number,
 	) {}
 
 	rounds = 0;
@@ -23,7 +25,7 @@ export class RoundsTracker {
 			grid.grow(growth.size);
 			this.giveGridGrowthPathTiles();
 		}
-		this.envGenerator.generateForRound(grid, growth);
+		this.envGenerator.generateForRound(grid, growth, runRandom(this.runSeed, "environment", this.rounds));
 	}
 
 	giveGridGrowthPathTiles() {

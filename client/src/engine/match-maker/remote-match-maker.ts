@@ -7,9 +7,6 @@ import { LocalMatchMaker } from "./local-match-maker";
 import { BOT_NAME, GamePerformance, MatchMaker, Opponent } from "./match-maker";
 import { SerializedBoard } from "./serialized-board";
 
-// BattleRandomSeed works modulo 2**31.
-const RANDOM_SEED_RANGE = 0x80000000;
-
 // Trades the player's board with the opponent server (server/) for a board of the round. A logged-in player sends their
 // access token: the server keeps the board as theirs for the next players, consumes the opponent, and never gives them
 // one of theirs. A guest's or a dev mode request only reads, so playing as a guest or in dev mode changes nothing on
@@ -25,10 +22,9 @@ export class RemoteMatchMaker extends MatchMaker {
 		super();
 	}
 
-	async getOpponent(round: number, army: Army, performance: GamePerformance): Promise<Opponent> {
+	async getOpponent(round: number, army: Army, performance: GamePerformance, boardSeed: number): Promise<Opponent> {
 		try {
-			// The seed of the battles other players will fight against this board.
-			const board = serializeBoard(army, round, Math.floor(Math.random() * RANDOM_SEED_RANGE));
+			const board = serializeBoard(army, round, boardSeed);
 			const response = await authenticatedFetch(
 				`${this.serverUrl}/opponents/${round}${this.test ? "?test=true" : ""}`,
 				{
@@ -43,7 +39,7 @@ export class RemoteMatchMaker extends MatchMaker {
 			return { ...deserializeBoard(opponent), playerName: playerName ?? BOT_NAME };
 		} catch (error) {
 			console.warn(`Opponent server unavailable, using a local board for round ${round}`, error);
-			return this.fallback.getOpponent(round, army, performance);
+			return this.fallback.getOpponent(round, army, performance, boardSeed);
 		}
 	}
 }

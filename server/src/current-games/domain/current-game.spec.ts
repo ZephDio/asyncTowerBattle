@@ -24,6 +24,8 @@ describe("CurrentGame", () => {
 	it.each([
 		["a life under one", savedGame({ life: 0 })],
 		["a fractional life", savedGame({ life: 1.5 })],
+		["a negative run seed", savedGame({ runSeed: -1 })],
+		["a run seed past the range", savedGame({ runSeed: 2 ** 31 })],
 		["negative gold", savedGame({ gold: -1 })],
 		["negative wins", savedGame({ performance: { wins: -1, losses: 0 } })],
 		["a battle without its opponent", savedGame({ phase: "battle" })],

@@ -19,9 +19,11 @@ const isOpponent = (value: unknown): value is SavedOpponent =>
 // rules (rounds, counts, the opponent of a battle) are the domain's, checked by CurrentGame.
 export const parseSavedGame = (body: unknown): SavedGame => {
 	if (!isRecord(body)) throw new BadRequestException("Expected a saved game");
-	const { phase, life, gold, performance, board, inventory, opponent } = body;
+	const { phase, runSeed, life, gold, performance, board, inventory, opponent } = body;
 	if (phase !== "shop" && phase !== "battle") throw new BadRequestException("The phase is shop or battle");
-	if (!isNumber(life) || !isNumber(gold)) throw new BadRequestException("The life and the gold are numbers");
+	if (!isNumber(runSeed) || !isNumber(life) || !isNumber(gold)) {
+		throw new BadRequestException("The run seed, the life and the gold are numbers");
+	}
 	if (!isPerformance(performance)) throw new BadRequestException("The performance needs wins and losses");
 	if (!isBoard(board)) throw new BadRequestException("The board isn't a serialized board");
 	if (!Array.isArray(inventory) || !inventory.every(isItem)) {
@@ -30,5 +32,5 @@ export const parseSavedGame = (body: unknown): SavedGame => {
 	if (opponent !== null && !isOpponent(opponent)) {
 		throw new BadRequestException("The opponent is null or a serialized board with a player name");
 	}
-	return { phase, life, gold, performance, board, inventory, opponent };
+	return { phase, runSeed, life, gold, performance, board, inventory, opponent };
 };

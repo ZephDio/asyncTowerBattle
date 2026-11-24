@@ -8,6 +8,12 @@ export class InvalidLifeError extends CurrentGameRuleError {
 	}
 }
 
+export class InvalidRunSeedError extends CurrentGameRuleError {
+	constructor(runSeed: number) {
+		super(`A run seed is an integer from 0 to 2**31 - 1, got ${runSeed}`);
+	}
+}
+
 export class InvalidGoldError extends CurrentGameRuleError {
 	constructor(gold: number) {
 		super(`Gold is a count, got ${gold}`);

@@ -12,6 +12,7 @@ export const board = (round: number): SerializedBoard => ({
 
 export const savedGame = (overrides: Partial<SavedGame> = {}): SavedGame => ({
 	phase: "shop",
+	runSeed: 12345,
 	life: 5,
 	gold: 45,
 	performance: { wins: 1, losses: 0 },

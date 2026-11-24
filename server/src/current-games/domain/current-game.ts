@@ -1,9 +1,10 @@
-import { assertBoardRules } from "../../opponents/domain/board-rules.js";
+import { assertBoardRules, RANDOM_SEED_RANGE } from "../../opponents/domain/board-rules.js";
 import type { GamePerformance } from "../../opponents/domain/player-board.js";
 import type { SerializedBoard, SerializedCell } from "../../opponents/domain/serialized-board.js";
 import {
 	InvalidGoldError,
 	InvalidLifeError,
+	InvalidRunSeedError,
 	InvalidSavedPerformanceError,
 	MissingOpponentError,
 	OpponentRoundError,
@@ -23,6 +24,9 @@ export type SavedPhase = "shop" | "battle";
 // lives, and for a battle the opponent the player was matched with.
 export type SavedGame = {
 	phase: SavedPhase;
+	// The seed of the run, which the client draws the shop offers, the environment and its board's battle seeds from. It
+	// is a seed BattleRandomSeed takes.
+	runSeed: number;
 	life: number;
 	gold: number;
 	performance: GamePerformance;
@@ -44,6 +48,9 @@ export class CurrentGame {
 
 	constructor({ playerId, game }: CurrentGameProps) {
 		assertBoardRules(game.board);
+		if (!Number.isInteger(game.runSeed) || game.runSeed < 0 || game.runSeed >= RANDOM_SEED_RANGE) {
+			throw new InvalidRunSeedError(game.runSeed);
+		}
 		if (!Number.isInteger(game.life) || game.life < 1) throw new InvalidLifeError(game.life);
 		if (!isCount(game.gold)) throw new InvalidGoldError(game.gold);
 		if (!isCount(game.performance.wins) || !isCount(game.performance.losses)) {

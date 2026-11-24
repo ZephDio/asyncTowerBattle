@@ -14,6 +14,8 @@ import { SerializedBoard, SerializedInventoryItem } from "../match-maker/seriali
 // Keep in sync with server/src/current-games/domain/current-game.ts.
 export type SavedGame = {
 	phase: "shop" | "battle";
+	// The seed of the run, see Game.runSeed.
+	runSeed: number;
 	life: number;
 	gold: number;
 	performance: GamePerformance;
@@ -26,6 +28,7 @@ export type SavedGame = {
 export type GameSnapshot = {
 	phase: SavedGame["phase"];
 	army: Army;
+	runSeed: number;
 	round: number;
 	life: number;
 	performance: GamePerformance;
@@ -33,8 +36,17 @@ export type GameSnapshot = {
 	opponent?: Opponent;
 };
 
-export const serializeGame = ({ phase, army, round, life, performance, opponent }: GameSnapshot): SavedGame => ({
+export const serializeGame = ({
 	phase,
+	army,
+	runSeed,
+	round,
+	life,
+	performance,
+	opponent,
+}: GameSnapshot): SavedGame => ({
+	phase,
+	runSeed,
 	life,
 	gold: army.goldEconomy.golds.amount,
 	performance: { ...performance },
@@ -48,6 +60,7 @@ export const serializeGame = ({ phase, army, round, life, performance, opponent 
 export type RestoredGame = {
 	faction: Faction;
 	army: Army;
+	runSeed: number;
 	round: number;
 	life: number;
 	performance: GamePerformance;
@@ -67,6 +80,7 @@ export const restoreGame = (saved: SavedGame): RestoredGame => {
 	return {
 		faction: saved.board.faction === "Elf" ? Faction.Elf : Faction.Dwarf,
 		army,
+		runSeed: saved.runSeed,
 		round: saved.board.round,
 		life: saved.life,
 		performance: { ...saved.performance },

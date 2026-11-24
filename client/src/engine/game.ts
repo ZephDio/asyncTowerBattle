@@ -15,6 +15,7 @@ import { ArmyFactory } from "./army/army-fixtures";
 import { TranslateAnimation } from "./translate-animation/translate-animation";
 import { armyGridCenter } from "./grid/grid";
 import { loggedInPlayer } from "../auth/session";
+import { deriveSeed, newRunSeed } from "../shared/run-random";
 import { deleteSavedGame, saveGame } from "./saved-game/saved-game-api";
 import { RestoredGame, SavedGame, restoreGame, serializeGame } from "./saved-game/saved-game";
 
@@ -24,6 +25,9 @@ export class Game {
 	battleSummary: null | BattleSummary = null;
 	shop: null | ShopPhase = null;
 	rounds: RoundsTracker;
+	// The seed of the run, drawn when it starts: the offers, the environment and the seed of the player's board all come
+	// from it, so a run that is left and continued plays out the same.
+	readonly runSeed: number;
 	life = 5;
 	performance: GamePerformance = { wins: 0, losses: 0 };
 
@@ -36,9 +40,10 @@ export class Game {
 		private endGame: () => void,
 		resumed?: RestoredGame,
 	) {
+		this.runSeed = resumed?.runSeed ?? newRunSeed();
 		this.army = resumed?.army ?? ArmyFactory.default(chosenClass);
 		const envGenerator = new EnvironmentGeneration();
-		this.rounds = new RoundsTracker(this.army, envGenerator);
+		this.rounds = new RoundsTracker(this.army, envGenerator, this.runSeed);
 		if (!resumed) {
 			this.startShop();
 			return;
@@ -117,7 +122,12 @@ export class Game {
 	async handleShopQuit() {
 		if (this.searchingOpponent) return;
 		this.searchingOpponent = true;
-		const opponent = await this.matchMaker.getOpponent(this.rounds.round, this.army, this.performance);
+		const opponent = await this.matchMaker.getOpponent(
+			this.rounds.round,
+			this.army,
+			this.performance,
+			deriveSeed(this.runSeed, "battle", this.rounds.round),
+		);
 		this.searchingOpponent = false;
 		this.shop = null;
 		this.save("battle", opponent);
@@ -155,6 +165,7 @@ export class Game {
 			this.setDescriptionHud.bind(this),
 			this.rounds.round,
 			this.life,
+			this.runSeed,
 		);
 	}
 
@@ -167,6 +178,7 @@ export class Game {
 					phase,
 					army: this.army,
 					round: this.rounds.round,
+					runSeed: this.runSeed,
 					life: this.life,
 					performance: this.performance,
 					opponent,

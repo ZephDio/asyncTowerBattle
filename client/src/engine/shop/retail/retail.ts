@@ -9,6 +9,7 @@ import { RetailGrid } from "../../grid/retail-grid";
 import { ArmyGrid } from "../../grid/grid";
 import { RetailFiller } from "./retail-filler";
 import { Buyable } from "./buyable";
+import { runRandom } from "../../../shared/run-random";
 export type ShopItem = Buyable;
 export class Retail extends Derive(
 	TCollider,
@@ -25,17 +26,21 @@ export class Retail extends Derive(
 		new Cell({ x: 7, y: 3 }),
 	];
 	grid: RetailGrid;
-	retailFiller: RetailFiller;
-	constructor(round: number) {
+	// How many times the offers were drawn, so each draw of a round has its own stream.
+	private draws = 0;
+	constructor(
+		private round: number,
+		private runSeed: number,
+	) {
 		super({});
-		this.retailFiller = new RetailFiller(round);
 		this.grid = new RetailGrid();
 		this.refresh();
 	}
 	position = new GridPosition(PercentToReal({ x: 50, y: 75 }));
 
 	async getRetailItems(): Promise<ShopItem[]> {
-		const itemsAndPrice = this.retailFiller.getFreshItems(this.slots);
+		const random = runRandom(this.runSeed, "shop", this.round, this.draws++);
+		const itemsAndPrice = new RetailFiller(this.round, random).getFreshItems(this.slots);
 		return itemsAndPrice.map((itemAndPrice) => {
 			return Buyable.from(itemAndPrice.recruit, itemAndPrice.price);
 		});

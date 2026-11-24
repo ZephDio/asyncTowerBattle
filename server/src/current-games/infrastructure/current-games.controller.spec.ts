@@ -104,6 +104,7 @@ describe("/current-game", () => {
 
 		await put({}).expect(400);
 		await put({ ...savedGame(), phase: "summary" }).expect(400);
+		await put({ ...savedGame(), runSeed: "1" }).expect(400);
 		await put({ ...savedGame(), inventory: [{ kind: 3 }] }).expect(400);
 		await put({ ...savedGame(), opponent: { board: board(2) } }).expect(400);
 	});

@@ -37,12 +37,19 @@ describe("saved game", () => {
 	it("rebuilds the army, its reserve and its gold from the JSON it was saved as", () => {
 		const army = armyWithReserve();
 		const saved = throughJson(
-			serializeGame({ phase: "shop", army, round: 1, life: 4, performance: { wins: 2, losses: 1 } }),
+			serializeGame({ phase: "shop", army, runSeed: 1234, round: 1, life: 4, performance: { wins: 2, losses: 1 } }),
 		);
 
 		const restored = restoreGame(saved);
 
-		expect(restored).toMatchObject({ faction: Faction.Elf, round: 1, life: 4, phase: "shop", opponent: null });
+		expect(restored).toMatchObject({
+			faction: Faction.Elf,
+			runSeed: 1234,
+			round: 1,
+			life: 4,
+			phase: "shop",
+			opponent: null,
+		});
 		expect(restored.performance).toEqual({ wins: 2, losses: 1 });
 		expect(serializeGame({ ...restored, opponent: undefined })).toEqual(saved);
 		expect(saved.inventory.map((item) => item.kind)).toEqual(["tower", "totem", "barrack", "unit", "trap", "path"]);
@@ -54,7 +61,15 @@ describe("saved game", () => {
 		const opponent = { ...LocalMatchMaker.board(1), playerName: "Bob" };
 
 		const saved = throughJson(
-			serializeGame({ phase: "battle", army, round: 1, life: 5, performance: { wins: 0, losses: 0 }, opponent }),
+			serializeGame({
+				phase: "battle",
+				army,
+				runSeed: 1234,
+				round: 1,
+				life: 5,
+				performance: { wins: 0, losses: 0 },
+				opponent,
+			}),
 		);
 		const restored = restoreGame(saved);
 
