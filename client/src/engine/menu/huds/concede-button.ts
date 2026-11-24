@@ -21,7 +21,7 @@ export class ConcedeButton extends Derive(
 ) {
 	override drawPriority = DrawPriority.HUD;
 	size = { width: 22, height: 7 };
-	position = PercentToReal(new GridPosition({ x: 50, y: 24 }));
+	position = PercentToReal(new GridPosition({ x: 50, y: 38 }));
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
 		const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		const center = this.getCanvasPosition(context, position);
