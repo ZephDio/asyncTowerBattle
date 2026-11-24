@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { logout, resumeSession } from "../auth/auth-api";
 import { type Player, type Session, storedTokens } from "../auth/session";
 import { DEBUG_BRIDGE } from "../debug/debug-flag";
-import { guestSteps, openTutorialOnFirstTime } from "./first-time-steps";
+import { openTutorialOnFirstTime } from "./first-time-steps";
 import { GameCanvas } from "./game-canvas";
 import { HelpButton } from "./help-button";
 import type { GameLink } from "../control/input-to-intent-translator";
@@ -41,14 +41,17 @@ export function App() {
 		game.send({ intent: account.kind === "player" ? "load-saved-game" : "forget-saved-game" });
 	}, [game, account]);
 
-	// The tutorial opens by itself the first time a registered player connects or a guest starts playing. Debug runs,
-	// such as the headless game tools, never get it: it would cover the game they drive.
-	const playing = account.kind === "player" || account.kind === "guest";
+	// The tutorial opens by itself the first time a registered player connects, and each time a guest starts playing: a
+	// guest has no account to remember it. Debug runs, such as the headless game tools, never get it: it would cover the
+	// game they drive.
+	const guest = account.kind === "guest";
 	const playerId = account.kind === "player" ? account.player.id : undefined;
 	useEffect(() => {
-		if (!game || !playing || DEBUG_BRIDGE) return;
-		openTutorialOnFirstTime(playerId ? playerSteps() : guestSteps(), () => game.send({ intent: "open-tutorial" }));
-	}, [game, playing, playerId]);
+		if (!game || DEBUG_BRIDGE) return;
+		const open = () => game.send({ intent: "open-tutorial" });
+		if (guest) open();
+		else if (playerId) openTutorialOnFirstTime(playerSteps(), open);
+	}, [game, guest, playerId]);
 
 	const onSession = useCallback((session: Session) => setAccount({ kind: "player", player: session.player }), []);
 	const logOut = useCallback(() => {

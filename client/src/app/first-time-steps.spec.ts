@@ -1,45 +1,24 @@
-import { guestSteps, openTutorialOnFirstTime, type FirstTimeSteps } from "./first-time-steps";
+import { type FirstTimeSteps, openTutorialOnFirstTime } from "./first-time-steps";
 
-const memoryStorage = () => {
-	const values = new Map<string, string>();
+// Steps kept in memory, as the server keeps them for a player.
+const memorySteps = (): FirstTimeSteps => {
+	let seen = false;
 	return {
-		getItem: (key: string) => values.get(key) ?? null,
-		setItem: (key: string, value: string) => void values.set(key, value),
+		tutorialSeen: async () => seen,
+		markTutorialSeen: async () => void (seen = true),
 	};
 };
 
 describe("openTutorialOnFirstTime", () => {
-	it("opens the tutorial once for a guest, and not on the next visit", async () => {
-		const storage = memoryStorage();
+	it("opens the tutorial once, and not on the next visit", async () => {
+		const steps = memorySteps();
 		let opened = 0;
 		const open = () => void opened++;
 
-		expect(await openTutorialOnFirstTime(guestSteps(storage), open)).toBe(true);
-		expect(await openTutorialOnFirstTime(guestSteps(storage), open)).toBe(false);
+		expect(await openTutorialOnFirstTime(steps, open)).toBe(true);
+		expect(await openTutorialOnFirstTime(steps, open)).toBe(false);
 
 		expect(opened).toBe(1);
-	});
-
-	it("opens it again for a guest with a fresh storage", async () => {
-		let opened = 0;
-		await openTutorialOnFirstTime(guestSteps(memoryStorage()), () => void opened++);
-		await openTutorialOnFirstTime(guestSteps(memoryStorage()), () => void opened++);
-		expect(opened).toBe(2);
-	});
-
-	it("opens it every time without storage", async () => {
-		let opened = 0;
-		const throwing = {
-			getItem: () => {
-				throw new Error("blocked");
-			},
-			setItem: () => {
-				throw new Error("blocked");
-			},
-		};
-		await openTutorialOnFirstTime(guestSteps(throwing), () => void opened++);
-		await openTutorialOnFirstTime(guestSteps(throwing), () => void opened++);
-		expect(opened).toBe(2);
 	});
 
 	it("stays closed when the steps can't be read", async () => {
