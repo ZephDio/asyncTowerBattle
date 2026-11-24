@@ -44,11 +44,12 @@ export class DebugBridge {
 		return this.wrap.game;
 	}
 
-	phase(): "menu" | "shop" | "battle" | "summary" {
+	phase(): "menu" | "shop" | "battle" | "summary" | "resume" {
 		const game = this.wrap.state === "game" ? this.game : null;
 		if (!game) return "menu";
 		if (game.battle) return "battle";
 		if (game.battleSummary) return "summary";
+		if (game.runResume) return "resume";
 		return "shop";
 	}
 
@@ -119,6 +120,7 @@ export class DebugBridge {
 	regions() {
 		const regions: Record<string, Rect> = { canvas: this.canvasRect() };
 		const phase = this.phase();
+		if (phase === "resume") regions["army"] = this.gridRect(this.grid("army"));
 		if (phase === "shop") {
 			regions["army"] = this.gridRect(this.grid("army"));
 			regions["inventory"] = this.gridRect(this.grid("inventory"));
@@ -155,6 +157,7 @@ export class DebugBridge {
 		if (phase === "shop" && game?.shop) elements = game.shop.getState().hudElements;
 		if (phase === "battle" && game?.battle) elements = game.battle.getState().hudElements;
 		if (phase === "summary" && game?.battleSummary) elements = game.battleSummary.getState().hudElements;
+		if (phase === "resume" && game?.runResume) elements = game.runResume.getState().hudElements;
 		return elements.flatMap((element) => {
 			if (!("position" in element) || !(element.position instanceof ScreenPosition)) return [];
 			return [{ name: element.constructor.name, ...this.screenToPage(element.position) }];

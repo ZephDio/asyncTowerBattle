@@ -30,6 +30,12 @@ export interface SummaryState extends GameState {
 	hidden: boolean;
 }
 
+export interface ResumeState extends GameState {
+	type: "resume";
+	grid: ArmyGrid;
+	hudElements: HudElement[];
+}
+
 export interface BattleState extends GameState {
 	type: "battle";
 	castles: AnyBattleCastle[];

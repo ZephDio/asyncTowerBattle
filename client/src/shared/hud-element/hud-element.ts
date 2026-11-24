@@ -13,6 +13,8 @@ import { BattleVerdictHud } from "../../engine/battle-summary/huds/battle-verdic
 import { NextRoundHud } from "../../engine/battle-summary/huds/next-round-hud";
 import { LifeRemainingHud } from "../../engine/battle-summary/huds/life-remaining-hud";
 
+import { ContinueHud } from "../../engine/run-resume/continue-hud";
+
 export type HudElement =
 	| StartGameButton
 	| StartBattleButton
@@ -27,4 +29,5 @@ export type HudElement =
 	| HideHud
 	| BattleVerdictHud
 	| NextRoundHud
-	| LifeRemainingHud;
+	| LifeRemainingHud
+	| ContinueHud;

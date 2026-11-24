@@ -1,5 +1,5 @@
 import { Battle } from "./battle/battle";
-import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
+import { BattleState, GameState, ResumeState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
 import { ShopPhase } from "./shop/shop";
 import { GamePerformance, MatchMaker, Opponent } from "./match-maker/match-maker";
@@ -15,12 +15,14 @@ import { ArmyFactory } from "./army/army-fixtures";
 import { TranslateAnimation } from "./translate-animation/translate-animation";
 import { armyGridCenter } from "./grid/grid";
 import { loggedInPlayer } from "../auth/session";
+import { RunResume } from "./run-resume/run-resume";
 import { MAX_LIVES, MAX_ROUNDS } from "./game-rules";
 
 export class Game {
 	army: Army;
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
+	runResume: null | RunResume = null;
 	shop: null | ShopPhase = null;
 	rounds: RoundsTracker;
 	life = MAX_LIVES;
@@ -43,6 +45,7 @@ export class Game {
 	async getState(): Promise<GameState> {
 		if (this.battle) return this.getBattleState();
 		if (this.battleSummary) return this.getSummaryState();
+		if (this.runResume) return this.runResume.getState() as ResumeState;
 		return this.getShopState();
 	}
 
@@ -85,7 +88,7 @@ export class Game {
 	handleSummaryQuit() {
 		this.battleSummary = null;
 		if (this.isRunOver) {
-			this.endGame();
+			this.startRunResume();
 			return;
 		}
 		const from = this.army.grid.centerPosition.clone();
@@ -101,6 +104,22 @@ export class Game {
 			() => grid.updateCornerPosition(),
 		);
 		animation.startAnimation();
+	}
+
+	startRunResume() {
+		this.setDescriptionHud(null);
+		const result = { life: this.life, wins: this.performance.wins, round: this.rounds.round };
+		this.runResume = new RunResume(
+			this.army,
+			result,
+			this.handleResumeQuit.bind(this),
+			this.setDescriptionHud.bind(this),
+		);
+	}
+
+	handleResumeQuit() {
+		this.runResume = null;
+		this.endGame();
 	}
 
 	// The shop stays on screen until the opponent board arrives.
@@ -120,6 +139,9 @@ export class Game {
 		}
 		if (this.battleSummary) {
 			state = this.battleSummary.getDrawables();
+		}
+		if (this.runResume) {
+			state = this.runResume.getDrawables();
 		}
 		if (this.shop) {
 			state = this.shop!.getDrawables();

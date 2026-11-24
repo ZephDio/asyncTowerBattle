@@ -12,6 +12,8 @@ export abstract class Renderer {
 }
 
 export type RenderableState = {
+	// Drawn right over the background, under every grid.
+	backdrops?: ImplementsTrait<typeof TRenderable>[];
 	renderables: ImplementsTrait<typeof TRenderable>[];
 	grids: {
 		grid: BattleGrid | ArmyGrid | RetailGrid | Inventory;
