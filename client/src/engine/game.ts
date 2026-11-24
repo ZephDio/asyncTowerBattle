@@ -16,7 +16,7 @@ import { TranslateAnimation } from "./translate-animation/translate-animation";
 import { armyGridCenter } from "./grid/grid";
 import { loggedInPlayer } from "../auth/session";
 import { RunResume } from "./run-resume/run-resume";
-import { MAX_ROUNDS, STARTING_LIVES } from "./game-rules";
+import { STARTING_LIVES, isRunOver } from "./game-rules";
 
 export class Game {
 	army: Army;
@@ -76,13 +76,8 @@ export class Game {
 		this.battle = null;
 	}
 
-	get isLastRound() {
-		return this.rounds.round >= MAX_ROUNDS;
-	}
-
-	// The run ends when the player has no life left or the last round has been played.
 	get isRunOver() {
-		return this.life <= 0 || this.isLastRound;
+		return isRunOver(this.life, this.rounds.round);
 	}
 
 	handleSummaryQuit() {

@@ -12,7 +12,6 @@ import { HideHud } from "../../engine/battle-summary/huds/hide-hud";
 import { BattleVerdictHud } from "../../engine/battle-summary/huds/battle-verdict-hud";
 import { NextRoundHud } from "../../engine/battle-summary/huds/next-round-hud";
 import { LifeRemainingHud } from "../../engine/battle-summary/huds/life-remaining-hud";
-
 import { ContinueHud } from "../../engine/run-resume/continue-hud";
 
 export type HudElement =
