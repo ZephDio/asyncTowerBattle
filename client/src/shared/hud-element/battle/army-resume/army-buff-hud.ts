@@ -36,11 +36,6 @@ const BuffKinds: BuffKind[] = [
 		describe: (stacks) => effect("Units' cast speed", "cast-speed", stacks),
 	},
 	{
-		icon: IconResources.castleDamage.image,
-		stacks: (armyBuff) => armyBuff.unitArmyBuff.getBuff("castle-damage"),
-		describe: (stacks) => effect("Units' castle damage", "castle-damage", stacks),
-	},
-	{
 		icon: IconResources.armyBuffAttack.image,
 		stacks: (armyBuff) => armyBuff.towerArmyBuff.getBuff("projectile-damage"),
 		describe: (stacks) => effect("Towers' damage", "projectile-damage", stacks),

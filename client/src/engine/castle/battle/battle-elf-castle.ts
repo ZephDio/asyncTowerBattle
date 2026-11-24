@@ -47,6 +47,6 @@ export class BattleElfCastle extends Derive(TBattleCastle, TImageVariant) {
 	}
 
 	produceFood() {
-		this.foodHooks.addFood(4 / 32);
+		this.foodHooks.addFood(5 / 32);
 	}
 }

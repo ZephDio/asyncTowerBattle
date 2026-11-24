@@ -164,9 +164,6 @@ export class Stats {
 				case "vitality":
 					this.addMaxHealth(amount, true);
 					break;
-				case "castle-damage":
-					this.basePercentStat.castleDamage += amount;
-					break;
 				case "projectile-damage":
 					this.basePercentStat.projectileDamage += amount;
 					break;

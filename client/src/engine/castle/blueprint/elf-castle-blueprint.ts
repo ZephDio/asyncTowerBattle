@@ -33,7 +33,7 @@ export class ElfCastleBlueprint extends Derive(
 		"Castle",
 		["A castle that", "you must protect !", "Builds Tower to protect", "yourself and barracks", "to slay your enemies"],
 		{
-			"food production": "4/second",
+			"food production": "5/second",
 			health: "20",
 		},
 	);

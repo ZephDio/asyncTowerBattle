@@ -41,7 +41,7 @@ Use these when a piece grants the buff to the whole army (`addUnitBuff` / `addTo
 | 🏹 | army tower projectile damage | `army-buff/tower-attack.png` | tower `projectile-damage` |
 | 🔮 | army tower cast speed | `army-buff/tower-cast-speed.png` | tower `cast-speed` |
 
-The unit `castle-damage` and `cast-speed` buffs have no shield icon yet.
+The unit `cast-speed` buff has no shield icon yet. Castle damage is deliberately not an army buff.
 
 ### Synergy
 

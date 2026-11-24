@@ -2,6 +2,8 @@ import { Cell } from "../../../../shared/position";
 import { CropsFieldBlueprint } from "../blueprint/implementation/crops-field-blueprint";
 import { AnvilTotemBlueprint } from "../blueprint/implementation/anvil-blueprint";
 import { WindmillBlueprint } from "../blueprint/implementation/windmill-blueprint";
+import { CornFieldBlueprint } from "../blueprint/implementation/corn-field-blueprint";
+import { CornField } from "./implementation/corn-field";
 import { CropsField } from "./implementation/crops-field";
 import { GobelinPortal } from "./implementation/gobelin-portal";
 import { AnvilTotem } from "./implementation/anvil";
@@ -23,6 +25,10 @@ export class TotemBuilder {
 
 	buildCropsField(field?: CropsFieldBlueprint) {
 		return new CropsField(this.cell, field);
+	}
+
+	buildCornField(field?: CornFieldBlueprint) {
+		return new CornField(this.cell, field);
 	}
 
 	buildWindmill(windmill?: WindmillBlueprint) {

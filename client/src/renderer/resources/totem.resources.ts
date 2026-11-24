@@ -79,6 +79,15 @@ export class TotemResources {
 		shape: "ellipse",
 	};
 
+	static cornField: ShapedResource = {
+		size: {
+			width: 4.9,
+			height: 4.232,
+		},
+		image: createImage("/resources/totem/corn-field.png"),
+		shape: "rectangle",
+	};
+
 	static bosquet: ShapedResource = {
 		size: {
 			width: 4.9,

@@ -36,6 +36,7 @@ import { WindmillBlueprint } from "../../constructs/totem/blueprint/implementati
 import { BakeryBlueprint } from "../../constructs/totem/blueprint/implementation/bakery-blueprint";
 import { MineBlueprint } from "../../constructs/totem/blueprint/implementation/mine-blueprint";
 import { BreweryBlueprint } from "../../constructs/totem/blueprint/implementation/brewery-blueprint";
+import { CornFieldBlueprint } from "../../constructs/totem/blueprint/implementation/corn-field-blueprint";
 import { PowderMagazineBlueprint } from "../../constructs/totem/blueprint/implementation/powder-magazine-blueprint";
 import { RedObeliskBlueprint } from "../../constructs/totem/blueprint/implementation/red-obelisk";
 import { EntBlueprint } from "../../units/blueprint/implementation/ent-blueprint";
@@ -58,6 +59,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			AnvilTotemBlueprint,
 			GobelinPortalBlueprint,
 			CropsFieldBlueprint,
+			CornFieldBlueprint,
 			WindmillBlueprint,
 			BakeryBlueprint,
 			MineBlueprint,

@@ -26,7 +26,7 @@ These facts come from the current code and drive the numbers below.
 
 - **Units do not fight units.** A unit walks the enemy path. Towers shoot it. If it reaches the castle, it deals its `damage` once and dies. **Life** means surviving towers, and **damage** means castle damage. Castles have 20 HP (elf) or 25 HP (dwarf).
 - **Barrack cost is the unit's `summonTime`**, so summon time sets throughput.
-- **Food**: each army starts at 100🌽 (full). Every 2 s, each unit eats `foodConsumption`: if there is food, it heals 1. If not, it takes growing hunger damage (2, 4, 6…). The castle produces 3.5🌽/s (dwarf) or 4🌽/s (elf), so about 7–8🌽 per 2 s tick. That sustains roughly 7–8 units at 1🌽 upkeep. A rush spends the 100🌽 buffer, and a food war attacks it.
+- **Food**: each army starts at 100🌽 (full). Every 2 s, each unit eats `foodConsumption`: if there is food, it heals 1. If not, it takes growing hunger damage (2, 4, 6…). The castle produces 5🌽/s (dwarf and elf), so about 10🌽 per 2 s tick. That sustains roughly 10 units at 1🌽 upkeep. A rush spends the 100🌽 buffer, and a food war attacks it.
 - **Fury** starts at 20 s and triggers every 2 s. Each trigger adds the next step (1, 2, 3…), so the total is triangular: 1, 3, 6, 10, 15… and 55 at 38 s. A unit receives the current fury **when it spawns**, as +X% max health and +X% movement speed. Two consequences:
   - Every **extra trigger** (the Red Obelisk, or a unit below) raises all later steps. That is the "start your fury early" lever.
   - Fury is a percentage, so **high-life units gain the most** from it.

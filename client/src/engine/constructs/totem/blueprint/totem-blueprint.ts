@@ -2,6 +2,7 @@ import { BakeryBlueprint } from "./implementation/bakery-blueprint";
 import { BosquetBlueprint } from "./implementation/bosquet-blueprint";
 import { BreweryBlueprint } from "./implementation/brewery-blueprint";
 import { CropsFieldBlueprint } from "./implementation/crops-field-blueprint";
+import { CornFieldBlueprint } from "./implementation/corn-field-blueprint";
 import { MineBlueprint } from "./implementation/mine-blueprint";
 import { AnvilTotemBlueprint } from "./implementation/anvil-blueprint";
 import { WindmillBlueprint } from "./implementation/windmill-blueprint";
@@ -14,6 +15,7 @@ export type AnyTotemBlueprint =
 	| GobelinPortalBlueprint
 	| WindmillBlueprint
 	| CropsFieldBlueprint
+	| CornFieldBlueprint
 	| BakeryBlueprint
 	| MineBlueprint
 	| BreweryBlueprint
