@@ -34,6 +34,6 @@ export class NextRoundHud extends Derive(
 		context.fillStyle = "#172634";
 		context.font = `${canvasSize.height * 0.22}px title`;
 		context.textAlign = "center";
-		context.fillText(this.runOver ? "Main Menu" : "Next Round", canvasPosition.x, canvasPosition.y);
+		context.fillText(this.runOver ? "Continue" : "Next Round", canvasPosition.x, canvasPosition.y);
 	}
 }
