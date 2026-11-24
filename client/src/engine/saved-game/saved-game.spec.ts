@@ -10,6 +10,7 @@ import { BasicBarrack } from "../constructs/barrack/recruit/implementation/basic
 import { Fox } from "../units/recruit/implementation/fox";
 import { Dragon } from "../units/recruit/implementation/dragon";
 import { FrostTower } from "../constructs/tower/recruit/implementation/frost-tower";
+import { BlacksmithTower } from "../constructs/tower/recruit/implementation/blacksmith-tower";
 import { Mine } from "../constructs/totem/recruit/implementation/mine";
 import { restoreGame, serializeGame } from "./saved-game";
 
@@ -54,6 +55,25 @@ describe("saved game", () => {
 		expect(serializeGame({ ...restored, opponent: undefined })).toEqual(saved);
 		expect(saved.inventory.map((item) => item.kind)).toEqual(["tower", "totem", "barrack", "unit", "trap", "path"]);
 		expect(restored.army.goldEconomy.golds.amount).toBe(37);
+	});
+
+	it("keeps a piece that spans several cells once, where the reserve placed it", () => {
+		const army = ArmyFactory.default(Faction.Elf);
+		const tower = new BlacksmithTower(origin());
+		army.pushToInventory(tower);
+		army.pushToInventory(new Fox(origin()));
+		const placed = tower.cell.clone();
+
+		const saved = throughJson(
+			serializeGame({ phase: "shop", army, runSeed: 1, round: 1, life: 5, performance: { wins: 0, losses: 0 } }),
+		);
+		const restored = restoreGame(saved);
+
+		expect(tower.gridShape.getVectorialCells().length).toBeGreaterThan(1);
+		expect(saved.inventory).toHaveLength(2);
+		const restoredTower = restored.army.inventory.getRecruits().find((recruit) => recruit instanceof BlacksmithTower);
+		expect(restoredTower?.cell).toEqual(placed);
+		expect(restored.army.inventory.getRecruits()).toHaveLength(3);
 	});
 
 	it("keeps the opponent of a battle with its seed and its player", () => {

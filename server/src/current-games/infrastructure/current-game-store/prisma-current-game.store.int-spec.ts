@@ -1,5 +1,6 @@
 import { PrismaService } from "../../../database/prisma.service.js";
 import { assertTestDatabase } from "../../../database/test-database.js";
+import { savedGame } from "../../domain/current-game-fixtures.js";
 import { currentGameStoreSuite } from "./current-game.store.test-suite.js";
 import { PrismaCurrentGameStore } from "./prisma-current-game.store.js";
 
@@ -37,5 +38,15 @@ describe("the current_game table", () => {
 		await prisma.player.delete({ where: { id } });
 
 		expect(await prisma.currentGame.count()).toBe(0);
+	});
+
+	it("reads a row that breaks today's rules as no game", async () => {
+		const id = crypto.randomUUID();
+		await prisma.player.create({ data: { id, email: "dave@test.local", name: "dave", googleId: "dave" } });
+		await prisma.currentGame.create({
+			data: { playerId: id, game: JSON.parse(JSON.stringify({ ...savedGame(), runSeed: null })) },
+		});
+
+		expect(await new PrismaCurrentGameStore(prisma).find(id)).toBeUndefined();
 	});
 });

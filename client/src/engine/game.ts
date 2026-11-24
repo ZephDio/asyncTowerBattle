@@ -31,6 +31,8 @@ export class Game {
 	// The seed of the run, drawn when it starts: the offers, the environment and the seed of the player's board all come
 	// from it, so a run that is left and continued plays out the same.
 	readonly runSeed: number;
+	// The player the run is played by, so a run never saves under another account after a logout and a login.
+	private readonly playerId = loggedInPlayer()?.id;
 	life = STARTING_LIVES;
 	performance: GamePerformance = { wins: 0, losses: 0 };
 
@@ -96,7 +98,7 @@ export class Game {
 			this.performance.wins++;
 		}
 		// A finished run can't be continued, even from its last summary or its resume screen.
-		if (this.isRunOver) deleteSavedGame();
+		if (this.isRunOver && this.savesForPlayer) deleteSavedGame();
 		this.startBattleSummary(battle, battleVerdict);
 		this.battle = null;
 	}
@@ -198,7 +200,12 @@ export class Game {
 
 	// Keeps the game as it stands at the start of a shop or of a battle, for the player to continue from there. A game
 	// that can't be saved still plays.
+	private get savesForPlayer() {
+		return this.playerId !== undefined && loggedInPlayer()?.id === this.playerId;
+	}
+
 	private save(phase: SavedGame["phase"], opponent?: Opponent) {
+		if (!this.savesForPlayer) return;
 		try {
 			saveGame(
 				serializeGame({

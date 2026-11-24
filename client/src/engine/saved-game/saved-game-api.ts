@@ -46,16 +46,11 @@ export const deleteSavedGame = (): Promise<void> => {
 	}).catch((error) => console.warn("The saved game could not be deleted", error));
 };
 
-// The game the player left running, or null when they have none or the server can't be reached.
+// The game the player left running, or null when they have none. Throws when the server can't be reached or refuses:
+// that is not the same as having no game, so the caller decides what to do about it.
 export const loadSavedGame = async (): Promise<SavedGame | null> => {
 	if (!saves()) return null;
-	try {
-		const { game }: { game: SavedGame | null } = await (
-			await enqueue(async () => ensureOk(await authenticatedFetch(url)))
-		).json();
-		return game;
-	} catch (error) {
-		console.warn("The saved game could not be loaded", error);
-		return null;
-	}
+	const response = await enqueue(async () => ensureOk(await authenticatedFetch(url)));
+	const { game }: { game: SavedGame | null } = await response.json();
+	return game;
 };
