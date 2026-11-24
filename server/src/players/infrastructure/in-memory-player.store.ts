@@ -32,6 +32,11 @@ export class InMemoryPlayerStore extends PlayerStore {
 		return player?.passwordHash ? { player: this.toPlayer(player), passwordHash: player.passwordHash } : undefined;
 	}
 
+	async findPasswordLoginByName(name: string) {
+		const player = [...this.players.values()].find((stored) => stored.name.toLowerCase() === name.toLowerCase());
+		return player?.passwordHash ? { player: this.toPlayer(player), passwordHash: player.passwordHash } : undefined;
+	}
+
 	private find(matches: (stored: PlayerAccount) => boolean) {
 		const player = [...this.players.values()].find(matches);
 		return player && this.toPlayer(player);

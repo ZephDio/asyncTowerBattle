@@ -38,8 +38,9 @@ export const loginWithGoogle = (credential: string) => openSession("/auth/google
 export const registerWithGoogle = (credential: string, name: string) =>
 	openSession("/auth/google/register", { credential, name });
 
-export const loginWithPassword = (email: string, password: string) =>
-	openSession("/auth/password/login", { email, password });
+// `identifier` is the player's email or player name.
+export const loginWithPassword = (identifier: string, password: string) =>
+	openSession("/auth/password/login", { identifier, password });
 
 export const registerWithPassword = (email: string, name: string, password: string) =>
 	openSession("/auth/password/register", { email, name, password });

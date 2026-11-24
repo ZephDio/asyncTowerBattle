@@ -23,15 +23,17 @@ Each pull adds the board its puller sent in the same request to the opponent's `
 
 ## Players
 
-Players sign in with Google or with their email and password; guests play without an account. The client's Google button gives an ID token (the `credential`), which the server checks against `GOOGLE_CLIENT_ID` with `google-auth-library`. A player is a `player` row (id, email, name, and their Google `sub` or their password hash), created on register. No two players share an email (stored in lower case) or a name (ignoring case), whichever way they sign in. A password is stored as its salted scrypt hash (`ScryptPasswordHasher`), never as typed.
+Players sign in with Google or with their email or player name and password; guests play without an account. The client's Google button gives an ID token (the `credential`), which the server checks against `GOOGLE_CLIENT_ID` with `google-auth-library`. A player is a `player` row (id, email, name, and their Google `sub` or their password hash), created on register. No two players share an email (stored in lower case) or a name (ignoring case), whichever way they sign in. A password is stored as its salted scrypt hash (`ScryptPasswordHasher`), never as typed.
 
 - `POST /auth/google/register` `{ credential, name }`: create the player (409 if the Google account already has one or its email or the name is taken, 400 for a name outside 2 to 20 characters)
 - `POST /auth/google/login` `{ credential }`: log in (404 if the account has no player yet)
 - `POST /auth/password/register` `{ email, name, password }`: create the player (409 if the email or name is taken, 400 for an invalid email, a name outside 2 to 20 characters or a password outside 8 to 128)
-- `POST /auth/password/login` `{ email, password }`: log in (401 for an unknown email or a wrong password, alike)
+- `POST /auth/password/login` `{ identifier, password }`: log in with the email or the player name (401 for an unknown identifier or a wrong password, alike)
 - `POST /auth/refresh` `{ refreshToken }`: trade a refresh token for a new session (401 if unknown, expired or already used)
 - `POST /auth/logout` `{ refreshToken }`: revoke the refresh token
 - `GET /players/me` with `Authorization: Bearer <access token>`: the player's profile
+- `GET /players/me/steps` with the same header: the player's "first time" steps, `{ tutorialSeen }`. They live in the `player_steps` table, one row per player created with their first step, and a missing row means none done. A new step is a new column that defaults to false.
+- `POST /players/me/steps/tutorial-seen` with the same header: record that the tutorial opened by itself for the player (204)
 
 The four first routes and the refresh answer with a session, `{ player, accessToken, refreshToken }`, that the client keeps in localStorage. The access token is a 15-minute JWT signed with `JWT_SECRET`, with the player id as subject; `AccessTokenGuard` checks it. The refresh token lasts 30 days, is stored hashed in `refresh_token` and is used once: each refresh revokes it and issues the next one. `JWT_SECRET` is required to start; without `GOOGLE_CLIENT_ID` the sign-in routes fail but the rest of the server works. The devenv shell sets both (fill in `GOOGLE_CLIENT_ID` in `devenv.nix`).
 
