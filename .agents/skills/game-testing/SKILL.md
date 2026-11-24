@@ -57,7 +57,7 @@ server unavailable" warning.
     (`FAKE_GOOGLE_SIGN_IN=true`, set by the devenv shell; set `ATB_SERVER_URL` to use a server other than port 6868).
     Without it the game plays as a guest. The result's `savesBoards` says which mode the game is in:
     - A logged-in `dev=False` game also saves itself on the server at each shop and battle start; `start(menu=True,
-      player=...)` reloads onto a main menu that shows a Continue Game button (`click_hud ContinueGameButton`).
+      player=...)` reloads onto a main menu that shows Continue Game in place of Start Game (`click_hud ContinueGameButton`), with a Concede button under it (`ConcedeButton`) that drops the saved game.
       Guest and `dev=True` games save nothing. Delete the test player afterwards (its `current_game` row goes with it).
     - Guest or `dev=True`: pulling an opponent is a free read. No board is stored or consumed. Use it to test game
       mechanics.

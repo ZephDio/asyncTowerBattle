@@ -1,7 +1,7 @@
 import { Game } from "./game";
 import { MainMenu } from "./menu/main-menu";
 import { TutorialPanelHud } from "../shared/hud-element/tutorial-panel-hud";
-import { loadSavedGame } from "./saved-game/saved-game-api";
+import { deleteSavedGame, loadSavedGame } from "./saved-game/saved-game-api";
 
 export class GameWrapper {
 	state: "game" | "mainMenu" = "mainMenu";
@@ -23,6 +23,13 @@ export class GameWrapper {
 
 	forgetSavedGame() {
 		this.mainMenu.setSavedGame(null);
+	}
+
+	// Drops the game the player left running, for good.
+	concede() {
+		if (!this.mainMenu.savedGame) return;
+		this.mainMenu.setSavedGame(null);
+		deleteSavedGame();
 	}
 
 	continueGame() {
