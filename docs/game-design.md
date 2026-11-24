@@ -56,7 +56,7 @@ Gold buys pieces and refreshes the shop (5 gold). Most pieces cost 10 or 15 gold
 
 ### Food (during battles)
 
-Each army starts the battle with **100 food (full)** and a maximum of 100. The castle produces food over time: 3.5 per second for the Dwarf, 4 per second for the Elf.
+Each army starts the battle with **100 food (full)** and a maximum of 100. The castle produces food over time: 5 per second for both the Dwarf and the Elf.
 
 - **Towers and some totems spend food each time they cast.** A building that cannot pay does not act. Barracks summon for free: their units only pay their upkeep.
 - **Every unit eats** its upkeep every 2 seconds. If fed, it heals 1 HP. If not, it takes hunger damage that grows each time (2, 4, 6…).
