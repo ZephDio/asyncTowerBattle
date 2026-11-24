@@ -54,6 +54,22 @@ describe("barrack name synergy", () => {
 		expect(around(new RushBarrack(origin))).toBe(6);
 	});
 
+	it("surrounds the footprint on both orientations, corners left out", () => {
+		const origin = new Cell({ x: 0, y: 0 });
+		for (const orientation of [BoardOrientation.Normal, BoardOrientation.Mirrored]) {
+			for (const barrack of [new BasicBarrack(origin), new RushBarrack(origin)]) {
+				const footprint = key(barrack.gridShape.getOccupiedCellsFrom(origin, orientation));
+				const around = barrack.patternEffect.getRelativeCells(orientation);
+				const sides = footprint.flatMap((cell) => {
+					const [x, y] = cell.split(",").map(Number) as [number, number];
+					return [`${x + 1},${y}`, `${x - 1},${y}`, `${x},${y + 1}`, `${x},${y - 1}`];
+				});
+				const expected = [...new Set(sides)].filter((cell) => !footprint.includes(cell)).sort();
+				expect(key(around)).toEqual(expected);
+			}
+		}
+	});
+
 	it("gives 5% cast speed per barrack with a different name", () => {
 		const basic = new BasicBarrack(new Cell({ x: 5, y: 5 }));
 		const wave = new WaveBarrack(new Cell({ x: 6, y: 5 }));

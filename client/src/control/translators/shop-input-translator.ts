@@ -125,7 +125,7 @@ export class ShopInputToIntentTranslator {
 			}
 			if (focus.element) {
 				const described = this.unitOr(focus.element, focus.grid, screenPosition);
-				if (implementsTrait(focus.element, TSynergy)) {
+				if (described === focus.element && implementsTrait(focus.element, TSynergy)) {
 					const patternEffect = focus.element.patternEffect;
 					const condition = patternEffect.patternCondition;
 					focus.grid.setOveredTile([
