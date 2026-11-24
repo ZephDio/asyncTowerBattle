@@ -16,7 +16,10 @@ export class NextRoundHud extends Derive(
 	TDrawable,
 	TRenderable,
 ) {
-	constructor(public position: ScreenPosition = PercentToReal({ x: 50, y: 15 })) {
+	constructor(
+		public runOver = false,
+		public position: ScreenPosition = PercentToReal({ x: 50, y: 15 }),
+	) {
 		super({});
 	}
 	size = { width: 25, height: 11 };
@@ -31,6 +34,6 @@ export class NextRoundHud extends Derive(
 		context.fillStyle = "#172634";
 		context.font = `${canvasSize.height * 0.22}px title`;
 		context.textAlign = "center";
-		context.fillText("Next Round", canvasPosition.x, canvasPosition.y);
+		context.fillText(this.runOver ? "Main Menu" : "Next Round", canvasPosition.x, canvasPosition.y);
 	}
 }

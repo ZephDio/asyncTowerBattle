@@ -15,6 +15,7 @@ import { ArmyFactory } from "./army/army-fixtures";
 import { TranslateAnimation } from "./translate-animation/translate-animation";
 import { armyGridCenter } from "./grid/grid";
 import { loggedInPlayer } from "../auth/session";
+import { MAX_LIVES, MAX_ROUNDS } from "./game-rules";
 
 export class Game {
 	army: Army;
@@ -22,7 +23,7 @@ export class Game {
 	battleSummary: null | BattleSummary = null;
 	shop: null | ShopPhase = null;
 	rounds: RoundsTracker;
-	life = 5;
+	life = MAX_LIVES;
 	performance: GamePerformance = { wins: 0, losses: 0 };
 
 	descriptionHud: null | DescriptionHud = null;
@@ -72,12 +73,22 @@ export class Game {
 		this.battle = null;
 	}
 
+	get isLastRound() {
+		return this.rounds.round >= MAX_ROUNDS;
+	}
+
+	// The run ends when the player has no life left or the last round has been played.
+	get isRunOver() {
+		return this.life <= 0 || this.isLastRound;
+	}
+
 	handleSummaryQuit() {
 		this.battleSummary = null;
-		const from = this.army.grid.centerPosition.clone();
-		if (this.life === 0) {
+		if (this.isRunOver) {
 			this.endGame();
+			return;
 		}
+		const from = this.army.grid.centerPosition.clone();
 		// The shop grows the grid, so the grid slides from the battle to where the grown grid rests.
 		this.startShop();
 		const grid = this.army.grid;
@@ -132,7 +143,13 @@ export class Game {
 	}
 
 	startBattleSummary(battle: Battle, battleVerdict: "Victory" | "Defeat") {
-		this.battleSummary = new BattleSummary(battle, battleVerdict, this.handleSummaryQuit.bind(this), this.life);
+		this.battleSummary = new BattleSummary(
+			battle,
+			battleVerdict,
+			this.handleSummaryQuit.bind(this),
+			this.life,
+			this.isRunOver,
+		);
 	}
 
 	startBattle({ army, randomSeed, playerName }: Opponent) {

@@ -10,6 +10,7 @@ import { ImplementsTrait } from "@ddd-ts/traits";
 import { GridElement } from "../shared/traits/engine/core/grid-element";
 import { TDescriptor } from "../shared/traits/render/huds/item-descriptor";
 import { Tagged } from "../shared/traits/engine/tags/tagged";
+import { MAX_ROUNDS } from "../engine/game-rules";
 import { rarityOf } from "../shared/traits/engine/rarity";
 import { Stats } from "../engine/stats/stats";
 import { PathTile } from "../engine/tile/recruit/tile";
@@ -212,7 +213,14 @@ export class DebugBridge {
 		const game = this.game;
 		const tutorial = this.wrap.tutorial !== null;
 		if (!game) return { phase, tutorial, faction: this.wrap.mainMenu.classesSelectorHud.selectedClass };
-		const base = { phase, tutorial, round: game.rounds.round, life: game.life };
+		const base = {
+			phase,
+			tutorial,
+			round: game.rounds.round,
+			maxRounds: MAX_ROUNDS,
+			life: game.life,
+			wins: game.performance.wins,
+		};
 		if (phase === "shop" && game.shop) {
 			const shop = game.shop;
 			const army = game.army;
