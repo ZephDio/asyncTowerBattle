@@ -20,6 +20,8 @@ export class Battlefield {
 	public alliedArmy: BattleArmy;
 	public enemyArmy: BattleArmy;
 	public grid: BattleGrid;
+	private enemyCastleFell = false;
+	private alliedCastleFell = false;
 
 	constructor(
 		alliedArmy: Army,
@@ -49,12 +51,16 @@ export class Battlefield {
 
 		const enemyBattleCastle = enemyArmy.castle.toEnemy(
 			grid,
-			() => this.onBattleOver("Victory"),
+			() => {
+				this.enemyCastleFell = true;
+			},
 			enemyFoodEconomy.getHooks(),
 		);
 		const alliedBattleCastle = alliedArmy.castle.toAllied(
 			grid,
-			() => this.onBattleOver("Defeat"),
+			() => {
+				this.alliedCastleFell = true;
+			},
 			alliedFoodEconomy.getHooks(),
 		);
 
@@ -164,6 +170,16 @@ export class Battlefield {
 		this.tickCastles();
 		this.enemyArmy.furry.tick();
 		this.alliedArmy.furry.tick();
+		this.resolveBattleEnd();
+	}
+
+	// Castles falling in the same tick is a win: the verdict waits for the end of the tick.
+	private resolveBattleEnd() {
+		if (this.enemyCastleFell) this.onBattleOver("Victory");
+		else if (this.alliedCastleFell) this.onBattleOver("Defeat");
+		else return;
+		this.enemyCastleFell = false;
+		this.alliedCastleFell = false;
 	}
 
 	searchEnemiesInArea(areaPosition: GridPosition, hitbox: HitBox): AnyBattleUnit[] {
