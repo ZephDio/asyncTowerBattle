@@ -6,20 +6,25 @@ import { LoginWithGoogle } from "./applicative/commands/login-with-google.use-ca
 import { LoginWithPassword } from "./applicative/commands/login-with-password.use-case.js";
 import { Logout } from "./applicative/commands/logout.use-case.js";
 import { RefreshSession } from "./applicative/commands/refresh-session.use-case.js";
+import { SeeTutorial } from "./applicative/commands/see-tutorial.use-case.js";
 import { RegisterWithGoogle } from "./applicative/commands/register-with-google.use-case.js";
 import { RegisterWithPassword } from "./applicative/commands/register-with-password.use-case.js";
 import { AccessTokens } from "./applicative/interfaces/access-tokens.js";
 import { GoogleIdentityVerifier } from "./applicative/interfaces/google-identity.verifier.js";
 import { PasswordHasher } from "./applicative/interfaces/password-hasher.js";
+import { PlayerStepsStore } from "./applicative/interfaces/player-steps.store.js";
 import { PlayerStore } from "./applicative/interfaces/player.store.js";
 import { RefreshTokenStore } from "./applicative/interfaces/refresh-token.store.js";
 import { GetPlayer } from "./applicative/queries/get-player.use-case.js";
+import { GetPlayerSteps } from "./applicative/queries/get-player-steps.use-case.js";
 import { SessionOpener } from "./applicative/session-opener.js";
 import { AccessTokenGuard, OptionalAccessTokenGuard } from "./infrastructure/access-token.guard.js";
 import { AuthController } from "./infrastructure/auth.controller.js";
 import { FakeGoogleIdentityVerifier } from "./infrastructure/fake-google-identity.verifier.js";
 import { GoogleAuthLibraryVerifier } from "./infrastructure/google-auth-library.verifier.js";
 import { JwtAccessTokens } from "./infrastructure/jwt-access-tokens.js";
+import { PlayerStepsController } from "./infrastructure/player-steps.controller.js";
+import { PrismaPlayerStepsStore } from "./infrastructure/player-steps-store/prisma-player-steps.store.js";
 import { PlayersController } from "./infrastructure/players.controller.js";
 import { PrismaPlayerStore } from "./infrastructure/prisma-player.store.js";
 import { PrismaRefreshTokenStore } from "./infrastructure/prisma-refresh-token.store.js";
@@ -40,7 +45,7 @@ const ACCESS_TOKEN_LIFETIME_S = 15 * 60;
 			},
 		}),
 	],
-	controllers: [AuthController, PlayersController],
+	controllers: [AuthController, PlayersController, PlayerStepsController],
 	providers: [
 		RegisterWithGoogle,
 		LoginWithGoogle,
@@ -49,6 +54,8 @@ const ACCESS_TOKEN_LIFETIME_S = 15 * 60;
 		RefreshSession,
 		Logout,
 		GetPlayer,
+		GetPlayerSteps,
+		SeeTutorial,
 		SessionOpener,
 		AccessTokenGuard,
 		OptionalAccessTokenGuard,
@@ -64,6 +71,7 @@ const ACCESS_TOKEN_LIFETIME_S = 15 * 60;
 		},
 		{ provide: PasswordHasher, useClass: ScryptPasswordHasher },
 		{ provide: PlayerStore, useClass: PrismaPlayerStore },
+		{ provide: PlayerStepsStore, useClass: PrismaPlayerStepsStore },
 		{ provide: RefreshTokenStore, useClass: PrismaRefreshTokenStore },
 	],
 	// For the other modules' routes that need a logged-in player, or that know them when there is one.

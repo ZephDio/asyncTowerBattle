@@ -2,10 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { logout, resumeSession } from "../auth/auth-api";
 import { type Player, type Session, storedTokens } from "../auth/session";
 import { DEBUG_BRIDGE } from "../debug/debug-flag";
+import { guestSteps, openTutorialOnFirstTime } from "./first-time-steps";
 import { GameCanvas } from "./game-canvas";
 import { HelpButton } from "./help-button";
 import type { GameLink } from "../control/input-to-intent-translator";
 import { LoginScreen } from "./login-screen";
+import { playerSteps } from "./player-steps";
 import { MenuToggle, SideMenu } from "./side-menu";
 
 // "resuming" while the stored session is being checked, "choosing" while the login screen is up.
@@ -38,6 +40,15 @@ export function App() {
 		if (!game || account.kind === "resuming" || account.kind === "choosing") return;
 		game.send({ intent: account.kind === "player" ? "load-saved-game" : "forget-saved-game" });
 	}, [game, account]);
+
+	// The tutorial opens by itself the first time a registered player connects or a guest starts playing. Debug runs,
+	// such as the headless game tools, never get it: it would cover the game they drive.
+	const playing = account.kind === "player" || account.kind === "guest";
+	const playerId = account.kind === "player" ? account.player.id : undefined;
+	useEffect(() => {
+		if (!game || !playing || DEBUG_BRIDGE) return;
+		openTutorialOnFirstTime(playerId ? playerSteps() : guestSteps(), () => game.send({ intent: "open-tutorial" }));
+	}, [game, playing, playerId]);
 
 	const onSession = useCallback((session: Session) => setAccount({ kind: "player", player: session.player }), []);
 	const logOut = useCallback(() => {

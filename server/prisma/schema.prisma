@@ -63,8 +63,20 @@ model Player {
   refreshTokens RefreshToken[]
   boards        PlayerBoard[]
   currentGame   CurrentGame?
+  steps         PlayerSteps?
 
   @@map("player")
+}
+
+// The "first time" steps a player went through, such as seeing the tutorial. One row per player, created with their
+// first step; a player without one has done none. A new step is a new column that defaults to false.
+model PlayerSteps {
+  playerId     String  @id @map("player_id") @db.Uuid
+  player       Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  // The tutorial opened by itself for the player.
+  tutorialSeen Boolean @default(false) @map("tutorial_seen")
+
+  @@map("player_steps")
 }
 
 // A refresh token of a player's session, stored as its SHA-256 hash. It is used once: refreshing revokes it and
