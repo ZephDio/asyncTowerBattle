@@ -28,7 +28,11 @@ Start only when the user asks the orchestrator to do the PR. Without that, do no
    - Post the summary of the review rounds on the PR: `gh pr comment <number> --body-file <file>` with what was found, applied and rejected.
    - Merge with `gh pr merge <number> --squash --delete-branch`, the user's rule. (History on master is mixed: some PRs were merged with merge commits.) Use another method only if the user asks. If the merge fails on conflicts, merge `origin/master` into the branch, rerun the checks, push, and review the conflict resolution if it was not trivial. If `--delete-branch` cannot delete the local branch because a worktree has it checked out, the remote branch is still deleted; leave the checkout to `ini`.
    - Confirm with `gh pr view <number> --json state,mergeCommit` and `git fetch origin && git log origin/master -1`.
-5. **Report** to the user: PR link, what the review found, what was applied or rejected, the merge commit, and checks not run. Then `ini review <initiative-name> "<summary>"`. Do not run `ini done`.
+5. **Clean up the feature environment.** Once the PR has reached master:
+   - Stop every dev process you started for the feature (the server, Vite, anything on a port of your own): find it with `ss -ltnpH 'sport = :<port>'` and kill that pid only, never `pkill -f` and never the user's servers (ports 5173 and 6868, or processes of another checkout). Confirm the ports are free.
+   - Remove the test data your runs left in the dev database (test players, their boards and saved games, putting back the boards they pulled), if you have not already.
+   - Pull master in the main checkout with `git -C <main checkout> pull --ff-only` so it holds the merge. It refuses rather than overwrite local changes: if it refuses, say so in the report and leave the checkout as it is.
+6. **Report** to the user: PR link, what the review found, what was applied or rejected, the merge commit, and checks not run. Then `ini review <initiative-name> "<summary>"`. Do not run `ini done`.
 
 ## Rules
 
