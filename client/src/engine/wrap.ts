@@ -40,7 +40,11 @@ export class GameWrapper {
 		this.state = "game";
 	}
 
+	// A new game wipes the player's saved one first, so it can't survive a save that fails: the shop that starts saves
+	// the new game at round 1.
 	startNewGame() {
+		this.mainMenu.setSavedGame(null);
+		deleteSavedGame();
 		this.game = new Game(this.mainMenu.classesSelectorHud.selectedClass, this.endGame.bind(this));
 		this.state = "game";
 	}
