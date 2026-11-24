@@ -8,6 +8,7 @@ import { StartBattleButton } from "./start-battle-button";
 import { SelectDwarfButton } from "../../engine/menu/huds/select-dwarf-button";
 import { SelectElfButton } from "../../engine/menu/huds/select-elf-button";
 import { StartGameButton } from "../../engine/menu/huds/start-game-button";
+import { ConcedeButton } from "../../engine/menu/huds/concede-button";
 import { HideHud } from "../../engine/battle-summary/huds/hide-hud";
 import { BattleVerdictHud } from "../../engine/battle-summary/huds/battle-verdict-hud";
 import { NextRoundHud } from "../../engine/battle-summary/huds/next-round-hud";
@@ -16,6 +17,7 @@ import { ContinueHud } from "../../engine/run-resume/continue-hud";
 
 export type HudElement =
 	| StartGameButton
+	| ConcedeButton
 	| StartBattleButton
 	| GoldHud
 	| ArmyHud

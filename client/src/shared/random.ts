@@ -1,8 +1,8 @@
 export type Outcomes<T> = { value: T; share: number }[];
 export class Random {
-	static roll<T>(outComes: Outcomes<T>): T {
+	static roll<T>(outComes: Outcomes<T>, random: () => number = Math.random): T {
 		const total = outComes.reduce((acc, cur) => acc + cur.share, 0);
-		const roll = Math.random() * total;
+		const roll = random() * total;
 		let sum = 0;
 		for (const outcome of outComes) {
 			sum += outcome.share;

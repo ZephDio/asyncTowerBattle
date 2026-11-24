@@ -15,6 +15,9 @@ import { ArmyFactory } from "./army/army-fixtures";
 import { TranslateAnimation } from "./translate-animation/translate-animation";
 import { armyGridCenter } from "./grid/grid";
 import { loggedInPlayer } from "../auth/session";
+import { deriveSeed, newRunSeed } from "../shared/run-random";
+import { deleteSavedGame, saveGame } from "./saved-game/saved-game-api";
+import { RestoredGame, SavedGame, restoreGame, serializeGame } from "./saved-game/saved-game";
 import { RunResume } from "./run-resume/run-resume";
 import { STARTING_LIVES, isRunOver } from "./game-rules";
 
@@ -25,6 +28,11 @@ export class Game {
 	runResume: null | RunResume = null;
 	shop: null | ShopPhase = null;
 	rounds: RoundsTracker;
+	// The seed of the run, drawn when it starts: the offers, the environment and the seed of the player's board all come
+	// from it, so a run that is left and continued plays out the same.
+	readonly runSeed: number;
+	// The player the run is played by, so a run never saves under another account after a logout and a login.
+	private readonly playerId = loggedInPlayer()?.id;
 	life = STARTING_LIVES;
 	performance: GamePerformance = { wins: 0, losses: 0 };
 
@@ -35,11 +43,28 @@ export class Game {
 	constructor(
 		public chosenClass: Faction,
 		private endGame: () => void,
+		resumed?: RestoredGame,
 	) {
-		this.army = ArmyFactory.default(chosenClass);
+		this.runSeed = resumed?.runSeed ?? newRunSeed();
+		this.army = resumed?.army ?? ArmyFactory.default(chosenClass);
 		const envGenerator = new EnvironmentGeneration();
-		this.rounds = new RoundsTracker(this.army, envGenerator);
-		this.startShop();
+		this.rounds = new RoundsTracker(this.army, envGenerator, this.runSeed);
+		if (!resumed) {
+			this.startShop();
+			return;
+		}
+		this.rounds.rounds = resumed.round;
+		this.life = resumed.life;
+		this.performance = resumed.performance;
+		if (resumed.phase === "battle" && resumed.opponent) this.startBattle(resumed.opponent);
+		else this.openShop();
+	}
+
+	// The game a player left, back at the start of the phase it was saved in: the shop with the gold and the offers it
+	// had on entering (the offers are drawn again), or the battle against the opponent the player was matched with.
+	static resume(saved: SavedGame, endGame: () => void) {
+		const restored = restoreGame(saved);
+		return new Game(restored.faction, endGame, restored);
 	}
 
 	async getState(): Promise<GameState> {
@@ -72,6 +97,8 @@ export class Game {
 		} else {
 			this.performance.wins++;
 		}
+		// A finished run can't be continued, even from its last summary or its resume screen.
+		if (this.isRunOver && this.savesForPlayer) deleteSavedGame();
 		this.startBattleSummary(battle, battleVerdict);
 		this.battle = null;
 	}
@@ -121,9 +148,15 @@ export class Game {
 	async handleShopQuit() {
 		if (this.searchingOpponent) return;
 		this.searchingOpponent = true;
-		const opponent = await this.matchMaker.getOpponent(this.rounds.round, this.army, this.performance);
+		const opponent = await this.matchMaker.getOpponent(
+			this.rounds.round,
+			this.army,
+			this.performance,
+			deriveSeed(this.runSeed, "battle", this.rounds.round),
+		);
 		this.searchingOpponent = false;
 		this.shop = null;
+		this.save("battle", opponent);
 		this.startBattle(opponent);
 	}
 
@@ -148,15 +181,46 @@ export class Game {
 
 	startShop() {
 		this.rounds.update();
+		this.openShop();
+		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
+		this.army.onShopEnter();
+		this.save("shop");
+	}
+
+	openShop() {
 		this.shop = new ShopPhase(
 			this.army,
 			this.handleShopQuit.bind(this),
 			this.setDescriptionHud.bind(this),
 			this.rounds.round,
 			this.life,
+			this.runSeed,
 		);
-		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
-		this.army.onShopEnter();
+	}
+
+	// Keeps the game as it stands at the start of a shop or of a battle, for the player to continue from there. A game
+	// that can't be saved still plays.
+	private get savesForPlayer() {
+		return this.playerId !== undefined && loggedInPlayer()?.id === this.playerId;
+	}
+
+	private save(phase: SavedGame["phase"], opponent?: Opponent) {
+		if (!this.savesForPlayer) return;
+		try {
+			saveGame(
+				serializeGame({
+					phase,
+					army: this.army,
+					round: this.rounds.round,
+					runSeed: this.runSeed,
+					life: this.life,
+					performance: this.performance,
+					opponent,
+				}),
+			);
+		} catch (error) {
+			console.warn("The game could not be saved", error);
+		}
 	}
 
 	startBattleSummary(battle: Battle, battleVerdict: "Victory" | "Defeat") {

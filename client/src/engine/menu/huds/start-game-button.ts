@@ -17,7 +17,7 @@ export class StartGameButton extends Derive(
 	override drawPriority = DrawPriority.HUD;
 	background = HudElementResources.startGame.image;
 	size = HudElementResources.startGame.size;
-	position = PercentToReal(new GridPosition({ x: 50, y: 50 }));
+	position = PercentToReal(new GridPosition({ x: 50, y: 64 }));
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
 		const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);

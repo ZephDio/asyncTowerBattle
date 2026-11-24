@@ -63,8 +63,9 @@ export class ShopPhase {
 		public setDescriptionHud: Game["setDescriptionHud"],
 		public round: number,
 		public life: number,
+		runSeed: number,
 	) {
-		this.retail = new Retail(round);
+		this.retail = new Retail(round, runSeed);
 		this.economyHooks = army.getEconomyHooks();
 	}
 

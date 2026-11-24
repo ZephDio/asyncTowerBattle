@@ -33,6 +33,12 @@ export function App() {
 			.then((session) => setAccount(session ? { kind: "player", player: session.player } : withoutSession));
 	}, []);
 
+	// The player's running game is offered in the main menu once they are logged in, and withdrawn when they are not.
+	useEffect(() => {
+		if (!game || account.kind === "resuming" || account.kind === "choosing") return;
+		game.send({ intent: account.kind === "player" ? "load-saved-game" : "forget-saved-game" });
+	}, [game, account]);
+
 	const onSession = useCallback((session: Session) => setAccount({ kind: "player", player: session.player }), []);
 	const logOut = useCallback(() => {
 		setMenuOpen(false);

@@ -111,7 +111,10 @@ type Candidate = { blueprint: AnyBlueprint; rarity: Rarity; share: number };
 // Each slot rolls a rarity from the round's odds, then an item of that rarity. An item is offered at most once per
 // roll: when a rarity has nothing left to offer, the slot rolls among the rarities that still have items.
 export class RetailFiller {
-	constructor(public round: number) {}
+	constructor(
+		public round: number,
+		private random: () => number = Math.random,
+	) {}
 
 	getFreshItems(cells: Cell[]) {
 		const items: { recruit: ImplementsTrait<typeof TRecruit>; price: number }[] = [];
@@ -122,11 +125,15 @@ export class RetailFiller {
 				(rarity) => odds[rarity] > 0 && candidates.some((candidate) => candidate.rarity === rarity),
 			);
 			if (rarities.length === 0) break;
-			const rarity = Random.roll(rarities.map((rarity) => ({ value: rarity, share: odds[rarity] })));
+			const rarity = Random.roll(
+				rarities.map((rarity) => ({ value: rarity, share: odds[rarity] })),
+				this.random,
+			);
 			const picked = Random.roll(
 				candidates
 					.filter((candidate) => candidate.rarity === rarity)
 					.map((candidate) => ({ value: candidate, share: candidate.share })),
+				this.random,
 			);
 			candidates = candidates.filter((candidate) => candidate !== picked);
 			items.push({

@@ -53,6 +53,13 @@ export type SerializedElement =
 	  }
 	| { kind: "environment"; type: SerializedEnvironmentType; cell: SerializedCell };
 
+// A piece waiting in the reserve (the inventory) of a saved game: any piece of the army, plus the traps and the units
+// that wait there apart from a path tile or a barrack. Its cell is its place in the reserve.
+export type SerializedInventoryItem =
+	| Exclude<SerializedElement, { kind: "castle" | "environment" }>
+	| { kind: "trap"; type: SerializedTrapType; cell: SerializedCell }
+	| { kind: "unit"; type: SerializedUnitType; cell: SerializedCell };
+
 export type SerializedBoard = {
 	round: number;
 	// Picks the castle and the army's default unit.

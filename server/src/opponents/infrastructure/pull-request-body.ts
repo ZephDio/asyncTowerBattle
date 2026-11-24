@@ -10,11 +10,11 @@ const FACTIONS = ["Dwarf", "Elf"];
 
 type Json = Record<string, unknown>;
 
-const isRecord = (value: unknown): value is Json =>
+export const isRecord = (value: unknown): value is Json =>
 	typeof value === "object" && value !== null && !Array.isArray(value);
-const isNumber = (value: unknown): value is number => typeof value === "number";
-const isString = (value: unknown): value is string => typeof value === "string";
-const isCell = (value: unknown): value is SerializedCell =>
+export const isNumber = (value: unknown): value is number => typeof value === "number";
+export const isString = (value: unknown): value is string => typeof value === "string";
+export const isCell = (value: unknown): value is SerializedCell =>
 	isRecord(value) && isNumber(value["x"]) && isNumber(value["y"]);
 const isNullOr = (value: unknown, check: (value: unknown) => boolean) => value === null || check(value);
 
@@ -37,7 +37,7 @@ const isElement = (value: unknown) => {
 	return shape !== undefined && shape(value);
 };
 
-const isBoard = (value: unknown): value is SerializedBoard =>
+export const isBoard = (value: unknown): value is SerializedBoard =>
 	isRecord(value) &&
 	isNumber(value["round"]) &&
 	isString(value["faction"]) &&
@@ -49,7 +49,7 @@ const isBoard = (value: unknown): value is SerializedBoard =>
 	Array.isArray(value["elements"]) &&
 	value["elements"].every(isElement);
 
-const isPerformance = (value: unknown): value is GamePerformance =>
+export const isPerformance = (value: unknown): value is GamePerformance =>
 	isRecord(value) && isNumber(value["wins"]) && isNumber(value["losses"]);
 
 // Refuses with a 400 a body that isn't a board and a performance, before any use case sees it.
