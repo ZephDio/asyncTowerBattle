@@ -5,16 +5,20 @@ export type FirstTimeSteps = {
 	markTutorialSeen(): Promise<void>;
 };
 
-// Opens the tutorial if these steps haven't seen it yet, and records that it was shown: closing it, or leaving, never
+// Opens the tutorial if these steps haven't seen it yet, and records that it was shown, unless opening it was refused
+// by returning false: closing it, or leaving, never
 // brings it back by itself, the "?" button still opens it. When the steps can't be read, the tutorial stays closed
 // rather than opening on every visit.
-export const openTutorialOnFirstTime = async (steps: FirstTimeSteps, openTutorial: () => void): Promise<boolean> => {
+export const openTutorialOnFirstTime = async (
+	steps: FirstTimeSteps,
+	openTutorial: () => boolean | void,
+): Promise<boolean> => {
 	try {
 		if (await steps.tutorialSeen()) return false;
 	} catch {
 		return false;
 	}
-	openTutorial();
+	if (openTutorial() === false) return false;
 	await steps.markTutorialSeen().catch(() => undefined);
 	return true;
 };

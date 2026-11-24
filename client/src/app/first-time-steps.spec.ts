@@ -21,6 +21,12 @@ describe("openTutorialOnFirstTime", () => {
 		expect(opened).toBe(1);
 	});
 
+	it("doesn't record the tutorial as seen when opening it was refused", async () => {
+		const steps = memorySteps();
+		expect(await openTutorialOnFirstTime(steps, () => false)).toBe(false);
+		expect(await steps.tutorialSeen()).toBe(false);
+	});
+
 	it("stays closed when the steps can't be read", async () => {
 		const unreachable: FirstTimeSteps = {
 			tutorialSeen: () => Promise.reject(new Error("offline")),

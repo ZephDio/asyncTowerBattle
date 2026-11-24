@@ -48,9 +48,17 @@ export function App() {
 	const playerId = account.kind === "player" ? account.player.id : undefined;
 	useEffect(() => {
 		if (!game || DEBUG_BRIDGE) return;
-		const open = () => game.send({ intent: "open-tutorial" });
+		let current = true;
+		// A player who logged out while their steps were being read gets nothing.
+		const open = () => {
+			if (current) game.send({ intent: "open-tutorial" });
+			return current;
+		};
 		if (guest) open();
 		else if (playerId) openTutorialOnFirstTime(playerSteps(), open);
+		return () => {
+			current = false;
+		};
 	}, [game, guest, playerId]);
 
 	const onSession = useCallback((session: Session) => setAccount({ kind: "player", player: session.player }), []);

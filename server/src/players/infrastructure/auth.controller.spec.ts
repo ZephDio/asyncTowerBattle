@@ -124,6 +124,18 @@ describe("auth and player routes", () => {
 			expect(session.player).toEqual(registered.player);
 		});
 
+		it("tries an email before a name, so a player named like another's email can't take their login", async () => {
+			const { body: owner } = await registerPassword({ email: "owner@example.com", name: "Owner" }).expect(201);
+			await registerPassword({ email: "squatter@example.com", name: "owner@example.com" }).expect(201);
+
+			const { body: session } = await post("/auth/password/login", {
+				identifier: "owner@example.com",
+				password: "hunter22",
+			}).expect(200);
+
+			expect(session.player).toEqual(owner.player);
+		});
+
 		it("refuses a wrong password and an unknown email alike", async () => {
 			await registerPassword().expect(201);
 
