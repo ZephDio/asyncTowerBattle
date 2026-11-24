@@ -8,6 +8,7 @@ import { IconResources } from "../../renderer/resources/icons.resources";
 import { DrawPriority } from "../traits/render/image-drawable";
 import { Rarity } from "../traits/engine/rarity";
 import { ArmyBuffPercent } from "../../engine/army/battle/army-buff";
+import { TagBadge } from "../traits/render/huds/tag-badge";
 
 // The source scroll's borders, in its own pixels: the top and bottom rolls and the curled sides. They keep their
 // shape when the scroll is stretched to the panel's size; only the parchment between them stretches.
@@ -30,7 +31,11 @@ const INLINE_ICONS: Record<string, HTMLImageElement> = {
 	"grey-bow": HudElementResources.targetBowInactive.image,
 	"red-bow": HudElementResources.targetBowActive.image,
 };
+// A {tag-barrack} part is drawn as the badge of the tag, like the descriptors' ones.
+const INLINE_TAGS: Record<string, TagBadge> = { "tag-barrack": new TagBadge("Barrack") };
 const INLINE_ICON = /\{([a-z-]+)\}/;
+// An inline tag badge is this many font sizes high.
+const INLINE_TAG_HEIGHT = 1.3;
 // An inline icon is as wide as this many font sizes.
 const INLINE_ICON_WIDTH = 1.25;
 
@@ -88,8 +93,8 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 
 	private drawLeftColumn(context: CanvasRenderingContext2D, x: number, y: number, width: number) {
 		const u = this.unit;
-		y = this.paragraph(context, this.title, x, y, width, TITLE_SIZE, "title") + 1.2 * u;
-		y = this.paragraph(context, "Buy monuments and units in the shop to build your army.", x, y, width) + 0.9 * u;
+		y = this.paragraph(context, this.title, x, y, width, TITLE_SIZE, "title") + 0.5 * u;
+		y = this.paragraph(context, "Buy monuments and units in the shop to build your army.", x, y, width) + 0.4 * u;
 
 		// Click [START] when ready.
 		const start = HudElementResources.startBattle.image;
@@ -101,7 +106,7 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		const startX = x + context.measureText("Click ").width;
 		this.drawPicture(context, start, startX, y, startWidth, startHeight);
 		context.fillText("when ready.", startX + startWidth + 0.5 * u, lineMiddle);
-		y += startHeight + 1.2 * u;
+		y += startHeight + 0.5 * u;
 
 		// The battle schema, with its explanation beside it.
 		const schemaSize = 18.5 * u;
@@ -112,16 +117,16 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		context.fillStyle = ALLIED;
 		textY = this.paragraph(context, "Your units walk up the opponent's path to their castle.", textX, textY, textWidth);
 		context.fillStyle = ENEMY;
-		textY = this.paragraph(context, "Theirs walk down yours.", textX, textY + 0.6 * u, textWidth);
+		textY = this.paragraph(context, "Theirs walk down yours.", textX, textY + 0.3 * u, textWidth);
 		context.fillStyle = INK;
 		this.paragraph(
 			context,
 			"Towers shoot the enemy units on their path. The first to destroy the other castle wins!",
 			textX,
-			textY + 0.6 * u,
+			textY + 0.3 * u,
 			textWidth,
 		);
-		y += 21.5 * u + 1.2 * u;
+		y += 20 * u + 0.5 * u;
 
 		y = this.iconParagraph(
 			context,
@@ -136,15 +141,22 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 			IconResources.food.image,
 			"Food 🌽 feeds your units and towers. At 0, you are in trouble!",
 			x,
-			y + 0.6 * u,
+			y + 0.3 * u,
 			width,
 		);
-		this.iconParagraph(
+		y = this.iconParagraph(
 			context,
 			IconResources.patternStar.image,
 			"Build strong synergies ▣ to overcome your opponents.",
 			x,
-			y + 0.6 * u,
+			y + 0.3 * u,
+			width,
+		);
+		this.paragraph(
+			context,
+			"A {tag-barrack} spawns basic units during battle.\nDrag a unit on it, to change the produced type.",
+			x,
+			y + 1.6 * u,
 			width,
 		);
 	}
@@ -329,6 +341,15 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 				x += context.measureText(part).width;
 				return;
 			}
+			const badge = INLINE_TAGS[part];
+			if (badge) {
+				const height = fontSize * INLINE_TAG_HEIGHT;
+				const font = context.font;
+				badge.draw(context, x, y + fontSize * 0.5, height);
+				x += badge.width(context, height) + fontSize * 0.3;
+				context.font = font;
+				return;
+			}
 			const icon = INLINE_ICONS[part];
 			// The bow sprites have a transparent margin: draw them a bit bigger than the letters so they match the font icons.
 			if (icon) this.drawPicture(context, icon, x - fontSize * 0.1, y - fontSize * 0.3, fontSize * 1.5, fontSize * 1.5);
@@ -385,8 +406,9 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 	}
 }
 
-// Splits text into lines no wider than maxWidth in the context's current font.
-function wrapText(context: CanvasRenderingContext2D, text: string, maxWidth: number) {
+// Splits text into lines no wider than maxWidth in the context's current font; a \n forces a new line.
+function wrapText(context: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+	if (text.includes("\n")) return text.split("\n").flatMap((part) => wrapText(context, part, maxWidth));
 	const lines: string[] = [];
 	let line = "";
 	for (const word of text.split(" ")) {
@@ -404,12 +426,16 @@ function wrapText(context: CanvasRenderingContext2D, text: string, maxWidth: num
 
 // The width of a line, counting its {name} inline icons.
 function measureLine(context: CanvasRenderingContext2D, line: string) {
-	const fontSize = Number.parseFloat(context.font);
-	return line
-		.split(INLINE_ICON)
-		.reduce(
-			(width, part, index) =>
-				width + (index % 2 === 0 ? context.measureText(part).width : fontSize * INLINE_ICON_WIDTH),
-			0,
-		);
+	const font = context.font;
+	const fontSize = Number.parseFloat(font);
+	const width = line.split(INLINE_ICON).reduce((total, part, index) => {
+		if (index % 2 === 0) return total + context.measureText(part).width;
+		const badge = INLINE_TAGS[part];
+		if (!badge) return total + fontSize * INLINE_ICON_WIDTH;
+		const badgeWidth = badge.width(context, fontSize * INLINE_TAG_HEIGHT) + fontSize * 0.3;
+		context.font = font;
+		return total + badgeWidth;
+	}, 0);
+	context.font = font;
+	return width;
 }
