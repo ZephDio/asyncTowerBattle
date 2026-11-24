@@ -34,6 +34,7 @@ export class GameWrapper {
 				return;
 			} catch (error) {
 				console.warn("The saved game could not be loaded", error);
+				if (attempt === SAVED_GAME_LOAD_ATTEMPTS) return;
 				await new Promise((resolve) => setTimeout(resolve, SAVED_GAME_RETRY_DELAY_MS * attempt));
 				if (load !== this.savedGameLoads) return;
 			}
@@ -80,6 +81,9 @@ export class GameWrapper {
 	endGame() {
 		this.game = null;
 		this.state = "mainMenu";
+		// An answer that came during the run was dropped: ask again for what the menu should offer now. It asks nothing of
+		// a guest.
+		this.loadSavedGame();
 	}
 
 	openTutorial() {
