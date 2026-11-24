@@ -137,7 +137,13 @@ export function LoginScreen({ onSession, onGuest }: { onSession: (session: Sessi
 							maxLength: NAME_LENGTH.max,
 							autoComplete: "username",
 						})}
-					{field("Email", { value: email, onValue: setEmail, type: "email", required: true, autoComplete: "email" })}
+					{field(mode === "login" ? "Email or player name" : "Email", {
+						value: email,
+						onValue: setEmail,
+						type: mode === "login" ? "text" : "email",
+						required: true,
+						autoComplete: mode === "login" ? "username" : "email",
+					})}
 					{field("Password", {
 						value: password,
 						onValue: setPassword,

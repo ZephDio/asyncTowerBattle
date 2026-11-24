@@ -11,4 +11,6 @@ export abstract class PlayerStore {
 	abstract findByName(name: string): Promise<Player | undefined>;
 	// The player who signs in with this email and a password, with the hash of their password.
 	abstract findPasswordLogin(email: string): Promise<{ player: Player; passwordHash: string } | undefined>;
+	// The same, found by player name, ignoring case.
+	abstract findPasswordLoginByName(name: string): Promise<{ player: Player; passwordHash: string } | undefined>;
 }

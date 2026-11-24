@@ -40,4 +40,9 @@ export class PrismaPlayerStore extends PlayerStore {
 		const row = await this.prisma.player.findUnique({ where: { email } });
 		return row?.passwordHash ? { player: toPlayer(row), passwordHash: row.passwordHash } : undefined;
 	}
+
+	async findPasswordLoginByName(name: string) {
+		const row = await this.prisma.player.findFirst({ where: { name: { equals: name, mode: "insensitive" } } });
+		return row?.passwordHash ? { player: toPlayer(row), passwordHash: row.passwordHash } : undefined;
+	}
 }

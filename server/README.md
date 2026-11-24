@@ -28,7 +28,7 @@ Players sign in with Google or with their email and password; guests play withou
 - `POST /auth/google/register` `{ credential, name }`: create the player (409 if the Google account already has one or its email or the name is taken, 400 for a name outside 2 to 20 characters)
 - `POST /auth/google/login` `{ credential }`: log in (404 if the account has no player yet)
 - `POST /auth/password/register` `{ email, name, password }`: create the player (409 if the email or name is taken, 400 for an invalid email, a name outside 2 to 20 characters or a password outside 8 to 128)
-- `POST /auth/password/login` `{ email, password }`: log in (401 for an unknown email or a wrong password, alike)
+- `POST /auth/password/login` `{ identifier, password }`: log in with the email or the player name (401 for an unknown identifier or a wrong password, alike)
 - `POST /auth/refresh` `{ refreshToken }`: trade a refresh token for a new session (401 if unknown, expired or already used)
 - `POST /auth/logout` `{ refreshToken }`: revoke the refresh token
 - `GET /players/me` with `Authorization: Bearer <access token>`: the player's profile

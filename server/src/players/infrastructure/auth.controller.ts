@@ -92,7 +92,7 @@ export class AuthController {
 	@Post("password/login")
 	@HttpCode(200)
 	async loginPassword(@Body() body?: Record<string, unknown>): Promise<Session> {
-		const request = { email: requireString(body, "email"), password: requireString(body, "password") };
+		const request = { identifier: requireString(body, "identifier"), password: requireString(body, "password") };
 		return this.loginWithPassword.execute(request).catch((error) => Promise.reject(toHttpError(error)));
 	}
 

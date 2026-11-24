@@ -108,20 +108,35 @@ describe("auth and player routes", () => {
 
 			expect(registered.player).toEqual({ id: expect.any(String), email: "zeph@example.com", name: "Zeph" });
 			await me(registered.accessToken).expect(200);
-			const login = { email: "ZEPH@example.com", password: "hunter22" };
+			const login = { identifier: "ZEPH@example.com", password: "hunter22" };
 			const { body: session } = await post("/auth/password/login", login).expect(200);
+			expect(session.player).toEqual(registered.player);
+		});
+
+		it("logs a registered player in with their player name, ignoring case", async () => {
+			const { body: registered } = await registerPassword().expect(201);
+
+			const { body: session } = await post("/auth/password/login", {
+				identifier: " zeph ",
+				password: "hunter22",
+			}).expect(200);
+
 			expect(session.player).toEqual(registered.player);
 		});
 
 		it("refuses a wrong password and an unknown email alike", async () => {
 			await registerPassword().expect(201);
 
-			const wrongPassword = await post("/auth/password/login", { email: "zeph@example.com", password: "hunter23" });
-			const unknownEmail = await post("/auth/password/login", { email: "who@example.com", password: "hunter22" });
+			const wrongPassword = await post("/auth/password/login", {
+				identifier: "zeph@example.com",
+				password: "hunter23",
+			});
+			const unknownEmail = await post("/auth/password/login", { identifier: "who@example.com", password: "hunter22" });
 
 			expect(wrongPassword.status).toBe(401);
 			expect(unknownEmail.status).toBe(401);
 			expect(unknownEmail.body.message).toBe(wrongPassword.body.message);
+			expect((await post("/auth/password/login", { identifier: "Nobody", password: "hunter22" })).status).toBe(401);
 		});
 
 		it("refuses a taken email or name, the name ignoring case", async () => {
@@ -142,7 +157,7 @@ describe("auth and player routes", () => {
 		it("does not log a Google player in with a password", async () => {
 			await register("1").expect(201);
 
-			await post("/auth/password/login", { email: "1@example.com", password: "hunter22" }).expect(401);
+			await post("/auth/password/login", { identifier: "1@example.com", password: "hunter22" }).expect(401);
 		});
 
 		it.each([{ email: "not-an-email" }, { password: "short" }, { name: "Z" }])("refuses %p", async (body) => {
