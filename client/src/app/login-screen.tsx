@@ -137,7 +137,7 @@ export function LoginScreen({ onSession, onGuest }: { onSession: (session: Sessi
 							maxLength: NAME_LENGTH.max,
 							autoComplete: "username",
 						})}
-					{field(mode === "login" ? "Email or player name" : "Email", {
+					{field(mode === "login" ? "Pseudo | Email" : "Email", {
 						value: email,
 						onValue: setEmail,
 						type: mode === "login" ? "text" : "email",
