@@ -2,6 +2,7 @@ import { ScreenPosition } from "../../shared/position";
 import { MouseEventType } from "../mouse-event-handler";
 import { Faction, MainMenu, MainMenuState } from "../../engine/menu/main-menu";
 import { StartGameButton } from "../../engine/menu/huds/start-game-button";
+import { ContinueGameButton } from "../../engine/menu/huds/continue-game-button";
 import { GameWrapper } from "../../engine/wrap";
 import { SelectElfButton } from "../../engine/menu/huds/select-elf-button";
 import { SelectDwarfButton } from "../../engine/menu/huds/select-dwarf-button";
@@ -25,6 +26,9 @@ export class MainMenuInputToIntentTranslator {
 		if (focus instanceof StartGameButton) {
 			this.gameWrapper.startNewGame();
 		}
+		if (focus instanceof ContinueGameButton) {
+			this.gameWrapper.continueGame();
+		}
 		if (focus instanceof SelectElfButton) {
 			this.gameWrapper.mainMenu.classesSelectorHud.changeClass(Faction.Elf);
 		}
@@ -36,6 +40,9 @@ export class MainMenuInputToIntentTranslator {
 	determinateFocus(screenPosition: ScreenPosition, state: MainMenuState) {
 		for (const hudElement of state.hudElements) {
 			if (hudElement instanceof StartGameButton && hudElement.contains(screenPosition)) {
+				return hudElement;
+			}
+			if (hudElement instanceof ContinueGameButton && hudElement.contains(screenPosition)) {
 				return hudElement;
 			}
 			if (hudElement instanceof SelectElfButton && hudElement.contains(screenPosition)) {

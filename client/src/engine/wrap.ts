@@ -1,6 +1,7 @@
 import { Game } from "./game";
 import { MainMenu } from "./menu/main-menu";
 import { TutorialPanelHud } from "../shared/hud-element/tutorial-panel-hud";
+import { loadSavedGame } from "./saved-game/saved-game-api";
 
 export class GameWrapper {
 	state: "game" | "mainMenu" = "mainMenu";
@@ -12,6 +13,24 @@ export class GameWrapper {
 	private tutorialListeners: ((open: boolean) => void)[] = [];
 	constructor() {
 		this.mainMenu = new MainMenu();
+	}
+
+	// Asks the server for the game the logged-in player left running, and offers to continue it in the main menu.
+	async loadSavedGame() {
+		const saved = await loadSavedGame();
+		this.mainMenu.setSavedGame(saved);
+	}
+
+	forgetSavedGame() {
+		this.mainMenu.setSavedGame(null);
+	}
+
+	continueGame() {
+		const saved = this.mainMenu.savedGame;
+		if (!saved) return;
+		this.mainMenu.setSavedGame(null);
+		this.game = Game.resume(saved, this.endGame.bind(this));
+		this.state = "game";
 	}
 
 	startNewGame() {

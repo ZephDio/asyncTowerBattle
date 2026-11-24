@@ -37,4 +37,14 @@ The four first routes and the refresh answer with a session, `{ player, accessTo
 
 With `FAKE_GOOGLE_SIGN_IN=true` the sign-in routes also accept the credential `google:<id>` as the Google account `<id>`, which is how the headless game tools play as a registered player (`start(player=...)`). The devenv shell sets it; a deployed server must not.
 
+## Current game
+
+A logged-in player can leave a game and continue it. The `current_game` table holds one row per player: the client's saved game as JSON (`SavedGame`, `src/current-games/domain/current-game.ts`), deleted with its player. The client replaces it at the start of each shop (the army, its reserve, the gold, the lives and the performance) and at the start of each battle (the same, plus the opponent board it was matched with and that board's player name), so a player who leaves a shop restarts that shop and one who leaves a battle replays it against the same opponent. The row is deleted when the player's last life is lost. `CurrentGame` refuses a game whose boards break the board rules, whose battle has no opponent (or whose shop has one), or whose life, gold or performance aren't counts.
+
+All three routes need `Authorization: Bearer <access token>` (401 otherwise):
+
+- `GET /current-game`: `{ "game": SavedGame | null }`, `null` when the player has no running game
+- `PUT /current-game` with a `SavedGame`: replace the player's game (204; 400 for a body of the wrong shape or one breaking the rules)
+- `DELETE /current-game`: forget the player's game (204, also when there is none)
+
 `GET /health` returns `{ "status": "ok", "uptime": <seconds> }`.

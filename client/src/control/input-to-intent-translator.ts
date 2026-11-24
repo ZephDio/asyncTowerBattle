@@ -17,7 +17,11 @@ export interface PlayerIntent {
 }
 
 // Intents sent by the page shell around the canvas (React), rather than read from mouse positions on the canvas.
-export type GameIntent = { intent: "open-tutorial" } | { intent: "close-tutorial" };
+export type GameIntent =
+	| { intent: "open-tutorial" }
+	| { intent: "close-tutorial" }
+	| { intent: "load-saved-game" }
+	| { intent: "forget-saved-game" };
 export type SendGameIntent = (intent: GameIntent) => void;
 // What the page shell holds of the game: a way to send it intents, and to hear when the tutorial opens or closes.
 export type GameLink = {
@@ -43,6 +47,8 @@ export class InputToIntent {
 	handleIntent({ intent }: GameIntent) {
 		if (intent === "open-tutorial") this.gameWrap.openTutorial();
 		if (intent === "close-tutorial") this.gameWrap.closeTutorial();
+		if (intent === "load-saved-game") this.gameWrap.loadSavedGame();
+		if (intent === "forget-saved-game") this.gameWrap.forgetSavedGame();
 	}
 
 	// Set from the press that closed the tutorial until its release, so that whole gesture stays out of the game.

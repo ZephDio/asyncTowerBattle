@@ -62,6 +62,7 @@ model Player {
   createdAt     DateTime       @default(now()) @map("created_at")
   refreshTokens RefreshToken[]
   boards        PlayerBoard[]
+  currentGame   CurrentGame?
 
   @@map("player")
 }
@@ -79,4 +80,16 @@ model RefreshToken {
 
   @@index([playerId])
   @@map("refresh_token")
+}
+
+// The game a player left running, which they can continue: the client's saved game as JSON, replaced at the start of
+// each shop and each battle and deleted when the game is over. One per player.
+model CurrentGame {
+  playerId  String   @id @map("player_id") @db.Uuid
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  // The SavedGame of src/current-games/domain/current-game.ts.
+  game      Json
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("current_game")
 }

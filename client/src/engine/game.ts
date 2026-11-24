@@ -15,6 +15,8 @@ import { ArmyFactory } from "./army/army-fixtures";
 import { TranslateAnimation } from "./translate-animation/translate-animation";
 import { armyGridCenter } from "./grid/grid";
 import { loggedInPlayer } from "../auth/session";
+import { deleteSavedGame, saveGame } from "./saved-game/saved-game-api";
+import { RestoredGame, SavedGame, restoreGame, serializeGame } from "./saved-game/saved-game";
 
 export class Game {
 	army: Army;
@@ -32,11 +34,27 @@ export class Game {
 	constructor(
 		public chosenClass: Faction,
 		private endGame: () => void,
+		resumed?: RestoredGame,
 	) {
-		this.army = ArmyFactory.default(chosenClass);
+		this.army = resumed?.army ?? ArmyFactory.default(chosenClass);
 		const envGenerator = new EnvironmentGeneration();
 		this.rounds = new RoundsTracker(this.army, envGenerator);
-		this.startShop();
+		if (!resumed) {
+			this.startShop();
+			return;
+		}
+		this.rounds.rounds = resumed.round;
+		this.life = resumed.life;
+		this.performance = resumed.performance;
+		if (resumed.phase === "battle" && resumed.opponent) this.startBattle(resumed.opponent);
+		else this.openShop();
+	}
+
+	// The game a player left, back at the start of the phase it was saved in: the shop with the gold and the offers it
+	// had on entering (the offers are drawn again), or the battle against the opponent the player was matched with.
+	static resume(saved: SavedGame, endGame: () => void) {
+		const restored = restoreGame(saved);
+		return new Game(restored.faction, endGame, restored);
 	}
 
 	async getState(): Promise<GameState> {
@@ -65,6 +83,8 @@ export class Game {
 		if (battleVerdict === "Defeat") {
 			this.life--;
 			this.performance.losses++;
+			// A lost game can't be continued, even from its last summary.
+			if (this.life === 0) deleteSavedGame();
 		} else {
 			this.performance.wins++;
 		}
@@ -77,6 +97,7 @@ export class Game {
 		const from = this.army.grid.centerPosition.clone();
 		if (this.life === 0) {
 			this.endGame();
+			return;
 		}
 		// The shop grows the grid, so the grid slides from the battle to where the grown grid rests.
 		this.startShop();
@@ -99,6 +120,7 @@ export class Game {
 		const opponent = await this.matchMaker.getOpponent(this.rounds.round, this.army, this.performance);
 		this.searchingOpponent = false;
 		this.shop = null;
+		this.save("battle", opponent);
 		this.startBattle(opponent);
 	}
 
@@ -120,6 +142,13 @@ export class Game {
 
 	startShop() {
 		this.rounds.update();
+		this.openShop();
+		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
+		this.army.onShopEnter();
+		this.save("shop");
+	}
+
+	openShop() {
 		this.shop = new ShopPhase(
 			this.army,
 			this.handleShopQuit.bind(this),
@@ -127,8 +156,25 @@ export class Game {
 			this.rounds.round,
 			this.life,
 		);
-		this.army.getEconomyHooks().addGold(20 + 5 * this.rounds.round);
-		this.army.onShopEnter();
+	}
+
+	// Keeps the game as it stands at the start of a shop or of a battle, for the player to continue from there. A game
+	// that can't be saved still plays.
+	private save(phase: SavedGame["phase"], opponent?: Opponent) {
+		try {
+			saveGame(
+				serializeGame({
+					phase,
+					army: this.army,
+					round: this.rounds.round,
+					life: this.life,
+					performance: this.performance,
+					opponent,
+				}),
+			);
+		} catch (error) {
+			console.warn("The game could not be saved", error);
+		}
 	}
 
 	startBattleSummary(battle: Battle, battleVerdict: "Victory" | "Defeat") {

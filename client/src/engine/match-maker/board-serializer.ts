@@ -34,6 +34,7 @@ import { Rock } from "../environment/rock";
 import { ArmyGrid } from "../grid/grid";
 import { Inventory } from "../grid/inventory/unit-inventory";
 import { BasicPathTile } from "../tile/recruit/implementation/basic-tile";
+import { AnyPathTile } from "../tile/recruit/tile";
 import { SlowingTrap } from "../trap/recruit/implementation/slowing-trap";
 import { StunTrap } from "../trap/recruit/implementation/stun-trap";
 import { AnyTrap } from "../trap/recruit/trap";
@@ -48,6 +49,7 @@ import { GoGoat } from "../units/recruit/implementation/go-goat";
 import { ParadiseBird } from "../units/recruit/implementation/paradise-bird";
 import { WhiteStag } from "../units/recruit/implementation/white-stag";
 import { AnyUnit } from "../units/recruit/unit";
+import { AnyRecruit } from "../../shared/traits/engine/recruit";
 import { Opponent } from "./match-maker";
 import {
 	SerializedBarrackType,
@@ -56,6 +58,7 @@ import {
 	SerializedElement,
 	SerializedEnvironmentType,
 	SerializedFaction,
+	SerializedInventoryItem,
 	SerializedTotemType,
 	SerializedTowerType,
 	SerializedTrapType,
@@ -136,6 +139,13 @@ const typeOf = <K extends string, T>(registry: Record<K, Constructor<T>>, elemen
 const toCell = ({ x, y }: SerializedCell) => new Cell({ x, y });
 const fromCell = ({ x, y }: Cell): SerializedCell => ({ x, y });
 
+const serializePathTile = (tile: AnyPathTile): Extract<SerializedElement, { kind: "path" }> => ({
+	kind: "path",
+	cell: fromCell(tile.cell),
+	trap: tile.trap ? typeOf(traps, tile.trap) : null,
+	connectionChoice: tile.connectionChoice?.map(fromCell) ?? null,
+});
+
 export const serializeBoard = (army: Army, round: number, randomSeed: number): SerializedBoard => {
 	const { grid } = army;
 	const castle = army.castle;
@@ -164,14 +174,7 @@ export const serializeBoard = (army: Army, round: number, randomSeed: number): S
 				unit: barrack.unitRecruit ? typeOf(units, barrack.unitRecruit) : null,
 			}),
 		),
-		...army.pathTiles.map(
-			(tile): SerializedElement => ({
-				kind: "path",
-				cell: fromCell(tile.cell),
-				trap: tile.trap ? typeOf(traps, tile.trap) : null,
-				connectionChoice: tile.connectionChoice?.map(fromCell) ?? null,
-			}),
-		),
+		...army.pathTiles.map(serializePathTile),
 		...army.environment.map(
 			(element): SerializedElement => ({
 				kind: "environment",
@@ -217,4 +220,39 @@ export const deserializeBoard = (board: SerializedBoard): Omit<Opponent, "player
 	if (!grid.getElement(entryCell)) grid.setElement(new BasicPathTile(entryCell));
 	const army = new Army(grid, new Inventory(), factions[board.faction].defaultUnit());
 	return { army, randomSeed: board.randomSeed };
+};
+
+const instanceOfAny = <T>(registry: Record<string, Constructor<T>>, element: object) =>
+	Object.values(registry).some((constructor) => element instanceof constructor);
+
+// A piece of the reserve in its serialized form, with its cell in the reserve.
+export const serializeInventoryItem = (recruit: AnyRecruit): SerializedInventoryItem => {
+	const cell = fromCell(recruit.cell);
+	if (instanceOfAny(towers, recruit)) return { kind: "tower", type: typeOf(towers, recruit), cell };
+	if (instanceOfAny(totems, recruit)) return { kind: "totem", type: typeOf(totems, recruit), cell };
+	if (instanceOfAny(barracks, recruit)) {
+		const barrack = recruit as AnyBarrack;
+		return {
+			kind: "barrack",
+			type: typeOf(barracks, barrack),
+			cell,
+			unit: barrack.unitRecruit ? typeOf(units, barrack.unitRecruit) : null,
+		};
+	}
+	if (instanceOfAny(traps, recruit)) return { kind: "trap", type: typeOf(traps, recruit), cell };
+	if (instanceOfAny(units, recruit)) return { kind: "unit", type: typeOf(units, recruit), cell };
+	if (recruit instanceof BasicPathTile) return serializePathTile(recruit);
+	throw new Error(`No serialized form for ${recruit.constructor.name} in the inventory`);
+};
+
+export const deserializeInventoryItem = (item: SerializedInventoryItem): AnyRecruit => {
+	switch (item.kind) {
+		case "trap":
+			return new traps[item.type](toCell(item.cell));
+		case "unit":
+			return new units[item.type](toCell(item.cell));
+		default:
+			// Never a castle or an environment piece, which the reserve doesn't hold. The faction only picks a castle.
+			return deserializeElement(item, "Dwarf") as AnyRecruit;
+	}
 };
