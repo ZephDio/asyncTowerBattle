@@ -91,7 +91,7 @@ server unavailable" warning.
   - `run` fast-forwards to the end in well under a second.
   - `pause(false)` resumes real time, together with `wait(ms)`.
 - `screenshot(region)` takes `canvas` (default), `full`, or a grid of the phase: `army`, `inventory`, `retail` in
-  the shop, `battle` in a battle or summary. Crop to a grid whenever the rest of the screen doesn't matter.
+  the shop, `battle` in a battle or summary (the end-of-run `resume` screen has `army`). Crop to a grid whenever the rest of the screen doesn't matter.
 - `console` returns errors and warnings since the last call. Check it after anything that might throw.
 - `eval(code)` runs JavaScript with `atb`, `game` and `wrap` in scope, for anything the other tools don't cover.
 
