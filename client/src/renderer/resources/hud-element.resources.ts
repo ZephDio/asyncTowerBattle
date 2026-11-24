@@ -7,6 +7,10 @@ export class HudElementResources {
 		image: createImage("/resources/button/start.png"),
 	};
 
+	static continueButton: IconResource = {
+		image: createImage("/resources/button/continue.png"),
+	};
+
 	static startGame = {
 		image: createImage("/resources/button/start-game.png"),
 		size: {

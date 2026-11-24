@@ -10,7 +10,7 @@ export type RunResult = { life: number; wins: number; round: number };
 
 // Screen units. The scroll hangs behind the army grid, which is centered on it.
 export const SCROLL_CENTER = new ScreenPosition({ x: 50, y: 30.6 });
-const SCROLL = { width: 72, height: 57 };
+const SCROLL = { width: 80, height: 57 };
 const INK = "#161c2e";
 
 // The big parchment of the end of a run: lives, wins and round on top, with room under them for the army's board.
@@ -48,7 +48,7 @@ export class RunResumeScroll extends Derive(TRenderable, TDrawable) {
 		context.fillText(String(this.result.wins), columnsX[1]!, valueY);
 		context.fillText(`${Math.min(this.result.round, MAX_ROUNDS)}/${MAX_ROUNDS}`, columnsX[2]!, valueY);
 
-		const heart = 2.4 * unit;
+		const heart = 3.2 * unit;
 		for (let index = 0; index < MAX_LIVES; index++) {
 			const icon = index < this.result.life ? IconResources.heartContainer : IconResources.emptyHeartContainer;
 			const x = columnsX[0]! + (index - (MAX_LIVES - 1) / 2) * heart;

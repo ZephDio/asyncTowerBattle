@@ -9,7 +9,8 @@ import { Rectangle } from "../../shared/hitbox/shapes/rectangle";
 import { TCollider } from "../../shared/traits/engine/core/TCollider";
 import { HudElementResources } from "../../renderer/resources/hud-element.resources";
 
-const SIZE = { width: 14, height: 6 };
+// The image is 304x96, like the shop's start button at 224x96 drawn 12 wide.
+const SIZE = { width: 13, height: 13 * (96 / 304) };
 
 export class ContinueHud extends Derive(
 	TCollider,
@@ -26,12 +27,6 @@ export class ContinueHud extends Derive(
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number): void {
 		const canvasSize = this.getCanvasSize(context, this.size.width, this.size.height, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
-		this.drawImage(context, canvasSize, canvasPosition, HudElementResources.startGame.image);
-
-		context.fillStyle = "#172634";
-		context.font = `${canvasSize.height * 0.3}px title`;
-		context.textAlign = "center";
-		context.textBaseline = "middle";
-		context.fillText("Continue", canvasPosition.x, canvasPosition.y);
+		this.drawImage(context, canvasSize, canvasPosition, HudElementResources.continueButton.image);
 	}
 }

@@ -16,7 +16,7 @@ import { TranslateAnimation } from "./translate-animation/translate-animation";
 import { armyGridCenter } from "./grid/grid";
 import { loggedInPlayer } from "../auth/session";
 import { RunResume } from "./run-resume/run-resume";
-import { MAX_LIVES, MAX_ROUNDS } from "./game-rules";
+import { MAX_ROUNDS, STARTING_LIVES } from "./game-rules";
 
 export class Game {
 	army: Army;
@@ -25,7 +25,7 @@ export class Game {
 	runResume: null | RunResume = null;
 	shop: null | ShopPhase = null;
 	rounds: RoundsTracker;
-	life = MAX_LIVES;
+	life = STARTING_LIVES;
 	performance: GamePerformance = { wins: 0, losses: 0 };
 
 	descriptionHud: null | DescriptionHud = null;

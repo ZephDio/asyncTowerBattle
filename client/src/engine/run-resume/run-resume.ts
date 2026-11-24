@@ -6,9 +6,9 @@ import { ResumeState } from "../../shared/gamestate";
 import { ContinueHud } from "./continue-hud";
 import { RunResumeScroll, RunResult } from "./run-resume-scroll";
 
-// Where the army grid rests on the scroll, and the continue button under it.
-const GRID_CENTER = new ScreenPosition({ x: 52, y: 21 });
-const CONTINUE_POSITION = new ScreenPosition({ x: 50, y: 6.2 });
+// Where the army grid rests on the scroll, and the continue button at its lower right.
+const GRID_CENTER = new ScreenPosition({ x: 47, y: 21 });
+const CONTINUE_POSITION = new ScreenPosition({ x: 81, y: 9.5 });
 
 // The last phase of a run: the player sees their board one last time. Nothing can be moved, only described.
 export class RunResume {
