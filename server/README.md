@@ -2,7 +2,7 @@
 
 NestJS server for asyncTowerBattle. It is the `server` package of the monorepo; shared tooling config lives at the root.
 
-- `pnpm start`: run the server on port 6868 (override with `PORT`), restarting on file changes
+- `pnpm start`: regenerate the Prisma client and apply the pending migrations, then run the server on port 6868 (override with `PORT`), restarting on file changes. Postgres must be up (`pnpm start:infra`), or it stops at the migration step; a schema change pulled while it runs is applied at the next `pnpm start`
 - `pnpm build` then `pnpm start:prod`: build and run the compiled server
 - `pnpm test`, `pnpm typecheck`, `pnpm format`
 
