@@ -1,4 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
+import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
+import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { AnyUnit } from "../../../../units/recruit/unit";
 import { BasicBattleBarrack } from "../../battle/implementation/battle-basic-barrack";
@@ -9,7 +11,7 @@ import { Cell } from "../../../../../shared/position";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
-export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
+export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack, HTSynergy, RecruitBattleStart) {
 	constructor(
 		public cell: Cell,
 		barrack: BasicBarrackBlueprint = new BasicBarrackBlueprint({}),
@@ -21,6 +23,7 @@ export class BasicBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 			statsHolder: barrack,
 			tagHolder: barrack,
 			rarityHolder: barrack,
+			synergy: barrack,
 		});
 	}
 	unitRecruit: null | AnyUnit;

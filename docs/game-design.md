@@ -134,6 +134,8 @@ Prices are in gold. "Every Xs" is the cast time. Food is the food spent per cast
 
 A barrack summons the unit placed into it (or the default unit). The unit's summon time sets the pace.
 
+Every barrack has a pattern around its footprint on its sides, corners left out (`xsx / sos / xsx`; `xssx / soos / xssx` for the Rush Barrack). At the start of the battle it gains +5% cast speed for each barrack of another name on those cells (a name counts once, and so does a barrack covering several star cells). Hovering a barrack shows its production speed, its unit and the time between two summons (the unit's summon time over the barrack's speed); hovering the unit put on it describes the unit.
+
 | Barrack | Rarity | Price | Effect |
 |---|---|---|---|
 | Basic Barrack | Common | 10 | One unit at a time. |
