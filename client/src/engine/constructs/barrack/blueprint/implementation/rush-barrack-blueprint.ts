@@ -1,5 +1,5 @@
 import { Rarity, TRarity } from "../../../../../shared/traits/engine/rarity";
-import { Derive } from "@ddd-ts/traits";
+import { Derive, ImplementsTrait } from "@ddd-ts/traits";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { HitBox } from "../../../../../shared/hitbox/hitboxe";
@@ -12,6 +12,11 @@ import { TBaseStats } from "../../../../stats/base-stats";
 import { BarrackResources } from "../../../../../renderer/resources/barrack.resources";
 import { BarrackTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
+
+import { TSynergy } from "../../../../../shared/traits/engine/synergy";
+import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
+import { GridElement } from "../../../../../shared/traits/engine/core/grid-element";
+import { SURROUNDING_CELLS_2X1, isBarrackWithOtherName } from "../../barrack-name-synergy";
 
 export class RushBarrackBlueprint extends Derive(
 	TRarity(Rarity.Common),
@@ -40,6 +45,7 @@ export class RushBarrackBlueprint extends Derive(
 		summonTime: NaN,
 		range: NaN,
 	}),
+	TSynergy,
 	BarrackTag,
 ) {
 	// The food each unit it summons eats on top of its own upkeep, every 2 seconds while it lives (a PermanentBuff).
@@ -47,14 +53,13 @@ export class RushBarrackBlueprint extends Derive(
 
 	description = new BarrackDescription(
 		"Rush Barrack",
-		[
-			"A barrack that spawn",
-			"units faster. Each",
-			`unit eats +${this.extraFoodPerUnit}🌽 more`,
-			"every 2s while alive",
-		],
+		["Units spawn hearty:", `+${this.extraFoodPerUnit} 🌽/2s`, "", "Cast 5% faster per ▣", "barrack of other name"],
 		this,
 	);
+
+	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) =>
+		isBarrackWithOtherName(this.description.name, gridElement);
+	override patternEffect: PatternEffect = new PatternEffect(SURROUNDING_CELLS_2X1(), this.patternCondition.bind(this));
 
 	toRecruit(cell: Cell) {
 		return new RushBarrack(cell.clone(), this);

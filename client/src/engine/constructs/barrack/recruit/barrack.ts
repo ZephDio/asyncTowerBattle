@@ -12,15 +12,31 @@ import { TokenHooks } from "../../../shop/holder/holder";
 import { TGrid } from "../../../grid/tgrid";
 import { RecruitCaster } from "../../../../shared/traits/engine/cast";
 import { HTBaseStats } from "../../../stats/base-stats";
+import { TLiveDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
+import { Physic } from "../../../../shared/physic";
+import { barrackLines } from "../barrack-lines";
 import { TokenUnit } from "../../../../shared/traits/engine/token-unit";
 
 export type AnyBarrack = ImplementsTrait<typeof Barrack>;
 
-export const Barrack = Subtrait([TRecruit, RecruitCaster, HTBaseStats], (base) => {
+export const Barrack = Subtrait([TRecruit, RecruitCaster, HTBaseStats, TLiveDescriptor], (base) => {
 	abstract class IBarrack extends base {
 		abstract unitRecruit: null | AnyUnit;
 		// The army's basic unit, set by the army when the barrack joins it. The barrack spawns it when it holds no unit.
 		defaultUnit: ImplementsTrait<typeof TokenUnit> | null = null;
+
+		liveLines() {
+			return barrackLines(this.bondedUnit, this.stats.castSpeed, this.stats.castSpeed);
+		}
+
+		// The unit put on the barrack, if the position (in the grid's frame) is over it: it is drawn 1.8 above the
+		// barrack's position (the shape's center for multi-cell barracks) and can be grabbed from there.
+		unitAt(grid: ImplementsTrait<typeof TGrid>, gridPosition: GridPosition) {
+			if (!this.unitRecruit) return null;
+			const barrackPosition = this.position instanceof GridPosition ? this.position : grid.cellToGrid(this.cell);
+			const unitPosition = new GridPosition({ x: barrackPosition.x, y: barrackPosition.y + 1.8 });
+			return Physic.doCollide(unitPosition, this.unitRecruit.hitbox, gridPosition) ? this.unitRecruit : null;
+		}
 
 		get bondedUnit() {
 			return this.unitRecruit ?? this.defaultUnit;

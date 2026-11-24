@@ -3,7 +3,7 @@ import { TTokenDrag } from "./token-drag/token-drag";
 import { ShopPhaseHooks } from "../shop";
 import { Retail } from "../retail/retail";
 import { Buyable } from "../retail/buyable";
-import { GridPosition, ScreenPosition } from "../../../shared/position";
+import { ScreenPosition } from "../../../shared/position";
 import { BuyableTokenDrag } from "./token-drag/buyable-token-drag";
 import { AnyRecruit } from "../../../shared/traits/engine/recruit";
 import { Army } from "../../army/army";
@@ -12,7 +12,6 @@ import { Castle } from "../../castle/recruit/castle-recruit";
 import { AnyBarrack, Barrack } from "../../constructs/barrack/recruit/barrack";
 import { RecruitTokenDrag } from "./token-drag/army-recruit-token-drag";
 import { AnyUnit } from "../../units/recruit/unit";
-import { Physic } from "../../../shared/physic";
 
 export type TokenHooks = {
 	shopPhaseHooks: ShopPhaseHooks;
@@ -70,17 +69,10 @@ export class Holder {
 	) {
 		if (implementsTrait(recruit, Castle)) return;
 		if (implementsTrait(recruit, Barrack)) {
-			if (recruit.unitRecruit) {
-				// The unit is drawn 1.8 above the barrack's position (the shape's center for multi-cell barracks).
-				const barrackPosition =
-					recruit.position instanceof GridPosition ? recruit.position : grid.cellToGrid(recruit.cell);
-				const unitPosition = new GridPosition({ x: barrackPosition.x, y: barrackPosition.y + 1.8 });
-				const screenPosition = grid.screenToGridPosition(position);
-				const isClickingOnUnit = Physic.doCollide(unitPosition, recruit.unitRecruit.hitbox, screenPosition);
-				if (isClickingOnUnit) {
-					this.setHoldFromUnitInBarracks(recruit, recruit.unitRecruit, this.getHooks(hooks), position);
-					return;
-				}
+			const unit = recruit.unitAt(grid, grid.screenToGridPosition(position));
+			if (unit) {
+				this.setHoldFromUnitInBarracks(recruit, unit, this.getHooks(hooks), position);
+				return;
 			}
 		}
 		army.removeRecruit(recruit);

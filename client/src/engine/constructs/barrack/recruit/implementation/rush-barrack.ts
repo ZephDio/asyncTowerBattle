@@ -1,4 +1,6 @@
 import { Derive } from "@ddd-ts/traits";
+import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
+import { RecruitBattleStart } from "../../../../../shared/traits/engine/battle-start";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { AnyUnit } from "../../../../units/recruit/unit";
 import { Barrack } from "../barrack";
@@ -12,7 +14,7 @@ import { BoardOrientation } from "../../../../../shared/traits/engine/core/board
 
 // Two cells side by side, anchored on the left one:
 //   oo
-export class RushBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
+export class RushBarrack extends Derive(TUnitPreviewHudRenderable, Barrack, HTSynergy, RecruitBattleStart) {
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 1, y: 0 })]);
 
 	constructor(
@@ -26,6 +28,7 @@ export class RushBarrack extends Derive(TUnitPreviewHudRenderable, Barrack) {
 			statsHolder: blueprint,
 			tagHolder: blueprint,
 			rarityHolder: blueprint,
+			synergy: blueprint,
 		});
 	}
 	unitRecruit: null | AnyUnit;

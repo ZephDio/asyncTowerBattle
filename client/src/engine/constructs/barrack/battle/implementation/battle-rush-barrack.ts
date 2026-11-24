@@ -2,6 +2,9 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { AnyUnit } from "../../../../units/recruit/unit";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Derive } from "@ddd-ts/traits";
+import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
+import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
+import { barrackNameCastSpeedPercent } from "../../barrack-name-synergy";
 import { BattleBarrack } from "../battle-barrack";
 import { RushBarrack } from "../../recruit/implementation/rush-barrack";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
@@ -9,7 +12,7 @@ import { PermanentBuff } from "../../../../army/battle/permanent-buff";
 
 // Summons like the basic barrack at its faster cast speed, and every unit it summons eats more: a permanent buff
 // on its food upkeep (paid every 2 seconds) for as long as it lives.
-export class RushBattleBarrack extends Derive(BattleBarrack) {
+export class RushBattleBarrack extends Derive(BattleBarrack, HTSynergy, BattleStartTrigger) {
 	castCost: number;
 
 	constructor(
@@ -36,6 +39,8 @@ export class RushBattleBarrack extends Derive(BattleBarrack) {
 			descriptor: barrack,
 			tagHolder: barrack,
 			rarityHolder: barrack,
+			synergy: barrack,
+			battleStartRecruit: barrack,
 		});
 		this.castCost = this.bondedUnit.stats.summonTime;
 		this.gridShape = barrack.gridShape;
@@ -43,6 +48,14 @@ export class RushBattleBarrack extends Derive(BattleBarrack) {
 	}
 
 	readonly summonedUpkeep: PermanentBuff;
+
+	onBattleStart(): void {
+		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
+			this.cell,
+			this.patternEffect.getRelativeCells(this.orientation),
+		);
+		this.stats.basePercentStat.castSpeed += barrackNameCastSpeedPercent(this.barrack.description.name, neighbors);
+	}
 
 	onCastResolve(): void {
 		const path = this.hooks.getEnemyPath();

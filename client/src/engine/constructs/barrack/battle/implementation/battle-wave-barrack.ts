@@ -2,12 +2,15 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { AnyUnit } from "../../../../units/recruit/unit";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Derive } from "@ddd-ts/traits";
+import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
+import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
+import { barrackNameCastSpeedPercent } from "../../barrack-name-synergy";
 import { Cast } from "../../../../../shared/traits/engine/cast";
 import { WaveBarrack } from "../../recruit/implementation/wave-barrack";
 import { BattleBarrack } from "../battle-barrack";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
-export class WaveBattleBarrack extends Derive(BattleBarrack) {
+export class WaveBattleBarrack extends Derive(BattleBarrack, HTSynergy, BattleStartTrigger) {
 	castCost: number;
 
 	cycles = [2.6, 0.2, 0.2];
@@ -37,6 +40,8 @@ export class WaveBattleBarrack extends Derive(BattleBarrack) {
 			descriptor: barrack,
 			tagHolder: barrack,
 			rarityHolder: barrack,
+			synergy: barrack,
+			battleStartRecruit: barrack,
 		});
 		this.castCost = unitRecruit ? unitRecruit.stats.summonTime : this.hooks.getDefaultUnit().stats.summonTime;
 		this.gridShape = barrack.gridShape;
@@ -46,6 +51,14 @@ export class WaveBattleBarrack extends Derive(BattleBarrack) {
 		const cycle = this.cycles[this.cycle % this.cycles.length] as number;
 		this.castInProgress = new Cast(this, this.onCastResolve.bind(this), this.castCost * cycle);
 		this.cycle += 1;
+	}
+
+	onBattleStart(): void {
+		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
+			this.cell,
+			this.patternEffect.getRelativeCells(this.orientation),
+		);
+		this.stats.basePercentStat.castSpeed += barrackNameCastSpeedPercent(this.barrack.description.name, neighbors);
 	}
 
 	onCastResolve(): void {

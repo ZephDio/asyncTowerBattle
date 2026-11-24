@@ -17,6 +17,7 @@ import { Buyable } from "../../engine/shop/retail/buyable";
 import { PathTile } from "../../engine/tile/recruit/tile";
 import { Trap } from "../../engine/trap/recruit/trap";
 import { BoardOrientation } from "../../shared/traits/engine/core/board-orientation";
+import { Barrack } from "../../engine/constructs/barrack/recruit/barrack";
 import { ArmyHud } from "../../shared/hud-element/army-hud";
 
 export class ShopInputToIntentTranslator {
@@ -123,8 +124,8 @@ export class ShopInputToIntentTranslator {
 				return;
 			}
 			if (focus.element) {
-				const described = this.trapOr(focus.element, focus.grid, screenPosition);
-				if (implementsTrait(focus.element, TSynergy)) {
+				const described = this.unitOr(focus.element, focus.grid, screenPosition);
+				if (described === focus.element && implementsTrait(focus.element, TSynergy)) {
 					const patternEffect = focus.element.patternEffect;
 					const condition = patternEffect.patternCondition;
 					focus.grid.setOveredTile([
@@ -196,12 +197,7 @@ export class ShopInputToIntentTranslator {
 		screenPosition: ScreenPosition,
 	) {
 		if (!shop.holderControl.hold) return;
-		if (
-			!focus ||
-			focus instanceof RefreshBellHud ||
-			focus instanceof StartBattleButton ||
-			focus instanceof ArmyHud
-		) {
+		if (!focus || focus instanceof RefreshBellHud || focus instanceof StartBattleButton || focus instanceof ArmyHud) {
 			shop.holderControl.hold.onRelease();
 			return;
 		}
@@ -234,6 +230,15 @@ export class ShopInputToIntentTranslator {
 		if (!(grid instanceof ArmyGrid)) return false;
 		if (implementsTrait(element, Trap)) return false;
 		return grid.isLocked(element);
+	}
+
+	// Over the unit put on a barrack, hovering describes that unit, as the unit is grabbed from there.
+	unitOr<T>(element: T, grid: ImplementsTrait<typeof TGrid>, screenPosition: ScreenPosition) {
+		if (element && implementsTrait(element, Barrack)) {
+			const unit = element.unitAt(grid, grid.screenToGridPosition(screenPosition));
+			if (unit) return unit;
+		}
+		return this.trapOr(element, grid, screenPosition);
 	}
 
 	// On a path tile carrying a trap, the middle of the tile stands for the trap: clicking there grabs only the trap

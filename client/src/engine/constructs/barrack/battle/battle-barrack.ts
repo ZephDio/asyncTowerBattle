@@ -1,4 +1,4 @@
-import { Subtrait, implementsTrait } from "@ddd-ts/traits";
+import { Subtrait } from "@ddd-ts/traits";
 import { BasicBattleBarrack } from "./implementation/battle-basic-barrack";
 import { VeterantBattleBarrack } from "./implementation/battle-veterant-barrack";
 import { WaveBattleBarrack } from "./implementation/battle-wave-barrack";
@@ -10,17 +10,11 @@ import { HTImageDrawable } from "../../../../shared/traits/render/image-drawable
 import { TUnitPreviewHudRenderable } from "../../../../shared/traits/render/huds/unit-preview-enderable";
 import { GridElement } from "../../../../shared/traits/engine/core/grid-element";
 import { HaveStats } from "../../../stats/stats";
-import {
-	HTDescriptor,
-	TDescriptor,
-	TLiveDescriptor,
-	formatStat,
-	liveStat,
-} from "../../../../shared/traits/render/huds/item-descriptor";
+import { HTDescriptor, TLiveDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { AnyUnit } from "../../../units/recruit/unit";
 import { TStatsRenderable } from "../../../../shared/traits/render/huds/stat-renderable";
-import { frameToSeconds } from "../../../../shared/seconds";
 import { BattleArmyHooks } from "../../../army/battle/battle-army";
+import { barrackLines } from "../barrack-lines";
 import { AnyBarrack } from "../recruit/barrack";
 import { HTTag } from "../../../../shared/traits/engine/tags/tagged";
 import { HTRarity } from "../../../../shared/traits/engine/rarity";
@@ -59,15 +53,7 @@ export const BattleBarrack = Subtrait(
 			}
 
 			liveLines() {
-				const unit = this.bondedUnit;
-				const castSpeed = this.castSpeed;
-				const summonTime =
-					castSpeed > 0 ? `${frameToSeconds(unit.stats.summonTime / castSpeed).toFixed(1)}s` : "stopped";
-				return {
-					unit: implementsTrait(unit, TDescriptor) ? unit.description.name : "-",
-					"production speed": liveStat(`x${formatStat(castSpeed)}`, castSpeed, this.stats.base.castSpeed),
-					"summon time": liveStat(summonTime, castSpeed, this.stats.base.castSpeed),
-				};
+				return barrackLines(this.bondedUnit, this.castSpeed, this.stats.base.castSpeed);
 			}
 
 			casts(): void {

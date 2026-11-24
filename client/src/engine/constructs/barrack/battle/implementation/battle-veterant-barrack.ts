@@ -2,17 +2,20 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { AnyUnit } from "../../../../units/recruit/unit";
 import { BattleArmyHooks } from "../../../../army/battle/battle-army";
 import { Derive } from "@ddd-ts/traits";
+import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
+import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
+import { barrackNameCastSpeedPercent } from "../../barrack-name-synergy";
 import { BattleBarrack } from "../battle-barrack";
-import { BasicBarrack } from "../../recruit/implementation/basic-barrack";
+import { VeterantBarrack } from "../../recruit/implementation/veterant-barrack";
 import { Status } from "../../../../../shared/traits/engine/status";
 import { Stats } from "../../../../stats/stats";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
 
-export class VeterantBattleBarrack extends Derive(BattleBarrack) {
+export class VeterantBattleBarrack extends Derive(BattleBarrack, HTSynergy, BattleStartTrigger) {
 	castCost: number;
 
 	constructor(
-		public readonly barrack: BasicBarrack,
+		public readonly barrack: VeterantBarrack,
 		public readonly position: GridPosition,
 		public readonly cell: Cell,
 
@@ -36,9 +39,19 @@ export class VeterantBattleBarrack extends Derive(BattleBarrack) {
 			descriptor: barrack,
 			tagHolder: barrack,
 			rarityHolder: barrack,
+			synergy: barrack,
+			battleStartRecruit: barrack,
 		});
 		this.castCost = unitRecruit ? unitRecruit.stats.summonTime : this.hooks.getDefaultUnit().stats.summonTime;
 		this.gridShape = barrack.gridShape;
+	}
+
+	onBattleStart(): void {
+		const neighbors = this.hooks.gridHooks.getRelativeNeighborsInArmy(
+			this.cell,
+			this.patternEffect.getRelativeCells(this.orientation),
+		);
+		this.stats.basePercentStat.castSpeed += barrackNameCastSpeedPercent(this.barrack.description.name, neighbors);
 	}
 
 	onCastResolve(): void {
