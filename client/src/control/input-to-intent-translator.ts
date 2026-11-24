@@ -10,6 +10,8 @@ import { BattleInputToIntentTranslator } from "./translators/battle-input-transl
 import { BattleSummaryInputToIntentTranslator } from "./translators/battlesummary-input-translator";
 import { GameWrapper } from "../engine/wrap";
 import { MainMenu } from "../engine/menu/main-menu";
+import { RunResume } from "../engine/run-resume/run-resume";
+import { RunResumeInputToIntentTranslator } from "./translators/run-resume-input-translator";
 import { MainMenuInputToIntentTranslator } from "./translators/main-menu-input-translator";
 
 export interface PlayerIntent {
@@ -33,6 +35,7 @@ export class InputToIntent {
 	shopTranslator: ShopInputToIntentTranslator;
 	battleSummaryTranslator: BattleSummaryInputToIntentTranslator;
 	mainMenuTranslator: MainMenuInputToIntentTranslator;
+	runResumeTranslator = new RunResumeInputToIntentTranslator();
 	constructor(public gameWrap: GameWrapper) {
 		this.battleTranslator = new BattleInputToIntentTranslator();
 		this.shopTranslator = new ShopInputToIntentTranslator();
@@ -69,6 +72,9 @@ export class InputToIntent {
 		if (phase instanceof BattleSummary) {
 			this.battleSummaryTranslator.handle(screenPosition, eventType, phase);
 		}
+		if (phase instanceof RunResume) {
+			this.runResumeTranslator.handle(screenPosition, eventType, phase);
+		}
 		if (phase instanceof MainMenu) {
 			this.mainMenuTranslator.handle(screenPosition, eventType, phase);
 		}
@@ -84,6 +90,9 @@ export class InputToIntent {
 			}
 			if (game.battleSummary) {
 				return game.battleSummary;
+			}
+			if (game.runResume) {
+				return game.runResume;
 			}
 			throw new Error("No Active Phase");
 		}

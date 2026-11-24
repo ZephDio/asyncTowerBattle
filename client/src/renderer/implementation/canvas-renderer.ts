@@ -32,8 +32,9 @@ export class CanvasRenderer implements Renderer {
 	}
 
 	async draw() {
-		const { grids, renderables } = this.gameWrap.getRenderState();
+		const { grids, renderables, backdrops = [] } = this.gameWrap.getRenderState();
 		this.drawBackGround();
+		for (const backdrop of backdrops) backdrop.render(this.context);
 		for (const { grid, drawables } of grids) {
 			grid.render(this.context);
 			const gridElementDrawables = grid.getDrawables();
@@ -52,6 +53,8 @@ export class CanvasRenderer implements Renderer {
 				.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
 				.map((drawable) => drawable.render(this.context, grid));
 		}
+		// A grid hover effect can leave the context translucent; the HUDs on top are drawn opaque.
+		this.context.globalAlpha = 1;
 		renderables
 			.sort((drawableA, drawableB) => drawableA.drawPriority - drawableB.drawPriority)
 			.map((drawable) => drawable.render(this.context));

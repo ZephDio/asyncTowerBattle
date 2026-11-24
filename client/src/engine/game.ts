@@ -1,5 +1,5 @@
 import { Battle } from "./battle/battle";
-import { BattleState, GameState, ShopState, SummaryState } from "../shared/gamestate";
+import { BattleState, GameState, ResumeState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
 import { ShopPhase } from "./shop/shop";
 import { GamePerformance, MatchMaker, Opponent } from "./match-maker/match-maker";
@@ -15,14 +15,17 @@ import { ArmyFactory } from "./army/army-fixtures";
 import { TranslateAnimation } from "./translate-animation/translate-animation";
 import { armyGridCenter } from "./grid/grid";
 import { loggedInPlayer } from "../auth/session";
+import { RunResume } from "./run-resume/run-resume";
+import { STARTING_LIVES, isRunOver } from "./game-rules";
 
 export class Game {
 	army: Army;
 	battle = null as null | Battle;
 	battleSummary: null | BattleSummary = null;
+	runResume: null | RunResume = null;
 	shop: null | ShopPhase = null;
 	rounds: RoundsTracker;
-	life = 5;
+	life = STARTING_LIVES;
 	performance: GamePerformance = { wins: 0, losses: 0 };
 
 	descriptionHud: null | DescriptionHud = null;
@@ -42,6 +45,7 @@ export class Game {
 	async getState(): Promise<GameState> {
 		if (this.battle) return this.getBattleState();
 		if (this.battleSummary) return this.getSummaryState();
+		if (this.runResume) return this.runResume.getState() as ResumeState;
 		return this.getShopState();
 	}
 
@@ -72,12 +76,17 @@ export class Game {
 		this.battle = null;
 	}
 
+	get isRunOver() {
+		return isRunOver(this.life, this.rounds.round);
+	}
+
 	handleSummaryQuit() {
 		this.battleSummary = null;
-		const from = this.army.grid.centerPosition.clone();
-		if (this.life === 0) {
-			this.endGame();
+		if (this.isRunOver) {
+			this.startRunResume();
+			return;
 		}
+		const from = this.army.grid.centerPosition.clone();
 		// The shop grows the grid, so the grid slides from the battle to where the grown grid rests.
 		this.startShop();
 		const grid = this.army.grid;
@@ -90,6 +99,22 @@ export class Game {
 			() => grid.updateCornerPosition(),
 		);
 		animation.startAnimation();
+	}
+
+	startRunResume() {
+		this.setDescriptionHud(null);
+		const result = { life: this.life, wins: this.performance.wins, round: this.rounds.round };
+		this.runResume = new RunResume(
+			this.army,
+			result,
+			this.handleResumeQuit.bind(this),
+			this.setDescriptionHud.bind(this),
+		);
+	}
+
+	handleResumeQuit() {
+		this.runResume = null;
+		this.endGame();
 	}
 
 	// The shop stays on screen until the opponent board arrives.
@@ -109,6 +134,9 @@ export class Game {
 		}
 		if (this.battleSummary) {
 			state = this.battleSummary.getDrawables();
+		}
+		if (this.runResume) {
+			state = this.runResume.getDrawables();
 		}
 		if (this.shop) {
 			state = this.shop!.getDrawables();
@@ -132,7 +160,13 @@ export class Game {
 	}
 
 	startBattleSummary(battle: Battle, battleVerdict: "Victory" | "Defeat") {
-		this.battleSummary = new BattleSummary(battle, battleVerdict, this.handleSummaryQuit.bind(this), this.life);
+		this.battleSummary = new BattleSummary(
+			battle,
+			battleVerdict,
+			this.handleSummaryQuit.bind(this),
+			this.life,
+			this.isRunOver,
+		);
 	}
 
 	startBattle({ army, randomSeed, playerName }: Opponent) {

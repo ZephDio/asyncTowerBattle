@@ -22,11 +22,12 @@ export class BattleVerdict extends Derive(TDrawable, TRenderable) {
 	constructor(
 		public verdict: "Victory" | "Defeat",
 		public life: number,
+		runOver = false,
 	) {
 		super({});
 		this.hideHud = new HideHud(this.hiddenState);
 		this.battleVerdictHud = new BattleVerdictHud(this.verdict);
-		this.nextRoundHud = new NextRoundHud();
+		this.nextRoundHud = new NextRoundHud(runOver);
 		this.lifeRemainingHud = new LifeRemainingHud(this.life);
 	}
 
@@ -62,8 +63,9 @@ export class BattleSummary {
 		public onSummaryQuit: Game["handleSummaryQuit"],
 
 		public life: number,
+		runOver = false,
 	) {
-		this.battleVerdict = new BattleVerdict(verdict, this.life);
+		this.battleVerdict = new BattleVerdict(verdict, this.life, runOver);
 	}
 
 	getState(): SummaryState {

@@ -10,9 +10,9 @@ const LINE_SIZE = 1.4;
 const LINE_HEIGHT = 1.8;
 const GAP = 0.6;
 // Art pixels.
-const ROLL = 10;
+export const ROLL = 10;
 const PAD_X = 8;
-const PAD_Y = ROLL + 2;
+export const PAD_Y = ROLL + 2;
 
 type Rgb = readonly [number, number, number];
 const INK: Rgb = [22, 28, 46];
@@ -61,7 +61,7 @@ export class HudTooltip extends Derive(TRenderable, TDrawable) {
 		let top = anchor.y - height / 2;
 		left = Math.round(Math.min(Math.max(left, 0), context.canvas.width - width));
 		top = Math.round(Math.min(Math.max(top, 0), context.canvas.height - height - 2 * p));
-		this.drawScroll(context, left, top, columns, rows, p);
+		HudTooltip.drawScroll(context, left, top, columns, rows, p);
 
 		let y = top + (PAD_Y * p + (LINE_HEIGHT * unit) / 2);
 		context.fillStyle = css(INK);
@@ -73,7 +73,7 @@ export class HudTooltip extends Derive(TRenderable, TDrawable) {
 	}
 
 	// A parchment sheet hanging between two rolls, as on the descriptor scroll, outlined in 2px ink on its own shadow.
-	private drawScroll(
+	static drawScroll(
 		context: CanvasRenderingContext2D,
 		left: number,
 		top: number,

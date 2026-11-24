@@ -1,3 +1,4 @@
+import { RenderableState } from "../renderer/renderer";
 import { Game } from "./game";
 import { MainMenu } from "./menu/main-menu";
 import { TutorialPanelHud } from "../shared/hud-element/tutorial-panel-hud";
@@ -53,7 +54,7 @@ export class GameWrapper {
 		return { ...state, renderables: [...state.renderables, this.tutorial] };
 	}
 
-	private phaseRenderState() {
+	private phaseRenderState(): RenderableState {
 		if (this.state === "game" && this.game) return this.game.getRenderState();
 		if (this.mainMenu) return this.mainMenu.getRenderState();
 		throw new Error("GameWrapper.getRenderState: invalid state");
