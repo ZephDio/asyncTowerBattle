@@ -51,13 +51,13 @@ describe("Frog", () => {
 		const { stats, rarity, requiredScience } = new Frog(new Cell({ x: 0, y: 0 })).blueprint;
 		expect(rarity).toBe(Rarity.Epic);
 		expect(requiredScience).toBe(Science.Witchcraft);
-		expect(stats.health).toBe(8);
+		expect(stats.health).toBe(25);
 		expect(stats.castleDamage).toBe(2);
 		expect(offered(new Set())).toBe(false);
 		expect(offered(new Set([Science.Witchcraft]))).toBe(true);
 	});
 
-	it("on death gives a vitality stack and poisons one random enemy for a second", () => {
+	it("on death gives a vitality stack and poisons one random enemy for 2 seconds", () => {
 		const enemies = [new Enemy(), new Enemy(), new Enemy()];
 		const { frog, buffs, removed } = setup(enemies, 0.5);
 		frog.stats.takeDamage(100);
@@ -67,8 +67,8 @@ describe("Frog", () => {
 		expect(enemies.map((enemy) => enemy.stats.conditions.has("poisoned"))).toEqual([false, true, false]);
 
 		const victim = enemies[1] as Enemy;
-		for (let tick = 0; tick < 40; tick++) victim.stats.conditions.get("poisoned")?.tick();
-		expect(100 - victim.stats.health).toBeCloseTo(6);
+		for (let tick = 0; tick < 80; tick++) victim.stats.conditions.get("poisoned")?.tick();
+		expect(100 - victim.stats.health).toBeCloseTo(12);
 		expect(victim.stats.conditions.has("poisoned")).toBe(false);
 	});
 

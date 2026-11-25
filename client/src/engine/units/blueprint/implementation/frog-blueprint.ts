@@ -25,7 +25,7 @@ export class FrogBlueprint extends Derive(
 	TDescriptor,
 	TImageDrawable(UnitResources.frog.image, UnitResources.frog.size, DrawPriority.NormalGridElement),
 	TBaseStats({
-		health: 8,
+		health: 25,
 		speed: 1.2,
 		attackSpeed: secondsToFrame(0.3),
 		castSpeed: NaN,
@@ -33,7 +33,7 @@ export class FrogBlueprint extends Derive(
 		projectileDamage: NaN,
 		foodConsumptionOnCast: NaN,
 		foodConsumption: 0.5,
-		summonTime: secondsToFrame(2.5),
+		summonTime: secondsToFrame(3.8),
 		range: NaN,
 	}),
 	AnimalTag,
@@ -41,7 +41,7 @@ export class FrogBlueprint extends Derive(
 ) {
 	// Unit vitality army-buff stacks (💖) gained on death, and the seconds a random enemy unit is poisoned.
 	readonly vitalityStacks = 1;
-	readonly poisonSeconds = 1;
+	readonly poisonSeconds = 2;
 
 	description = new UnitDescription(
 		"Frog",

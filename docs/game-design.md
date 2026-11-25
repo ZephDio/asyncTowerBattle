@@ -162,7 +162,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | White Stag | Rare | 20 | 42 | 0.13 | 1.5 | 1.3 | 3.5 s | Animal, Forest, Magic | Casts healing waves. Drops a healing antler at 50% life and on death. |
 | Ent | Epic | 15 | 45 | 0.13 | 3 | 1.5 | 4.5 s | Forest | Every 6 s throws roots that slow a building by 50% for 4 s. |
 | Brewmaster | Epic | 15 | 40 | 0.22 | 3.5 | 5 | 4 s | Kinfolk | Regenerates 15% of its life every 2 s. Very hungry. |
-| Frog | Epic | 15 | 8 | 0.08 | 2 | 0.5 | 2.5 s | Animal, Magic | Needs Witchcraft science. Very slow. On death: the army gains 1 vitality stack (💖) and a random living enemy unit is poisoned for 1 s (the Witch House's poison: 6 damage/s, +20% per Cauldron). |
+| Frog | Epic | 15 | 25 | 0.08 | 2 | 0.5 | 3.8 s | Animal, Magic | Needs Witchcraft science. Very slow. On death: the army gains 1 vitality stack (💖) and a random living enemy unit is poisoned for 2 s (the Witch House's poison: 6 damage/s, +20% per Cauldron). |
 | Dragon | Legendary | 15 | 18 | 0.25 | 3 | 1.6 | 2.2 s | Evil, Mountain, Monster | +1 max health per 5 gold the player owns. |
 
 ### Totems (economy, buffs, tricks)
