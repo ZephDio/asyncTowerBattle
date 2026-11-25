@@ -5,10 +5,11 @@ Run from anywhere: python3 scripts/generate-frog.py
 
 Outputs public/resources/units/frog.png, and public/resources/units/frog.sheet.png with its json (see sprite_sheet.py).
 
-REST is a 16x14 frog, one character per pixel, outline included, upscaled 4x with nearest neighbor like the fox: a
-round, plump green body with two big shiny eyes, rosy cheeks, a wide smile, dark spots and a pale belly. The sheet's frame 1 is frog.png. Frame 2 breathes
-out: every row above the belly drops one sprite pixel (row 5 is the one squeezed out) so the eyes bob down while the
-feet stay planted.
+A sitting frog seen from the front, 27x27 pixels with its outline, upscaled 3x with nearest neighbor: big eyes with a
+highlight on top of the head, a wide smile, a yellow-green belly narrowing to a point and two folded front legs. LEFT
+holds the columns from the left edge to the center column, mirrored to make the full sprite. The sheet's frame 1 is
+frog.png. Frame 2 breathes out: every row above the belly drops one sprite pixel (row 9 is the one squeezed out) so
+the head bobs down while the legs stay planted.
 """
 
 from pathlib import Path
@@ -19,40 +20,54 @@ from voxel_sprite import write_png
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "public" / "resources" / "units" / "frog.png"
 SHEET = ROOT / "public" / "resources" / "units" / "frog.sheet.png"
-SCALE = 4
+SCALE = 3
 
 PALETTE = {
-    "a": (29, 29, 28, 255),  # outline
-    "G": (96, 190, 72, 255),
-    "g": (58, 136, 64, 255),
-    "l": (178, 236, 120, 255),
-    "y": (236, 244, 176, 255),
-    "w": (250, 250, 240, 255),
-    "k": (29, 29, 28, 255),
-    "p": (244, 140, 150, 255),
+    "a": (0, 0, 0, 255),  # outline
+    "L": (110, 200, 50, 255),
+    "G": (86, 170, 40, 255),
+    "g": (62, 130, 36, 255),
+    "d": (44, 100, 30, 255),
+    "y": (190, 200, 50, 255),
+    "Y": (160, 168, 40, 255),
+    "w": (255, 255, 255, 255),
 }
 
-REST = [
-    "..aaaa....aaaa..",
-    ".awwwwa..awwwwa.",
-    ".awwkka..akkwwa.",
-    ".aGGGGaaaaGGGGa.",
-    "aGlGGGGGGGGGGGGa",
-    "aGGGgGGGGGGgGGGa",
-    "aGppGGGGGGGGppGa",
-    "aGGaaGGGGGGaaGGa",
-    "aGGGGaaaaaaGGGGa",
-    ".aGGyyyyyyyyGGa.",
-    ".aGGGyyyyyyGGGa.",
-    "aGGGaaGGGGaaGGGa",
-    "aGGGGa....aGGGGa",
-    ".aaaa......aaaa.",
+LEFT = [
+    ".......aaa....",
+    "......aLLLa...",
+    ".....aLwwwLaaa",
+    ".....aLwwwLaaa",
+    ".....awaaawLLL",
+    ".....awaaawGGG",
+    ".....awwwwwGGG",
+    "....aLGGGGGGGG",
+    "....aLGGGGGGGG",
+    "....aGaGGGGGGG",
+    "....aGGagGGGGG",
+    "....aGGGgaaaaa",
+    ".....aGyyyyyyy",
+    ".....aGyyyyyyy",
+    ".....aGyyyyyyy",
+    ".....aGyyyyyyy",
+    "....aaGGYyyyyy",
+    ".aaaLaGagYyyyy",
+    "aLLLLaGagYyyyy",
+    "aLLLLaGagYyyyy",
+    "aGGGGaGagYyyyy",
+    "aggGGaGaaaYyyy",
+    ".aaaGaGGgaaYyy",
+    "..aaaGaGGGGaYY",
+    "...aaGaGGGGaGY",
+    "..aggggaagggaa",
+    "..aaaaaaaaaaaa",
 ]
-SQUEEZED_ROW = 5
+REST = [row + row[-2::-1] for row in LEFT]
+SQUEEZED_ROW = 9
 
 
 def main() -> None:
-    assert all(len(row) == 16 for row in REST), "every row must be 16 pixels wide"
+    assert all(len(row) == 27 for row in REST), "every row must be 27 pixels wide"
     write_png(OUTPUT, to_pixels(REST, PALETTE, scale=SCALE))
     write_sheet(SHEET, [("idle", [REST, breath_out(REST, SQUEEZED_ROW)], 450)], PALETTE, scale=SCALE)
     print(f"wrote {OUTPUT.relative_to(ROOT)}, {SHEET.relative_to(ROOT)} and its json")
