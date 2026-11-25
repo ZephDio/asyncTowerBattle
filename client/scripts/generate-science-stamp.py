@@ -6,8 +6,8 @@ Run from anywhere: python3 scripts/generate-science-stamp.py
 Outputs public/resources/icons/science-stamp.png.
 
 A science is a token an army holds (see docs/game-design.md), drawn as a wax seal. This is the seal with no emblem:
-a raised cyan rim around a recessed, empty face. A science icon is this stamp with a small emblem pressed in the
-face (the 8x8 pixels inside the rim), in the lighter cyan. It follows the corn and gold coin icons (see
+a raised cyan rim, two pixels wide, around a recessed, empty face. A science icon is this stamp with a small emblem
+pressed in the face (the 10x10 pixels inside the rim), in the lighter cyan. It follows the corn and gold coin icons (see
 generate-corn.py): a 16x16 sprite upscaled 4x, flat colors with a couple of shades, light from the top left, and the
 icons' dark ink outline drawn around the silhouette.
 """
@@ -29,30 +29,30 @@ PALETTE = {
     "c": (36, 148, 190, 255),
     "d": (22, 98, 146, 255),
     # Recessed face: its top left edge is in the rim's shadow, its bottom right edge catches the light
-    "F": (52, 170, 205, 255),
+    "F": (38, 128, 176, 255),
     "s": (22, 98, 146, 255),
     "w": (130, 232, 244, 255),
     "K": OUTLINE,
 }
 
-# The edge of the wax is slightly uneven, as poured wax is, with a thicker lower right. The first and last rows and
+# The rim is two pixels wide all around, lit on the top left and shaded on the bottom right. The first and last rows and
 # columns stay empty for the outline.
 SPRITE = [
     "................",
-    ".....WWWCCC.....",
-    "...WWWCCCCCCc...",
-    "..WWCCCCCCCCCc..",
-    ".WWCCssssssCCCc.",
-    ".WCCsFFFFFFwCCc.",
-    ".WCsFFFFFFFFwCc.",
-    ".WCsFFFFFFFFwCc.",
-    ".CCsFFFFFFFFwCc.",
-    ".CCsFFFFFFFFwCc.",
-    ".CCCsFFFFFFwCCc.",
-    ".cCCCwwwwwwCCcc.",
-    "..cCCCCCCCCCccc.",
-    "...ccCCCCCCcdd..",
-    ".....ccccddd....",
+    ".....WWWWCC.....",
+    "...WWCCCCCCCc...",
+    "..WCCFFFFFFCCc..",
+    "..WCFFFFFFFFCc..",
+    ".WCFFFFFFFFFFCc.",
+    ".WCFFFFFFFFFFCc.",
+    ".WCFFFFFFFFFFcc.",
+    ".WCFFFFFFFFFFcd.",
+    ".CCFFFFFFFFFFcd.",
+    ".CcFFFFFFFFFFcd.",
+    "..CcFFFFFFFFcd..",
+    "..CccFFFFFFccd..",
+    "...Ccccccccdd...",
+    ".....ccdddd.....",
     "................",
 ]
 
