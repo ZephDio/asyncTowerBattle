@@ -90,8 +90,8 @@ export class TotemResources {
 
 	static stonemason: ShapedResource = {
 		size: {
-			width: 4.9,
-			height: 10,
+			width: 5.004,
+			height: 8.388,
 		},
 		image: createImage("/resources/totem/stonemason.png"),
 		shape: "rectangle",
