@@ -25,7 +25,7 @@ const TAIL = 16 * PIXEL;
 const STAMP = 16 * PIXEL;
 // The ribbon grows a segment for each seal up to FULL_LENGTH seals, then keeps that length: the seals come closer
 // together, and once they would touch they alternate left and right of the ribbon by ZIGZAG.
-const FULL_LENGTH = 4;
+const FULL_LENGTH = 5;
 const ZIGZAG = 6 * PIXEL;
 
 const SCIENCE_NAMES: Record<Science, string> = {
