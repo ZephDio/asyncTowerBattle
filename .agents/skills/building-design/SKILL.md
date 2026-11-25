@@ -91,6 +91,14 @@ Also check it in the game with the game-testing skill:
   transparent. The `pixel-art-assets` skill covers drawing it.
 - Then follow the "Adding a new piece" checklist in `AGENTS.md` (union type, fixtures, resources, retail pool).
 
+## Test link
+
+After implementing a monument (totem, tower, barrack...), always leave a Vite dev server running on the checkout
+and give the user a test link. Start it detached, from the checkout's `client/`, on a free port so it doesn't
+clash with the user's own server, with `setsid nohup <vite> --strictPort --port <port> &` (Vite listens on every
+interface), check that it answers, then give `http://<LAN IP>:<port>/?dev` (`?dev` gives gold and free opponents)
+and say which piece to look for. Tell the user it keeps running, and stop it when they are done.
+
 ## Placeholder sprite
 
 When the user designs a new monument (totem, tower, barrack...) and gives no art ("no resources for now"), don't
