@@ -21,9 +21,7 @@ const TOP = 14 * PIXEL;
 const SEGMENT = 22 * PIXEL;
 const TAIL = 9 * PIXEL;
 const STAMP = 16 * PIXEL;
-const HALO = 24 * PIXEL;
-// The pinned seal is pulled out of the ribbon, towards the board.
-const PULL = 2 * PIXEL;
+const HALO = 20 * PIXEL;
 // The ribbon grows a segment for each seal up to FULL_LENGTH seals, then keeps that length: the seals come closer
 // together, and once they would touch they alternate left and right of the ribbon by ZIGZAG.
 const FULL_LENGTH = 5;
@@ -73,8 +71,7 @@ export class ScienceHud extends Derive(
 	// The center of the seal of the science at `index`.
 	private sealCenter(index: number) {
 		const zigzag = this.spacing < STAMP ? (index % 2 === 0 ? -ZIGZAG : ZIGZAG) : 0;
-		const pull = this.sciences[index] === this.pinned ? -PULL : 0;
-		return new ScreenPosition({ x: this.position.x + zigzag + pull, y: this.top - TOP - (index + 0.5) * this.spacing });
+		return new ScreenPosition({ x: this.position.x + zigzag, y: this.top - TOP - (index + 0.5) * this.spacing });
 	}
 
 	// The science of the nearest seal under `point`, as seals overlap once they zigzag.

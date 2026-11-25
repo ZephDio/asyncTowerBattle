@@ -7,7 +7,7 @@ Outputs, in public/resources/hud/science-ribbon/:
 - top.png: the brass rod the ribbon hangs from, with the cloth sleeve looped over it.
 - segment.png: a length of plain ribbon, one per science held, its seal drawn over it by the game.
 - tail.png: the swallowtail end of the ribbon.
-- halo.png: a brass ring drawn behind the seal whose scroll is pinned open.
+- halo.png: a thin yellow ring drawn behind the seal whose scroll is pinned open.
 
 The ribbon is an undyed linen strip hanging right of the reserve, the seals of the army's sciences pressed on it like
 wax seals on a charter. It mirrors the army banners (see generate-army-banners.py): the same pixel density (5 image
@@ -93,20 +93,15 @@ def tail():
 
 
 def halo():
-    size = 24
+    """A 2 pixel yellow ring hugging the 16 pixel stamp, the gold of the gold coin icon."""
+    size = 20
     middle = (size - 1) / 2
     image = [[CLEAR] * size for _ in range(size)]
     for y in range(size):
         for x in range(size):
             d = ((x - middle) ** 2 + (y - middle) ** 2) ** 0.5
-            # Lit from the top left, as the rod's brass: the light shade on that side of the ring.
-            lit = (x + y) < size - 1
-            if 9 <= d < 10.4:
-                image[y][x] = (*(BRASS[3] if lit else BRASS[2]), 255)
-            elif 10.4 <= d < 11.4:
-                image[y][x] = (*(BRASS[2] if lit else BRASS[1]), 255)
-            elif 11.4 <= d < 12.2:
-                image[y][x] = (*INK, 255)
+            if 7.6 <= d < 9.8:
+                image[y][x] = (254, 231, 97, 255)
     return image
 
 
