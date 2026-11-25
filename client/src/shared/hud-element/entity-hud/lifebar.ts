@@ -17,6 +17,7 @@ export class LifeBar extends Derive(TDrawable) {
 		context.globalAlpha = 1;
 		context.fillStyle = "red";
 		context.strokeStyle = "cyan";
+		context.lineWidth = 3;
 		const size = this.getCanvasSize(context, 3, 0.5, scale);
 		const canvasPosition = this.getCanvasPosition(context, position);
 		this.drawRectangle(context, size, canvasPosition);
