@@ -84,10 +84,11 @@ def top():
 
 
 def tail():
-    height = 16
+    height = 9
     middle = (CLOTH_RIGHT - CLOTH_LEFT) / 2
-    # A swallowtail: the two points hang at the bottom, the notch rises 6 pixels in the middle.
-    return cloth(height, bottom=lambda c: height - 1 - round(6 * (1 - abs(c - middle) / middle)), open_bottom=False)
+    # A short swallowtail, so a full ribbon keeps clear of the screen's bottom: the two points hang at the bottom, the
+    # notch rises 5 pixels in the middle.
+    return cloth(height, bottom=lambda c: height - 1 - round(5 * (1 - abs(c - middle) / middle)), open_bottom=False)
 
 
 def main() -> None:
