@@ -31,11 +31,16 @@ const setup = (enemies: Enemy[], random = 0) => {
 		alliedArmyBuffHooks: buffs.getHooks(),
 		getEnemyUnits: () => enemies as unknown as AnyBattleUnit[],
 		removeUnit: (unit: unknown) => removed.push(unit),
+		notifyEnemyCastleHit: () => {},
 		random: () => random,
 	} as unknown as BattleArmyHooks;
-	const path = { getNodes: () => [] } as unknown as BattlePath;
+	const castleHits: number[] = [];
+	const path = {
+		getNodes: () => [],
+		alliedCastle: { takeHit: (damage: number) => castleHits.push(damage) },
+	} as unknown as BattlePath;
 	const frog = new Frog(new Cell({ x: 0, y: 0 })).toBattle(new GridPosition({ x: 0, y: 0 }), path, hooks);
-	return { frog, buffs, removed };
+	return { frog, buffs, removed, castleHits };
 };
 
 const offered = (sciences: ReadonlySet<Science>) =>
@@ -71,5 +76,16 @@ describe("Frog", () => {
 		const { frog, buffs } = setup([new Enemy(false)]);
 		frog.stats.takeDamage(100);
 		expect(buffs.unitArmyBuff.getBuff("vitality")).toBe(1);
+	});
+
+	it("does not die on reaching the castle: it hits it and leaves without its death effect", () => {
+		const enemy = new Enemy();
+		const { frog, buffs, removed, castleHits } = setup([enemy]);
+		frog.attackCastle();
+
+		expect(castleHits).toEqual([2]);
+		expect(removed).toEqual([frog]);
+		expect(buffs.unitArmyBuff.getBuff("vitality")).toBe(0);
+		expect(enemy.stats.conditions.has("poisoned")).toBe(false);
 	});
 });

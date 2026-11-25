@@ -104,8 +104,8 @@ export const TBattleUnit = Subtrait(
 			attackCastle() {
 				this.enemyPath.alliedCastle.takeHit(this.stats.castleDamage);
 				this.hooks.notifyEnemyCastleHit();
+				// Reaching the castle is not a death: the unit leaves the battle without its on-death effects.
 				this.hooks.removeUnit(this);
-				this.stats.die(); // TODO
 			}
 
 			consumeFood() {

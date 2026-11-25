@@ -43,7 +43,7 @@ The two boards are joined into one battlefield: the player's board at the bottom
 How a battle plays out:
 
 - **Barracks** summon units. Each unit enters the opponent's board at the door and walks the path.
-- **Units do not fight units.** Towers shoot units. A unit that reaches the enemy castle deals its damage to the castle once and disappears.
+- **Units do not fight units.** Towers shoot units. A unit that reaches the enemy castle deals its damage to the castle once and disappears. Reaching the castle is not a death: a unit that does so triggers its "hits the enemy castle" effects but never its "on death" ones (the Frog's croak, the White Stag's last antler), which only fire when a tower kills it.
 - **Towers** fire at enemy units standing in their **target zone**: a set of cells relative to the tower, by default the 8 cells around it. In the shop, each target cell is marked with a bow icon, red when the cell holds a path tile (the tower will be useful there) and grey otherwise.
 - **Totems** cast on a timer or react to events, and buff, feed or sabotage.
 - The battle ends when a castle falls.
