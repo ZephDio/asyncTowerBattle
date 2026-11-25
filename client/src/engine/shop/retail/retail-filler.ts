@@ -34,6 +34,7 @@ import { GobelinPortalBlueprint } from "../../constructs/totem/blueprint/impleme
 import { CropsFieldBlueprint } from "../../constructs/totem/blueprint/implementation/crops-field-blueprint";
 import { StunTrapBlueprint } from "../../trap/blueprint/implementation/stun-trap-blueprint";
 import { AnyTrapBlueprint } from "../../trap/blueprint/trap-blueprint";
+import { FrogBlueprint } from "../../units/blueprint/implementation/frog-blueprint";
 import { FoxBlueprint } from "../../units/blueprint/implementation/fox-blueprint";
 import { WindmillBlueprint } from "../../constructs/totem/blueprint/implementation/windmill-blueprint";
 import { BakeryBlueprint } from "../../constructs/totem/blueprint/implementation/bakery-blueprint";
@@ -107,6 +108,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			BrewmasterBlueprint,
 			GoGoatBlueprint,
 			ParadiseBirdBlueprint,
+			FrogBlueprint,
 		],
 		share: 50,
 	},

@@ -76,11 +76,17 @@ export const TBattleUnit = Subtrait(
 				this.position.y = newPosition.y;
 			}
 
+			// Scales the movement speed of this tick. A unit with its own gait (the Frog's hops) overrides it; the
+			// scale must average 1 over the gait, so the movement speed stat stays the unit's average speed.
+			movementMultiplier(): number {
+				return 1;
+			}
+
 			followPath(): void {
 				if (this.canMove() && !this.pathFinder.isArrived) {
 					const newPosition = this.pathFinder.getNextPosition(
 						this.position,
-						movementSpeedToDistancePerTick(this.stats.movementSpeed),
+						movementSpeedToDistancePerTick(this.stats.movementSpeed) * this.movementMultiplier(),
 					);
 					this.move(newPosition);
 				}
@@ -104,8 +110,8 @@ export const TBattleUnit = Subtrait(
 			attackCastle() {
 				this.enemyPath.alliedCastle.takeHit(this.stats.castleDamage);
 				this.hooks.notifyEnemyCastleHit();
+				// Reaching the castle is not a death: the unit leaves the battle without its on-death effects.
 				this.hooks.removeUnit(this);
-				this.stats.die(); // TODO
 			}
 
 			consumeFood() {

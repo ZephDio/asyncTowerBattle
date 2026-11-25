@@ -17,6 +17,10 @@ import { frameToSeconds } from "../../../shared/seconds";
 // The damage a poisoned enemy takes each second, before the army's modifiers (the Cauldron).
 export const POISON_DAMAGE_PER_SECOND = 6;
 
+// Read from the army each time, so a modifier gained or lost during the battle applies at once.
+export const poisonDamagePerSecond = (hooks: BattleArmyHooks) =>
+	POISON_DAMAGE_PER_SECOND * (1 + hooks.alliedArmyBuffHooks.getPoisonDamagePercent() / 100);
+
 export class PoisonGround extends Derive(
 	TDrawable,
 	TRenderable,
@@ -45,13 +49,11 @@ export class PoisonGround extends Derive(
 		}
 		const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
 		for (const enemy of enemies) {
-			enemy.addCondition(new Poisoned(this.damagePerSecond));
+			enemy.addCondition(Poisoned.by(this.hooks));
 		}
 	}
 
-	// Read from the army each time, so a modifier gained or lost during the battle applies at once.
-	damagePerSecond = () =>
-		POISON_DAMAGE_PER_SECOND * (1 + this.hooks.alliedArmyBuffHooks.getPoisonDamagePercent() / 100);
+	damagePerSecond = () => poisonDamagePerSecond(this.hooks);
 
 	get size() {
 		return {
@@ -75,11 +77,15 @@ export class PoisonGround extends Derive(
 export class Poisoned extends Derive(Status) {
 	key = "poisoned";
 	clock = 0;
-	duration = 70;
+	duration: number;
 	stats: Stats;
 
-	constructor(public damagePerSecond: () => number) {
+	constructor(
+		public damagePerSecond: () => number,
+		duration = 70,
+	) {
 		super({});
+		this.duration = duration;
 	}
 
 	tick() {
@@ -88,6 +94,11 @@ export class Poisoned extends Derive(Status) {
 			this.stats.removeCondition(this);
 		}
 		this.stats.takeDamage(this.damagePerSecond() * frameToSeconds(1));
+	}
+
+	// A poison applied by an army: its damage follows that army's poison modifiers (the Cauldron) tick by tick.
+	static by(hooks: BattleArmyHooks, duration?: number) {
+		return new Poisoned(() => poisonDamagePerSecond(hooks), duration);
 	}
 
 	stack(_status: Poisoned) {}

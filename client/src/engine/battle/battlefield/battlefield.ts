@@ -83,6 +83,7 @@ export class Battlefield {
 			enemyArmyBuffHooks,
 			alliedArmy.getEconomyHooks(),
 			enemyArmy.getEconomyHooks(),
+			(): AnyBattleUnit[] => [...enemyBattleArmy.units.keys()],
 		);
 		const enemyBattleArmy = new BattleArmy(
 			enemyFoodEconomy,
@@ -101,6 +102,7 @@ export class Battlefield {
 			alliedArmyBuffHooks,
 			enemyArmy.getEconomyHooks(),
 			alliedArmy.getEconomyHooks(),
+			(): AnyBattleUnit[] => [...alliedBattleArmy.units.keys()],
 		);
 		alliedArmy.refreshPathConnections();
 		enemyArmy.refreshPathConnections();

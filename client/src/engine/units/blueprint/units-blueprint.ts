@@ -5,6 +5,7 @@ import { EntBlueprint } from "./implementation/ent-blueprint";
 import { FoxBlueprint } from "./implementation/fox-blueprint";
 import { ParadiseBirdBlueprint } from "./implementation/paradise-bird-blueprint";
 import { GoGoatBlueprint } from "./implementation/go-goat-blueprint";
+import { FrogBlueprint } from "./implementation/frog-blueprint";
 import { WhiteStagBlueprint } from "./implementation/white-stag-blueprint";
 
 export type AnyUnitBlueprint =
@@ -15,4 +16,5 @@ export type AnyUnitBlueprint =
 	| EntBlueprint
 	| BrewmasterBlueprint
 	| GoGoatBlueprint
-	| ParadiseBirdBlueprint;
+	| ParadiseBirdBlueprint
+	| FrogBlueprint;

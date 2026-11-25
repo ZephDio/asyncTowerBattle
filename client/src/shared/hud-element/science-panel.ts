@@ -97,7 +97,10 @@ export class SciencePanel extends Derive(TRenderable, TDrawable) {
 			context.fillText("It unlocks nothing yet", center.x, center.y + 2 * unit);
 		}
 		context.restore();
+		// The hover effect leaves the context translucent, which the descriptor drawn after the scroll must not inherit.
+		context.save();
 		this.drawGrid(context);
+		context.restore();
 	}
 
 	// The pieces and their hover effects, ordered as the renderer orders a grid's drawables.
