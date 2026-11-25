@@ -6,6 +6,8 @@ import { Rarity } from "../../../../../shared/traits/engine/rarity";
 import { Science } from "../../../../../shared/traits/engine/science";
 import { Cauldron } from "../../recruit/implementation/cauldron";
 import { WitchHouse } from "../../../tower/recruit/implementation/witch-house";
+import { Poisoned } from "../../../../area-effect/implementation/poison-ground";
+import { Stats } from "../../../../stats/stats";
 import type { BattleArmyHooks } from "../../../../army/battle/battle-army";
 
 const setup = (count: number) => {
@@ -46,5 +48,18 @@ describe("Cauldron", () => {
 
 	it("makes the Witch House itself deal no damage", () => {
 		expect(new WitchHouse(new Cell({ x: 0, y: 0 })).stats.hasProjectileDamage()).toBe(false);
+	});
+
+	it("takes 6 health in 32 ticks (one second) from a poisoned enemy, 7.2 with a Cauldron", () => {
+		for (const [cauldrons, expected] of [
+			[0, 6],
+			[1, 7.2],
+		] as const) {
+			const { puddle } = setup(cauldrons);
+			const stats = new Stats(100, 0, 0, 0, 0, 0, 0, 0, () => {});
+			stats.addCondition(new Poisoned(puddle.damagePerSecond));
+			for (let tick = 0; tick < 32; tick++) stats.conditions.get("poisoned")?.tick();
+			expect(100 - stats.health).toBeCloseTo(expected);
+		}
 	});
 });
