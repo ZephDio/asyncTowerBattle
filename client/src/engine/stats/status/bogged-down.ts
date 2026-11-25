@@ -22,6 +22,7 @@ export class BoggedDown extends Derive(Status) {
 		this.clock++;
 		if (this.clock >= this.duration) {
 			this.stats.removeCondition(this);
+			return;
 		}
 		if (this.didTrigger) return;
 		this.stats.setModifier("movementSpeed", this.key, -this.percent);

@@ -187,7 +187,9 @@ Path rules (junctions, right-click to choose a direction) are in `docs/path.md`.
 
 ### Status effects
 
-Frozen (slowed, wearing off), Rooted (cannot move), Stunned, Bogged down (mud), Poisoned (damage over time), Stone Shield (blocks the next hit).
+Frozen (slowed, wearing off), Rooted (cannot move), Stunned, Bogged down (mud), Hindered (the Forest Cabin's bolts), Poisoned (damage over time), Stone Shield (blocks the next hit).
+
+Percent modifiers follow one rule: increases (army buffs, synergies) add up, and each reduction (slows) multiplies the stat, one value per source, so a unit with +56% speed under the Mud Trap (-30%) and a Cabin slow (-50%) moves at 156% x 0.7 x 0.5 = 54.6%. The same source never stacks with itself: it keeps the longest remaining time and the strongest percent.
 
 ## Strategic axes
 
