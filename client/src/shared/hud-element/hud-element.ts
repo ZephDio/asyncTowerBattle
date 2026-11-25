@@ -3,6 +3,7 @@ import { CastleLifeBar } from "./battle/army-resume/castle-life-bar";
 import { SliderBattleSpeed } from "./battle/slider-speed";
 import { GoldHud } from "./gold-hud";
 import { ArmyHud } from "./army-hud";
+import { ScienceHud } from "./science-hud";
 import { RefreshBellHud } from "./refresh-bell-hud";
 import { StartBattleButton } from "./start-battle-button";
 import { SelectDwarfButton } from "../../engine/menu/huds/select-dwarf-button";
@@ -21,6 +22,7 @@ export type HudElement =
 	| StartBattleButton
 	| GoldHud
 	| ArmyHud
+	| ScienceHud
 	| RefreshBellHud
 	| CastleLifeBar
 	| BattleClockHud

@@ -19,6 +19,7 @@ import { Trap } from "../../engine/trap/recruit/trap";
 import { BoardOrientation } from "../../shared/traits/engine/core/board-orientation";
 import { Barrack } from "../../engine/constructs/barrack/recruit/barrack";
 import { ArmyHud } from "../../shared/hud-element/army-hud";
+import { ScienceHud } from "../../shared/hud-element/science-hud";
 
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
@@ -61,7 +62,7 @@ export class ShopInputToIntentTranslator {
 			shop.exitShop();
 			return;
 		}
-		if (!focus || focus instanceof ArmyHud) return;
+		if (!focus || focus instanceof ArmyHud || focus instanceof ScienceHud) return;
 		if (shop.holderControl.hold) return;
 		if (focus.cell && (focus.grid instanceof ArmyGrid || focus.grid instanceof Inventory)) {
 			const element = this.trapOr(focus.element, focus.grid, screenPosition);
@@ -84,7 +85,7 @@ export class ShopInputToIntentTranslator {
 		if (shop.holderControl.hold) {
 			shop.holderControl.moveHold(screenPosition);
 		}
-		if (focus instanceof ArmyHud) {
+		if (focus instanceof ArmyHud || focus instanceof ScienceHud) {
 			this.clearHover(shop);
 			const described = shop.holderControl.hold ? null : focus.describedAt(screenPosition);
 			if (described) {
@@ -197,7 +198,13 @@ export class ShopInputToIntentTranslator {
 		screenPosition: ScreenPosition,
 	) {
 		if (!shop.holderControl.hold) return;
-		if (!focus || focus instanceof RefreshBellHud || focus instanceof StartBattleButton || focus instanceof ArmyHud) {
+		if (
+			!focus ||
+			focus instanceof RefreshBellHud ||
+			focus instanceof StartBattleButton ||
+			focus instanceof ArmyHud ||
+			focus instanceof ScienceHud
+		) {
 			shop.holderControl.hold.onRelease();
 			return;
 		}
@@ -211,7 +218,8 @@ export class ShopInputToIntentTranslator {
 			focus &&
 			!(focus instanceof RefreshBellHud) &&
 			!(focus instanceof StartBattleButton) &&
-			!(focus instanceof ArmyHud)
+			!(focus instanceof ArmyHud) &&
+			!(focus instanceof ScienceHud)
 		) {
 			if (focus.grid instanceof ArmyGrid && focus.element && implementsTrait(focus.element, PathTile)) {
 				shop.army.cyclePathAt(focus.element.cell);
@@ -258,6 +266,9 @@ export class ShopInputToIntentTranslator {
 				return hudElement;
 			}
 			if (hudElement instanceof ArmyHud && hudElement.contains(screenPosition)) {
+				return hudElement;
+			}
+			if (hudElement instanceof ScienceHud && hudElement.sciences.length > 0 && hudElement.contains(screenPosition)) {
 				return hudElement;
 			}
 		}

@@ -41,6 +41,13 @@ export class HudElementResources {
 		Dwarf: { image: createImage("/resources/hud/battle-dwarf.png") },
 	};
 
+	// The ribbon the shop's science seals hang on, drawn by scripts/generate-science-ribbon.py.
+	static scienceRibbon = {
+		top: { image: createImage("/resources/hud/science-ribbon/top.png") },
+		segment: { image: createImage("/resources/hud/science-ribbon/segment.png") },
+		tail: { image: createImage("/resources/hud/science-ribbon/tail.png") },
+	};
+
 	static banner: IconResource = {
 		image: createImage("/resources/hud/banner.png"),
 	};

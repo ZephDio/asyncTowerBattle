@@ -19,6 +19,7 @@ import { EconomyHooks } from "../gold/army-gold-economy";
 import { PathPreview } from "../path/army/path-preview";
 import { PathInvalidHud } from "../../shared/hud-element/path-invalid-hud";
 import { ArmyHud } from "../../shared/hud-element/army-hud";
+import { ScienceHud } from "../../shared/hud-element/science-hud";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -134,6 +135,7 @@ export class ShopPhase {
 				...(this.signHovered ? [new RarityOddsHud(rarityOdds(this.round), this.sign)] : []),
 				new RefreshBellHud(this.bellPressedAt),
 				this.getArmyHud(),
+				this.getScienceHud(),
 				...(network.complete ? [] : [new PathInvalidHud()]),
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
@@ -143,6 +145,11 @@ export class ShopPhase {
 	// Built from the army each time, since the grid widens between rounds and the gold changes.
 	getArmyHud() {
 		return new ArmyHud(this.army, this.round, this.life);
+	}
+
+	// Built each time too: the sciences change as pieces that grant one are placed or sold.
+	getScienceHud() {
+		return new ScienceHud(this.army, this.army.inventory);
 	}
 
 	getPathPreview(network = this.army.pathNetwork) {
@@ -176,7 +183,7 @@ export class ShopPhase {
 			type: "shop",
 			retail: this.retail,
 			hold: this.holderControl.hold,
-			hudElements: [new StartBattleButton({}), new RefreshBellHud(), this.getArmyHud()],
+			hudElements: [new StartBattleButton({}), new RefreshBellHud(), this.getArmyHud(), this.getScienceHud()],
 			towers: this.army.towers,
 			castle: this.army.castle,
 			grid: this.army.grid,

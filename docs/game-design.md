@@ -117,7 +117,7 @@ An empty barrack summons the faction's default unit. Factions are thin for now: 
 
 ### Sciences
 
-A science is a token an army holds because it owns a piece that grants it. For now only the castles grant one: the Elf castle the Elf science, the Dwarf Mountain the Dwarf science (a castle can grant several later). A piece behind a science is not offered in the shop, nor by the refresh bell, until the army holds it. The Forest Cabin needs the Elf science; the Dwarf science gates nothing yet. Sciences are derived from the owned pieces, never stored, and are not shown to the player yet.
+A science is a token an army holds because it owns a piece that grants it. For now only the castles grant one: the Elf castle the Elf science, the Dwarf Mountain the Dwarf science (a castle can grant several later). A piece behind a science is not offered in the shop, nor by the refresh bell, until the army holds it. The Forest Cabin needs the Elf science; the Dwarf science gates nothing yet. Sciences are derived from the owned pieces, never stored. The shop shows them as seals on a ribbon right of the reserve; hovering a seal tells what grants the science and what it unlocks. A piece that grants a science shows its seal at the bottom right of its descriptor.
 
 ## The pieces
 
