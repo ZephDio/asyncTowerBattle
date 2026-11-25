@@ -23,6 +23,10 @@ const TOP = 14 * PIXEL;
 const SEGMENT = 22 * PIXEL;
 const TAIL = 16 * PIXEL;
 const STAMP = 16 * PIXEL;
+// The ribbon grows a segment for each seal up to FULL_LENGTH seals, then keeps that length: the seals come closer
+// together, and once they would touch they alternate left and right of the ribbon by ZIGZAG.
+const FULL_LENGTH = 5;
+const ZIGZAG = 6 * PIXEL;
 
 const SCIENCE_NAMES: Record<Science, string> = {
 	[Science.Elf]: "Elf",
@@ -54,24 +58,42 @@ export class ScienceHud extends Derive(
 		this.sciences = Object.values(Science).filter((science) => army.sciences.has(science));
 		const reserveRight = reserve.centerPosition.x + (reserve.width * reserve.cellSize) / 2;
 		this.top = reserve.centerPosition.y + (reserve.height * reserve.cellSize) / 2;
-		const height = TOP + this.sciences.length * SEGMENT + TAIL;
+		const height = TOP + this.segments * SEGMENT + TAIL;
 		this.position = new ScreenPosition({ x: (reserveRight + 100) / 2, y: this.top - height / 2 });
 		this.hitbox = new HitBox([[new Rectangle({ width: WIDTH, height }), new ScreenPosition({ x: 0, y: 0 })]]);
 	}
 
-	// The center of the seal of the science at `index`.
-	private sealCenter(index: number) {
-		return new ScreenPosition({ x: this.position.x, y: this.top - TOP - (index + 0.5) * SEGMENT });
+	get seals() {
+		return this.sciences.length;
 	}
 
-	// What hovering `point` describes: the science whose seal is under it.
+	private get segments() {
+		return Math.min(this.seals, FULL_LENGTH);
+	}
+
+	// From one seal's center to the next.
+	private get spacing() {
+		return this.seals > 0 ? (this.segments * SEGMENT) / this.seals : SEGMENT;
+	}
+
+	// The center of the seal of the science at `index`.
+	private sealCenter(index: number) {
+		const zigzag = this.spacing < STAMP ? (index % 2 === 0 ? -ZIGZAG : ZIGZAG) : 0;
+		return new ScreenPosition({ x: this.position.x + zigzag, y: this.top - TOP - (index + 0.5) * this.spacing });
+	}
+
+	// What hovering `point` describes: the science of the nearest seal under it, as seals overlap once they zigzag.
 	describedAt(point: ScreenPosition): ScienceDescription | null {
-		const index = this.sciences.findIndex((_, index) => {
+		let nearest: { science: Science; distance: number } | null = null;
+		this.sciences.forEach((science, index) => {
 			const center = this.sealCenter(index);
-			return Math.abs(point.x - center.x) <= STAMP / 2 && Math.abs(point.y - center.y) <= SEGMENT / 2;
+			const dx = point.x - center.x;
+			const dy = point.y - center.y;
+			if (Math.abs(dx) > STAMP / 2 || Math.abs(dy) > STAMP / 2) return;
+			const distance = Math.hypot(dx, dy);
+			if (!nearest || distance < nearest.distance) nearest = { science, distance };
 		});
-		const science = this.sciences[index];
-		return science ? this.describe(science) : null;
+		return nearest ? this.describe((nearest as { science: Science }).science) : null;
 	}
 
 	private describe(science: Science): ScienceDescription {
@@ -102,8 +124,8 @@ export class ScienceHud extends Derive(
 				image,
 			);
 		piece(topImage.image, 0, TOP);
-		this.sciences.forEach((_, index) => piece(segment.image, TOP + index * SEGMENT, SEGMENT));
-		piece(tail.image, TOP + this.sciences.length * SEGMENT, TAIL);
+		for (let index = 0; index < this.segments; index++) piece(segment.image, TOP + index * SEGMENT, SEGMENT);
+		piece(tail.image, TOP + this.segments * SEGMENT, TAIL);
 		this.sciences.forEach((science, index) =>
 			this.drawImage(
 				context,
