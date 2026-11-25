@@ -26,6 +26,7 @@ import { BlacksmithTower } from "../constructs/tower/recruit/implementation/blac
 import { DrillTower } from "../constructs/tower/recruit/implementation/drill-tower";
 import { Lighthouse } from "../constructs/tower/recruit/implementation/lighthouse";
 import { FrostTower } from "../constructs/tower/recruit/implementation/frost-tower";
+import { ForestCabin } from "../constructs/tower/recruit/implementation/forest-cabin";
 import { WindmillTurret } from "../constructs/tower/recruit/implementation/windmill-turret";
 import { WitchHouse } from "../constructs/tower/recruit/implementation/witch-house";
 import { ZappingTower } from "../constructs/tower/recruit/implementation/zapping-tower";
@@ -72,6 +73,7 @@ const towers: Record<SerializedTowerType, Constructor<AnyTower>> = {
 	blacksmith: BlacksmithTower,
 	drill: DrillTower,
 	frost: FrostTower,
+	"forest-cabin": ForestCabin,
 	lighthouse: Lighthouse,
 	"windmill-turret": WindmillTurret,
 	"witch-house": WitchHouse,

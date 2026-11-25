@@ -5,6 +5,7 @@ import { deserializeBoard, serializeBoard } from "./board-serializer";
 import { LocalMatchMaker } from "./local-match-maker";
 // After the serializer: loaded first, these run into the engine's grid <-> render traits import cycle.
 import { shopBlueprints } from "../shop/retail/retail-filler";
+import { TowerBuilder } from "../constructs/tower/recruit/tower-fixtures";
 import { Unit } from "../units/recruit/unit";
 
 const rounds = GRID_GROWTH_CYCLE.map((_, index) => index + 1);
@@ -34,6 +35,18 @@ describe("board serializer", () => {
 
 		expect(blacksmiths).toHaveLength(1);
 		expect(opponent.army.grid.getRecruits().map((recruit) => recruit.constructor.name)).toContain("BlacksmithTower");
+	});
+
+	it("serializes and rebuilds a forest cabin under its own type", () => {
+		const { army, randomSeed } = LocalMatchMaker.board(4);
+		army.grid.setElement(new TowerBuilder().celled(new Cell({ x: 0, y: 0 })).buildForestCabin());
+		const board = serializeBoard(army, 4, randomSeed);
+
+		const opponent = deserializeBoard(JSON.parse(JSON.stringify(board)));
+
+		expect(board.elements.some((element) => element.kind === "tower" && element.type === "forest-cabin")).toBe(true);
+		expect(opponent.army.grid.getRecruits().map((recruit) => recruit.constructor.name)).toContain("ForestCabin");
+		expect(serializeBoard(opponent.army, 4, opponent.randomSeed)).toEqual(board);
 	});
 
 	it("knows every unit the shop sells", () => {

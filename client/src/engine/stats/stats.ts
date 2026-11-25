@@ -94,6 +94,17 @@ export type FlatStat =
 	| "castSpeed"
 	| "range";
 
+// The stats whose keyed modifiers add up when positive and multiply when negative. Max health has its own healing logic.
+export type ModifiableStat = Exclude<FlatStat, "maxHealth">;
+const MODIFIABLE_STATS: ModifiableStat[] = [
+	"castleDamage",
+	"projectileDamage",
+	"movementSpeed",
+	"foodCost",
+	"castSpeed",
+	"range",
+];
+
 export class Stats {
 	private _health: number;
 	private _maxHealth: number;
@@ -125,6 +136,12 @@ export class Stats {
 		castSpeed: 0,
 		range: 0,
 	};
+
+	// Percent modifiers by source. Increases add up with basePercentStat, reductions each multiply the stat.
+	private modifiers = Object.fromEntries(MODIFIABLE_STATS.map((stat) => [stat, new Map<string, number>()])) as Record<
+		ModifiableStat,
+		Map<string, number>
+	>;
 
 	public conditions: Map<string, ImplementsTrait<typeof Status>> = new Map();
 	public boons: Map<string, ImplementsTrait<typeof Status>> = new Map();
@@ -192,8 +209,24 @@ export class Stats {
 		return this.base[stat] + this.flatStat[stat];
 	}
 
+	setModifier(stat: ModifiableStat, source: string, percent: number) {
+		this.modifiers[stat].set(source, percent);
+	}
+
+	clearModifier(stat: ModifiableStat, source: string) {
+		this.modifiers[stat].delete(source);
+	}
+
 	private percentOf(stat: FlatStat) {
-		return Math.max(0, this.basePercentStat[stat] / 100);
+		let added = this.basePercentStat[stat];
+		let factor = 1;
+		if (stat !== "maxHealth") {
+			for (const percent of this.modifiers[stat].values()) {
+				if (percent >= 0) added += percent;
+				else factor *= Math.max(0, 1 + percent / 100);
+			}
+		}
+		return Math.max(0, added / 100) * factor;
 	}
 
 	private boosted(stat: FlatStat) {

@@ -1,6 +1,7 @@
 import { BlacksmithTowerBlueprint } from "./implementation/blacksmith-tower-blueprint";
 import { DrillTowerBlueprint } from "./implementation/drill-tower-blueprint";
 import { LighthouseBlueprint } from "./implementation/lighthouse-blueprint";
+import { ForestCabinBlueprint } from "./implementation/forest-cabin-blueprint";
 import { FrostTowerBlueprint } from "./implementation/frost-tower-blueprint";
 import { WindmillTurretBlueprint } from "./implementation/windmill-turret-blueprint";
 import { WitchHouseBlueprint } from "./implementation/witch-house-blueprint";
@@ -13,4 +14,5 @@ export type AnyTowerBlueprint =
 	| ZappingTowerBlueprint
 	| FrostTowerBlueprint
 	| DrillTowerBlueprint
-	| LighthouseBlueprint;
+	| LighthouseBlueprint
+	| ForestCabinBlueprint;

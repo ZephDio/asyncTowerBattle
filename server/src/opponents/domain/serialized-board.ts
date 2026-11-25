@@ -8,6 +8,7 @@ export type SerializedFaction = "Dwarf" | "Elf";
 export type SerializedTowerType =
 	| "blacksmith"
 	| "drill"
+	| "forest-cabin"
 	| "frost"
 	| "lighthouse"
 	| "windmill-turret"
