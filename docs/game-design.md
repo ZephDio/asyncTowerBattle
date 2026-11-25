@@ -117,7 +117,7 @@ An empty barrack summons the faction's default unit. Factions are thin for now: 
 
 ### Sciences
 
-A science is a token an army holds because it owns a piece that grants it. The castles grant one: the Elf castle the Elf science, the Dwarf Mountain the Dwarf science (a castle can grant several later). The Witch House grants the Witchcraft science while it stands on the grid; in the reserve or sold, it grants nothing. A piece behind a science is not offered in the shop, nor by the refresh bell, until the army holds it. The Forest Cabin needs the Elf science; the Stonemason needs the Dwarf science and the Cauldron the Witchcraft one. Sciences are derived from the owned pieces, never stored. The shop shows them as seals on a ribbon right of the reserve. Hovering a seal opens the science's scroll over the left of the shop, and clicking it keeps the scroll open until the next click elsewhere: it tells what grants the science and lays out every piece it unlocks, each hoverable for its description and its pattern and target cells. A piece that grants a science shows its seal at the bottom right of its descriptor.
+A science is a token an army holds because it owns a piece that grants it. The castles grant one: the Elf castle the Elf science, the Dwarf Mountain the Dwarf science (a castle can grant several later). The Witch House grants the Witchcraft science while it stands on the grid; in the reserve or sold, it grants nothing. A piece behind a science is not offered in the shop, nor by the refresh bell, until the army holds it. The Forest Cabin needs the Elf science; the Stonemason needs the Dwarf science, the Cauldron and the Frog the Witchcraft one. Sciences are derived from the owned pieces, never stored. The shop shows them as seals on a ribbon right of the reserve. Hovering a seal opens the science's scroll over the left of the shop, and clicking it keeps the scroll open until the next click elsewhere: it tells what grants the science and lays out every piece it unlocks, each hoverable for its description and its pattern and target cells. A piece that grants a science shows its seal at the bottom right of its descriptor.
 
 ## The pieces
 
@@ -162,6 +162,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | White Stag | Rare | 20 | 42 | 0.13 | 1.5 | 1.3 | 3.5 s | Animal, Forest, Magic | Casts healing waves. Drops a healing antler at 50% life and on death. |
 | Ent | Epic | 15 | 45 | 0.13 | 3 | 1.5 | 4.5 s | Forest | Every 6 s throws roots that slow a building by 50% for 4 s. |
 | Brewmaster | Epic | 15 | 40 | 0.22 | 3.5 | 5 | 4 s | Kinfolk | Regenerates 15% of its life every 2 s. Very hungry. |
+| Frog | Epic | 15 | 8 | 0.08 | 2 | 0.5 | 2.5 s | Animal, Magic | Needs Witchcraft science. Very slow. On death: the army gains 1 vitality stack (💖) and a random living enemy unit is poisoned for 1 s (the Witch House's poison: 6 damage/s, +20% per Cauldron). |
 | Dragon | Legendary | 15 | 18 | 0.25 | 3 | 1.6 | 2.2 s | Evil, Mountain, Monster | +1 max health per 5 gold the player owns. |
 
 ### Totems (economy, buffs, tricks)

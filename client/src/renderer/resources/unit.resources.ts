@@ -98,6 +98,17 @@ export class UnitResources {
 	};
 	static dwarfSheet = SpriteSheet.fromJson("/resources/units/dwarf.sheet.png", "/resources/units/dwarf.sheet.json");
 
+	// A small green frog, 64x52 pixels.
+	static frog: ShapedResource = {
+		size: {
+			width: 3,
+			height: 2.4375,
+		},
+		image: createImage("/resources/units/frog.png"),
+		shape: "ellipse",
+	};
+	static frogSheet = SpriteSheet.fromJson("/resources/units/frog.sheet.png", "/resources/units/frog.sheet.json");
+
 	static fox: ShapedResource = {
 		size: {
 			width: 3,

@@ -35,6 +35,7 @@ export type SerializedUnitType =
 	| "dragon"
 	| "ent"
 	| "fox"
+	| "frog"
 	| "go-goat"
 	| "paradise-bird"
 	| "white-stag";

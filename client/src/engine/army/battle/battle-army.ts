@@ -38,6 +38,7 @@ export type BattleArmyHooks = {
 	searchAlliesConstructsInArea: BattleArmy["searchAlliesConstructsInArea"];
 	getEnemyCastle: BattleArmy["getEnemyCastle"];
 	getAlliedUnits: () => AnyBattleUnit[];
+	getEnemyUnits: () => AnyBattleUnit[];
 	getAlliedCastle: () => AnyBattleCastle;
 	triggerFurry: () => void;
 	onEnemyCastleHit: (listener: () => void) => void;
@@ -88,6 +89,7 @@ export class BattleArmy {
 		public alliedGoldEconomyHooks: EconomyHooks,
 
 		public enemyGoldEconomyHooks: EconomyHooks,
+		public getEnemyUnits: () => AnyBattleUnit[] = () => [],
 	) {
 		this.surchargeBuffHooks();
 		this.furry = new Furry(0, 0, this.getTimer);
@@ -228,6 +230,7 @@ export class BattleArmy {
 			getEnemyCastle: this.getEnemyCastle.bind(this),
 			getAlliedCastle: () => this.castle,
 			getAlliedUnits: () => [...this.units.keys()],
+			getEnemyUnits: () => this.getEnemyUnits(),
 			triggerFurry: () => this.furry.increaseFurry(),
 			onEnemyCastleHit: this.onEnemyCastleHit.bind(this),
 			onUnitAdded: this.onUnitAdded.bind(this),

@@ -17,6 +17,10 @@ import { frameToSeconds } from "../../../shared/seconds";
 // The damage a poisoned enemy takes each second, before the army's modifiers (the Cauldron).
 export const POISON_DAMAGE_PER_SECOND = 6;
 
+// Read from the army each time, so a modifier gained or lost during the battle applies at once.
+export const poisonDamagePerSecond = (hooks: BattleArmyHooks) =>
+	POISON_DAMAGE_PER_SECOND * (1 + hooks.alliedArmyBuffHooks.getPoisonDamagePercent() / 100);
+
 export class PoisonGround extends Derive(
 	TDrawable,
 	TRenderable,
@@ -75,11 +79,15 @@ export class PoisonGround extends Derive(
 export class Poisoned extends Derive(Status) {
 	key = "poisoned";
 	clock = 0;
-	duration = 70;
+	duration: number;
 	stats: Stats;
 
-	constructor(public damagePerSecond: () => number) {
+	constructor(
+		public damagePerSecond: () => number,
+		duration = 70,
+	) {
 		super({});
+		this.duration = duration;
 	}
 
 	tick() {
