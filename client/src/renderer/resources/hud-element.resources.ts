@@ -46,6 +46,7 @@ export class HudElementResources {
 		top: { image: createImage("/resources/hud/science-ribbon/top.png") },
 		segment: { image: createImage("/resources/hud/science-ribbon/segment.png") },
 		tail: { image: createImage("/resources/hud/science-ribbon/tail.png") },
+		halo: { image: createImage("/resources/hud/science-ribbon/halo.png") },
 	};
 
 	static banner: IconResource = {

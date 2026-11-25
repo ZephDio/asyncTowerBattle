@@ -7,6 +7,7 @@ Outputs, in public/resources/hud/science-ribbon/:
 - top.png: the brass rod the ribbon hangs from, with the cloth sleeve looped over it.
 - segment.png: a length of plain ribbon, one per science held, its seal drawn over it by the game.
 - tail.png: the swallowtail end of the ribbon.
+- halo.png: a brass ring drawn behind the seal whose scroll is pinned open.
 
 The ribbon is an undyed linen strip hanging right of the reserve, the seals of the army's sciences pressed on it like
 wax seals on a charter. It mirrors the army banners (see generate-army-banners.py): the same pixel density (5 image
@@ -91,9 +92,27 @@ def tail():
     return cloth(height, bottom=lambda c: height - 1 - round(5 * (1 - abs(c - middle) / middle)), open_bottom=False)
 
 
+def halo():
+    size = 24
+    middle = (size - 1) / 2
+    image = [[CLEAR] * size for _ in range(size)]
+    for y in range(size):
+        for x in range(size):
+            d = ((x - middle) ** 2 + (y - middle) ** 2) ** 0.5
+            # Lit from the top left, as the rod's brass: the light shade on that side of the ring.
+            lit = (x + y) < size - 1
+            if 9 <= d < 10.4:
+                image[y][x] = (*(BRASS[3] if lit else BRASS[2]), 255)
+            elif 10.4 <= d < 11.4:
+                image[y][x] = (*(BRASS[2] if lit else BRASS[1]), 255)
+            elif 11.4 <= d < 12.2:
+                image[y][x] = (*INK, 255)
+    return image
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    for name, image in (("top", top()), ("segment", cloth(22)), ("tail", tail())):
+    for name, image in (("top", top()), ("segment", cloth(22)), ("tail", tail()), ("halo", halo())):
         write_png(OUT / f"{name}.png", image)
         print(f"wrote {(OUT / f'{name}.png').relative_to(OUT.parents[2])}")
 

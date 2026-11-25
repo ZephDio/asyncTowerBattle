@@ -156,7 +156,7 @@ export class ShopPhase {
 
 	// Built each time too: the sciences change as pieces that grant one are placed or sold.
 	getScienceHud() {
-		return new ScienceHud(this.army, this.army.inventory);
+		return new ScienceHud(this.army, this.army.inventory, this.pinnedScience);
 	}
 
 	// The scroll shown: the hovered science's, else the pinned one's.
