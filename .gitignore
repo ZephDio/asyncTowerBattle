@@ -11,3 +11,6 @@ server/src/database/generated
 
 # layering-design skill scratch iterations
 .agents/skills/layering-design/tmp/
+
+# screenshots taken while testing the game
+.agents/screenshots/

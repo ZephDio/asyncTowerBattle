@@ -406,13 +406,13 @@ describe("Lighthouse", () => {
 	});
 
 	describe("mirrored, on the opponent's board", () => {
-		it("shines from the crystal below the upside-down tower", () => {
+		it("shines from the crystal above the tower, as on the player's board", () => {
 			const { tower, beams } = setup({ orientation: BoardOrientation.Mirrored });
 
 			tower.onCastResolve();
 
 			for (const beam of beams)
-				expect(beam.origin.y).toBeCloseTo(tower.position.y - new LighthouseBlueprint({}).crystalAbove);
+				expect(beam.origin.y).toBeCloseTo(tower.position.y + new LighthouseBlueprint({}).crystalAbove);
 		});
 
 		const mirrored = (cells: Cell[]) => cells.map((cell) => new Cell({ x: 5 - (cell.x - 5), y: 5 - (cell.y - 5) }));
