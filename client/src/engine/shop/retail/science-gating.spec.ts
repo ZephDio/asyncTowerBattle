@@ -7,6 +7,7 @@ import { ForestCabinBlueprint } from "../../constructs/tower/blueprint/implement
 import { StonemasonBlueprint } from "../../constructs/totem/blueprint/implementation/stonemason-blueprint";
 import { Science } from "../../../shared/traits/engine/science";
 import { Cell } from "../../../shared/position";
+import { WitchHouse } from "../../constructs/tower/recruit/implementation/witch-house";
 import { RetailFiller } from "./retail-filler";
 
 const offeredCabin = (sciences: ReadonlySet<Science>) =>
@@ -47,5 +48,21 @@ describe("sciences", () => {
 	it("is derived from the army's castle", () => {
 		expect([...ArmyFactory.default(Faction.Elf).sciences]).toEqual([Science.Elf]);
 		expect([...ArmyFactory.default(Faction.Dwarf).sciences]).toEqual([Science.Dwarf]);
+	});
+
+	it("is granted by the Witch House while it stands on the grid, not in the reserve", () => {
+		expect([...new WitchHouse(new Cell({ x: 0, y: 0 })).grantedSciences]).toEqual([Science.Witchcraft]);
+
+		const army = ArmyFactory.default(Faction.Elf);
+		const house = new WitchHouse(new Cell({ x: 3, y: 2 }));
+		army.inventory.add(house);
+		expect(army.sciences.has(Science.Witchcraft)).toBe(false);
+
+		army.inventory.deleteElement(house);
+		army.grid.setElement(house);
+		expect([...army.sciences].sort()).toEqual([Science.Elf, Science.Witchcraft]);
+
+		army.grid.deleteElement(house);
+		expect([...army.sciences]).toEqual([Science.Elf]);
 	});
 });

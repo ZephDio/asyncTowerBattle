@@ -5,6 +5,7 @@ import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
 export enum Science {
 	Elf = "elf",
 	Dwarf = "dwarf",
+	Witchcraft = "witchcraft",
 }
 
 // The sciences a piece grants to the army that owns it.

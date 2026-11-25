@@ -15,6 +15,7 @@ import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TowerResources } from "../../../../../renderer/resources/tower.resources";
 import { TowerTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { EvilTag } from "../../../../../shared/traits/engine/tags/alignment/alignment-tags";
+import { Science, TGrantsScience } from "../../../../../shared/traits/engine/science";
 import { TTargeting } from "../../../../../shared/traits/engine/targeting";
 
 export class WitchHouseBlueprint extends Derive(
@@ -38,6 +39,7 @@ export class WitchHouseBlueprint extends Derive(
 	TowerTag,
 	EvilTag,
 	TTargeting,
+	TGrantsScience(Science.Witchcraft),
 ) {
 	// The cells on each side of the house's bottom cell and the one below it.
 	override targetZone = new TargetZone([

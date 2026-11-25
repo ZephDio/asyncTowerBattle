@@ -4,13 +4,14 @@ import { Tower } from "../tower";
 import { AnyBattleTower } from "../../battle/battle-tower";
 import { BattleGrid } from "../../../../grid/battle-grid";
 import { Derive } from "@ddd-ts/traits";
+import { HTGrantsScience } from "../../../../../shared/traits/engine/science";
 import { WitchHouseBlueprint } from "../../blueprint/implementation/witch-house-blueprint";
 
 import { PoisonGround } from "../../../../area-effect/implementation/poison-ground";
 import { GridShape } from "../../../../../shared/traits/engine/core/grid-element";
 import { BattleWitchHouse } from "../../battle/implementation/battle-witch-house";
 import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
-export class WitchHouse extends Derive(Tower) {
+export class WitchHouse extends Derive(Tower, HTGrantsScience) {
 	override gridShape: GridShape = new GridShape([new Cell({ x: 0, y: 0 }), new Cell({ x: 0, y: 1 })]);
 	constructor(
 		public cell: Cell,
@@ -24,6 +25,7 @@ export class WitchHouse extends Derive(Tower) {
 			tagHolder: tower,
 			rarityHolder: tower,
 			targeting: tower,
+			scienceHolder: tower,
 		});
 	}
 
