@@ -4,6 +4,7 @@ import { ArmyFactory } from "../../army/army-fixtures";
 import { Faction } from "../../menu/main-menu";
 import { CastleFactory } from "../../castle/recruit/castle-recruit-fixtures";
 import { ForestCabinBlueprint } from "../../constructs/tower/blueprint/implementation/forest-cabin-blueprint";
+import { StonemasonBlueprint } from "../../constructs/totem/blueprint/implementation/stonemason-blueprint";
 import { Science } from "../../../shared/traits/engine/science";
 import { Cell } from "../../../shared/position";
 import { RetailFiller } from "./retail-filler";
@@ -18,6 +19,16 @@ describe("sciences", () => {
 		expect(offeredCabin(new Set())).toBe(false);
 		expect(offeredCabin(new Set([Science.Dwarf]))).toBe(false);
 		expect(offeredCabin(new Set([Science.Elf]))).toBe(true);
+	});
+
+	it("keeps the Stonemason out of the shop until the army holds the Dwarf science", () => {
+		const offered = (sciences: ReadonlySet<Science>) =>
+			new RetailFiller(1, Math.random, sciences)
+				.candidates()
+				.some(({ blueprint }) => blueprint instanceof StonemasonBlueprint);
+		expect(offered(new Set())).toBe(false);
+		expect(offered(new Set([Science.Elf]))).toBe(false);
+		expect(offered(new Set([Science.Dwarf]))).toBe(true);
 	});
 
 	it("never offers a gated piece without its science, whatever the roll", () => {

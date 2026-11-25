@@ -9,6 +9,7 @@ import { WindmillBlueprint } from "./implementation/windmill-blueprint";
 import { GobelinPortalBlueprint } from "./implementation/gobelin-portal-blueprint";
 import { PowderMagazineBlueprint } from "./implementation/powder-magazine-blueprint";
 import { RedObeliskBlueprint } from "./implementation/red-obelisk";
+import { StonemasonBlueprint } from "./implementation/stonemason-blueprint";
 
 export type AnyTotemBlueprint =
 	| AnvilTotemBlueprint
@@ -21,4 +22,5 @@ export type AnyTotemBlueprint =
 	| BreweryBlueprint
 	| PowderMagazineBlueprint
 	| RedObeliskBlueprint
-	| BosquetBlueprint;
+	| BosquetBlueprint
+	| StonemasonBlueprint;

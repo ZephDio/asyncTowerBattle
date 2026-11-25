@@ -88,6 +88,15 @@ export class TotemResources {
 		shape: "rectangle",
 	};
 
+	static stonemason: ShapedResource = {
+		size: {
+			width: 5.004,
+			height: 9.223,
+		},
+		image: createImage("/resources/totem/stonemason.png"),
+		shape: "rectangle",
+	};
+
 	static bosquet: ShapedResource = {
 		size: {
 			width: 4.9,

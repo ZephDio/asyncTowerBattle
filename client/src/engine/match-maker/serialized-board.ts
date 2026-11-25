@@ -24,6 +24,7 @@ export type SerializedTotemType =
 	| "gobelin-portal"
 	| "mine"
 	| "red-obelisk"
+	| "stonemason"
 	| "powder-magazine"
 	| "windmill";
 export type SerializedBarrackType = "basic" | "rush" | "veterant" | "wave";
