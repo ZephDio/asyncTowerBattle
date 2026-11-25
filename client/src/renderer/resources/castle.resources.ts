@@ -29,5 +29,4 @@ export class CastleResources {
 		image: createImage("/resources/castle/dwarf/board-right.png"),
 		shape: "rectangle",
 	};
-
 }

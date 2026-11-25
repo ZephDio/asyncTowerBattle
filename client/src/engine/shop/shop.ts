@@ -65,7 +65,7 @@ export class ShopPhase {
 		public life: number,
 		runSeed: number,
 	) {
-		this.retail = new Retail(round, runSeed);
+		this.retail = new Retail(round, runSeed, () => army.sciences);
 		this.economyHooks = army.getEconomyHooks();
 	}
 

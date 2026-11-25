@@ -4,7 +4,6 @@ import { DWARF_CASTLE_LAYOUT, STANDARD_CELL_SIZE } from "../grid/grid-scale";
 
 // The sprite overhangs the carpet slightly; neither doorway moves with the art.
 
-
 export type CastleGeometry = {
 	// Centre of the sprite, where the castle is drawn.
 	position: GridPosition;
@@ -16,7 +15,12 @@ export type CastleGeometry = {
 
 // `anchor` is the anchor cell in the frame being built: the army grid's for an allied castle (width and height don't
 // matter), the battle grid's for an enemy one, and `boardWidth` is the width of the boards.
-export const castleGeometry = (anchor: Cell, orientation: BoardOrientation, boardWidth: number, layout = DWARF_CASTLE_LAYOUT): CastleGeometry => {
+export const castleGeometry = (
+	anchor: Cell,
+	orientation: BoardOrientation,
+	boardWidth: number,
+	layout = DWARF_CASTLE_LAYOUT,
+): CastleGeometry => {
 	const S = STANDARD_CELL_SIZE;
 	const inset = layout.width / 2 - layout.overlap;
 	if (orientation === BoardOrientation.Normal) {

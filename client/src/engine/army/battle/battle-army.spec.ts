@@ -2,8 +2,7 @@ import { ArmyBuff } from "./army-buff";
 import { BattleArmy } from "./battle-army";
 import type { AnyBattleUnit } from "../../units/battle/battle-unit";
 
-const unit = () =>
-	({ initArmyBuffs: () => {}, addFurry: () => {}, applyBuff: () => {} }) as unknown as AnyBattleUnit;
+const unit = () => ({ initArmyBuffs: () => {}, addFurry: () => {}, applyBuff: () => {} }) as unknown as AnyBattleUnit;
 
 const noop = (() => undefined) as never;
 

@@ -14,6 +14,7 @@ import { TokenUnit } from "../../shared/traits/engine/token-unit";
 import { PathTile } from "../tile/recruit/tile";
 import { DEFAULT_PATH_CONNECTIONS } from "../tile/path-shape";
 import { AnyTrap, Trap } from "../trap/recruit/trap";
+import { sciencesGrantedBy } from "../../shared/traits/engine/science";
 import { Barrack } from "../constructs/barrack/recruit/barrack";
 
 export type ArmyHooks = {
@@ -85,6 +86,10 @@ export class Army {
 	}
 	get castle() {
 		return this.grid.castle;
+	}
+	// Derived from the owned pieces, so nothing is stored: the castle and any grid piece that grants one.
+	get sciences() {
+		return sciencesGrantedBy([this.castle, ...this.grid.getElements()]);
 	}
 	get towers() {
 		return this.grid.towers;

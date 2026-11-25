@@ -23,11 +23,17 @@ export class ElfCastle extends Derive(Castle) {
 			statsHolder: castle,
 			tagHolder: castle,
 			rarityHolder: castle,
+			scienceHolder: castle,
 		});
 	}
 
 	toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
-		const { position, doorPosition, spawnPosition } = castleGeometry(this.cell, BoardOrientation.Normal, grid.width, this.layout);
+		const { position, doorPosition, spawnPosition } = castleGeometry(
+			this.cell,
+			BoardOrientation.Normal,
+			grid.width,
+			this.layout,
+		);
 		return new BattleElfCastle(
 			this,
 			onDeath,
@@ -42,7 +48,12 @@ export class ElfCastle extends Derive(Castle) {
 
 	toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): BattleElfCastle {
 		const cell = BattleGrid.flip(grid, this.cell);
-		const { position, doorPosition, spawnPosition } = castleGeometry(cell, BoardOrientation.Mirrored, grid.width, this.layout);
+		const { position, doorPosition, spawnPosition } = castleGeometry(
+			cell,
+			BoardOrientation.Mirrored,
+			grid.width,
+			this.layout,
+		);
 		return new BattleElfCastle(
 			this,
 			onDeath,

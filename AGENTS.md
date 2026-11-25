@@ -70,6 +70,8 @@ The castle is the exception: it is not a grid element. `ArmyGrid` keeps it apart
 
 Adding a new piece usually means one file in each layer's `implementation/`, plus updates to the layer's union type (`Any*`), its fixtures and builders (`*-fixtures.ts`), and its image entries in `src/renderer/resources/*.resources.ts`. Images are served from `public/resources/`; each piece has a single front-view image, `<piece>.png`.
 
+A piece can be gated behind a science (`src/shared/traits/engine/science.ts`): the blueprint adds `TRequiresScience(Science.X)` and `RetailFiller.candidates` leaves it out of the offers (and of the refresh bell) until the army holds that science. The army holds a science when one of its pieces grants it: a blueprint adds `TGrantsScience(Science.X)` and its recruit takes `HTGrantsScience` (`scienceHolder: blueprint`), as the castles do. `Army.sciences` is derived from the castle and the grid pieces each time, so nothing is stored or serialized.
+
 ### Cross-object communication: hooks
 Entities never hold references to the army or battlefield. Instead they receive hook objects, which are bags of callbacks: `BattleArmyHooks` (`src/engine/army/battle/battle-army.ts`) provides target search, `addProjectile`, allied and enemy food, gold and buff hooks, and grid hooks. The shop uses `TokenHooks` and `shopPhaseHooks`. Wire new interactions through these hooks.
 
