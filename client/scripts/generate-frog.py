@@ -5,9 +5,9 @@ Run from anywhere: python3 scripts/generate-frog.py
 
 Outputs public/resources/units/frog.png, and public/resources/units/frog.sheet.png with its json (see sprite_sheet.py).
 
-REST is a 16x13 frog, one character per pixel, outline included, upscaled 4x with nearest neighbor like the fox: a
-green body with two bulging eyes, a wide mouth and a pale belly. The sheet's frame 1 is frog.png. Frame 2 breathes
-out: every row above the belly drops one sprite pixel (row 8 is the one squeezed out) so the eyes bob down while the
+REST is a 16x14 frog, one character per pixel, outline included, upscaled 4x with nearest neighbor like the fox: a
+round, plump green body with two big shiny eyes, rosy cheeks, a wide smile, dark spots and a pale belly. The sheet's frame 1 is frog.png. Frame 2 breathes
+out: every row above the belly drops one sprite pixel (row 5 is the one squeezed out) so the eyes bob down while the
 feet stay planted.
 """
 
@@ -23,30 +23,32 @@ SCALE = 4
 
 PALETTE = {
     "a": (29, 29, 28, 255),  # outline
-    "G": (88, 170, 70, 255),
-    "g": (52, 120, 62, 255),
-    "l": (150, 214, 100, 255),
-    "y": (226, 236, 160, 255),
+    "G": (96, 190, 72, 255),
+    "g": (58, 136, 64, 255),
+    "l": (178, 236, 120, 255),
+    "y": (236, 244, 176, 255),
     "w": (250, 250, 240, 255),
     "k": (29, 29, 28, 255),
+    "p": (244, 140, 150, 255),
 }
 
 REST = [
     "..aaaa....aaaa..",
-    ".awwwGa..aGwwwa.",
-    ".awkkGaaaaGkkwa.",
-    "aGGGGGGGGGGGGGGa",
-    "aGGGGGGGGGGGGGGa",
-    "aGlaaaaaaaaaalGa",
-    "aGGGllllllllGGGa",
-    "aGGGGGGGGGGGGGGa",
-    "aGGGlyyyyyylGGGa",
+    ".awwwwa..awwwwa.",
+    ".awwkka..akkwwa.",
+    ".aGGGGaaaaGGGGa.",
+    "aGlGGGGGGGGGGGGa",
+    "aGGGgGGGGGGgGGGa",
+    "aGppGGGGGGGGppGa",
+    "aGGaaGGGGGGaaGGa",
+    "aGGGGaaaaaaGGGGa",
+    ".aGGyyyyyyyyGGa.",
     ".aGGGyyyyyyGGGa.",
     "aGGGaaGGGGaaGGGa",
     "aGGGGa....aGGGGa",
     ".aaaa......aaaa.",
 ]
-SQUEEZED_ROW = 7
+SQUEEZED_ROW = 5
 
 
 def main() -> None:
