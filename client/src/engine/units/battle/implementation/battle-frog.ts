@@ -6,7 +6,7 @@ import { Frog } from "../../recruit/implementation/frog";
 import { PathFinder } from "../../../battle/path-finder";
 import { TBattleUnit } from "../battle-unit";
 import { UnitResources } from "../../../../renderer/resources/unit.resources";
-import { Poisoned, poisonDamagePerSecond } from "../../../area-effect/implementation/poison-ground";
+import { Poisoned } from "../../../area-effect/implementation/poison-ground";
 import { secondsToFrame } from "../../../../shared/seconds";
 
 const HOP_TICKS = secondsToFrame(0.5);
@@ -61,6 +61,6 @@ export class BattleFrog extends Derive(TBattleUnit) {
 		this.hooks.alliedArmyBuffHooks.addUnitBuff("vitality", vitalityStacks);
 		const enemies = this.hooks.getEnemyUnits().filter((enemy) => enemy.isAlive());
 		const victim = enemies[Math.floor(this.hooks.random() * enemies.length)];
-		victim?.addCondition(new Poisoned(() => poisonDamagePerSecond(this.hooks), secondsToFrame(poisonSeconds)));
+		victim?.addCondition(Poisoned.by(this.hooks, secondsToFrame(poisonSeconds)));
 	}
 }
