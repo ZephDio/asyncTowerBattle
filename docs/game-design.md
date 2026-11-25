@@ -162,7 +162,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | White Stag | Rare | 20 | 42 | 0.13 | 1.5 | 1.3 | 3.5 s | Animal, Forest, Magic | Casts healing waves. Drops a healing antler at 50% life and on death. |
 | Ent | Epic | 15 | 45 | 0.13 | 3 | 1.5 | 4.5 s | Forest | Every 6 s throws roots that slow a building by 50% for 4 s. |
 | Brewmaster | Epic | 15 | 40 | 0.22 | 3.5 | 5 | 4 s | Kinfolk | Regenerates 15% of its life every 2 s. Very hungry. |
-| Frog | Epic | 15 | 25 | 0.08 | 2 | 0.5 | 3.8 s | Animal, Magic | Needs Witchcraft science. Very slow, and it hops: it moves in half-second hops (speed a half sine, peaking at about 3.1x) separated by half-second rests, so its average speed is still the 0.08 shown. On death: the army gains 1 vitality stack (💖) and a random living enemy unit is poisoned for 2 s (the Witch House's poison: 6 damage/s, +20% per Cauldron). |
+| Frog | Epic | 15 | 25 | 0.08 | 2 | 0.5 | 3.8 s | Animal, Magic | Needs Witchcraft science. Very slow, and it hops: it moves in half-second hops (speed a half sine, peaking at about 3.1x) separated by half-second rests, so its average speed is still the 0.08 shown. On death: the army gains 1 vitality stack (💖) and a random living enemy unit is poisoned for 2 s (the Witch House's poison: 6 damage/s, +20% per Cauldron). Its 2 s are added to the time the poison has left, where a puddle only refreshes it up to 70 ticks. |
 | Dragon | Legendary | 15 | 18 | 0.25 | 3 | 1.6 | 2.2 s | Evil, Mountain, Monster | +1 max health per 5 gold the player owns. |
 
 ### Totems (economy, buffs, tricks)
@@ -180,7 +180,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Gold Mine | Common | 15 | Shop entered: +5 gold. Start of battle: +1 vitality army buff stack (💖) if a Mountain (a Rock or another Gold Mine) is on its star. Each mine stacks. | right |
 | Red Obelisk | Legendary | 10 | Every 5 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
 | Stonemason | Uncommon | 15 | Needs Dwarf science. Totem + Mountain, 1 wide and 2 tall. Every 5 s: gives a stone shield to 2 random allied units that have none, +1 unit per Mountain (Rock, Gold Mine, Go-Goat, another Stonemason) on its stars (up to 6). No food cost. Poison ignores shields. Placeholder sprite. | left and right of both cells (4 stars) |
-| Cauldron | Epic | 30 | Needs Witchcraft science. One cell, tagged Totem and Evil. Start of battle: the army's poison effects (the Witch House's puddles, 6 damage/s) deal +20% damage, each Cauldron adding its own 20%. Placeholder sprite. | none |
+| Cauldron | Epic | 30 | Needs Witchcraft science. One cell, tagged Totem and Evil. Start of battle: the army's poison effects (the Witch House's puddles and the Frog's croak, 6 damage/s) deal +20% damage, each Cauldron adding its own 20%. Placeholder sprite. | none |
 
 ### Path tiles and traps
 
