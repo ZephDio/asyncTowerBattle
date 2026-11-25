@@ -20,9 +20,9 @@ from voxel_sprite import EMPTY, Hit, VoxelGrid, outline, render, write_png
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "public" / "resources" / "totem" / "stonemason.png"
 WIDTH = 102
-HEIGHT = 171
+HEIGHT = 188
 ORIGIN_Y = 108
-HALF_Y = 96
+HALF_Y = 112
 
 # Grey granite for the crag, sandstone for the carved work (statue, shields, block), as on the Bosquet
 GRANITE = [(58, 54, 72, 255), (88, 86, 102, 255), (124, 122, 134, 255), (164, 162, 166, 255), (204, 202, 194, 255)]
@@ -35,11 +35,11 @@ INTERIOR = [(34, 30, 50, 255), (50, 44, 68, 255), (70, 62, 86, 255)]
 
 # Rock slab and steps
 SLAB_HALF_X = 43
-SLAB_FRONT = -62
+SLAB_FRONT = -84
 SLAB_BACK = 36
-SLAB_HEIGHT = 8
+SLAB_HEIGHT = 12
 STEPS = 3
-STEP_DEPTH = 6
+STEP_DEPTH = 7
 
 # Crag: its front face leans back above the doorway, its crown is flat under the statue and slopes to the shoulders
 CRAG_HALF_X = 42
@@ -59,7 +59,7 @@ ARCH_SPRING = 42  # z where the round top starts
 ARCH_DEPTH = 22
 
 # Carving station in the doorway
-BLOCK = (-14, 14, -54, -36, SLAB_HEIGHT, SLAB_HEIGHT + 16)
+BLOCK = (-21, 21, -74, -50, SLAB_HEIGHT, SLAB_HEIGHT + 15)
 
 # Shields on the shoulders: center x, z, and how far they turn outward
 SHIELD_X = 33
@@ -86,7 +86,11 @@ STATUE_SCALE = 1.7
     MOSS_LABEL,
     EMBLEM_LABEL,
     EYE_LABEL,
-) = range(1, 14)
+    WORK_LABEL,
+    ROUGH_LABEL,
+    HEAD_LABEL,
+    CHIP_LABEL,
+) = range(1, 18)
 
 
 def noise(*values: int) -> float:
@@ -148,7 +152,7 @@ def build_slab(grid: VoxelGrid) -> None:
                 grid.box(x, x + 1, y, y + 1, 0, height, SLAB_LABEL)
     for i in range(STEPS):
         y0 = SLAB_FRONT - (STEPS - i) * STEP_DEPTH
-        half = 30 - 2 * (STEPS - i)
+        half = 36 - 2 * (STEPS - i)
         for x in range(-half - 3, half + 3):
             if abs(x + 0.5) < half + 3 * smooth_noise(x / 5, i, 3):
                 grid.box(x, x + 1, y0, SLAB_FRONT, 0, round((i + 1) * SLAB_HEIGHT / (STEPS + 1)) + 1, SLAB_LABEL)
@@ -196,18 +200,50 @@ def build_crag(grid: VoxelGrid) -> None:
 
 def build_station(grid: VoxelGrid) -> None:
     x0, x1, y0, y1, z0, z1 = BLOCK
-    grid.box(x0, x1, y0, y1, z0, z1, BLOCK_LABEL)
-    # Chipped front corner
-    grid.box(x1 - 5, x1, y0, y0 + 4, z1 - 4, z1, EMPTY)
-    # Mallet lying across the block: wooden handle, a big wooden head
-    grid.box(-10, 3, -46, -43, z1, z1 + 3, WOOD_LABEL)
-    grid.box(3, 11, -50, -39, z1, z1 + 8, WOOD_LABEL)
-    # Chisel pointing to the camera, iron blade and wooden grip
-    grid.box(-9, -6, -54, -48, z1, z1 + 3, IRON_LABEL)
-    grid.box(-10, -5, -48, -40, z1, z1 + 4, WOOD_LABEL)
-    # Stone chips at the foot of the block
-    for cx, cy in ((-19, -58), (17, -57), (20, -52)):
-        grid.box(cx, cx + 3, cy, cy + 2, SLAB_HEIGHT, SLAB_HEIGHT + 2, BLOCK_LABEL)
+    # Stone workbench: a thick top over a narrower base, the top's front corner chipped
+    grid.box(x0 + 3, x1 - 3, y0 + 3, y1 - 2, z0, z1 - 4, BLOCK_LABEL)
+    grid.box(x0, x1, y0, y1, z1 - 4, z1, BLOCK_LABEL)
+    grid.box(x1 - 4, x1, y0, y0 + 3, z1 - 3, z1, EMPTY)
+    # Unfinished stone shield propped up on the back of the bench, facing the camera.
+    # Its left half is dressed and carved with the mountain chevron, its right half still rough
+    sx, sy = -6, -58
+    for v in range(-11, 7):
+        for u in range(-9, 10):
+            k = kite_small(u, v)
+            if k > 1:
+                continue
+            rough = u > 1 and noise(u, v, 21) > 0.4
+            chevron = -9 < v < -1 and u <= 1 and abs(abs(u) - (-v - 1) * 0.8) < 1.2
+            depth = 3 if rough else 2
+            for t in range(depth):
+                y = sy - t + (1 if chevron and t == depth - 1 else 0)
+                label = ROUGH_LABEL if rough else (EMBLEM_LABEL if chevron else WORK_LABEL)
+                grid.set(sx + u, y + depth - 1, z1 + v + 11, label)
+    # Mallet on the right: handle toward the camera, a barrel head bound with iron
+    grid.box(12, 15, -73, -59, z1, z1 + 3, WOOD_LABEL)
+    for y in range(-59, -50):
+        for x in range(8, 20):
+            for z in range(z1, z1 + 9):
+                if math.hypot(x + 0.5 - 13.5, z + 0.5 - z1 - 4.5) <= 4.6:
+                    band = y in (-58, -52)
+                    grid.set(x, y, z, IRON_LABEL if band else HEAD_LABEL)
+    # Flat chisel and a point chisel in front of the shield: iron blades, wooden grips
+    grid.box(-19, -12, -71, -68, z1, z1 + 2, IRON_LABEL)
+    grid.box(-12, -2, -72, -67, z1, z1 + 3, WOOD_LABEL)
+    grid.box(1, 7, -73, -71, z1, z1 + 2, IRON_LABEL)
+    grid.box(7, 10, -74, -70, z1, z1 + 3, WOOD_LABEL)
+    # Chips on the bench and at its foot
+    for cx, cy, cz in ((-16, -54, z1), (5, -66, z1), (-25, -76, SLAB_HEIGHT), (23, -72, SLAB_HEIGHT),
+                       (26, -66, SLAB_HEIGHT), (-24, -60, SLAB_HEIGHT), (15, -80, SLAB_HEIGHT)):
+        grid.box(cx, cx + 2, cy, cy + 2, cz, cz + 2, CHIP_LABEL)
+
+
+def kite_small(u: float, v: float) -> float:
+    """The bench shield's outline, point down. Returns <= 1 inside."""
+    if v >= 0:
+        return max(abs(u) / 9, ((abs(u) / 9) ** 4 + (v / 6) ** 4) ** 0.25)
+    t = -v / 11
+    return 2.0 if t >= 1 else abs(u) / max(9 * (1 - t ** 1.7), 0.01)
 
 
 def kite(u: float, v: float) -> float:
@@ -336,20 +372,29 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
             index -= 1
         return step(GRANITE, index)
     if hit.label == SLAB_LABEL:
+        if hit.neighbor(0, 0, 1) == EMPTY and hit.my < SLAB_FRONT and hit.neighbor(0, -1, 0) == EMPTY:
+            return GRANITE[4]  # lit nosing of each step
         if hit.neighbor(0, 0, 1) == EMPTY:
             value = 3 if noise(hit.mx // 6, hit.my // 4, 12) > 0.3 else 2
             if (hit.mx + 3 * (hit.my // 8)) % 13 == 0:
                 value = 2
             return step(GRANITE, value)
         if hit.neighbor(0, -1, 0) == EMPTY:
-            return step(GRANITE, 2)
+            return step(GRANITE, 1 if hit.my < SLAB_FRONT + 1 else 2)
         return step(GRANITE, 1)
     if hit.label == MOSS_LABEL:
         index = lit(hit, (0.7, 0.4, 0.1))
         if noise(hit.mx, hit.my, 13) > 0.8:
             index -= 1
         return step(MOSS, index - 1)
-    if hit.label in (BLOCK_LABEL, STATUE_LABEL, BEARD_LABEL, SHIELD_LABEL):
+    if hit.label == BLOCK_LABEL:
+        # Dark granite bench, so the sandstone work on it stands out
+        if hit.neighbor(0, 0, 1) == EMPTY:
+            return GRANITE[3] if hit.neighbor(0, -1, 0) == EMPTY or hit.neighbor(-1, 0, 0) == EMPTY else GRANITE[2]
+        if hit.z < BLOCK[5] - 4:
+            return GRANITE[0]
+        return GRANITE[1] if hit.neighbor(-1, 0, 0) != EMPTY else GRANITE[2]
+    if hit.label in (STATUE_LABEL, BEARD_LABEL, SHIELD_LABEL):
         index = lit(hit)
         if hit.label == BEARD_LABEL:
             index = max(index, 3) + (1 if hit.mx < 0 else 0) - (1 if hit.mx % 4 == 0 else 0)
@@ -358,6 +403,18 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
         if hit.label == SHIELD_LABEL:
             index = max(index, 2)
         return step(SANDSTONE, index)
+    if hit.label == WORK_LABEL:
+        # The carved face: smooth and light, rim lit on top
+        if hit.neighbor(0, 0, 1) == EMPTY or hit.neighbor(-1, 0, 0) == EMPTY:
+            return SANDSTONE[4]
+        return SANDSTONE[3]
+    if hit.label == ROUGH_LABEL:
+        return SANDSTONE[3 if noise(hit.mx, hit.my, 22) > 0.5 else 2] if hit.neighbor(0, 0, 1) == EMPTY else SANDSTONE[1]
+    if hit.label == HEAD_LABEL:
+        light = hit.light(hit.normal())
+        return WOOD[3] if light > 0.6 else WOOD[2] if light > 0.2 else WOOD[1]
+    if hit.label == CHIP_LABEL:
+        return SANDSTONE[4] if hit.neighbor(0, 0, 1) == EMPTY else SANDSTONE[2]
     if hit.label == EYE_LABEL:
         return INTERIOR[0]
     if hit.label == EMBLEM_LABEL:
@@ -384,7 +441,7 @@ def crack(label: int, other: int) -> tuple[int, int, int, int] | None:
         return None
     if {label, other} <= {STATUE_LABEL, EYE_LABEL}:
         return None
-    if {label, other} <= {SHIELD_LABEL, RIM_LABEL, EMBLEM_LABEL}:
+    if {label, other} <= {SHIELD_LABEL, RIM_LABEL, EMBLEM_LABEL} or {label, other} <= {WORK_LABEL, ROUGH_LABEL}:
         return None
     return (22, 28, 46, 255)
 
@@ -394,7 +451,7 @@ def footprint_shadow(x: float, y: float) -> float:
     y += 2
     boxes = (
         (-SLAB_HALF_X, SLAB_HALF_X, SLAB_FRONT, SLAB_BACK),
-        (-30, 30, SLAB_FRONT - STEPS * STEP_DEPTH, SLAB_FRONT),
+        (-36, 36, SLAB_FRONT - STEPS * STEP_DEPTH, SLAB_FRONT),
     )
     distance = min(max(x0 - x, x - x1, y0 - y, y - y1, 0) for x0, x1, y0, y1 in boxes)
     return distance / 3
