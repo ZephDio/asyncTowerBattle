@@ -92,7 +92,7 @@ export class DescriptionHud extends Derive(BannerBackground) {
 
 	constructor(
 		public item: ImplementsTrait<typeof TDescriptor>,
-		public position: ScreenPosition = PercentToReal({ x: 81, y: 73 }),
+		public position: ScreenPosition = PercentToReal({ x: 86, y: 73 }),
 	) {
 		super({});
 		this.bannerImage = HudElementResources.descriptorBanner[rarityOf(this.item)].image;
