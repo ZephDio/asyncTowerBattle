@@ -103,7 +103,7 @@ Pieces carry tags that synergies and future pieces can target.
 
 - **Building**: Tower, Barrack, Totem, Tile, Trap, Castle.
 - **Alignment**: Food, Evil, Magic.
-- **Biome**: Forest, Mountain, Sky. Forest is on the Forest environment, Bosquet, Ent, White Stag and the Forest Cabin.
+- **Biome**: Forest, Mountain, Sky. Forest is on the Forest environment, Bosquet, Ent, White Stag and the Forest Cabin. Mountain is on the Rock, Gold Mine, Go-Goat, Dragon and the Stonemason.
 - **Species** (units): Kinfolk, Animal, Monster.
 
 ## Factions
@@ -178,6 +178,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Forging Anvil | Legendary | 10 | Damage towers on its stars deal +30% damage. | left and right |
 | Gold Mine | Common | 15 | Shop entered: +5 gold. Start of battle: +1 vitality army buff stack (💖) if a Mountain (a Rock or another Gold Mine) is on its star. Each mine stacks. | right |
 | Red Obelisk | Legendary | 10 | Every 5 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
+| Stonemason | Uncommon | 15 | Needs Dwarf science. Totem + Mountain, 1 wide and 2 tall. Every 5 s: gives a stone shield to 2 random allied units that have none, +1 unit per Mountain (Rock, Gold Mine, Go-Goat, another Stonemason) on its stars (up to 6). No food cost. Poison ignores shields. Placeholder sprite. | left and right of both cells (4 stars) |
 
 ### Path tiles and traps
 

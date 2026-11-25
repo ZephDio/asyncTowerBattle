@@ -20,6 +20,7 @@ import { Mine } from "../constructs/totem/recruit/implementation/mine";
 import { RedObelisk } from "../constructs/totem/recruit/implementation/obelisk";
 import { CornField } from "../constructs/totem/recruit/implementation/corn-field";
 import { PowderMagazine } from "../constructs/totem/recruit/implementation/powder-magazine";
+import { Stonemason } from "../constructs/totem/recruit/implementation/stonemason";
 import { Windmill } from "../constructs/totem/recruit/implementation/windmill";
 import { AnyTotem } from "../constructs/totem/recruit/totem";
 import { BlacksmithTower } from "../constructs/tower/recruit/implementation/blacksmith-tower";
@@ -84,6 +85,7 @@ const totems: Record<SerializedTotemType, Constructor<AnyTotem>> = {
 	anvil: AnvilTotem,
 	bakery: Bakery,
 	bosquet: Bosquet,
+	stonemason: Stonemason,
 	brewery: Brewery,
 	"corn-field": CornField,
 	"crops-field": CropsField,
