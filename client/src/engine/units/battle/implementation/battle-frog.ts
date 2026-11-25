@@ -61,6 +61,6 @@ export class BattleFrog extends Derive(TBattleUnit) {
 		this.hooks.alliedArmyBuffHooks.addUnitBuff("vitality", vitalityStacks);
 		const enemies = this.hooks.getEnemyUnits().filter((enemy) => enemy.isAlive());
 		const victim = enemies[Math.floor(this.hooks.random() * enemies.length)];
-		victim?.addCondition(Poisoned.by(this.hooks, secondsToFrame(poisonSeconds)));
+		victim?.addCondition(Poisoned.by(this.hooks, "add", secondsToFrame(poisonSeconds)));
 	}
 }
