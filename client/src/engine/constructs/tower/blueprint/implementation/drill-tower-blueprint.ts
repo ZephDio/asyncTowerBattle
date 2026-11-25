@@ -38,12 +38,7 @@ export class DrillTowerBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(
-		TowerResources.drill.image,
-		TowerResources.drill.size,
-		DrawPriority.NormalGridElement,
-		EnemyRender.FullFlip,
-	),
+	TImageDrawable(TowerResources.drill.image, TowerResources.drill.size, DrawPriority.NormalGridElement, EnemyRender.FullFlip),
 	TBaseStats({
 		health: NaN,
 		castleDamage: NaN,

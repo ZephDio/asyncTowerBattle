@@ -29,10 +29,7 @@ export class RarityOddsHud extends Derive(TDrawable, TRenderable) {
 	badgeSize = 2.7;
 	badgeSpacing = 3.1;
 
-	constructor(
-		public odds: RarityOdds,
-		sign: ShopSignHud,
-	) {
+	constructor(public odds: RarityOdds, sign: ShopSignHud) {
 		super({});
 		this.position = new ScreenPosition({
 			x: sign.position.x + sign.size.width / 2 + 1.6 + this.size.width / 2,
