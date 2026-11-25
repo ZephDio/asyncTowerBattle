@@ -1,7 +1,6 @@
-import { Derive, implementsTrait } from "@ddd-ts/traits";
+import { Derive } from "@ddd-ts/traits";
 import { Army } from "../../engine/army/army";
 import { Inventory } from "../../engine/grid/inventory/unit-inventory";
-import { blueprintsRequiring } from "../../engine/shop/retail/retail-filler";
 import { HudElementResources } from "../../renderer/resources/hud-element.resources";
 import { IconResources } from "../../renderer/resources/icons.resources";
 import { HitBox } from "../hitbox/hitboxe";
@@ -9,11 +8,10 @@ import { Rectangle } from "../hitbox/shapes/rectangle";
 import { ScreenPosition } from "../position";
 import { TCollider } from "../traits/engine/core/TCollider";
 import { THitbox } from "../traits/engine/core/THitbox";
-import { Science, grantedSciencesOf } from "../traits/engine/science";
+import { Science } from "../traits/engine/science";
 import { TDrawable } from "../traits/render/drawable";
 import { DrawPriority } from "../traits/render/image-drawable";
 import { TRenderable } from "../traits/render/renderable";
-import { Description, TDescriptor } from "../traits/render/huds/item-descriptor";
 
 // Sizes in screen units, from the ribbon's images at the army banner's density (5 image pixels per unit, see
 // scripts/generate-science-ribbon.py).
@@ -28,16 +26,8 @@ const STAMP = 16 * PIXEL;
 const FULL_LENGTH = 5;
 const ZIGZAG = 6 * PIXEL;
 
-const SCIENCE_NAMES: Record<Science, string> = {
-	[Science.Elf]: "Elf",
-	[Science.Dwarf]: "Dwarf",
-};
-
-const nameOf = (element: object) =>
-	implementsTrait(element, TDescriptor) ? element.description.name : element.constructor.name;
-
 // The shop's ribbon right of the reserve: a seal for each science the army holds, top to bottom. Hovering a seal
-// describes the science: what grants it in the army and what it unlocks in the shop. It hangs from the top of the
+// opens its science's scroll (see SciencePanel), clicking it keeps the scroll open. It hangs from the top of the
 // reserve, so it is not shown when the army holds no science.
 export class ScienceHud extends Derive(
 	TCollider,
@@ -50,10 +40,7 @@ export class ScienceHud extends Derive(
 	sciences: Science[];
 	private top: number;
 
-	constructor(
-		private army: Army,
-		reserve: Inventory,
-	) {
+	constructor(army: Army, reserve: Inventory) {
 		super({});
 		this.sciences = Object.values(Science).filter((science) => army.sciences.has(science));
 		const reserveRight = reserve.centerPosition.x + (reserve.width * reserve.cellSize) / 2;
@@ -82,8 +69,8 @@ export class ScienceHud extends Derive(
 		return new ScreenPosition({ x: this.position.x + zigzag, y: this.top - TOP - (index + 0.5) * this.spacing });
 	}
 
-	// What hovering `point` describes: the science of the nearest seal under it, as seals overlap once they zigzag.
-	describedAt(point: ScreenPosition): ScienceDescription | null {
+	// The science of the nearest seal under `point`, as seals overlap once they zigzag.
+	scienceAt(point: ScreenPosition): Science | null {
 		let nearest: { science: Science; distance: number } | null = null;
 		this.sciences.forEach((science, index) => {
 			const center = this.sealCenter(index);
@@ -93,22 +80,7 @@ export class ScienceHud extends Derive(
 			const distance = Math.hypot(dx, dy);
 			if (!nearest || distance < nearest.distance) nearest = { science, distance };
 		});
-		return nearest ? this.describe((nearest as { science: Science }).science) : null;
-	}
-
-	private describe(science: Science): ScienceDescription {
-		const granters = this.army.scienceGranters.filter((element) => grantedSciencesOf(element).includes(science));
-		const unlocked = blueprintsRequiring(science);
-		return {
-			description: new Description(`${SCIENCE_NAMES[science]} science`, [
-				"Granted by:",
-				...granters.map((element) => `  ${nameOf(element)}`),
-				"",
-				"Unlocks in the shop:",
-				...(unlocked.length ? unlocked.map((blueprint) => `  ${nameOf(blueprint)}`) : ["  nothing yet"]),
-			]),
-			grantedSciences: [science],
-		};
+		return nearest ? (nearest as { science: Science }).science : null;
 	}
 
 	draw(context: CanvasRenderingContext2D) {
@@ -137,6 +109,3 @@ export class ScienceHud extends Derive(
 		context.restore();
 	}
 }
-
-// A science's description, with its own stamp in the corner of the descriptor.
-export type ScienceDescription = { description: Description; grantedSciences: Science[] };

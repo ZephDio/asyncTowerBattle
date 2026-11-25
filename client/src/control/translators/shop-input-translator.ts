@@ -20,10 +20,12 @@ import { BoardOrientation } from "../../shared/traits/engine/core/board-orientat
 import { Barrack } from "../../engine/constructs/barrack/recruit/barrack";
 import { ArmyHud } from "../../shared/hud-element/army-hud";
 import { ScienceHud } from "../../shared/hud-element/science-hud";
+import { SciencePanel } from "../../shared/hud-element/science-panel";
 
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
 		shop.signHovered = shop.sign.contains(screenPosition);
+		if (this.handleSciences(screenPosition, eventType, shop)) return;
 		const state = shop.getState();
 		if (eventType === "move" && !shop.holderControl.hold && shop.army.grid.isOverCastle(screenPosition)) {
 			// The castle stands off the grid, so it is hovered apart from the cells.
@@ -85,7 +87,12 @@ export class ShopInputToIntentTranslator {
 		if (shop.holderControl.hold) {
 			shop.holderControl.moveHold(screenPosition);
 		}
-		if (focus instanceof ArmyHud || focus instanceof ScienceHud) {
+		if (focus instanceof ScienceHud) {
+			this.clearHover(shop);
+			shop.setDescriptionHud(null);
+			return;
+		}
+		if (focus instanceof ArmyHud) {
 			this.clearHover(shop);
 			const described = shop.holderControl.hold ? null : focus.describedAt(screenPosition);
 			if (described) {
@@ -225,6 +232,55 @@ export class ShopInputToIntentTranslator {
 				shop.army.cyclePathAt(focus.element.cell);
 			}
 		}
+	}
+
+	// The science seals and the scroll they open come before the rest of the shop, which the scroll covers. Returns
+	// whether the event was theirs.
+	handleSciences(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
+		const holding = !!shop.holderControl.hold;
+		const science = holding ? null : shop.getScienceHud().scienceAt(screenPosition);
+		if (eventType === "move") {
+			shop.sciencePanel?.clearHover();
+			shop.hoveredScience = science;
+		}
+		if (science) {
+			if (eventType === "down") shop.toggleScience(science);
+			this.clearHover(shop);
+			shop.setDescriptionHud(null);
+			return true;
+		}
+		const panel = shop.sciencePanel;
+		if (panel && !holding && panel.contains(screenPosition)) {
+			shop.signHovered = false;
+			if (eventType === "move") this.hoverSciencePanel(shop, panel, screenPosition);
+			return true;
+		}
+		if (eventType === "down" && shop.pinnedScience) shop.closeSciencePanel();
+		return false;
+	}
+
+	// Over a piece of a science's scroll: its description, and its pattern and target cells on the scroll's grid.
+	hoverSciencePanel(shop: ShopPhase, panel: SciencePanel, screenPosition: ScreenPosition) {
+		this.clearHover(shop);
+		const element = panel.elementAt(screenPosition);
+		if (!element) {
+			shop.setDescriptionHud(null);
+			return;
+		}
+		const grid = panel.grid;
+		grid.setOveredTile([...element.gridShape.getOccupiedCellsFrom(element.cell, element.orientation)]);
+		if (implementsTrait(element, TSynergy)) {
+			const { patternEffect } = element;
+			grid.setSynergiesTiles(
+				element.cell,
+				patternEffect.getRelativeCells(element.orientation),
+				patternEffect.patternCondition,
+			);
+		}
+		if (implementsTrait(element, TTargeting)) {
+			grid.addTargetTiles(element.cell, element.targetZone, element.orientation);
+		}
+		shop.setDescriptionHud(implementsTrait(element, TDescriptor) ? new DescriptionHud(element) : null);
 	}
 
 	clearHover(shop: ShopPhase) {
