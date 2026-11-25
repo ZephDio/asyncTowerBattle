@@ -49,7 +49,7 @@ export class PoisonGround extends Derive(
 		}
 		const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
 		for (const enemy of enemies) {
-			enemy.addCondition(Poisoned.by(this.hooks));
+			enemy.addCondition(Poisoned.by(this.hooks, "refresh"));
 		}
 	}
 
@@ -74,6 +74,12 @@ export class PoisonGround extends Derive(
 	}
 }
 
+// What a poison does when the enemy is poisoned again while it still is:
+// - "refresh": the remaining duration goes back up to the new poison's duration if that is longer, never beyond. A
+//   puddle re-poisons every tick, so a unit standing in it keeps the full duration without it growing.
+// - "add": the new poison's duration is added to what remains (the Frog's croak).
+export type PoisonStacking = "refresh" | "add";
+
 export class Poisoned extends Derive(Status) {
 	key = "poisoned";
 	clock = 0;
@@ -83,9 +89,14 @@ export class Poisoned extends Derive(Status) {
 	constructor(
 		public damagePerSecond: () => number,
 		duration = 70,
+		public stacking: PoisonStacking = "refresh",
 	) {
 		super({});
 		this.duration = duration;
+	}
+
+	get remaining() {
+		return this.duration - this.clock;
 	}
 
 	tick() {
@@ -96,12 +107,17 @@ export class Poisoned extends Derive(Status) {
 		this.stats.takeDamage(this.damagePerSecond() * frameToSeconds(1));
 	}
 
-	// A poison applied by an army: its damage follows that army's poison modifiers (the Cauldron) tick by tick.
-	static by(hooks: BattleArmyHooks, duration?: number) {
-		return new Poisoned(() => poisonDamagePerSecond(hooks), duration);
+	// A poison applied by an army: its damage follows that army's poison modifiers (the Cauldron) tick by tick,
+	// whatever the source of the poison.
+	static by(hooks: BattleArmyHooks, stacking: PoisonStacking, duration?: number) {
+		return new Poisoned(() => poisonDamagePerSecond(hooks), duration, stacking);
 	}
 
-	stack(_status: Poisoned) {}
+	// The poison already on the enemy takes the new one's duration according to the new one's stacking.
+	stack(status: Poisoned) {
+		if (status.stacking === "add") this.duration += status.remaining;
+		else this.duration = Math.max(this.duration, this.clock + status.remaining);
+	}
 
 	onRemove() {}
 }
