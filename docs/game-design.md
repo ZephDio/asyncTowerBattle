@@ -132,7 +132,7 @@ Prices are in gold. "Every Xs" is the cast time. Food is the food spent per cast
 | Blacksmith Tower | Common | 10 | 4 per spark | 1.5 s | 3 | Horizontal 2x1. Every cast (no target needed) shoots 7 sparks from its anvil in a wide cone (68 degrees above and 70 below the left direction) toward the 3 cells on the left of its left cell. The cone is cut in 7 equal slices and each spark takes a random direction in its own slice, and flies to the flat far edge of the zone's cells, so it crosses the whole path there, or to the top or bottom of the zone if its angle is steep (the direction is from the battle's seeded random). A spark stops on the first enemy it touches and hurts it. Kinfolk units also get max health from it: 0 at first, +1 every 4 casts (new Kinfolk units get the value reached so far). |
 | Zapping Tower | Uncommon | 10 | 15 | 3.5 s | 3 | Lightning that chains between nearby enemies. |
 | Frost Tower | Rare | 10 | 4 | 3 s | 3.5 | A frost boulder falls and explodes, slowing enemies. |
-| Witch House | Rare | 10 | 6 | 6 s | 5 | Two cells tall. Targets the cells on either side of and below its base. Fills every path cell of its zone with poison puddles. Grants the Witchcraft science. |
+| Witch House | Rare | 10 | 0 | 6 s | 5 | Two cells tall. Targets the cells on either side of and below its base. Deals no damage itself (no projectile damage, so the Anvil and the Powder Magazine skip it). Fills every path cell of its zone with poison puddles: a puddle poisons enemies in it for a constant 6 damage/s, read from the army at each tick, so army modifiers such as the Cauldron's +20% apply at once, even to puddles already on the ground. Grants the Witchcraft science. |
 | Drill Tower | Rare | 15 | 25 | 6 s | 5 | L-shaped, 3 cells. Targets the whole column below it. Fires a giant drill that pierces every enemy in line. With a rock on its star (left of the shed) it casts every 4.5 s. |
 
 ### Barracks (offense)
@@ -179,7 +179,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Gold Mine | Common | 15 | Shop entered: +5 gold. Start of battle: +1 vitality army buff stack (💖) if a Mountain (a Rock or another Gold Mine) is on its star. Each mine stacks. | right |
 | Red Obelisk | Legendary | 10 | Every 5 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
 | Stonemason | Uncommon | 15 | Needs Dwarf science. Totem + Mountain, 1 wide and 2 tall. Every 5 s: gives a stone shield to 2 random allied units that have none, +1 unit per Mountain (Rock, Gold Mine, Go-Goat, another Stonemason) on its stars (up to 6). No food cost. Poison ignores shields. Placeholder sprite. | left and right of both cells (4 stars) |
-| Cauldron | Epic | 30 | Needs Witchcraft science. One cell, tagged Totem and Evil. Start of battle: the army's poison effects (the Witch House's puddles) deal +20% damage, each Cauldron adding its own 20%. Placeholder sprite. | none |
+| Cauldron | Epic | 30 | Needs Witchcraft science. One cell, tagged Totem and Evil. Start of battle: the army's poison effects (the Witch House's puddles, 6 damage/s) deal +20% damage, each Cauldron adding its own 20%. Placeholder sprite. | none |
 
 ### Path tiles and traps
 

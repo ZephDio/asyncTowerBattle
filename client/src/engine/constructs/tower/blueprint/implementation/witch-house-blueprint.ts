@@ -27,7 +27,7 @@ export class WitchHouseBlueprint extends Derive(
 	TBaseStats({
 		health: NaN,
 		castleDamage: NaN,
-		projectileDamage: 6,
+		projectileDamage: NaN,
 		attackSpeed: NaN,
 		castSpeed: castSpeedFromSeconds(6),
 		speed: NaN,
@@ -49,7 +49,14 @@ export class WitchHouseBlueprint extends Derive(
 	]);
 	description = new TowerDescription(
 		"Witch House",
-		["When an enemy is in", "its target zone, makes", "poison puddles on", "every path of the zone"],
+		[
+			"When an enemy is in",
+			"its target zone, makes",
+			"poison puddles on",
+			"every path of the zone",
+			"",
+			"Poison: 6 damage/s",
+		],
 		this,
 	);
 	toRecruit(cell: Cell) {

@@ -29,9 +29,8 @@ export class WitchHouse extends Derive(Tower, HTGrantsScience) {
 		});
 	}
 
-	getAreaEffect(hooks: BattleArmyHooks, position: GridPosition, damage: number) {
-		const poisonPercent = hooks.alliedArmyBuffHooks.getPoisonDamagePercent();
-		return new PoisonGround(80, position, damage * (1 + poisonPercent / 100), hooks);
+	getAreaEffect(hooks: BattleArmyHooks, position: GridPosition) {
+		return new PoisonGround(80, position, hooks);
 	}
 
 	toAllied(_grid: BattleGrid, hooks: BattleArmyHooks): AnyBattleTower {
