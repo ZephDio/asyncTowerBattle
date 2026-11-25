@@ -19,10 +19,13 @@ import { Trap } from "../../engine/trap/recruit/trap";
 import { BoardOrientation } from "../../shared/traits/engine/core/board-orientation";
 import { Barrack } from "../../engine/constructs/barrack/recruit/barrack";
 import { ArmyHud } from "../../shared/hud-element/army-hud";
+import { ScienceHud } from "../../shared/hud-element/science-hud";
+import { SciencePanel } from "../../shared/hud-element/science-panel";
 
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
 		shop.signHovered = shop.sign.contains(screenPosition);
+		if (this.handleSciences(screenPosition, eventType, shop)) return;
 		const state = shop.getState();
 		if (eventType === "move" && !shop.holderControl.hold && shop.army.grid.isOverCastle(screenPosition)) {
 			// The castle stands off the grid, so it is hovered apart from the cells.
@@ -61,7 +64,7 @@ export class ShopInputToIntentTranslator {
 			shop.exitShop();
 			return;
 		}
-		if (!focus || focus instanceof ArmyHud) return;
+		if (!focus || focus instanceof ArmyHud || focus instanceof ScienceHud) return;
 		if (shop.holderControl.hold) return;
 		if (focus.cell && (focus.grid instanceof ArmyGrid || focus.grid instanceof Inventory)) {
 			const element = this.trapOr(focus.element, focus.grid, screenPosition);
@@ -83,6 +86,11 @@ export class ShopInputToIntentTranslator {
 	) {
 		if (shop.holderControl.hold) {
 			shop.holderControl.moveHold(screenPosition);
+		}
+		if (focus instanceof ScienceHud) {
+			this.clearHover(shop);
+			shop.setDescriptionHud(null);
+			return;
 		}
 		if (focus instanceof ArmyHud) {
 			this.clearHover(shop);
@@ -197,7 +205,13 @@ export class ShopInputToIntentTranslator {
 		screenPosition: ScreenPosition,
 	) {
 		if (!shop.holderControl.hold) return;
-		if (!focus || focus instanceof RefreshBellHud || focus instanceof StartBattleButton || focus instanceof ArmyHud) {
+		if (
+			!focus ||
+			focus instanceof RefreshBellHud ||
+			focus instanceof StartBattleButton ||
+			focus instanceof ArmyHud ||
+			focus instanceof ScienceHud
+		) {
 			shop.holderControl.hold.onRelease();
 			return;
 		}
@@ -211,12 +225,62 @@ export class ShopInputToIntentTranslator {
 			focus &&
 			!(focus instanceof RefreshBellHud) &&
 			!(focus instanceof StartBattleButton) &&
-			!(focus instanceof ArmyHud)
+			!(focus instanceof ArmyHud) &&
+			!(focus instanceof ScienceHud)
 		) {
 			if (focus.grid instanceof ArmyGrid && focus.element && implementsTrait(focus.element, PathTile)) {
 				shop.army.cyclePathAt(focus.element.cell);
 			}
 		}
+	}
+
+	// The science seals and the scroll they open come before the rest of the shop, which the scroll covers. Returns
+	// whether the event was theirs.
+	handleSciences(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
+		const holding = !!shop.holderControl.hold;
+		const science = holding ? null : shop.getScienceHud().scienceAt(screenPosition);
+		if (eventType === "move") {
+			shop.sciencePanel?.clearHover();
+			shop.hoveredScience = science;
+		}
+		if (science) {
+			if (eventType === "down") shop.toggleScience(science);
+			this.clearHover(shop);
+			shop.setDescriptionHud(null);
+			return true;
+		}
+		const panel = shop.sciencePanel;
+		if (panel && !holding && panel.contains(screenPosition)) {
+			shop.signHovered = false;
+			if (eventType === "move") this.hoverSciencePanel(shop, panel, screenPosition);
+			return true;
+		}
+		if (eventType === "down" && shop.pinnedScience) shop.closeSciencePanel();
+		return false;
+	}
+
+	// Over a piece of a science's scroll: its description, and its pattern and target cells on the scroll's grid.
+	hoverSciencePanel(shop: ShopPhase, panel: SciencePanel, screenPosition: ScreenPosition) {
+		this.clearHover(shop);
+		const element = panel.elementAt(screenPosition);
+		if (!element) {
+			shop.setDescriptionHud(null);
+			return;
+		}
+		const grid = panel.grid;
+		grid.setOveredTile([...element.gridShape.getOccupiedCellsFrom(element.cell, element.orientation)]);
+		if (implementsTrait(element, TSynergy)) {
+			const { patternEffect } = element;
+			grid.setSynergiesTiles(
+				element.cell,
+				patternEffect.getRelativeCells(element.orientation),
+				patternEffect.patternCondition,
+			);
+		}
+		if (implementsTrait(element, TTargeting)) {
+			grid.addTargetTiles(element.cell, element.targetZone, element.orientation);
+		}
+		shop.setDescriptionHud(implementsTrait(element, TDescriptor) ? new DescriptionHud(element) : null);
 	}
 
 	clearHover(shop: ShopPhase) {
@@ -258,6 +322,9 @@ export class ShopInputToIntentTranslator {
 				return hudElement;
 			}
 			if (hudElement instanceof ArmyHud && hudElement.contains(screenPosition)) {
+				return hudElement;
+			}
+			if (hudElement instanceof ScienceHud && hudElement.sciences.length > 0 && hudElement.contains(screenPosition)) {
 				return hudElement;
 			}
 		}

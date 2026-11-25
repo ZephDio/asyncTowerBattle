@@ -9,9 +9,10 @@ import { RecruitCaster } from "../../../shared/traits/engine/cast";
 import { HTBaseStats } from "../../stats/base-stats";
 import { AnyBattleCastle } from "../battle";
 import { BoardOrientation } from "../../../shared/traits/engine/core/board-orientation";
+import { HTGrantsScience } from "../../../shared/traits/engine/science";
 import { castleGeometry } from "../castle-geometry";
 
-export const Castle = Subtrait([TRecruit, RecruitCaster, HTBaseStats], (base) => {
+export const Castle = Subtrait([TRecruit, RecruitCaster, HTBaseStats, HTGrantsScience], (base) => {
 	abstract class ICastle extends base {
 		layout = DWARF_CASTLE_LAYOUT;
 		abstract toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): AnyBattleCastle;

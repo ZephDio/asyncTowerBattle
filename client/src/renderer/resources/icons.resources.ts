@@ -1,10 +1,15 @@
 import { createImage } from "../../shared/image";
 import { SpriteSheet } from "../../shared/sprite-sheet";
+import { Science } from "../../shared/traits/engine/science";
 
 export type IconResource = {
 	image: HTMLImageElement;
 };
 export class IconResources {
+	static scienceStamps: Record<Science, IconResource> = {
+		[Science.Elf]: { image: createImage("/resources/icons/science-elf.png") },
+		[Science.Dwarf]: { image: createImage("/resources/icons/science-dwarf.png") },
+	};
 	static food: IconResource = {
 		image: createImage("/resources/icons/corn.png"),
 	};

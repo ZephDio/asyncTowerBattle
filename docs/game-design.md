@@ -115,6 +115,10 @@ Pieces carry tags that synergies and future pieces can target.
 
 An empty barrack summons the faction's default unit. Factions are thin for now: castle stats and default unit. Faction-specific pieces are planned.
 
+### Sciences
+
+A science is a token an army holds because it owns a piece that grants it. For now only the castles grant one: the Elf castle the Elf science, the Dwarf Mountain the Dwarf science (a castle can grant several later). A piece behind a science is not offered in the shop, nor by the refresh bell, until the army holds it. The Forest Cabin needs the Elf science; the Dwarf science gates nothing yet. Sciences are derived from the owned pieces, never stored. The shop shows them as seals on a ribbon right of the reserve. Hovering a seal opens the science's scroll over the left of the shop, and clicking it keeps the scroll open until the next click elsewhere: it tells what grants the science and lays out every piece it unlocks, each hoverable for its description and its pattern and target cells. A piece that grants a science shows its seal at the bottom right of its descriptor.
+
 ## The pieces
 
 Prices are in gold. "Every Xs" is the cast time. Food is the food spent per cast (buildings) or per 2 s (units).

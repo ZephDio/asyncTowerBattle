@@ -19,6 +19,7 @@ import { Buyable } from "../engine/shop/retail/buyable";
 import { Faction } from "../engine/menu/main-menu";
 import { RetailFiller } from "../engine/shop/retail/retail-filler";
 import { TRecruit } from "../shared/traits/engine/recruit";
+import { Science } from "../shared/traits/engine/science";
 import { Unit } from "../engine/units/recruit/unit";
 import { BattleArmy } from "../engine/army/battle/battle-army";
 
@@ -338,7 +339,7 @@ export class DebugBridge {
 	}
 
 	catalog() {
-		return new RetailFiller(1).candidates().map(({ blueprint }) => {
+		return new RetailFiller(1).candidates(new Set(Object.values(Science))).map(({ blueprint }) => {
 			const recruit = blueprint.toRecruit(new Cell({ x: 0, y: 0 }));
 			return {
 				name: recruit.description.name,
@@ -354,7 +355,7 @@ export class DebugBridge {
 		const game = this.game;
 		if (!game) throw new Error("No game running");
 		const lower = name.toLowerCase();
-		const candidate = new RetailFiller(1).candidates().find(({ blueprint }) => {
+		const candidate = new RetailFiller(1).candidates(new Set(Object.values(Science))).find(({ blueprint }) => {
 			const recruit = blueprint.toRecruit(new Cell({ x: 0, y: 0 }));
 			return recruit.description.name.toLowerCase() === lower || recruit.constructor.name.toLowerCase() === lower;
 		});

@@ -8,6 +8,7 @@ import { GridPosition } from "../../../shared/position";
 import { Description, TDescriptor } from "../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../stats/base-stats";
 import { CastleResources } from "../../../renderer/resources/castle.resources";
+import { Science, TGrantsScience } from "../../../shared/traits/engine/science";
 import { CastleTag } from "../../../shared/traits/engine/tags/building/building-tags";
 
 export class DwarfCastleBlueprint extends Derive(
@@ -28,6 +29,7 @@ export class DwarfCastleBlueprint extends Derive(
 		range: NaN,
 	}),
 	CastleTag,
+	TGrantsScience(Science.Dwarf),
 ) {
 	description = new Description(
 		"Dwarf Mountain",

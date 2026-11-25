@@ -15,7 +15,7 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 	synergiesEffects: SynergyEffectHud[] = [];
 	// Smaller cells than the standard size so the six rows fit between the bottom of the screen and the descriptor
 	constructor(
-		screenPosition: ScreenPosition = PercentToReal({ x: 85, y: 24.5 }),
+		screenPosition: ScreenPosition = PercentToReal({ x: 80, y: 24.5 }),
 		width: number = 5,
 		height: number = 6,
 		cellSize: number = 4.3,

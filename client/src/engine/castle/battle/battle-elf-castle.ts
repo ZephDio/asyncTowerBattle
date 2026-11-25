@@ -34,6 +34,7 @@ export class BattleElfCastle extends Derive(TBattleCastle, TImageVariant) {
 			descriptor: recruit,
 			tagHolder: recruit,
 			rarityHolder: recruit,
+			scienceHolder: recruit,
 		});
 		this.gridShape = recruit.gridShape;
 		this.orientation = orientation;

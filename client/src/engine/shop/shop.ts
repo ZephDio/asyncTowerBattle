@@ -19,6 +19,9 @@ import { EconomyHooks } from "../gold/army-gold-economy";
 import { PathPreview } from "../path/army/path-preview";
 import { PathInvalidHud } from "../../shared/hud-element/path-invalid-hud";
 import { ArmyHud } from "../../shared/hud-element/army-hud";
+import { ScienceHud } from "../../shared/hud-element/science-hud";
+import { SciencePanel } from "../../shared/hud-element/science-panel";
+import { Science } from "../../shared/traits/engine/science";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -56,6 +59,10 @@ export class ShopPhase {
 	// When the refresh bell was last pressed, for its press animation
 	bellPressedAt: number | null = null;
 	economyHooks: EconomyHooks;
+	// The science scroll kept open by a click on its seal, and the one previewed while its seal is hovered.
+	pinnedScience: Science | null = null;
+	hoveredScience: Science | null = null;
+	private sciencePanels = new Map<Science, SciencePanel>();
 	constructor(
 		public army: Army,
 		public onShopExit: Game["handleShopQuit"],
@@ -65,7 +72,7 @@ export class ShopPhase {
 		public life: number,
 		runSeed: number,
 	) {
-		this.retail = new Retail(round, runSeed);
+		this.retail = new Retail(round, runSeed, () => army.sciences);
 		this.economyHooks = army.getEconomyHooks();
 	}
 
@@ -134,6 +141,8 @@ export class ShopPhase {
 				...(this.signHovered ? [new RarityOddsHud(rarityOdds(this.round), this.sign)] : []),
 				new RefreshBellHud(this.bellPressedAt),
 				this.getArmyHud(),
+				this.getScienceHud(),
+				...(this.sciencePanel ? [this.sciencePanel] : []),
 				...(network.complete ? [] : [new PathInvalidHud()]),
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
@@ -143,6 +152,33 @@ export class ShopPhase {
 	// Built from the army each time, since the grid widens between rounds and the gold changes.
 	getArmyHud() {
 		return new ArmyHud(this.army, this.round, this.life);
+	}
+
+	// Built each time too: the sciences change as pieces that grant one are placed or sold.
+	getScienceHud() {
+		return new ScienceHud(this.army, this.army.inventory, this.pinnedScience);
+	}
+
+	// The scroll shown: the hovered science's, else the pinned one's.
+	get sciencePanel(): SciencePanel | null {
+		const science = this.hoveredScience ?? this.pinnedScience;
+		if (!science) return null;
+		let panel = this.sciencePanels.get(science);
+		if (!panel) {
+			panel = new SciencePanel(science, this.army);
+			this.sciencePanels.set(science, panel);
+		}
+		return panel;
+	}
+
+	// A click on a seal pins its scroll, or closes it when it is the pinned one.
+	toggleScience(science: Science) {
+		this.pinnedScience = this.pinnedScience === science ? null : science;
+	}
+
+	closeSciencePanel() {
+		this.sciencePanel?.clearHover();
+		this.pinnedScience = null;
 	}
 
 	getPathPreview(network = this.army.pathNetwork) {
@@ -176,7 +212,7 @@ export class ShopPhase {
 			type: "shop",
 			retail: this.retail,
 			hold: this.holderControl.hold,
-			hudElements: [new StartBattleButton({}), new RefreshBellHud(), this.getArmyHud()],
+			hudElements: [new StartBattleButton({}), new RefreshBellHud(), this.getArmyHud(), this.getScienceHud()],
 			towers: this.army.towers,
 			castle: this.army.castle,
 			grid: this.army.grid,

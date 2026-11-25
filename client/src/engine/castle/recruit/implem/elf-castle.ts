@@ -23,6 +23,7 @@ export class ElfCastle extends Derive(Castle) {
 			statsHolder: castle,
 			tagHolder: castle,
 			rarityHolder: castle,
+			scienceHolder: castle,
 		});
 	}
 

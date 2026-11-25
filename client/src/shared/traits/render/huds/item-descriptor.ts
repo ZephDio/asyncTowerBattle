@@ -7,6 +7,8 @@ import { TBaseStats } from "../../../../engine/stats/base-stats";
 import { castSpeedToSecond, frameToSeconds } from "../../../seconds";
 import { TagBadge, drawTagBadgeRows, sortTags } from "./tag-badge";
 import { rarityOf } from "../../engine/rarity";
+import { IconResources } from "../../../../renderer/resources/icons.resources";
+import { grantedSciencesOf } from "../../engine/science";
 import { HudElementResources } from "../../../../renderer/resources/hud-element.resources";
 
 export const TDescriptor = Trait((base) => {
@@ -69,6 +71,11 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 
 	return IDescriptor;
 });
+
+// Where the stamps of the sciences the piece grants stand, from the scroll's center and in screen percent units: the
+// first one's center at the bottom of the scroll's body, the next ones side by side towards the center.
+const STAMP_ORIGIN = { x: 7.2, y: -10.5 };
+const STAMP_SIZE = 3;
 
 // The space before a new section of description lines, in lines.
 const SECTION_GAP = 0.5;
@@ -205,6 +212,18 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		const tagHeight = this.getCanvasSize(context, 0, 1.35, scale).height;
 		const tagsMaxWidth = this.getCanvasSize(context, 16, 0, scale).width;
 		drawTagBadgeRows(context, this.tagBadges, tagsPosition, tagHeight, tagsMaxWidth, 2);
+		// Sciences granted
+		const stampSize = this.getCanvasSize(context, STAMP_SIZE, STAMP_SIZE, scale);
+		context.save();
+		context.imageSmoothingEnabled = false;
+		grantedSciencesOf(this.item).forEach((science, index) => {
+			const stampPosition = this.getCanvasPosition(
+				context,
+				this.position.add(new ScreenPosition({ x: STAMP_ORIGIN.x - index * STAMP_SIZE, y: STAMP_ORIGIN.y })),
+			);
+			this.drawImage(context, stampSize, stampPosition, IconResources.scienceStamps[science].image);
+		});
+		context.restore();
 	}
 }
 

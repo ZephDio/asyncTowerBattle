@@ -9,6 +9,7 @@ import { RetailGrid } from "../../grid/retail-grid";
 import { ArmyGrid } from "../../grid/grid";
 import { RetailFiller } from "./retail-filler";
 import { Buyable } from "./buyable";
+import { Science } from "../../../shared/traits/engine/science";
 import { runRandom } from "../../../shared/run-random";
 export type ShopItem = Buyable;
 export class Retail extends Derive(
@@ -31,6 +32,7 @@ export class Retail extends Derive(
 	constructor(
 		private round: number,
 		private runSeed: number,
+		private getSciences: () => ReadonlySet<Science> = () => new Set(),
 	) {
 		super({});
 		this.grid = new RetailGrid();
@@ -40,7 +42,7 @@ export class Retail extends Derive(
 
 	async getRetailItems(): Promise<ShopItem[]> {
 		const random = runRandom(this.runSeed, "shop", this.round, this.draws++);
-		const itemsAndPrice = new RetailFiller(this.round, random).getFreshItems(this.slots);
+		const itemsAndPrice = new RetailFiller(this.round, random, this.getSciences()).getFreshItems(this.slots);
 		return itemsAndPrice.map((itemAndPrice) => {
 			return Buyable.from(itemAndPrice.recruit, itemAndPrice.price);
 		});
