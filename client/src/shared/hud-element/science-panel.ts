@@ -34,11 +34,10 @@ export class SciencePanel extends Derive(TRenderable, TDrawable) {
 	drawPriority = DrawPriority.Menu;
 	position = CENTER;
 	readonly grid: ScienceGrid;
-	private granters: string[];
 
 	constructor(
 		readonly science: Science,
-		army: Army,
+		private army: Army,
 	) {
 		super({});
 		this.grid = new ScienceGrid(GRID.width, GRID.height, GRID.center.clone(), GRID.cellSize);
@@ -53,7 +52,11 @@ export class SciencePanel extends Derive(TRenderable, TDrawable) {
 			});
 			this.grid.setElement(blueprint.toRecruit(cell));
 		});
-		this.granters = army.scienceGranters.filter((element) => grantedSciencesOf(element).includes(science)).map(nameOf);
+	}
+
+	// Read each frame: the pieces that grant the science change as they are placed or sold.
+	private granters() {
+		return this.army.scienceGranters.filter((element) => grantedSciencesOf(element).includes(this.science)).map(nameOf);
 	}
 
 	contains(point: ScreenPosition) {
@@ -88,7 +91,7 @@ export class SciencePanel extends Derive(TRenderable, TDrawable) {
 		context.font = `${3 * unit}px title`;
 		context.fillText(`${SCIENCE_NAMES[this.science]} science`, center.x, top + 6 * unit);
 		context.font = `${1.6 * unit}px text`;
-		context.fillText(`Granted by ${this.granters.join(", ")}`, center.x, top + 9.5 * unit);
+		context.fillText(`Granted by ${this.granters().join(", ")}`, center.x, top + 9.5 * unit);
 		if (this.grid.getElements().length === 0) {
 			context.fillText("It unlocks nothing yet", center.x, center.y + 2 * unit);
 		}

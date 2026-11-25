@@ -32,14 +32,7 @@ const setup = (enemies: Enemy[], direction = new GridPosition({ x: -1, y: 0 }), 
 			enemies.filter((found) => Math.hypot(found.position.x - area.x, found.position.y - area.y) <= 2),
 		removeProjectile: (projectile: unknown) => removed.push(projectile),
 	} as unknown as BattleArmyHooks;
-	const spark = new BattleSparkShot(
-		new EmberSpark(1.5),
-		new GridPosition({ x: 30, y: 10 }),
-		hooks,
-		4,
-		direction,
-		range,
-	);
+	const spark = new BattleSparkShot(new EmberSpark(1.5), new GridPosition({ x: 30, y: 10 }), hooks, 4, direction, range);
 	return { spark, removed };
 };
 
