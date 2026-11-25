@@ -117,7 +117,7 @@ An empty barrack summons the faction's default unit. Factions are thin for now: 
 
 ### Sciences
 
-A science is a token an army holds because it owns a piece that grants it. The castles grant one: the Elf castle the Elf science, the Dwarf Mountain the Dwarf science (a castle can grant several later). The Witch House grants the Witchcraft science while it stands on the grid; in the reserve or sold, it grants nothing. A piece behind a science is not offered in the shop, nor by the refresh bell, until the army holds it. The Forest Cabin needs the Elf science; the Dwarf and Witchcraft sciences gate nothing yet. Sciences are derived from the owned pieces, never stored. The shop shows them as seals on a ribbon right of the reserve. Hovering a seal opens the science's scroll over the left of the shop, and clicking it keeps the scroll open until the next click elsewhere: it tells what grants the science and lays out every piece it unlocks, each hoverable for its description and its pattern and target cells. A piece that grants a science shows its seal at the bottom right of its descriptor.
+A science is a token an army holds because it owns a piece that grants it. The castles grant one: the Elf castle the Elf science, the Dwarf Mountain the Dwarf science (a castle can grant several later). The Witch House grants the Witchcraft science while it stands on the grid; in the reserve or sold, it grants nothing. A piece behind a science is not offered in the shop, nor by the refresh bell, until the army holds it. The Forest Cabin needs the Elf science; the Stonemason needs the Dwarf science and the Cauldron the Witchcraft one. Sciences are derived from the owned pieces, never stored. The shop shows them as seals on a ribbon right of the reserve. Hovering a seal opens the science's scroll over the left of the shop, and clicking it keeps the scroll open until the next click elsewhere: it tells what grants the science and lays out every piece it unlocks, each hoverable for its description and its pattern and target cells. A piece that grants a science shows its seal at the bottom right of its descriptor.
 
 ## The pieces
 
@@ -179,6 +179,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Gold Mine | Common | 15 | Shop entered: +5 gold. Start of battle: +1 vitality army buff stack (💖) if a Mountain (a Rock or another Gold Mine) is on its star. Each mine stacks. | right |
 | Red Obelisk | Legendary | 10 | Every 5 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
 | Stonemason | Uncommon | 15 | Needs Dwarf science. Totem + Mountain, 1 wide and 2 tall. Every 5 s: gives a stone shield to 2 random allied units that have none, +1 unit per Mountain (Rock, Gold Mine, Go-Goat, another Stonemason) on its stars (up to 6). No food cost. Poison ignores shields. Placeholder sprite. | left and right of both cells (4 stars) |
+| Cauldron | Epic | 30 | Needs Witchcraft science. One cell, tagged Totem and Evil. Start of battle: the army's poison effects (the Witch House's puddles) deal +20% damage, each Cauldron adding its own 20%. Placeholder sprite. | none |
 
 ### Path tiles and traps
 

@@ -19,6 +19,7 @@ export type SerializedTotemType =
 	| "bakery"
 	| "bosquet"
 	| "brewery"
+	| "cauldron"
 	| "corn-field"
 	| "crops-field"
 	| "gobelin-portal"
