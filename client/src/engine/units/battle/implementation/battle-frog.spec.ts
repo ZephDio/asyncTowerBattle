@@ -9,6 +9,8 @@ import { Frog } from "../../recruit/implementation/frog";
 import { Poisoned } from "../../../area-effect/implementation/poison-ground";
 import { RetailFiller } from "../../../shop/retail/retail-filler";
 import { FrogBlueprint } from "../../blueprint/implementation/frog-blueprint";
+import { HOP_SPEED } from "./battle-frog";
+import { movementSpeedToDistancePerTick } from "../../../../shared/seconds";
 import type { BattleArmyHooks } from "../../../army/battle/battle-army";
 import type { BattlePath } from "../../../path/battle/battle-path";
 import type { AnyBattleUnit } from "../battle-unit";
@@ -32,6 +34,7 @@ const setup = (enemies: Enemy[], random = 0) => {
 		getEnemyUnits: () => enemies as unknown as AnyBattleUnit[],
 		removeUnit: (unit: unknown) => removed.push(unit),
 		notifyEnemyCastleHit: () => {},
+		alliedFoodHooks: { consumeFood: () => true },
 		random: () => random,
 	} as unknown as BattleArmyHooks;
 	const castleHits: number[] = [];
@@ -87,5 +90,27 @@ describe("Frog", () => {
 		expect(removed).toEqual([frog]);
 		expect(buffs.unitArmyBuff.getBuff("vitality")).toBe(0);
 		expect(enemy.stats.conditions.has("poisoned")).toBe(false);
+	});
+
+	it("hops: stands still between hops, and its speed averages 1 over a hop and its rest", () => {
+		expect(HOP_SPEED.reduce((sum, value) => sum + value, 0) / HOP_SPEED.length).toBeCloseTo(1);
+		expect(Math.max(...HOP_SPEED)).toBeGreaterThan(2);
+		expect(HOP_SPEED.filter((value) => value === 0)).toHaveLength(HOP_SPEED.length / 2);
+	});
+
+	it("covers as much ground as its movement speed says, but in hops", () => {
+		const { frog } = setup([]);
+		frog.pathFinder.destinations = [new GridPosition({ x: 1000, y: 0 })];
+		const cycle = HOP_SPEED.length;
+		const walked: number[] = [];
+		for (let tick = 0; tick < 3 * cycle; tick++) {
+			const before = frog.position.x;
+			frog.tick();
+			walked.push(frog.position.x - before);
+		}
+		const distancePerTick = movementSpeedToDistancePerTick(frog.stats.movementSpeed);
+		const total = walked.reduce((sum, step) => sum + step, 0);
+		expect(total).toBeCloseTo(3 * cycle * distancePerTick, 3);
+		expect(walked.filter((step) => step === 0).length).toBeGreaterThanOrEqual(3 * (cycle / 2) - 3);
 	});
 });

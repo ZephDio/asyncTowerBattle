@@ -76,11 +76,17 @@ export const TBattleUnit = Subtrait(
 				this.position.y = newPosition.y;
 			}
 
+			// Scales the movement speed of this tick. A unit with its own gait (the Frog's hops) overrides it; the
+			// scale must average 1 over the gait, so the movement speed stat stays the unit's average speed.
+			movementMultiplier(): number {
+				return 1;
+			}
+
 			followPath(): void {
 				if (this.canMove() && !this.pathFinder.isArrived) {
 					const newPosition = this.pathFinder.getNextPosition(
 						this.position,
-						movementSpeedToDistancePerTick(this.stats.movementSpeed),
+						movementSpeedToDistancePerTick(this.stats.movementSpeed) * this.movementMultiplier(),
 					);
 					this.move(newPosition);
 				}

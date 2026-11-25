@@ -9,6 +9,15 @@ import { UnitResources } from "../../../../renderer/resources/unit.resources";
 import { Poisoned, poisonDamagePerSecond } from "../../../area-effect/implementation/poison-ground";
 import { secondsToFrame } from "../../../../shared/seconds";
 
+const HOP_TICKS = secondsToFrame(0.5);
+const REST_TICKS = secondsToFrame(0.5);
+
+// The speed of each tick of a hop: a half sine, from rest up to a peak and back, scaled so that a hop followed by its
+// rest averages 1, which keeps the unit's movement speed stat its average speed.
+const HOP_SHAPE = Array.from({ length: HOP_TICKS }, (_, tick) => Math.sin((Math.PI * (tick + 0.5)) / HOP_TICKS));
+const HOP_SCALE = (HOP_TICKS + REST_TICKS) / HOP_SHAPE.reduce((sum, value) => sum + value, 0);
+export const HOP_SPEED = [...HOP_SHAPE.map((value) => value * HOP_SCALE), ...Array<number>(REST_TICKS).fill(0)];
+
 // On death, the army gains a vitality stack and a random enemy unit is poisoned for a second.
 export class BattleFrog extends Derive(TBattleUnit) {
 	override idleSheet = UnitResources.frogSheet;
@@ -40,6 +49,11 @@ export class BattleFrog extends Derive(TBattleUnit) {
 			rarityHolder: recruit,
 		});
 		this.pathFinder = new PathFinder(enemyPath.getNodes());
+	}
+
+	// Hops instead of walking: it stands still between two hops, and moves fast in the middle of each one.
+	override movementMultiplier() {
+		return HOP_SPEED[this.clock % HOP_SPEED.length] ?? 1;
 	}
 
 	private croak() {
