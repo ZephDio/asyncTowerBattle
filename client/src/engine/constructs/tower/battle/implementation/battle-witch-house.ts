@@ -49,7 +49,7 @@ export class BattleWitchHouse extends Derive(BattleTower) {
 				for (const neighbor of neighbors) {
 					if (neighbor instanceof BasicBattlePathTile) {
 						const position = this.hooks.gridHooks.getRealPosition(neighbor.cell);
-						const areaEffects = this.recruit.getAreaEffect(this.hooks, position, this.stats.projectileDamage);
+						const areaEffects = this.recruit.getAreaEffect(this.hooks, position);
 						this.hooks.addAreaEffect(areaEffects, this);
 					}
 				}

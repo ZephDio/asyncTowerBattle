@@ -4,9 +4,11 @@ import { ArmyFactory } from "../../army/army-fixtures";
 import { Faction } from "../../menu/main-menu";
 import { CastleFactory } from "../../castle/recruit/castle-recruit-fixtures";
 import { ForestCabinBlueprint } from "../../constructs/tower/blueprint/implementation/forest-cabin-blueprint";
+import { CauldronBlueprint } from "../../constructs/totem/blueprint/implementation/cauldron-blueprint";
 import { StonemasonBlueprint } from "../../constructs/totem/blueprint/implementation/stonemason-blueprint";
 import { Science } from "../../../shared/traits/engine/science";
 import { Cell } from "../../../shared/position";
+import { WitchHouse } from "../../constructs/tower/recruit/implementation/witch-house";
 import { RetailFiller } from "./retail-filler";
 
 const offeredCabin = (sciences: ReadonlySet<Science>) =>
@@ -31,6 +33,16 @@ describe("sciences", () => {
 		expect(offered(new Set([Science.Dwarf]))).toBe(true);
 	});
 
+	it("keeps the Cauldron out of the shop until the army holds the Witchcraft science", () => {
+		const offered = (sciences: ReadonlySet<Science>) =>
+			new RetailFiller(1, Math.random, sciences)
+				.candidates()
+				.some(({ blueprint }) => blueprint instanceof CauldronBlueprint);
+		expect(offered(new Set())).toBe(false);
+		expect(offered(new Set([Science.Dwarf]))).toBe(false);
+		expect(offered(new Set([Science.Witchcraft]))).toBe(true);
+	});
+
 	it("never offers a gated piece without its science, whatever the roll", () => {
 		const slots = Array.from({ length: 8 }, (_, index) => new Cell({ x: index, y: 0 }));
 		for (let round = 1; round <= 16; round++) {
@@ -47,5 +59,21 @@ describe("sciences", () => {
 	it("is derived from the army's castle", () => {
 		expect([...ArmyFactory.default(Faction.Elf).sciences]).toEqual([Science.Elf]);
 		expect([...ArmyFactory.default(Faction.Dwarf).sciences]).toEqual([Science.Dwarf]);
+	});
+
+	it("is granted by the Witch House while it stands on the grid, not in the reserve", () => {
+		expect([...new WitchHouse(new Cell({ x: 0, y: 0 })).grantedSciences]).toEqual([Science.Witchcraft]);
+
+		const army = ArmyFactory.default(Faction.Elf);
+		const house = new WitchHouse(new Cell({ x: 3, y: 2 }));
+		army.inventory.add(house);
+		expect(army.sciences.has(Science.Witchcraft)).toBe(false);
+
+		army.inventory.deleteElement(house);
+		army.grid.setElement(house);
+		expect([...army.sciences].sort()).toEqual([Science.Elf, Science.Witchcraft]);
+
+		army.grid.deleteElement(house);
+		expect([...army.sciences]).toEqual([Science.Elf]);
 	});
 });

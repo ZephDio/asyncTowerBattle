@@ -12,6 +12,10 @@ import { STANDARD_CELL_SIZE } from "../../grid/tgrid";
 import { DrawPriority } from "../../../shared/traits/render/image-drawable";
 import { Status } from "../../../shared/traits/engine/status";
 import { Stats } from "../../stats/stats";
+import { frameToSeconds } from "../../../shared/seconds";
+
+// The damage a poisoned enemy takes each second, before the army's modifiers (the Cauldron).
+export const POISON_DAMAGE_PER_SECOND = 6;
 
 export class PoisonGround extends Derive(
 	TDrawable,
@@ -29,7 +33,6 @@ export class PoisonGround extends Derive(
 	constructor(
 		public maxDuration: number,
 		public position: GridPosition,
-		public damage: number,
 		public hooks: BattleArmyHooks,
 	) {
 		super({});
@@ -42,9 +45,13 @@ export class PoisonGround extends Derive(
 		}
 		const enemies = this.hooks.searchEnemyInArea(this.position, this.hitbox);
 		for (const enemy of enemies) {
-			enemy.addCondition(new Poisoned(this.damage));
+			enemy.addCondition(new Poisoned(this.damagePerSecond));
 		}
 	}
+
+	// Read from the army each time, so a modifier gained or lost during the battle applies at once.
+	damagePerSecond = () =>
+		POISON_DAMAGE_PER_SECOND * (1 + this.hooks.alliedArmyBuffHooks.getPoisonDamagePercent() / 100);
 
 	get size() {
 		return {
@@ -71,7 +78,7 @@ export class Poisoned extends Derive(Status) {
 	duration = 70;
 	stats: Stats;
 
-	constructor(public damage: number) {
+	constructor(public damagePerSecond: () => number) {
 		super({});
 	}
 
@@ -80,7 +87,7 @@ export class Poisoned extends Derive(Status) {
 		if (this.clock >= this.duration) {
 			this.stats.removeCondition(this);
 		}
-		this.stats.takeDamage(this.damage / 64);
+		this.stats.takeDamage(this.damagePerSecond() * frameToSeconds(1));
 	}
 
 	stack(_status: Poisoned) {}

@@ -88,6 +88,15 @@ export class TotemResources {
 		shape: "rectangle",
 	};
 
+	static cauldron: ShapedResource = {
+		size: {
+			width: 4.9,
+			height: 3.8,
+		},
+		image: createImage("/resources/totem/cauldron.png"),
+		shape: "rectangle",
+	};
+
 	static stonemason: ShapedResource = {
 		size: {
 			width: 5.004,

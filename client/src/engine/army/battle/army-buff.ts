@@ -5,6 +5,8 @@ export type ArmyBuffHooks = {
 	addTowerBuff: ArmyBuff["addTowerBuff"];
 	getTowerBuff: TowerArmyBuff["getBuff"];
 	getTowerBuffs: ArmyBuff["getTowerArmyBuffs"];
+	addPoisonDamagePercent: ArmyBuff["addPoisonDamagePercent"];
+	getPoisonDamagePercent: () => number;
 };
 export type Buff = UnitBuff | TowerBuff;
 
@@ -23,6 +25,12 @@ export const ArmyBuffPercent: Record<Buff, number> = {
 export class ArmyBuff {
 	unitArmyBuff: UnitArmyBuff = new UnitArmyBuff();
 	towerArmyBuff: TowerArmyBuff = new TowerArmyBuff();
+	// Percent added to the damage of the army's poison effects (the Cauldron).
+	poisonDamagePercent = 0;
+
+	addPoisonDamagePercent(percent: number) {
+		this.poisonDamagePercent += percent;
+	}
 
 	addUnitBuff(buff: UnitBuff, amount = 1) {
 		this.unitArmyBuff.addBuff(buff, amount);
@@ -48,6 +56,8 @@ export class ArmyBuff {
 			addTowerBuff: this.addTowerBuff.bind(this),
 			getTowerBuff: (tb: TowerBuff) => this.towerArmyBuff.getBuff(tb),
 			getTowerBuffs: this.towerArmyBuff.getBuffs.bind(this),
+			addPoisonDamagePercent: this.addPoisonDamagePercent.bind(this),
+			getPoisonDamagePercent: () => this.poisonDamagePercent,
 		};
 	}
 }

@@ -287,7 +287,7 @@ export class TowerDescription extends Description {
 
 	constructor(name: string, description: string[], tower: ImplementsTrait<ReturnType<typeof TBaseStats>>) {
 		const extraLines: TowerLinesDescription = {
-			"projectile damage": `${tower.stats.projectileDamage}`,
+			"projectile damage": Number.isNaN(tower.stats.projectileDamage) ? "0" : `${tower.stats.projectileDamage}`,
 			"cast speed": `${castSpeedToSecond(tower.stats.castSpeed)}s`,
 			"food consumption": `${tower.stats.foodConsumptionOnCast}`,
 		};

@@ -1,10 +1,11 @@
-import { ImplementsTrait, Subtrait, Trait } from "@ddd-ts/traits";
+import { Subtrait, Trait } from "@ddd-ts/traits";
 
 // A science is a token an army holds because it owns pieces that grant it. A blueprint can require one: the shop
 // does not offer it until the army holds that science.
 export enum Science {
 	Elf = "elf",
 	Dwarf = "dwarf",
+	Witchcraft = "witchcraft",
 }
 
 // The sciences a piece grants to the army that owns it.
@@ -37,9 +38,9 @@ export function grantedSciencesOf(element: object): readonly Science[] {
 // Recruits copy the sciences of the blueprint they are built from.
 export const HTGrantsScience = Subtrait([TGrantsScience()], (base, Props) => {
 	abstract class IGrantsScienceHolder extends base {
-		constructor(props: { scienceHolder: ImplementsTrait<ReturnType<typeof TGrantsScience>> } & typeof Props) {
+		constructor(props: { scienceHolder: object } & typeof Props) {
 			super(props);
-			this.grantedSciences = props.scienceHolder.grantedSciences;
+			this.grantedSciences = grantedSciencesOf(props.scienceHolder);
 		}
 	}
 	return IGrantsScienceHolder;
