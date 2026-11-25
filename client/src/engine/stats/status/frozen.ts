@@ -7,8 +7,6 @@ export class Frozen extends Derive(Status) {
 	override clock: number = 0;
 	override stats: Stats;
 
-	hasTriggered = false;
-
 	constructor(
 		public duration: number,
 		public intensity: number,
@@ -18,20 +16,16 @@ export class Frozen extends Derive(Status) {
 
 	override stack(_status: Frozen): void {}
 
+	// The slow is full on the first tick and fades out linearly over the duration
 	tick() {
-		if (!this.hasTriggered) {
-			this.stats.basePercentStat.movementSpeed -= this.intensity;
-			this.hasTriggered = true;
-		}
 		this.clock++;
-		this.stats.basePercentStat.movementSpeed += this.intensity / this.duration;
+		this.stats.setModifier("movementSpeed", this.key, -this.intensity * (1 - this.clock / this.duration));
 		if (this.clock >= this.duration) {
 			this.stats.removeCondition(this);
 		}
 	}
 
 	override onRemove(): void {
-		const remainingTime = this.duration - this.clock;
-		this.stats.basePercentStat.movementSpeed += (this.intensity / this.duration) * remainingTime;
+		this.stats.clearModifier("movementSpeed", this.key);
 	}
 }

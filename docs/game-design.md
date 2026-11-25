@@ -103,7 +103,7 @@ Pieces carry tags that synergies and future pieces can target.
 
 - **Building**: Tower, Barrack, Totem, Tile, Trap, Castle.
 - **Alignment**: Food, Evil, Magic.
-- **Biome**: Forest, Mountain, Sky.
+- **Biome**: Forest, Mountain, Sky. Forest is on the Forest environment, Bosquet, Ent, White Stag and the Forest Cabin.
 - **Species** (units): Kinfolk, Animal, Monster.
 
 ## Factions
@@ -124,6 +124,7 @@ Prices are in gold. "Every Xs" is the cast time. Food is the food spent per cast
 | Tower | Rarity | Price | Damage | Every | Food | Effect |
 |---|---|---|---|---|---|---|
 | Miller's Bolt | Common | 10 | 10 | 1.5 s | 1.5 | Fast homing bullets. The first time an allied unit hits the enemy castle, gain 20 food. Tagged Food. |
+| Forest Cabin | Common | 10 | 8 | 1.15 s | 1 | One cell, tagged Forest. Targets the cells on its left and right and shoots homing bolts that slow the hit enemy by 50% for 2 s (refreshed by each hit; it multiplies with the Mud Trap's 30%, buffs being additive and slows multiplicative). Casts 10% faster for each Forest (tree, Bosquet, other Cabin) on its stars above and below, counted at battle start. Placeholder name: may become Ranger's Cabin. |
 | Blacksmith Tower | Common | 10 | 4 per spark | 1.5 s | 3 | Horizontal 2x1. Every cast (no target needed) shoots 7 sparks from its anvil in a wide cone (68 degrees above and 70 below the left direction) toward the 3 cells on the left of its left cell. The cone is cut in 7 equal slices and each spark takes a random direction in its own slice, and flies to the flat far edge of the zone's cells, so it crosses the whole path there, or to the top or bottom of the zone if its angle is steep (the direction is from the battle's seeded random). A spark stops on the first enemy it touches and hurts it. Kinfolk units also get max health from it: 0 at first, +1 every 4 casts (new Kinfolk units get the value reached so far). |
 | Zapping Tower | Uncommon | 10 | 15 | 3.5 s | 3 | Lightning that chains between nearby enemies. |
 | Frost Tower | Rare | 10 | 4 | 3 s | 3.5 | A frost boulder falls and explodes, slowing enemies. |

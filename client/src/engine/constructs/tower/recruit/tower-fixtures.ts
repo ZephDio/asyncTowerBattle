@@ -14,6 +14,8 @@ import { DrillTowerBlueprint } from "../blueprint/implementation/drill-tower-blu
 import { DrillTower } from "./implementation/drill-tower";
 import { LighthouseBlueprint } from "../blueprint/implementation/lighthouse-blueprint";
 import { Lighthouse } from "./implementation/lighthouse";
+import { ForestCabinBlueprint } from "../blueprint/implementation/forest-cabin-blueprint";
+import { ForestCabin } from "./implementation/forest-cabin";
 
 export class TowerBuilder {
 	cell: Cell;
@@ -41,6 +43,9 @@ export class TowerBuilder {
 	}
 	buildLighthouse(tower?: LighthouseBlueprint) {
 		return new Lighthouse(this.cell, tower);
+	}
+	buildForestCabin(tower?: ForestCabinBlueprint) {
+		return new ForestCabin(this.cell, tower);
 	}
 }
 
