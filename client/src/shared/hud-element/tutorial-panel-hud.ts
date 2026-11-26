@@ -26,7 +26,11 @@ const INLINE_ICONS: Record<string, HTMLImageElement> = {
 	"red-bow": HudElementResources.targetBowActive.image,
 };
 // A {tag-barrack} part is drawn as the badge of the tag, like the descriptors' ones.
-const INLINE_TAGS: Record<string, TagBadge> = { "tag-barrack": new TagBadge("Barrack") };
+const INLINE_TAGS: Record<string, TagBadge> = {
+	"tag-barrack": new TagBadge("Barrack"),
+	"tag-tower": new TagBadge("Tower"),
+	"tag-totem": new TagBadge("Totem"),
+};
 const INLINE_ICON = /\{([a-z-]+)\}/;
 // An inline tag badge is this many font sizes high.
 const INLINE_TAG_HEIGHT = 1.3;
@@ -94,6 +98,17 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		const u = this.unit;
 		y = this.paragraph(context, this.title, x, y, width, TITLE_SIZE, "title") + 0.5 * u;
 		y = this.paragraph(context, "Buy monuments and units in the shop to build your army.", x, y, width) + 0.4 * u;
+		y = this.paragraph(context, "A {tag-tower} will attack enemy units running down your path.", x, y, width) + 0.3 * u;
+		y = this.paragraph(context, "A {tag-totem} gives various effects.", x, y, width) + 0.3 * u;
+		y =
+			this.paragraph(
+				context,
+				"A {tag-barrack} spawns basic units during battle.\nDrag a unit on it, to change the produced type.",
+				x,
+				y,
+				width,
+			) +
+			0.4 * u;
 
 		// Click [START] when ready.
 		const start = HudElementResources.startBattle.image;
@@ -149,13 +164,6 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 			"Build strong synergies ▣ to overcome your opponents.",
 			x,
 			y + 0.3 * u,
-			width,
-		);
-		this.paragraph(
-			context,
-			"A {tag-barrack} spawns basic units during battle.\nDrag a unit on it, to change the produced type.",
-			x,
-			y + 1.6 * u,
 			width,
 		);
 	}
