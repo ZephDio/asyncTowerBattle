@@ -59,6 +59,7 @@ function drawRoll(
 // A parchment sheet hanging between two rolls of any height, one art pixel being `p` canvas pixels. The rolls carry the
 // title and the tags, so the caller picks their height. (left, top) is the top left corner of the top roll, and the
 // roll's shadow falls under the scroll's last row. The handles stick out of its sides, outside `columns`.
+// Returns false, drawing nothing, while its images are loading.
 export function drawDescriptorScroll(
 	context: CanvasRenderingContext2D,
 	parts: DescriptorScrollParts,
@@ -66,8 +67,8 @@ export function drawDescriptorScroll(
 	top: number,
 	shape: ScrollShape,
 	p: number,
-) {
-	if (!ready(parts)) return;
+): boolean {
+	if (!ready(parts)) return false;
 	const { columns, topRoll, bottomRoll } = shape;
 	const rows = scrollRows(shape);
 	const width = columns * p;
@@ -159,4 +160,5 @@ export function drawDescriptorScroll(
 		);
 	}
 	context.restore();
+	return true;
 }

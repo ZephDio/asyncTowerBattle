@@ -167,7 +167,7 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 
 	draw(context: CanvasRenderingContext2D, _position: ScreenPosition, scale: number) {
 		const unit = this.getCanvasSize(context, 1, 1, scale).width;
-		const p = Math.max(2, Math.round(unit * ART_PIXEL));
+		const p = Math.max(1, Math.round(unit * ART_PIXEL));
 		// The scroll's art pixels are whole canvas pixels, but the text keeps its size in screen units (as before the scroll).
 		const q = unit * ART_PIXEL;
 		// The handles stick out of the box's sides.
@@ -175,7 +175,8 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 		const shape = this.getShape(columns, Math.floor((SCROLL_HEIGHT * unit) / p));
 		const left = Math.round(SCROLL_RIGHT * unit - (HANDLE_WIDTH - 1) * p - columns * p);
 		const top = Math.round(SCROLL_TOP * unit);
-		drawDescriptorScroll(context, HudElementResources.descriptorScroll[rarityOf(this.item)], left, top, shape, p);
+		if (!drawDescriptorScroll(context, HudElementResources.descriptorScroll[rarityOf(this.item)], left, top, shape, p))
+			return;
 
 		context.save();
 		context.fillStyle = INK;
