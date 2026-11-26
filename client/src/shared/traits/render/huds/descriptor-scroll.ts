@@ -87,26 +87,15 @@ export function drawDescriptorScroll(
 	context.drawImage(parts.shadow, left + 2 * p, top + rows * p, width - 4 * p, SHADE * p);
 
 	const bottomY = top + (rows - bottomRoll) * p;
-	for (const [y, roll] of [
-		[top, topRoll],
-		[bottomY, bottomRoll],
-	] as const) {
-		const handleY = y + Math.floor((roll - HANDLE_HEIGHT) / 2) * p;
-		context.drawImage(
-			parts.handleLeft,
-			left - (HANDLE_WIDTH - HANDLE_OVERLAP) * p,
-			handleY,
-			HANDLE_WIDTH * p,
-			HANDLE_HEIGHT * p,
-		);
-		context.drawImage(
-			parts.handleRight,
-			left + width - HANDLE_OVERLAP * p,
-			handleY,
-			HANDLE_WIDTH * p,
-			HANDLE_HEIGHT * p,
-		);
-	}
+	const handleY = top + Math.floor((topRoll - HANDLE_HEIGHT) / 2) * p;
+	context.drawImage(
+		parts.handleLeft,
+		left - (HANDLE_WIDTH - HANDLE_OVERLAP) * p,
+		handleY,
+		HANDLE_WIDTH * p,
+		HANDLE_HEIGHT * p,
+	);
+	context.drawImage(parts.handleRight, left + width - HANDLE_OVERLAP * p, handleY, HANDLE_WIDTH * p, HANDLE_HEIGHT * p);
 	for (const [y, roll] of [
 		[top, topRoll],
 		[bottomY, bottomRoll],
