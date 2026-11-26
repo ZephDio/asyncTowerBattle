@@ -40,8 +40,8 @@ export function drawWoodPanel(
 	context.drawImage(parts.topLeft, x - edge, y - edge, edge, edge);
 	context.drawImage(parts.top, x, y - edge, w, edge);
 	context.drawImage(parts.topRight, x + w, y - edge, edge, edge);
-	context.drawImage(parts.left, x - edge, y - edge, edge, h + edge);
-	context.drawImage(parts.right, x + w, y - edge, edge, h + edge);
+	context.drawImage(parts.left, x - edge, y, edge, h);
+	context.drawImage(parts.right, x + w, y, edge, h);
 	context.drawImage(parts.bottomLeft, x - edge, y + h, edge, edge);
 	context.drawImage(parts.bottom, x, y + h, w, edge);
 	context.drawImage(parts.bottomRight, x + w, y + h, edge, edge);
