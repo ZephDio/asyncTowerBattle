@@ -31,8 +31,9 @@ function quarterCase(h: boolean, v: boolean, d: boolean) {
 const SPREAD = 0.15;
 
 // A building site: its cells, as offsets in grid cells (y up), the canvas point where the middle of their bounding box
-// goes, and the price sign planted on it, which the other sites keep clear of.
-export type Plot = { cells: Cell[]; center: { x: number; y: number }; sign?: Box };
+// goes, the price sign planted on it, which the other sites keep clear of, and its scale: a shrunk offer's site is
+// drawn smaller with it, rope and stakes included.
+export type Plot = { cells: Cell[]; center: { x: number; y: number }; sign?: Box; scale?: number };
 
 export type Box = { left: number; top: number; right: number; bottom: number };
 
@@ -67,7 +68,8 @@ function room(box: Box, bounds: Box) {
 	);
 }
 
-// Building sites of bare earth roped off by stakes, at `tileSize` canvas pixels per cell, on the ground within `bounds`.
+// Building sites of bare earth roped off by stakes, at `tileSize` canvas pixels per cell (times each plot's scale), on
+// the ground within `bounds`.
 export function drawConstructionSites(
 	context: CanvasRenderingContext2D,
 	plots: Plot[],
@@ -76,21 +78,22 @@ export function drawConstructionSites(
 ): void {
 	const { quarters, stake } = HudElementResources.constructionSite;
 	if (![quarters, stake].every((image) => image.complete && image.naturalWidth > 0)) return;
-	const p = tileSize / CELL;
-	const boxes = plots.map((plot) => boxOf(plot, tileSize));
-	const stakes: { x: number; y: number }[] = [];
+	const boxes = plots.map((plot) => boxOf(plot, tileSize * (plot.scale ?? 1)));
+	const stakes: { x: number; y: number; p: number }[] = [];
 
 	context.save();
 	context.globalAlpha = 1;
 	context.imageSmoothingEnabled = false;
 	plots.forEach((plot, index) => {
 		const { minX, maxY, columns, rows, box } = boxes[index]!;
+		const cellSize = tileSize * (plot.scale ?? 1);
+		const p = cellSize / CELL;
 		const others = boxes.filter((_, other) => other !== index).map((other) => gap(box, other.box) / 2);
 		const signs = plots.flatMap((other, i) => (i !== index && other.sign ? [gap(box, other.sign)] : []));
-		const spread = Math.min(SPREAD * tileSize, room(box, bounds), ...others, ...signs);
+		const spread = Math.min(SPREAD * cellSize, room(box, bounds), ...others, ...signs);
 		// The plot's art is stretched from its middle to spread past its cells.
-		const scaleX = (columns * tileSize + 2 * spread) / (columns * tileSize);
-		const scaleY = (rows * tileSize + 2 * spread) / (rows * tileSize);
+		const scaleX = (columns * cellSize + 2 * spread) / (columns * cellSize);
+		const scaleY = (rows * cellSize + 2 * spread) / (rows * cellSize);
 		const toCanvas = (x: number, y: number) => ({
 			x: plot.center.x + (x - plot.center.x) * scaleX,
 			y: plot.center.y + (y - plot.center.y) * scaleY,
@@ -99,13 +102,13 @@ export function drawConstructionSites(
 		const has = (cell: Cell, [dx, dy]: readonly number[]) => own.has(key(cell.x + dx!, cell.y + dy!));
 
 		for (const cell of plot.cells) {
-			const left = box.left + (cell.x - minX) * tileSize;
-			const top = box.top + (maxY - cell.y) * tileSize;
+			const left = box.left + (cell.x - minX) * cellSize;
+			const top = box.top + (maxY - cell.y) * cellSize;
 			CORNERS.forEach((corner, row) => {
 				const column = quarterCase(has(cell, corner.h), has(cell, corner.v), has(cell, corner.d));
-				const half = tileSize / 2;
+				const half = cellSize / 2;
 				const from = toCanvas(left + (corner.right ? half : 0), top + (corner.bottom ? half : 0));
-				const to = toCanvas(left + (corner.right ? tileSize : half), top + (corner.bottom ? tileSize : half));
+				const to = toCanvas(left + (corner.right ? cellSize : half), top + (corner.bottom ? cellSize : half));
 				const x0 = Math.round(from.x);
 				const y0 = Math.round(from.y);
 				const width = Math.round(to.x) - x0;
@@ -115,19 +118,19 @@ export function drawConstructionSites(
 				// two of the plot's cells (counted by one of the two cells only).
 				const inwardX = (corner.right ? -1 : 1) * ROPE * p * scaleX;
 				const inwardY = (corner.bottom ? -1 : 1) * ROPE * p * scaleY;
-				const vertex = toCanvas(left + (corner.right ? tileSize : 0), top + (corner.bottom ? tileSize : 0));
-				if (column === 0 || column === 3) stakes.push({ x: vertex.x + inwardX, y: vertex.y + inwardY });
-				if (column === 1 && corner.right) stakes.push({ x: vertex.x, y: vertex.y + inwardY });
-				if (column === 2 && corner.bottom) stakes.push({ x: vertex.x + inwardX, y: vertex.y });
+				const vertex = toCanvas(left + (corner.right ? cellSize : 0), top + (corner.bottom ? cellSize : 0));
+				if (column === 0 || column === 3) stakes.push({ x: vertex.x + inwardX, y: vertex.y + inwardY, p });
+				if (column === 1 && corner.right) stakes.push({ x: vertex.x, y: vertex.y + inwardY, p });
+				if (column === 2 && corner.bottom) stakes.push({ x: vertex.x + inwardX, y: vertex.y, p });
 			});
 		}
 	});
 	stakes.sort((a, b) => a.y - b.y);
-	for (const foot of stakes) {
+	for (const { x, y, p } of stakes) {
 		context.drawImage(
 			stake,
-			Math.round(foot.x - STAKE_FOOT.x * p),
-			Math.round(foot.y - STAKE_FOOT.y * p),
+			Math.round(x - STAKE_FOOT.x * p),
+			Math.round(y - STAKE_FOOT.y * p),
 			Math.round(stake.width * p),
 			Math.round(stake.height * p),
 		);

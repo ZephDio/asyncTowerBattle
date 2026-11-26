@@ -14,6 +14,7 @@ import { implementsTrait } from "@ddd-ts/traits";
 import { HTTag } from "../../../shared/traits/engine/tags/tagged";
 import { HTGrantsScience } from "../../../shared/traits/engine/science";
 import { HTRarity } from "../../../shared/traits/engine/rarity";
+import { TSizable } from "../../../shared/traits/engine/core/sizable";
 
 export type AnyBuyable = AnyRecruit;
 
@@ -30,6 +31,8 @@ export class Buyable extends Derive(
 	HTImageDrawable,
 	GridElement,
 	TImageVariant,
+	// Shrinks an offer too big for its slot (RetailGrid.setElement); it is drawn at its full size while held.
+	TSizable,
 ) {
 	drawPriority = DrawPriority.NormalGridElement;
 	constructor(

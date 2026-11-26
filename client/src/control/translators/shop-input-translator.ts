@@ -337,7 +337,7 @@ export class ShopInputToIntentTranslator {
 		const cell = grid.gridPositionToCell(gridPosition);
 		if (!cell) return;
 		return {
-			element: grid.getElement(cell),
+			element: (grid instanceof RetailGrid && grid.offerAt(gridPosition)) || grid.getElement(cell),
 			grid,
 			cell,
 		};
