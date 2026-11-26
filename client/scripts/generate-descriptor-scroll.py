@@ -12,6 +12,7 @@ bottom one, so a roll can be any height from ROLL_MIN rows. Outputs, in public/r
   rolls at their middle and outside the scroll's columns.
 - deco-left.png, deco-right.png (from uncommon on): the decoration of the sheet's margins, DECO_HEIGHT rows tall, repeated
   down the sheet.
+- gem.png (epic and above): a gem set on the middle of each roll end, drawn over the caps.
 - ornament-left.png, ornament-right.png (epic and above): the gilded tendrils sticking out of the footer's ends.
 - edge-left.png, edge-right.png: the ink border of the sheet and its shaded side, 1 row tall, repeated down the sheet.
 - center.png: the straw of the sheet with its fibers, a tile that repeats both ways.
@@ -157,20 +158,35 @@ def knob(side, palette):
     rect(2, 2, w - 4, h - 4, STRAW_SHADE)
     rect(2, 2, w - 5, h - 5, CREAM)
     rect(4, 4, w - 7, h - 7, STRAW)
-    if palette.get("gem"):
-        # a gold framed gem on the cap, whose middle row is the one the game repeats for a taller roll
-        frame, core, light = palette["gem"]
-        for y, (x, width) in zip(range(3, 9), ((3, 1), (2, 3), (1, 5), (1, 5), (2, 3), (3, 1))):
-            rect(x + 1, y, width, 1, frame)
-        rect(4, 4, 1, 1, core)
-        rect(3, 5, 3, 2, core)
-        rect(4, 7, 1, 1, core)
-        rect(4, 5, 1, 1, light)
-    else:
+    if not palette.get("gem"):
         rect(4, 4, 2, 2, palette["dot"])
     if side == "right":
         pixels = [row[::-1] for row in pixels]
     return pixels
+
+
+def gem():
+    """A faceted amethyst in a gold setting, GEM_WIDTH x GEM_HEIGHT, set on the middle of each roll end."""
+    rows = (
+        ".GGGG.",
+        "GWLMMG",
+        "GLMMDG",
+        "GLMDDG",
+        "GMMDDG",
+        "GMDDDG",
+        ".GDDG.",
+        "..KK..",
+    )
+    colors = {
+        "G": GOLD,
+        "K": GOLD_DARK,
+        "W": (255, 238, 255, 255),
+        "L": PURPLE_LIGHT,
+        "M": PURPLE,
+        "D": PURPLE_DARK,
+        ".": CLEAR,
+    }
+    return [[colors[c] for c in row] for row in rows]
 
 
 def ornament(side):
@@ -315,6 +331,8 @@ def main():
             "shade": new(1, SHADE, STRAW_SHADE),
             "shadow": new(1, SHADE, SHADOW),
         }
+        if palette.get("gem"):
+            pieces["gem"] = gem()
         if palette.get("ornaments"):
             pieces["ornament-left"] = ornament("left")
             pieces["ornament-right"] = ornament("right")

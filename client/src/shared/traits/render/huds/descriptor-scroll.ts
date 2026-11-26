@@ -14,6 +14,8 @@ export const HANDLE_HEIGHT = 8;
 // How far a handle goes under its roll's end.
 const HANDLE_OVERLAP = 1;
 const EDGE = 7;
+// A gem's distance from its roll's end: inside the cap's ink.
+const GEM_INSET = 2;
 const ORNAMENT_WIDTH = 14;
 const ORNAMENT_HEIGHT = 12;
 const DECO_WIDTH = 6;
@@ -135,6 +137,13 @@ export function drawDescriptorScroll(
 		drawRoll(context, parts.rollLeft, left, y, ROLL_END * p, roll, p);
 		drawRoll(context, parts.roll, left + ROLL_END * p, y, width - 2 * ROLL_END * p, roll, p);
 		drawRoll(context, parts.rollRight, left + width - ROLL_END * p, y, ROLL_END * p, roll, p);
+		if (parts.gem) {
+			const gemY = y + Math.floor((roll - parts.gem.naturalHeight) / 2) * p;
+			const gemW = parts.gem.naturalWidth * p;
+			const gemH = parts.gem.naturalHeight * p;
+			context.drawImage(parts.gem, left + GEM_INSET * p, gemY, gemW, gemH);
+			context.drawImage(parts.gem, left + width - (GEM_INSET + parts.gem.naturalWidth) * p, gemY, gemW, gemH);
+		}
 	}
 	context.restore();
 }

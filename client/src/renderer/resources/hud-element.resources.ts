@@ -21,6 +21,8 @@ export type DescriptorScrollParts = Record<
 	// The ornaments sticking out of the footer's ends, from the epic scroll on.
 	ornamentLeft?: HTMLImageElement;
 	ornamentRight?: HTMLImageElement;
+	// A gem set on the roll ends, from the epic scroll on.
+	gem?: HTMLImageElement;
 };
 
 function descriptorScrollParts(rarity: string, decorated = false, ornamented = false): DescriptorScrollParts {
@@ -37,7 +39,9 @@ function descriptorScrollParts(rarity: string, decorated = false, ornamented = f
 		shade: part("shade"),
 		shadow: part("shadow"),
 		...(decorated ? { decoLeft: part("deco-left"), decoRight: part("deco-right") } : {}),
-		...(ornamented ? { ornamentLeft: part("ornament-left"), ornamentRight: part("ornament-right") } : {}),
+		...(ornamented
+			? { ornamentLeft: part("ornament-left"), ornamentRight: part("ornament-right"), gem: part("gem") }
+			: {}),
 	};
 }
 
