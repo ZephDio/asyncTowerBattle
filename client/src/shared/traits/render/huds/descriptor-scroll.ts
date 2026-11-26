@@ -15,7 +15,6 @@ export const HANDLE_HEIGHT = 8;
 const HANDLE_OVERLAP = 1;
 const EDGE = 7;
 const DECO_WIDTH = 6;
-const DECO_HEIGHT = 24;
 // The decoration's distance from the scroll's sides.
 const DECO_INSET = 7;
 
@@ -93,8 +92,9 @@ export function drawDescriptorScroll(
 	if (parts.decoLeft && parts.decoRight) {
 		const decoTop = top + (topRoll + SHADE) * p;
 		const decoHeight = (rows - topRoll - bottomRoll - 2 * SHADE) * p;
-		for (let y = 0; y < decoHeight; y += DECO_HEIGHT * p) {
-			const h = Math.min(DECO_HEIGHT * p, decoHeight - y);
+		const decoTile = parts.decoLeft.naturalHeight;
+		for (let y = 0; y < decoHeight; y += decoTile * p) {
+			const h = Math.min(decoTile * p, decoHeight - y);
 			context.drawImage(parts.decoLeft, 0, 0, DECO_WIDTH, h / p, left + DECO_INSET * p, decoTop + y, DECO_WIDTH * p, h);
 			context.drawImage(
 				parts.decoRight,

@@ -58,11 +58,36 @@ LEAF = (70, 146, 62, 255)
 LEAF_LIGHT = (128, 190, 84, 255)
 
 DECO_WIDTH = 6
-DECO_HEIGHT = 24
+
+BLUE_DARK = (22, 48, 120, 255)
+BLUE = (48, 96, 190, 255)
+BLUE_LIGHT = (118, 168, 236, 255)
+BERRY = (170, 214, 255, 255)
+
+# The vines: the palette (stem, leaf edge, leaf, leaf highlight), the tile's height, its leaves as (row, side) with
+# side 1 for a leaf going up and -1 for one going down, its berries as rows and its diamonds as rows (centers).
+VINES = {
+    "vine": {
+        "colors": (LEAF_DARK, LEAF_DARK, LEAF, LEAF_LIGHT),
+        "height": 24,
+        "leaves": ((3, 1), (9, -1), (15, 1), (21, -1)),
+        "berries": (),
+        "diamonds": (),
+    },
+    "blue vine": {
+        "colors": (BLUE_DARK, BLUE_DARK, BLUE, BLUE_LIGHT),
+        "height": 48,
+        "leaves": ((3, 1), (9, -1), (15, 1), (15, -1), (21, -1), (35, 1), (41, -1), (41, 1)),
+        "berries": (46,),
+        "diamonds": (28,),
+        "berry": BERRY,
+    },
+}
 
 PALETTES = {
     "common": {"dot": INK, "deco": None},
     "uncommon": {"dot": LEAF_DARK, "deco": "vine"},
+    "rare": {"dot": BLUE_DARK, "deco": "blue vine"},
 }
 
 
@@ -128,28 +153,39 @@ def handle(side):
     return pixels
 
 
-def vine(side):
-    """A climbing vine for the margins of the sheet, DECO_HEIGHT rows tall and repeating: a straight stem on the strip's
-    inner edge, the side of the text, and a leaf every 6 rows pointing outwards, alternately up and down. The text
-    side of the stem stays free so the text can come closer."""
-    pixels = new(DECO_WIDTH, DECO_HEIGHT)
+def vine(side, kind):
+    """A climbing vine for the margins of the sheet, repeating: a straight stem on the strip's inner edge, the side of
+    the text, and leaves pointing outwards. The text side of the stem stays free so the text can come closer."""
+    config = VINES[kind]
+    stem, edge_color, leaf_color, light = config["colors"]
+    height = config["height"]
+    pixels = new(DECO_WIDTH, height)
     rect = painter(pixels)
-    for y in range(DECO_HEIGHT):
-        rect(0, y, 1, 1, LEAF_DARK)
+    for y in range(height):
+        rect(0, y, 1, 1, stem)
     leaf = (
-        (1, 0, LEAF_DARK),
-        (2, 0, LEAF),
-        (3, 0, LEAF),
-        (2, -1, LEAF_DARK),
-        (3, -1, LEAF_LIGHT),
-        (4, -1, LEAF),
-        (3, -2, LEAF_DARK),
-        (4, -2, LEAF_DARK),
-        (5, -2, LEAF_DARK),
+        (1, 0, edge_color),
+        (2, 0, leaf_color),
+        (3, 0, leaf_color),
+        (2, -1, edge_color),
+        (3, -1, light),
+        (4, -1, leaf_color),
+        (3, -2, edge_color),
+        (4, -2, edge_color),
+        (5, -2, edge_color),
     )
-    for y, flip in ((3, 1), (9, -1), (15, 1), (21, -1)):
+    for y, flip in config["leaves"]:
         for dx, dy, color in leaf:
-            rect(dx, (y + flip * dy) % DECO_HEIGHT, 1, 1, color)
+            rect(dx, (y + flip * dy) % height, 1, 1, color)
+    for y in config["berries"]:
+        rect(2, y - 3, 2, 2, edge_color)
+        rect(2, y - 3, 1, 1, config.get("berry", light))
+    for y in config["diamonds"]:
+        for dy, (x, w) in enumerate(((3, 1), (2, 3), (1, 5), (2, 3), (3, 1))):
+            rect(x, y - 2 + dy, w, 1, edge_color)
+        rect(3, y - 1, 1, 3, leaf_color)
+        rect(2, y, 3, 1, leaf_color)
+        rect(3, y, 1, 1, light)
     if side == "left":
         pixels = [row[::-1] for row in pixels]
     return pixels
@@ -194,8 +230,8 @@ def main():
             "shadow": new(1, SHADE, SHADOW),
         }
         if palette["deco"]:
-            pieces["deco-left"] = vine("left")
-            pieces["deco-right"] = vine("right")
+            pieces["deco-left"] = vine("left", palette["deco"])
+            pieces["deco-right"] = vine("right", palette["deco"])
         for name, pixels in pieces.items():
             write_png(out / f"{name}.png", pixels)
             print(f"wrote {(out / f'{name}.png').relative_to(OUT.parents[3])}")
