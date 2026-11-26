@@ -337,7 +337,8 @@ export class ShopInputToIntentTranslator {
 		const cell = grid.gridPositionToCell(gridPosition);
 		if (!cell) return;
 		return {
-			element: (grid instanceof RetailGrid && grid.offerAt(gridPosition)) || grid.getElement(cell),
+			// Shop offers by where they are drawn only, so every offer is grabbed from its image alone.
+			element: grid instanceof RetailGrid ? grid.offerAt(gridPosition) : grid.getElement(cell),
 			grid,
 			cell,
 		};

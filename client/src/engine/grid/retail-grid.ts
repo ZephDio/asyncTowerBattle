@@ -51,7 +51,7 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	constructor(
 		// The cells where the shop lays its offers: each one keeps its building site, even once sold.
-		public slots: Cell[] = [],
+		public slots: Cell[],
 		screenPosition = new ScreenPosition({ x: 38.75, y: 46.35 }),
 		width: number = 9,
 		height: number = 5,
@@ -74,14 +74,13 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		});
 	}
 
-	// An offer that fits takes the cells of its footprint, as on the army grid. A shrunk one only takes its slot's cell,
-	// since its footprint would reach over the other slots. Either is found first by its drawn box (offerAt).
+	// An offer takes only its slot's cell (a Buyable is one cell, whatever its piece's footprint) and is found by its
+	// drawn box (offerAt). It is shrunk if its footprint is too big for its slot, and its site recorded.
 	override setElement(buyable: Buyable) {
 		const cells = buyable.entity.gridShape.getVectorialCells(buyable.entity.orientation);
 		const scale = offerScale(cells);
 		buyable.sizeScale = scale;
-		if (scale < 1) this.tiles.set(ArmyGrid.posToString(buyable.cell), buyable);
-		else super.setElement(buyable);
+		super.setElement(buyable);
 		this.sites.set(ArmyGrid.posToString(buyable.cell), { cells, scale });
 	}
 

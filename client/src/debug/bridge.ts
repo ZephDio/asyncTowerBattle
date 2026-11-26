@@ -132,13 +132,11 @@ export class DebugBridge {
 		return regions;
 	}
 
-	// Page pixel to press to pick up an element: the centre of its first occupied cell, or for an offer shrunk to fit
-	// its slot, the centre of its drawn image.
+	// Page pixel to press to pick up an element: the centre of its first occupied cell (for a shop offer, its slot's
+	// cell, where its image is drawn).
 	pressPoint(gridName: GridName, id: string) {
 		const grid = this.grid(gridName);
-		const object = this.byId(id);
-		if (object instanceof Buyable && object.sizeScale < 1) return this.cellCenterPage(grid, object.cell);
-		const element = object as AnyGridElement;
+		const element = this.byId(id) as AnyGridElement;
 		const cells = element.gridShape.getOccupiedCellsFrom(element.cell, element.orientation);
 		const cell = cells[0];
 		if (!cell) throw new Error(`${id} has no cell`);
@@ -422,7 +420,10 @@ export class DebugBridge {
 			size: { width: columns * STANDARD_CELL_SIZE, height: rows * STANDARD_CELL_SIZE },
 		};
 		const old = retail.grid.tiles.get(ArmyGrid.posToString(anchor));
-		for (const [key, value] of [...retail.grid.tiles]) if (value === old) retail.grid.tiles.delete(key);
+		if (old) {
+			retail.reservations.release(old);
+			retail.removeItem(old);
+		}
 		const offer = new Buyable(recruit as never, new Cell(anchor), price);
 		retail.grid.setElement(offer);
 		return this.describe(offer);
