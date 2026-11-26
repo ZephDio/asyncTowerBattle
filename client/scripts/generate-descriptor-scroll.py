@@ -10,6 +10,8 @@ bottom one, so a roll can be any height from ROLL_MIN rows. Outputs, in public/r
   needs. `roll.png` is 1 pixel wide and repeats. The ends are ROLL_END wide.
 - handle-left.png, handle-right.png: the dark wood rods sticking out of the rolls' ends, HANDLE_WIDTH wide, drawn behind the
   rolls at their middle and outside the scroll's columns.
+- deco-left.png, deco-right.png (from uncommon on): the decoration of the sheet's margins, DECO_HEIGHT rows tall, repeated
+  down the sheet.
 - edge-left.png, edge-right.png: the ink border of the sheet and its shaded side, 1 row tall, repeated down the sheet.
 - center.png: the straw of the sheet with its fibers, a tile that repeats both ways.
 - shade.png: the two rows of shade under the top roll, 1 pixel wide, stretched across the sheet.
@@ -51,8 +53,16 @@ WOOD_LIGHT = (128, 84, 50, 255)
 BRASS = (222, 190, 120, 255)
 BRASS_DARK = (160, 122, 62, 255)
 
+LEAF_DARK = (36, 92, 48, 255)
+LEAF = (70, 146, 62, 255)
+LEAF_LIGHT = (128, 190, 84, 255)
+
+DECO_WIDTH = 11
+DECO_HEIGHT = 24
+
 PALETTES = {
-    "common": {},
+    "common": {"dot": INK, "deco": None},
+    "uncommon": {"dot": LEAF_DARK, "deco": "vine"},
 }
 
 
@@ -94,7 +104,7 @@ def knob(side, palette):
     rect(2, 2, w - 4, h - 4, STRAW_SHADE)
     rect(2, 2, w - 5, h - 5, CREAM)
     rect(4, 4, w - 7, h - 7, STRAW)
-    rect(4, 4, 2, 2, INK)
+    rect(4, 4, 2, 2, palette["dot"])
     if side == "right":
         pixels = [row[::-1] for row in pixels]
     return pixels
@@ -114,6 +124,39 @@ def handle(side):
     rect(w - 4, 1, 3, h - 2, BRASS_DARK)
     rect(w - 4, 1, 3, 3, BRASS)
     if side == "left":
+        pixels = [row[::-1] for row in pixels]
+    return pixels
+
+
+def vine(side):
+    """A climbing vine for the left margin of the sheet, DECO_HEIGHT rows tall and repeating: a wavy stem with a leaf
+    every 6 rows, alternating sides."""
+    pixels = new(DECO_WIDTH, DECO_HEIGHT)
+    rect = painter(pixels)
+    wave = [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0]
+    center = DECO_WIDTH // 2
+    for y in range(DECO_HEIGHT):
+        rect(center + wave[y], y, 1, 1, LEAF_DARK)
+    leaf = (
+        (1, 0, LEAF_DARK),
+        (2, 0, LEAF),
+        (3, 0, LEAF),
+        (2, -1, LEAF_DARK),
+        (3, -1, LEAF_LIGHT),
+        (4, -1, LEAF),
+        (4, -2, LEAF_DARK),
+        (3, -2, LEAF_DARK),
+        (5, -2, LEAF_DARK),
+    )
+    for y, direction in ((3, 1), (9, -1), (15, 1), (21, -1)):
+        x = center + wave[y]
+        for dx, dy, color in leaf:
+            rect(x + direction * dx, (y + dy) % DECO_HEIGHT, 1, 1, color)
+    for y, direction in ((9, 1), (21, 1), (3, -1), (15, -1)):
+        x = center + wave[y]
+        rect(x + direction * 1, y, 1, 1, LEAF_DARK)
+        rect(x + direction * 2, y - 1, 1, 1, LEAF)
+    if side == "right":
         pixels = [row[::-1] for row in pixels]
     return pixels
 
@@ -156,6 +199,9 @@ def main():
             "shade": new(1, SHADE, STRAW_SHADE),
             "shadow": new(1, SHADE, SHADOW),
         }
+        if palette["deco"]:
+            pieces["deco-left"] = vine("left")
+            pieces["deco-right"] = vine("right")
         for name, pixels in pieces.items():
             write_png(out / f"{name}.png", pixels)
             print(f"wrote {(out / f'{name}.png').relative_to(OUT.parents[3])}")

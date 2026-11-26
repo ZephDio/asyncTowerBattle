@@ -14,9 +14,13 @@ export type DescriptorScrollParts = Record<
 	| "shade"
 	| "shadow",
 	HTMLImageElement
->;
+> & {
+	// The decoration of the sheet's margins, from the uncommon scroll on.
+	decoLeft?: HTMLImageElement;
+	decoRight?: HTMLImageElement;
+};
 
-function descriptorScrollParts(rarity: string): DescriptorScrollParts {
+function descriptorScrollParts(rarity: string, decorated = false): DescriptorScrollParts {
 	const part = (name: string) => createImage(`/resources/hud/descriptor-scroll/${rarity}/${name}.png`);
 	return {
 		rollLeft: part("roll-left"),
@@ -29,6 +33,7 @@ function descriptorScrollParts(rarity: string): DescriptorScrollParts {
 		center: part("center"),
 		shade: part("shade"),
 		shadow: part("shadow"),
+		...(decorated ? { decoLeft: part("deco-left"), decoRight: part("deco-right") } : {}),
 	};
 }
 
@@ -105,16 +110,17 @@ export class HudElementResources {
 		bottomRight: createImage("/resources/hud/scroll/bottom-right.png"),
 	};
 
-	// The pieces of the descriptor's scroll, drawn by scripts/generate-descriptor-scroll.py. Only the common one is drawn
-	// so far: the other rarities use it until theirs are.
+	// The pieces of the descriptor's scroll, drawn by scripts/generate-descriptor-scroll.py. Only the common and uncommon
+	// ones are drawn so far: the other rarities use the uncommon one until theirs are.
 	static descriptorScroll: Record<Rarity, DescriptorScrollParts> = (() => {
 		const common = descriptorScrollParts("common");
+		const uncommon = descriptorScrollParts("uncommon", true);
 		return {
 			[Rarity.Common]: common,
-			[Rarity.Uncommon]: common,
-			[Rarity.Rare]: common,
-			[Rarity.Epic]: common,
-			[Rarity.Legendary]: common,
+			[Rarity.Uncommon]: uncommon,
+			[Rarity.Rare]: uncommon,
+			[Rarity.Epic]: uncommon,
+			[Rarity.Legendary]: uncommon,
 		};
 	})();
 

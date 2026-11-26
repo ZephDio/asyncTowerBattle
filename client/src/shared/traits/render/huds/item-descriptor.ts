@@ -89,7 +89,7 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 
 // The scroll is laid out in art pixels, drawn `p` canvas pixels each (see drawDescriptorScroll), about 0.16 screen units.
 // The text stays this far from the sheet's sides.
-const TEXT_LEFT = 18;
+const TEXT_LEFT = 20;
 const TITLE_SIZE = 15;
 // Screen units per art pixel of the text's layout.
 const ART_PIXEL = 0.16;
