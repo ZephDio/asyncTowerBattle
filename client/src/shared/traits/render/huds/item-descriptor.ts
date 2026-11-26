@@ -1,7 +1,17 @@
 import { Derive, ImplementsTrait, Subtrait, Trait, implementsTrait } from "@ddd-ts/traits";
 import { ScreenPosition } from "../../../position";
 import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
-import { BannerBackground } from "./banner-background";
+import { TRenderable } from "../renderable";
+import { TDrawable } from "../drawable";
+import {
+	ROLL_END,
+	ROLL_INK_BOTTOM,
+	ROLL_INK_TOP,
+	SHADE,
+	ScrollShape,
+	drawDescriptorScroll,
+	scrollRows,
+} from "./descriptor-scroll";
 import { Tag, Tagged } from "../../engine/tags/tagged";
 import { TBaseStats } from "../../../../engine/stats/base-stats";
 import { castSpeedToSecond, frameToSeconds } from "../../../seconds";
@@ -77,21 +87,34 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 	return IDescriptor;
 });
 
-// Where the stamps of the sciences the piece grants stand, from the scroll's center and in screen percent units: the
-// first one's center at the bottom of the scroll's body, the next ones side by side towards the center.
-const STAMP_ORIGIN = { x: 7.2, y: -10.5 };
-const STAMP_SIZE = 3;
-
-// The space before a new section of description lines, in lines.
+// The scroll is laid out in art pixels, drawn `p` canvas pixels each (see drawDescriptorScroll), about 0.16 screen units.
+const COLUMNS = 120;
+// The text stays this far from the sheet's sides.
+const TEXT_LEFT = 12;
+const TEXT_WIDTH = COLUMNS - 2 * TEXT_LEFT;
+const TITLE_ROLL = 22;
+const TITLE_SIZE = 14;
+const LINE_SIZE = 10;
+const LINE_HEIGHT = 13;
+// The room the last line's descenders need under the row it sits in.
+const LINE_DESCENT = 3;
 const SECTION_GAP = 0.5;
+const TAG_SIZE = 9;
+const TAG_ROW_HEIGHT = TAG_SIZE * 1.15;
+const TAG_ROLL_MIN = 16;
+const TAG_PADDING = 4;
+const MAX_TAGS = 4;
+const TAGS_PER_ROW = 2;
+const BODY_PADDING = 4;
+const BODY_MIN = 80;
+const STAMP_SIZE = 19;
+// The scroll hangs from this point, in screen percent units: where the top of the old banner was.
+const SCROLL_TOP = { x: 86, y: 89.5 };
 
-export class DescriptionHud extends Derive(BannerBackground) {
+const INK = "rgb(22,28,46)";
+
+export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 	drawPriority: 9;
-	titlePosition: ScreenPosition;
-	// The stat and description lines start below this point, under the scroll's top roll.
-	linesOrigin: ScreenPosition;
-	linesPosition: ScreenPosition[];
-	tagsPosition: ScreenPosition;
 	tags: Tag[];
 	tagBadges: TagBadge[];
 
@@ -100,13 +123,10 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		public position: ScreenPosition = PercentToReal({ x: 86, y: 73 }),
 	) {
 		super({});
-		this.bannerImage = HudElementResources.descriptorBanner[rarityOf(this.item)].image;
-		this.titlePosition = this.position.add(new ScreenPosition({ x: 0, y: 14.4 }));
-		this.linesOrigin = this.position.add(new ScreenPosition({ x: 0, y: 10.8 }));
-		this.linesPosition = this.getLinesPositions();
 		this.tags = implementsTrait(this.item, Tagged) ? this.item.tags : [];
-		this.tagBadges = sortTags(this.tags).map((tag) => new TagBadge(tag));
-		this.tagsPosition = this.position.add(new ScreenPosition({ x: 0, y: -14.5 }));
+		this.tagBadges = sortTags(this.tags)
+			.slice(0, MAX_TAGS)
+			.map((tag) => new TagBadge(tag));
 	}
 
 	get extraLines(): Record<string, string | LiveLine> {
@@ -120,116 +140,128 @@ export class DescriptionHud extends Derive(BannerBackground) {
 		return this.item.liveDescription();
 	}
 
-	getLinesPositions() {
-		const positions = [];
-		const { statColumns } = this.item.description;
+	// The baseline of each line, stats then description, in art pixels under the top of the body.
+	getLinesOffsets() {
+		const offsets: number[] = [];
+		const { statColumns, sectionStarts } = this.item.description;
 		const statCount = Object.keys(this.extraLines).length;
 		for (let index = 0; index < statCount; index++) {
-			const row = Math.floor(index / statColumns) + 1;
-			const x = -7 + (index % statColumns) * (14 / statColumns);
-			positions.push(this.linesOrigin.add(new ScreenPosition({ x, y: -2.1 * (row + 0.1) })));
+			offsets.push((Math.floor(index / statColumns) + 0.8) * LINE_HEIGHT);
 		}
-		let i = Math.ceil(statCount / statColumns);
-		const { sectionStarts } = this.item.description;
+		let row = Math.ceil(statCount / statColumns);
 		this.descriptionLines.forEach((_, index) => {
-			if (sectionStarts.includes(index)) i += SECTION_GAP;
-			i++;
-			positions.push(this.linesOrigin.add(new ScreenPosition({ x: -7, y: -2.1 * (i + 0.8) })));
+			if (sectionStarts.includes(index)) row += SECTION_GAP;
+			offsets.push((row + 0.8) * LINE_HEIGHT);
+			row++;
 		});
-		return positions;
+		return { offsets, rows: row };
 	}
 
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition, scale: number) {
-		this.linesPosition = this.getLinesPositions();
-		const bannerSize = this.getCanvasSize(context, 19.3, 33, scale);
-		const canvasPosition = this.getCanvasPosition(context, position);
-		this.drawBanner(context, bannerSize, canvasPosition);
-		// Title
-		const titlePosition = this.getCanvasPosition(context, this.titlePosition);
+	getShape(): ScrollShape & { lines: ReturnType<DescriptionHud["getLinesOffsets"]> } {
+		const lines = this.getLinesOffsets();
+		const tagRows = Math.ceil(this.tagBadges.length / TAGS_PER_ROW);
+		const tagRoll =
+			tagRows > 1
+				? Math.ceil(TAG_SIZE + (tagRows - 1) * TAG_ROW_HEIGHT) + ROLL_INK_TOP + ROLL_INK_BOTTOM + 2 * TAG_PADDING
+				: TAG_ROLL_MIN;
+		// The stamps of the sciences the piece grants take a row of their own under the lines.
+		const stamps = grantedSciencesOf(this.item).length > 0 ? STAMP_SIZE + BODY_PADDING : 0;
+		const body = Math.max(
+			BODY_MIN,
+			Math.ceil(lines.rows * LINE_HEIGHT) + stamps + 2 * BODY_PADDING + SHADE * 2 + LINE_DESCENT,
+		);
+		return { columns: COLUMNS, topRoll: TITLE_ROLL, bottomRoll: tagRoll, body, lines };
+	}
+
+	draw(context: CanvasRenderingContext2D, _position: ScreenPosition, scale: number) {
+		const unit = this.getCanvasSize(context, 1, 1, scale).width;
+		const p = Math.max(2, Math.round(unit * 0.16));
+		const shape = this.getShape();
+		const anchor = this.getCanvasPosition(context, PercentToReal(SCROLL_TOP));
+		const height = scrollRows(shape) * p;
+		const left = Math.round(Math.min(anchor.x - (COLUMNS * p) / 2, context.canvas.width - COLUMNS * p));
+		const top = Math.round(Math.min(anchor.y, context.canvas.height - height - SHADE * p));
+		drawDescriptorScroll(context, HudElementResources.descriptorScroll[rarityOf(this.item)], left, top, shape, p);
+
+		context.save();
+		context.fillStyle = INK;
+		// Title, in the top roll between its ink rows and its curls
 		const title = this.item.description.name;
-		// Long titles get a smaller font so they fit between the roll's curls instead of being squeezed.
-		const titleFontSize = this.getCanvasSize(context, 11.5, 2.4, scale);
-		context.font = `${titleFontSize.height}px title`;
-		const titleWidth = context.measureText(title).width;
-		const titleHeight = titleFontSize.height * Math.min(1, titleFontSize.width / titleWidth);
-		context.font = `${titleHeight}px title`;
+		const titleCenter = top + (ROLL_INK_TOP + (shape.topRoll - ROLL_INK_TOP - ROLL_INK_BOTTOM) / 2) * p;
+		const titleWidth = (COLUMNS - 2 * ROLL_END - 4) * p;
+		// Long titles get a smaller font so they fit between the curls instead of being squeezed.
+		context.font = `${TITLE_SIZE * p}px title`;
+		const fontSize = TITLE_SIZE * p * Math.min(1, titleWidth / context.measureText(title).width);
+		context.font = `${fontSize}px title`;
 		context.textAlign = "center";
 		context.textBaseline = "middle";
-		context.fillStyle = "#000000";
-		context.fillText(title, titlePosition.x, titlePosition.y);
+		context.fillText(title, left + (COLUMNS * p) / 2, titleCenter);
 		context.textBaseline = "alphabetic";
-		// Description lines
+		// Stats and description lines
 		const lines = [...Object.entries(this.extraLines)];
 		const description = this.descriptionLines;
-		const descriptionFontSize = this.getCanvasSize(context, 14, 1.6, scale);
-		const statFontSize = this.getCanvasSize(context, 14 / this.item.description.statColumns, 1.6, scale);
-		const { statLabels } = this.item.description;
-		context.font = `${descriptionFontSize.height}px text`;
+		const bodyTop = top + (shape.topRoll + SHADE + BODY_PADDING) * p;
+		const textLeft = left + TEXT_LEFT * p;
+		const textWidth = TEXT_WIDTH * p;
+		const { statColumns, statLabels } = this.item.description;
+		const statWidth = textWidth / statColumns;
+		context.font = `${LINE_SIZE * p}px text`;
 		context.textAlign = "left";
-		const linesPosition = lines.map((_, index) =>
-			this.getCanvasPosition(context, this.linesPosition[index] as ScreenPosition),
-		);
-		const descriptionPositions = description.map((_, index) =>
-			this.getCanvasPosition(context, this.linesPosition[index + lines.length] as ScreenPosition),
-		);
 		lines.forEach(([key, value], index) => {
-			const linePosition = linesPosition[index];
-			if (!linePosition) return;
+			const x = textLeft + (index % statColumns) * statWidth;
+			const y = bodyTop + (shape.lines.offsets[index] ?? 0) * p;
 			const label = `${statLabels[key] ?? key}: `;
 			if (typeof value === "string") {
-				context.fillText(`${label}${value}`, linePosition.x, linePosition.y, statFontSize.width);
+				context.fillText(`${label}${value}`, x, y, statWidth);
 				return;
 			}
-			const labelWidth = Math.min(context.measureText(label).width, statFontSize.width);
-			context.fillText(label, linePosition.x, linePosition.y, statFontSize.width);
+			const labelWidth = Math.min(context.measureText(label).width, statWidth);
+			context.fillText(label, x, y, statWidth);
 			context.fillStyle = TrendColors[value.trend];
-			context.fillText(
-				value.value,
-				linePosition.x + labelWidth,
-				linePosition.y,
-				Math.max(0, statFontSize.width - labelWidth),
-			);
-			context.fillStyle = "#000000";
+			context.fillText(value.value, x + labelWidth, y, Math.max(0, statWidth - labelWidth));
+			context.fillStyle = INK;
 		});
 		description.forEach((line, index) => {
-			const descriptionPosition = descriptionPositions[index];
-			if (!descriptionPosition) return;
+			const y = bodyTop + (shape.lines.offsets[index + lines.length] ?? 0) * p;
 			if (typeof line === "string") {
-				context.fillText(line, descriptionPosition.x, descriptionPosition.y, descriptionFontSize.width);
+				context.fillText(line, textLeft, y, textWidth);
 				return;
 			}
 			// Segments share the line's width, squeezed together when the line is too long.
 			const texts = line.map((segment) => (typeof segment === "string" ? segment : segment.value));
 			const widths = texts.map((text) => context.measureText(text).width);
 			const totalWidth = widths.reduce((sum, width) => sum + width, 0);
-			const squeeze = Math.min(1, descriptionFontSize.width / Math.max(totalWidth, 1));
-			let x = descriptionPosition.x;
+			const squeeze = Math.min(1, textWidth / Math.max(totalWidth, 1));
+			let x = textLeft;
 			line.forEach((segment, segmentIndex) => {
 				const width = (widths[segmentIndex] ?? 0) * squeeze;
-				context.fillStyle = typeof segment === "string" ? "#000000" : TrendColors[segment.trend];
-				context.fillText(texts[segmentIndex] ?? "", x, descriptionPosition.y, Math.max(width, 1));
+				context.fillStyle = typeof segment === "string" ? INK : TrendColors[segment.trend];
+				context.fillText(texts[segmentIndex] ?? "", x, y, Math.max(width, 1));
 				x += width;
 			});
-			context.fillStyle = "#000000";
+			context.fillStyle = INK;
 		});
-		// Tags
-		const tagsPosition = this.getCanvasPosition(context, this.tagsPosition);
-		const tagHeight = this.getCanvasSize(context, 0, 1.35, scale).height;
-		const tagsMaxWidth = this.getCanvasSize(context, 16, 0, scale).width;
-		drawTagBadgeRows(context, this.tagBadges, tagsPosition, tagHeight, tagsMaxWidth, 2);
-		// Sciences granted
-		const stampSize = this.getCanvasSize(context, STAMP_SIZE, STAMP_SIZE, scale);
+		// Tags, in the bottom roll
+		const rollTop = top + (rowsAbove(shape) + ROLL_INK_TOP) * p;
+		const rollInner = shape.bottomRoll - ROLL_INK_TOP - ROLL_INK_BOTTOM;
+		const tagsCenter = { x: left + (COLUMNS * p) / 2, y: rollTop + (rollInner / 2) * p };
+		drawTagBadgeRows(context, this.tagBadges, tagsCenter, TAG_SIZE * p, (COLUMNS - 2 * ROLL_END - 4) * p, TAGS_PER_ROW);
+		context.restore();
+		// Sciences granted: the first stamp at the bottom right of the sheet, the next ones towards the left
 		context.save();
 		context.imageSmoothingEnabled = false;
+		const stampsTop = top + (rowsAbove(shape) - STAMP_SIZE - BODY_PADDING) * p;
 		grantedSciencesOf(this.item).forEach((science, index) => {
-			const stampPosition = this.getCanvasPosition(
-				context,
-				this.position.add(new ScreenPosition({ x: STAMP_ORIGIN.x - index * STAMP_SIZE, y: STAMP_ORIGIN.y })),
-			);
-			this.drawImage(context, stampSize, stampPosition, IconResources.scienceStamps[science].image);
+			const x = left + (COLUMNS - TEXT_LEFT - (index + 1) * STAMP_SIZE) * p;
+			context.drawImage(IconResources.scienceStamps[science].image, x, stampsTop, STAMP_SIZE * p, STAMP_SIZE * p);
 		});
 		context.restore();
 	}
+}
+
+// The rows above the bottom roll.
+function rowsAbove(shape: ScrollShape) {
+	return shape.topRoll + shape.body;
 }
 
 export class Description {

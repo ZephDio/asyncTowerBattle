@@ -85,10 +85,8 @@ export function drawTagBadgeRows(
 ) {
 	const rowCount = Math.ceil(badges.length / perRow);
 	const rowSpacing = height * 1.15;
-	// Multiple rows sit slightly higher to stay inside the scroll's roll
-	const multiRowOffset = rowCount > 1 ? height * 0.3 : 0;
 	for (let row = 0; row < rowCount; row++) {
-		const y = center.y + (row - (rowCount - 1) / 2) * rowSpacing - multiRowOffset;
+		const y = center.y + (row - (rowCount - 1) / 2) * rowSpacing;
 		drawTagBadgeRow(context, badges.slice(row * perRow, (row + 1) * perRow), { x: center.x, y }, height, maxWidth);
 	}
 }

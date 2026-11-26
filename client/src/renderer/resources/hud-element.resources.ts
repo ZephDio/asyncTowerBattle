@@ -2,6 +2,25 @@ import { createImage } from "../../shared/image";
 import { IconResource } from "./icons.resources";
 import { Rarity } from "../../shared/traits/engine/rarity";
 
+export type DescriptorScrollParts = Record<
+	"rollLeft" | "roll" | "rollRight" | "edgeLeft" | "edgeRight" | "center" | "shade" | "shadow",
+	HTMLImageElement
+>;
+
+function descriptorScrollParts(rarity: string): DescriptorScrollParts {
+	const part = (name: string) => createImage(`/resources/hud/descriptor-scroll/${rarity}/${name}.png`);
+	return {
+		rollLeft: part("roll-left"),
+		roll: part("roll"),
+		rollRight: part("roll-right"),
+		edgeLeft: part("edge-left"),
+		edgeRight: part("edge-right"),
+		center: part("center"),
+		shade: part("shade"),
+		shadow: part("shadow"),
+	};
+}
+
 export class HudElementResources {
 	static startBattle: IconResource = {
 		image: createImage("/resources/button/start.png"),
@@ -74,6 +93,19 @@ export class HudElementResources {
 		bottom: createImage("/resources/hud/scroll/bottom.png"),
 		bottomRight: createImage("/resources/hud/scroll/bottom-right.png"),
 	};
+
+	// The pieces of the descriptor's scroll, drawn by scripts/generate-descriptor-scroll.py. Only the common one is drawn
+	// so far: the other rarities use it until theirs are.
+	static descriptorScroll: Record<Rarity, DescriptorScrollParts> = (() => {
+		const common = descriptorScrollParts("common");
+		return {
+			[Rarity.Common]: common,
+			[Rarity.Uncommon]: common,
+			[Rarity.Rare]: common,
+			[Rarity.Epic]: common,
+			[Rarity.Legendary]: common,
+		};
+	})();
 
 	static banner: IconResource = {
 		image: createImage("/resources/hud/banner.png"),
