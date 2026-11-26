@@ -47,3 +47,31 @@ export function drawWoodPanel(
 	context.drawImage(parts.bottomRight, x + w, y + h, edge, edge);
 	context.restore();
 }
+
+// The frame of a panel without its top and its planks: the sides and the bottom, for a grid that sits under a sign.
+// The sides start one frame above `top`, over the sign's bottom corners, so they run on from the sign's sides. Like
+// `drawWoodPanel`, it is drawn outside of the given area.
+export function drawWoodFrameBelow(
+	context: CanvasRenderingContext2D,
+	left: number,
+	top: number,
+	width: number,
+	height: number,
+	p: number,
+): void {
+	const parts = HudElementResources.woodPanel;
+	if (!Object.values(parts).every((image) => image.complete && image.naturalWidth > 0)) return;
+	const edge = WOOD_BORDER * p;
+	const x = Math.round(left);
+	const y = Math.round(top);
+	const w = Math.round(width);
+	const h = Math.round(height);
+	context.save();
+	context.imageSmoothingEnabled = false;
+	context.drawImage(parts.left, x - edge, y - edge, edge, h + edge);
+	context.drawImage(parts.right, x + w, y - edge, edge, h + edge);
+	context.drawImage(parts.bottomLeft, x - edge, y + h, edge, edge);
+	context.drawImage(parts.bottom, x, y + h, w, edge);
+	context.drawImage(parts.bottomRight, x + w, y + h, edge, edge);
+	context.restore();
+}
