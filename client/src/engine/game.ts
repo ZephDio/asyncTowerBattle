@@ -1,3 +1,4 @@
+import { GrassSeed } from "./grid/grass-seed";
 import { Battle } from "./battle/battle";
 import { BattleState, GameState, ResumeState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
@@ -46,6 +47,7 @@ export class Game {
 		resumed?: RestoredGame,
 	) {
 		this.runSeed = resumed?.runSeed ?? newRunSeed();
+		GrassSeed.value = this.runSeed;
 		this.army = resumed?.army ?? ArmyFactory.default(chosenClass);
 		const envGenerator = new EnvironmentGeneration();
 		this.rounds = new RoundsTracker(this.army, envGenerator, this.runSeed);

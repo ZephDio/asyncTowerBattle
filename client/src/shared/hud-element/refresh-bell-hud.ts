@@ -38,7 +38,7 @@ export class RefreshBellHud extends Derive(
 	}
 	public type = "bell";
 	// Left of the shop panel
-	public position = new ScreenPosition({ x: 7.1, y: 50.3 });
+	public position = new ScreenPosition({ x: 10, y: 50.3 });
 
 	size = { width: 7, height: 7 };
 }

@@ -1,5 +1,4 @@
 import { Derive } from "@ddd-ts/traits";
-import { Army } from "../../engine/army/army";
 import { Inventory } from "../../engine/grid/inventory/unit-inventory";
 import { HudElementResources } from "../../renderer/resources/hud-element.resources";
 import { IconResources } from "../../renderer/resources/icons.resources";
@@ -27,9 +26,18 @@ const HALO = 20 * PIXEL;
 const FULL_LENGTH = 5;
 const ZIGZAG = 6 * PIXEL;
 
-// The shop's ribbon right of the reserve: a seal for each science the army holds, top to bottom. Hovering a seal
+// A ribbon with a seal for each science of an army, such as the shop's ribbon right of the reserve: a seal for each science the army holds, top to bottom. Hovering a seal
 // opens its science's scroll (see SciencePanel), clicking it keeps the scroll open. It hangs from the top of the
 // reserve, so it is not shown when the army holds no science.
+// Where the shop's ribbon hangs: from the top of the reserve, halfway between its right side and the screen's.
+export const besideReserve = (reserve: Inventory) => {
+	const reserveRight = reserve.centerPosition.x + (reserve.width * reserve.cellSize) / 2;
+	return new ScreenPosition({
+		x: (reserveRight + 100) / 2,
+		y: reserve.centerPosition.y + (reserve.height * reserve.cellSize) / 2,
+	});
+};
+
 export class ScienceHud extends Derive(
 	TCollider,
 	THitbox(new HitBox([[new Rectangle({ width: WIDTH, height: TOP + TAIL }), new ScreenPosition({ x: 0, y: 0 })]])),
@@ -41,17 +49,17 @@ export class ScienceHud extends Derive(
 	sciences: Science[];
 	private top: number;
 
+	// `anchor` is the middle of the ribbon's top, where it hangs from.
 	constructor(
-		army: Army,
-		reserve: Inventory,
+		army: { sciences: ReadonlySet<Science> },
+		anchor: ScreenPosition,
 		private pinned: Science | null = null,
 	) {
 		super({});
 		this.sciences = Object.values(Science).filter((science) => army.sciences.has(science));
-		const reserveRight = reserve.centerPosition.x + (reserve.width * reserve.cellSize) / 2;
-		this.top = reserve.centerPosition.y + (reserve.height * reserve.cellSize) / 2;
+		this.top = anchor.y;
 		const height = TOP + this.segments * SEGMENT + TAIL;
-		this.position = new ScreenPosition({ x: (reserveRight + 100) / 2, y: this.top - height / 2 });
+		this.position = new ScreenPosition({ x: anchor.x, y: this.top - height / 2 });
 		this.hitbox = new HitBox([[new Rectangle({ width: WIDTH, height }), new ScreenPosition({ x: 0, y: 0 })]]);
 	}
 

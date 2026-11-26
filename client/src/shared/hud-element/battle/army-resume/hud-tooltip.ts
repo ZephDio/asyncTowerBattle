@@ -2,6 +2,7 @@ import { Derive } from "@ddd-ts/traits";
 import { TRenderable } from "../../../traits/render/renderable";
 import { TDrawable } from "../../../traits/render/drawable";
 import { ScreenPosition } from "../../../position";
+import { HudElementResources } from "../../../../renderer/resources/hud-element.resources";
 
 export type TooltipContent = string[];
 
@@ -12,19 +13,10 @@ const GAP = 0.6;
 // Art pixels.
 export const ROLL = 10;
 const PAD_X = 8;
+const EDGE_ROWS = 2;
 export const PAD_Y = ROLL + 2;
 
-type Rgb = readonly [number, number, number];
-const INK: Rgb = [22, 28, 46];
-// The thatch ramp of the pixel-art style guide, as parchment.
-const MAUVE: Rgb = [138, 103, 99];
-const STRAW_SHADE: Rgb = [175, 140, 121];
-const STRAW: Rgb = [227, 193, 140];
-const CREAM: Rgb = [245, 239, 169];
-const FIBER: Rgb = [214, 176, 128];
-const SHADOW = "rgba(22,28,46,0.31)";
-
-const css = ([r, g, b]: Rgb) => `rgb(${r},${g},${b})`;
+const INK = "rgb(22,28,46)";
 
 // A small parchment scroll beside a hovered banner element, on the `side` facing the board. Its content is read every
 // frame, so live values stay current while it is open.
@@ -64,7 +56,7 @@ export class HudTooltip extends Derive(TRenderable, TDrawable) {
 		HudTooltip.drawScroll(context, left, top, columns, rows, p);
 
 		let y = top + (PAD_Y * p + (LINE_HEIGHT * unit) / 2);
-		context.fillStyle = css(INK);
+		context.fillStyle = INK;
 		for (const line of lines) {
 			context.fillText(line, left + PAD_X * p, y);
 			y += LINE_HEIGHT * unit;
@@ -73,6 +65,8 @@ export class HudTooltip extends Derive(TRenderable, TDrawable) {
 	}
 
 	// A parchment sheet hanging between two rolls, as on the descriptor scroll, outlined in 2px ink on its own shadow.
+	// It is cut in nine pieces drawn by scripts/generate-scroll.py: the corners keep their size, the edges and the
+	// center repeat, all at `p` canvas pixels per art pixel.
 	static drawScroll(
 		context: CanvasRenderingContext2D,
 		left: number,
@@ -81,44 +75,38 @@ export class HudTooltip extends Derive(TRenderable, TDrawable) {
 		rows: number,
 		p: number,
 	) {
-		const rect = (x: number, y: number, w: number, h: number, color: Rgb | string) => {
-			if (w <= 0 || h <= 0) return;
-			context.fillStyle = typeof color === "string" ? color : css(color);
-			context.fillRect(left + x * p, top + y * p, w * p, h * p);
-		};
-		// An ink block with its corners cut by one art pixel.
-		const block = (x: number, y: number, w: number, h: number) => {
-			rect(x + 1, y, w - 2, h, INK);
-			rect(x, y + 1, w, h - 2, INK);
-		};
+		const parts = HudElementResources.scroll;
+		if (!Object.values(parts).every((image) => image.complete && image.naturalWidth > 0)) return;
+		columns = Math.max(columns, 2 * ROLL);
+		rows = Math.max(rows, 2 * PAD_Y + EDGE_ROWS);
+		const edge = ROLL * p;
+		const topHeight = PAD_Y * p;
+		const bottomHeight = (PAD_Y + EDGE_ROWS) * p;
+		const width = columns * p;
+		const height = rows * p;
+		const innerWidth = width - 2 * edge;
+		const innerHeight = height - topHeight - (bottomHeight - EDGE_ROWS * p);
+		const middleY = top + topHeight;
+		const bottomY = top + height - PAD_Y * p;
 
-		rect(2, rows, columns - 4, 2, SHADOW);
-
-		const sheetLeft = 3;
-		const sheetWidth = columns - 2 * sheetLeft;
-		rect(sheetLeft, ROLL - 3, sheetWidth, rows - 2 * ROLL + 6, INK);
-		rect(sheetLeft + 2, ROLL - 3, sheetWidth - 4, rows - 2 * ROLL + 6, STRAW);
-		rect(sheetLeft + 2, ROLL, sheetWidth - 4, 2, STRAW_SHADE);
-		rect(sheetLeft + 2, rows - ROLL - 2, sheetWidth - 4, 2, STRAW_SHADE);
-		rect(sheetLeft + sheetWidth - 4, ROLL, 2, rows - 2 * ROLL, STRAW_SHADE);
-		for (let y = ROLL + 4; y < rows - ROLL - 3; y += 4) {
-			for (let x = sheetLeft + 5 + ((y * 7) % 9); x < sheetLeft + sheetWidth - 10; x += 13 + ((x + y) % 5)) {
-				rect(x, y, 3 + ((x * y) % 4), 1, FIBER);
+		context.save();
+		context.imageSmoothingEnabled = false;
+		const tile = parts.center;
+		for (let y = 0; y < innerHeight; y += tile.height * p) {
+			for (let x = 0; x < innerWidth; x += tile.width * p) {
+				const w = Math.min(tile.width * p, innerWidth - x);
+				const h = Math.min(tile.height * p, innerHeight - y);
+				context.drawImage(tile, 0, 0, w / p, h / p, left + edge + x, middleY + y, w, h);
 			}
 		}
-
-		// Each roll is a parchment cylinder lit from above, ending in a curl on both sides.
-		const cylinder: Rgb[] = [CREAM, CREAM, STRAW, STRAW, STRAW_SHADE, MAUVE];
-		for (const y of [0, rows - ROLL]) {
-			block(0, y, columns, ROLL);
-			cylinder.forEach((shade, row) => rect(2, y + 2 + row, columns - 4, 1, shade));
-			for (const x of [0, columns - ROLL]) {
-				block(x, y, ROLL, ROLL);
-				rect(x + 2, y + 2, ROLL - 4, ROLL - 4, STRAW_SHADE);
-				rect(x + 2, y + 2, ROLL - 5, ROLL - 5, CREAM);
-				rect(x + 4, y + 4, ROLL - 7, ROLL - 7, STRAW);
-				rect(x + 4, y + 4, 2, 2, INK);
-			}
-		}
+		context.drawImage(parts.topLeft, left, top, edge, topHeight);
+		context.drawImage(parts.top, left + edge, top, innerWidth, topHeight);
+		context.drawImage(parts.topRight, left + width - edge, top, edge, topHeight);
+		context.drawImage(parts.left, left, middleY, edge, innerHeight);
+		context.drawImage(parts.right, left + width - edge, middleY, edge, innerHeight);
+		context.drawImage(parts.bottomLeft, left, bottomY, edge, bottomHeight);
+		context.drawImage(parts.bottom, left + edge, bottomY, innerWidth, bottomHeight);
+		context.drawImage(parts.bottomRight, left + width - edge, bottomY, edge, bottomHeight);
+		context.restore();
 	}
 }

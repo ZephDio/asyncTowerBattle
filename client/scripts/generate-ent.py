@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-ent.py
 
-Outputs public/resources/units/ent.png, and public/resources/units/ent.sheet.png with its json (see sprite_sheet.py).
+Outputs public/resources/units/ent/ent.png, and public/resources/units/ent/ent.sheet.png with its json (see sprite_sheet.py).
 
 It follows the dragon unit: a 16x16 front-facing sprite upscaled 4x, flat colors with one or two shades per part,
 light from the top left, and a near-black outline drawn around the silhouette. The sprite is hand placed in
@@ -19,8 +19,8 @@ from sprite_sheet import breath_out, outline, to_pixels, write_sheet
 from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "public" / "resources" / "units" / "ent.png"
-SHEET = ROOT / "public" / "resources" / "units" / "ent.sheet.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "ent" / "ent.png"
+SHEET = ROOT / "public" / "resources" / "units" / "ent" / "ent.sheet.png"
 SCALE = 4
 
 OUTLINE = (29, 29, 28, 255)

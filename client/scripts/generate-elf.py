@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-elf.py
 
-Outputs public/resources/units/elf.png, and public/resources/units/elf.sheet.png with its json (see sprite_sheet.py).
+Outputs public/resources/units/elf/elf.png, and public/resources/units/elf/elf.sheet.png with its json (see sprite_sheet.py).
 
 It follows the dragon, brewmaster and go-goat units: a front-facing sprite upscaled 4x, flat colors with one or two
 shades per part, light from the top left, and a near-black outline drawn around the silhouette. The sprite is hand
@@ -21,8 +21,8 @@ from sprite_sheet import breath_out, outline, to_pixels, write_sheet
 from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "public" / "resources" / "units" / "elf.png"
-SHEET = ROOT / "public" / "resources" / "units" / "elf.sheet.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "elf" / "elf.png"
+SHEET = ROOT / "public" / "resources" / "units" / "elf" / "elf.sheet.png"
 SCALE = 4
 
 PALETTE = {

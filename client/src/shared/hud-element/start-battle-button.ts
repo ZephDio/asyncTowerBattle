@@ -24,7 +24,7 @@ export class StartBattleButton extends Derive(
 	}
 	public type = "startBattle";
 	// Upper left, right of the shop panel
-	public position = new ScreenPosition({ x: 61.8, y: 57 });
+	public position = new ScreenPosition({ x: 66.3, y: 57 });
 
 	size = { width: 12, height: 5.15 };
 }

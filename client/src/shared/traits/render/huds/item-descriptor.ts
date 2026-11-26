@@ -28,10 +28,12 @@ const TrendColors: Record<StatTrend, string> = {
 	neutral: "#000000",
 };
 
-export const formatStat = (value: number) => `${Number(value.toFixed(2))}`;
+// A stat a piece doesn't have is NaN, shown as 0.
+export const formatStat = (value: number) => (Number.isNaN(value) ? "0" : `${Number(value.toFixed(2))}`);
 
 // Compares a live stat to its base value. Pass higherIsBetter = false for costs and cooldowns.
 export const liveStat = (value: string, current: number, base: number, higherIsBetter = true): LiveLine => {
+	if (Number.isNaN(current) || Number.isNaN(base)) return { value, trend: "neutral" };
 	const delta = current - base;
 	if (Math.abs(delta) <= Math.abs(base) * 1e-6) return { value, trend: "neutral" };
 	return { value, trend: delta > 0 === higherIsBetter ? "better" : "worse" };
@@ -63,9 +65,12 @@ export const TLiveDescriptionText = Trait((base) => {
 export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 	abstract class IDescriptor extends base {
 		description: Description;
+		// What this element is described as, so a battle entity shows the sciences its recruit grants (see grantedSciencesOf).
+		describedBy: ImplementsTrait<typeof TDescriptor>;
 		constructor(props: { descriptor: ImplementsTrait<typeof TDescriptor> } & typeof Props) {
 			super(props);
 			this.description = props.descriptor.description;
+			this.describedBy = props.descriptor;
 		}
 	}
 

@@ -10,7 +10,7 @@ import { IconResources } from "../../../renderer/resources/icons.resources";
 export class LifeRemainingHud extends Derive(TDrawable, TRenderable) {
 	constructor(
 		public life: number,
-		public position: ScreenPosition = PercentToReal({ x: 50, y: 70 }),
+		public position: ScreenPosition = PercentToReal({ x: 50, y: 78 }),
 	) {
 		super({});
 	}

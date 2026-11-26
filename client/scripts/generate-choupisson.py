@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-choupisson.py
 
-Outputs public/resources/units/choupisson.png, and public/resources/units/choupisson.sheet.png with its json (see
+Outputs public/resources/units/choupisson/choupisson.png, and public/resources/units/choupisson/choupisson.sheet.png with its json (see
 sprite_sheet.py).
 
 It follows the dragon unit: a 16x16 front-facing sprite upscaled 4x, flat colors with one or two shades per part,
@@ -20,8 +20,8 @@ from sprite_sheet import breath_out, outline, to_pixels, write_sheet
 from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "public" / "resources" / "units" / "choupisson.png"
-SHEET = ROOT / "public" / "resources" / "units" / "choupisson.sheet.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "choupisson" / "choupisson.png"
+SHEET = ROOT / "public" / "resources" / "units" / "choupisson" / "choupisson.sheet.png"
 SCALE = 4
 
 PALETTE = {

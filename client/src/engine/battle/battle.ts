@@ -11,7 +11,12 @@ import { ArmyResume } from "../../shared/hud-element/battle/army-resume/army-res
 import { ScreenPosition } from "../../shared/position";
 import { HudTooltip } from "../../shared/hud-element/battle/army-resume/hud-tooltip";
 import { secondsToFrame } from "../../shared/seconds";
+import { ScienceHud } from "../../shared/hud-element/science-hud";
 import { TranslateAnimation } from "../translate-animation/translate-animation";
+
+// The ribbons hang beside the banners, from this far right (or left) of their middle and this far above it.
+const RIBBON_OFFSET = 12.4;
+const RIBBON_RISE = 8;
 
 export class Battle {
 	battlefield: Battlefield;
@@ -139,6 +144,16 @@ export class Battle {
 		this.gameSpeed = 31.25 / speed;
 	}
 
+	// The ribbon of each army's sciences beside its banner, following the banner's intro slide.
+	private scienceRibbons() {
+		const beside = (army: Army, resume: ArmyResume, offset: number) =>
+			new ScienceHud(army, new ScreenPosition({ x: resume.position.x + offset, y: resume.position.y + RIBBON_RISE }));
+		return [
+			beside(this.alliedArmy, this.alliedArmyResume, RIBBON_OFFSET),
+			beside(this.enemyArmy, this.enemyArmyResume, -RIBBON_OFFSET),
+		];
+	}
+
 	getDrawables(): RenderableState {
 		const tooltip = this.hoverPoint ? this.tooltipAt(this.hoverPoint) : null;
 		return {
@@ -147,6 +162,7 @@ export class Battle {
 				this.speedCursor,
 				this.alliedArmyResume,
 				this.enemyArmyResume,
+				...this.scienceRibbons(),
 				...(tooltip ? [tooltip] : []),
 			],
 			grids: this.animationOver

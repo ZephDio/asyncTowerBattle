@@ -18,7 +18,7 @@ export class NextRoundHud extends Derive(
 ) {
 	constructor(
 		public runOver = false,
-		public position: ScreenPosition = PercentToReal({ x: 50, y: 15 }),
+		public position: ScreenPosition = PercentToReal({ x: 50, y: 25 }),
 	) {
 		super({});
 	}

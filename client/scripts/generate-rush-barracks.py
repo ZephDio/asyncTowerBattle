@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the rush barracks to public/resources/house/rush-barracks.png.
+"""Render the rush barracks to public/resources/barracks/rush-barracks.png.
 
 The rush barracks is a horizontal two-cell piece (`oo`): the approved basic barracks
 (generate-barracks.py, imported unchanged) on the left cell, and a side cantina on the
@@ -21,7 +21,7 @@ _spec = importlib.util.spec_from_file_location('barracks', HERE / 'generate-barr
 barracks = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(barracks)
 
-OUTPUT = HERE.parent / 'public/resources/house/rush-barracks.png'
+OUTPUT = HERE.parent / 'public/resources/barracks/rush-barracks.png'
 WIDTH, HEIGHT, ORIGIN = 2 * barracks.WIDTH, barracks.HEIGHT, barracks.ORIGIN
 HALL_X = -55  # the barracks model's center, so it sits on the left cell
 RIGHT_WALL = HALL_X + 46  # the hall's right wall, the lean-to's high side

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render composition 2 of the basic barracks to public/resources/house/barracks.png.
+"""Render composition 2 of the basic barracks to public/resources/barracks/barracks.png.
 
 The hall has two bays: a jettied living floor above the rack, and a double-height
 entry on the right. The left curtain wall joins the hall to the lookout. All
@@ -10,7 +10,7 @@ from pathlib import Path
 
 from voxel_sprite import OUTLINE, VoxelGrid, outline, render, write_png
 
-OUTPUT = Path(__file__).resolve().parents[1] / 'public/resources/house/barracks.png'
+OUTPUT = Path(__file__).resolve().parents[1] / 'public/resources/barracks/barracks.png'
 WIDTH, HEIGHT, ORIGIN = 110, 143, 108
 PAVE, ROCK, LIME, OAK, ROOF, PANE, BLUE, DOOR, ARCH, STEEL, STRAW, CORD, DARK = range(1, 14)
 WOOD = ('51404a', '77534b', 'a77855', 'd4a470')

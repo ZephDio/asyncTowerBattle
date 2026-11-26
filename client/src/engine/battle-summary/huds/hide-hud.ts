@@ -18,7 +18,7 @@ export class HideHud extends Derive(
 ) {
 	constructor(
 		public hiddenState: { hidden: boolean },
-		public position: ScreenPosition = PercentToReal({ x: 50, y: 85 }),
+		public position: ScreenPosition = PercentToReal({ x: 10, y: 74 }),
 	) {
 		super({});
 	}

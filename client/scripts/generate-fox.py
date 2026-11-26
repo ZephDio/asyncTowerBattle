@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-fox.py
 
-Outputs public/resources/units/fox.png, and public/resources/units/fox.sheet.png with its json (see sprite_sheet.py).
+Outputs public/resources/units/fox/fox.png, and public/resources/units/fox/fox.sheet.png with its json (see sprite_sheet.py).
 
 REST is the original 16x13 fox, one character per pixel, outline included. It used to ship at 1x and looked blurry
 once stretched on the board, so it is now upscaled 4x with nearest neighbor like the dragon: every original pixel
@@ -19,8 +19,8 @@ from sprite_sheet import breath_out, to_pixels, write_sheet
 from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "public" / "resources" / "units" / "fox.png"
-SHEET = ROOT / "public" / "resources" / "units" / "fox.sheet.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "fox" / "fox.png"
+SHEET = ROOT / "public" / "resources" / "units" / "fox" / "fox.sheet.png"
 SCALE = 4
 
 PALETTE = {
