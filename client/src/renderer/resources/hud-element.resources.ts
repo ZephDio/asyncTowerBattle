@@ -23,9 +23,16 @@ export type DescriptorScrollParts = Record<
 	ornamentRight?: HTMLImageElement;
 	// A gem set on the roll ends, from the epic scroll on.
 	gem?: HTMLImageElement;
+	// A crest over the header, from the legendary scroll on.
+	crest?: HTMLImageElement;
 };
 
-function descriptorScrollParts(rarity: string, decorated = false, ornamented = false): DescriptorScrollParts {
+function descriptorScrollParts(
+	rarity: string,
+	decorated = false,
+	ornamented = false,
+	crested = false,
+): DescriptorScrollParts {
 	const part = (name: string) => createImage(`/resources/hud/descriptor-scroll/${rarity}/${name}.png`);
 	return {
 		rollLeft: part("roll-left"),
@@ -42,6 +49,7 @@ function descriptorScrollParts(rarity: string, decorated = false, ornamented = f
 		...(ornamented
 			? { ornamentLeft: part("ornament-left"), ornamentRight: part("ornament-right"), gem: part("gem") }
 			: {}),
+		...(crested ? { crest: part("crest") } : {}),
 	};
 }
 
@@ -118,19 +126,19 @@ export class HudElementResources {
 		bottomRight: createImage("/resources/hud/scroll/bottom-right.png"),
 	};
 
-	// The pieces of the descriptor's scroll, drawn by scripts/generate-descriptor-scroll.py. Only the common to epic ones
-	// are drawn so far: legendary uses the epic one until it is.
+	// The pieces of the descriptor's scroll, drawn by scripts/generate-descriptor-scroll.py. One per rarity.
 	static descriptorScroll: Record<Rarity, DescriptorScrollParts> = (() => {
 		const common = descriptorScrollParts("common");
 		const uncommon = descriptorScrollParts("uncommon", true);
 		const rare = descriptorScrollParts("rare", true);
 		const epic = descriptorScrollParts("epic", true, true);
+		const legendary = descriptorScrollParts("legendary", true, true, true);
 		return {
 			[Rarity.Common]: common,
 			[Rarity.Uncommon]: uncommon,
 			[Rarity.Rare]: rare,
 			[Rarity.Epic]: epic,
-			[Rarity.Legendary]: epic,
+			[Rarity.Legendary]: legendary,
 		};
 	})();
 

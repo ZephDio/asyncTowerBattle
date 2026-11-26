@@ -14,6 +14,8 @@ export const HANDLE_HEIGHT = 8;
 // How far a handle goes under its roll's end.
 const HANDLE_OVERLAP = 1;
 const EDGE = 7;
+// The rows of the crest that sit on the header's top.
+const CREST_OVERLAP = 2;
 // A gem's distance from its roll's end: inside the cap's ink.
 const GEM_INSET = 2;
 const ORNAMENT_WIDTH = 14;
@@ -144,6 +146,17 @@ export function drawDescriptorScroll(
 			context.drawImage(parts.gem, left + GEM_INSET * p, gemY, gemW, gemH);
 			context.drawImage(parts.gem, left + width - (GEM_INSET + parts.gem.naturalWidth) * p, gemY, gemW, gemH);
 		}
+	}
+	if (parts.crest) {
+		const crestW = parts.crest.naturalWidth * p;
+		const crestH = parts.crest.naturalHeight * p;
+		context.drawImage(
+			parts.crest,
+			left + Math.round((width - crestW) / 2),
+			top - crestH + CREST_OVERLAP * p,
+			crestW,
+			crestH,
+		);
 	}
 	context.restore();
 }

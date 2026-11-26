@@ -13,6 +13,7 @@ bottom one, so a roll can be any height from ROLL_MIN rows. Outputs, in public/r
 - deco-left.png, deco-right.png (from uncommon on): the decoration of the sheet's margins, DECO_HEIGHT rows tall, repeated
   down the sheet.
 - gem.png (epic and above): a gem set on the middle of each roll end, drawn over the caps.
+- crest.png (legendary): a crown of gold flames over the header.
 - ornament-left.png, ornament-right.png (epic and above): the gilded tendrils sticking out of the footer's ends.
 - edge-left.png, edge-right.png: the ink border of the sheet and its shaded side, 1 row tall, repeated down the sheet.
 - center.png: the straw of the sheet with its fibers, a tile that repeats both ways.
@@ -74,6 +75,12 @@ PURPLE_LIGHT = (184, 134, 240, 255)
 GOLD = (244, 200, 76, 255)
 GOLD_DARK = (172, 122, 32, 255)
 
+RED_DARK = (104, 14, 22, 255)
+RED = (196, 38, 28, 255)
+ORANGE = (244, 120, 34, 255)
+YELLOW = (255, 206, 72, 255)
+RUBY_LIGHT = (255, 150, 126, 255)
+
 # The vines: the palette (stem, leaf edge, leaf, leaf highlight), the tile's height, its leaves as (row, side) with
 # side 1 for a leaf going up and -1 for one going down, its berries as rows and its diamonds as rows (centers).
 VINES = {
@@ -104,6 +111,31 @@ VINES = {
         "frame": GOLD,
         "frame_dark": GOLD_DARK,
     },
+    "flame vine": {
+        "colors": (RED_DARK, RED_DARK, RED, ORANGE),
+        "height": 80,
+        "leaves": (
+            (6, 1),
+            (6, -1),
+            (18, 1),
+            (24, -1),
+            (30, 1),
+            (30, -1),
+            (54, 1),
+            (54, -1),
+            (60, -1),
+            (66, 1),
+            (72, 1),
+            (72, -1),
+        ),
+        "berries": (12, 36, 48),
+        "diamonds": (42,),
+        "curls": ((78, -1),),
+        "berry": YELLOW,
+        "tip": YELLOW,
+        "frame": GOLD,
+        "frame_dark": GOLD_DARK,
+    },
 }
 
 PALETTES = {
@@ -114,8 +146,17 @@ PALETTES = {
         "dot": PURPLE,
         "deco": "gilded vine",
         "trim": GOLD,
-        "gem": (GOLD, PURPLE, PURPLE_LIGHT),
-        "ornaments": True,
+        "gem": ((255, 238, 255, 255), PURPLE_LIGHT, PURPLE, PURPLE_DARK),
+        "ornaments": (PURPLE, PURPLE_LIGHT, PURPLE_DARK),
+    },
+    "legendary": {
+        "dot": RED,
+        "deco": "flame vine",
+        "trim": GOLD,
+        "gem": ((255, 236, 210, 255), RUBY_LIGHT, RED, RED_DARK),
+        "ornaments": (RED, ORANGE, RED_DARK),
+        "handle_tip": (YELLOW, GOLD_DARK),
+        "crest": True,
     },
 }
 
@@ -165,8 +206,8 @@ def knob(side, palette):
     return pixels
 
 
-def gem():
-    """A faceted amethyst in a gold setting, GEM_WIDTH x GEM_HEIGHT, set on the middle of each roll end."""
+def gem(palette):
+    """A faceted gem in a gold setting, set on the middle of each roll end."""
     rows = (
         ".GGGG.",
         "GWLMMG",
@@ -180,35 +221,52 @@ def gem():
     colors = {
         "G": GOLD,
         "K": GOLD_DARK,
-        "W": (255, 238, 255, 255),
-        "L": PURPLE_LIGHT,
-        "M": PURPLE,
-        "D": PURPLE_DARK,
+        "W": palette["gem"][0],
+        "L": palette["gem"][1],
+        "M": palette["gem"][2],
+        "D": palette["gem"][3],
         ".": CLEAR,
     }
     return [[colors[c] for c in row] for row in rows]
 
 
-def ornament(side):
+def crest():
+    """A crown of gold flames over the middle of the header, whose last two rows sit on the roll's top ink."""
+    half = (
+        "............G",
+        "...........GY",
+        "....G.....GOO",
+        "...GYG...GORR",
+        "..GYOG..GOORR",
+        "..GOORG.GOORR",
+        ".GGGGGGGGGGGG",
+        ".KKKKKKKKKKKK",
+    )
+    colors = {"G": GOLD, "K": GOLD_DARK, "Y": YELLOW, "O": ORANGE, "R": RED, ".": CLEAR}
+    return [[colors[c] for c in row + row[::-1]] for row in half]
+
+
+def ornament(side, colors):
     """A gilded tendril sticking out of the footer's end, as the handle does of the header's: a gold stem with a leaf
     up, a leaf down and a curl at its tip. ORNAMENT_WIDTH wide, drawn behind the roll."""
     pixels = new(ORNAMENT_WIDTH, ORNAMENT_HEIGHT)
     rect = painter(pixels)
+    leaf, light, dark = colors
     rect(0, 5, 11, 1, GOLD)
     rect(0, 6, 11, 1, GOLD_DARK)
     for x, y, color in (
-        (3, 4, PURPLE),
-        (4, 4, PURPLE),
-        (4, 3, PURPLE_LIGHT),
-        (5, 3, PURPLE),
-        (5, 2, PURPLE_DARK),
-        (6, 2, PURPLE_DARK),
-        (7, 7, PURPLE),
-        (8, 7, PURPLE),
-        (8, 8, PURPLE_LIGHT),
-        (9, 8, PURPLE),
-        (9, 9, PURPLE_DARK),
-        (10, 9, PURPLE_DARK),
+        (3, 4, leaf),
+        (4, 4, leaf),
+        (4, 3, light),
+        (5, 3, leaf),
+        (5, 2, dark),
+        (6, 2, dark),
+        (7, 7, leaf),
+        (8, 7, leaf),
+        (8, 8, light),
+        (9, 8, leaf),
+        (9, 9, dark),
+        (10, 9, dark),
         (11, 5, GOLD),
         (12, 4, GOLD),
         (12, 3, GOLD),
@@ -223,7 +281,7 @@ def ornament(side):
     return pixels
 
 
-def handle(side):
+def handle(side, tip=None):
     """The dark wood rod the parchment is rolled on, sticking out of a roll's end: a brass tip on its outer end."""
     pixels = new(HANDLE_WIDTH, HANDLE_HEIGHT)
     rect = painter(pixels)
@@ -234,8 +292,9 @@ def handle(side):
     rect(0, 5, w - 1, 2, WOOD_DARK)
     for x in (w - 8, w - 11):
         rect(x, 1, 1, h - 2, WOOD_DARK)
-    rect(w - 4, 1, 3, h - 2, BRASS_DARK)
-    rect(w - 4, 1, 3, 3, BRASS)
+    bright, dark = tip or (BRASS, BRASS_DARK)
+    rect(w - 4, 1, 3, h - 2, dark)
+    rect(w - 4, 1, 3, 3, bright)
     if side == "left":
         pixels = [row[::-1] for row in pixels]
     return pixels
@@ -323,8 +382,8 @@ def main():
             "roll-left": knob("left", palette),
             "roll": roll_strip(1, None, palette),
             "roll-right": knob("right", palette),
-            "handle-left": handle("left"),
-            "handle-right": handle("right"),
+            "handle-left": handle("left", palette.get("handle_tip")),
+            "handle-right": handle("right", palette.get("handle_tip")),
             "edge-left": edge("left", palette.get("trim")),
             "edge-right": edge("right", palette.get("trim")),
             "center": center_tile(),
@@ -332,10 +391,12 @@ def main():
             "shadow": new(1, SHADE, SHADOW),
         }
         if palette.get("gem"):
-            pieces["gem"] = gem()
+            pieces["gem"] = gem(palette)
         if palette.get("ornaments"):
-            pieces["ornament-left"] = ornament("left")
-            pieces["ornament-right"] = ornament("right")
+            pieces["ornament-left"] = ornament("left", palette["ornaments"])
+            pieces["ornament-right"] = ornament("right", palette["ornaments"])
+        if palette.get("crest"):
+            pieces["crest"] = crest()
         if palette["deco"]:
             pieces["deco-left"] = vine("left", palette["deco"])
             pieces["deco-right"] = vine("right", palette["deco"])
