@@ -17,7 +17,8 @@ export function drawWoodSign(
 	context.font = `${size.height * textScale}px title`;
 	context.fillStyle = "#ffe5ad";
 	context.textAlign = "center";
-	context.textBaseline = "middle";
-	context.fillText(label, center.x, center.y);
+	context.textBaseline = "alphabetic";
+	const { actualBoundingBoxAscent: ascent, actualBoundingBoxDescent: descent } = context.measureText(label);
+	context.fillText(label, center.x, center.y + (ascent - descent) / 2);
 	context.restore();
 }
