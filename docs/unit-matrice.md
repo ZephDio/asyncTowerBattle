@@ -44,7 +44,7 @@ Stars always mean **better for the player**. For cost and food, ★★★★★ 
 | ★★★★ | 26–35 | 0.28–0.34 | 3 | 1.3–1.8 s | 0.5–0.6 |
 | ★★★★★ | > 35 | ≥ 0.35 | ≥ 4 | ≤ 1.2 s | ≤ 0.4 |
 
-For reference, the current tokens are Elf (10 HP, 0.32 speed, 1.2 s) and Dwarf (14 HP, 0.13 speed, 1.6 s). The Ent (45 HP, 4.5 s) is the top of the life scale.
+For reference, the current tokens are Elf (10 HP, 0.32 speed, 3.5 s) and Dwarf (14 HP, 0.13 speed, 3.5 s). The Ent (45 HP, 4.5 s) is the top of the life scale.
 
 Budget rule: a common unit has about **12–13 stars plus one simple effect**. A unit with a weaker effect gets more stars.
 

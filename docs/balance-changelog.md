@@ -10,4 +10,4 @@
 | Bosquet (Animal castle damage) | +1 | +0.5 | Animals hit the castle too hard. |
 | Dwarf (summon time) | 1.6 s | 3.5 s | Slower unit production. |
 | Elf (summon time) | 1.2 s | 3.5 s | Slower unit production. |
-| Dwarf and Elf castles (production speed) | x1 | x2 | Offsets the longer summon time: the castle summons its default unit every 1.75 s. Barracks keep the 3.5 s pace. |
+| Dwarf and Elf castles (production speed) | x1 | x2 | Partly offsets the longer summon time: the castle summons its default unit every 1.75 s (was 1.2 s for the Elf castle, 1.6 s for the Dwarf one), so castles are slower overall, the Elf one by about 46%. Barracks use the 3.5 s pace. |
