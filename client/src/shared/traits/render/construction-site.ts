@@ -27,12 +27,12 @@ function quarterCase(h: boolean, v: boolean, d: boolean) {
 }
 
 // Cells by which a plot reaches past its cells on every side, so it shows around the piece standing on it. A plot
-// spreads less when another one or the edge of the ground is close, so they never overlap.
+// spreads less when another one, another plot's price sign or the edge of the ground is close, so they never overlap.
 const SPREAD = 0.15;
 
-// A building site: its cells, as offsets in grid cells (y up), and the canvas point where the middle of their bounding
-// box goes.
-export type Plot = { cells: Cell[]; center: { x: number; y: number } };
+// A building site: its cells, as offsets in grid cells (y up), the canvas point where the middle of their bounding box
+// goes, and the price sign planted on it, which the other sites keep clear of.
+export type Plot = { cells: Cell[]; center: { x: number; y: number }; sign?: Box };
 
 export type Box = { left: number; top: number; right: number; bottom: number };
 
@@ -86,7 +86,8 @@ export function drawConstructionSites(
 	plots.forEach((plot, index) => {
 		const { minX, maxY, columns, rows, box } = boxes[index]!;
 		const others = boxes.filter((_, other) => other !== index).map((other) => gap(box, other.box) / 2);
-		const spread = Math.min(SPREAD * tileSize, room(box, bounds), ...others);
+		const signs = plots.flatMap((other, i) => (i !== index && other.sign ? [gap(box, other.sign)] : []));
+		const spread = Math.min(SPREAD * tileSize, room(box, bounds), ...others, ...signs);
 		// The plot's art is stretched from its middle to spread past its cells.
 		const scaleX = (columns * tileSize + 2 * spread) / (columns * tileSize);
 		const scaleY = (rows * tileSize + 2 * spread) / (rows * tileSize);
@@ -110,13 +111,14 @@ export function drawConstructionSites(
 				const width = Math.round(to.x) - x0;
 				const height = Math.round(to.y) - y0;
 				context.drawImage(quarters, column * QUARTER, row * QUARTER, QUARTER, QUARTER, x0, y0, width, height);
-				if (column !== 0) return;
-				// An outer corner: its stake stands where the rope turns.
-				const outer = toCanvas(left + (corner.right ? tileSize : 0), top + (corner.bottom ? tileSize : 0));
-				stakes.push({
-					x: outer.x + (corner.right ? -1 : 1) * ROPE * p * scaleX,
-					y: outer.y + (corner.bottom ? -1 : 1) * ROPE * p * scaleY,
-				});
+				// Stakes stand where the rope turns, at the outer and inner corners, and where it crosses a boundary between
+				// two of the plot's cells (counted by one of the two cells only).
+				const inwardX = (corner.right ? -1 : 1) * ROPE * p * scaleX;
+				const inwardY = (corner.bottom ? -1 : 1) * ROPE * p * scaleY;
+				const vertex = toCanvas(left + (corner.right ? tileSize : 0), top + (corner.bottom ? tileSize : 0));
+				if (column === 0 || column === 3) stakes.push({ x: vertex.x + inwardX, y: vertex.y + inwardY });
+				if (column === 1 && corner.right) stakes.push({ x: vertex.x, y: vertex.y + inwardY });
+				if (column === 2 && corner.bottom) stakes.push({ x: vertex.x + inwardX, y: vertex.y });
 			});
 		}
 	});

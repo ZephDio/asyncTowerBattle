@@ -10,9 +10,13 @@ import { ArmyGrid } from "./grid";
 import { drawFence } from "../../shared/traits/render/fence";
 import { Plot, drawConstructionSites } from "../../shared/traits/render/construction-site";
 
-// Cells trimmed off the grid's sides to get the fenced field. The prices hang below the offers and the front fence
-// rises over the field's bottom edge, so the field reaches a little below the grid.
-const FIELD_TRIM = { left: 0.5, right: 0.5, top: 0.5, bottom: -0.15 };
+// Cells trimmed off the grid's sides to get the fenced field (negative: the field reaches past the grid). It fills the
+// space between the shop sign and the start button, above the army grid; the bottom row's prices stand clear of the
+// front fence and a two-cell-tall offer in the top row clear of the back fence.
+const FIELD_TRIM = { left: 0.06, right: 0.06, top: -0.02, bottom: -0.24 };
+// The price sign of each offer, in cells around its slot's center (x right, y down): what a building site must not
+// spread over.
+const SIGN = { halfWidth: 0.55, top: 0.38, bottom: 0.95 };
 // Art pixels per cell of the fence and the building sites, as on the grass.
 const ART_PIXELS_PER_CELL = 48;
 
@@ -24,7 +28,7 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	constructor(
 		// The cells where the shop lays its offers: each one keeps its building site, even once sold.
 		public slots: Cell[] = [],
-		screenPosition = new ScreenPosition({ x: 38.85, y: 48.3 }),
+		screenPosition = new ScreenPosition({ x: 38.75, y: 46.5 }),
 		width: number = 9,
 		height: number = 5,
 		cellSize: number = 4.5,
@@ -32,20 +36,39 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		super({ width, height, cellSize, position: screenPosition });
 	}
 
+	// The footprint of the offer laid on each slot, kept while it is held and once it is sold, until the next draw.
+	private siteShapes = new Map<string, Cell[]>();
+
+	override setElement(buyable: Buyable) {
+		super.setElement(buyable);
+		const cells = buyable.entity.gridShape.getVectorialCells(buyable.entity.orientation);
+		this.siteShapes.set(ArmyGrid.posToString(buyable.cell), cells);
+	}
+
+	clearOffers() {
+		this.tiles.clear();
+		this.siteShapes.clear();
+	}
+
 	getBuyables() {
 		return [...this.tiles.values()];
 	}
 
-	// A building site on each slot, in the shape of the offer standing there, drawn like it centered on its cell. A slot
-	// left empty keeps a one-cell site.
+	// A building site on each slot, in the footprint of the offer laid there, drawn like it centered on its cell. A slot
+	// that got no offer has a one-cell site.
 	plots(position: { x: number; y: number }, tileSize: number): Plot[] {
 		return this.slots.map((slot) => {
-			const offer = this.tiles.get(ArmyGrid.posToString(slot));
-			const cells = offer
-				? offer.entity.gridShape.getVectorialCells(offer.entity.orientation)
-				: [new Cell({ x: 0, y: 0 })];
+			const cells = this.siteShapes.get(ArmyGrid.posToString(slot)) ?? [new Cell({ x: 0, y: 0 })];
 			const center = { x: position.x + (slot.x + 0.5) * tileSize, y: position.y - (slot.y + 0.5) * tileSize };
-			return { cells, center };
+			const sign = this.tiles.get(ArmyGrid.posToString(slot))
+				? {
+						left: center.x - SIGN.halfWidth * tileSize,
+						right: center.x + SIGN.halfWidth * tileSize,
+						top: center.y + SIGN.top * tileSize,
+						bottom: center.y + SIGN.bottom * tileSize,
+					}
+				: undefined;
+			return { cells, center, sign };
 		});
 	}
 
