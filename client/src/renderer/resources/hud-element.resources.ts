@@ -2,6 +2,57 @@ import { createImage } from "../../shared/image";
 import { IconResource } from "./icons.resources";
 import { Rarity } from "../../shared/traits/engine/rarity";
 
+export type DescriptorScrollParts = Record<
+	| "rollLeft"
+	| "roll"
+	| "rollRight"
+	| "handleLeft"
+	| "handleRight"
+	| "edgeLeft"
+	| "edgeRight"
+	| "center"
+	| "shade"
+	| "shadow",
+	HTMLImageElement
+> & {
+	// The decoration of the sheet's margins, from the uncommon scroll on.
+	decoLeft?: HTMLImageElement;
+	decoRight?: HTMLImageElement;
+	// The ornaments sticking out of the footer's ends, from the epic scroll on.
+	ornamentLeft?: HTMLImageElement;
+	ornamentRight?: HTMLImageElement;
+	// A gem set on the roll ends, from the epic scroll on.
+	gem?: HTMLImageElement;
+	// A crest over the header, from the legendary scroll on.
+	crest?: HTMLImageElement;
+};
+
+function descriptorScrollParts(
+	rarity: string,
+	decorated = false,
+	ornamented = false,
+	crested = false,
+): DescriptorScrollParts {
+	const part = (name: string) => createImage(`/resources/hud/descriptor-scroll/${rarity}/${name}.png`);
+	return {
+		rollLeft: part("roll-left"),
+		roll: part("roll"),
+		rollRight: part("roll-right"),
+		handleLeft: part("handle-left"),
+		handleRight: part("handle-right"),
+		edgeLeft: part("edge-left"),
+		edgeRight: part("edge-right"),
+		center: part("center"),
+		shade: part("shade"),
+		shadow: part("shadow"),
+		...(decorated ? { decoLeft: part("deco-left"), decoRight: part("deco-right") } : {}),
+		...(ornamented
+			? { ornamentLeft: part("ornament-left"), ornamentRight: part("ornament-right"), gem: part("gem") }
+			: {}),
+		...(crested ? { crest: part("crest") } : {}),
+	};
+}
+
 export class HudElementResources {
 	static startBattle: IconResource = {
 		image: createImage("/resources/button/start.png"),
@@ -74,6 +125,22 @@ export class HudElementResources {
 		bottom: createImage("/resources/hud/scroll/bottom.png"),
 		bottomRight: createImage("/resources/hud/scroll/bottom-right.png"),
 	};
+
+	// The pieces of the descriptor's scroll, drawn by scripts/generate-descriptor-scroll.py. One per rarity.
+	static descriptorScroll: Record<Rarity, DescriptorScrollParts> = (() => {
+		const common = descriptorScrollParts("common");
+		const uncommon = descriptorScrollParts("uncommon", true);
+		const rare = descriptorScrollParts("rare", true);
+		const epic = descriptorScrollParts("epic", true, true);
+		const legendary = descriptorScrollParts("legendary", true, true, true);
+		return {
+			[Rarity.Common]: common,
+			[Rarity.Uncommon]: uncommon,
+			[Rarity.Rare]: rare,
+			[Rarity.Epic]: epic,
+			[Rarity.Legendary]: legendary,
+		};
+	})();
 
 	static banner: IconResource = {
 		image: createImage("/resources/hud/banner.png"),
