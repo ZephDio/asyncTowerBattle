@@ -107,6 +107,17 @@ describe("/current-game", () => {
 		await put({ ...savedGame(), runSeed: "1" }).expect(400);
 		await put({ ...savedGame(), inventory: [{ kind: 3 }] }).expect(400);
 		await put({ ...savedGame(), opponent: { board: board(2) } }).expect(400);
+		await put({ ...savedGame(), reservedOffers: [{ item: { kind: "totem", cell: { x: 1, y: 3 } } }] }).expect(400);
+		await put({ ...savedGame(), reservedOffers: {} }).expect(400);
+	});
+
+	it("takes a game saved without reserved offers as one with none", async () => {
+		const authorization = await as("alice");
+		const { reservedOffers: _, ...older } = savedGame();
+		await server().put("/current-game").set("Authorization", authorization).send(older).expect(204);
+
+		const response = await server().get("/current-game").set("Authorization", authorization).expect(200);
+		expect(response.body).toEqual({ game: { ...older, reservedOffers: [] } });
 	});
 
 	it("refuses a saved game that breaks the rules", async () => {

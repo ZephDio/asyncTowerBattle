@@ -18,6 +18,7 @@ export const savedGame = (overrides: Partial<SavedGame> = {}): SavedGame => ({
 	performance: { wins: 1, losses: 0 },
 	board: board(2),
 	inventory: [{ kind: "tower", type: "frost", cell: { x: 0, y: 0 } }],
+	reservedOffers: [{ item: { kind: "totem", type: "mine", cell: { x: 1, y: 3 } }, price: 15 }],
 	opponent: null,
 	...overrides,
 });

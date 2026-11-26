@@ -42,8 +42,8 @@ export class Game {
 	matchMaker: MatchMaker = new RemoteMatchMaker();
 	// Set while the shop waits for the opponent, so the start button can't ask twice.
 	searchingOpponent = false;
-	// The offers the player reserved, kept from one shop to the next.
-	readonly offerReservations = new OfferReservations();
+	// The offers the player reserved, kept from one shop to the next and saved with the game.
+	readonly offerReservations: OfferReservations;
 	constructor(
 		public chosenClass: Faction,
 		private endGame: () => void,
@@ -52,6 +52,7 @@ export class Game {
 		this.runSeed = resumed?.runSeed ?? newRunSeed();
 		GrassSeed.value = this.runSeed;
 		this.army = resumed?.army ?? ArmyFactory.default(chosenClass);
+		this.offerReservations = new OfferReservations(resumed?.reservedOffers);
 		const envGenerator = new EnvironmentGeneration();
 		this.rounds = new RoundsTracker(this.army, envGenerator, this.runSeed);
 		if (!resumed) {
@@ -66,7 +67,7 @@ export class Game {
 	}
 
 	// The game a player left, back at the start of the phase it was saved in: the shop with the gold and the offers it
-	// had on entering (the offers are drawn again), or the battle against the opponent the player was matched with.
+	// had on entering (the offers are drawn again, except the reserved ones), or the battle against the opponent the player was matched with.
 	static resume(saved: SavedGame, endGame: () => void) {
 		const restored = restoreGame(saved);
 		return new Game(restored.faction, endGame, restored);
@@ -221,6 +222,7 @@ export class Game {
 					runSeed: this.runSeed,
 					life: this.life,
 					performance: this.performance,
+					reservedOffers: this.offerReservations.all(),
 					opponent,
 				}),
 			);
