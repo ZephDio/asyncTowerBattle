@@ -6,15 +6,9 @@ import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { HudElementResources } from "../../renderer/resources/hud-element.resources";
 import { IconResources } from "../../renderer/resources/icons.resources";
 import { DrawPriority } from "../traits/render/image-drawable";
-import { Rarity } from "../traits/engine/rarity";
+import { HudTooltip, PAD_Y } from "./battle/army-resume/hud-tooltip";
 import { ArmyBuffPercent } from "../../engine/army/battle/army-buff";
 import { TagBadge } from "../traits/render/huds/tag-badge";
-
-// The source scroll's borders, in its own pixels: the top and bottom rolls and the curled sides. They keep their
-// shape when the scroll is stretched to the panel's size; only the parchment between them stretches.
-const SLICE = { top: 165, bottom: 150, left: 80, right: 80 };
-// Screen units per source pixel for those borders: a bit bigger than the item descriptor's scroll.
-const BORDER_SCALE = 0.042;
 
 const INK = "#000000";
 const ALLIED = "#1d5fd1";
@@ -77,17 +71,22 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		this.unit = this.getCanvasSize(context, 1, 0, scale).width;
 		const u = this.unit;
 		const center = this.getCanvasPosition(context, position);
-		const left = center.x - (this.width * u) / 2;
-		const top = center.y - (this.height * u) / 2;
-		this.drawParchment(context, left, top, this.width * u, this.height * u, BORDER_SCALE * u);
+		// The scroll is drawn on a grid of art pixels, like the other scrolls: columns x rows of p canvas pixels.
+		const p = Math.max(2, Math.round(u * 0.16));
+		const columns = Math.round((this.width * u) / p);
+		const rows = Math.round((this.height * u) / p);
+		const scrollLeft = Math.round(center.x - (columns * p) / 2);
+		const scrollTop = Math.round(center.y - (rows * p) / 2);
+		HudTooltip.drawScroll(context, scrollLeft, scrollTop, columns, rows, p);
 
 		context.save();
 		context.textAlign = "left";
 		context.textBaseline = "top";
 		context.fillStyle = INK;
-		const firstLine = top + SLICE.top * BORDER_SCALE * u * 0.95;
-		this.drawLeftColumn(context, left + 5.4 * u, firstLine, 41 * u);
-		this.drawRightColumn(context, left + 50 * u, firstLine, 42 * u);
+		const firstLine = scrollTop + PAD_Y * p + 2.2 * u;
+		const textLeft = scrollLeft + 5 * u;
+		this.drawLeftColumn(context, textLeft, firstLine, 41 * u);
+		this.drawRightColumn(context, textLeft + 44.6 * u, firstLine, 41 * u);
 		context.restore();
 	}
 
@@ -366,43 +365,6 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		height: number,
 	) {
 		if (image.complete && image.naturalWidth) context.drawImage(image, x, y, width, height);
-	}
-
-	// Nine-slice drawing of the descriptor's scroll, so the panel keeps its rolls at any size.
-	private drawParchment(
-		context: CanvasRenderingContext2D,
-		x: number,
-		y: number,
-		width: number,
-		height: number,
-		border: number,
-	) {
-		const image = HudElementResources.descriptorBanner[Rarity.Common].image;
-		if (!image.complete || !image.naturalWidth) return;
-		const source = { width: image.naturalWidth, height: image.naturalHeight };
-		const sourceColumns = [0, SLICE.left, source.width - SLICE.right, source.width];
-		const sourceRows = [0, SLICE.top, source.height - SLICE.bottom, source.height];
-		const columns = [x, x + SLICE.left * border, x + width - SLICE.right * border, x + width];
-		const rows = [y, y + SLICE.top * border, y + height - SLICE.bottom * border, y + height];
-		for (let row = 0; row < 3; row++) {
-			for (let column = 0; column < 3; column++) {
-				const sx = sourceColumns[column] as number;
-				const sy = sourceRows[row] as number;
-				const dx = columns[column] as number;
-				const dy = rows[row] as number;
-				context.drawImage(
-					image,
-					sx,
-					sy,
-					(sourceColumns[column + 1] as number) - sx,
-					(sourceRows[row + 1] as number) - sy,
-					dx,
-					dy,
-					(columns[column + 1] as number) - dx,
-					(rows[row + 1] as number) - dy,
-				);
-			}
-		}
 	}
 }
 
