@@ -12,6 +12,7 @@ bottom one, so a roll can be any height from ROLL_MIN rows. Outputs, in public/r
   rolls at their middle and outside the scroll's columns.
 - deco-left.png, deco-right.png (from uncommon on): the decoration of the sheet's margins, DECO_HEIGHT rows tall, repeated
   down the sheet.
+- ornament-left.png, ornament-right.png (epic and above): the gilded tendrils sticking out of the footer's ends.
 - edge-left.png, edge-right.png: the ink border of the sheet and its shaded side, 1 row tall, repeated down the sheet.
 - center.png: the straw of the sheet with its fibers, a tile that repeats both ways.
 - shade.png: the two rows of shade under the top roll, 1 pixel wide, stretched across the sheet.
@@ -58,6 +59,8 @@ LEAF = (70, 146, 62, 255)
 LEAF_LIGHT = (128, 190, 84, 255)
 
 DECO_WIDTH = 6
+ORNAMENT_WIDTH = 14
+ORNAMENT_HEIGHT = 12
 
 BLUE_DARK = (22, 48, 120, 255)
 BLUE = (48, 96, 190, 255)
@@ -106,7 +109,13 @@ PALETTES = {
     "common": {"dot": INK, "deco": None},
     "uncommon": {"dot": LEAF_DARK, "deco": "vine"},
     "rare": {"dot": BLUE_DARK, "deco": "blue vine"},
-    "epic": {"dot": PURPLE, "deco": "gilded vine", "trim": GOLD},
+    "epic": {
+        "dot": PURPLE,
+        "deco": "gilded vine",
+        "trim": GOLD,
+        "gem": (GOLD, PURPLE, PURPLE_LIGHT),
+        "ornaments": True,
+    },
 }
 
 
@@ -148,8 +157,52 @@ def knob(side, palette):
     rect(2, 2, w - 4, h - 4, STRAW_SHADE)
     rect(2, 2, w - 5, h - 5, CREAM)
     rect(4, 4, w - 7, h - 7, STRAW)
-    rect(4, 4, 2, 2, palette["dot"])
+    if palette.get("gem"):
+        # a gold framed gem on the cap, whose middle row is the one the game repeats for a taller roll
+        frame, core, light = palette["gem"]
+        for y, (x, width) in zip(range(3, 9), ((3, 1), (2, 3), (1, 5), (1, 5), (2, 3), (3, 1))):
+            rect(x + 1, y, width, 1, frame)
+        rect(4, 4, 1, 1, core)
+        rect(3, 5, 3, 2, core)
+        rect(4, 7, 1, 1, core)
+        rect(4, 5, 1, 1, light)
+    else:
+        rect(4, 4, 2, 2, palette["dot"])
     if side == "right":
+        pixels = [row[::-1] for row in pixels]
+    return pixels
+
+
+def ornament(side):
+    """A gilded tendril sticking out of the footer's end, as the handle does of the header's: a gold stem with a leaf
+    up, a leaf down and a curl at its tip. ORNAMENT_WIDTH wide, drawn behind the roll."""
+    pixels = new(ORNAMENT_WIDTH, ORNAMENT_HEIGHT)
+    rect = painter(pixels)
+    rect(0, 5, 11, 1, GOLD)
+    rect(0, 6, 11, 1, GOLD_DARK)
+    for x, y, color in (
+        (3, 4, PURPLE),
+        (4, 4, PURPLE),
+        (4, 3, PURPLE_LIGHT),
+        (5, 3, PURPLE),
+        (5, 2, PURPLE_DARK),
+        (6, 2, PURPLE_DARK),
+        (7, 7, PURPLE),
+        (8, 7, PURPLE),
+        (8, 8, PURPLE_LIGHT),
+        (9, 8, PURPLE),
+        (9, 9, PURPLE_DARK),
+        (10, 9, PURPLE_DARK),
+        (11, 5, GOLD),
+        (12, 4, GOLD),
+        (12, 3, GOLD),
+        (11, 2, GOLD),
+        (10, 2, GOLD),
+        (10, 3, GOLD_DARK),
+        (13, 5, GOLD_DARK),
+    ):
+        rect(x, y, 1, 1, color)
+    if side == "left":
         pixels = [row[::-1] for row in pixels]
     return pixels
 
@@ -262,6 +315,9 @@ def main():
             "shade": new(1, SHADE, STRAW_SHADE),
             "shadow": new(1, SHADE, SHADOW),
         }
+        if palette.get("ornaments"):
+            pieces["ornament-left"] = ornament("left")
+            pieces["ornament-right"] = ornament("right")
         if palette["deco"]:
             pieces["deco-left"] = vine("left", palette["deco"])
             pieces["deco-right"] = vine("right", palette["deco"])

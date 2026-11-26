@@ -18,9 +18,12 @@ export type DescriptorScrollParts = Record<
 	// The decoration of the sheet's margins, from the uncommon scroll on.
 	decoLeft?: HTMLImageElement;
 	decoRight?: HTMLImageElement;
+	// The ornaments sticking out of the footer's ends, from the epic scroll on.
+	ornamentLeft?: HTMLImageElement;
+	ornamentRight?: HTMLImageElement;
 };
 
-function descriptorScrollParts(rarity: string, decorated = false): DescriptorScrollParts {
+function descriptorScrollParts(rarity: string, decorated = false, ornamented = false): DescriptorScrollParts {
 	const part = (name: string) => createImage(`/resources/hud/descriptor-scroll/${rarity}/${name}.png`);
 	return {
 		rollLeft: part("roll-left"),
@@ -34,6 +37,7 @@ function descriptorScrollParts(rarity: string, decorated = false): DescriptorScr
 		shade: part("shade"),
 		shadow: part("shadow"),
 		...(decorated ? { decoLeft: part("deco-left"), decoRight: part("deco-right") } : {}),
+		...(ornamented ? { ornamentLeft: part("ornament-left"), ornamentRight: part("ornament-right") } : {}),
 	};
 }
 
@@ -116,7 +120,7 @@ export class HudElementResources {
 		const common = descriptorScrollParts("common");
 		const uncommon = descriptorScrollParts("uncommon", true);
 		const rare = descriptorScrollParts("rare", true);
-		const epic = descriptorScrollParts("epic", true);
+		const epic = descriptorScrollParts("epic", true, true);
 		return {
 			[Rarity.Common]: common,
 			[Rarity.Uncommon]: uncommon,
