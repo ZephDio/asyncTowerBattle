@@ -151,12 +151,12 @@ export class ShopPhase {
 		};
 	}
 
-	// Built from the army each time, since the grid widens between rounds and the gold changes.
 	getReserveSign() {
 		const { position, width, height, cellSize } = this.army.inventory;
 		return new ReserveSignHud({ gridPosition: position, gridWidth: width, gridHeight: height, cellSize });
 	}
 
+	// Built from the army each time, since the grid widens between rounds and the gold changes.
 	getArmyHud() {
 		return new ArmyHud(this.army, this.round, this.life);
 	}

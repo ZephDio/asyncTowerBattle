@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates the wooden plank panel behind the shop (src/shared/traits/render/wood-panel.ts).
+"""Generates the wooden plank panel of the shop and reserve signs (src/shared/traits/render/wood-panel.ts).
 
 Run from anywhere: python3 scripts/generate-wood-panel.py
 
@@ -10,7 +10,7 @@ like the scroll (generate-scroll.py):
   long side and repeat.
 - center.png: horizontal planks, PLANK rows tall each, with staggered seams and grain. It repeats both ways.
 
-The game draws one plank per grid cell high (see wood-panel.ts), so the center tile is 2 planks tall.
+The center tile is 2 planks tall; wood-panel.ts tiles it at the banner's art-pixel scale.
 """
 
 from pathlib import Path
