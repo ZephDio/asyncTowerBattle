@@ -20,7 +20,7 @@ export class ElfCastleBlueprint extends Derive(
 		health: 20,
 		castleDamage: NaN,
 		projectileDamage: NaN,
-		castSpeed: 1,
+		castSpeed: 2,
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

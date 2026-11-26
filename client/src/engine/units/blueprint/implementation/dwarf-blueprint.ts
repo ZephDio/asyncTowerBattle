@@ -33,7 +33,7 @@ export class DwarfBlueprint extends Derive(
 		castSpeed: NaN,
 		foodConsumption: 0.4,
 		foodConsumptionOnCast: NaN,
-		summonTime: secondsToFrame(1.6),
+		summonTime: secondsToFrame(3.5),
 		range: NaN,
 	}),
 	KinfolkTag,

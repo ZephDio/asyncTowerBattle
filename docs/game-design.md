@@ -113,7 +113,7 @@ Pieces carry tags that synergies and future pieces can target.
 | Dwarf | Dwarf Mountain | 25 | 5 | Dwarf: slow, tough, spawns with a stone shield that blocks one hit |
 | Elf | Castle | 20 | 5 | Elf: fast and fragile |
 
-An empty barrack summons the faction's default unit. Factions are thin for now: castle stats and default unit. Faction-specific pieces are planned.
+Both castles summon their default unit at twice the speed of a barrack (castle production speed ×2). An empty barrack summons the faction's default unit. Factions are thin for now: castle stats and default unit. Faction-specific pieces are planned.
 
 ### Sciences
 
@@ -154,8 +154,8 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 
 | Unit | Rarity | Price | HP | Speed | Castle dmg | Food | Summon | Tags | Ability |
 |---|---|---|---|---|---|---|---|---|---|
-| Dwarf | default | — | 14 | 0.13 | 1.2 | 0.4 | 1.6 s | Kinfolk | Spawns with a stone shield (blocks one hit). |
-| Elf | default | — | 10 | 0.32 | 1 | 0.4 | 1.2 s | Kinfolk | None. |
+| Dwarf | default | — | 14 | 0.13 | 1.2 | 0.4 | 3.5 s | Kinfolk | Spawns with a stone shield (blocks one hit). |
+| Elf | default | — | 10 | 0.32 | 1 | 0.4 | 3.5 s | Kinfolk | None. |
 | Gobelin | token | — | 10 | 0.4 | 1 | 1 | 1 s | Evil, Monster | Small and fast. Made by the Gobelin Portal. |
 | Glutton Fox | Uncommon | 15 | 22 | 0.18 | 1.5 | 0.5 | 1.8 s | Animal, Food | Every 4.5 s eats 2 food from the enemy (scales with attack). |
 | Choupisson | Rare | 15 | 18 | 0.25 | 3 | 1.8 | 3.5 s | Animal | When hit, throws 3 spines in a cone. |
@@ -178,7 +178,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Gobelin Portal | Epic | 10 | When a caster on a star triggers: 30% chance to summon a Gobelin. | the 4 diagonals |
 | Forging Anvil | Legendary | 10 | Damage towers on its stars deal +30% damage. | left and right |
 | Gold Mine | Common | 15 | Shop entered: +5 gold. Start of battle: +1 vitality army buff stack (💖) if a Mountain (a Rock or another Gold Mine) is on its star. Each mine stacks. | right |
-| Red Obelisk | Legendary | 10 | Every 5 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
+| Red Obelisk | Legendary | 20 | Every 8 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
 | Stonemason | Uncommon | 15 | Needs Dwarf science. Totem + Mountain, 1 wide and 2 tall. Every 5 s: gives a stone shield to 2 random allied units that have none, +1 unit per Mountain (Rock, Gold Mine, Go-Goat, another Stonemason) on its stars (up to 6). No food cost. Poison ignores shields. Placeholder sprite. | left and right of both cells (4 stars) |
 | Cauldron | Epic | 30 | Needs Witchcraft science. One cell, tagged Totem and Evil. Start of battle: the army's poison effects (the Witch House's puddles and the Frog's croak, 6 damage/s) deal +20% damage, each Cauldron adding its own 20%. Placeholder sprite. | none |
 
