@@ -64,6 +64,12 @@ BLUE = (48, 96, 190, 255)
 BLUE_LIGHT = (118, 168, 236, 255)
 BERRY = (170, 214, 255, 255)
 
+PURPLE_DARK = (62, 26, 112, 255)
+PURPLE = (120, 62, 188, 255)
+PURPLE_LIGHT = (184, 134, 240, 255)
+GOLD = (244, 200, 76, 255)
+GOLD_DARK = (172, 122, 32, 255)
+
 # The vines: the palette (stem, leaf edge, leaf, leaf highlight), the tile's height, its leaves as (row, side) with
 # side 1 for a leaf going up and -1 for one going down, its berries as rows and its diamonds as rows (centers).
 VINES = {
@@ -82,12 +88,25 @@ VINES = {
         "diamonds": (28,),
         "berry": BERRY,
     },
+    "gilded vine": {
+        "colors": (PURPLE_DARK, PURPLE_DARK, PURPLE, PURPLE_LIGHT),
+        "height": 64,
+        "leaves": ((6, 1), (6, -1), (20, 1), (26, -1), (42, 1), (46, -1), (54, 1), (54, -1)),
+        "berries": (18, 40),
+        "diamonds": (34,),
+        "curls": ((14, 1), (61, -1)),
+        "berry": GOLD,
+        "tip": GOLD,
+        "frame": GOLD,
+        "frame_dark": GOLD_DARK,
+    },
 }
 
 PALETTES = {
     "common": {"dot": INK, "deco": None},
     "uncommon": {"dot": LEAF_DARK, "deco": "vine"},
     "rare": {"dot": BLUE_DARK, "deco": "blue vine"},
+    "epic": {"dot": PURPLE, "deco": "gilded vine", "trim": GOLD},
 }
 
 
@@ -176,31 +195,45 @@ def vine(side, kind):
     )
     for y, flip in config["leaves"]:
         for dx, dy, color in leaf:
+            if (dx, dy) == (5, -2) and "tip" in config:
+                color = config["tip"]
             rect(dx, (y + flip * dy) % height, 1, 1, color)
+    curl = ((1, 0), (2, 0), (3, 0), (4, -1), (4, -2), (3, -3), (2, -3), (2, -2))
+    for y, flip in config.get("curls", ()):
+        for index, (dx, dy) in enumerate(curl):
+            rect(dx, (y + flip * dy) % height, 1, 1, light if index in (3, 4) else leaf_color)
+        rect(3, (y - flip * 2 + 0) % height, 1, 1, config["tip"])
     for y in config["berries"]:
         rect(2, y - 3, 2, 2, edge_color)
         rect(2, y - 3, 1, 1, config.get("berry", light))
     for y in config["diamonds"]:
         for dy, (x, w) in enumerate(((3, 1), (2, 3), (1, 5), (2, 3), (3, 1))):
-            rect(x, y - 2 + dy, w, 1, edge_color)
+            rect(x, y - 2 + dy, w, 1, config.get("frame", edge_color))
         rect(3, y - 1, 1, 3, leaf_color)
         rect(2, y, 3, 1, leaf_color)
         rect(3, y, 1, 1, light)
+        if "frame_dark" in config:
+            rect(1, y, 1, 1, config["frame_dark"])
+            rect(3, y + 2, 1, 1, config["frame_dark"])
     if side == "left":
         pixels = [row[::-1] for row in pixels]
     return pixels
 
 
-def edge(side):
+def edge(side, trim=None):
     width = SHEET_INSET + SHEET_BORDER + 2
     pixels = new(width, 1)
     rect = painter(pixels)
     if side == "left":
         rect(SHEET_INSET, 0, SHEET_BORDER, 1, INK)
         rect(SHEET_INSET + SHEET_BORDER, 0, 2, 1, STRAW)
+        if trim:
+            rect(SHEET_INSET + SHEET_BORDER, 0, 1, 1, trim)
     else:
         rect(0, 0, 2, 1, STRAW_SHADE)
         rect(2, 0, SHEET_BORDER, 1, INK)
+        if trim:
+            rect(1, 0, 1, 1, trim)
     return pixels
 
 
@@ -223,8 +256,8 @@ def main():
             "roll-right": knob("right", palette),
             "handle-left": handle("left"),
             "handle-right": handle("right"),
-            "edge-left": edge("left"),
-            "edge-right": edge("right"),
+            "edge-left": edge("left", palette.get("trim")),
+            "edge-right": edge("right", palette.get("trim")),
             "center": center_tile(),
             "shade": new(1, SHADE, STRAW_SHADE),
             "shadow": new(1, SHADE, SHADOW),

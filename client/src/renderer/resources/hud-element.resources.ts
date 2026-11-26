@@ -110,18 +110,19 @@ export class HudElementResources {
 		bottomRight: createImage("/resources/hud/scroll/bottom-right.png"),
 	};
 
-	// The pieces of the descriptor's scroll, drawn by scripts/generate-descriptor-scroll.py. Only the common, uncommon and
-	// rare ones are drawn so far: the other rarities use the rare one until theirs are.
+	// The pieces of the descriptor's scroll, drawn by scripts/generate-descriptor-scroll.py. Only the common to epic ones
+	// are drawn so far: legendary uses the epic one until it is.
 	static descriptorScroll: Record<Rarity, DescriptorScrollParts> = (() => {
 		const common = descriptorScrollParts("common");
 		const uncommon = descriptorScrollParts("uncommon", true);
 		const rare = descriptorScrollParts("rare", true);
+		const epic = descriptorScrollParts("epic", true);
 		return {
 			[Rarity.Common]: common,
 			[Rarity.Uncommon]: uncommon,
 			[Rarity.Rare]: rare,
-			[Rarity.Epic]: rare,
-			[Rarity.Legendary]: rare,
+			[Rarity.Epic]: epic,
+			[Rarity.Legendary]: epic,
 		};
 	})();
 
