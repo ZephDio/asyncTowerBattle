@@ -3,7 +3,7 @@ import { ScreenPosition } from "../position";
 import { TDrawable } from "../traits/render/drawable";
 import { DrawPriority } from "../traits/render/image-drawable";
 import { TRenderable } from "../traits/render/renderable";
-import { drawShopPanel } from "../traits/render/shop-panel";
+import { drawWoodSign } from "../traits/render/wood-sign";
 
 export class ShopSignHud extends Derive(TDrawable, TRenderable) {
 	drawPriority = DrawPriority.HUD;
@@ -19,16 +19,8 @@ export class ShopSignHud extends Derive(TDrawable, TRenderable) {
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
-		const { x, y } = this.getCanvasPosition(context, position);
-		const { width, height } = this.getCanvasSize(context, this.size.width, this.size.height);
-		context.save();
-		context.globalAlpha = 1;
-		drawShopPanel(context, x - width / 2, y - height / 2, width, height, height);
-		context.font = `${height * 0.58}px title`;
-		context.fillStyle = "#ffe5ad";
-		context.textAlign = "center";
-		context.textBaseline = "middle";
-		context.fillText("SHOP", x, y);
-		context.restore();
+		const center = this.getCanvasPosition(context, position);
+		const size = this.getCanvasSize(context, this.size.width, this.size.height);
+		drawWoodSign(context, center, size, this.getCanvasSize(context, 1, 1).width, "SHOP");
 	}
 }
