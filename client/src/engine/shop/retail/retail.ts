@@ -37,7 +37,7 @@ export class Retail extends Derive(
 		public reservations = new OfferReservations(),
 	) {
 		super({});
-		this.grid = new RetailGrid();
+		this.grid = new RetailGrid(this.slots);
 		this.refresh();
 	}
 	position = new GridPosition(PercentToReal({ x: 50, y: 75 }));

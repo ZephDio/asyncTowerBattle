@@ -113,6 +113,32 @@ export class HudElementResources {
 		bottomRight: createImage("/resources/hud/wood-panel/bottom-right.png"),
 	};
 
+	// The wooden fence around the shop offers, cut in pieces by scripts/generate-fence.py: the corners, then one bay of
+	// each side, which repeats.
+	static fence = {
+		topLeft: createImage("/resources/hud/fence/top-left.png"),
+		top: createImage("/resources/hud/fence/top.png"),
+		topRight: createImage("/resources/hud/fence/top-right.png"),
+		left: createImage("/resources/hud/fence/left.png"),
+		right: createImage("/resources/hud/fence/right.png"),
+		bottomLeft: createImage("/resources/hud/fence/bottom-left.png"),
+		bottom: createImage("/resources/hud/fence/bottom.png"),
+		bottomRight: createImage("/resources/hud/fence/bottom-right.png"),
+	};
+
+	// The building site under each shop offer, drawn by scripts/generate-construction-site.py: quarter cells and a stake.
+	static constructionSite = {
+		quarters: createImage("/resources/hud/construction-site/site.png"),
+		stake: createImage("/resources/hud/construction-site/stake.png"),
+	};
+
+	// The little wooden sign of a shop offer's price, drawn by scripts/generate-price-sign.py.
+	static priceSign = {
+		left: createImage("/resources/hud/price-sign/left.png"),
+		middle: createImage("/resources/hud/price-sign/middle.png"),
+		right: createImage("/resources/hud/price-sign/right.png"),
+	};
+
 	// The nine pieces of the parchment scroll of the tooltips, drawn by scripts/generate-scroll.py.
 	static scroll = {
 		topLeft: createImage("/resources/hud/scroll/top-left.png"),

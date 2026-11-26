@@ -12,7 +12,7 @@ export const TPriceHudRenderable = Subtrait([THudRenderable, THasPrice], (base) 
 				...super.huds(),
 				{
 					hud: this.unitPreview,
-					position: new GridPosition({ x: 0, y: -4.2 }),
+					position: new GridPosition({ x: 0, y: -3.8 }),
 				},
 			];
 		}
