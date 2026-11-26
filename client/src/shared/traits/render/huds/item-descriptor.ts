@@ -90,7 +90,6 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 // The scroll is laid out in art pixels, drawn `p` canvas pixels each (see drawDescriptorScroll), about 0.16 screen units.
 // The text stays this far from the sheet's sides.
 const TEXT_LEFT = 12;
-const TITLE_ROLL = 22;
 const TITLE_SIZE = 14;
 const LINE_SIZE = 10;
 const LINE_HEIGHT = 13;
@@ -98,18 +97,18 @@ const SECTION_GAP = 0.5;
 const TAG_SIZE = 9;
 const TAG_ROW_HEIGHT = TAG_SIZE * 1.15;
 const TAG_PADDING = 1;
-// The scroll always has the same size, whatever it describes, and its bottom roll always has room for two rows of tags.
-const TAG_ROLL = Math.ceil(TAG_SIZE + TAG_ROW_HEIGHT) + ROLL_INK_TOP + ROLL_INK_BOTTOM + 2 * TAG_PADDING;
+// The scroll always has the same size, whatever it describes. Both its rolls are tall enough for two rows of tags.
+const ROLL_HEIGHT = Math.ceil(TAG_SIZE + TAG_ROW_HEIGHT) + ROLL_INK_TOP + ROLL_INK_BOTTOM + 2 * TAG_PADDING;
 const MAX_TAGS = 4;
 const TAGS_PER_ROW = 2;
 const BODY_PADDING = 4;
 const STAMP_SIZE = 19;
 // The scroll's box in screen percent units (of the canvas width): its right edge, its top (level with the start button) and its size. It
-// ends just above the reserve's sign, and its size does not depend on what it describes.
+// hangs over the reserve's sign, and its size does not depend on what it describes.
 const SCROLL_RIGHT = 97.5;
 const SCROLL_TOP = 1.5;
 const SCROLL_WIDTH = 25;
-const SCROLL_HEIGHT = 26.8;
+const SCROLL_HEIGHT = 33;
 
 const INK = "rgb(22,28,46)";
 
@@ -159,8 +158,8 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 
 	getShape(columns: number, rows: number): ScrollShape & { lines: ReturnType<DescriptionHud["getLinesOffsets"]> } {
 		const lines = this.getLinesOffsets();
-		const body = rows - TITLE_ROLL - TAG_ROLL;
-		return { columns, topRoll: TITLE_ROLL, bottomRoll: TAG_ROLL, body, lines };
+		const body = rows - ROLL_HEIGHT - ROLL_HEIGHT;
+		return { columns, topRoll: ROLL_HEIGHT, bottomRoll: ROLL_HEIGHT, body, lines };
 	}
 
 	draw(context: CanvasRenderingContext2D, _position: ScreenPosition, scale: number) {
