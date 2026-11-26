@@ -14,10 +14,10 @@ export const HANDLE_HEIGHT = 8;
 // How far a handle goes under its roll's end.
 const HANDLE_OVERLAP = 1;
 const EDGE = 7;
-const DECO_WIDTH = 7;
+const DECO_WIDTH = 6;
 const DECO_HEIGHT = 24;
 // The decoration's distance from the scroll's sides.
-const DECO_INSET = 12;
+const DECO_INSET = 7;
 
 export type ScrollShape = {
 	columns: number;

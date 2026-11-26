@@ -57,7 +57,7 @@ LEAF_DARK = (36, 92, 48, 255)
 LEAF = (70, 146, 62, 255)
 LEAF_LIGHT = (128, 190, 84, 255)
 
-DECO_WIDTH = 7
+DECO_WIDTH = 6
 DECO_HEIGHT = 24
 
 PALETTES = {
@@ -129,8 +129,9 @@ def handle(side):
 
 
 def vine(side):
-    """A climbing vine for the left margin of the sheet, DECO_HEIGHT rows tall and repeating: a straight stem on the
-    outer edge of the strip and a leaf every 6 rows pointing inwards, alternately up and down."""
+    """A climbing vine for the margins of the sheet, DECO_HEIGHT rows tall and repeating: a straight stem on the strip's
+    inner edge, the side of the text, and a leaf every 6 rows pointing outwards, alternately up and down. The text
+    side of the stem stays free so the text can come closer."""
     pixels = new(DECO_WIDTH, DECO_HEIGHT)
     rect = painter(pixels)
     for y in range(DECO_HEIGHT):
@@ -149,7 +150,7 @@ def vine(side):
     for y, flip in ((3, 1), (9, -1), (15, 1), (21, -1)):
         for dx, dy, color in leaf:
             rect(dx, (y + flip * dy) % DECO_HEIGHT, 1, 1, color)
-    if side == "right":
+    if side == "left":
         pixels = [row[::-1] for row in pixels]
     return pixels
 
