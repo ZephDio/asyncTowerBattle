@@ -108,7 +108,7 @@ const STAMP_SIZE = 19;
 const SCROLL_RIGHT = 97.5;
 const SCROLL_TOP = 1.5;
 const SCROLL_WIDTH = 25;
-const SCROLL_HEIGHT = 33;
+const SCROLL_HEIGHT = 31.2;
 
 const INK = "rgb(22,28,46)";
 
