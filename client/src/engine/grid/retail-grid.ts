@@ -20,7 +20,7 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	synergiesEffects: SynergyEffectHud[] = [];
 
 	constructor(
-		screenPosition = new ScreenPosition({ x: 34.35, y: 48.3 }),
+		screenPosition = new ScreenPosition({ x: 38.85, y: 48.3 }),
 		width: number = 9,
 		height: number = 5,
 		cellSize: number = 4.5,

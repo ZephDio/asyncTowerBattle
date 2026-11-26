@@ -277,7 +277,7 @@ For the windmill-to-war-turret example (`generate-windmill-turret.py`), the tran
 
 ## Unit style (dragon)
 
-Units are a different, chunkier style, matched on `client/public/resources/units/dragon.png`: a 16x16 front-facing
+Units are a different, chunkier style, matched on `client/public/resources/units/dragon/dragon.png`: a 16x16 front-facing
 sprite upscaled 4x to 64x64 (`analyze.py` shows runs of 4), flat colors with one or two shades per part,
 light from the top left, a near-black `(29, 29, 28)` outline around the silhouette, no ground shadow, and a
 single image like every other piece. The voxel renderer is overkill at

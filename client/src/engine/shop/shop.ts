@@ -19,7 +19,7 @@ import { EconomyHooks } from "../gold/army-gold-economy";
 import { PathPreview } from "../path/army/path-preview";
 import { PathInvalidHud } from "../../shared/hud-element/path-invalid-hud";
 import { ArmyHud } from "../../shared/hud-element/army-hud";
-import { ScienceHud } from "../../shared/hud-element/science-hud";
+import { ScienceHud, besideReserve } from "../../shared/hud-element/science-hud";
 import { SciencePanel } from "../../shared/hud-element/science-panel";
 import { Science } from "../../shared/traits/engine/science";
 
@@ -156,7 +156,7 @@ export class ShopPhase {
 
 	// Built each time too: the sciences change as pieces that grant one are placed or sold.
 	getScienceHud() {
-		return new ScienceHud(this.army, this.army.inventory, this.pinnedScience);
+		return new ScienceHud(this.army, besideReserve(this.army.inventory), this.pinnedScience);
 	}
 
 	// The scroll shown: the hovered science's, else the pinned one's.

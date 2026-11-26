@@ -8,7 +8,7 @@ export class BarrackResources {
 			width: 4.9,
 			height: 6.37,
 		},
-		image: createImage("/resources/house/barracks.png"),
+		image: createImage("/resources/barracks/barracks.png"),
 		shape: "rectangle",
 	};
 
@@ -18,7 +18,7 @@ export class BarrackResources {
 			width: 9.8,
 			height: 6.37,
 		},
-		image: createImage("/resources/house/rush-barracks.png"),
+		image: createImage("/resources/barracks/rush-barracks.png"),
 		shape: "rectangle",
 	};
 
@@ -27,7 +27,7 @@ export class BarrackResources {
 			width: 5,
 			height: 8,
 		},
-		image: createImage("/resources/house/red.png"),
+		image: createImage("/resources/barracks/red.png"),
 		shape: "rectangle",
 	};
 
@@ -36,7 +36,7 @@ export class BarrackResources {
 			width: 5,
 			height: 8,
 		},
-		image: createImage("/resources/house/yellow.png"),
+		image: createImage("/resources/barracks/yellow.png"),
 		shape: "rectangle",
 	};
 }

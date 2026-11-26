@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-go-goat.py
 
-Outputs public/resources/units/go-goat.png, and public/resources/units/go-goat.sheet.png with its json (see
+Outputs public/resources/units/go-goat/go-goat.png, and public/resources/units/go-goat/go-goat.sheet.png with its json (see
 sprite_sheet.py).
 
 It follows the dragon unit: a sprite upscaled 4x, flat colors with one or two shades per part, light from the top
@@ -21,8 +21,8 @@ from sprite_sheet import breath_out, outline, to_pixels, write_sheet
 from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "public" / "resources" / "units" / "go-goat.png"
-SHEET = ROOT / "public" / "resources" / "units" / "go-goat.sheet.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "go-goat" / "go-goat.png"
+SHEET = ROOT / "public" / "resources" / "units" / "go-goat" / "go-goat.sheet.png"
 SCALE = 4
 
 PALETTE = {

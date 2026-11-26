@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-white-stag.py
 
-Outputs, in public/resources/units/:
+Outputs, in public/resources/units/white-stag/:
 - white-stag.png: the stag with both antlers.
 - white-stag-antler.png: the dropped antler lying on the ground, drawn by the FallenAntler area effect.
 - white-stag.sheet.png and white-stag-one-antler.sheet.png, with their json: the idle sheets of the stag with both
@@ -26,7 +26,7 @@ from sprite_sheet import Frame, breath_out, outline, to_pixels, write_sheet
 from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-UNITS = ROOT / "public" / "resources" / "units"
+UNITS = ROOT / "public" / "resources" / "units" / "white-stag"
 SCALE = 4
 
 PALETTE = {

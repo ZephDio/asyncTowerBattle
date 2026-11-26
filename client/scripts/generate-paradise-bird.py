@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-paradise-bird.py
 
-Outputs public/resources/units/paradise-bird.png, and public/resources/units/paradise-bird.sheet.png with its json
+Outputs public/resources/units/paradise-bird/paradise-bird.png, and public/resources/units/paradise-bird/paradise-bird.sheet.png with its json
 (see sprite_sheet.py).
 
 It follows the dragon unit: a sprite upscaled 4x, flat colors with one or two shades per part, light from the top
@@ -21,8 +21,8 @@ from sprite_sheet import breath_out, outline, to_pixels, write_sheet
 from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "public" / "resources" / "units" / "paradise-bird.png"
-SHEET = ROOT / "public" / "resources" / "units" / "paradise-bird.sheet.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "paradise-bird" / "paradise-bird.png"
+SHEET = ROOT / "public" / "resources" / "units" / "paradise-bird" / "paradise-bird.sheet.png"
 SCALE = 4
 
 PALETTE = {

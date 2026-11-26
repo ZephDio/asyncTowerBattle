@@ -49,6 +49,19 @@ export class HudElementResources {
 		halo: { image: createImage("/resources/hud/science-ribbon/halo.png") },
 	};
 
+	// The nine pieces of the parchment scroll of the tooltips, drawn by scripts/generate-scroll.py.
+	static scroll = {
+		topLeft: createImage("/resources/hud/scroll/top-left.png"),
+		top: createImage("/resources/hud/scroll/top.png"),
+		topRight: createImage("/resources/hud/scroll/top-right.png"),
+		left: createImage("/resources/hud/scroll/left.png"),
+		center: createImage("/resources/hud/scroll/center.png"),
+		right: createImage("/resources/hud/scroll/right.png"),
+		bottomLeft: createImage("/resources/hud/scroll/bottom-left.png"),
+		bottom: createImage("/resources/hud/scroll/bottom.png"),
+		bottomRight: createImage("/resources/hud/scroll/bottom-right.png"),
+	};
+
 	static banner: IconResource = {
 		image: createImage("/resources/hud/banner.png"),
 	};

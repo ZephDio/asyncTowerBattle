@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-brewmaster.py
 
-Outputs public/resources/units/brewmaster.png, and public/resources/units/brewmaster.sheet.png with its json (see
+Outputs public/resources/units/brewmaster/brewmaster.png, and public/resources/units/brewmaster/brewmaster.sheet.png with its json (see
 sprite_sheet.py).
 
 It follows the dragon unit: a 16x16 front-facing sprite upscaled 4x, flat colors with one or two shades per part,
@@ -21,8 +21,8 @@ from sprite_sheet import breath_out, outline, to_pixels, write_sheet
 from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "public" / "resources" / "units" / "brewmaster.png"
-SHEET = ROOT / "public" / "resources" / "units" / "brewmaster.sheet.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "brewmaster" / "brewmaster.png"
+SHEET = ROOT / "public" / "resources" / "units" / "brewmaster" / "brewmaster.sheet.png"
 SCALE = 4
 
 PALETTE = {

@@ -7,13 +7,15 @@ import { drawShopPanel } from "../traits/render/shop-panel";
 
 export class ShopSignHud extends Derive(TDrawable, TRenderable) {
 	drawPriority = DrawPriority.HUD;
-	position = new ScreenPosition({ x: 7.1, y: 57.4 });
+	position = new ScreenPosition({ x: 10, y: 57.4 });
 
 	readonly size = { width: 9, height: 4.5 };
 
 	contains(point: ScreenPosition) {
-		return Math.abs(point.x - this.position.x) <= this.size.width / 2 &&
-			Math.abs(point.y - this.position.y) <= this.size.height / 2;
+		return (
+			Math.abs(point.x - this.position.x) <= this.size.width / 2 &&
+			Math.abs(point.y - this.position.y) <= this.size.height / 2
+		);
 	}
 
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {

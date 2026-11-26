@@ -31,8 +31,14 @@ export function requiredScienceOf(element: object): Science | undefined {
 	return "requiredScience" in element ? (element.requiredScience as Science) : undefined;
 }
 
+// An element that has no sciences of its own but is described as another one (a battle tower as its recruit) grants
+// that one's.
 export function grantedSciencesOf(element: object): readonly Science[] {
-	return "grantedSciences" in element ? (element.grantedSciences as readonly Science[]) : [];
+	if ("grantedSciences" in element) return element.grantedSciences as readonly Science[];
+	if ("describedBy" in element && element.describedBy && element.describedBy !== element) {
+		return grantedSciencesOf(element.describedBy);
+	}
+	return [];
 }
 
 // Recruits copy the sciences of the blueprint they are built from.

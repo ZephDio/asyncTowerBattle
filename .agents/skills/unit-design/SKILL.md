@@ -22,7 +22,7 @@ Adding a unit `<unit>` (kebab case file names, PascalCase classes):
 | Recruit | `client/src/engine/units/recruit/implementation/<unit>.ts` | `Derive(Unit)`, plus `RecruitCaster` if it casts; `toBattle` |
 | Recruit fixtures | `client/src/engine/units/recruit/unit-fixtures.ts` | `UnitRecruitFixture.<unit>`, used by armies and barracks |
 | Battle | `client/src/engine/units/battle/implementation/battle-<unit>.ts` | `Derive(TBattleUnit)`, plus `Caster` if it casts |
-| Image | `client/public/resources/units/<unit>.png`, entry in `client/src/renderer/resources/unit.resources.ts` | `size` in grid units, `shape: "ellipse"` |
+| Image | `client/public/resources/units/<unit>/<unit>.png`, entry in `client/src/renderer/resources/unit.resources.ts` | `size` in grid units, `shape: "ellipse"` |
 | Generator | `client/scripts/generate-<unit>.py` | writes the PNG (and the idle sheet, if any) |
 | Shop | `client/src/engine/shop/retail/retail-filler.ts` | add the blueprint to the units pool to sell it |
 | Enemies | `client/src/engine/match-maker/local-match-maker.ts`, `client/src/engine/constructs/barrack/recruit/barrack-fixtures.ts` | only if the opponent armies should field it |
@@ -100,7 +100,7 @@ The description is three short lines (about 20 characters each): `new UnitDescri
 
 ## Sprite
 
-The reference is `client/public/resources/units/dragon.png`; the ent, choupisson, brewmaster and white stag follow it.
+The reference is `client/public/resources/units/dragon/dragon.png`; the ent, choupisson, brewmaster and white stag follow it.
 
 - **A character grid, upscaled 4x** with nearest neighbor: one character per sprite pixel, `.` transparent. 16x16
   is the norm (64x64 PNG). A big creature may take more (the white stag is 23x23 for its antlers and long legs),
@@ -150,7 +150,7 @@ For stat tuning, compare `run` results with the same seed and board before and a
 When an old sprite is small or blurry but the user likes its drawing (the fox), **don't redraw it**: transcribe
 the PNG pixel for pixel into a grid (`read_png`, one letter per color) and write it at 4x. My redraws of the fox
 and the priest were rejected as much worse than the originals; the 1:1 upscale was approved. Redraw only when the
-user asks for a new design. Old images stay in git: `git show HEAD:client/public/resources/units/<unit>.png`.
+user asks for a new design. Old images stay in git: `git show HEAD:client/public/resources/units/<unit>/<unit>.png`.
 
 ### Idle animation
 

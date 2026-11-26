@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-dragon-sheet.py
 
-Outputs public/resources/units/dragon.sheet.png and public/resources/units/dragon.sheet.json (see sprite_sheet.py).
+Outputs public/resources/units/dragon/dragon.sheet.png and public/resources/units/dragon/dragon.sheet.json (see sprite_sheet.py).
 
 dragon.png is a 15x15 sprite upscaled 4x, placed at (3, 2) in a 65x64 canvas: the frames keep that canvas so frame 1
 is dragon.png pixel for pixel, still used alone in the shop. Frame 2 breathes out: the head and the wings drop one
@@ -16,7 +16,7 @@ from pathlib import Path
 from sprite_sheet import breath_out, write_sheet
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "public" / "resources" / "units" / "dragon.sheet.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "dragon" / "dragon.sheet.png"
 
 PALETTE = {
     "a": (29, 29, 28, 255),  # outline

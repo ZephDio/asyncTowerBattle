@@ -28,7 +28,7 @@ not change.
 
 ## What "done" looks like for one unit
 
-1. `client/scripts/generate-<unit>-sheet.py`, which writes `client/public/resources/units/<unit>.sheet.png` and
+1. `client/scripts/generate-<unit>-sheet.py`, which writes `client/public/resources/units/<unit>/<unit>.sheet.png` and
    `<unit>.sheet.json` with one tag, `idle`, holding 2 frames at 450 ms each.
 2. **Frame 1 is `<unit>.png`, identical pixel for pixel**, in the same canvas size. Check it (see Verification).
    Every frame of a sheet has the canvas size of the still image, so the resource `size` in `unit.resources.ts`
@@ -36,7 +36,7 @@ not change.
 3. Frame 2 is the breath out (see "The bob" below).
 4. In `client/src/renderer/resources/unit.resources.ts`, next to the unit's entry:
    ```ts
-   static elfSheet = SpriteSheet.fromJson("/resources/units/elf.sheet.png", "/resources/units/elf.sheet.json");
+   static elfSheet = SpriteSheet.fromJson("/resources/units/elf/elf.sheet.png", "/resources/units/elf/elf.sheet.json");
    ```
 5. In `client/src/engine/units/battle/implementation/battle-<unit>.ts`, as the first field of the class:
    ```ts
@@ -99,7 +99,7 @@ Pillow is only available in the skill's nix shell:
 1. **Frame 1 equals the still image**: crop the first frame from the sheet and compare it with `<unit>.png`, pixel by
    pixel. Treat any two fully transparent pixels as equal, whatever their RGB.
 2. **Preview**: `python3 .agents/skills/pixel-art-assets/scripts/preview.py --scale <s> <out.png>
-   client/public/resources/units/<unit>.png client/public/resources/units/<unit>.sheet.png`, writing `<out.png>` to the scratchpad.
+   client/public/resources/units/<unit>/<unit>.png client/public/resources/units/<unit>/<unit>.sheet.png`, writing `<out.png>` to the scratchpad.
    Then Read the image and check that frame 2 drops the head, keeps the feet, and shows no seam or cut detail.
    Use `--scale` 4 to 8 for small sprites and 1 for the big ones.
 3. Rerun `generate-fox.py` and `generate-dragon-sheet.py` after changing `sprite_sheet.py`. `git status` must

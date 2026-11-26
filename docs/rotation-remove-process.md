@@ -163,7 +163,7 @@ Each step should end with `pnpm typecheck` and `pnpm exec jest` green, and be on
 ### 8. Assets
 
 - For every piece with four views, copy `front-view.png` to `<piece>.png` next to its folder, e.g.
-  `client/public/resources/towers/blue.png`, `client/public/resources/house/red.png`, `client/public/resources/totem/anvil.png`. Keep the
+  `client/public/resources/towers/blue.png`, `client/public/resources/barracks/red.png`, `client/public/resources/totem/anvil.png`. Keep the
   folders and the other views.
 - `mine.png` and `obelisk.png` stay as they are.
 

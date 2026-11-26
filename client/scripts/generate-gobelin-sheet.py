@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-gobelin-sheet.py
 
-Outputs public/resources/units/gobelin.sheet.png and public/resources/units/gobelin.sheet.json (see sprite_sheet.py).
+Outputs public/resources/units/gobelin/gobelin.sheet.png and public/resources/units/gobelin/gobelin.sheet.json (see sprite_sheet.py).
 
 gobelin.png is 4-bit palette pixel art at 1x, too big to transcribe by hand, so the bob is built in image space. Frame 1 is gobelin.png pixel for pixel, still used alone
 in the shop. Frame 2 squashes everything above Y_FEET by DROP rows (about 1/14 of the opaque height, like the fox
@@ -16,8 +16,8 @@ from pathlib import Path
 from sprite_sheet import opaque_rows, read_png, squash, write_strip
 
 ROOT = Path(__file__).resolve().parent.parent
-STILL = ROOT / "public" / "resources" / "units" / "gobelin.png"
-OUTPUT = ROOT / "public" / "resources" / "units" / "gobelin.sheet.png"
+STILL = ROOT / "public" / "resources" / "units" / "gobelin" / "gobelin.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "gobelin" / "gobelin.sheet.png"
 
 Y_FEET = 76
 

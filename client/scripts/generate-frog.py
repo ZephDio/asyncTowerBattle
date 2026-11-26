@@ -3,7 +3,7 @@
 
 Run from anywhere: python3 scripts/generate-frog.py
 
-Outputs public/resources/units/frog.png, and public/resources/units/frog.sheet.png with its json (see sprite_sheet.py).
+Outputs public/resources/units/frog/frog.png, and public/resources/units/frog/frog.sheet.png with its json (see sprite_sheet.py).
 
 A sitting frog seen from the front, 27x27 pixels with its outline, upscaled 3x with nearest neighbor: big eyes with a
 highlight on top of the head, a wide smile, a yellow-green belly narrowing to a point and two folded front legs. LEFT
@@ -18,8 +18,8 @@ from sprite_sheet import breath_out, to_pixels, write_sheet
 from voxel_sprite import write_png
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "public" / "resources" / "units" / "frog.png"
-SHEET = ROOT / "public" / "resources" / "units" / "frog.sheet.png"
+OUTPUT = ROOT / "public" / "resources" / "units" / "frog" / "frog.png"
+SHEET = ROOT / "public" / "resources" / "units" / "frog" / "frog.sheet.png"
 SCALE = 3
 
 PALETTE = {
