@@ -37,7 +37,7 @@ export class Retail extends Derive(
 		public reservations = new OfferReservations(),
 	) {
 		super({});
-		this.grid = new RetailGrid();
+		this.grid = new RetailGrid(this.slots);
 		this.refresh();
 	}
 	position = new GridPosition(PercentToReal({ x: 50, y: 75 }));
@@ -82,7 +82,7 @@ export class Retail extends Derive(
 
 	// New offers in the free slots; the reserved ones stay in theirs.
 	async refresh() {
-		this.grid.tiles.clear();
+		this.grid.clearOffers();
 		const reserved = this.reservations.all();
 		const items = await this.getRetailItems(this.slots.filter((slot) => !this.reservations.isSlotReserved(slot)));
 		await this.fill([...reserved, ...items]);

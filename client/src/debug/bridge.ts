@@ -7,7 +7,7 @@ import { CanvasRenderer, proportion } from "../renderer/implementation/canvas-re
 import { Cell, GridPosition, ScreenPosition } from "../shared/position";
 import { STANDARD_CELL_SIZE, TGrid } from "../engine/grid/tgrid";
 import { ImplementsTrait } from "@ddd-ts/traits";
-import { GridElement } from "../shared/traits/engine/core/grid-element";
+import { GridElement, GridShape } from "../shared/traits/engine/core/grid-element";
 import { TDescriptor } from "../shared/traits/render/huds/item-descriptor";
 import { Tagged } from "../shared/traits/engine/tags/tagged";
 import { MAX_ROUNDS } from "../engine/game-rules";
@@ -22,6 +22,7 @@ import { TRecruit } from "../shared/traits/engine/recruit";
 import { Science } from "../shared/traits/engine/science";
 import { Unit } from "../engine/units/recruit/unit";
 import { BattleArmy } from "../engine/army/battle/battle-army";
+import { ArmyGrid } from "../engine/grid/grid";
 
 type AnyGrid = ImplementsTrait<typeof TGrid>;
 type AnyGridElement = ImplementsTrait<typeof GridElement>;
@@ -131,7 +132,8 @@ export class DebugBridge {
 		return regions;
 	}
 
-	// Page pixel to press to pick up an element: the centre of its first occupied cell.
+	// Page pixel to press to pick up an element: the centre of its first occupied cell (for a shop offer, its slot's
+	// cell, where its image is drawn).
 	pressPoint(gridName: GridName, id: string) {
 		const grid = this.grid(gridName);
 		const element = this.byId(id) as AnyGridElement;
@@ -374,6 +376,57 @@ export class DebugBridge {
 		}
 		game.army.addRecruit(recruit, game.army.grid);
 		return this.describe(recruit);
+	}
+
+	// Test only: replaces the offer of shop slot `slot` (0-7, in Retail.slots order) with a placeholder piece of any
+	// footprint, `cells` as [x, y] offsets from its anchor (y up), drawn as a pink block in each cell. It is a Witch House
+	// with that footprint and image, never added to the catalog or the offers' pool.
+	injectOffer(slot: number, cells: [number, number][], price = 10) {
+		const retail = this.game?.shop?.retail;
+		if (!retail) throw new Error("No shop open");
+		const anchor = retail.slots[slot];
+		if (!anchor) throw new Error(`No slot ${slot}`);
+		const candidate = new RetailFiller(1)
+			.candidates(new Set(Object.values(Science)))
+			.find(({ blueprint }) => blueprint.toRecruit(new Cell({ x: 0, y: 0 })).constructor.name === "WitchHouse");
+		if (!candidate) throw new Error("No Witch House blueprint");
+		const recruit = candidate.blueprint.toRecruit(new Cell(anchor)) as AnyGridElement & {
+			drawable: { image: HTMLImageElement; size: { width: number; height: number } };
+		};
+		const xs = cells.map(([x]) => x);
+		const ys = cells.map(([, y]) => y);
+		const minX = Math.min(...xs);
+		const maxY = Math.max(...ys);
+		const columns = Math.max(...xs) - minX + 1;
+		const rows = maxY - Math.min(...ys) + 1;
+		const pixels = 16;
+		const canvas = document.createElement("canvas");
+		canvas.width = columns * pixels;
+		canvas.height = rows * pixels;
+		const context = canvas.getContext("2d")!;
+		// A block a little smaller than its cell, so the building site shows between the blocks.
+		for (const [x, y] of cells) {
+			context.fillStyle = "#b8327e";
+			context.fillRect((x - minX) * pixels + 3, (maxY - y) * pixels + 3, pixels - 6, pixels - 6);
+			context.fillStyle = "#ff6ec7";
+			context.fillRect((x - minX) * pixels + 4, (maxY - y) * pixels + 4, pixels - 8, pixels - 8);
+		}
+		const image = new Image();
+		image.src = canvas.toDataURL();
+		recruit.gridShape = new GridShape(cells.map(([x, y]) => new Cell({ x, y })));
+		recruit.drawable = {
+			...recruit.drawable,
+			image,
+			size: { width: columns * STANDARD_CELL_SIZE, height: rows * STANDARD_CELL_SIZE },
+		};
+		const old = retail.grid.tiles.get(ArmyGrid.posToString(anchor));
+		if (old) {
+			retail.reservations.release(old);
+			retail.removeItem(old);
+		}
+		const offer = new Buyable(recruit as never, new Cell(anchor), price);
+		retail.grid.setElement(offer);
+		return this.describe(offer);
 	}
 
 	remove(id: string) {
