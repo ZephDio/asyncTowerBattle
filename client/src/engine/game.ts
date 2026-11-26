@@ -3,6 +3,7 @@ import { Battle } from "./battle/battle";
 import { BattleState, GameState, ResumeState, ShopState, SummaryState } from "../shared/gamestate";
 import { BattleSummary } from "./battle-summary/battle-summary";
 import { ShopPhase } from "./shop/shop";
+import { OfferReservations } from "./shop/retail/offer-reservations";
 import { GamePerformance, MatchMaker, Opponent } from "./match-maker/match-maker";
 import { RemoteMatchMaker } from "./match-maker/remote-match-maker";
 import { RoundsTracker } from "./rounds/tracker";
@@ -41,6 +42,8 @@ export class Game {
 	matchMaker: MatchMaker = new RemoteMatchMaker();
 	// Set while the shop waits for the opponent, so the start button can't ask twice.
 	searchingOpponent = false;
+	// The offers the player reserved, kept from one shop to the next.
+	readonly offerReservations = new OfferReservations();
 	constructor(
 		public chosenClass: Faction,
 		private endGame: () => void,
@@ -197,6 +200,7 @@ export class Game {
 			this.rounds.round,
 			this.life,
 			this.runSeed,
+			this.offerReservations,
 		);
 	}
 

@@ -23,6 +23,8 @@ import { ArmyHud } from "../../shared/hud-element/army-hud";
 import { ScienceHud, besideReserve } from "../../shared/hud-element/science-hud";
 import { SciencePanel } from "../../shared/hud-element/science-panel";
 import { Science } from "../../shared/traits/engine/science";
+import { OfferReservations } from "./retail/offer-reservations";
+import { ReservedSignHud } from "../../shared/hud-element/entity-hud/reserved-sign-hud";
 
 type ArmyHooks = {
 	isValidDestinationCell: (cell: Cell) => boolean;
@@ -72,8 +74,9 @@ export class ShopPhase {
 		public round: number,
 		public life: number,
 		runSeed: number,
+		reservations = new OfferReservations(),
 	) {
-		this.retail = new Retail(round, runSeed, () => army.sciences);
+		this.retail = new Retail(round, runSeed, () => army.sciences, reservations);
 		this.economyHooks = army.getEconomyHooks();
 	}
 
@@ -88,7 +91,11 @@ export class ShopPhase {
 
 	buy(buyable: Buyable) {
 		this.economyHooks.spendGold(buyable.price);
-		this.retail.removeItem(buyable);
+		this.retail.sell(buyable);
+	}
+
+	toggleReservation(buyable: Buyable) {
+		this.retail.toggleReservation(buyable);
 	}
 
 	refresh() {
@@ -133,7 +140,7 @@ export class ShopPhase {
 				},
 				{
 					grid: this.retail.grid,
-					drawables: [],
+					drawables: this.retail.reservedOffers().map((buyable) => new ReservedSignHud(buyable)),
 				},
 			],
 			renderables: [
