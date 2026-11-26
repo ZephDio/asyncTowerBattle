@@ -1,9 +1,8 @@
 import { Derive } from "@ddd-ts/traits";
-import { Cell, GridPosition, ScreenPosition } from "../../position";
+import { Cell, ScreenPosition } from "../../position";
 import { TDrawable } from "../../traits/render/drawable";
 import { DrawPriority } from "../../traits/render/image-drawable";
 import { TRenderable } from "../../traits/render/renderable";
-import { STANDARD_CELL_SIZE } from "../../../engine/grid/grid-scale";
 import { HudElementResources } from "../../../renderer/resources/hud-element.resources";
 import { PRICE_SIGN_DROP } from "../../traits/render/huds/price-renderable";
 import { priceSignLayout } from "./price-hud";
@@ -22,15 +21,13 @@ export class ReservedSignHud extends Derive(TDrawable, TRenderable) {
 		super({});
 	}
 
+	// The offer's cell, placed by the grid like the offer; the price sign stands PRICE_SIGN_DROP below it.
 	get position() {
-		const { x, y } = this.offer.cell;
-		return new GridPosition({
-			x: (x + 0.5) * STANDARD_CELL_SIZE,
-			y: (y + 0.5) * STANDARD_CELL_SIZE + PRICE_SIGN_DROP,
-		});
+		return this.offer.cell;
 	}
 
-	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
+	draw(context: CanvasRenderingContext2D, anchor: ScreenPosition, scale: number): void {
+		const position = new ScreenPosition({ x: anchor.x, y: anchor.y + PRICE_SIGN_DROP * scale });
 		const { lock, left, right } = HudElementResources.priceSign;
 		if (![lock, left, right].every((image) => image.complete && image.naturalWidth > 0)) return;
 		context.save();

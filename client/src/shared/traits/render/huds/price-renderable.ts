@@ -5,9 +5,9 @@ import { PriceHud } from "../../../hud-element/entity-hud/price-hud";
 import { THasPrice } from "../../engine/has-price";
 import { THudRenderable } from "./hud-renderable";
 
-// How far below its offer's anchor the price sign stands, in grid units: 0.6 of a cell, on the front edge of its
-// building site, so it stays clear of a two-cell-tall offer in the slot below.
-export const PRICE_SIGN_DROP = -0.6 * STANDARD_CELL_SIZE;
+// How far below its offer's anchor the price sign stands, in grid units: 0.8 of a cell, in front of its building site,
+// so it leaves the offer in full view.
+export const PRICE_SIGN_DROP = -0.8 * STANDARD_CELL_SIZE;
 
 export const TPriceHudRenderable = Subtrait([THudRenderable, THasPrice], (base) => {
 	abstract class IPriceHudRenderable extends base {

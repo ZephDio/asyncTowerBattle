@@ -13,10 +13,13 @@ import { Plot, drawConstructionSites } from "../../shared/traits/render/construc
 // Cells trimmed off the grid's sides to get the fenced field (negative: the field reaches past the grid). It fills the
 // space between the shop sign and the start button, above the army grid; the bottom row's prices stand clear of the
 // front fence and a two-cell-tall offer in the top row clear of the back fence.
-const FIELD_TRIM = { left: 0.06, right: 0.06, top: -0.02, bottom: -0.24 };
+const FIELD_TRIM = { left: 0.06, right: 0.06, top: -0.15, bottom: -0.3 };
 // The price sign of each offer, in cells around its slot's center (x right, y down): what a building site must not
 // spread over.
-const SIGN = { halfWidth: 0.55, top: 0.38, bottom: 0.95 };
+const SIGN = { halfWidth: 0.55, top: 0.58, bottom: 1.15 };
+// Cells the top row of offers stands higher than its cells, so a two-cell-tall offer in the bottom row, the
+// Lighthouse's marker included, stays clear of the price signs above it, which stand in front of their sites.
+const TOP_ROW_LIFT = 0.35;
 // Art pixels per cell of the fence and the building sites, as on the grass.
 const ART_PIXELS_PER_CELL = 48;
 // The most room an offer takes around its slot's center, in cells, so it stays clear of the other slots, their price
@@ -49,7 +52,7 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	constructor(
 		// The cells where the shop lays its offers: each one keeps its building site, even once sold.
 		public slots: Cell[] = [],
-		screenPosition = new ScreenPosition({ x: 38.75, y: 46.5 }),
+		screenPosition = new ScreenPosition({ x: 38.75, y: 46.35 }),
 		width: number = 9,
 		height: number = 5,
 		cellSize: number = 4.5,
@@ -61,8 +64,18 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 	// next draw.
 	private sites = new Map<string, Site>();
 
-	// An offer that fits takes the cells of its footprint, as on the army grid. A shrunk one only takes its slot's cell
-	// and is found by its drawn box (offerAt), since its footprint would reach over the other slots.
+	// The top row stands TOP_ROW_LIFT higher: every offer, sign and site is placed from here.
+	override cellToGrid(cell: Cell) {
+		const top = Math.max(...this.slots.map((slot) => slot.y));
+		const lift = cell.y >= top ? TOP_ROW_LIFT : 0;
+		return new GridPosition({
+			x: (cell.x + 0.5) * STANDARD_CELL_SIZE,
+			y: (cell.y + 0.5 + lift) * STANDARD_CELL_SIZE,
+		});
+	}
+
+	// An offer that fits takes the cells of its footprint, as on the army grid. A shrunk one only takes its slot's cell,
+	// since its footprint would reach over the other slots. Either is found first by its drawn box (offerAt).
 	override setElement(buyable: Buyable) {
 		const cells = buyable.entity.gridShape.getVectorialCells(buyable.entity.orientation);
 		const scale = offerScale(cells);
@@ -72,10 +85,10 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 		this.sites.set(ArmyGrid.posToString(buyable.cell), { cells, scale });
 	}
 
-	// The shrunk offer drawn at this grid position, its footprint's box or its image, whichever is bigger.
+	// The offer drawn at this grid position: its footprint's box or its image, whichever is bigger, around where it is
+	// drawn (the top row stands higher than its cells).
 	offerAt(position: GridPosition): Buyable | undefined {
 		for (const buyable of new Set(this.tiles.values())) {
-			if (buyable.sizeScale >= 1) continue;
 			const { columns, rows } = extent(buyable.entity.gridShape.getVectorialCells(buyable.entity.orientation));
 			const scale = buyable.sizeScale;
 			const halfWidth = (Math.max(columns * STANDARD_CELL_SIZE, buyable.drawable.size.width) * scale) / 2;
@@ -105,7 +118,11 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 				cells: [new Cell({ x: 0, y: 0 })],
 				scale: 1,
 			};
-			const center = { x: position.x + (slot.x + 0.5) * tileSize, y: position.y - (slot.y + 0.5) * tileSize };
+			const anchor = this.cellToGrid(slot);
+			const center = {
+				x: position.x + (anchor.x / STANDARD_CELL_SIZE) * tileSize,
+				y: position.y - (anchor.y / STANDARD_CELL_SIZE) * tileSize,
+			};
 			const sign = this.tiles.get(ArmyGrid.posToString(slot))
 				? {
 						left: center.x - SIGN.halfWidth * tileSize,

@@ -3,8 +3,8 @@
 
 Run from anywhere: python3 scripts/generate-construction-site.py
 
-A plot of bare earth dug in the grass, marked out by a rope between wooden stakes, so an offer stands on a building
-site whatever its footprint. One art pixel is as big as the grass's: CELL pixels per grid cell.
+A plot of pale packed earth dug in the grass, marked out by a muted rope between plain wooden stakes, so an offer
+stands on a building site whatever its footprint. One art pixel is as big as the grass's: CELL pixels per grid cell.
 
 Outputs, in public/resources/hud/construction-site/:
 - site.png: the plot cut in quarter cells, QUARTER pixels square, to lay over any set of cells. Each row is one corner
@@ -30,15 +30,23 @@ INSET = 3
 ROPE_DEPTH = 4
 
 GRASS_EDGE = (70, 160, 84, 255)
-EARTH = [(92, 66, 70, 255), (118, 86, 74, 255), (146, 108, 82, 255), (170, 130, 94, 255), (196, 158, 112, 255)]
+# Pale, greyish packed earth with few details, so the pieces (many in brown wood) stand out from their site.
+EARTH = [(104, 90, 92, 255), (140, 124, 112, 255), (172, 156, 132, 255), (186, 172, 148, 255), (206, 194, 168, 255)]
 PEBBLE = [(112, 110, 122, 255), (160, 158, 162, 255), (204, 202, 194, 255)]
 CHIP = (218, 181, 112, 255)
-ROPE = (238, 222, 170, 255)
-ROPE_SHADE = (180, 150, 104, 255)
+# A muted rope, close to the earth, that frames the site without competing with the piece.
+ROPE = (204, 188, 150, 255)
+ROPE_SHADE = (164, 146, 116, 255)
 CLEAR = (0, 0, 0, 0)
 # Tower wood, dark to light.
 WOOD = [(90, 70, 70, 255), (134, 99, 83, 255), (180, 131, 85, 255), (218, 181, 112, 255)]
 FLAG = [(156, 52, 56, 255), (214, 84, 72, 255)]
+# Share of the earth in darker and in lighter clumps, the pebbles' and wood chips' places, and whether the stakes carry
+# a ribbon.
+CLUMPS = (0.08, 0.06)
+PEBBLES = ((33, 9), (15, 37))
+CHIPS = ()
+RIBBON = False
 
 # Neighbor cell offsets (x right, y down on screen) of each corner: horizontal side, vertical side, diagonal.
 CORNERS = {
@@ -66,15 +74,15 @@ def earth_tile():
     for y in range(CELL):
         for x in range(CELL):
             value = noise(x // 3, y // 2, 1)
-            if value < 0.18:
+            if value < CLUMPS[0]:
                 tile[y][x] = EARTH[1]
-            elif value > 0.86:
+            elif value > 1 - CLUMPS[1]:
                 tile[y][x] = EARTH[3]
-    for px, py in ((10, 14), (33, 9), (38, 35), (15, 37), (25, 24)):
+    for px, py in PEBBLES:
         tile[py][px] = tile[py][px + 1] = PEBBLE[2]
         tile[py + 1][px] = tile[py + 1][px + 1] = PEBBLE[0]
         tile[py][px + 2] = PEBBLE[1]
-    for px, py, length in ((28, 17, 3), (8, 28, 2), (40, 22, 3)):
+    for px, py, length in CHIPS:
         for dx in range(length):
             tile[py][px + dx] = CHIP
             tile[py + 1][px + dx] = EARTH[1]
@@ -120,17 +128,18 @@ def quarter(corner, case, tile):
 
 
 def stake():
-    """A stake with a pointed top and a red ribbon, lit from the left, on a small shadow."""
+    """A stake with a pointed top (and a red ribbon if RIBBON), lit from the left, on a small shadow."""
     width, height = 8, 14
     pixels = [[CLEAR] * width for _ in range(height)]
     body = {(x, y) for y in range(3, 12) for x in range(3, 5)} | {(3, 2), (4, 2)}
     for x, y in body:
         pixels[y][x] = WOOD[3] if x == 3 else WOOD[2]
     pixels[2][4] = WOOD[3]
-    for x, y in ((2, 4), (5, 4), (2, 5), (5, 5)):
-        pixels[y][x] = FLAG[1] if x == 2 else FLAG[0]
-    pixels[4][3], pixels[5][3] = FLAG[1], FLAG[1]
-    pixels[4][4], pixels[5][4] = FLAG[0], FLAG[0]
+    if RIBBON:
+        for x, y in ((2, 4), (5, 4), (2, 5), (5, 5)):
+            pixels[y][x] = FLAG[1] if x == 2 else FLAG[0]
+        pixels[4][3], pixels[5][3] = FLAG[1], FLAG[1]
+        pixels[4][4], pixels[5][4] = FLAG[0], FLAG[0]
     for x in range(2, 7):
         pixels[12][x] = (22, 28, 46, 80)
     solid = {(x, y) for y in range(height) for x in range(width) if pixels[y][x][3] == 255}
