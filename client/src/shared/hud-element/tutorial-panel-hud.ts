@@ -6,15 +6,10 @@ import { PercentToReal } from "../../renderer/implementation/canvas-renderer";
 import { HudElementResources } from "../../renderer/resources/hud-element.resources";
 import { IconResources } from "../../renderer/resources/icons.resources";
 import { DrawPriority } from "../traits/render/image-drawable";
-import { Rarity } from "../traits/engine/rarity";
+import { HudTooltip, PAD_Y } from "./battle/army-resume/hud-tooltip";
 import { ArmyBuffPercent } from "../../engine/army/battle/army-buff";
 import { TagBadge } from "../traits/render/huds/tag-badge";
-
-// The source scroll's borders, in its own pixels: the top and bottom rolls and the curled sides. They keep their
-// shape when the scroll is stretched to the panel's size; only the parchment between them stretches.
-const SLICE = { top: 165, bottom: 150, left: 80, right: 80 };
-// Screen units per source pixel for those borders: a bit bigger than the item descriptor's scroll.
-const BORDER_SCALE = 0.042;
+import { drawOutlinedText, FamineColor } from "./battle/army-resume/pixel-meter";
 
 const INK = "#000000";
 const ALLIED = "#1d5fd1";
@@ -32,7 +27,13 @@ const INLINE_ICONS: Record<string, HTMLImageElement> = {
 	"red-bow": HudElementResources.targetBowActive.image,
 };
 // A {tag-barrack} part is drawn as the badge of the tag, like the descriptors' ones.
-const INLINE_TAGS: Record<string, TagBadge> = { "tag-barrack": new TagBadge("Barrack") };
+const INLINE_TAGS: Record<string, TagBadge> = {
+	"tag-barrack": new TagBadge("Barrack"),
+	"tag-tower": new TagBadge("Tower"),
+	"tag-totem": new TagBadge("Totem"),
+};
+// A {famine} part is the outlined red FAMINE label that the food bar shows in battle.
+const FAMINE_LABEL = "FAMINE";
 const INLINE_ICON = /\{([a-z-]+)\}/;
 // An inline tag badge is this many font sizes high.
 const INLINE_TAG_HEIGHT = 1.3;
@@ -77,17 +78,22 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		this.unit = this.getCanvasSize(context, 1, 0, scale).width;
 		const u = this.unit;
 		const center = this.getCanvasPosition(context, position);
-		const left = center.x - (this.width * u) / 2;
-		const top = center.y - (this.height * u) / 2;
-		this.drawParchment(context, left, top, this.width * u, this.height * u, BORDER_SCALE * u);
+		// The scroll is drawn on a grid of art pixels, like the other scrolls: columns x rows of p canvas pixels.
+		const p = Math.max(2, Math.round(u * 0.16));
+		const columns = Math.round((this.width * u) / p);
+		const rows = Math.round((this.height * u) / p);
+		const scrollLeft = Math.round(center.x - (columns * p) / 2);
+		const scrollTop = Math.round(center.y - (rows * p) / 2);
+		HudTooltip.drawScroll(context, scrollLeft, scrollTop, columns, rows, p);
 
 		context.save();
 		context.textAlign = "left";
 		context.textBaseline = "top";
 		context.fillStyle = INK;
-		const firstLine = top + SLICE.top * BORDER_SCALE * u * 0.95;
-		this.drawLeftColumn(context, left + 5.4 * u, firstLine, 41 * u);
-		this.drawRightColumn(context, left + 50 * u, firstLine, 42 * u);
+		const firstLine = scrollTop + PAD_Y * p + 2.2 * u;
+		const textLeft = scrollLeft + 5 * u;
+		this.drawLeftColumn(context, textLeft, firstLine, 41 * u);
+		this.drawRightColumn(context, textLeft + 44.6 * u, firstLine, 41 * u);
 		context.restore();
 	}
 
@@ -95,6 +101,17 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		const u = this.unit;
 		y = this.paragraph(context, this.title, x, y, width, TITLE_SIZE, "title") + 0.5 * u;
 		y = this.paragraph(context, "Buy monuments and units in the shop to build your army.", x, y, width) + 0.4 * u;
+		y = this.paragraph(context, "A {tag-tower} will attack enemy units running down your path.", x, y, width) + 0.3 * u;
+		y = this.paragraph(context, "A {tag-totem} gives various effects.", x, y, width) + 0.3 * u;
+		y =
+			this.paragraph(
+				context,
+				"A {tag-barrack} spawns basic units during battle.\nDrag a unit on it, to change the produced type.",
+				x,
+				y,
+				width,
+			) +
+			0.4 * u;
 
 		// Click [START] when ready.
 		const start = HudElementResources.startBattle.image;
@@ -139,7 +156,7 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		y = this.iconParagraph(
 			context,
 			IconResources.food.image,
-			"Food 🌽 feeds your units and towers. At 0, you are in trouble!",
+			"Food 🌽 feeds your units and towers.\nAt 0, you are in {famine}! You will be in trouble...",
 			x,
 			y + 0.3 * u,
 			width,
@@ -150,13 +167,6 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 			"Build strong synergies ▣ to overcome your opponents.",
 			x,
 			y + 0.3 * u,
-			width,
-		);
-		this.paragraph(
-			context,
-			"A {tag-barrack} spawns basic units during battle.\nDrag a unit on it, to change the produced type.",
-			x,
-			y + 1.6 * u,
 			width,
 		);
 	}
@@ -310,8 +320,10 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		width: number,
 	) {
 		const u = this.unit;
-		this.drawPicture(context, icon, x, y, ICON * u, ICON * u);
 		const bottom = this.paragraph(context, text, x + ICON * u + 1 * u, y + 0.3 * u, width - ICON * u - 1 * u);
+		// The icon is centered on a text taller than itself.
+		const iconY = y + Math.max(0, (bottom - y - 0.3 * u - ICON * u) / 2);
+		this.drawPicture(context, icon, x, iconY, ICON * u, ICON * u);
 		return Math.max(bottom, y + ICON * u);
 	}
 
@@ -341,6 +353,11 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 				x += context.measureText(part).width;
 				return;
 			}
+			if (part === "famine") {
+				drawOutlinedText(context, FAMINE_LABEL, x, y + fontSize * 0.5, fontSize, FamineColor, "left");
+				x += context.measureText(FAMINE_LABEL).width + fontSize * 0.1;
+				return;
+			}
 			const badge = INLINE_TAGS[part];
 			if (badge) {
 				const height = fontSize * INLINE_TAG_HEIGHT;
@@ -366,43 +383,6 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		height: number,
 	) {
 		if (image.complete && image.naturalWidth) context.drawImage(image, x, y, width, height);
-	}
-
-	// Nine-slice drawing of the descriptor's scroll, so the panel keeps its rolls at any size.
-	private drawParchment(
-		context: CanvasRenderingContext2D,
-		x: number,
-		y: number,
-		width: number,
-		height: number,
-		border: number,
-	) {
-		const image = HudElementResources.descriptorBanner[Rarity.Common].image;
-		if (!image.complete || !image.naturalWidth) return;
-		const source = { width: image.naturalWidth, height: image.naturalHeight };
-		const sourceColumns = [0, SLICE.left, source.width - SLICE.right, source.width];
-		const sourceRows = [0, SLICE.top, source.height - SLICE.bottom, source.height];
-		const columns = [x, x + SLICE.left * border, x + width - SLICE.right * border, x + width];
-		const rows = [y, y + SLICE.top * border, y + height - SLICE.bottom * border, y + height];
-		for (let row = 0; row < 3; row++) {
-			for (let column = 0; column < 3; column++) {
-				const sx = sourceColumns[column] as number;
-				const sy = sourceRows[row] as number;
-				const dx = columns[column] as number;
-				const dy = rows[row] as number;
-				context.drawImage(
-					image,
-					sx,
-					sy,
-					(sourceColumns[column + 1] as number) - sx,
-					(sourceRows[row + 1] as number) - sy,
-					dx,
-					dy,
-					(columns[column + 1] as number) - dx,
-					(rows[row + 1] as number) - dy,
-				);
-			}
-		}
 	}
 }
 
@@ -430,6 +410,7 @@ function measureLine(context: CanvasRenderingContext2D, line: string) {
 	const fontSize = Number.parseFloat(font);
 	const width = line.split(INLINE_ICON).reduce((total, part, index) => {
 		if (index % 2 === 0) return total + context.measureText(part).width;
+		if (part === "famine") return total + context.measureText(FAMINE_LABEL).width + fontSize * 0.1;
 		const badge = INLINE_TAGS[part];
 		if (!badge) return total + fontSize * INLINE_ICON_WIDTH;
 		const badgeWidth = badge.width(context, fontSize * INLINE_TAG_HEIGHT) + fontSize * 0.3;
