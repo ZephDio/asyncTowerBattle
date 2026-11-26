@@ -20,7 +20,7 @@ export class DwarfCastleBlueprint extends Derive(
 		health: 25,
 		castleDamage: NaN,
 		projectileDamage: NaN,
-		castSpeed: 1,
+		castSpeed: 2,
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

@@ -10,7 +10,7 @@ import { BoardOrientation } from "../../../../../shared/traits/engine/core/board
 import { withTag } from "../../../../../shared/traits/engine/tags/tagged";
 import { PermanentBuff } from "../../../../army/battle/permanent-buff";
 
-const CASTLE_DAMAGE_BONUS = 1;
+const CASTLE_DAMAGE_BONUS = 0.5;
 const isAnimal = withTag("Animal");
 const BASE_HEAL = 5;
 const CAST_SPEED_BONUS_PER_FOREST = 10;

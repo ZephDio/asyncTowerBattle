@@ -20,7 +20,7 @@ import { TotemTag } from "../../../../../shared/traits/engine/tags/building/buil
 
 export class RedObeliskBlueprint extends Derive(
 	TRarity(Rarity.Legendary),
-	TShopBlueprint(10, 10),
+	TShopBlueprint(20, 10),
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TDescriptor,
 	TImageDrawable(TotemResources.obelisk.image, TotemResources.obelisk.size, DrawPriority.NormalGridElement),
@@ -31,7 +31,7 @@ export class RedObeliskBlueprint extends Derive(
 		health: NaN,
 		castleDamage: NaN,
 		projectileDamage: NaN,
-		castSpeed: castSpeedFromSeconds(5),
+		castSpeed: castSpeedFromSeconds(8),
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

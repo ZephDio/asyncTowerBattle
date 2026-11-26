@@ -61,7 +61,7 @@ export class BosquetBlueprint extends Derive(
 	description = new CasterDescription(
 		"Bosquet",
 		[
-			"Animals get +1 🗡️",
+			"Animals get +0.5 🗡️",
 			"",
 			`Every ${CAST_TIME} seconds :`,
 			"heal animals by 5 💚",
