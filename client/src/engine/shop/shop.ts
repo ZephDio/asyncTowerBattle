@@ -1,5 +1,6 @@
 import { rarityOdds } from "./retail/rarity-odds";
 import { RarityOddsHud } from "../../shared/hud-element/rarity-odds-hud";
+import { ReserveSignHud } from "../../shared/hud-element/reserve-sign-hud";
 import { ShopSignHud } from "../../shared/hud-element/shop-sign-hud";
 import { Cell, ScreenPosition } from "../../shared/position";
 import { Army } from "../army/army";
@@ -138,6 +139,7 @@ export class ShopPhase {
 			renderables: [
 				new StartBattleButton({}),
 				this.sign,
+				this.getReserveSign(),
 				...(this.signHovered ? [new RarityOddsHud(rarityOdds(this.round), this.sign)] : []),
 				new RefreshBellHud(this.bellPressedAt),
 				this.getArmyHud(),
@@ -147,6 +149,11 @@ export class ShopPhase {
 				...(this.holderControl.hold ? [this.holderControl.hold] : []),
 			],
 		};
+	}
+
+	getReserveSign() {
+		const { position, width, height, cellSize } = this.army.inventory;
+		return new ReserveSignHud({ gridPosition: position, gridWidth: width, gridHeight: height, cellSize });
 	}
 
 	// Built from the army each time, since the grid widens between rounds and the gold changes.

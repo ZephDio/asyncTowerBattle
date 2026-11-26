@@ -49,6 +49,19 @@ export class HudElementResources {
 		halo: { image: createImage("/resources/hud/science-ribbon/halo.png") },
 	};
 
+	// The nine pieces of the wooden plank panel of the shop, drawn by scripts/generate-wood-panel.py.
+	static woodPanel = {
+		topLeft: createImage("/resources/hud/wood-panel/top-left.png"),
+		top: createImage("/resources/hud/wood-panel/top.png"),
+		topRight: createImage("/resources/hud/wood-panel/top-right.png"),
+		left: createImage("/resources/hud/wood-panel/left.png"),
+		center: createImage("/resources/hud/wood-panel/center.png"),
+		right: createImage("/resources/hud/wood-panel/right.png"),
+		bottomLeft: createImage("/resources/hud/wood-panel/bottom-left.png"),
+		bottom: createImage("/resources/hud/wood-panel/bottom.png"),
+		bottomRight: createImage("/resources/hud/wood-panel/bottom-right.png"),
+	};
+
 	// The nine pieces of the parchment scroll of the tooltips, drawn by scripts/generate-scroll.py.
 	static scroll = {
 		topLeft: createImage("/resources/hud/scroll/top-left.png"),
