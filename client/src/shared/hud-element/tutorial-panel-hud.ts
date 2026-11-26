@@ -320,8 +320,10 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		width: number,
 	) {
 		const u = this.unit;
-		this.drawPicture(context, icon, x, y, ICON * u, ICON * u);
 		const bottom = this.paragraph(context, text, x + ICON * u + 1 * u, y + 0.3 * u, width - ICON * u - 1 * u);
+		// The icon is centered on a text taller than itself.
+		const iconY = y + Math.max(0, (bottom - y - 0.3 * u - ICON * u) / 2);
+		this.drawPicture(context, icon, x, iconY, ICON * u, ICON * u);
 		return Math.max(bottom, y + ICON * u);
 	}
 
