@@ -90,7 +90,9 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 // The scroll is laid out in art pixels, drawn `p` canvas pixels each (see drawDescriptorScroll), about 0.16 screen units.
 // The text stays this far from the sheet's sides.
 const TEXT_LEFT = 18;
-const TITLE_SIZE = 14;
+const TITLE_SIZE = 15;
+// Screen units per art pixel of the text's layout.
+const ART_PIXEL = 0.16;
 const TITLE_DROP = 1.5;
 const LINE_SIZE = 10;
 const LINE_HEIGHT = 13;
@@ -165,7 +167,9 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 
 	draw(context: CanvasRenderingContext2D, _position: ScreenPosition, scale: number) {
 		const unit = this.getCanvasSize(context, 1, 1, scale).width;
-		const p = Math.max(2, Math.round(unit * 0.16));
+		const p = Math.max(2, Math.round(unit * ART_PIXEL));
+		// The scroll's art pixels are whole canvas pixels, but the text keeps its size in screen units (as before the scroll).
+		const q = unit * ART_PIXEL;
 		// The handles stick out of the box's sides.
 		const columns = Math.floor((SCROLL_WIDTH * unit) / p) - 2 * (HANDLE_WIDTH - 1);
 		const shape = this.getShape(columns, Math.floor((SCROLL_HEIGHT * unit) / p));
@@ -181,8 +185,8 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 		const titleCenter = top + (ROLL_INK_TOP + (shape.topRoll - ROLL_INK_TOP - ROLL_INK_BOTTOM) / 2 + TITLE_DROP) * p;
 		const titleWidth = (columns - 2 * ROLL_END - 4) * p;
 		// Long titles get a smaller font so they fit between the curls instead of being squeezed.
-		context.font = `${TITLE_SIZE * p}px title`;
-		const fontSize = TITLE_SIZE * p * Math.min(1, titleWidth / context.measureText(title).width);
+		context.font = `${TITLE_SIZE * q}px title`;
+		const fontSize = TITLE_SIZE * q * Math.min(1, titleWidth / context.measureText(title).width);
 		context.font = `${fontSize}px title`;
 		context.textAlign = "center";
 		context.textBaseline = "middle";
@@ -196,11 +200,11 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 		const textWidth = (columns - 2 * TEXT_LEFT) * p;
 		const { statColumns, statLabels } = this.item.description;
 		const statWidth = textWidth / statColumns;
-		context.font = `${LINE_SIZE * p}px text`;
+		context.font = `${LINE_SIZE * q}px text`;
 		context.textAlign = "left";
 		lines.forEach(([key, value], index) => {
 			const x = textLeft + (index % statColumns) * statWidth;
-			const y = bodyTop + (shape.lines.offsets[index] ?? 0) * p;
+			const y = bodyTop + (shape.lines.offsets[index] ?? 0) * q;
 			const label = `${statLabels[key] ?? key}: `;
 			if (typeof value === "string") {
 				context.fillText(`${label}${value}`, x, y, statWidth);
@@ -213,7 +217,7 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 			context.fillStyle = INK;
 		});
 		description.forEach((line, index) => {
-			const y = bodyTop + (shape.lines.offsets[index + lines.length] ?? 0) * p;
+			const y = bodyTop + (shape.lines.offsets[index + lines.length] ?? 0) * q;
 			if (typeof line === "string") {
 				context.fillText(line, textLeft, y, textWidth);
 				return;
@@ -236,7 +240,7 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 		const rollTop = top + (rowsAbove(shape) + ROLL_INK_TOP) * p;
 		const rollInner = shape.bottomRoll - ROLL_INK_TOP - ROLL_INK_BOTTOM;
 		const tagsCenter = { x: left + (columns * p) / 2, y: rollTop + (rollInner / 2) * p };
-		drawTagBadgeRows(context, this.tagBadges, tagsCenter, TAG_SIZE * p, (columns - 2 * ROLL_END - 4) * p, TAGS_PER_ROW);
+		drawTagBadgeRows(context, this.tagBadges, tagsCenter, TAG_SIZE * q, (columns - 2 * ROLL_END - 4) * p, TAGS_PER_ROW);
 		context.restore();
 		// Sciences granted: the first stamp at the bottom right of the sheet, the next ones towards the left
 		context.save();
