@@ -8,12 +8,13 @@ export function drawWoodSign(
 	size: { width: number; height: number },
 	unit: number,
 	label: string,
+	textScale = 0.58,
 ): void {
 	const artPixel = Math.max(1, Math.round(unit * 0.2));
 	context.save();
 	context.globalAlpha = 1;
 	drawWoodPanel(context, center.x - size.width / 2, center.y - size.height / 2, size.width, size.height, artPixel);
-	context.font = `${size.height * 0.58}px title`;
+	context.font = `${size.height * textScale}px title`;
 	context.fillStyle = "#ffe5ad";
 	context.textAlign = "center";
 	context.textBaseline = "middle";

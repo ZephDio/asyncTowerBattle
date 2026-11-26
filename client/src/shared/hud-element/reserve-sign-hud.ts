@@ -9,6 +9,7 @@ import { drawWoodSign } from "../traits/render/wood-sign";
 // The sign above the reserve grid. Its frame is drawn outside of its size, 1 unit thick, so the sign is as wide as the
 // grid, and the frame runs on around the grid's sides and bottom.
 const FRAME = 1;
+const TEXT_SCALE = 0.8;
 export class ReserveSignHud extends Derive(TDrawable, TRenderable) {
 	drawPriority = DrawPriority.HUD;
 	position: ScreenPosition;
@@ -32,7 +33,7 @@ export class ReserveSignHud extends Derive(TDrawable, TRenderable) {
 	draw(context: CanvasRenderingContext2D, position: ScreenPosition): void {
 		const center = this.getCanvasPosition(context, position);
 		const size = this.getCanvasSize(context, this.size.width, this.size.height);
-		drawWoodSign(context, center, size, this.getCanvasSize(context, 1, 1).width, "RESERVE");
+		drawWoodSign(context, center, size, this.getCanvasSize(context, 1, 1).width, "RESERVE", TEXT_SCALE);
 		const unit = this.getCanvasSize(context, 1, 1).width;
 		const grid = this.getCanvasSize(context, this.grid.width, this.grid.height);
 		const gridCenter = this.getCanvasPosition(context, new ScreenPosition(this.grid.center));
