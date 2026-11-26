@@ -3,15 +3,7 @@ import { ScreenPosition } from "../../../position";
 import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
 import { TRenderable } from "../renderable";
 import { TDrawable } from "../drawable";
-import {
-	ROLL_END,
-	ROLL_INK_BOTTOM,
-	ROLL_INK_TOP,
-	SHADE,
-	ScrollShape,
-	drawDescriptorScroll,
-	scrollRows,
-} from "./descriptor-scroll";
+import { ROLL_END, ROLL_INK_BOTTOM, ROLL_INK_TOP, SHADE, ScrollShape, drawDescriptorScroll } from "./descriptor-scroll";
 import { Tag, Tagged } from "../../engine/tags/tagged";
 import { TBaseStats } from "../../../../engine/stats/base-stats";
 import { castSpeedToSecond, frameToSeconds } from "../../../seconds";
@@ -88,10 +80,8 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 });
 
 // The scroll is laid out in art pixels, drawn `p` canvas pixels each (see drawDescriptorScroll), about 0.16 screen units.
-const COLUMNS = 120;
 // The text stays this far from the sheet's sides.
 const TEXT_LEFT = 12;
-const TEXT_WIDTH = COLUMNS - 2 * TEXT_LEFT;
 const TITLE_ROLL = 22;
 const TITLE_SIZE = 14;
 const LINE_SIZE = 10;
@@ -102,13 +92,16 @@ const TAG_ROW_HEIGHT = TAG_SIZE * 1.15;
 const TAG_PADDING = 4;
 // The scroll always has the same size, whatever it describes, and its bottom roll always has room for two rows of tags.
 const TAG_ROLL = Math.ceil(TAG_SIZE + TAG_ROW_HEIGHT) + ROLL_INK_TOP + ROLL_INK_BOTTOM + 2 * TAG_PADDING;
-const SCROLL_ROWS = 216;
 const MAX_TAGS = 4;
 const TAGS_PER_ROW = 2;
 const BODY_PADDING = 4;
 const STAMP_SIZE = 19;
-// The scroll hangs from this point, in screen percent units: where the top of the old banner was.
-const SCROLL_TOP = { x: 86, y: 89.5 };
+// The scroll's box in screen percent units (of the canvas width): its right edge, its top (level with the start button) and its size. It
+// ends just above the reserve's sign, and its size does not depend on what it describes.
+const SCROLL_RIGHT = 97.5;
+const SCROLL_TOP = 1.5;
+const SCROLL_WIDTH = 25;
+const SCROLL_HEIGHT = 26.8;
 
 const INK = "rgb(22,28,46)";
 
@@ -156,20 +149,19 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 		return { offsets, rows: row };
 	}
 
-	getShape(): ScrollShape & { lines: ReturnType<DescriptionHud["getLinesOffsets"]> } {
+	getShape(columns: number, rows: number): ScrollShape & { lines: ReturnType<DescriptionHud["getLinesOffsets"]> } {
 		const lines = this.getLinesOffsets();
-		const body = SCROLL_ROWS - TITLE_ROLL - TAG_ROLL;
-		return { columns: COLUMNS, topRoll: TITLE_ROLL, bottomRoll: TAG_ROLL, body, lines };
+		const body = rows - TITLE_ROLL - TAG_ROLL;
+		return { columns, topRoll: TITLE_ROLL, bottomRoll: TAG_ROLL, body, lines };
 	}
 
 	draw(context: CanvasRenderingContext2D, _position: ScreenPosition, scale: number) {
 		const unit = this.getCanvasSize(context, 1, 1, scale).width;
 		const p = Math.max(2, Math.round(unit * 0.16));
-		const shape = this.getShape();
-		const anchor = this.getCanvasPosition(context, PercentToReal(SCROLL_TOP));
-		const height = scrollRows(shape) * p;
-		const left = Math.round(Math.min(anchor.x - (COLUMNS * p) / 2, context.canvas.width - COLUMNS * p));
-		const top = Math.round(Math.min(anchor.y, context.canvas.height - height - SHADE * p));
+		const columns = Math.floor((SCROLL_WIDTH * unit) / p);
+		const shape = this.getShape(columns, Math.floor((SCROLL_HEIGHT * unit) / p));
+		const left = Math.round((SCROLL_RIGHT * unit) / 1 - columns * p);
+		const top = Math.round(SCROLL_TOP * unit);
 		drawDescriptorScroll(context, HudElementResources.descriptorScroll[rarityOf(this.item)], left, top, shape, p);
 
 		context.save();
@@ -177,21 +169,21 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 		// Title, in the top roll between its ink rows and its curls
 		const title = this.item.description.name;
 		const titleCenter = top + (ROLL_INK_TOP + (shape.topRoll - ROLL_INK_TOP - ROLL_INK_BOTTOM) / 2) * p;
-		const titleWidth = (COLUMNS - 2 * ROLL_END - 4) * p;
+		const titleWidth = (columns - 2 * ROLL_END - 4) * p;
 		// Long titles get a smaller font so they fit between the curls instead of being squeezed.
 		context.font = `${TITLE_SIZE * p}px title`;
 		const fontSize = TITLE_SIZE * p * Math.min(1, titleWidth / context.measureText(title).width);
 		context.font = `${fontSize}px title`;
 		context.textAlign = "center";
 		context.textBaseline = "middle";
-		context.fillText(title, left + (COLUMNS * p) / 2, titleCenter);
+		context.fillText(title, left + (columns * p) / 2, titleCenter);
 		context.textBaseline = "alphabetic";
 		// Stats and description lines
 		const lines = [...Object.entries(this.extraLines)];
 		const description = this.descriptionLines;
 		const bodyTop = top + (shape.topRoll + SHADE + BODY_PADDING) * p;
 		const textLeft = left + TEXT_LEFT * p;
-		const textWidth = TEXT_WIDTH * p;
+		const textWidth = (columns - 2 * TEXT_LEFT) * p;
 		const { statColumns, statLabels } = this.item.description;
 		const statWidth = textWidth / statColumns;
 		context.font = `${LINE_SIZE * p}px text`;
@@ -233,15 +225,15 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 		// Tags, in the bottom roll
 		const rollTop = top + (rowsAbove(shape) + ROLL_INK_TOP) * p;
 		const rollInner = shape.bottomRoll - ROLL_INK_TOP - ROLL_INK_BOTTOM;
-		const tagsCenter = { x: left + (COLUMNS * p) / 2, y: rollTop + (rollInner / 2) * p };
-		drawTagBadgeRows(context, this.tagBadges, tagsCenter, TAG_SIZE * p, (COLUMNS - 2 * ROLL_END - 4) * p, TAGS_PER_ROW);
+		const tagsCenter = { x: left + (columns * p) / 2, y: rollTop + (rollInner / 2) * p };
+		drawTagBadgeRows(context, this.tagBadges, tagsCenter, TAG_SIZE * p, (columns - 2 * ROLL_END - 4) * p, TAGS_PER_ROW);
 		context.restore();
 		// Sciences granted: the first stamp at the bottom right of the sheet, the next ones towards the left
 		context.save();
 		context.imageSmoothingEnabled = false;
 		const stampsTop = top + (rowsAbove(shape) - SHADE - STAMP_SIZE - BODY_PADDING) * p;
 		grantedSciencesOf(this.item).forEach((science, index) => {
-			const x = left + (COLUMNS - TEXT_LEFT - (index + 1) * STAMP_SIZE) * p;
+			const x = left + (columns - TEXT_LEFT - (index + 1) * STAMP_SIZE) * p;
 			context.drawImage(IconResources.scienceStamps[science].image, x, stampsTop, STAMP_SIZE * p, STAMP_SIZE * p);
 		});
 		context.restore();
