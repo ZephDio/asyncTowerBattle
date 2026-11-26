@@ -94,6 +94,8 @@ server unavailable" warning.
   the shop, `battle` in a battle or summary (the end-of-run `resume` screen has `army`). Crop to a grid whenever the rest of the screen doesn't matter.
 - `console` returns errors and warnings since the last call. Check it after anything that might throw.
 - `eval(code)` runs JavaScript with `atb`, `game` and `wrap` in scope, for anything the other tools don't cover.
+  For example `eval atb.injectOffer(slot, [[x, y], ...])` replaces shop slot `slot` (0-7) with a pink placeholder of
+  that footprint (offsets from its anchor, y up), to test offers of any size; it is never in the catalog.
 
 ## Workflows
 
