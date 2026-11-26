@@ -156,7 +156,7 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		y = this.iconParagraph(
 			context,
 			IconResources.food.image,
-			"Food 🌽 feeds your units and towers. At 0, you are in {famine}!\nYou will be in trouble...",
+			"Food 🌽 feeds your units and towers.\nAt 0, you are in {famine}! You will be in trouble...",
 			x,
 			y + 0.3 * u,
 			width,
