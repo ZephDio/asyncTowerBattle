@@ -11,6 +11,9 @@ Outputs, in public/resources/hud/price-sign/, three pieces the game stretches to
 - left.png and right.png: the ends of the board, CAP pixels wide, with a leg under each.
 - middle.png: one pixel wide, repeated between them.
 The face, where the price goes, runs from row FACE_TOP to FACE_BOTTOM - 1 (see price-hud.ts).
+- lock.png: the smaller sign of a reserved offer, planted in front of the price sign's lower right corner
+  (reserved-sign-hud.ts): the same board and wood on a single leg, with a closed padlock, its body in the gold coin's
+  yellows (generate-gold-coin.py) and its shackle in steel, on the dark face.
 """
 
 from pathlib import Path
@@ -74,9 +77,67 @@ def mirror(pixels):
     return flipped
 
 
+# The padlock, one character per pixel on the lock sign's face: steel shackle (s light, S shade), gold body (W shine,
+# G light, g mid, o shade), ink keyhole (K).
+PADLOCK = [
+    ".ssSS.",
+    ".s..S.",
+    ".s..S.",
+    "WGGGGg",
+    "GgKKgo",
+    "GggKgo",
+    "Gggggo",
+    "oooooo",
+]
+PADLOCK_COLORS = {
+    "s": (204, 210, 220, 255),
+    "S": (128, 136, 156, 255),
+    "W": (255, 246, 170, 255),
+    "G": (254, 231, 97, 255),
+    "g": (254, 174, 52, 255),
+    "o": (205, 112, 38, 255),
+    "K": INK,
+}
+LOCK_WIDTH = 12
+
+
+def lock():
+    """A square board in the price sign's frame, the padlock on its face, on one leg in the middle."""
+    width = LOCK_WIDTH
+    pixels = [[CLEAR] * width for _ in range(HEIGHT)]
+    for y in range(BOARD):
+        for x in range(width):
+            if x in (0, width - 1) or y in (0, BOARD - 1):
+                color = INK
+            elif y == 1 or x == 1:
+                color = FRAME_LIGHT
+            elif y == BOARD - 2 or x == width - 2:
+                color = FRAME_DARK
+            elif y == FACE_TOP:
+                color = TOP_EDGE
+            else:
+                color = FACE
+            pixels[y][x] = color
+    top = FACE_TOP + (FACE_BOTTOM - FACE_TOP - len(PADLOCK)) // 2 + 1
+    left_x = (width - len(PADLOCK[0])) // 2
+    for dy, row in enumerate(PADLOCK):
+        for dx, char in enumerate(row):
+            if char != ".":
+                pixels[top + dy][left_x + dx] = PADLOCK_COLORS[char]
+    middle_x = width // 2
+    for y in range(BOARD, BOARD + LEG):
+        pixels[y][middle_x - 2] = INK
+        pixels[y][middle_x - 1] = FRAME
+        pixels[y][middle_x] = FRAME_DARK
+        pixels[y][middle_x + 1] = INK
+    for x in range(middle_x - 3, middle_x + 3):
+        pixels[HEIGHT - 1][x] = SHADOW
+    return pixels
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    pieces = {"left": left(), "middle": middle()}
+    pieces = {"left": left(), "middle": middle(), "lock": lock()}
     pieces["right"] = mirror(pieces["left"])
     for name, pixels in pieces.items():
         write_png(OUT / f"{name}.png", pixels)

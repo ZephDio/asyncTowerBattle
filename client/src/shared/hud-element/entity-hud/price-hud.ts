@@ -16,6 +16,23 @@ const COIN = 8;
 // Screen units per art pixel: two thirds of the army banner's, so the sign stays smaller than the pieces.
 const ART_PIXEL = 0.14;
 
+// Where the price sign of `price` stands, centered on `center` (canvas pixels): its top left corner, its width, the
+// canvas pixels per art pixel and the width of its text in art pixels. The context's font is left set for the text.
+export function priceSignLayout(
+	context: CanvasRenderingContext2D,
+	center: { x: number; y: number },
+	price: number,
+	unit: number,
+) {
+	const { left, right } = HudElementResources.priceSign;
+	const p = Math.max(1, Math.round(unit * ART_PIXEL));
+	context.font = `${(FACE_BOTTOM - FACE_TOP + 1) * p}px title`;
+	const textWidth = Math.ceil(context.measureText(price.toString()).width / p);
+	const inner = PADDING + textWidth + GAP + COIN + PADDING;
+	const width = (left.width + inner + right.width) * p;
+	return { x: Math.round(center.x - width / 2), y: Math.round(center.y - (BOARD * p) / 2), width, inner, textWidth, p };
+}
+
 // The price of an offer on a little wooden sign planted below it, with the gold coin, in the wood of the shop and
 // reserve signs.
 export class PriceHud extends Derive(TDrawable) {
@@ -27,21 +44,16 @@ export class PriceHud extends Derive(TDrawable) {
 		const { left, middle, right } = HudElementResources.priceSign;
 		const coin = IconResources.gold.image;
 		if (![left, middle, right, coin].every((image) => image.complete && image.naturalWidth > 0)) return;
-		const p = Math.max(1, Math.round(this.getCanvasSize(context, 1, 1).width * ART_PIXEL));
 		const center = this.getCanvasPosition(context, position);
 		const text = this.buyable.price.toString();
 
 		context.save();
 		context.globalAlpha = 1;
 		context.imageSmoothingEnabled = false;
-		context.font = `${(FACE_BOTTOM - FACE_TOP + 1) * p}px title`;
+		const unit = this.getCanvasSize(context, 1, 1).width;
+		const { x, y, inner, textWidth, p } = priceSignLayout(context, center, this.buyable.price, unit);
 		context.textAlign = "left";
 		context.textBaseline = "middle";
-		const textWidth = Math.ceil(context.measureText(text).width / p);
-		const inner = PADDING + textWidth + GAP + COIN + PADDING;
-		const width = (left.width + inner + right.width) * p;
-		const x = Math.round(center.x - width / 2);
-		const y = Math.round(center.y - (BOARD * p) / 2);
 		context.drawImage(left, x, y, left.width * p, left.height * p);
 		context.drawImage(middle, x + left.width * p, y, inner * p, middle.height * p);
 		context.drawImage(right, x + (left.width + inner) * p, y, right.width * p, right.height * p);

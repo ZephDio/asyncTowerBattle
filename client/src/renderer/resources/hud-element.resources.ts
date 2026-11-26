@@ -132,11 +132,14 @@ export class HudElementResources {
 		stake: createImage("/resources/hud/construction-site/stake.png"),
 	};
 
-	// The little wooden sign of a shop offer's price, drawn by scripts/generate-price-sign.py.
+	// The little wooden sign of a shop offer's price and the padlock sign of a reserved one, drawn by
+	// scripts/generate-price-sign.py.
 	static priceSign = {
 		left: createImage("/resources/hud/price-sign/left.png"),
 		middle: createImage("/resources/hud/price-sign/middle.png"),
 		right: createImage("/resources/hud/price-sign/right.png"),
+		// The padlock sign of a reserved offer.
+		lock: createImage("/resources/hud/price-sign/lock.png"),
 	};
 
 	// The nine pieces of the parchment scroll of the tooltips, drawn by scripts/generate-scroll.py.
