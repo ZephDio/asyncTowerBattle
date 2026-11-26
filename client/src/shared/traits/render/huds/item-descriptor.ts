@@ -97,7 +97,7 @@ const LINE_HEIGHT = 13;
 const SECTION_GAP = 0.5;
 const TAG_SIZE = 9;
 const TAG_ROW_HEIGHT = TAG_SIZE * 1.15;
-const TAG_PADDING = 4;
+const TAG_PADDING = 1;
 // The scroll always has the same size, whatever it describes, and its bottom roll always has room for two rows of tags.
 const TAG_ROLL = Math.ceil(TAG_SIZE + TAG_ROW_HEIGHT) + ROLL_INK_TOP + ROLL_INK_BOTTOM + 2 * TAG_PADDING;
 const MAX_TAGS = 4;
