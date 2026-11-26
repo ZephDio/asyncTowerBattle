@@ -156,7 +156,7 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		y = this.iconParagraph(
 			context,
 			IconResources.food.image,
-			"Food 🌽 feeds your units and towers. At 0, you are in {famine}!",
+			"Food 🌽 feeds your units and towers. At 0, you are in {famine}!\nYou will be in trouble...",
 			x,
 			y + 0.3 * u,
 			width,
@@ -353,7 +353,7 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 			}
 			if (part === "famine") {
 				drawOutlinedText(context, FAMINE_LABEL, x, y + fontSize * 0.5, fontSize, FamineColor, "left");
-				x += context.measureText(FAMINE_LABEL).width + fontSize * 0.2;
+				x += context.measureText(FAMINE_LABEL).width + fontSize * 0.1;
 				return;
 			}
 			const badge = INLINE_TAGS[part];
@@ -408,7 +408,7 @@ function measureLine(context: CanvasRenderingContext2D, line: string) {
 	const fontSize = Number.parseFloat(font);
 	const width = line.split(INLINE_ICON).reduce((total, part, index) => {
 		if (index % 2 === 0) return total + context.measureText(part).width;
-		if (part === "famine") return total + context.measureText(FAMINE_LABEL).width + fontSize * 0.2;
+		if (part === "famine") return total + context.measureText(FAMINE_LABEL).width + fontSize * 0.1;
 		const badge = INLINE_TAGS[part];
 		if (!badge) return total + fontSize * INLINE_ICON_WIDTH;
 		const badgeWidth = badge.width(context, fontSize * INLINE_TAG_HEIGHT) + fontSize * 0.3;
