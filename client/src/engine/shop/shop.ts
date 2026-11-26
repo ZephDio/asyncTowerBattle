@@ -129,6 +129,7 @@ export class ShopPhase {
 	getDrawables() {
 		const network = this.army.pathNetwork;
 		return {
+			backdrops: [this.getReserveSign()],
 			grids: [
 				{
 					grid: this.army.grid,
@@ -146,7 +147,6 @@ export class ShopPhase {
 			renderables: [
 				new StartBattleButton({}),
 				this.sign,
-				this.getReserveSign(),
 				...(this.signHovered ? [new RarityOddsHud(rarityOdds(this.round), this.sign)] : []),
 				new RefreshBellHud(this.bellPressedAt),
 				this.getArmyHud(),
