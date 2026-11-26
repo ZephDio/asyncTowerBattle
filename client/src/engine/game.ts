@@ -67,7 +67,8 @@ export class Game {
 	}
 
 	// The game a player left, back at the start of the phase it was saved in: the shop with the gold and the offers it
-	// had on entering (the offers are drawn again, except the reserved ones), or the battle against the opponent the player was matched with.
+	// had on entering (the offers are drawn again, except the reserved ones), or the battle against the opponent the
+	// player was matched with.
 	static resume(saved: SavedGame, endGame: () => void) {
 		const restored = restoreGame(saved);
 		return new Game(restored.faction, endGame, restored);

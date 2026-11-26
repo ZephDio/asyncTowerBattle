@@ -74,7 +74,7 @@ Some effects buff the whole army for the rest of the battle: units get vitality 
 
 ## The shop
 
-- The shop shows a row of offers. Each slot first rolls a **rarity** from the round's odds, then a piece of that rarity. A piece appears at most once per roll.
+- The shop shows a row of offers. Each slot first rolls a **rarity** from the round's odds, then a piece of that rarity. A piece appears at most once per roll; a reserved offer is not part of the roll, so a new offer can repeat it.
 - Five rarities: Common, Uncommon, Rare, Epic, Legendary. Early rounds are almost all common. Odds flatten to 20% each by round 12:
 
 | Round | Common | Uncommon | Rare | Epic | Legendary |
@@ -86,6 +86,7 @@ Some effects buff the whole army for the rest of the battle: units get vitality 
 | 12+ | 20 | 20 | 20 | 20 | 20 |
 
 - Within a rarity, categories are weighted: totems 100, towers 100, units 50, barracks 60, path tiles and traps 35.
+- **Reserving.** Right-clicking an offer reserves it (a RESERVED sign hangs over it) or frees it. A reserved offer keeps its slot through refreshes and into the next round's shop, until it is bought; the game saves it, so a continued run keeps it. Only the free slots get new offers, and a refresh still costs 5 gold.
 - Bought pieces go on the board or into the **inventory** (a reserve).
 - Pieces are dragged and dropped. **They never rotate**: a piece's shape and its synergy cells are fixed as drawn, facing the player.
 
