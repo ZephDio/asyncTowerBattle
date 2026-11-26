@@ -96,17 +96,16 @@ const TITLE_ROLL = 22;
 const TITLE_SIZE = 14;
 const LINE_SIZE = 10;
 const LINE_HEIGHT = 13;
-// The room the last line's descenders need under the row it sits in.
-const LINE_DESCENT = 3;
 const SECTION_GAP = 0.5;
 const TAG_SIZE = 9;
 const TAG_ROW_HEIGHT = TAG_SIZE * 1.15;
-const TAG_ROLL_MIN = 16;
 const TAG_PADDING = 4;
+// The scroll always has the same size, whatever it describes, and its bottom roll always has room for two rows of tags.
+const TAG_ROLL = Math.ceil(TAG_SIZE + TAG_ROW_HEIGHT) + ROLL_INK_TOP + ROLL_INK_BOTTOM + 2 * TAG_PADDING;
+const SCROLL_ROWS = 216;
 const MAX_TAGS = 4;
 const TAGS_PER_ROW = 2;
 const BODY_PADDING = 4;
-const BODY_MIN = 80;
 const STAMP_SIZE = 19;
 // The scroll hangs from this point, in screen percent units: where the top of the old banner was.
 const SCROLL_TOP = { x: 86, y: 89.5 };
@@ -159,18 +158,8 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 
 	getShape(): ScrollShape & { lines: ReturnType<DescriptionHud["getLinesOffsets"]> } {
 		const lines = this.getLinesOffsets();
-		const tagRows = Math.ceil(this.tagBadges.length / TAGS_PER_ROW);
-		const tagRoll =
-			tagRows > 1
-				? Math.ceil(TAG_SIZE + (tagRows - 1) * TAG_ROW_HEIGHT) + ROLL_INK_TOP + ROLL_INK_BOTTOM + 2 * TAG_PADDING
-				: TAG_ROLL_MIN;
-		// The stamps of the sciences the piece grants take a row of their own under the lines.
-		const stamps = grantedSciencesOf(this.item).length > 0 ? STAMP_SIZE + BODY_PADDING : 0;
-		const body = Math.max(
-			BODY_MIN,
-			Math.ceil(lines.rows * LINE_HEIGHT) + stamps + 2 * BODY_PADDING + SHADE * 2 + LINE_DESCENT,
-		);
-		return { columns: COLUMNS, topRoll: TITLE_ROLL, bottomRoll: tagRoll, body, lines };
+		const body = SCROLL_ROWS - TITLE_ROLL - TAG_ROLL;
+		return { columns: COLUMNS, topRoll: TITLE_ROLL, bottomRoll: TAG_ROLL, body, lines };
 	}
 
 	draw(context: CanvasRenderingContext2D, _position: ScreenPosition, scale: number) {
@@ -250,7 +239,7 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 		// Sciences granted: the first stamp at the bottom right of the sheet, the next ones towards the left
 		context.save();
 		context.imageSmoothingEnabled = false;
-		const stampsTop = top + (rowsAbove(shape) - STAMP_SIZE - BODY_PADDING) * p;
+		const stampsTop = top + (rowsAbove(shape) - SHADE - STAMP_SIZE - BODY_PADDING) * p;
 		grantedSciencesOf(this.item).forEach((science, index) => {
 			const x = left + (COLUMNS - TEXT_LEFT - (index + 1) * STAMP_SIZE) * p;
 			context.drawImage(IconResources.scienceStamps[science].image, x, stampsTop, STAMP_SIZE * p, STAMP_SIZE * p);

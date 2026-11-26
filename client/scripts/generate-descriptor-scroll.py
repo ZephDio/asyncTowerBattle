@@ -41,8 +41,13 @@ CLEAR = (0, 0, 0, 0)
 
 TILE_WIDTH, TILE_HEIGHT = 32, 16
 
+WOOD_DARK = (58, 36, 24, 255)
+WOOD = (92, 58, 36, 255)
+WOOD_LIGHT = (128, 84, 50, 255)
+NAIL = (222, 190, 120, 255)
+
 PALETTES = {
-    "common": {"knob": INK},
+    "common": {"knob": NAIL},
 }
 
 
@@ -75,14 +80,16 @@ def roll_strip(width, ends, palette):
 
 
 def knob(side, palette):
+    """A dark wood handle: the end of the rod the parchment is rolled on, lit from the top left, with a nail."""
     pixels = new(ROLL_END, ROLL_MIN)
     rect = painter(pixels)
     w, h = ROLL_END, ROLL_MIN
     rect(1, 0, w - 2, h, INK)
     rect(0, 1, w, h - 2, INK)
-    rect(2, 2, w - 4, h - 4, STRAW_SHADE)
-    rect(2, 2, w - 5, h - 5, CREAM)
-    rect(4, 4, w - 7, h - 7, STRAW)
+    rect(2, 2, w - 4, h - 4, WOOD_DARK)
+    rect(2, 2, w - 5, h - 5, WOOD_LIGHT)
+    rect(4, 4, w - 7, h - 7, WOOD)
+    rect(2, ROLL_TOP + 1, w - 4, 1, WOOD_DARK)
     rect(4, 4, 2, 2, palette["knob"])
     if side == "right":
         pixels = [row[::-1] for row in pixels]
