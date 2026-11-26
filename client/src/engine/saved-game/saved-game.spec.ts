@@ -13,6 +13,9 @@ import { FrostTower } from "../constructs/tower/recruit/implementation/frost-tow
 import { BlacksmithTower } from "../constructs/tower/recruit/implementation/blacksmith-tower";
 import { Mine } from "../constructs/totem/recruit/implementation/mine";
 import { restoreGame, serializeGame } from "./saved-game";
+import { Buyable } from "../shop/retail/buyable";
+import { OfferReservations } from "../shop/retail/offer-reservations";
+import { ShopPhase } from "../shop/shop";
 
 const origin = () => new Cell({ x: 0, y: 0 });
 
@@ -96,5 +99,55 @@ describe("saved game", () => {
 		expect(restored.opponent?.playerName).toBe("Bob");
 		expect(restored.opponent?.randomSeed).toBe(opponent.randomSeed);
 		expect(restored.opponent?.army.path.length).toBe(opponent.army.path.length);
+	});
+
+	it("keeps the reserved offers, which the shop of the continued game keeps in their slots", async () => {
+		const army = ArmyFactory.default(Faction.Elf);
+		const reserved = [
+			Buyable.from(new Mine(new Cell({ x: 1, y: 3 })), 15),
+			Buyable.from(new Fox(new Cell({ x: 5, y: 1 })), 15),
+		];
+		const snapshot = { army, runSeed: 1234, round: 2, life: 5, performance: { wins: 1, losses: 0 } };
+		const saved = throughJson(serializeGame({ ...snapshot, phase: "shop", reservedOffers: reserved }));
+
+		const restored = restoreGame(saved);
+
+		expect(saved.reservedOffers).toEqual([
+			{ item: { kind: "totem", type: "mine", cell: { x: 1, y: 3 } }, price: 15 },
+			{ item: { kind: "unit", type: "fox", cell: { x: 5, y: 1 } }, price: 15 },
+		]);
+		expect(serializeGame({ ...restored, opponent: undefined })).toEqual(saved);
+		const shop = new ShopPhase(
+			restored.army,
+			async () => {},
+			() => {},
+			restored.round,
+			restored.life,
+			restored.runSeed,
+			new OfferReservations(restored.reservedOffers),
+		);
+		await new Promise((resolve) => setTimeout(resolve));
+		const offerAt = (x: number, y: number) =>
+			shop.retail.grid.getBuyables().find((offer) => offer.cell.x === x && offer.cell.y === y);
+		expect(offerAt(1, 3)?.entity).toBeInstanceOf(Mine);
+		expect(offerAt(5, 1)?.entity).toBeInstanceOf(Fox);
+		expect(shop.retail.reservedOffers()).toHaveLength(2);
+		expect(offerAt(1, 3)?.price).toBe(15);
+	});
+
+	it("restores a game saved before reservations with none", () => {
+		const saved = throughJson(
+			serializeGame({
+				phase: "shop",
+				army: ArmyFactory.default(Faction.Elf),
+				runSeed: 1,
+				round: 1,
+				life: 5,
+				performance: { wins: 0, losses: 0 },
+			}),
+		);
+		delete saved.reservedOffers;
+
+		expect(restoreGame(saved).reservedOffers).toEqual([]);
 	});
 });

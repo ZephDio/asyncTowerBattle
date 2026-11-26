@@ -344,7 +344,7 @@ async def click(x: float, y: float, button: str = "left") -> str:
 @mcp.tool()
 async def click_cell(grid: str, x: int, y: int, button: str = "left") -> str:
     """Click the centre of cell (x, y) of a grid ("army", "inventory", "retail", "battle"). Right-click on a path
-    tile cycles its junction."""
+    tile cycles its junction, on an offer reserves or frees it."""
     point = await page_point(grid, x, y)
     await session.page.mouse.click(point["x"], point["y"], button=button)
     return dump(point)

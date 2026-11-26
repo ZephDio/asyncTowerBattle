@@ -11,6 +11,7 @@ import { RetailFiller } from "./retail-filler";
 import { Buyable } from "./buyable";
 import { Science } from "../../../shared/traits/engine/science";
 import { runRandom } from "../../../shared/run-random";
+import { OfferReservations } from "./offer-reservations";
 export type ShopItem = Buyable;
 export class Retail extends Derive(
 	TCollider,
@@ -33,6 +34,7 @@ export class Retail extends Derive(
 		private round: number,
 		private runSeed: number,
 		private getSciences: () => ReadonlySet<Science> = () => new Set(),
+		public reservations = new OfferReservations(),
 	) {
 		super({});
 		this.grid = new RetailGrid();
@@ -40,9 +42,9 @@ export class Retail extends Derive(
 	}
 	position = new GridPosition(PercentToReal({ x: 50, y: 75 }));
 
-	async getRetailItems(): Promise<ShopItem[]> {
+	async getRetailItems(slots: Cell[] = this.slots): Promise<ShopItem[]> {
 		const random = runRandom(this.runSeed, "shop", this.round, this.draws++);
-		const itemsAndPrice = new RetailFiller(this.round, random, this.getSciences()).getFreshItems(this.slots);
+		const itemsAndPrice = new RetailFiller(this.round, random, this.getSciences()).getFreshItems(slots);
 		return itemsAndPrice.map((itemAndPrice) => {
 			return Buyable.from(itemAndPrice.recruit, itemAndPrice.price);
 		});
@@ -52,14 +54,38 @@ export class Retail extends Derive(
 		this.grid.tiles.delete(ArmyGrid.posToString(buyable.cell));
 	}
 
+	// A bought offer leaves its slot for good, reserved or not.
+	sell(buyable: Buyable) {
+		this.removeItem(buyable);
+		this.reservations.release(buyable);
+	}
+
+	toggleReservation(buyable: Buyable) {
+		if (this.grid.tiles.get(ArmyGrid.posToString(buyable.cell)) !== buyable) return;
+		this.reservations.toggle(buyable);
+	}
+
+	isReserved(buyable: Buyable) {
+		return this.reservations.isReserved(buyable);
+	}
+
+	// The reserved offers on display: not the one in the player's hand.
+	reservedOffers() {
+		return this.reservations
+			.all()
+			.filter((buyable) => this.grid.tiles.get(ArmyGrid.posToString(buyable.cell)) === buyable);
+	}
+
 	addItem(buyable: Buyable) {
 		this.grid.tiles.set(ArmyGrid.posToString(buyable.cell), buyable);
 	}
 
+	// New offers in the free slots; the reserved ones stay in theirs.
 	async refresh() {
 		this.grid.tiles.clear();
-		const items = await this.getRetailItems();
-		await this.fill(items);
+		const reserved = this.reservations.all();
+		const items = await this.getRetailItems(this.slots.filter((slot) => !this.reservations.isSlotReserved(slot)));
+		await this.fill([...reserved, ...items]);
 	}
 
 	async fill(items: ShopItem[]) {

@@ -233,7 +233,10 @@ export class DebugBridge {
 				gold: army.getEconomyHooks().getEconomy().amount,
 				pathComplete: army.pathNetwork.complete,
 				holding: shop.holderControl.hold ? this.describe(shop.holderControl.hold.holded) : null,
-				offers: this.uniqueElements(shop.retail.grid).map((offer) => this.describe(offer)),
+				offers: this.uniqueElements(shop.retail.grid).map((offer) => ({
+					...this.describe(offer),
+					...(offer instanceof Buyable && shop.retail.isReserved(offer) ? { reserved: true } : {}),
+				})),
 				army: [army.castle, ...this.uniqueElements(army.grid)]
 					.filter((element) => !army.environment.includes(element as never) && !implementsTrait(element, PathTile))
 					.map((element) => this.describe(element)),

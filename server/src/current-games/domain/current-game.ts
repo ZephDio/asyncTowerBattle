@@ -16,6 +16,9 @@ import {
 // client needs no server change.
 export type SavedItem = { kind: string; cell: SerializedCell; [field: string]: unknown };
 
+// An offer the player reserved in the shop: the piece in its slot (the item's cell), and its price.
+export type SavedOffer = { item: SavedItem; price: number };
+
 export type SavedOpponent = { board: SerializedBoard; playerName: string };
 
 export type SavedPhase = "shop" | "battle";
@@ -33,6 +36,8 @@ export type SavedGame = {
 	// The player's own board, of the round being played. Its random seed is not used.
 	board: SerializedBoard;
 	inventory: SavedItem[];
+	// The shop offers the player reserved, for the next shop to keep. A game saved before reservations has none.
+	reservedOffers?: SavedOffer[];
 	opponent: SavedOpponent | null;
 };
 

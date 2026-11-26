@@ -79,7 +79,7 @@ server unavailable" warning.
 - Acting:
   - `drag(id, from_grid, to_grid, x, y)` buys (`retail` → `army` / `inventory`) or moves pieces. It lands the
     piece's anchor exactly on (x, y). It returns the state: check the drop was accepted.
-  - `click_cell` / `hover_cell(grid, x, y)`. A right-click cycles a path junction. A hover shows the description
+  - `click_cell` / `hover_cell(grid, x, y)`. A right-click cycles a path junction, or reserves or frees an offer on `retail` (`state.offers` marks it `reserved`). A hover shows the description
     and synergies, ready for a screenshot.
   - `click_hud(name)`, e.g. `StartBattleButton`, `RefreshBellHud`, `NextRoundHud`, `HideHud`.
   - `give(name, x, y)` places any catalog piece for free with its anchor at (x, y). Without a cell, and always for

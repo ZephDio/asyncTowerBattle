@@ -231,6 +231,9 @@ export class ShopInputToIntentTranslator {
 			if (focus.grid instanceof ArmyGrid && focus.element && implementsTrait(focus.element, PathTile)) {
 				shop.army.cyclePathAt(focus.element.cell);
 			}
+			if (focus.grid instanceof RetailGrid && focus.element instanceof Buyable) {
+				shop.toggleReservation(focus.element);
+			}
 		}
 	}
 
