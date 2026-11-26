@@ -63,6 +63,8 @@ LEAF_LIGHT = (128, 190, 84, 255)
 DECO_WIDTH = 6
 ORNAMENT_WIDTH = 14
 ORNAMENT_HEIGHT = 12
+GRAND_WIDTH = 14
+GRAND_HEIGHT = 20
 
 BLUE_DARK = (22, 48, 120, 255)
 BLUE = (48, 96, 190, 255)
@@ -157,6 +159,8 @@ PALETTES = {
         "ornaments": (RED, ORANGE, RED_DARK),
         "handle_tip": (YELLOW, GOLD_DARK),
         "crest": True,
+        "gems": 2,
+        "grand": True,
     },
 }
 
@@ -227,7 +231,11 @@ def gem(palette):
         "D": palette["gem"][3],
         ".": CLEAR,
     }
-    return [[colors[c] for c in row] for row in rows]
+    gems = [[colors[c] for c in row] for row in rows]
+    stack = []
+    for index in range(palette.get("gems", 1)):
+        stack += ([[CLEAR] * len(gems[0])] if index else []) + gems
+    return stack
 
 
 def crest():
@@ -244,6 +252,49 @@ def crest():
     )
     colors = {"G": GOLD, "K": GOLD_DARK, "Y": YELLOW, "O": ORANGE, "R": RED, ".": CLEAR}
     return [[colors[c] for c in row + row[::-1]] for row in half]
+
+
+def grand_ornament(side, colors):
+    """A prestigious gilded plant sticking out of the footer's end: a gold stem with a pair of flame leaves and a gold
+    flower around a ruby bud at its tip. GRAND_WIDTH x GRAND_HEIGHT, drawn behind the roll."""
+    leaf, light, dark = colors
+    pixels = new(GRAND_WIDTH, GRAND_HEIGHT)
+    rect = painter(pixels)
+    rect(0, 9, 9, 1, GOLD)
+    rect(0, 10, 9, 1, GOLD_DARK)
+    leaf_shape = (
+        (0, 0, dark),
+        (1, 0, leaf),
+        (2, 0, leaf),
+        (1, -1, dark),
+        (2, -1, light),
+        (3, -1, leaf),
+        (2, -2, dark),
+        (3, -2, light),
+        (4, -2, leaf),
+        (3, -3, dark),
+        (4, -3, leaf),
+        (5, -3, leaf),
+        (4, -4, dark),
+        (5, -4, light),
+        (6, -4, YELLOW),
+    )
+    for bx, flip, by, count in ((0, 1, 8, 15), (0, -1, 11, 15), (3, 1, 8, 9), (3, -1, 11, 9)):
+        for dx, dy, color in leaf_shape[:count]:
+            rect(bx + dx, by + flip * dy, 1, 1, color)
+    letters = {"G": GOLD, "K": GOLD_DARK, "Y": YELLOW, "R": leaf, "L": light, "D": dark}
+    flower = ("..GG..", ".GYYG.", "GYRRYG", "GRLRRG", "KRRDDK")
+    for dy, row in enumerate(flower):
+        for dx, letter in enumerate(row):
+            if letter == ".":
+                continue
+            for y in (5 + dy, 14 - dy):
+                rect(8 + dx, y, 1, 1, letters[letter])
+    for x, y in ((12, 2), (6, 17), (13, 16)):
+        rect(x, y, 1, 1, YELLOW)
+    if side == "left":
+        pixels = [row[::-1] for row in pixels]
+    return pixels
 
 
 def ornament(side, colors):
@@ -393,8 +444,9 @@ def main():
         if palette.get("gem"):
             pieces["gem"] = gem(palette)
         if palette.get("ornaments"):
-            pieces["ornament-left"] = ornament("left", palette["ornaments"])
-            pieces["ornament-right"] = ornament("right", palette["ornaments"])
+            make = grand_ornament if palette.get("grand") else ornament
+            pieces["ornament-left"] = make("left", palette["ornaments"])
+            pieces["ornament-right"] = make("right", palette["ornaments"])
         if palette.get("crest"):
             pieces["crest"] = crest()
         if palette["deco"]:

@@ -19,7 +19,6 @@ const CREST_OVERLAP = 2;
 // A gem's distance from its roll's end: inside the cap's ink.
 const GEM_INSET = 2;
 const ORNAMENT_WIDTH = 14;
-const ORNAMENT_HEIGHT = 12;
 const DECO_WIDTH = 6;
 // The decoration's distance from the scroll's sides.
 const DECO_INSET = 7;
@@ -126,9 +125,10 @@ export function drawDescriptorScroll(
 	);
 	context.drawImage(parts.handleRight, left + width - HANDLE_OVERLAP * p, handleY, HANDLE_WIDTH * p, HANDLE_HEIGHT * p);
 	if (parts.ornamentLeft && parts.ornamentRight) {
-		const ornamentY = bottomY + Math.floor((bottomRoll - ORNAMENT_HEIGHT) / 2) * p;
+		const ornamentHeight = parts.ornamentLeft.naturalHeight;
+		const ornamentY = bottomY + Math.floor((bottomRoll - ornamentHeight) / 2) * p;
 		const w = ORNAMENT_WIDTH * p;
-		const h = ORNAMENT_HEIGHT * p;
+		const h = ornamentHeight * p;
 		context.drawImage(parts.ornamentLeft, left - (ORNAMENT_WIDTH - HANDLE_OVERLAP) * p, ornamentY, w, h);
 		context.drawImage(parts.ornamentRight, left + width - HANDLE_OVERLAP * p, ornamentY, w, h);
 	}
