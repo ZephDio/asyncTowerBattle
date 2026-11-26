@@ -91,6 +91,7 @@ export const HTDescriptor = Subtrait([TDescriptor], (base, Props) => {
 // The text stays this far from the sheet's sides.
 const TEXT_LEFT = 12;
 const TITLE_SIZE = 14;
+const TITLE_DROP = 1.5;
 const LINE_SIZE = 10;
 const LINE_HEIGHT = 13;
 const SECTION_GAP = 0.5;
@@ -176,7 +177,8 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 		context.fillStyle = INK;
 		// Title, in the top roll between its ink rows and its curls
 		const title = this.item.description.name;
-		const titleCenter = top + (ROLL_INK_TOP + (shape.topRoll - ROLL_INK_TOP - ROLL_INK_BOTTOM) / 2) * p;
+		// A little lower than the roll's middle: the title font sits high, most titles having no descenders.
+		const titleCenter = top + (ROLL_INK_TOP + (shape.topRoll - ROLL_INK_TOP - ROLL_INK_BOTTOM) / 2 + TITLE_DROP) * p;
 		const titleWidth = (columns - 2 * ROLL_END - 4) * p;
 		// Long titles get a smaller font so they fit between the curls instead of being squeezed.
 		context.font = `${TITLE_SIZE * p}px title`;
