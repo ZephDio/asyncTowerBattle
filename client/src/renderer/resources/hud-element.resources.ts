@@ -3,7 +3,16 @@ import { IconResource } from "./icons.resources";
 import { Rarity } from "../../shared/traits/engine/rarity";
 
 export type DescriptorScrollParts = Record<
-	"rollLeft" | "roll" | "rollRight" | "edgeLeft" | "edgeRight" | "center" | "shade" | "shadow",
+	| "rollLeft"
+	| "roll"
+	| "rollRight"
+	| "handleLeft"
+	| "handleRight"
+	| "edgeLeft"
+	| "edgeRight"
+	| "center"
+	| "shade"
+	| "shadow",
 	HTMLImageElement
 >;
 
@@ -13,6 +22,8 @@ function descriptorScrollParts(rarity: string): DescriptorScrollParts {
 		rollLeft: part("roll-left"),
 		roll: part("roll"),
 		rollRight: part("roll-right"),
+		handleLeft: part("handle-left"),
+		handleRight: part("handle-right"),
 		edgeLeft: part("edge-left"),
 		edgeRight: part("edge-right"),
 		center: part("center"),

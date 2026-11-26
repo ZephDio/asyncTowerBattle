@@ -9,6 +9,10 @@ export const ROLL_MIN = ROLL_TOP + 1 + ROLL_BOTTOM;
 export const ROLL_INK_TOP = 2;
 export const ROLL_INK_BOTTOM = 4;
 export const SHADE = 2;
+export const HANDLE_WIDTH = 14;
+export const HANDLE_HEIGHT = 8;
+// How far a handle goes under its roll's end.
+const HANDLE_OVERLAP = 1;
 const EDGE = 7;
 
 export type ScrollShape = {
@@ -46,7 +50,7 @@ function drawRoll(
 
 // A parchment sheet hanging between two rolls of any height, one art pixel being `p` canvas pixels. The rolls carry the
 // title and the tags, so the caller picks their height. (left, top) is the top left corner of the top roll, and the
-// roll's shadow falls under the scroll's last row.
+// roll's shadow falls under the scroll's last row. The handles stick out of its sides, outside `columns`.
 export function drawDescriptorScroll(
 	context: CanvasRenderingContext2D,
 	parts: DescriptorScrollParts,
@@ -83,6 +87,26 @@ export function drawDescriptorScroll(
 	context.drawImage(parts.shadow, left + 2 * p, top + rows * p, width - 4 * p, SHADE * p);
 
 	const bottomY = top + (rows - bottomRoll) * p;
+	for (const [y, roll] of [
+		[top, topRoll],
+		[bottomY, bottomRoll],
+	] as const) {
+		const handleY = y + Math.floor((roll - HANDLE_HEIGHT) / 2) * p;
+		context.drawImage(
+			parts.handleLeft,
+			left - (HANDLE_WIDTH - HANDLE_OVERLAP) * p,
+			handleY,
+			HANDLE_WIDTH * p,
+			HANDLE_HEIGHT * p,
+		);
+		context.drawImage(
+			parts.handleRight,
+			left + width - HANDLE_OVERLAP * p,
+			handleY,
+			HANDLE_WIDTH * p,
+			HANDLE_HEIGHT * p,
+		);
+	}
 	for (const [y, roll] of [
 		[top, topRoll],
 		[bottomY, bottomRoll],

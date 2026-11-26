@@ -8,6 +8,8 @@ bottom one, so a roll can be any height from ROLL_MIN rows. Outputs, in public/r
 - roll-left.png, roll.png, roll-right.png: a roll, ROLL_TOP + 1 + ROLL_BOTTOM rows tall. The game draws the first
   ROLL_TOP rows and the last ROLL_BOTTOM rows as they are and repeats the one row between them to reach the height it
   needs. `roll.png` is 1 pixel wide and repeats. The ends are ROLL_END wide.
+- handle-left.png, handle-right.png: the dark wood rods sticking out of the rolls' ends, HANDLE_WIDTH wide, drawn behind the
+  rolls at their middle and outside the scroll's columns.
 - edge-left.png, edge-right.png: the ink border of the sheet and its shaded side, 1 row tall, repeated down the sheet.
 - center.png: the straw of the sheet with its fibers, a tile that repeats both ways.
 - shade.png: the two rows of shade under the top roll, 1 pixel wide, stretched across the sheet.
@@ -26,6 +28,8 @@ ROLL_END = 10
 ROLL_TOP = 6
 ROLL_BOTTOM = 4
 ROLL_MIN = ROLL_TOP + 1 + ROLL_BOTTOM
+HANDLE_WIDTH = 14
+HANDLE_HEIGHT = 8
 SHEET_INSET = 3
 SHEET_BORDER = 2
 SHADE = 2
@@ -44,10 +48,11 @@ TILE_WIDTH, TILE_HEIGHT = 32, 16
 WOOD_DARK = (58, 36, 24, 255)
 WOOD = (92, 58, 36, 255)
 WOOD_LIGHT = (128, 84, 50, 255)
-NAIL = (222, 190, 120, 255)
+BRASS = (222, 190, 120, 255)
+BRASS_DARK = (160, 122, 62, 255)
 
 PALETTES = {
-    "common": {"knob": NAIL},
+    "common": {},
 }
 
 
@@ -80,18 +85,35 @@ def roll_strip(width, ends, palette):
 
 
 def knob(side, palette):
-    """A dark wood handle: the end of the rod the parchment is rolled on, lit from the top left, with a nail."""
+    """The end of a roll: a curled cap of parchment with a nail."""
     pixels = new(ROLL_END, ROLL_MIN)
     rect = painter(pixels)
     w, h = ROLL_END, ROLL_MIN
     rect(1, 0, w - 2, h, INK)
     rect(0, 1, w, h - 2, INK)
-    rect(2, 2, w - 4, h - 4, WOOD_DARK)
-    rect(2, 2, w - 5, h - 5, WOOD_LIGHT)
-    rect(4, 4, w - 7, h - 7, WOOD)
-    rect(2, ROLL_TOP + 1, w - 4, 1, WOOD_DARK)
-    rect(4, 4, 2, 2, palette["knob"])
+    rect(2, 2, w - 4, h - 4, STRAW_SHADE)
+    rect(2, 2, w - 5, h - 5, CREAM)
+    rect(4, 4, w - 7, h - 7, STRAW)
+    rect(4, 4, 2, 2, INK)
     if side == "right":
+        pixels = [row[::-1] for row in pixels]
+    return pixels
+
+
+def handle(side):
+    """The dark wood rod the parchment is rolled on, sticking out of a roll's end: a brass tip on its outer end."""
+    pixels = new(HANDLE_WIDTH, HANDLE_HEIGHT)
+    rect = painter(pixels)
+    w, h = HANDLE_WIDTH, HANDLE_HEIGHT
+    rect(0, 0, w, h, INK)
+    rect(0, 1, w - 1, 1, WOOD_LIGHT)
+    rect(0, 2, w - 1, 3, WOOD)
+    rect(0, 5, w - 1, 2, WOOD_DARK)
+    for x in (w - 8, w - 11):
+        rect(x, 1, 1, h - 2, WOOD_DARK)
+    rect(w - 4, 1, 3, h - 2, BRASS_DARK)
+    rect(w - 4, 1, 3, 3, BRASS)
+    if side == "left":
         pixels = [row[::-1] for row in pixels]
     return pixels
 
@@ -126,6 +148,8 @@ def main():
             "roll-left": knob("left", palette),
             "roll": roll_strip(1, None, palette),
             "roll-right": knob("right", palette),
+            "handle-left": handle("left"),
+            "handle-right": handle("right"),
             "edge-left": edge("left"),
             "edge-right": edge("right"),
             "center": center_tile(),

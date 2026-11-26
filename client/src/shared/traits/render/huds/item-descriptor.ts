@@ -3,7 +3,15 @@ import { ScreenPosition } from "../../../position";
 import { PercentToReal } from "../../../../renderer/implementation/canvas-renderer";
 import { TRenderable } from "../renderable";
 import { TDrawable } from "../drawable";
-import { ROLL_END, ROLL_INK_BOTTOM, ROLL_INK_TOP, SHADE, ScrollShape, drawDescriptorScroll } from "./descriptor-scroll";
+import {
+	HANDLE_WIDTH,
+	ROLL_END,
+	ROLL_INK_BOTTOM,
+	ROLL_INK_TOP,
+	SHADE,
+	ScrollShape,
+	drawDescriptorScroll,
+} from "./descriptor-scroll";
 import { Tag, Tagged } from "../../engine/tags/tagged";
 import { TBaseStats } from "../../../../engine/stats/base-stats";
 import { castSpeedToSecond, frameToSeconds } from "../../../seconds";
@@ -158,9 +166,10 @@ export class DescriptionHud extends Derive(TRenderable, TDrawable) {
 	draw(context: CanvasRenderingContext2D, _position: ScreenPosition, scale: number) {
 		const unit = this.getCanvasSize(context, 1, 1, scale).width;
 		const p = Math.max(2, Math.round(unit * 0.16));
-		const columns = Math.floor((SCROLL_WIDTH * unit) / p);
+		// The handles stick out of the box's sides.
+		const columns = Math.floor((SCROLL_WIDTH * unit) / p) - 2 * (HANDLE_WIDTH - 1);
 		const shape = this.getShape(columns, Math.floor((SCROLL_HEIGHT * unit) / p));
-		const left = Math.round((SCROLL_RIGHT * unit) / 1 - columns * p);
+		const left = Math.round(SCROLL_RIGHT * unit - (HANDLE_WIDTH - 1) * p - columns * p);
 		const top = Math.round(SCROLL_TOP * unit);
 		drawDescriptorScroll(context, HudElementResources.descriptorScroll[rarityOf(this.item)], left, top, shape, p);
 
