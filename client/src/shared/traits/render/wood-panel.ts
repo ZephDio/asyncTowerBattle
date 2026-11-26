@@ -40,16 +40,17 @@ export function drawWoodPanel(
 	context.drawImage(parts.topLeft, x - edge, y - edge, edge, edge);
 	context.drawImage(parts.top, x, y - edge, w, edge);
 	context.drawImage(parts.topRight, x + w, y - edge, edge, edge);
-	context.drawImage(parts.left, x - edge, y, edge, h);
-	context.drawImage(parts.right, x + w, y, edge, h);
+	context.drawImage(parts.left, x - edge, y - edge, edge, h + edge);
+	context.drawImage(parts.right, x + w, y - edge, edge, h + edge);
 	context.drawImage(parts.bottomLeft, x - edge, y + h, edge, edge);
 	context.drawImage(parts.bottom, x, y + h, w, edge);
 	context.drawImage(parts.bottomRight, x + w, y + h, edge, edge);
 	context.restore();
 }
 
-// The frame of a panel without its top and its planks, around the area below `top`: the sides and the bottom, for a
-// grid that sits under a sign. Like `drawWoodPanel`, it is drawn outside of the given area.
+// The frame of a panel without its top and its planks: the sides and the bottom, for a grid that sits under a sign.
+// The sides start one frame above `top`, over the sign's bottom corners, so they run on from the sign's sides. Like
+// `drawWoodPanel`, it is drawn outside of the given area.
 export function drawWoodFrameBelow(
 	context: CanvasRenderingContext2D,
 	left: number,
@@ -67,8 +68,8 @@ export function drawWoodFrameBelow(
 	const h = Math.round(height);
 	context.save();
 	context.imageSmoothingEnabled = false;
-	context.drawImage(parts.left, x - edge, y, edge, h);
-	context.drawImage(parts.right, x + w, y, edge, h);
+	context.drawImage(parts.left, x - edge, y - edge, edge, h + edge);
+	context.drawImage(parts.right, x + w, y - edge, edge, h + edge);
 	context.drawImage(parts.bottomLeft, x - edge, y + h, edge, edge);
 	context.drawImage(parts.bottom, x, y + h, w, edge);
 	context.drawImage(parts.bottomRight, x + w, y + h, edge, edge);
