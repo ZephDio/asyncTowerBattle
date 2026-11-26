@@ -57,7 +57,7 @@ LEAF_DARK = (36, 92, 48, 255)
 LEAF = (70, 146, 62, 255)
 LEAF_LIGHT = (128, 190, 84, 255)
 
-DECO_WIDTH = 11
+DECO_WIDTH = 7
 DECO_HEIGHT = 24
 
 PALETTES = {
@@ -129,14 +129,12 @@ def handle(side):
 
 
 def vine(side):
-    """A climbing vine for the left margin of the sheet, DECO_HEIGHT rows tall and repeating: a wavy stem with a leaf
-    every 6 rows, alternating sides."""
+    """A climbing vine for the left margin of the sheet, DECO_HEIGHT rows tall and repeating: a straight stem on the
+    outer edge of the strip and a leaf every 6 rows pointing inwards, alternately up and down."""
     pixels = new(DECO_WIDTH, DECO_HEIGHT)
     rect = painter(pixels)
-    wave = [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0]
-    center = DECO_WIDTH // 2
     for y in range(DECO_HEIGHT):
-        rect(center + wave[y], y, 1, 1, LEAF_DARK)
+        rect(0, y, 1, 1, LEAF_DARK)
     leaf = (
         (1, 0, LEAF_DARK),
         (2, 0, LEAF),
@@ -144,18 +142,13 @@ def vine(side):
         (2, -1, LEAF_DARK),
         (3, -1, LEAF_LIGHT),
         (4, -1, LEAF),
-        (4, -2, LEAF_DARK),
         (3, -2, LEAF_DARK),
+        (4, -2, LEAF_DARK),
         (5, -2, LEAF_DARK),
     )
-    for y, direction in ((3, 1), (9, -1), (15, 1), (21, -1)):
-        x = center + wave[y]
+    for y, flip in ((3, 1), (9, -1), (15, 1), (21, -1)):
         for dx, dy, color in leaf:
-            rect(x + direction * dx, (y + dy) % DECO_HEIGHT, 1, 1, color)
-    for y, direction in ((9, 1), (21, 1), (3, -1), (15, -1)):
-        x = center + wave[y]
-        rect(x + direction * 1, y, 1, 1, LEAF_DARK)
-        rect(x + direction * 2, y - 1, 1, 1, LEAF)
+            rect(dx, (y + flip * dy) % DECO_HEIGHT, 1, 1, color)
     if side == "right":
         pixels = [row[::-1] for row in pixels]
     return pixels
