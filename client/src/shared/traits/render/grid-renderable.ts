@@ -6,6 +6,9 @@ import { EnvironmentResources } from "../../../renderer/resources/environment.re
 import { layoutGrass } from "../../../engine/grid/grass-layout";
 import { GrassSeed } from "../../../engine/grid/grass-seed";
 
+// Every grass image, listed once: checking them is done every frame.
+const GRASS_IMAGES = Object.values(EnvironmentResources.grass).flat();
+
 export const TGridDrawable = Subtrait([TGrid, TDrawable], (base) => {
 	abstract class IGridDrawable extends base {
 		drawPriority = DrawPriority.BackGroundGrid;
@@ -44,12 +47,7 @@ export const TGridDrawable = Subtrait([TGrid, TDrawable], (base) => {
 		// The grass patches, laid out by the run's seed over the flat green, and clipped to the grid.
 		drawGrass(context: CanvasRenderingContext2D, position: { x: number; y: number }, tileSize: number) {
 			const patches = EnvironmentResources.grass;
-			if (
-				!Object.values(patches)
-					.flat()
-					.every((image) => image.complete && image.naturalWidth > 0)
-			)
-				return;
+			if (!GRASS_IMAGES.every((image) => image.complete && image.naturalWidth > 0)) return;
 			context.save();
 			context.beginPath();
 			context.rect(position.x, position.y, this.width * tileSize, -this.height * tileSize);

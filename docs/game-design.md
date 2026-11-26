@@ -251,4 +251,4 @@ The full rules and the generator workflow are in `.agents/skills/pixel-art-asset
 
 ### Asset locations
 
-- `client/public/resources/towers/`, `house/` (barracks), `totem/`, `castle/`, `units/` (with `.sheet.png` animation sheets), `projectiles/`, `path/`, `environment/` (rock, forest), `hud/`, `button/`, `economy/`, `verdict/` (victory and defeat banners).
+- `client/public/resources/towers/`, `barracks/`, `totem/`, `castle/`, `units/` (with `.sheet.png` animation sheets), `projectiles/`, `path/`, `environment/` (rock, forest), `hud/`, `button/`, `economy/`, `verdict/` (victory and defeat banners).
