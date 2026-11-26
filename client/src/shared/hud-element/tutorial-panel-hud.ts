@@ -9,6 +9,7 @@ import { DrawPriority } from "../traits/render/image-drawable";
 import { HudTooltip, PAD_Y } from "./battle/army-resume/hud-tooltip";
 import { ArmyBuffPercent } from "../../engine/army/battle/army-buff";
 import { TagBadge } from "../traits/render/huds/tag-badge";
+import { drawOutlinedText, FamineColor } from "./battle/army-resume/pixel-meter";
 
 const INK = "#000000";
 const ALLIED = "#1d5fd1";
@@ -31,6 +32,8 @@ const INLINE_TAGS: Record<string, TagBadge> = {
 	"tag-tower": new TagBadge("Tower"),
 	"tag-totem": new TagBadge("Totem"),
 };
+// A {famine} part is the outlined red FAMINE label that the food bar shows in battle.
+const FAMINE_LABEL = "FAMINE";
 const INLINE_ICON = /\{([a-z-]+)\}/;
 // An inline tag badge is this many font sizes high.
 const INLINE_TAG_HEIGHT = 1.3;
@@ -153,7 +156,7 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 		y = this.iconParagraph(
 			context,
 			IconResources.food.image,
-			"Food 🌽 feeds your units and towers. At 0, you are in trouble!",
+			"Food 🌽 feeds your units and towers. At 0, you are in {famine}!",
 			x,
 			y + 0.3 * u,
 			width,
@@ -348,6 +351,11 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 				x += context.measureText(part).width;
 				return;
 			}
+			if (part === "famine") {
+				drawOutlinedText(context, FAMINE_LABEL, x, y + fontSize * 0.5, fontSize, FamineColor, "left");
+				x += context.measureText(FAMINE_LABEL).width + fontSize * 0.2;
+				return;
+			}
 			const badge = INLINE_TAGS[part];
 			if (badge) {
 				const height = fontSize * INLINE_TAG_HEIGHT;
@@ -400,6 +408,7 @@ function measureLine(context: CanvasRenderingContext2D, line: string) {
 	const fontSize = Number.parseFloat(font);
 	const width = line.split(INLINE_ICON).reduce((total, part, index) => {
 		if (index % 2 === 0) return total + context.measureText(part).width;
+		if (part === "famine") return total + context.measureText(FAMINE_LABEL).width + fontSize * 0.2;
 		const badge = INLINE_TAGS[part];
 		if (!badge) return total + fontSize * INLINE_ICON_WIDTH;
 		const badgeWidth = badge.width(context, fontSize * INLINE_TAG_HEIGHT) + fontSize * 0.3;
