@@ -70,5 +70,10 @@ describe("shop slot signs", () => {
 		expect(shop.bellPressedAt).toBeNull();
 		expect(shop.retail.grid.getBuyables()).toEqual(offers.slice(1));
 		expect(shop.retail.held).toBe(held);
+
+		shop.holderControl.hold!.onRelease();
+		shop.refresh();
+		await settle();
+		expect(shop.army.getEconomyHooks().getEconomy().amount).toBe(gold - 5);
 	});
 });
