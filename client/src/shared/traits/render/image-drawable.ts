@@ -23,7 +23,8 @@ export enum DrawPriority {
 
 // How a piece's image is drawn on the opponent's board, where its footprint is mirrored through a point.
 export enum EnemyRender {
-	// Drawn as on the ally board.
+	// Drawn as on the ally board, or with its own image for the opponent's view when the piece has one: a building
+	// redrawn as the other player sees it (the Butchery), instead of turned by π.
 	Normal = "normal",
 	// Flipped left to right, for pieces whose details depend on their side.
 	AxeFlip = "axe-flip",
@@ -36,6 +37,7 @@ export const TImageDrawable = (
 	size: Size,
 	priority: number,
 	enemyRender: EnemyRender = EnemyRender.Normal,
+	enemyImage?: HTMLImageElement,
 ) =>
 	Subtrait([TDrawable], (base) => {
 		abstract class TImageDrawable extends base {
@@ -44,6 +46,7 @@ export const TImageDrawable = (
 				size: size,
 				priority: priority,
 				enemyRender: enemyRender,
+				enemyImage: enemyImage,
 			};
 
 			get drawPriority() {
@@ -91,7 +94,9 @@ export const TImageDrawable = (
 					this.drawImage(context, size, canvasPosition, variant.image, variant.theta);
 					return;
 				}
-				this.drawImage(context, size, canvasPosition, this.drawable.image, this.getImageAngle());
+				const enemyImage =
+					implementsTrait(this, TBoardOriented) && this.mirrored ? this.drawable.enemyImage : undefined;
+				this.drawImage(context, size, canvasPosition, enemyImage ?? this.drawable.image, this.getImageAngle());
 			}
 		}
 		return TImageDrawable;

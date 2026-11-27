@@ -106,6 +106,22 @@ export class TotemResources {
 		shape: "rectangle",
 	};
 
+	static butchery: ShapedResource = {
+		size: {
+			width: 9.8,
+			height: 9.8,
+		},
+		image: createImage("/resources/totem/butchery.png"),
+		shape: "rectangle",
+	};
+
+	// The opponent's Butchery, its point-mirrored footprint (`so / oo`) redrawn from the same camera.
+	static butcheryEnemy: ShapedResource = {
+		size: TotemResources.butchery.size,
+		image: createImage("/resources/totem/butchery-enemy.png"),
+		shape: "rectangle",
+	};
+
 	static bosquet: ShapedResource = {
 		size: {
 			width: 4.9,

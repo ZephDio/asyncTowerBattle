@@ -1,0 +1,100 @@
+import { Derive } from "@ddd-ts/traits";
+import { Butchery } from "../../recruit/implementation/butchery";
+import { BattleArmyHooks } from "../../../../army/battle/battle-army";
+import { Cell, GridPosition } from "../../../../../shared/position";
+import { Cast } from "../../../../../shared/traits/engine/cast";
+import { CasterTotem } from "../battle-totem";
+import { HTSynergy } from "../../../../../shared/traits/engine/synergy";
+import { TStatsRenderable } from "../../../../../shared/traits/render/huds/stat-renderable";
+import { BoardOrientation } from "../../../../../shared/traits/engine/core/board-orientation";
+import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
+import { implementsTrait } from "@ddd-ts/traits";
+import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
+import type { TowerBuff, UnitBuff } from "../../../../army/battle/army-buff";
+import { BattleBarrack } from "../../../barrack/battle/battle-barrack";
+import type { AnyBattleUnit } from "../../../../units/battle/battle-unit";
+
+type SacrificeBuff = { side: "unit"; buff: UnitBuff } | { side: "tower"; buff: TowerBuff };
+
+export const SACRIFICE_BUFF_POOL: readonly SacrificeBuff[] = [
+	{ side: "unit", buff: "movement-speed" },
+	{ side: "unit", buff: "vitality" },
+	{ side: "tower", buff: "projectile-damage" },
+	{ side: "tower", buff: "cast-speed" },
+];
+
+export class BattleButchery extends Derive(CasterTotem, HTSynergy, TStatsRenderable, BattleStartTrigger) {
+	constructor(
+		public butchery: Butchery,
+		readonly hooks: BattleArmyHooks,
+		public readonly position: GridPosition,
+		public readonly cell: Cell,
+		override orientation: BoardOrientation,
+	) {
+		super({
+			synergy: butchery,
+			imageDrawable: butchery,
+			hitboxHolder: butchery,
+			tagHolder: butchery,
+			rarityHolder: butchery,
+			casterRecruit: butchery,
+			battleStartRecruit: butchery,
+			maxHealth: butchery.stats.health,
+			castleDamage: butchery.stats.castleDamage,
+			projectileDamage: butchery.stats.projectileDamage,
+			attackSpeed: butchery.stats.attackSpeed,
+			movementSpeed: butchery.stats.speed,
+			castSpeed: butchery.stats.castSpeed,
+			foodCost: butchery.stats.foodConsumptionOnCast,
+			range: butchery.stats.range,
+			onDeath: () => {},
+			descriptor: butchery,
+		});
+		this.gridShape = butchery.gridShape;
+	}
+
+	tick() {
+		this.stats.tick();
+		this.tickCast();
+	}
+
+	// An animal barrack on the star produces faster by a flat amount, added to its own production speed.
+	onBattleStart() {
+		const [neighbor] = this.hooks.gridHooks.getRelativeNeighborsInArmy(
+			this.cell,
+			this.patternEffect.getRelativeCells(this.orientation),
+		);
+		if (neighbor && implementsTrait(neighbor, BattleBarrack) && this.patternEffect.patternCondition(neighbor)) {
+			neighbor.stats.flatStat.castSpeed += this.butchery.blueprint.productionSpeedBonus;
+		}
+	}
+
+	private pickIndex(length: number) {
+		return Math.min(Math.floor(this.hooks.random() * length), length - 1);
+	}
+
+	// A random allied animal, from the battle's seeded random. Undefined when none is alive.
+	victim(): AnyBattleUnit | undefined {
+		const animals = this.hooks.getAlliedUnits().filter((unit) => hasTag(unit, "Animal"));
+		return animals[this.pickIndex(animals.length)];
+	}
+
+	// The victim dies through its own death effect (as with the Red Obelisk): no castle damage, no gold, no refund.
+	// With no animal alive nothing happens and the timer starts over.
+	onCastResolve() {
+		const victim = this.victim();
+		if (victim) {
+			victim.die();
+			for (let i = 0; i < this.butchery.blueprint.buffsPerSacrifice; i++) {
+				const drawn = SACRIFICE_BUFF_POOL[this.pickIndex(SACRIFICE_BUFF_POOL.length)]!;
+				if (drawn.side === "unit") this.hooks.alliedArmyBuffHooks.addUnitBuff(drawn.buff);
+				else this.hooks.alliedArmyBuffHooks.addTowerBuff(drawn.buff);
+			}
+		}
+		this.finishCast();
+	}
+
+	casts() {
+		this.castInProgress = new Cast(this, this.onCastResolve.bind(this));
+	}
+}

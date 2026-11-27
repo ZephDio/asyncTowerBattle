@@ -8,6 +8,7 @@ import { shopBlueprints } from "../shop/retail/retail-filler";
 import { TowerBuilder } from "../constructs/tower/recruit/tower-fixtures";
 import { Unit } from "../units/recruit/unit";
 import { Cauldron } from "../constructs/totem/recruit/implementation/cauldron";
+import { Butchery } from "../constructs/totem/recruit/implementation/butchery";
 import { Stonemason } from "../constructs/totem/recruit/implementation/stonemason";
 
 const rounds = GRID_GROWTH_CYCLE.map((_, index) => index + 1);
@@ -60,6 +61,18 @@ describe("board serializer", () => {
 
 		expect(board.elements.some((element) => element.kind === "totem" && element.type === "stonemason")).toBe(true);
 		expect(opponent.army.grid.getRecruits().map((recruit) => recruit.constructor.name)).toContain("Stonemason");
+		expect(serializeBoard(opponent.army, 4, opponent.randomSeed)).toEqual(board);
+	});
+
+	it("serializes and rebuilds a butchery under its own type", () => {
+		const { army, randomSeed } = LocalMatchMaker.board(4);
+		army.grid.setElement(new Butchery(new Cell({ x: 0, y: 0 })));
+		const board = serializeBoard(army, 4, randomSeed);
+
+		const opponent = deserializeBoard(JSON.parse(JSON.stringify(board)));
+
+		expect(board.elements.some((element) => element.kind === "totem" && element.type === "butchery")).toBe(true);
+		expect(opponent.army.grid.getRecruits().map((recruit) => recruit.constructor.name)).toContain("Butchery");
 		expect(serializeBoard(opponent.army, 4, opponent.randomSeed)).toEqual(board);
 	});
 

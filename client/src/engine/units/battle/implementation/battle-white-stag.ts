@@ -23,6 +23,7 @@ export class BattleWhiteStag extends Derive(TBattleUnit, Caster) {
 	override idleSheet = UnitResources.whiteStagSheet;
 	pathFinder: PathFinder;
 	antlers = 2;
+	private sacrificed = false;
 
 	constructor(
 		recruit: WhiteStag,
@@ -42,7 +43,7 @@ export class BattleWhiteStag extends Derive(TBattleUnit, Caster) {
 			foodCost: recruit.stats.foodConsumption,
 			range: recruit.stats.range,
 			onDeath: () => {
-				this.dropAntlers(0);
+				this.dropAntlers(this.sacrificed ? Math.max(this.antlers - 1, 0) : 0);
 				this.hooks.removeUnit(this);
 			},
 			hitboxHolder: recruit,
@@ -56,6 +57,12 @@ export class BattleWhiteStag extends Derive(TBattleUnit, Caster) {
 	healWave() {
 		this.hooks.addAreaEffect(new HealWave(35, this.position, HEAL_WAVE_HEAL, this.hooks), this);
 		this.finishCast();
+	}
+
+	// A sacrifice (the Red Obelisk, the Butchery) goes straight to the death effect and drops one antler only.
+	override die() {
+		this.sacrificed = true;
+		super.die();
 	}
 
 	// Drops antlers until only `keep` are left. A stag killed from above 50% in one blow drops both.

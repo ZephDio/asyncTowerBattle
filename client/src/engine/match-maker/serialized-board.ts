@@ -26,6 +26,7 @@ export type SerializedTotemType =
 	| "mine"
 	| "red-obelisk"
 	| "stonemason"
+	| "butchery"
 	| "powder-magazine"
 	| "windmill";
 export type SerializedBarrackType = "basic" | "rush" | "veterant" | "wave";

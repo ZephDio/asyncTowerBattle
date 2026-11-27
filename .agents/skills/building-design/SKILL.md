@@ -23,7 +23,8 @@ xssx
 ## Reading a drawing
 
 - The drawing is the **player's view**, the piece as written in code. The opponent's copy is its point mirror,
-  which `BoardOrientation.Mirrored` produces. Never draw or code it separately.
+  which `BoardOrientation.Mirrored` produces. Never code its cells or pattern separately; only its image may be
+  redrawn, see "The opponent's view" below.
 - **Rows go down the screen, and game coordinates are y-up**: the top row has the highest y and each row
   below is y - 1. Columns go left to right with x + 1. See the y-up note in `AGENTS.md`.
 - The drawing doesn't mark the anchor `(0, 0)`. Pick one of the `o` cells as the anchor, usually the main
@@ -90,6 +91,46 @@ Also check it in the game with the game-testing skill:
 - The sprite covers the bounding box of the `o` cells, one image quadrant per cell, and `x` cells inside it stay
   transparent. The `pixel-art-assets` skill covers drawing it.
 - Then follow the "Adding a new piece" checklist in `AGENTS.md` (union type, fixtures, resources, retail pool).
+
+## The opponent's view
+
+On the opponent's board a piece's footprint and pattern are the point mirror of the player's (x and y negated
+around the anchor). The camera stays the same, so the image has to cover the mirrored cells without showing the
+building upside down. `TImageDrawable`'s `enemyRender` and `enemyImage` choose how
+(`shared/traits/render/image-drawable.ts`):
+
+| Case | Choice | Example |
+| --- | --- | --- |
+| Symmetric footprint, side-free details | `EnemyRender.Normal`, the same image | most one-cell pieces |
+| Symmetric footprint, details that face a side | `EnemyRender.AxeFlip`, flipped left to right | Blacksmith tower |
+| Asymmetric footprint, a quick result | `EnemyRender.FullFlip`, turned by π: the perspective is wrong (roofs point down) | Drill tower |
+| Asymmetric monument (an L shape, an annex) | a second image passed as `enemyImage`, drawn unturned | Butchery |
+
+For a monument, prefer the redrawn opponent's view. It is the same building seen by the other player, rebuilt to
+fit the mirrored cells:
+
+1. Write the mirrored drawing first. `oo / os` becomes `so / oo`: rotate the drawing by 180°, `o` and `s`
+   cells included. Say which cells hold which part of the building in each view.
+2. Keep each part in its own cells: what stood in the bottom row of the player's view (the annex) is now in the top
+   row, and the reverse. A part that was in front can end up behind another, so recompute what the camera sees: the
+   oblique camera shows the front faces only, the back row is drawn higher and partly hidden by the front row.
+3. Keep the identifying elements, rearranged for the new view: the facade elements in reverse order (left to right
+   becomes right to left), signs and wall details shifted to stay on a visible face, and the openings that tie the
+   piece to its star (the Butchery's yard, open toward the star) turned to face the star's new side.
+4. Leave out what no longer fits or hides something more important (the Butchery's rack of steaks, which would stand
+   in front of the cold room's arch), and tell the user which elements were dropped.
+5. Render both views from one generator and one model with a second layout (constants overridden for the opponent,
+   see `ENEMY_LAYOUT` in `client/scripts/generate-butchery.py`), so a later art change reaches both. Write
+   `<piece>.png` and `<piece>-enemy.png`, and add a `<piece>Enemy` resource of the same size.
+6. Pass it to the blueprint: `TImageDrawable(image, size, priority, EnemyRender.Normal, Resources.<piece>Enemy.image)`.
+7. Check both images: the empty cells of each bounding box stay fully transparent (count the opaque pixels of the
+   `x` and `s` quadrants), nothing is clipped at the canvas edges. Then check the opponent's view in a battle: no
+   opponent board holds the new piece yet, so add one to the enemy army with the `eval` tool after `start_battle`
+   (import `Butchery` from `/src/...`, `toEnemy(battlefield.grid, enemyArmy.getHooks())`, push it to
+   `enemyArmy.totems` and `grid.setElement` it on free cells) and take `screenshot battle`.
+
+When the user reviews one view, carry the change to the other one where it applies (the Butchery's annex
+battlements were asked for on the opponent's view and added to both).
 
 ## Test link
 

@@ -10,6 +10,7 @@ import { GobelinPortalBlueprint } from "./implementation/gobelin-portal-blueprin
 import { PowderMagazineBlueprint } from "./implementation/powder-magazine-blueprint";
 import { RedObeliskBlueprint } from "./implementation/red-obelisk";
 import { CauldronBlueprint } from "./implementation/cauldron-blueprint";
+import { ButcheryBlueprint } from "./implementation/butchery-blueprint";
 import { StonemasonBlueprint } from "./implementation/stonemason-blueprint";
 
 export type AnyTotemBlueprint =
@@ -25,4 +26,5 @@ export type AnyTotemBlueprint =
 	| RedObeliskBlueprint
 	| BosquetBlueprint
 	| StonemasonBlueprint
+	| ButcheryBlueprint
 	| CauldronBlueprint;

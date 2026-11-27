@@ -10,7 +10,7 @@ export type ArmyBuffHooks = {
 };
 export type Buff = UnitBuff | TowerBuff;
 
-export type UnitBuff = "movement-speed" | "cast-speed" | "vitality";
+export type UnitBuff = "movement-speed" | "vitality";
 export type TowerBuff = "projectile-damage" | "cast-speed";
 
 // The percent each stack of a buff adds to the stat (Stats.applyArmyBuffs). The unit and tower "cast-speed" buffs
