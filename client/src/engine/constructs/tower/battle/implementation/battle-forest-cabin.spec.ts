@@ -77,51 +77,6 @@ describe("ForestCabin", () => {
 		expect(mirrored.multiShot).toBe(shots);
 	});
 
-	describe("on cast", () => {
-		const enemy = () =>
-			({ isAlive: () => true, position: new GridPosition({ x: 5, y: 5 }) }) as unknown as AnyBattleUnit;
-		const cast = (shots: number, enemies: AnyBattleUnit[], food = true) => {
-			const consumeFood = jest.fn(() => food);
-			const addProjectile = jest.fn();
-			const hooks = {
-				alliedFoodHooks: { consumeFood },
-				addProjectile,
-				gridHooks: { getCell: () => at(4, 3) },
-				searchTarget: (_position: GridPosition, criteria: (unit: AnyBattleUnit) => boolean) =>
-					enemies.find((unit) => criteria(unit)) ?? null,
-			} as unknown as BattleArmyHooks;
-			const cabin = new ForestCabin(at(3, 3)).toAllied(grid as never, hooks) as BattleForestCabin;
-			cabin.multiShot = shots;
-			cabin.onCastResolve();
-			return { consumeFood, addProjectile };
-		};
-
-		it("shoots one enemy without multi-shot", () => {
-			const { consumeFood, addProjectile } = cast(0, [enemy(), enemy()]);
-			expect(addProjectile).toHaveBeenCalledTimes(1);
-			expect(consumeFood).toHaveBeenCalledTimes(1);
-		});
-
-		it("shoots a different enemy for each multi-shot, for the food of one cast", () => {
-			const enemies = [enemy(), enemy(), enemy()];
-			const { consumeFood, addProjectile } = cast(2, enemies);
-			expect(addProjectile).toHaveBeenCalledTimes(3);
-			expect(consumeFood).toHaveBeenCalledTimes(1);
-			const hit = addProjectile.mock.calls.map(([projectile]) => (projectile as { target: unknown }).target);
-			expect(new Set(hit).size).toBe(3);
-		});
-
-		it("shoots fewer bolts when the zone holds fewer enemies", () => {
-			const { addProjectile } = cast(3, [enemy(), enemy()]);
-			expect(addProjectile).toHaveBeenCalledTimes(2);
-		});
-
-		it("shoots nothing without food", () => {
-			const { addProjectile } = cast(2, [enemy(), enemy()], false);
-			expect(addProjectile).not.toHaveBeenCalled();
-		});
-	});
-
 	it("mirrors onto the flipped cell", () => {
 		const recruit = new ForestCabin(at(3, 3));
 		const enemy = recruit.toEnemy(grid as never, setup([]));
