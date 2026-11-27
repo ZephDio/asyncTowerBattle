@@ -9,6 +9,7 @@ import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-s
 
 export class BattleForestCabin extends Derive(BattleTower, BattleStartTrigger) {
 	target = null as null | AnyBattleUnit;
+	multiShot = 0;
 	constructor(
 		private readonly recruit: ForestCabin,
 		private readonly hooks: BattleArmyHooks,
@@ -38,22 +39,24 @@ export class BattleForestCabin extends Derive(BattleTower, BattleStartTrigger) {
 		});
 	}
 
-	// Each forest on a star, counted once when the battle starts, speeds the cast up
+	// Each forest on a star, counted once when the battle starts, gives one more target per cast
 	onBattleStart(): void {
-		const { patternEffect, patternCondition, castSpeedPercentPerForest } = this.recruit.tower;
+		const { patternEffect, patternCondition, multiShotPerForest } = this.recruit.tower;
 		const stars = this.hooks.gridHooks.getRelativeNeighborsInArmy(
 			this.cell,
 			patternEffect.getRelativeCells(this.orientation),
 		);
 		const forests = stars.filter((star) => patternCondition(star)).length;
-		this.stats.basePercentStat.castSpeed += castSpeedPercentPerForest * forests;
+		this.multiShot = multiShotPerForest * forests;
 	}
 
-	private attack(target: AnyBattleUnit) {
+	private attack(targets: AnyBattleUnit[]) {
 		const sucess = this.hooks.alliedFoodHooks.consumeFood(this.stats.foodCost);
 		if (sucess) {
-			const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.projectileDamage);
-			this.hooks.addProjectile(projectile, this);
+			for (const target of targets) {
+				const projectile = this.recruit.getProjectile(this.hooks, target, this.position, this.stats.projectileDamage);
+				this.hooks.addProjectile(projectile, this);
+			}
 		}
 		this.finishCast(sucess);
 	}
@@ -66,13 +69,21 @@ export class BattleForestCabin extends Derive(BattleTower, BattleStartTrigger) {
 		this.target = enemyUnit;
 	}
 
+	// The main target, then one different enemy in the zone for each multi-shot, all for one cast's food
 	onCastResolve(): void {
-		if (this.target && this.doesTargetMatchesRule(this.target)) {
-			this.attack(this.target);
-			return;
+		if (!this.target || !this.doesTargetMatchesRule(this.target)) {
+			this.setTarget(this.hooks.searchTarget(this.position, this.doesTargetMatchesRule.bind(this)));
 		}
-		const target = this.hooks.searchTarget(this.position, this.doesTargetMatchesRule.bind(this));
-		this.setTarget(target);
-		if (this.target) this.attack(this.target);
+		if (!this.target) return;
+		const targets = [this.target];
+		for (let shot = 0; shot < this.multiShot; shot++) {
+			const extra = this.hooks.searchTarget(
+				this.position,
+				(enemyUnit) => !targets.includes(enemyUnit) && this.doesTargetMatchesRule(enemyUnit),
+			);
+			if (!extra) break;
+			targets.push(extra);
+		}
+		this.attack(targets);
 	}
 }

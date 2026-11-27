@@ -53,27 +53,28 @@ describe("ForestCabin", () => {
 	});
 
 	it.each([
-		["no forest", [], 1],
-		["one forest", [{ cell: at(3, 4), element: new Forest(at(3, 4)) }], 1.1],
+		["no forest", [], 0],
+		["one forest", [{ cell: at(3, 4), element: new Forest(at(3, 4)) }], 1],
 		[
 			"two forests, a cabin among them",
 			[
 				{ cell: at(3, 4), element: new Forest(at(3, 4)) },
 				{ cell: at(3, 2), element: new ForestCabin(at(3, 2)) },
 			],
-			1.2,
+			2,
 		],
-		["a rock", [{ cell: at(3, 4), element: new Rock(at(3, 4)) }], 1],
-	])("casts with %s on its stars at base x%s", (_name, elements, factor) => {
+		["a rock", [{ cell: at(3, 4), element: new Rock(at(3, 4)) }], 0],
+	])("gains multi-shots with %s on its stars: %s", (_name, elements, shots) => {
 		const normal = new ForestCabin(at(3, 3)).toAllied(grid as never, setup(elements)) as BattleForestCabin;
 		normal.onBattleStart();
-		expect(normal.stats.castSpeed).toBeCloseTo(castSpeedFromSeconds(1.15) * factor);
+		expect(normal.multiShot).toBe(shots);
+		expect(normal.stats.castSpeed).toBeCloseTo(castSpeedFromSeconds(1.15));
 
 		// The enemy board is the same board turned by 180°
 		const turned = elements.map(({ cell, element }) => ({ cell: BattleGrid.flip(grid as never, cell), element }));
 		const mirrored = new ForestCabin(at(3, 3)).toEnemy(grid as never, setup(turned)) as BattleForestCabin;
 		mirrored.onBattleStart();
-		expect(mirrored.stats.castSpeed).toBeCloseTo(castSpeedFromSeconds(1.15) * factor);
+		expect(mirrored.multiShot).toBe(shots);
 	});
 
 	it("mirrors onto the flipped cell", () => {
