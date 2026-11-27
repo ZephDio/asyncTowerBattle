@@ -6,16 +6,20 @@ import { TSizable } from "../engine/core/sizable";
 
 const HOVERED_FILTER = "brightness(1.25)";
 
+export function drawHovered(context: CanvasRenderingContext2D, hovered: boolean, draw: () => void) {
+	if (!hovered) return draw();
+	context.save();
+	context.filter = HOVERED_FILTER;
+	draw();
+	context.restore();
+}
+
 export const TRenderable = Subtrait([TDrawable], (base) => {
 	abstract class IRenderable extends base {
 		abstract get position(): ScreenPosition | GridPosition | Cell;
 
 		render(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid>) {
-			if (!grid?.isHovered(this)) return this.renderPlain(context, grid);
-			context.save();
-			context.filter = HOVERED_FILTER;
-			this.renderPlain(context, grid);
-			context.restore();
+			drawHovered(context, !!grid?.isHovered(this), () => this.renderPlain(context, grid));
 		}
 
 		private renderPlain(context: CanvasRenderingContext2D, grid?: ImplementsTrait<typeof TGrid>) {

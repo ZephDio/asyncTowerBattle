@@ -21,11 +21,13 @@ import { Barrack } from "../../engine/constructs/barrack/recruit/barrack";
 import { ArmyHud } from "../../shared/hud-element/army-hud";
 import { ScienceHud } from "../../shared/hud-element/science-hud";
 import { SciencePanel } from "../../shared/hud-element/science-panel";
+import { TUnitPreviewHudRenderable } from "../../shared/traits/render/huds/unit-preview-enderable";
+import { TTrapHolder } from "../../shared/traits/engine/trap-holder";
 
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
 		shop.signHovered = shop.sign.contains(screenPosition);
-		if (eventType === "move") shop.retail.grid.setHoveredElement(null);
+		if (eventType === "move") shop.retail.grid.setHovered([]);
 		if (this.handleSciences(screenPosition, eventType, shop)) return;
 		const state = shop.getState();
 		if (eventType === "move" && !shop.holderControl.hold && shop.army.grid.isOverCastle(screenPosition)) {
@@ -134,8 +136,8 @@ export class ShopInputToIntentTranslator {
 				return;
 			}
 			if (focus.element) {
-				focus.grid.setHoveredElement(focus.element);
 				const described = this.unitOr(focus.element, focus.grid, screenPosition);
+				focus.grid.setHovered(this.hoverTargets(focus.element, described));
 				if (described === focus.element && implementsTrait(focus.element, TSynergy)) {
 					const patternEffect = focus.element.patternEffect;
 					const condition = patternEffect.patternCondition;
@@ -167,8 +169,8 @@ export class ShopInputToIntentTranslator {
 				focus.grid.setOveredTile(projectionCells);
 			}
 			if (focus.element) {
-				if (!shop.holderControl.hold) focus.grid.setHoveredElement(focus.element);
 				const described = this.trapOr(focus.element, focus.grid, screenPosition);
+				if (!shop.holderControl.hold) focus.grid.setHovered(this.hoverTargets(focus.element, described));
 				if (implementsTrait(described, TDescriptor)) {
 					shop.setDescriptionHud(new DescriptionHud(described));
 				}
@@ -183,7 +185,7 @@ export class ShopInputToIntentTranslator {
 				return;
 			}
 			if (focus.element) {
-				focus.grid.setHoveredElement(focus.element);
+				focus.grid.setHovered([focus.element]);
 				if (implementsTrait(focus.element, TDescriptor)) {
 					shop.setDescriptionHud(new DescriptionHud(focus.element));
 				}
@@ -269,7 +271,7 @@ export class ShopInputToIntentTranslator {
 			return;
 		}
 		const grid = panel.grid;
-		grid.setHoveredElement(element);
+		grid.setHovered([element]);
 		if (implementsTrait(element, TSynergy)) {
 			const { patternEffect } = element;
 			grid.setSynergiesTiles(
@@ -295,6 +297,15 @@ export class ShopInputToIntentTranslator {
 		if (!(grid instanceof ArmyGrid)) return false;
 		if (implementsTrait(element, Trap)) return false;
 		return grid.isLocked(element);
+	}
+
+	// What lights up under the mouse: the unit on a barrack or the trap on a path tile alone when it is the piece
+	// grabbed there, else the element with the unit or trap it carries.
+	hoverTargets(element: object, described: object): object[] {
+		const preview = implementsTrait(element, TUnitPreviewHudRenderable) ? [element.unitPreview] : [];
+		if (described !== element) return preview.length > 0 ? preview : [described];
+		if (implementsTrait(element, TTrapHolder) && element.trap) return [element, element.trap];
+		return [element, ...preview];
 	}
 
 	// Over the unit put on a barrack, hovering describes that unit, as the unit is grabbed from there.

@@ -30,16 +30,17 @@ export const TGrid = Trait((base) => {
 		abstract tiles: Map<string, ImplementsTrait<typeof GridElement>>;
 		abstract hoverEffect: HoverEffect[] | null;
 		abstract synergiesEffects: SynergyEffectHud[];
-		// Drawn brighter while hovered, instead of lighting its cells (TRenderable.render).
-		hoveredElement: ImplementsTrait<typeof GridElement> | null = null;
+		// Drawn brighter while hovered, instead of lighting their cells (TRenderable.render, THudRenderable.render): an
+		// element, the trap it carries, the unit preview of a barrack.
+		hovered: object[] = [];
 
-		setHoveredElement(element: ImplementsTrait<typeof GridElement> | null) {
-			if (element) this.hoverEffect = [];
-			this.hoveredElement = element;
+		setHovered(drawables: object[]) {
+			if (drawables.length > 0) this.hoverEffect = [];
+			this.hovered = drawables;
 		}
 
 		isHovered(drawable: object) {
-			return this.hoveredElement === drawable;
+			return this.hovered.includes(drawable);
 		}
 
 		get position(): ScreenPosition {
