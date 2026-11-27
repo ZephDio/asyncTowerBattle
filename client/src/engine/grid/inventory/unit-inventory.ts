@@ -81,6 +81,7 @@ export class Inventory extends Derive(TRenderable, TGrid, TGridDrawable) {
 
 	setOveredTile(cells: Cell[] | null) {
 		this.hoverEffect = [];
+		this.hoveredElement = null;
 		if (cells && cells.length > 0) {
 			for (const cell of cells) {
 				this.hoverEffect.push(new HoverEffect(cell, this));

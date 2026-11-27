@@ -27,7 +27,8 @@ export class RunResumeInputToIntentTranslator {
 		const cell = grid.gridPositionToCell(grid.screenToGridPosition(screenPosition));
 		const element = cell ? grid.getElement(cell) : undefined;
 		const described = element ? this.shopTranslator.unitOr(element, grid, screenPosition) : undefined;
-		if (cell) grid.setOveredTile([cell]);
+		if (element) grid.setHoveredElement(element);
+		else if (cell) grid.setOveredTile([cell]);
 		resume.setDescriptionHud(
 			described && implementsTrait(described, TDescriptor) ? new DescriptionHud(described) : null,
 		);

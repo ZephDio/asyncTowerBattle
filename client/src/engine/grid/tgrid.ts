@@ -30,6 +30,17 @@ export const TGrid = Trait((base) => {
 		abstract tiles: Map<string, ImplementsTrait<typeof GridElement>>;
 		abstract hoverEffect: HoverEffect[] | null;
 		abstract synergiesEffects: SynergyEffectHud[];
+		// Drawn brighter while hovered, instead of lighting its cells (TRenderable.render).
+		hoveredElement: ImplementsTrait<typeof GridElement> | null = null;
+
+		setHoveredElement(element: ImplementsTrait<typeof GridElement>) {
+			this.hoverEffect = [];
+			this.hoveredElement = element;
+		}
+
+		isHovered(drawable: object) {
+			return this.hoveredElement === drawable;
+		}
 
 		get position(): ScreenPosition {
 			return this.bottomLeftCornerPosition;

@@ -110,6 +110,7 @@ export class ShopInputToIntentTranslator {
 			return;
 		}
 		if (focus.cell && focus.grid instanceof ArmyGrid) {
+			shop.army.inventory.setOveredTile(null);
 			focus.grid.clearSynergiesTiles();
 			focus.grid.setOveredTile([focus.cell]);
 			if (shop.holderControl.hold) {
@@ -132,13 +133,11 @@ export class ShopInputToIntentTranslator {
 				return;
 			}
 			if (focus.element) {
+				focus.grid.setHoveredElement(focus.element);
 				const described = this.unitOr(focus.element, focus.grid, screenPosition);
 				if (described === focus.element && implementsTrait(focus.element, TSynergy)) {
 					const patternEffect = focus.element.patternEffect;
 					const condition = patternEffect.patternCondition;
-					focus.grid.setOveredTile([
-						...focus.element.gridShape.getOccupiedCellsFrom(focus.element.cell, focus.element.orientation),
-					]);
 					focus.grid.setSynergiesTiles(
 						focus.element.cell,
 						patternEffect.getRelativeCells(focus.element.orientation),
@@ -146,9 +145,6 @@ export class ShopInputToIntentTranslator {
 					);
 				}
 				if (implementsTrait(focus.element, TTargeting)) {
-					focus.grid.setOveredTile([
-						...focus.element.gridShape.getOccupiedCellsFrom(focus.element.cell, focus.element.orientation),
-					]);
 					focus.grid.addTargetTiles(focus.element.cell, focus.element.targetZone, focus.element.orientation);
 				}
 				if (implementsTrait(described, TDescriptor)) {
@@ -161,6 +157,8 @@ export class ShopInputToIntentTranslator {
 			shop.army.inventory.setOveredTile(null);
 		}
 		if (focus.cell && focus.grid instanceof Inventory) {
+			shop.army.grid.clearSynergiesTiles();
+			shop.army.grid.setOveredTile(null);
 			focus.grid.setOveredTile([focus.cell]);
 			if (shop.holderControl.hold) {
 				const gridPosition = focus.grid.screenToGridPosition(screenPosition);
@@ -168,9 +166,7 @@ export class ShopInputToIntentTranslator {
 				focus.grid.setOveredTile(projectionCells);
 			}
 			if (focus.element) {
-				focus.grid.setOveredTile([
-					...focus.element.gridShape.getOccupiedCellsFrom(focus.element.cell, focus.element.orientation),
-				]);
+				if (!shop.holderControl.hold) focus.grid.setHoveredElement(focus.element);
 				const described = this.trapOr(focus.element, focus.grid, screenPosition);
 				if (implementsTrait(described, TDescriptor)) {
 					shop.setDescriptionHud(new DescriptionHud(described));
@@ -271,7 +267,7 @@ export class ShopInputToIntentTranslator {
 			return;
 		}
 		const grid = panel.grid;
-		grid.setOveredTile([...element.gridShape.getOccupiedCellsFrom(element.cell, element.orientation)]);
+		grid.setHoveredElement(element);
 		if (implementsTrait(element, TSynergy)) {
 			const { patternEffect } = element;
 			grid.setSynergiesTiles(
