@@ -99,7 +99,9 @@ export class ShopPhase {
 		this.retail.toggleReservation(buyable);
 	}
 
+	// The offers cannot be redrawn while the player holds one: it has to be placed or put back first.
 	refresh() {
+		if (this.holderControl.hold) return;
 		this.bellPressedAt = performance.now();
 		if (this.economyHooks.canPurchase(5)) {
 			this.retail.refresh();

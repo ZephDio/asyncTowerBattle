@@ -55,4 +55,25 @@ describe("shop slot signs", () => {
 		await settle();
 		expect(retailDrawables(shop)).toEqual([]);
 	});
+
+	it("does not reroll while the player holds an offer", async () => {
+		const shop = await openShop();
+		const offers = shop.retail.grid.getBuyables();
+		const held = offers[0]!;
+		shop.selectItemFromRetail(held, new ScreenPosition({ x: 0, y: 0 }));
+		const gold = shop.army.getEconomyHooks().getEconomy().amount;
+
+		shop.refresh();
+		await settle();
+
+		expect(shop.army.getEconomyHooks().getEconomy().amount).toBe(gold);
+		expect(shop.bellPressedAt).toBeNull();
+		expect(shop.retail.grid.getBuyables()).toEqual(offers.slice(1));
+		expect(shop.retail.held).toBe(held);
+
+		shop.holderControl.hold!.onRelease();
+		shop.refresh();
+		await settle();
+		expect(shop.army.getEconomyHooks().getEconomy().amount).toBe(gold - 5);
+	});
 });
