@@ -8,9 +8,9 @@ Outputs public/resources/totem/butchery.png, a 196x196 front view. The Butchery 
 its star, stays transparent.
 
 The top two cells hold the butcher's hall, a Dwarf monument in the stone bricks of the Dwarf castle on a rough
-granite plinth, under a shingled roof with a smoking chimney and a crossed sword and axe. Its left half is the
+granite plinth, under a flat battlemented roof with a smoking chimney and a signboard carved with a big steak. Its left half is the
 open slaughter door: a bloody axe stuck in a stump and a steak on a hook. Its right half is the shop, a counter
-under an awning hung with hams and sausages, a cleaver sign and a coiled sausage sign. The bottom left cell holds
+under an awning hung with hams and strings of sausages, a cleaver sign and a coiled sausage sign. The bottom left cell holds
 its annex, a stone cold room under a slate roof with sides of meat hanging in its open arch, behind which a paved
 cutting yard holds a chopping block with a bloody cleaver, a rack of steaks and salt barrels. The yard is open on
 its right, toward the star, where the animals come in.
@@ -58,16 +58,16 @@ EAVE = 5
 ROOF_SLOPE = 1.05
 DOOR = (-72, -32, 38)  # x0, x1, top z: the open slaughter door
 DOOR_DEPTH = 10
-SHOP = (22, 64, 21, 38)  # x0, x1, z0, z1: the counter window
-AWNING = (16, 70, 82, 44)  # x0, x1, front y, z at the wall
-HAMS = (28, 52)
-SAUSAGE = 40
-CHIMNEY = (48, 60, 100, 110, 84)
-SMOKE_PUFFS = ((53, 106, 89, 5.5), (59, 110, 96, 4.5))
-SIGN_X = 6
-COIL = (80, 34, 7)  # x, z, radius of the coiled sausage sign
-# Crossed sword and axe on the front slope, drawn in screen pixels (u right, v up) from this anchor
-EMBLEM_X = -22
+SHOP = (6, 48, 21, 38)  # x0, x1, z0, z1: the counter window
+AWNING = (0, 54, 82, 44)  # x0, x1, front y, z at the wall
+HAMS = (12, 42)
+SAUSAGES = (22, 32)
+CHIMNEY = (48, 60, 100, 110, 78)
+SMOKE_PUFFS = ((53, 106, 83, 5.5), (59, 110, 90, 4.5))
+SIGN_X = -18
+COIL = (72, 33, 11)  # x, z, radius of the coiled sausage sign
+MERLON = (6, 10, 6)  # width, period, height of the battlements
+MEAT_SIGN = (-50, -4, 58, 86)  # x0, x1, z0, z1 of the signboard on the roof
 
 # The annex on the bottom left cell: a cold room in front, a cutting yard behind it
 ANNEX = (-90, -10, -50, -28)  # x0, x1, y0, y1
@@ -104,7 +104,9 @@ SHADOW_JITTER = 0.25
     BLADE_LABEL,
     HILT_LABEL,
     HANDLE_LABEL,
-) = range(1, 21)
+    SAUSAGE_LABEL,
+    TWINE_LABEL,
+) = range(1, 23)
 
 
 def noise(*values: int) -> float:
@@ -163,20 +165,22 @@ def build_hall(grid: VoxelGrid) -> None:
             wide = (z // 8) % 2 == 0
             grid.box(qx, qx + (6 if wide else 4) + (0 if qx < 0 else -(2 if wide else 0)), y0 - 1, y0, z, z + 7, QUOIN_LABEL)
     grid.box(x0 - 1, x1 + 1, y0 - 2, y0, WALL_TOP - 3, WALL_TOP, QUOIN_LABEL)
-    # Hipped shingle roof with its ridge along x
-    for y in range(y0 - EAVE, y1 + EAVE):
-        for x in range(x0 - EAVE, x1 + EAVE):
-            hip = WALL_TOP + (min(x - (x0 - EAVE), x1 + EAVE - 1 - x) + 0.5) * ROOF_SLOPE
-            top = round(min(roof_top(y), hip))
-            grid.box(x, x + 1, y, y + 1, top - 3, top, ROOF_LABEL)
-            if y0 <= y < y1 and x0 <= x < x1:
-                grid.box(x, x + 1, y, y + 1, WALL_TOP, top - 3, WALL_LABEL)
+    # Flat stone roof behind battlements, like the Dwarf castle
+    grid.box(x0 - 1, x1 + 1, y0 - 2, y1 + 1, WALL_TOP, WALL_TOP + 3, QUOIN_LABEL)
+    grid.box(x0 + 3, x1 - 3, y0 + 2, y1 - 3, WALL_TOP + 2, WALL_TOP + 3, ROOF_LABEL)
+    width, period, height = MERLON
+    for mx in range(x0 - 1, x1 + 1, period):
+        for my in (y0 - 2, y1 - 2):
+            grid.box(mx, min(mx + width, x1 + 1), my, my + 3, WALL_TOP + 3, WALL_TOP + 3 + height, QUOIN_LABEL)
+    for my in range(y0 + 6, y1 - 2, period):
+        for mx in (x0 - 1, x1 - 2):
+            grid.box(mx, mx + 3, my, my + width, WALL_TOP + 3, WALL_TOP + 3 + height, QUOIN_LABEL)
     cx0, cx1, cy0, cy1, ctop = CHIMNEY
     grid.box(cx0, cx1, cy0, cy1, WALL_TOP, ctop, CHIMNEY_LABEL)
     grid.box(cx0 + 3, cx1 - 3, cy0 + 3, cy1 - 3, ctop - 4, ctop, EMPTY)
     for sx, sy, sz, r in SMOKE_PUFFS:
         ellipsoid(grid, sx, sy, sz, r, r, r * 0.8, SMOKE_LABEL)
-    build_emblem(grid)
+    build_meat_sign(grid)
 
     # The open slaughter door: a recess with a dark back, a stone arch, a stump with a bloody axe, a hooked steak
     dx0, dx1, dtop = DOOR
@@ -219,8 +223,10 @@ def build_hall(grid: VoxelGrid) -> None:
         ellipsoid(grid, hx, hang_y, az - 16, 5, 3.5, 5.5, MEAT_LABEL)
         ellipsoid(grid, hx, hang_y, az - 11, 3, 2.4, 2.8, MEAT_LABEL)
         grid.box(hx - 1, hx + 1, math.floor(hang_y) - 1, math.floor(hang_y) + 1, az - 9, az - 7, FAT_LABEL)
-    for i, z in enumerate(range(az - 9, az - 24, -3)):
-        ellipsoid(grid, SAUSAGE + (1 if i % 2 else -1) * 0.5, hang_y, z, 1.8, 1.8, 1.7, MEAT_LABEL)
+    for sx in SAUSAGES:
+        for i, z in enumerate(range(az - 11, az - 28, -6)):
+            ellipsoid(grid, sx + (0.8 if i % 2 else -0.8), hang_y, z, 2.4, 2.2, 2.8, SAUSAGE_LABEL)
+            grid.box(sx - 1, sx + 1, math.floor(hang_y) - 1, math.floor(hang_y) + 1, z + 3, z + 4, TWINE_LABEL)
     # Cleaver sign on an iron bracket, blood on its edge
     grid.box(SIGN_X - 1, SIGN_X + 1, y0 - 10, y0, 47, 49, STEEL_LABEL)
     grid.box(SIGN_X - 7, SIGN_X + 5, y0 - 9, y0 - 7, 32, 43, BLADE_LABEL)
@@ -228,47 +234,49 @@ def build_hall(grid: VoxelGrid) -> None:
     grid.box(SIGN_X - 1, SIGN_X + 1, y0 - 9, y0 - 7, 43, 47, STEEL_LABEL)
     # Coiled sausage sign on the right of the shop
     cx, cz, r = COIL
-    grid.box(cx - r - 1, cx + r + 1, y0 - 2, y0, cz - r - 1, cz + r + 1, WOOD_LABEL)
-    for z in range(cz - r, cz + r):
-        for x in range(cx - r, cx + r):
-            if math.hypot(x + 0.5 - cx, z + 0.5 - cz) <= r:
-                grid.set(x, y0 - 3, z, COIL_LABEL)
+    for z in range(cz - r - 2, cz + r + 2):
+        for x in range(cx - r - 2, cx + r + 2):
+            if math.hypot(x + 0.5 - cx, z + 0.5 - cz) <= r + 1.5:
+                grid.box(x, x + 1, y0 - 2, y0, z, z + 1, WOOD_LABEL)
+    grid.box(cx - 1, cx + 1, y0 - 1, y0, cz + r + 1, WALL_TOP - 3, STEEL_LABEL)
+    # The sausage coiled in a spiral, a tube made of links, a tie of twine between two links
+    t = 0.0
+    link = 0
+    while True:
+        radius = 2.0 + t * 3.8 / (2 * math.pi)
+        if radius > r - 1:
+            break
+        px, pz = cx + radius * math.cos(t), cz + radius * math.sin(t)
+        tied = (t * radius) % 8 < 0.7
+        ellipsoid(grid, px, y0 - 3.2, pz, 1.5, 1.4, 1.5, TWINE_LABEL if tied else SAUSAGE_LABEL)
+        t += 0.35 / max(1.0, radius / 3)
 
 
-def build_emblem(grid: VoxelGrid) -> None:
-    """A crossed sword and axe lying on the front slope, drawn in screen pixels: one voxel along y on the slope
-    rises about 1.5 px on screen."""
-    front = HALL[2] - EAVE
-    rise = 0.7 + 0.75 * ROOF_SLOPE
-
-    def put(u: float, v: float, label: int) -> None:
-        x = round(EMBLEM_X + u)
-        y = round(front + 2 + v / rise)
-        top = round(min(roof_top(y), WALL_TOP + 999))
-        grid.box(x, x + 1, y, y + 1, top, top + 2, label)
-
-    def segment(u0: float, v0: float, u1: float, v1: float, half: float, label: int) -> None:
-        length = math.hypot(u1 - u0, v1 - v0)
-        for i in range(int(length * 2) + 1):
-            t = i / (length * 2) if length else 0
-            u, v = u0 + (u1 - u0) * t, v0 + (v1 - v0) * t
-            for du in range(-math.ceil(half), math.ceil(half) + 1):
-                for dv in range(-math.ceil(half), math.ceil(half) + 1):
-                    if abs(du) + abs(dv) <= half + 0.5:
-                        put(u + du, v + dv, label)
-
-    # Sword: a broad blade up to the left, a gold guard, a leather grip and a pommel down to the right
-    segment(-22, 31, 2, 9, 2.6, BLADE_LABEL)
-    segment(-4, 3, 8, 15, 1.4, HILT_LABEL)
-    segment(4, 7, 9, 2, 1.2, HANDLE_LABEL)
-    segment(10, 1, 10, 1, 1.6, HILT_LABEL)
-    # Axe: a handle up to the right and a broad bearded head on its right
-    segment(-14, 8, 6, 27, 1.4, HANDLE_LABEL)
-    for u in range(0, 24):
-        for v in range(12, 36):
-            du, dv = u - 6, v - 25
-            if du >= 0 and (du / 13) ** 2 + (dv / 10) ** 2 <= 1 and not (du < 4 and abs(dv) > 4):
-                put(u, v, BLADE_LABEL)
+def build_meat_sign(grid: VoxelGrid) -> None:
+    """A wooden signboard on two posts behind the front battlements, a big T-bone steak carved on it."""
+    sx0, sx1, sz0, sz1 = MEAT_SIGN
+    y = HALL[2] + 4
+    for px in (sx0 + 4, sx1 - 6):
+        grid.box(px, px + 2, y + 1, y + 3, WALL_TOP + 3, sz0, HANDLE_LABEL)
+    grid.box(sx0, sx1, y, y + 2, sz0, sz1, WOOD_LABEL)
+    grid.box(sx0 - 1, sx1 + 1, y - 1, y, sz0 - 1, sz0 + 1, HANDLE_LABEL)
+    grid.box(sx0 - 1, sx1 + 1, y - 1, y, sz1 - 1, sz1 + 1, HANDLE_LABEL)
+    cx, cz = (sx0 + sx1) / 2, (sz0 + sz1) / 2
+    # The steak: a kidney shaped slab, a thick fat cap along its top and left, marbled red, the T of a bone
+    for x in range(sx0 + 1, sx1 - 1):
+        for z in range(sz0 + 1, sz1 - 1):
+            dx, dz = (x + 0.5 - cx) / 19, (z + 0.5 - cz) / 11.5
+            angle = math.atan2(dz, dx)
+            edge = 1 + 0.12 * math.cos(angle) - 0.16 * math.cos(2 * angle - 0.6) + 0.06 * math.sin(3 * angle)
+            r = math.hypot(dx, dz) / edge
+            if r > 1:
+                continue
+            cap = r > 0.74 and (dz > -0.2 or dx < -0.4)
+            label = FAT_LABEL if cap or (r < 0.7 and noise(x, z, 51) > 0.93) else MEAT_LABEL
+            grid.box(x, x + 1, y - 2, y, z, z + 1, label)
+    bx, bz = round(cx) - 5, round(cz) + 1
+    grid.box(bx - 6, bx + 6, y - 3, y - 2, bz + 1, bz + 3, FAT_LABEL)
+    grid.box(bx - 1, bx + 1, y - 3, y - 2, bz - 7, bz + 1, FAT_LABEL)
 
 
 def build_annex(grid: VoxelGrid) -> None:
@@ -394,8 +402,6 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
         if side == "top":
             return STONE[4]
         base = 3 if side == "front" else 2 if side == "left" else 1
-        if side == "front" and WALL_TOP - 10 <= hit.z < WALL_TOP and hit.my >= HALL[2] - 1:
-            base -= 1
         return bricks(hit, side, base)
 
     if label == QUOIN_LABEL:
@@ -404,22 +410,11 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
         return TRIM[2] if side in ("front", "left") else TRIM[1]
 
     if label == ROOF_LABEL:
-        if hit.neighbor(0, 0, 1) != EMPTY and hit.neighbor(0, 0, -1) == EMPTY:
-            return SHINGLE[0]
-        ridge = (HALL[2] + HALL[3]) / 2
-        if side == "left" or hit.neighbor(-1, 0, 0) == EMPTY and hit.neighbor(-1, 0, -1) == EMPTY:
-            return SHINGLE[2] if hit.mx < 0 else SHINGLE[1]
-        if hit.mx > 0 and hit.neighbor(1, 0, 1) == EMPTY and hit.neighbor(0, -1, 1) != EMPTY:
-            return SHINGLE[1]
-        index = 3 if hit.my >= ridge - 3 else 2
-        course = (hit.my - HALL[2] + EAVE) // 4
-        shift = round(noise(course, 21) * 6)
-        joint = (hit.mx + 400 + shift + course * 4) % 8 == 0 and noise(course, (hit.mx + 400 + shift + course * 4) // 8) > 0.35
-        if (hit.my - HALL[2] + EAVE) % 4 == 0 or joint:
-            index -= 1
-        elif noise(course, (hit.mx + 400 + shift + course * 4) // 8, 13) > 0.85:
-            index -= 1
-        return step(SHINGLE, index)
+        # Square stone slabs on the flat roof
+        if (hit.mx + 400) % 12 == 0 or hit.my % 10 == 0:
+            return STONE[1]
+        slab = noise((hit.mx + 400) // 12, hit.my // 10, 9)
+        return STONE[3] if slab > 0.75 else STONE[1] if slab < 0.12 else STONE[2]
 
     if label == SLATE_LABEL:
         if hit.neighbor(0, 0, 1) != EMPTY and hit.neighbor(0, 0, -1) == EMPTY:
@@ -453,6 +448,16 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
             return step(WOOD, index)
         return step(WOOD, 2 if side in ("front", "left") else 1)
 
+    if label == SAUSAGE_LABEL:
+        # A glossy casing: lit on the upper left, with a small highlight
+        light = hit.light(hit.normal())
+        if light > 0.8 and noise(hit.mx, hit.z, 41) > 0.5:
+            return MEAT[3]
+        return step(MEAT, 2 if light > 0.35 else 1 if light > -0.2 else 0)
+
+    if label == TWINE_LABEL:
+        return FAT[1] if side in ("top", "front", "left") else FAT[0]
+
     if label == HANDLE_LABEL:
         return WOOD[1] if side in ("top", "front", "left") else WOOD[0]
 
@@ -472,8 +477,7 @@ def shade(hit: Hit) -> tuple[int, int, int, int]:
     if label == BLADE_LABEL:
         # Steel with a bright edge; the lower half of a butcher's blade is stained with blood
         index = 4 if side == "top" else 3 if side in ("front", "left") else 2
-        on_roof = hit.my >= HALL[2] - EAVE - 1
-        if not on_roof and noise(hit.mx // 2, hit.z // 2, 31) > 0.55 and hit.z % 7 < 4:
+        if noise(hit.mx // 2, hit.z // 2, 31) > 0.55 and hit.z % 7 < 4:
             return BLOOD[2] if index >= 3 else BLOOD[1]
         return step(STEEL, index)
 
@@ -501,6 +505,8 @@ SAME_MATERIAL = (
     {PAVING_LABEL, BLOOD_LABEL},
     {FOOTING_LABEL, BLOOD_LABEL},
     {WALL_LABEL, CHIMNEY_LABEL},
+    {QUOIN_LABEL, ROOF_LABEL},
+    {SAUSAGE_LABEL, TWINE_LABEL},
     {MEAT_LABEL, FAT_LABEL},
 )
 
