@@ -106,6 +106,15 @@ export class TotemResources {
 		shape: "rectangle",
 	};
 
+	static butchery: ShapedResource = {
+		size: {
+			width: 9.8,
+			height: 9.8,
+		},
+		image: createImage("/resources/totem/butchery.png"),
+		shape: "rectangle",
+	};
+
 	static bosquet: ShapedResource = {
 		size: {
 			width: 4.9,

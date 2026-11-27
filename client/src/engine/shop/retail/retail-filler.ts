@@ -9,6 +9,7 @@ import { SlowingTrapBlueprint } from "../../trap/blueprint/implementation/slowin
 import { AnyPathTileBlueprint } from "../../tile/blueprint/tile";
 import { BlacksmithTowerBlueprint } from "../../constructs/tower/blueprint/implementation/blacksmith-tower-blueprint";
 import { CauldronBlueprint } from "../../constructs/totem/blueprint/implementation/cauldron-blueprint";
+import { ButcheryBlueprint } from "../../constructs/totem/blueprint/implementation/butchery-blueprint";
 import { StonemasonBlueprint } from "../../constructs/totem/blueprint/implementation/stonemason-blueprint";
 import { ForestCabinBlueprint } from "../../constructs/tower/blueprint/implementation/forest-cabin-blueprint";
 import { WindmillTurretBlueprint } from "../../constructs/tower/blueprint/implementation/windmill-turret-blueprint";
@@ -73,6 +74,7 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 			RedObeliskBlueprint,
 			BosquetBlueprint,
 			StonemasonBlueprint,
+			ButcheryBlueprint,
 			CauldronBlueprint,
 		],
 		share: 100,

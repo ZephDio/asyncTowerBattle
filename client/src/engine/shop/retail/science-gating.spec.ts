@@ -6,6 +6,7 @@ import { CastleFactory } from "../../castle/recruit/castle-recruit-fixtures";
 import { ForestCabinBlueprint } from "../../constructs/tower/blueprint/implementation/forest-cabin-blueprint";
 import { BosquetBlueprint } from "../../constructs/totem/blueprint/implementation/bosquet-blueprint";
 import { CauldronBlueprint } from "../../constructs/totem/blueprint/implementation/cauldron-blueprint";
+import { ButcheryBlueprint } from "../../constructs/totem/blueprint/implementation/butchery-blueprint";
 import { StonemasonBlueprint } from "../../constructs/totem/blueprint/implementation/stonemason-blueprint";
 import { Science } from "../../../shared/traits/engine/science";
 import { Cell } from "../../../shared/position";
@@ -40,6 +41,16 @@ describe("sciences", () => {
 			new RetailFiller(1, Math.random, sciences)
 				.candidates()
 				.some(({ blueprint }) => blueprint instanceof StonemasonBlueprint);
+		expect(offered(new Set())).toBe(false);
+		expect(offered(new Set([Science.Elf]))).toBe(false);
+		expect(offered(new Set([Science.Dwarf]))).toBe(true);
+	});
+
+	it("keeps the Butchery out of the shop until the army holds the Dwarf science", () => {
+		const offered = (sciences: ReadonlySet<Science>) =>
+			new RetailFiller(1, Math.random, sciences)
+				.candidates()
+				.some(({ blueprint }) => blueprint instanceof ButcheryBlueprint);
 		expect(offered(new Set())).toBe(false);
 		expect(offered(new Set([Science.Elf]))).toBe(false);
 		expect(offered(new Set([Science.Dwarf]))).toBe(true);
