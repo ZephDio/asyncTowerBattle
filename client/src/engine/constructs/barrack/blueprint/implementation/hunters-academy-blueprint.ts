@@ -56,7 +56,7 @@ export class HuntersAcademyBlueprint extends Derive(
 ) {
 	description = new BarrackDescription(
 		"Hunter's Academy",
-		["Teaches the Trap science", "", "Cast 5% faster per ▣", "barrack of other name", "", "Cast 10% faster per ▣", "forest"],
+		["Cast 5% faster per ▣", "barrack of other name", "", "Cast 10% faster per ▣", "forest"],
 		this,
 	);
 
