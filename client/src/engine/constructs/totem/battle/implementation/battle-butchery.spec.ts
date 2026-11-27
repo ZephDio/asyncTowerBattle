@@ -85,7 +85,7 @@ describe("Butchery", () => {
 		totem(setup([]).hooks).onCastResolve();
 	});
 
-	it("draws its buffs with replacement from the five army buffs, and reaches all of them", () => {
+	it("draws its buffs with replacement from the four army buffs, and reaches all of them", () => {
 		const seen = new Set<string>();
 		for (let seed = 1; seed <= 60; seed++) {
 			const { hooks, unitBuffs, towerBuffs } = setup([unit(true)], seed);
@@ -94,7 +94,7 @@ describe("Butchery", () => {
 			towerBuffs.forEach((b) => seen.add(`tower:${b}`));
 		}
 		expect([...seen].sort()).toEqual(
-			["tower:cast-speed", "tower:projectile-damage", "unit:cast-speed", "unit:movement-speed", "unit:vitality"].sort(),
+			["tower:cast-speed", "tower:projectile-damage", "unit:movement-speed", "unit:vitality"].sort(),
 		);
 	});
 

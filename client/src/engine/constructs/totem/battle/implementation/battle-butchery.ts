@@ -16,7 +16,6 @@ import type { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 
 export const SACRIFICE_BUFF_POOL: readonly { side: "unit" | "tower"; buff: Buff }[] = [
 	{ side: "unit", buff: "movement-speed" },
-	{ side: "unit", buff: "cast-speed" },
 	{ side: "unit", buff: "vitality" },
 	{ side: "tower", buff: "projectile-damage" },
 	{ side: "tower", buff: "cast-speed" },

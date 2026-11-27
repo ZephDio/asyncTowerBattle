@@ -42,7 +42,7 @@ export class BattleWhiteStag extends Derive(TBattleUnit, Caster) {
 			foodCost: recruit.stats.foodConsumption,
 			range: recruit.stats.range,
 			onDeath: () => {
-				this.dropAntlers(0);
+				this.dropAntlers(Math.max(this.antlers - 1, 0));
 				this.hooks.removeUnit(this);
 			},
 			hitboxHolder: recruit,
@@ -58,7 +58,7 @@ export class BattleWhiteStag extends Derive(TBattleUnit, Caster) {
 		this.finishCast();
 	}
 
-	// Drops antlers until only `keep` are left. A stag killed from above 50% in one blow drops both.
+	// Drops antlers until only `keep` are left. On death it drops one: its last, or a single one when killed above 50% in one blow.
 	dropAntlers(keep: number) {
 		while (this.antlers > keep) {
 			this.antlers--;

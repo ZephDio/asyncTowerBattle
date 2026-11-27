@@ -70,7 +70,7 @@ Fury is the late-battle clock that prevents stalemates. Starting at 20 seconds, 
 
 ### Army buffs
 
-Some effects buff the whole army for the rest of the battle: units get vitality (max health), movement speed or cast speed. Towers get attack or cast speed. Units receive the army buffs when they spawn.
+Some effects buff the whole army for the rest of the battle: units get vitality (max health) or movement speed. Towers get attack or cast speed. Units receive the army buffs when they spawn.
 
 ## The shop
 
@@ -181,7 +181,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Gold Mine | Common | 15 | Shop entered: +5 gold. Start of battle: +1 vitality army buff stack (💖) if a Mountain (a Rock or another Gold Mine) is on its star. Each mine stacks. | right |
 | Red Obelisk | Legendary | 20 | Every 8 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
 | Stonemason | Uncommon | 15 | Needs Dwarf science. Totem + Mountain, 1 wide and 2 tall. Every 5 s: gives a stone shield to 2 random allied units that have none, +1 unit per Mountain (Rock, Gold Mine, Go-Goat, another Stonemason) on its stars (up to 6). No food cost. Poison ignores shields. Placeholder sprite. | left and right of both cells (4 stars) |
-| Butchery | Rare | 25 | Needs Dwarf science. Totem, 2 wide and 2 tall (an L: the bottom right cell is its star). Every 6 s: sacrifices a random allied Animal alive on the board (it leaves the battle like a unit reaching the castle: no death effect, no castle damage, no gold, no refund; with no Animal alive nothing happens and the timer starts over), and the army gains 3 random buffs, drawn with replacement from the five army buffs (unit 👢 speed, unit cast speed, unit 💖 health, tower 🏹 projectile damage, tower 🔮 cast speed), one stack each. No food cost. Star: a barrack on it that produces an Animal gets +0.1 production speed, added to its own (a Rush Barrack at 1.2 runs at 1.3), counted at battle start. Placeholder sprite. | the cell right of its bottom left cell (1 star) |
+| Butchery | Rare | 25 | Needs Dwarf science. Totem, 2 wide and 2 tall (an L: the bottom right cell is its star). Every 6 s: sacrifices a random allied Animal alive on the board (it leaves the battle like a unit reaching the castle: no death effect, no castle damage, no gold, no refund; with no Animal alive nothing happens and the timer starts over), and the army gains 3 random buffs, drawn with replacement from the four army buffs (unit 👢 speed, unit 💖 health, tower 🏹 projectile damage, tower 🔮 cast speed), one stack each. No food cost. Star: a barrack on it that produces an Animal gets +0.1 production speed, added to its own (a Rush Barrack at 1.2 runs at 1.3), counted at battle start. Placeholder sprite. | the cell right of its bottom left cell (1 star) |
 | Cauldron | Epic | 30 | Needs Witchcraft science. One cell, tagged Totem and Evil. Start of battle: the army's poison effects (the Witch House's puddles and the Frog's croak, 6 damage/s) deal +20% damage, each Cauldron adding its own 20%. Placeholder sprite. | none |
 
 ### Path tiles and traps
