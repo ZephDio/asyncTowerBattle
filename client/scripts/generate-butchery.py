@@ -31,7 +31,7 @@ HEIGHT = 2 * CELL
 # Screen row of the ground at model y 0; model x 0 is the column between the two cells
 ORIGIN_Y = 153
 HALF_X = CELL
-HALF_Y = 160
+HALF_Y = 200
 
 # Ramps, dark to light. STONE, ROCK, TRIM and the slate IRON are the Dwarf castle's
 STONE = [(70, 64, 84, 255), (108, 98, 108, 255), (146, 134, 130, 255), (186, 172, 156, 255), (214, 200, 176, 255)]
@@ -76,6 +76,8 @@ ARCH = (-80, -20, 30)  # x0, x1, top z
 CARCASSES = (-68, -50, -32)
 YARD = (-92, -6, -28, 87)
 YARD_WALL = 10
+YARD_WALL_SIDE = "left"  # the side of the yard walled in, the other one stays open toward the star
+YARD_BLOOD = ((-44, 72, 3.5), (-22, 12, 2.5))
 BLOCK = (-30, 40)  # chopping block, x, y
 RACK = (-84, -50, 58)  # x0, x1, y
 BARRELS = ((-78, 18), (-66, 26), (-80, 32))
@@ -283,9 +285,10 @@ def build_annex(grid: VoxelGrid) -> None:
     # Cutting yard: stone flags behind the cold room, a low wall on the left and the back, open on the right
     yx0, yx1, yy0, yy1 = YARD
     grid.box(yx0, yx1, yy0, yy1, 0, 2, PAVING_LABEL)
-    grid.box(yx0, yx0 + 4, yy0, yy1, 0, YARD_WALL, WALL_LABEL)
+    wx = yx0 if YARD_WALL_SIDE == "left" else yx1 - 4
+    grid.box(wx, wx + 4, yy0, yy1, 0, YARD_WALL, WALL_LABEL)
     # Blood pools on the flags around the block and along the trail to the door
-    for bx, by, r in ((BLOCK[0] + 4, BLOCK[1] - 5, 5), (BLOCK[0] - 6, BLOCK[1] + 6, 3), (-44, 72, 3.5), (-22, 12, 2.5)):
+    for bx, by, r in ((BLOCK[0] + 4, BLOCK[1] - 5, 5), (BLOCK[0] - 6, BLOCK[1] + 6, 3), *YARD_BLOOD):
         for y in range(math.floor(by - r), math.ceil(by + r)):
             for x in range(math.floor(bx - r * 1.5), math.ceil(bx + r * 1.5)):
                 if ((x - bx) / 1.5) ** 2 + (y - by) ** 2 <= r * r * (0.8 + 0.4 * noise(x, y)):
@@ -296,16 +299,17 @@ def build_annex(grid: VoxelGrid) -> None:
     grid.box(bx - 3, bx + 5, by - 1, by + 1, 14, 22, BLADE_LABEL)
     grid.box(bx - 1, bx + 1, by - 1, by + 1, 22, 28, WOOD_LABEL)
     # Rack of steaks and sausages along the back
-    rx0, rx1, ry = RACK
-    for px in (rx0, rx1 - 3):
-        grid.box(px, px + 3, ry, ry + 3, 2, 34, WOOD_LABEL)
-    grid.box(rx0, rx1, ry, ry + 3, 31, 34, WOOD_LABEL)
-    for i, sx in enumerate(range(rx0 + 7, rx1 - 4, 7)):
-        if i % 2:
-            for j, z in enumerate(range(28, 14, -3)):
-                ellipsoid(grid, sx + (0.5 if j % 2 else -0.5), ry + 1, z, 1.8, 1.8, 1.7, MEAT_LABEL)
-        else:
-            hanging_steak(grid, sx, ry + 1, 30)
+    if RACK:
+        rx0, rx1, ry = RACK
+        for px in (rx0, rx1 - 3):
+            grid.box(px, px + 3, ry, ry + 3, 2, 34, WOOD_LABEL)
+        grid.box(rx0, rx1, ry, ry + 3, 31, 34, WOOD_LABEL)
+        for i, sx in enumerate(range(rx0 + 7, rx1 - 4, 7)):
+            if i % 2:
+                for j, z in enumerate(range(28, 14, -3)):
+                    ellipsoid(grid, sx + (0.5 if j % 2 else -0.5), ry + 1, z, 1.8, 1.8, 1.7, MEAT_LABEL)
+            else:
+                hanging_steak(grid, sx, ry + 1, 30)
     for cx, cy in BARRELS:
         cylinder_z(grid, cx, cy, 2, 14, 5, WOOD_LABEL)
         cylinder_z(grid, cx, cy, 14, 15, 4, FAT_LABEL)
@@ -530,14 +534,48 @@ def footprint_shadow(x: float, y: float) -> float:
     return min(outside(FOOTING) / 3, outside((ax0 - 2, ax1 + 2, ay0, ay1)) / 2.5, outside(YARD) / 1)
 
 
+# The opponent's Butchery is a point mirror of the player's: `so / oo`, the star top left. Rather than turning the
+# image by pi, which would show the building upside down, it is the same building seen by the other player and
+# rebuilt to fit: the hall runs along the bottom row with its facade in reverse order (the coiled sausage sign, the
+# shop, the cleaver sign, then the slaughter door), the annex and its yard stand behind it in the top right cell, the
+# yard open on its left toward the star. The rack of steaks is left out: in front of the cold room it hid the arch.
+ENEMY_LAYOUT = {
+    "OUTPUT": ROOT / "public" / "resources" / "totem" / "butchery-enemy.png",
+    "ORIGIN_Y": 186,
+    "HALL": (-90, 90, 0, 38),
+    "FOOTING": (-93, 93, -3, 41),
+    "DOOR": (32, 72, 38),
+    "SHOP": (-48, -6, 21, 38),
+    "AWNING": (-54, 0, -8, 44),
+    "HAMS": (-42, -12),
+    "SAUSAGES": (-32, -22),
+    "CHIMNEY": (48, 60, 14, 24, 78),
+    "SMOKE_PUFFS": ((53, 20, 83, 5.5), (59, 24, 90, 4.5)),
+    "SIGN_X": 14,
+    "COIL": (-72, 33, 11),
+    "ANNEX": (10, 90, 166, 188),
+    "ARCH": (20, 80, 30),
+    "CARCASSES": (32, 50, 68),
+    "YARD": (6, 92, 41, 188),
+    "YARD_WALL_SIDE": "right",
+    "YARD_BLOOD": ((58, 150, 3), (24, 132, 2.5), (70, 112, 2.5)),
+    "BLOCK": (42, 140),
+    "RACK": None,
+    "BARRELS": ((80, 130), (70, 138), (82, 146)),
+}
+
+
 def main() -> None:
-    grid = build_model()
-    # shadow_radii is ignored, footprint_shadow gives the shape
-    sprite = render(grid, 0, WIDTH, HEIGHT, ORIGIN_Y, shade, (1, 1), SHADOW_JITTER, shadow_shape=footprint_shadow)
-    # Hooks, handles and rack posts are thin: a 2px depth outline would turn them into ink bars
-    outline(sprite, crack, depth_gap=6, depth_width=1)
-    write_png(OUTPUT, sprite.pixels)
-    print(f"wrote {OUTPUT.relative_to(ROOT)}")
+    for layout in (None, ENEMY_LAYOUT):
+        if layout:
+            globals().update(layout)
+        grid = build_model()
+        # shadow_radii is ignored, footprint_shadow gives the shape
+        sprite = render(grid, 0, WIDTH, HEIGHT, ORIGIN_Y, shade, (1, 1), SHADOW_JITTER, shadow_shape=footprint_shadow)
+        # Hooks, handles and rack posts are thin: a 2px depth outline would turn them into ink bars
+        outline(sprite, crack, depth_gap=6, depth_width=1)
+        write_png(OUTPUT, sprite.pixels)
+        print(f"wrote {OUTPUT.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

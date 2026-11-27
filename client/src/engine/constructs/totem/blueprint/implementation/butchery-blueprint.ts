@@ -9,7 +9,7 @@ import { HitBox } from "../../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../../shared/hitbox/shapes/rectangle";
 import { Cell, GridPosition } from "../../../../../shared/position";
 import { CAST_TIME, CasterDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
-import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
+import { DrawPriority, EnemyRender, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
 import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
@@ -36,7 +36,13 @@ export class ButcheryBlueprint extends Derive(
 		]),
 	),
 	TDescriptor,
-	TImageDrawable(TotemResources.butchery.image, TotemResources.butchery.size, DrawPriority.NormalGridElement),
+	TImageDrawable(
+		TotemResources.butchery.image,
+		TotemResources.butchery.size,
+		DrawPriority.NormalGridElement,
+		EnemyRender.Normal,
+		TotemResources.butcheryEnemy.image,
+	),
 	TSynergy,
 	TBaseStats({
 		health: NaN,

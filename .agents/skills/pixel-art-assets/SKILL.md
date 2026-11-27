@@ -291,6 +291,12 @@ Pieces cannot be rotated, so every piece ships a single image, the front view fa
 loaded with `createImage(...)` in its `*.resources.ts` entry. On the opponent board the same image is drawn rotated
 by π with the piece's mirrored footprint, so don't draw a back view.
 
+An asymmetric multi-cell building can instead get a second image, the opponent's view, passed as `enemyImage` to
+`TImageDrawable` and drawn unrotated on the mirrored footprint: the same building rebuilt for the point-mirrored
+cells, its parts moved to stay in view (signs and wall details shifted, the facade order reversed) and the ones that
+no longer fit left out. `generate-butchery.py` renders both from one model with a second layout
+(`butchery.png`, `butchery-enemy.png`); the drill tower still turns by π.
+
 Draw the image in the shape of the piece's footprint as written in its `GridShape`: a horizontal two-cell piece
 (brewery) gets a wide canvas, a vertical one (witch house) a tall canvas.
 
