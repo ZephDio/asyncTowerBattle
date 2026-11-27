@@ -10,7 +10,7 @@ describe("round scaling", () => {
 		expect(CASTLE_LIFE_BY_ROUND).toHaveLength(MAX_ROUNDS);
 		expect(MAX_FOOD_BY_ROUND).toHaveLength(MAX_ROUNDS);
 		expect([castleLife(1), castleLife(2), castleLife(MAX_ROUNDS)]).toEqual([25, 30, 250]);
-		expect([maxFood(1), maxFood(2), maxFood(MAX_ROUNDS)]).toEqual([100, 115, 300]);
+		expect([maxFood(1), maxFood(2), maxFood(MAX_ROUNDS)]).toEqual([100, 105, 300]);
 		for (let round = 2; round <= MAX_ROUNDS; round++) {
 			expect(castleLife(round)).toBeGreaterThan(castleLife(round - 1));
 			expect(maxFood(round)).toBeGreaterThan(maxFood(round - 1));
@@ -38,6 +38,6 @@ describe("round scaling", () => {
 
 		opponent.setRound(8);
 
-		expect([opponent.castle.maxHealth, opponent.foodEconomy.maxFood]).toEqual([95, 195]);
+		expect([opponent.castle.maxHealth, opponent.foodEconomy.maxFood]).toEqual([95, 160]);
 	});
 });

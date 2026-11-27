@@ -3,7 +3,7 @@
 export const CASTLE_LIFE_BY_ROUND = [25, 30, 35, 45, 55, 65, 80, 95, 110, 125, 140, 160, 180, 200, 225, 250] as const;
 
 export const MAX_FOOD_BY_ROUND = [
-	100, 115, 125, 140, 155, 165, 180, 195, 205, 220, 235, 245, 260, 275, 285, 300,
+	100, 105, 110, 115, 125, 135, 145, 160, 175, 190, 205, 220, 240, 260, 280, 300,
 ] as const;
 
 const atRound = (table: readonly number[], round: number) =>
