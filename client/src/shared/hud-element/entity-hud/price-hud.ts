@@ -1,4 +1,5 @@
 import { Derive, ImplementsTrait } from "@ddd-ts/traits";
+import { DrawPriority } from "../../traits/render/image-drawable";
 import { TDrawable } from "../../traits/render/drawable";
 import { THasPrice } from "../../traits/engine/has-price";
 import { ScreenPosition } from "../../position";
@@ -61,9 +62,41 @@ export class PriceHud extends Derive(TDrawable) {
 		const faceMiddle = y + ((FACE_TOP + FACE_BOTTOM) / 2) * p;
 		const textX = x + (left.width + PADDING) * p;
 		context.fillStyle = "#ffe5ad";
-		context.fillText(text, textX, faceMiddle);
+		context.fillText(text, textX, faceMiddle + p);
 		const coinX = textX + (textWidth + GAP) * p;
 		context.drawImage(coin, coinX, faceMiddle - (COIN * p) / 2, COIN * p, COIN * p);
+		context.restore();
+	}
+}
+
+// What replaces an offer's price sign once it is bought: the same sign at the size it had with the offer's price, in
+// the same wood and text color, with SOLD centered on its face (shrunk only if it does not fit).
+export class SoldSignHud extends Derive(TDrawable) {
+	drawPriority = DrawPriority.HUD;
+	constructor(private price: number) {
+		super({});
+	}
+	draw(context: CanvasRenderingContext2D, position: ScreenPosition, _scale: number) {
+		const { left, middle, right } = HudElementResources.priceSign;
+		if (![left, middle, right].every((image) => image.complete && image.naturalWidth > 0)) return;
+		const center = this.getCanvasPosition(context, position);
+		context.save();
+		context.globalAlpha = 1;
+		context.imageSmoothingEnabled = false;
+		const unit = this.getCanvasSize(context, 1, 1).width;
+		const { x, y, inner, p } = priceSignLayout(context, center, this.price, unit);
+		const faceHeight = (FACE_BOTTOM - FACE_TOP + 1) * p;
+		context.font = `${faceHeight}px title`;
+		const room = (inner - 2 * PADDING) * p;
+		const textWidth = context.measureText("SOLD").width;
+		if (textWidth > room) context.font = `${Math.floor((faceHeight * room) / textWidth)}px title`;
+		context.textAlign = "center";
+		context.textBaseline = "middle";
+		context.drawImage(left, x, y, left.width * p, left.height * p);
+		context.drawImage(middle, x + left.width * p, y, inner * p, middle.height * p);
+		context.drawImage(right, x + (left.width + inner) * p, y, right.width * p, right.height * p);
+		context.fillStyle = "#ffe5ad";
+		context.fillText("SOLD", x + (left.width + inner / 2) * p, y + ((FACE_TOP + FACE_BOTTOM) / 2 + 1) * p);
 		context.restore();
 	}
 }

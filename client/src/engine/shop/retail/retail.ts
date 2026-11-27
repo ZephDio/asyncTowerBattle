@@ -50,14 +50,30 @@ export class Retail extends Derive(
 		});
 	}
 
+	// The offer picked up by the player: its piece leaves the slot, whose signs stay until it is bought or put back.
+	held: Buyable | null = null;
+	// The slots of the bought offers, kept with a sold sign until the next draw.
+	private soldSlots = new Map<string, { cell: Cell; price: number }>();
+
 	removeItem(buyable: Buyable) {
 		this.grid.tiles.delete(ArmyGrid.posToString(buyable.cell));
+	}
+
+	hold(buyable: Buyable) {
+		this.removeItem(buyable);
+		this.held = buyable;
 	}
 
 	// A bought offer leaves its slot for good, reserved or not.
 	sell(buyable: Buyable) {
 		this.removeItem(buyable);
 		this.reservations.release(buyable);
+		if (this.held === buyable) this.held = null;
+		this.soldSlots.set(ArmyGrid.posToString(buyable.cell), { cell: buyable.cell, price: buyable.price });
+	}
+
+	soldOffers() {
+		return [...this.soldSlots.values()];
 	}
 
 	toggleReservation(buyable: Buyable) {
@@ -69,20 +85,24 @@ export class Retail extends Derive(
 		return this.reservations.isReserved(buyable);
 	}
 
-	// The reserved offers on display: not the one in the player's hand.
+	// The reserved offers on display, and the one in the player's hand.
 	reservedOffers() {
 		return this.reservations
 			.all()
-			.filter((buyable) => this.grid.tiles.get(ArmyGrid.posToString(buyable.cell)) === buyable);
+			.filter(
+				(buyable) => buyable === this.held || this.grid.tiles.get(ArmyGrid.posToString(buyable.cell)) === buyable,
+			);
 	}
 
 	addItem(buyable: Buyable) {
+		if (this.held === buyable) this.held = null;
 		this.grid.tiles.set(ArmyGrid.posToString(buyable.cell), buyable);
 	}
 
 	// New offers in the free slots; the reserved ones stay in theirs.
 	async refresh() {
 		this.grid.clearOffers();
+		this.soldSlots.clear();
 		const reserved = this.reservations.all();
 		const items = await this.getRetailItems(this.slots.filter((slot) => !this.reservations.isSlotReserved(slot)));
 		await this.fill([...reserved, ...items]);
