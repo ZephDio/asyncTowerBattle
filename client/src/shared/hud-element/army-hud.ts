@@ -54,7 +54,9 @@ const BASIC_UNIT_DESCRIPTION = new Description("Basic unit", [
 // left of the grid, which widens over the rounds.
 export class ArmyHud extends Derive(
 	TCollider,
-	THitbox(new HitBox([[new Rectangle({ width: BANNER_WIDTH, height: BANNER_HEIGHT }), new ScreenPosition({ x: 0, y: 0 })]])),
+	THitbox(
+		new HitBox([[new Rectangle({ width: BANNER_WIDTH, height: BANNER_HEIGHT }), new ScreenPosition({ x: 0, y: 0 })]]),
+	),
 	TDrawable,
 	TRenderable,
 ) {
@@ -87,14 +89,16 @@ export class ArmyHud extends Derive(
 	private overArea(point: ScreenPosition, fromTop: number, width: number, height: number) {
 		const center = this.position.add(this.offsetTo(fromTop + height / 2));
 		return (
-			Math.abs(point.x - center.x) <= (width / 2) * this.scale && Math.abs(point.y - center.y) <= (height / 2) * this.scale
+			Math.abs(point.x - center.x) <= (width / 2) * this.scale &&
+			Math.abs(point.y - center.y) <= (height / 2) * this.scale
 		);
 	}
 
 	// What hovering `point` describes: the unit in its slot, or the "Basic unit" label.
 	describedAt(point: ScreenPosition): ImplementsTrait<typeof TDescriptor> | null {
 		if (this.overArea(point, SLOT_TOP, SLOT, SLOT) && implementsTrait(this.unit, TDescriptor)) return this.unit;
-		if (this.overArea(point, SLOT_TOP - LABEL, WIDTH - 2 * PADDING, LABEL)) return { description: BASIC_UNIT_DESCRIPTION };
+		if (this.overArea(point, SLOT_TOP - LABEL, WIDTH - 2 * PADDING, LABEL))
+			return { description: BASIC_UNIT_DESCRIPTION };
 		return null;
 	}
 
@@ -119,7 +123,7 @@ export class ArmyHud extends Derive(
 		context.strokeStyle = OUTLINE;
 		context.fillStyle = TEXT;
 		const army = this.army;
-		const rows = [`❤ ${Math.round(army.castle.stats.health)}`, `🌽 ${Math.round(army.foodEconomy.maxFood)}`];
+		const rows = [`❤ ${Math.round(army.castle.maxHealth)}`, `🌽 ${Math.round(army.foodEconomy.maxFood)}`];
 		rows.forEach((row, index) => {
 			this.drawText(context, row, center.x, top + (PADDING + ROW * (index + 0.5)) * unit, unit * 2.2, unit);
 		});
@@ -146,7 +150,14 @@ export class ArmyHud extends Derive(
 	}
 
 	// The font's "middle" baseline sits a bit above the letters' visual center, so nudge them down.
-	private drawText(context: CanvasRenderingContext2D, text: string, x: number, y: number, fontSize: number, unit: number) {
+	private drawText(
+		context: CanvasRenderingContext2D,
+		text: string,
+		x: number,
+		y: number,
+		fontSize: number,
+		unit: number,
+	) {
 		context.font = `${fontSize}px title`;
 		context.lineWidth = unit * 0.35;
 		const textY = y + fontSize * 0.08;

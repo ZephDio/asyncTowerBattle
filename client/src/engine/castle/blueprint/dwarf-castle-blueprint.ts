@@ -13,7 +13,11 @@ import { CastleTag } from "../../../shared/traits/engine/tags/building/building-
 
 export class DwarfCastleBlueprint extends Derive(
 	TRarity(Rarity.Common),
-	TImageDrawable(CastleResources.dwarfBoardLeft.image, CastleResources.dwarfBoardLeft.size, DrawPriority.NormalGridElement),
+	TImageDrawable(
+		CastleResources.dwarfBoardLeft.image,
+		CastleResources.dwarfBoardLeft.size,
+		DrawPriority.NormalGridElement,
+	),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TBaseStats({
@@ -36,7 +40,7 @@ export class DwarfCastleBlueprint extends Derive(
 		["A castle that", "you must protect !", "Builds Tower to protect", "yourself and barracks", "to slay your enemies"],
 		{
 			"food production": "5/second",
-			health: "25",
+			health: "25 to 250",
 		},
 	);
 }

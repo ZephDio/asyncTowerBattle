@@ -34,7 +34,7 @@ Each time the board grows, the player receives 2 free path tiles. Trees spawn in
 
 The two boards are joined into one battlefield: the player's board at the bottom, the opponent's board on top, rotated 180°. Each board has:
 
-- a **castle** (the thing to protect, 20 or 25 HP), which stands off the board with a 3-cell-tall sprite overhanging the path by a quarter cell (Dwarf) or half cell (Elf) left of the top row (right of it on the opponent's board),
+- a **castle** (the thing to protect, 25 HP in round 1), which stands off the board with a 3-cell-tall sprite overhanging the path by a quarter cell (Dwarf) or half cell (Elf) left of the top row (right of it on the opponent's board),
 - a **door** in its top-right corner, where the other army's units enter,
 - a **path** of tiles that the player built from the door (top right cell) to the top left cell, which it leaves by its left edge into the castle. Enemy units enter the board by the right edge of the door cell and reach the castle through the door on the top left cell's left edge, while the castle's own units spawn at its other door, one cell higher, and enter the opponent's board by the left edge of its door cell; the opponent's board is the point mirror (top right cell, right edge).
 
@@ -56,7 +56,7 @@ Gold buys pieces and refreshes the shop (5 gold). Most pieces cost 10 or 15 gold
 
 ### Food (during battles)
 
-Each army starts the battle with **100 food (full)** and a maximum of 100. The castle produces food over time: 5 per second for both the Dwarf and the Elf.
+Each army starts the battle with its **maximum food (full)**, which grows with the round from 100 in round 1 to 300 in round 16 (`MAX_FOOD_BY_ROUND` in `engine/rounds/round-scaling.ts`). The castle produces food over time: 5 per second for both the Dwarf and the Elf.
 
 - **Towers and some totems spend food each time they cast.** A building that cannot pay does not act. Barracks summon for free: their units only pay their upkeep.
 - **Every unit eats** its upkeep every 2 seconds. If fed, it heals 1 HP. If not, it takes hunger damage that grows each time (2, 4, 6…).
@@ -109,12 +109,12 @@ Pieces carry tags that synergies and future pieces can target.
 
 ## Factions
 
-| Faction | Castle | Castle HP | Food / s | Default unit |
+| Faction | Castle | Castle HP (round 1) | Food / s | Default unit |
 |---|---|---|---|---|
 | Dwarf | Dwarf Mountain | 25 | 5 | Dwarf: slow, tough, spawns with a stone shield that blocks one hit |
-| Elf | Castle | 20 | 5 | Elf: fast and fragile |
+| Elf | Castle | 25 | 5 | Elf: fast and fragile |
 
-Both castles summon their default unit at twice the speed of a barrack (castle production speed ×2). An empty barrack summons the faction's default unit. Factions are thin for now: castle stats and default unit. Faction-specific pieces are planned.
+Both castles have the same life, which grows with the round from 25 in round 1 to 250 in round 16 (`CASTLE_LIFE_BY_ROUND`, same file), with the same rise as the game that inspired it: slow first rounds, steeper at the end. Both sides of a battle use the round being played, so a stored opponent board carries neither value. The shop's army panel shows the castle's life and max food of the current round. Both castles summon their default unit at twice the speed of a barrack (castle production speed ×2). An empty barrack summons the faction's default unit. Factions are thin for now: castle stats and default unit. Faction-specific pieces are planned.
 
 ### Sciences
 
