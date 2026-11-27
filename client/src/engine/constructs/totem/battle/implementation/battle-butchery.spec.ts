@@ -27,11 +27,13 @@ const setup = (kinds: boolean[], seed = 1, board: Record<string, object> = {}) =
 	const left: AnyBattleUnit[] = [];
 	const unitBuffs: string[] = [];
 	const towerBuffs: string[] = [];
+	const food: number[] = [];
 	const hooks = {
 		getAlliedUnits: () => left,
 		removeUnit: (u: AnyBattleUnit) => left.splice(left.indexOf(u), 1),
 		random: () => random.random(),
 		onUnitAdded: () => {},
+		alliedFoodHooks: { addFood: (amount: number) => food.push(amount) },
 		alliedArmyBuffHooks: {
 			addUnitBuff: (buff: string) => unitBuffs.push(buff),
 			addTowerBuff: (buff: string) => towerBuffs.push(buff),
@@ -46,7 +48,7 @@ const setup = (kinds: boolean[], seed = 1, board: Record<string, object> = {}) =
 		animal ? new Fox(at(0, 0)).toBattle(origin, path, hooks) : new Ent(at(0, 0)).toBattle(origin, path, hooks),
 	);
 	left.push(...units);
-	return { hooks, left, units, unitBuffs, towerBuffs };
+	return { hooks, left, units, unitBuffs, towerBuffs, food };
 };
 
 const totem = (hooks: BattleArmyHooks, cell = at(3, 3)) => new Butchery(cell).toAllied(grid as never, hooks);
@@ -60,7 +62,7 @@ describe("Butchery", () => {
 		expect(requiredScienceOf(blueprint)).toBe(Science.Dwarf);
 		expect(blueprint.stats.castSpeed).toBeCloseTo(castSpeedFromSeconds(6));
 		expect(blueprint.stats.foodConsumptionOnCast).toBeNaN();
-		expect(blueprint.tags).toContain("Totem");
+		expect(blueprint.tags).toEqual(expect.arrayContaining(["Totem", "Food"]));
 	});
 
 	it("has the oo / os layout with its star at the bottom right, mirrored for the opponent", () => {
@@ -74,17 +76,19 @@ describe("Butchery", () => {
 		expect(cells(blueprint.patternEffect.getRelativeCells(BoardOrientation.Mirrored))).toEqual([[-1, 0]]);
 	});
 
-	it("sacrifices one animal and gives 3 buffs, leaving other units alone", () => {
-		const { hooks, left, units, unitBuffs, towerBuffs } = setup([false, true, false]);
+	it("sacrifices one animal for 5 food and 3 buffs, leaving other units alone", () => {
+		const { hooks, left, units, unitBuffs, towerBuffs, food } = setup([false, true, false]);
 		totem(hooks).onCastResolve();
 		expect(left).toEqual([units[0], units[2]]);
+		expect(food).toEqual([5]);
 		expect(unitBuffs.length + towerBuffs.length).toBe(3);
 	});
 
 	it("does nothing without an animal alive", () => {
-		const { hooks, left, unitBuffs, towerBuffs } = setup([false]);
+		const { hooks, left, unitBuffs, towerBuffs, food } = setup([false]);
 		totem(hooks).onCastResolve();
 		expect(left).toHaveLength(1);
+		expect(food).toEqual([]);
 		expect(unitBuffs.length + towerBuffs.length).toBe(0);
 		totem(setup([]).hooks).onCastResolve();
 	});

@@ -85,6 +85,7 @@ export class BattleButchery extends Derive(CasterTotem, HTSynergy, TStatsRendera
 		const victim = this.victim();
 		if (victim) {
 			victim.die();
+			this.hooks.alliedFoodHooks.addFood(this.butchery.blueprint.foodPerSacrifice);
 			for (let i = 0; i < this.butchery.blueprint.buffsPerSacrifice; i++) {
 				const drawn = SACRIFICE_BUFF_POOL[this.pickIndex(SACRIFICE_BUFF_POOL.length)]!;
 				if (drawn.side === "unit") this.hooks.alliedArmyBuffHooks.addUnitBuff(drawn.buff);

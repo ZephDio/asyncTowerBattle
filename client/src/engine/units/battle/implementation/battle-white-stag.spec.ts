@@ -25,6 +25,7 @@ const setup = () => {
 		random: () => random.random(),
 		triggerFurry: () => {},
 		alliedArmyBuffHooks: new ArmyBuff().getHooks(),
+		alliedFoodHooks: { addFood: () => {} },
 		gridHooks: { getRelativeNeighborsInArmy: () => [] },
 	} as unknown as BattleArmyHooks;
 	const path = { getNodes: () => [new GridPosition({ x: 100, y: 0 })] } as unknown as BattlePath;
