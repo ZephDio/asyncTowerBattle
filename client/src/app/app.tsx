@@ -72,7 +72,7 @@ export function App() {
 		<div className="h-screen w-screen overflow-hidden bg-black">
 			{/* The left padding keeps a strip for the menu toggle, so it never covers the canvas. */}
 			<div className="h-full py-[2vh] pr-[2vw] pl-20">
-				{/* Mounted from the start and never unmounted, since the game has no teardown: the login screen covers it. */}
+				{/* Mounted from the start and never unmounted: the login screen covers it. */}
 				<GameCanvas onStart={setGame} />
 			</div>
 			<HelpButton game={game} />

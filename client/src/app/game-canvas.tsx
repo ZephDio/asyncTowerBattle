@@ -8,9 +8,12 @@ export function GameCanvas({ onStart }: { onStart: (game: GameLink) => void }) {
 	const canvas = useRef<HTMLCanvasElement>(null);
 	useEffect(() => {
 		if (!container.current || !canvas.current) return;
-		// The game has no teardown: it lives for the page's lifetime, so the app renders it once and never unmounts it.
-		onStart(startGame(container.current, canvas.current));
-		// The game starts once: onStart is only read then.
+		// The app renders the game once and never unmounts it; the cleanup is for Fast Refresh and StrictMode, which
+		// run the effect again on the same canvas and must not leave the first game drawing and listening.
+		const { link, stop } = startGame(container.current, canvas.current);
+		onStart(link);
+		return stop;
+		// onStart is only read when the game starts.
 	}, []);
 	return (
 		<div ref={container} className="flex h-full w-full items-center justify-center">
