@@ -11,6 +11,9 @@ import { StonemasonBlueprint } from "../../constructs/totem/blueprint/implementa
 import { Science } from "../../../shared/traits/engine/science";
 import { Cell } from "../../../shared/position";
 import { WitchHouse } from "../../constructs/tower/recruit/implementation/witch-house";
+import { HuntersAcademy } from "../../constructs/barrack/recruit/implementation/hunters-academy";
+import { SlowingTrapBlueprint } from "../../trap/blueprint/implementation/slowing-trap-blueprint";
+import { StunTrapBlueprint } from "../../trap/blueprint/implementation/stun-trap-blueprint";
 import { RetailFiller } from "./retail-filler";
 
 const offeredCabin = (sciences: ReadonlySet<Science>) =>
@@ -64,6 +67,30 @@ describe("sciences", () => {
 		expect(offered(new Set())).toBe(false);
 		expect(offered(new Set([Science.Dwarf]))).toBe(false);
 		expect(offered(new Set([Science.Witchcraft]))).toBe(true);
+	});
+
+	it("keeps both traps out of the shop until the army holds the Trap science", () => {
+		const offered = (sciences: ReadonlySet<Science>, trap: typeof SlowingTrapBlueprint | typeof StunTrapBlueprint) =>
+			new RetailFiller(1, Math.random, sciences).candidates().some(({ blueprint }) => blueprint instanceof trap);
+		for (const trap of [SlowingTrapBlueprint, StunTrapBlueprint]) {
+			expect(offered(new Set(), trap)).toBe(false);
+			expect(offered(new Set([Science.Elf, Science.Dwarf]), trap)).toBe(false);
+			expect(offered(new Set([Science.Trap]), trap)).toBe(true);
+		}
+	});
+
+	it("is granted by the Hunter's Academy while it stands on the grid, not in the reserve", () => {
+		const army = ArmyFactory.default(Faction.Elf);
+		const academy = new HuntersAcademy(new Cell({ x: 3, y: 2 }));
+		army.inventory.add(academy);
+		expect(army.sciences.has(Science.Trap)).toBe(false);
+
+		army.inventory.deleteElement(academy);
+		army.grid.setElement(academy);
+		expect([...army.sciences].sort()).toEqual([Science.Elf, Science.Trap]);
+
+		army.grid.deleteElement(academy);
+		expect([...army.sciences]).toEqual([Science.Elf]);
 	});
 
 	it("never offers a gated piece without its science, whatever the roll", () => {

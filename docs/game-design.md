@@ -118,7 +118,7 @@ Both castles have the same life, which grows with the round from 25 in round 1 t
 
 ### Sciences
 
-A science is a token an army holds because it owns a piece that grants it. The castles grant one: the Elf castle the Elf science, the Dwarf Mountain the Dwarf science (a castle can grant several later). The Witch House grants the Witchcraft science while it stands on the grid; in the reserve or sold, it grants nothing. A piece behind a science is not offered in the shop, nor by the refresh bell, until the army holds it. The Bosquet needs the Elf science; the Stonemason and the Butchery need the Dwarf science, the Cauldron and the Frog the Witchcraft one. Sciences are derived from the owned pieces, never stored. The shop shows them as seals on a ribbon right of the reserve. Hovering a seal opens the science's scroll over the left of the shop, and clicking it keeps the scroll open until the next click elsewhere: it tells what grants the science and lays out every piece it unlocks, each hoverable for its description and its pattern and target cells. A piece that grants a science shows its seal at the bottom right of its descriptor.
+A science is a token an army holds because it owns a piece that grants it. The castles grant one: the Elf castle the Elf science, the Dwarf Mountain the Dwarf science (a castle can grant several later). The Witch House grants the Witchcraft science while it stands on the grid; in the reserve or sold, it grants nothing. A piece behind a science is not offered in the shop, nor by the refresh bell, until the army holds it. The Bosquet needs the Elf science; the Stonemason and the Butchery need the Dwarf science, the Cauldron and the Frog the Witchcraft one, and the Mud Trap and the Stun Trap the Trap science, which the Hunter's Academy grants while it stands on the grid (so no trap is offered until an Academy is held; traps already owned, on a board or in the reserve stay). Sciences are derived from the owned pieces, never stored. The shop shows them as seals on a ribbon right of the reserve. Hovering a seal opens the science's scroll over the left of the shop, and clicking it keeps the scroll open until the next click elsewhere: it tells what grants the science and lays out every piece it unlocks, each hoverable for its description and its pattern and target cells. A piece that grants a science shows its seal at the bottom right of its descriptor.
 
 ## The pieces
 
@@ -147,6 +147,7 @@ Every barrack has a pattern around its footprint on its sides, corners left out 
 | Basic Barrack | Common | 10 | One unit at a time. |
 | Wave Barrack | Uncommon | 10 | Units come out 3 at a time. |
 | Veteran Barrack | Epic | 10 | Slower (×0.6). Summons a giant version of its unit: slower, much more health. |
+| Hunter's Academy | Uncommon | 15 | Grants the Trap science. Two cells tall (`o / o`), with six stars: one above, one below and two on each side (`xsx / sos / sos / xsx`). Slower (×0.8). Instead of the other barracks' rule it gains +5% cast speed per barrack of another name on its stars and +10% per Forest (a piece that is both counts for both; a piece covering several stars counts once), counted at battle start. Placeholder sprite. |
 | Rush Barrack | Common | 15 | Two cells wide (`oo`). Faster (×1.2). Each unit it summons eats +0.4 food more at its 2 s upkeep for as long as it lives (a permanent buff on its upkeep, no icon); short of food, it goes hungry like any unit. |
 
 ### Units
@@ -189,8 +190,8 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Piece | Rarity | Price | Effect |
 |---|---|---|---|
 | Basic Tile | Common | 10 | A dirt path cell. Shape (straight or turn) follows its neighbors. |
-| Mud Trap | Common | 10 | Placed on a path tile. Slows enemies on it by 30%. |
-| Stun Trap | Uncommon | 10 | Placed on a path tile. Stuns enemies on it for 2 s. |
+| Mud Trap | Common | 10 | Needs Trap science. Placed on a path tile. Slows enemies on it by 30%. |
+| Stun Trap | Uncommon | 10 | Needs Trap science. Placed on a path tile. Stuns enemies on it for 2 s. |
 
 Path rules (junctions, right-click to choose a direction) are in `docs/path.md`.
 

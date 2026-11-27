@@ -9,11 +9,13 @@ import { HitBox } from "../../../../shared/hitbox/hitboxe";
 import { Rectangle } from "../../../../shared/hitbox/shapes/rectangle";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { PathResources } from "../../../../renderer/resources/path.resources";
+import { Science, TRequiresScience } from "../../../../shared/traits/engine/science";
 import { TrapTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class StunTrapBlueprint extends Derive(
 	TRarity(Rarity.Uncommon),
 	TShopBlueprint(10, 5),
+	TRequiresScience(Science.Trap),
 	TImageDrawable(PathResources.trap.straight, PathResources.trap.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,
 	TrapTag,

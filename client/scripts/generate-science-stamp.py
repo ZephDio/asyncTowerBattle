@@ -8,6 +8,7 @@ Outputs, in public/resources/icons/:
 - science-elf.png: the same stamp in green with a minimalist elf head pressed in its face.
 - science-dwarf.png: the same stamp in copper with a minimalist helmeted, bearded dwarf head pressed in its face.
 - science-witchcraft.png: the same stamp in purple with a minimalist witch hat pressed in its face.
+- science-trap.png: the same stamp in crimson with a minimalist open bear trap pressed in its face.
 
 A science is a token an army holds (see docs/game-design.md), drawn as a wax seal. This is the seal with no emblem:
 a raised cyan rim, two pixels wide, around a recessed, empty face. A science icon is this stamp with a small emblem
@@ -64,6 +65,18 @@ PURPLE = {
     "w": (196, 150, 240, 255),
     "E": (240, 220, 255, 255),
     "g": (138, 214, 90, 255),
+}
+
+RED = {
+    **CYAN,
+    "W": (255, 208, 196, 255),
+    "C": (222, 84, 72, 255),
+    "c": (158, 44, 52, 255),
+    "d": (100, 28, 44, 255),
+    "F": (96, 30, 46, 255),
+    "s": (100, 28, 44, 255),
+    "w": (240, 140, 124, 255),
+    "E": (255, 226, 214, 255),
 }
 
 # The rim is two pixels wide all around, lit on the top left and shaded on the bottom right. The first and last rows and
@@ -138,6 +151,17 @@ WITCH_HAT = [
 ]
 WITCH_HAT_AT = (3, 5)
 
+# A minimalist open bear trap: two toothed jaws held apart over a flat base plate.
+BEAR_TRAP = [
+    "E.E....E.E",
+    "EEE....EEE",
+    "EEEE..EEEE",
+    ".EEEEEEEE.",
+    "..EEEEEE..",
+    "EEEEEEEEEE",
+]
+BEAR_TRAP_AT = (3, 5)
+
 
 def pressed(emblem: list[str], at: tuple[int, int]) -> list[str]:
     """The stamp with an emblem drawn over its face: "." in the emblem leaves the face as it is."""
@@ -157,6 +181,7 @@ def main() -> None:
         "science-elf.png": (pressed(ELF_HEAD, ELF_HEAD_AT), GREEN),
         "science-dwarf.png": (pressed(DWARF_HEAD, DWARF_HEAD_AT), DWARF),
         "science-witchcraft.png": (pressed(WITCH_HAT, WITCH_HAT_AT), PURPLE),
+        "science-trap.png": (pressed(BEAR_TRAP, BEAR_TRAP_AT), RED),
     }
     for name, (sprite, palette) in outputs.items():
         write_png(OUTPUT_DIR / name, to_pixels(outline(sprite, "K"), palette, scale=SCALE))

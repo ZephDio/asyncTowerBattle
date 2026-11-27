@@ -27,6 +27,7 @@ import { DrillTowerBlueprint } from "../../constructs/tower/blueprint/implementa
 import { LighthouseBlueprint } from "../../constructs/tower/blueprint/implementation/lighthouse-blueprint";
 import { ChoupissonBlueprint } from "../../units/blueprint/implementation/choupisson-blueprint";
 import { VeterantBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/veteran-barrack-blueprint";
+import { HuntersAcademyBlueprint } from "../../constructs/barrack/blueprint/implementation/hunters-academy-blueprint";
 import { RushBarrackBlueprint } from "../../constructs/barrack/blueprint/implementation/rush-barrack-blueprint";
 import { AnyTotemBlueprint } from "../../constructs/totem/blueprint/totem-blueprint";
 import { BosquetBlueprint } from "../../constructs/totem/blueprint/implementation/bosquet-blueprint";
@@ -93,7 +94,13 @@ const pool: { value: Constructor<AnyBlueprint>[]; share: number }[] = [
 		share: 100,
 	},
 	{
-		value: [BasicBarrackBlueprint, WaveBarrackBlueprint, VeterantBarrackBlueprint, RushBarrackBlueprint],
+		value: [
+			BasicBarrackBlueprint,
+			WaveBarrackBlueprint,
+			VeterantBarrackBlueprint,
+			RushBarrackBlueprint,
+			HuntersAcademyBlueprint,
+		],
 		share: 60,
 	},
 	{

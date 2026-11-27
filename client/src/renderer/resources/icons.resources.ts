@@ -10,6 +10,7 @@ export class IconResources {
 		[Science.Elf]: { image: createImage("/resources/icons/science-elf.png") },
 		[Science.Dwarf]: { image: createImage("/resources/icons/science-dwarf.png") },
 		[Science.Witchcraft]: { image: createImage("/resources/icons/science-witchcraft.png") },
+		[Science.Trap]: { image: createImage("/resources/icons/science-trap.png") },
 	};
 	static food: IconResource = {
 		image: createImage("/resources/icons/corn.png"),

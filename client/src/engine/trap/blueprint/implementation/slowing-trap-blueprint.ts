@@ -10,11 +10,13 @@ import { TShopBlueprint } from "../../../../shared/traits/engine/shop-blueprint"
 import { STANDARD_CELL_SIZE } from "../../../grid/tgrid";
 import { Description, TDescriptor } from "../../../../shared/traits/render/huds/item-descriptor";
 import { PathResources } from "../../../../renderer/resources/path.resources";
+import { Science, TRequiresScience } from "../../../../shared/traits/engine/science";
 import { TrapTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class SlowingTrapBlueprint extends Derive(
 	TRarity(Rarity.Common),
 	TShopBlueprint(10, 3),
+	TRequiresScience(Science.Trap),
 	TImageDrawable(PathResources.slowing.straight, PathResources.slowing.size, DrawPriority.CarpetStyleGridElement),
 	TDescriptor,
 	TrapTag,

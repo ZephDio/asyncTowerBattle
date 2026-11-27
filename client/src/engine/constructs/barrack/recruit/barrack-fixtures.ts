@@ -5,6 +5,7 @@ import { Cell } from "../../../../shared/position";
 import { WaveBarrack } from "./implementation/wave-barrack";
 import { VeterantBarrack } from "./implementation/veterant-barrack";
 import { RushBarrack } from "./implementation/rush-barrack";
+import { HuntersAcademy } from "./implementation/hunters-academy";
 
 export class BarrackRecruitBuilder {
 	productionSpeed: number | undefined;
@@ -48,6 +49,12 @@ export class BarrackRecruitBuilder {
 		const rushBarrackRecruit = new RushBarrack(this.cell);
 		if (this.unit) rushBarrackRecruit.setUnit(this.unit);
 		return rushBarrackRecruit;
+	}
+
+	buildHuntersAcademy() {
+		const academyRecruit = new HuntersAcademy(this.cell);
+		if (this.unit) academyRecruit.setUnit(this.unit);
+		return academyRecruit;
 	}
 }
 

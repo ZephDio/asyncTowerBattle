@@ -10,6 +10,7 @@ import { BasicBarrack } from "../constructs/barrack/recruit/implementation/basic
 import { VeterantBarrack } from "../constructs/barrack/recruit/implementation/veterant-barrack";
 import { WaveBarrack } from "../constructs/barrack/recruit/implementation/wave-barrack";
 import { RushBarrack } from "../constructs/barrack/recruit/implementation/rush-barrack";
+import { HuntersAcademy } from "../constructs/barrack/recruit/implementation/hunters-academy";
 import { AnvilTotem } from "../constructs/totem/recruit/implementation/anvil";
 import { Bakery } from "../constructs/totem/recruit/implementation/backery";
 import { Bosquet } from "../constructs/totem/recruit/implementation/bosquet";
@@ -106,6 +107,7 @@ const barracks: Record<SerializedBarrackType, Constructor<AnyBarrack>> = {
 	rush: RushBarrack,
 	veterant: VeterantBarrack,
 	wave: WaveBarrack,
+	"hunters-academy": HuntersAcademy,
 };
 
 const units: Record<SerializedUnitType, Constructor<AnyUnit>> = {

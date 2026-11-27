@@ -6,6 +6,7 @@ export enum Science {
 	Elf = "elf",
 	Dwarf = "dwarf",
 	Witchcraft = "witchcraft",
+	Trap = "trap",
 }
 
 // The sciences a piece grants to the army that owns it.

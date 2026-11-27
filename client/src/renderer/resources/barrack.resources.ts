@@ -31,6 +31,16 @@ export class BarrackResources {
 		shape: "rectangle",
 	};
 
+	// Placeholder art (flat pink), one cell wide and two tall
+	static huntersAcademy: ShapedResource = {
+		size: {
+			width: 4.9,
+			height: 9.8,
+		},
+		image: createImage("/resources/barracks/hunters-academy.png"),
+		shape: "rectangle",
+	};
+
 	static veterant: ShapedResource = {
 		size: {
 			width: 5,
