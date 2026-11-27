@@ -10,11 +10,13 @@ import { BoardOrientation } from "../../../../../shared/traits/engine/core/board
 import { BattleStartTrigger } from "../../../../../shared/traits/engine/battle-start";
 import { implementsTrait } from "@ddd-ts/traits";
 import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
-import type { Buff } from "../../../../army/battle/army-buff";
+import type { TowerBuff, UnitBuff } from "../../../../army/battle/army-buff";
 import { BattleBarrack } from "../../../barrack/battle/battle-barrack";
 import type { AnyBattleUnit } from "../../../../units/battle/battle-unit";
 
-export const SACRIFICE_BUFF_POOL: readonly { side: "unit" | "tower"; buff: Buff }[] = [
+type SacrificeBuff = { side: "unit"; buff: UnitBuff } | { side: "tower"; buff: TowerBuff };
+
+export const SACRIFICE_BUFF_POOL: readonly SacrificeBuff[] = [
 	{ side: "unit", buff: "movement-speed" },
 	{ side: "unit", buff: "vitality" },
 	{ side: "tower", buff: "projectile-damage" },
@@ -84,9 +86,9 @@ export class BattleButchery extends Derive(CasterTotem, HTSynergy, TStatsRendera
 		if (victim) {
 			victim.die();
 			for (let i = 0; i < this.butchery.blueprint.buffsPerSacrifice; i++) {
-				const { side, buff } = SACRIFICE_BUFF_POOL[this.pickIndex(SACRIFICE_BUFF_POOL.length)]!;
-				if (side === "unit") this.hooks.alliedArmyBuffHooks.addUnitBuff(buff as never);
-				else this.hooks.alliedArmyBuffHooks.addTowerBuff(buff as never);
+				const drawn = SACRIFICE_BUFF_POOL[this.pickIndex(SACRIFICE_BUFF_POOL.length)]!;
+				if (drawn.side === "unit") this.hooks.alliedArmyBuffHooks.addUnitBuff(drawn.buff);
+				else this.hooks.alliedArmyBuffHooks.addTowerBuff(drawn.buff);
 			}
 		}
 		this.finishCast();
