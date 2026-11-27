@@ -57,12 +57,12 @@ const forestAt = (x: number, y: number): Placed => ({
 describe("Hunter's Academy", () => {
 	const blueprint = new HuntersAcademyBlueprint({});
 
-	it("is an Uncommon barrack at 15 gold, with a 0.8 cast speed", () => {
+	it("is an Uncommon barrack at 15 gold, with a 0.85 cast speed", () => {
 		expect(blueprint.rarity).toBe(Rarity.Uncommon);
 		expect(blueprint.price).toBe(15);
-		expect(blueprint.stats.castSpeed).toBe(0.8);
+		expect(blueprint.stats.castSpeed).toBe(0.85);
 		expect(blueprint.tags).toContain("Barrack");
-		expect(new HuntersAcademy(academyCell).stats.castSpeed).toBe(0.8);
+		expect(new HuntersAcademy(academyCell).stats.castSpeed).toBe(0.85);
 	});
 
 	it("has two cells and six stars around them, corners left out", () => {

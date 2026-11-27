@@ -147,7 +147,7 @@ Every barrack has a pattern around its footprint on its sides, corners left out 
 | Basic Barrack | Common | 10 | One unit at a time. |
 | Wave Barrack | Uncommon | 10 | Units come out 3 at a time. |
 | Veteran Barrack | Epic | 10 | Slower (×0.6). Summons a giant version of its unit: slower, much more health. |
-| Hunter's Academy | Uncommon | 15 | Grants the Trap science. Two cells tall (`o / o`), with six stars: one above, one below and two on each side (`xsx / sos / sos / xsx`). Slower (×0.8). Instead of the other barracks' rule it gains +5% cast speed per barrack of another name on its stars and +10% per Forest (a piece that is both counts for both; a piece covering several stars counts once), counted at battle start. Placeholder sprite. |
+| Hunter's Academy | Uncommon | 15 | Grants the Trap science. Two cells tall (`o / o`), with six stars: one above, one below and two on each side (`xsx / sos / sos / xsx`). Slower (×0.85). Instead of the other barracks' rule it gains +5% cast speed per barrack of another name on its stars and +10% per Forest (a piece that is both counts for both; a piece covering several stars counts once), counted at battle start. Placeholder sprite. |
 | Rush Barrack | Common | 15 | Two cells wide (`oo`). Faster (×1.2). Each unit it summons eats +0.4 food more at its 2 s upkeep for as long as it lives (a permanent buff on its upkeep, no icon); short of food, it goes hungry like any unit. |
 
 ### Units
