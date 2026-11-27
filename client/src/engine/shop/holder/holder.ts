@@ -40,7 +40,7 @@ export class Holder {
 	}
 
 	setHoldFromRetail(buyable: Buyable, retail: Retail, position: ScreenPosition, hooks: ShopPhaseHooks) {
-		retail.removeItem(buyable);
+		retail.hold(buyable);
 		const onAbort = () => {
 			retail.addItem(buyable);
 			this.setNull();

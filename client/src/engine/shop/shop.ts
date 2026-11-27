@@ -1,3 +1,4 @@
+import { OfferSlotSignHud } from "../../shared/hud-element/entity-hud/offer-slot-sign-hud";
 import { rarityOdds } from "./retail/rarity-odds";
 import { RarityOddsHud } from "../../shared/hud-element/rarity-odds-hud";
 import { ReserveSignHud } from "../../shared/hud-element/reserve-sign-hud";
@@ -141,7 +142,11 @@ export class ShopPhase {
 				},
 				{
 					grid: this.retail.grid,
-					drawables: this.retail.reservedOffers().map((buyable) => new ReservedSignHud(buyable)),
+					drawables: [
+						...this.retail.reservedOffers().map((buyable) => new ReservedSignHud(buyable)),
+						...(this.retail.held ? [new OfferSlotSignHud(this.retail.held.cell, this.retail.held)] : []),
+						...this.retail.soldOffers().map(({ cell, price }) => new OfferSlotSignHud(cell, undefined, price)),
+					],
 				},
 			],
 			renderables: [

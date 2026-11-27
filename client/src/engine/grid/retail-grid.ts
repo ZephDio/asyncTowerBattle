@@ -122,7 +122,7 @@ export class RetailGrid extends Derive(TRenderable, TGrid, TGridDrawable) {
 				x: position.x + (anchor.x / STANDARD_CELL_SIZE) * tileSize,
 				y: position.y - (anchor.y / STANDARD_CELL_SIZE) * tileSize,
 			};
-			const sign = this.tiles.get(ArmyGrid.posToString(slot))
+			const sign = this.sites.has(ArmyGrid.posToString(slot))
 				? {
 						left: center.x - SIGN.halfWidth * tileSize,
 						right: center.x + SIGN.halfWidth * tileSize,
