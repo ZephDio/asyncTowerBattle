@@ -77,12 +77,12 @@ export class BattleButchery extends Derive(CasterTotem, HTSynergy, TStatsRendera
 		return animals[this.pickIndex(animals.length)];
 	}
 
-	// The sacrifice leaves the battle like a unit reaching the castle: no on-death effect, no damage, no refund.
+	// The victim dies through its own death effect (as with the Red Obelisk): no castle damage, no gold, no refund.
 	// With no animal alive nothing happens and the timer starts over.
 	onCastResolve() {
 		const victim = this.victim();
 		if (victim) {
-			this.hooks.removeUnit(victim);
+			victim.die();
 			for (let i = 0; i < this.butchery.blueprint.buffsPerSacrifice; i++) {
 				const { side, buff } = SACRIFICE_BUFF_POOL[this.pickIndex(SACRIFICE_BUFF_POOL.length)]!;
 				if (side === "unit") this.hooks.alliedArmyBuffHooks.addUnitBuff(buff as never);
