@@ -321,8 +321,13 @@ def build_annex(grid: VoxelGrid) -> None:
     # A flat stone roof behind a crenellated parapet, like the Dwarf castle's gatehouse
     grid.box(x0 - 1, x1 + 1, y0 - 1, y1 + 1, ANNEX_WALL - 3, ANNEX_WALL, QUOIN_LABEL)
     grid.box(x0 + 2, x1 - 2, y0 + 2, y1 - 2, ANNEX_WALL - 1, ANNEX_WALL, SLATE_LABEL)
+    # Battlements on all four sides, like the hall's
     for mx in range(x0 - 1, x1 + 1, 10):
-        grid.box(mx, min(mx + 6, x1 + 1), y0 - 1, y0 + 2, ANNEX_WALL, ANNEX_WALL + 5, QUOIN_LABEL)
+        for my in (y0 - 1, y1 - 2):
+            grid.box(mx, min(mx + 6, x1 + 1), my, my + 3, ANNEX_WALL, ANNEX_WALL + 5, QUOIN_LABEL)
+    for my in range(y0 + 5, y1 - 2, 10):
+        for mx in (x0 - 1, x1 - 2):
+            grid.box(mx, mx + 3, my, min(my + 6, y1 - 2), ANNEX_WALL, ANNEX_WALL + 5, QUOIN_LABEL)
     for qx in (x0 - 1, x1 - 5):
         for z in range(FOOTING_HEIGHT, ANNEX_WALL, 8):
             grid.box(qx, qx + 6, y0 - 1, y0, z, z + 7, QUOIN_LABEL)
