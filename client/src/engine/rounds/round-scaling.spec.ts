@@ -6,10 +6,10 @@ import { MAX_ROUNDS } from "../game-rules";
 import { CASTLE_LIFE_BY_ROUND, MAX_FOOD_BY_ROUND, castleLife, maxFood } from "./round-scaling";
 
 describe("round scaling", () => {
-	it("has one value per round, rising from 20 life and 100 food to 250 life and 300 food", () => {
+	it("has one value per round, rising from 25 life and 100 food to 250 life and 300 food", () => {
 		expect(CASTLE_LIFE_BY_ROUND).toHaveLength(MAX_ROUNDS);
 		expect(MAX_FOOD_BY_ROUND).toHaveLength(MAX_ROUNDS);
-		expect([castleLife(1), castleLife(2), castleLife(MAX_ROUNDS)]).toEqual([20, 30, 250]);
+		expect([castleLife(1), castleLife(2), castleLife(MAX_ROUNDS)]).toEqual([25, 30, 250]);
 		expect([maxFood(1), maxFood(2), maxFood(MAX_ROUNDS)]).toEqual([100, 115, 300]);
 		for (let round = 2; round <= MAX_ROUNDS; round++) {
 			expect(castleLife(round)).toBeGreaterThan(castleLife(round - 1));
@@ -24,7 +24,7 @@ describe("round scaling", () => {
 
 	it.each([Faction.Elf, Faction.Dwarf])("gives the %s army the life and food of the round", (faction) => {
 		const army = ArmyFactory.default(faction);
-		expect([army.castle.maxHealth, army.foodEconomy.maxFood]).toEqual([20, 100]);
+		expect([army.castle.maxHealth, army.foodEconomy.maxFood]).toEqual([25, 100]);
 
 		army.setRound(MAX_ROUNDS);
 
