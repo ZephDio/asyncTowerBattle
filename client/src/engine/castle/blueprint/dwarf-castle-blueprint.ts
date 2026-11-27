@@ -13,7 +13,11 @@ import { CastleTag } from "../../../shared/traits/engine/tags/building/building-
 
 export class DwarfCastleBlueprint extends Derive(
 	TRarity(Rarity.Common),
-	TImageDrawable(CastleResources.dwarfBoardLeft.image, CastleResources.dwarfBoardLeft.size, DrawPriority.NormalGridElement),
+	TImageDrawable(
+		CastleResources.dwarfBoardLeft.image,
+		CastleResources.dwarfBoardLeft.size,
+		DrawPriority.NormalGridElement,
+	),
 	TDescriptor,
 	THitbox(new HitBox([[new Rectangle({ width: 5, height: 5 }), new GridPosition({ x: 0, y: 0 })]])),
 	TBaseStats({
