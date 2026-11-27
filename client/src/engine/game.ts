@@ -195,6 +195,7 @@ export class Game {
 	}
 
 	openShop() {
+		this.army.setRound(this.rounds.round);
 		this.shop = new ShopPhase(
 			this.army,
 			this.handleShopQuit.bind(this),
@@ -243,6 +244,8 @@ export class Game {
 	}
 
 	startBattle({ army, randomSeed, playerName }: Opponent) {
+		this.army.setRound(this.rounds.round);
+		army.setRound(this.rounds.round);
 		this.battle = new Battle(
 			this.army,
 			army,

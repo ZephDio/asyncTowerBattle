@@ -22,7 +22,7 @@ export class BattleElfCastle extends Derive(TBattleCastle, TImageVariant) {
 			imageDrawable: recruit,
 			hitboxHolder: recruit,
 			casterRecruit: recruit,
-			maxHealth: recruit.stats.health,
+			maxHealth: recruit.maxHealth,
 			castleDamage: recruit.stats.castleDamage,
 			projectileDamage: recruit.stats.projectileDamage,
 			movementSpeed: recruit.stats.speed,

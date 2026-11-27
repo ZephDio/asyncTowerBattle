@@ -6,6 +6,7 @@ import { Unit } from "../units/recruit/unit";
 import { AnyRecruit, TRecruit } from "../../shared/traits/engine/recruit";
 import { TGrid } from "../grid/tgrid";
 import { PathNetwork } from "../path/army/path-network";
+import { castleLife } from "../rounds/round-scaling";
 import { ArmyFoodEconomy } from "../food/food-economy";
 import { ArmyGoldEconomy, EconomyHooks } from "../gold/army-gold-economy";
 import { ShopEnterTrigger } from "../../shared/traits/engine/shop-enter";
@@ -31,6 +32,12 @@ export class Army {
 		public foodEconomy = new ArmyFoodEconomy(),
 		public goldEconomy = new ArmyGoldEconomy(),
 	) {}
+
+	// The castle's life and the max food of the round being played, for this army and for an opponent's alike.
+	setRound(round: number) {
+		this.castle.maxHealth = castleLife(round);
+		this.foodEconomy.setRound(round);
+	}
 
 	isValidDestinationCell(cell: Cell) {
 		const cellString = ArmyGrid.posToString(cell);

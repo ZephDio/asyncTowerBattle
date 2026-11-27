@@ -119,7 +119,7 @@ export class ArmyHud extends Derive(
 		context.strokeStyle = OUTLINE;
 		context.fillStyle = TEXT;
 		const army = this.army;
-		const rows = [`❤ ${Math.round(army.castle.stats.health)}`, `🌽 ${Math.round(army.foodEconomy.maxFood)}`];
+		const rows = [`❤ ${Math.round(army.castle.maxHealth)}`, `🌽 ${Math.round(army.foodEconomy.maxFood)}`];
 		rows.forEach((row, index) => {
 			this.drawText(context, row, center.x, top + (PADDING + ROW * (index + 0.5)) * unit, unit * 2.2, unit);
 		});

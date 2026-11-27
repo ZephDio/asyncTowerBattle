@@ -11,10 +11,13 @@ import { AnyBattleCastle } from "../battle";
 import { BoardOrientation } from "../../../shared/traits/engine/core/board-orientation";
 import { HTGrantsScience } from "../../../shared/traits/engine/science";
 import { castleGeometry } from "../castle-geometry";
+import { castleLife } from "../../rounds/round-scaling";
 
 export const Castle = Subtrait([TRecruit, RecruitCaster, HTBaseStats, HTGrantsScience], (base) => {
 	abstract class ICastle extends base {
 		layout = DWARF_CASTLE_LAYOUT;
+		// The castle's life in battle: it grows with the round (see rounds/round-scaling.ts), set by Army.setRound.
+		maxHealth: number = castleLife(1);
 		abstract toAllied(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): AnyBattleCastle;
 		abstract toEnemy(grid: BattleGrid, onDeath: () => void, foodHooks: FoodHooks): AnyBattleCastle;
 
