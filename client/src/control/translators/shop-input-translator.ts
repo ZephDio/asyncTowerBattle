@@ -25,6 +25,7 @@ import { SciencePanel } from "../../shared/hud-element/science-panel";
 export class ShopInputToIntentTranslator {
 	handle(screenPosition: ScreenPosition, eventType: MouseEventType, shop: ShopPhase) {
 		shop.signHovered = shop.sign.contains(screenPosition);
+		if (eventType === "move") shop.retail.grid.setHoveredElement(null);
 		if (this.handleSciences(screenPosition, eventType, shop)) return;
 		const state = shop.getState();
 		if (eventType === "move" && !shop.holderControl.hold && shop.army.grid.isOverCastle(screenPosition)) {
@@ -182,6 +183,7 @@ export class ShopInputToIntentTranslator {
 				return;
 			}
 			if (focus.element) {
+				focus.grid.setHoveredElement(focus.element);
 				if (implementsTrait(focus.element, TDescriptor)) {
 					shop.setDescriptionHud(new DescriptionHud(focus.element));
 				}

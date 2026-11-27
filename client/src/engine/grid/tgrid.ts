@@ -33,8 +33,8 @@ export const TGrid = Trait((base) => {
 		// Drawn brighter while hovered, instead of lighting its cells (TRenderable.render).
 		hoveredElement: ImplementsTrait<typeof GridElement> | null = null;
 
-		setHoveredElement(element: ImplementsTrait<typeof GridElement>) {
-			this.hoverEffect = [];
+		setHoveredElement(element: ImplementsTrait<typeof GridElement> | null) {
+			if (element) this.hoverEffect = [];
 			this.hoveredElement = element;
 		}
 

@@ -4,7 +4,7 @@ import { Cell, GridPosition, ScreenPosition } from "../../position";
 import { STANDARD_CELL_SIZE, TGrid } from "../../../engine/grid/tgrid";
 import { TSizable } from "../engine/core/sizable";
 
-const HOVERED_FILTER = "brightness(1.35)";
+const HOVERED_FILTER = "brightness(1.25)";
 
 export const TRenderable = Subtrait([TDrawable], (base) => {
 	abstract class IRenderable extends base {
