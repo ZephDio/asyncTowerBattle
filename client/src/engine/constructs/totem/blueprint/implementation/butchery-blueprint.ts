@@ -11,7 +11,7 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { CAST_TIME, CasterDescription, TDescriptor } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { DrawPriority, EnemyRender, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { STANDARD_CELL_SIZE } from "../../../../grid/tgrid";
-import { TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
+import { FoodTag, TotemTag } from "../../../../../shared/traits/engine/tags/building/building-tags";
 import { TSynergy } from "../../../../../shared/traits/engine/synergy";
 import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { TBaseStats } from "../../../../stats/base-stats";
@@ -57,8 +57,10 @@ export class ButcheryBlueprint extends Derive(
 		range: NaN,
 	}),
 	TotemTag,
+	FoodTag,
 ) {
 	readonly buffsPerSacrifice = 3;
+	readonly foodPerSacrifice = 5;
 	// Added to the production speed of a barrack on the star that summons an Animal, on top of its own value (1.2 -> 1.3).
 	readonly productionSpeedBonus = 0.1;
 
@@ -76,8 +78,8 @@ export class ButcheryBlueprint extends Derive(
 		[
 			`Every ${CAST_TIME} seconds :`,
 			"sacrifice a random ally",
-			"animal, the army gains",
-			"3 random buffs",
+			"animal: +5🌽 and the army",
+			"gains 3 random buffs",
 			"",
 			"+0.1 production speed",
 			"for an animal barrack on ▣",
