@@ -123,6 +123,19 @@ describe("Butchery", () => {
 	});
 
 	describe("star", () => {
+		it("lights only for a barrack holding an Animal unit, in the shop", () => {
+			const lights = (unit: Fox | Ent | null) => {
+				const recruit = new RushBarrack(at(4, 3));
+				recruit.setUnit(unit);
+				return blueprint.patternCondition(recruit);
+			};
+			expect(lights(new Fox(at(0, 0)))).toBe(true);
+			expect(lights(new Ent(at(0, 0)))).toBe(false);
+			expect(lights(null)).toBe(false);
+			expect(blueprint.patternCondition(new Ent(at(4, 3)) as never)).toBe(false);
+			expect(blueprint.patternCondition(undefined)).toBe(false);
+		});
+
 		// A real Rush barrack (production speed 1.2) bonded to a Fox, or to an Ent when it is not an animal.
 		const barrack = (animal: boolean, hooks: BattleArmyHooks) => {
 			const recruit = new RushBarrack(at(4, 3));

@@ -56,8 +56,12 @@ export class ButcheryBlueprint extends Derive(
 	// Added to the production speed of a barrack on the star that summons an Animal, on top of its own value (1.2 -> 1.3).
 	readonly productionSpeedBonus = 0.1;
 
-	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) =>
-		gridElement !== undefined && hasTag(gridElement, "Barrack");
+	// A barrack (in the shop or in battle) whose unit, the one put on it or else the army's default, is an Animal.
+	patternCondition = (gridElement: ImplementsTrait<typeof GridElement> | undefined) => {
+		if (!gridElement || !hasTag(gridElement, "Barrack") || !("bondedUnit" in gridElement)) return false;
+		const unit = gridElement.bondedUnit;
+		return typeof unit === "object" && unit !== null && hasTag(unit, "Animal");
+	};
 
 	override patternEffect = new PatternEffect([new Cell({ x: 1, y: 0 })], this.patternCondition.bind(this));
 

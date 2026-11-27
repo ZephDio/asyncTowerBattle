@@ -62,7 +62,7 @@ export class BattleButchery extends Derive(CasterTotem, HTSynergy, TStatsRendera
 			this.cell,
 			this.patternEffect.getRelativeCells(this.orientation),
 		);
-		if (neighbor && implementsTrait(neighbor, BattleBarrack) && hasTag(neighbor.bondedUnit, "Animal")) {
+		if (neighbor && implementsTrait(neighbor, BattleBarrack) && this.patternEffect.patternCondition(neighbor)) {
 			neighbor.stats.flatStat.castSpeed += this.butchery.blueprint.productionSpeedBonus;
 		}
 	}
