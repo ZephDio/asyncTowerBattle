@@ -103,6 +103,7 @@ export class Retail extends Derive(
 	async refresh() {
 		this.grid.clearOffers();
 		this.soldSlots.clear();
+		this.held = null;
 		const reserved = this.reservations.all();
 		const items = await this.getRetailItems(this.slots.filter((slot) => !this.reservations.isSlotReserved(slot)));
 		await this.fill([...reserved, ...items]);
