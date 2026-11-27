@@ -94,7 +94,8 @@ export const TImageDrawable = (
 					this.drawImage(context, size, canvasPosition, variant.image, variant.theta);
 					return;
 				}
-				const enemyImage = implementsTrait(this, TBoardOriented) && this.mirrored ? this.drawable.enemyImage : undefined;
+				const enemyImage =
+					implementsTrait(this, TBoardOriented) && this.mirrored ? this.drawable.enemyImage : undefined;
 				this.drawImage(context, size, canvasPosition, enemyImage ?? this.drawable.image, this.getImageAngle());
 			}
 		}
