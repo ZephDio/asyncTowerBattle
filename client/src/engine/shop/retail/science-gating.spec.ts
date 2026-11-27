@@ -4,6 +4,7 @@ import { ArmyFactory } from "../../army/army-fixtures";
 import { Faction } from "../../menu/main-menu";
 import { CastleFactory } from "../../castle/recruit/castle-recruit-fixtures";
 import { ForestCabinBlueprint } from "../../constructs/tower/blueprint/implementation/forest-cabin-blueprint";
+import { BosquetBlueprint } from "../../constructs/totem/blueprint/implementation/bosquet-blueprint";
 import { CauldronBlueprint } from "../../constructs/totem/blueprint/implementation/cauldron-blueprint";
 import { StonemasonBlueprint } from "../../constructs/totem/blueprint/implementation/stonemason-blueprint";
 import { Science } from "../../../shared/traits/engine/science";
@@ -16,11 +17,22 @@ const offeredCabin = (sciences: ReadonlySet<Science>) =>
 		.candidates()
 		.some(({ blueprint }) => blueprint instanceof ForestCabinBlueprint);
 
+const offeredBosquet = (sciences: ReadonlySet<Science>) =>
+	new RetailFiller(1, Math.random, sciences)
+		.candidates()
+		.some(({ blueprint }) => blueprint instanceof BosquetBlueprint);
+
 describe("sciences", () => {
-	it("keeps the Forest Cabin out of the shop until the army holds the Elf science", () => {
-		expect(offeredCabin(new Set())).toBe(false);
-		expect(offeredCabin(new Set([Science.Dwarf]))).toBe(false);
+	it("offers the Forest Cabin to every army", () => {
+		expect(offeredCabin(new Set())).toBe(true);
+		expect(offeredCabin(new Set([Science.Dwarf]))).toBe(true);
 		expect(offeredCabin(new Set([Science.Elf]))).toBe(true);
+	});
+
+	it("keeps the Bosquet out of the shop until the army holds the Elf science", () => {
+		expect(offeredBosquet(new Set())).toBe(false);
+		expect(offeredBosquet(new Set([Science.Dwarf]))).toBe(false);
+		expect(offeredBosquet(new Set([Science.Elf]))).toBe(true);
 	});
 
 	it("keeps the Stonemason out of the shop until the army holds the Dwarf science", () => {
@@ -47,7 +59,7 @@ describe("sciences", () => {
 		const slots = Array.from({ length: 8 }, (_, index) => new Cell({ x: index, y: 0 }));
 		for (let round = 1; round <= 16; round++) {
 			const offers = new RetailFiller(round).getFreshItems(slots);
-			expect(offers.some(({ recruit }) => recruit.constructor.name === "ForestCabin")).toBe(false);
+			expect(offers.some(({ recruit }) => recruit.constructor.name === "Bosquet")).toBe(false);
 		}
 	});
 

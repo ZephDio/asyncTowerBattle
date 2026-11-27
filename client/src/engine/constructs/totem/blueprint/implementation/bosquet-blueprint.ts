@@ -17,6 +17,7 @@ import { PatternEffect } from "../../../../pattern-effect/pattern-effect";
 import { TBaseStats } from "../../../../stats/base-stats";
 import { castSpeedFromSeconds } from "../../../../../shared/seconds";
 import { TotemResources } from "../../../../../renderer/resources/totem.resources";
+import { Science, TRequiresScience } from "../../../../../shared/traits/engine/science";
 import { Bosquet } from "../../recruit/implementation/bosquet";
 
 // xsx
@@ -25,6 +26,7 @@ import { Bosquet } from "../../recruit/implementation/bosquet";
 export class BosquetBlueprint extends Derive(
 	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
+	TRequiresScience(Science.Elf),
 	THitbox(
 		new HitBox([
 			[new Rectangle({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE }), new GridPosition({ x: 0, y: 0 })],

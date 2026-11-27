@@ -7,7 +7,6 @@ import { Cell, GridPosition } from "../../../../../shared/position";
 import { DrawPriority, TImageDrawable } from "../../../../../shared/traits/render/image-drawable";
 import { Bullet } from "../../../../projectile/blueprint/implementation/bullet";
 import { ForestCabin } from "../../recruit/implementation/forest-cabin";
-import { Science, TRequiresScience } from "../../../../../shared/traits/engine/science";
 import { TShopBlueprint } from "../../../../../shared/traits/engine/shop-blueprint";
 import { TDescriptor, TowerDescription } from "../../../../../shared/traits/render/huds/item-descriptor";
 import { TBaseStats } from "../../../../stats/base-stats";
@@ -26,7 +25,6 @@ import { hasTag } from "../../../../../shared/traits/engine/tags/tagged";
 export class ForestCabinBlueprint extends Derive(
 	TRarity(Rarity.Common),
 	TShopBlueprint(10, 10),
-	TRequiresScience(Science.Elf),
 	THitbox(
 		new HitBox([
 			[new Rectangle({ width: STANDARD_CELL_SIZE, height: STANDARD_CELL_SIZE }), new GridPosition({ x: 0, y: 0 })],
@@ -51,7 +49,7 @@ export class ForestCabinBlueprint extends Derive(
 	ForestTag,
 	TTargeting,
 ) {
-	readonly castSpeedPercentPerForest = 10;
+	readonly multiShotPerForest = 1;
 	readonly slowPercent = 50;
 	readonly slowSeconds = 2;
 
@@ -77,7 +75,7 @@ export class ForestCabinBlueprint extends Derive(
 			`Hit enemies are ${this.slowPercent}%`,
 			`slower for ${this.slowSeconds}s`,
 			"",
-			`Cast ${this.castSpeedPercentPerForest}% faster`,
+			`+${this.multiShotPerForest} multi-shot`,
 			"for each ▣ forest",
 		],
 		this,
