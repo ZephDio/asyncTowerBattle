@@ -21,6 +21,7 @@ export function getRelativePositionPercent(position: ScreenPosition, size: Size,
 
 export class CanvasRenderer implements Renderer {
 	public context: CanvasRenderingContext2D;
+	private stopped = false;
 	constructor(
 		public gameWrap: GameWrapper,
 		public container: HTMLElement,
@@ -64,8 +65,6 @@ export class CanvasRenderer implements Renderer {
 		this.context.fillStyle = "#A65";
 		this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	}
-
-	private stopped = false;
 
 	// Ends the draw loop; a frame already waiting does not draw again.
 	stop() {
