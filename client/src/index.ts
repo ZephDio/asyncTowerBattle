@@ -5,16 +5,25 @@ import { CanvasRenderer } from "./renderer/implementation/canvas-renderer";
 import { installDebugBridge } from "./debug/bridge";
 import { DEBUG_BRIDGE } from "./debug/debug-flag";
 
-// Returns the page shell's link to the game.
-export function startGame(container: HTMLElement, canvas: HTMLCanvasElement): GameLink {
+export type RunningGame = { link: GameLink; stop: () => void };
+
+// Returns the page shell's link to the game and what ends it: the draw loop, the input listeners and the debug bridge.
+export function startGame(container: HTMLElement, canvas: HTMLCanvasElement): RunningGame {
 	const gameWrap = new GameWrapper();
 	const renderer = new CanvasRenderer(gameWrap, container, canvas);
 	const inputToIntent = new InputToIntent(gameWrap);
-	new MouseEventHandler(renderer, inputToIntent);
-	if (DEBUG_BRIDGE) installDebugBridge(gameWrap, renderer);
+	const mouse = new MouseEventHandler(renderer, inputToIntent);
+	const removeBridge = DEBUG_BRIDGE ? installDebugBridge(gameWrap, renderer) : undefined;
 	renderer.init();
 	return {
-		send: (intent) => inputToIntent.handleIntent(intent),
-		onTutorialChange: (listener) => gameWrap.onTutorialChange(listener),
+		link: {
+			send: (intent) => inputToIntent.handleIntent(intent),
+			onTutorialChange: (listener) => gameWrap.onTutorialChange(listener),
+		},
+		stop: () => {
+			renderer.stop();
+			mouse.dispose();
+			removeBridge?.();
+		},
 	};
 }

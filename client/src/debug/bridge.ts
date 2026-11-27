@@ -487,6 +487,12 @@ export class DebugBridge {
 	}
 }
 
+// Returns the removal of the bridge, which leaves a bridge installed since by another game alone.
 export function installDebugBridge(wrap: GameWrapper, renderer: CanvasRenderer) {
-	(window as unknown as { __atb: DebugBridge }).__atb = new DebugBridge(wrap, renderer);
+	const target = window as unknown as { __atb?: DebugBridge };
+	const bridge = new DebugBridge(wrap, renderer);
+	target.__atb = bridge;
+	return () => {
+		if (target.__atb === bridge) delete target.__atb;
+	};
 }

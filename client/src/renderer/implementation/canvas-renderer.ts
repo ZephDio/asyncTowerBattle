@@ -21,6 +21,7 @@ export function getRelativePositionPercent(position: ScreenPosition, size: Size,
 
 export class CanvasRenderer implements Renderer {
 	public context: CanvasRenderingContext2D;
+	private stopped = false;
 	constructor(
 		public gameWrap: GameWrapper,
 		public container: HTMLElement,
@@ -65,15 +66,23 @@ export class CanvasRenderer implements Renderer {
 		this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 
+	// Ends the draw loop; a frame already waiting does not draw again.
+	stop() {
+		this.stopped = true;
+	}
+
 	init() {
 		const render = async () => {
+			if (this.stopped) return;
 			const before = new Date();
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			this.sizeGame();
 			await this.draw();
+			if (this.stopped) return;
 			const after = new Date();
 			const diff = after.getTime() - before.getTime();
 			await new Promise((res: any) => setTimeout(() => res(), 15 - diff));
+			if (this.stopped) return;
 			window.requestAnimationFrame(render);
 		};
 		render();
