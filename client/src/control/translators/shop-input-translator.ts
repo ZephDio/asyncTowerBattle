@@ -267,6 +267,7 @@ export class ShopInputToIntentTranslator {
 		this.clearHover(shop);
 		const element = panel.elementAt(screenPosition);
 		if (!element) {
+			panel.clearHover();
 			shop.setDescriptionHud(null);
 			return;
 		}
