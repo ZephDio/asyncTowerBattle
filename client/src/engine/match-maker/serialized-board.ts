@@ -29,7 +29,7 @@ export type SerializedTotemType =
 	| "butchery"
 	| "powder-magazine"
 	| "windmill";
-export type SerializedBarrackType = "basic" | "rush" | "veterant" | "wave";
+export type SerializedBarrackType = "basic" | "rush" | "veterant" | "wave" | "hunters-academy";
 export type SerializedUnitType =
 	| "brewmaster"
 	| "choupisson"

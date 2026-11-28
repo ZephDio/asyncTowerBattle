@@ -9,6 +9,8 @@ import { TowerBuilder } from "../constructs/tower/recruit/tower-fixtures";
 import { Unit } from "../units/recruit/unit";
 import { Cauldron } from "../constructs/totem/recruit/implementation/cauldron";
 import { Butchery } from "../constructs/totem/recruit/implementation/butchery";
+import { HuntersAcademy } from "../constructs/barrack/recruit/implementation/hunters-academy";
+import { Science } from "../../shared/traits/engine/science";
 import { Stonemason } from "../constructs/totem/recruit/implementation/stonemason";
 
 const rounds = GRID_GROWTH_CYCLE.map((_, index) => index + 1);
@@ -85,6 +87,33 @@ describe("board serializer", () => {
 
 		expect(board.elements.some((element) => element.kind === "totem" && element.type === "cauldron")).toBe(true);
 		expect(opponent.army.grid.getRecruits().map((recruit) => recruit.constructor.name)).toContain("Cauldron");
+	});
+
+	it("serializes and rebuilds a hunter's academy under its own type", () => {
+		const { army, randomSeed } = LocalMatchMaker.board(4);
+		army.grid.setElement(new HuntersAcademy(new Cell({ x: 0, y: 0 })));
+		const board = serializeBoard(army, 4, randomSeed);
+
+		const opponent = deserializeBoard(JSON.parse(JSON.stringify(board)));
+
+		expect(board.elements.some((element) => element.kind === "barrack" && element.type === "hunters-academy")).toBe(
+			true,
+		);
+		expect(opponent.army.grid.getRecruits().map((recruit) => recruit.constructor.name)).toContain("HuntersAcademy");
+	});
+
+	it("still loads a board holding traps, though the army has no Trap science", () => {
+		const { army, randomSeed } = LocalMatchMaker.board(4);
+		const board = serializeBoard(army, 4, randomSeed);
+		const [first, second] = board.elements.filter((element) => element.kind === "path");
+		if (first?.kind !== "path" || second?.kind !== "path") throw new Error("The round 4 board has no path");
+		first.trap = "slowing";
+		second.trap = "stun";
+
+		const opponent = deserializeBoard(JSON.parse(JSON.stringify(board)));
+
+		expect(opponent.army.sciences.has(Science.Trap)).toBe(false);
+		expect(serializeBoard(opponent.army, 4, opponent.randomSeed)).toEqual(board);
 	});
 
 	it("knows every unit the shop sells", () => {

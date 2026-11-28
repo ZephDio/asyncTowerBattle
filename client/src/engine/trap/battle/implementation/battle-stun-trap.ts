@@ -26,7 +26,7 @@ export class BattleStunTrap extends Derive(
 	HTRarity,
 ) {
 	didTrigger = false;
-	cooldown = secondsToFrame(3);
+	cooldown = secondsToFrame(4.5);
 	clock = 0;
 
 	action = null as null | Action;

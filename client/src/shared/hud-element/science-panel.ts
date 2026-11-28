@@ -14,6 +14,7 @@ export const SCIENCE_NAMES: Record<Science, string> = {
 	[Science.Elf]: "Elf",
 	[Science.Dwarf]: "Dwarf",
 	[Science.Witchcraft]: "Witchcraft",
+	[Science.Trap]: "Trap",
 };
 
 // Screen units. The scroll covers the left of the shop, up to the reserve, which stays visible with the ribbon and

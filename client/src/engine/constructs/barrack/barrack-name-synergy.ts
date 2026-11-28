@@ -38,3 +38,30 @@ export const barrackNameCastSpeedPercent = (
 	ownName: string,
 	neighbors: (ImplementsTrait<typeof GridElement> | undefined)[],
 ) => countBarrackNames(ownName, neighbors) * BARRACK_NAME_CAST_SPEED_PERCENT;
+
+export const HUNTERS_ACADEMY_FOREST_CAST_SPEED_PERCENT = 10;
+
+// The cells around a vertical two cell barrack (anchored on its bottom cell): the six cells touching its sides.
+//   xsx
+//   sos
+//   sos
+//   xsx
+export const SURROUNDING_CELLS_1X2 = () => cells([0, 2], [-1, 0], [-1, 1], [1, 0], [1, 1], [0, -1]);
+
+export const isForest = (element: ImplementsTrait<typeof GridElement> | undefined) =>
+	element !== undefined && hasTag(element, "Forest");
+
+// A piece covering several star cells is counted once.
+const distinct = <T>(elements: (T | undefined)[]) => [...new Set(elements.filter((element) => element !== undefined))];
+
+// 5% per barrack of another name, and 10% per Forest, on the stars. A piece that is both counts for both.
+export const huntersAcademyCastSpeedPercent = (
+	ownName: string,
+	neighbors: (ImplementsTrait<typeof GridElement> | undefined)[],
+) => {
+	const pieces = distinct(neighbors);
+	return (
+		barrackNameCastSpeedPercent(ownName, pieces) +
+		pieces.filter(isForest).length * HUNTERS_ACADEMY_FOREST_CAST_SPEED_PERCENT
+	);
+};

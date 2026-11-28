@@ -31,6 +31,16 @@ export class BarrackResources {
 		shape: "rectangle",
 	};
 
+	// 110x253 image, one cell wide and two tall: the basic barracks' scale and ground row on the bottom cell
+	static huntersAcademy: ShapedResource = {
+		size: {
+			width: 4.9,
+			height: 11.27,
+		},
+		image: createImage("/resources/barracks/hunters-academy.png"),
+		shape: "rectangle",
+	};
+
 	static veterant: ShapedResource = {
 		size: {
 			width: 5,
