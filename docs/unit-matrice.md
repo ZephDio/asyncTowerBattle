@@ -27,7 +27,7 @@ These facts come from the current code and drive the numbers below.
 - **Units do not fight units.** A unit walks the enemy path. Towers shoot it. If it reaches the castle, it deals its `damage` once and dies. **Life** means surviving towers, and **damage** means castle damage. Castles have 20 HP (elf) or 25 HP (dwarf).
 - **Barrack cost is the unit's `summonTime`**, so summon time sets throughput.
 - **Food**: each army starts at 100🌽 (full). Every 2 s, each unit eats `foodConsumption`: if there is food, it heals 1. If not, it takes growing hunger damage (2, 4, 6…). The castle produces 5🌽/s (dwarf and elf), so about 10🌽 per 2 s tick. That sustains roughly 10 units at 1🌽 upkeep. A rush spends the 100🌽 buffer, and a food war attacks it.
-- **Fury** starts at 20 s and triggers every 2 s. Each trigger adds the next step (1, 2, 3…), so the total is triangular: 1, 3, 6, 10, 15… and 55 at 38 s. A unit receives the current fury **when it spawns**, as +X% max health and +X% movement speed. Two consequences:
+- **Fury** starts at 30 s and triggers every 3 s. Each trigger adds the next step (1, 2, 3…), so the total is triangular: 1, 3, 6, 10, 15… and 55 at 57 s. A unit receives the current fury **when it spawns**, as +X% max health and +X% movement speed. Two consequences:
   - Every **extra trigger** (the Red Obelisk, or a unit below) raises all later steps. That is the "start your fury early" lever.
   - Fury is a percentage, so **high-life units gain the most** from it.
 - **Army buffs** (`vitality`, `movement-speed`, `cast-speed`; `attack` for towers) are stored per army and applied to every unit at spawn. `vitality` is +3% max health per stack.
@@ -72,7 +72,7 @@ Budget rule: a common unit has about **12–13 stars plus one simple effect**. A
 
 ### Unit notes
 
-**Wolf (rush).** The purest tempo unit: cheap, very fast, fragile. It hits harder while food is high, which is exactly the start-of-battle window a rush exploits. Its low base life means fury barely helps it, so it wants the game to end before 20 s. It is weak to area towers (Blacksmith, Zapping) and slows.
+**Wolf (rush).** The purest tempo unit: cheap, very fast, fragile. It hits harder while food is high, which is exactly the start-of-battle window a rush exploits. Its low base life means fury barely helps it, so it wants the game to end before 30 s. It is weak to area towers (Blacksmith, Zapping) and slows.
 
 **Bandit (food war).** A raider: every Bandit that gets through costs the enemy 6🌽, almost one full tick of castle production. It complements the Glutton Fox, which drains food over time instead of on a hit. Its secondary axis is rush, because it is cheap and food-efficient.
 
@@ -80,7 +80,7 @@ Budget rule: a common unit has about **12–13 stars plus one simple effect**. A
 
 **Stone Golem (long game, tank).** A slow wall: high life plus a shield that eats the first tower shot, which is very effective against slow-firing towers like Frost. It is the unit that benefits most from fury (high base HP) and from Herbalist stacks. It is weak to starvation because of its 1🌽 upkeep.
 
-**Imp (fury).** It wants to die. Each death adds a fury step, so all later triggers are bigger. Two or three Imp deaths before 20 s shift the whole fury curve. Being Evil, it fits the Red Obelisk theme, which also sacrifices your own units to trigger fury. Its slow summon is the brake. **Balance risk**: two barracks of Imps could trigger fury too often. If so, add "at most once every 4 s per army".
+**Imp (fury).** It wants to die. Each death adds a fury step, so all later triggers are bigger. Two or three Imp deaths before 30 s shift the whole fury curve. Being Evil, it fits the Red Obelisk theme, which also sacrifices your own units to trigger fury. Its slow summon is the brake. **Balance risk**: two barracks of Imps could trigger fury too often. If so, add "at most once every 4 s per army".
 
 **Magpie (anti-scaling).** It does almost no castle damage. Its value is stealing a buff stack (`vitality`, `movement-speed`, `cast-speed` or tower `attack`): the enemy loses it and you gain it. It is useless against a rush and strong against Herbalist or Powder Magazine boards. It is fast enough to get through, but fragile.
 
