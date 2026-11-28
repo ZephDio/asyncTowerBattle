@@ -14,7 +14,7 @@ import { Science, TRequiresScience } from "../../../../shared/traits/engine/scie
 import { TrapTag } from "../../../../shared/traits/engine/tags/building/building-tags";
 
 export class SlowingTrapBlueprint extends Derive(
-	TRarity(Rarity.Common),
+	TRarity(Rarity.Uncommon),
 	TShopBlueprint(10, 3),
 	TRequiresScience(Science.Trap),
 	TImageDrawable(PathResources.slowing.straight, PathResources.slowing.size, DrawPriority.CarpetStyleGridElement),

@@ -190,7 +190,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Piece | Rarity | Price | Effect |
 |---|---|---|---|
 | Basic Tile | Common | 10 | A dirt path cell. Shape (straight or turn) follows its neighbors. |
-| Mud Trap | Common | 10 | Needs Trap science. Placed on a path tile. Slows enemies on it by 30%. |
+| Mud Trap | Uncommon | 10 | Needs Trap science. Placed on a path tile. Slows enemies on it by 30%. |
 | Stun Trap | Rare | 10 | Needs Trap science. Placed on a path tile. Stuns enemies on it for 1 s, 10 ticks after they step on it, then needs 4.5 s to re-arm. |
 
 Path rules (junctions, right-click to choose a direction) are in `docs/path.md`.
