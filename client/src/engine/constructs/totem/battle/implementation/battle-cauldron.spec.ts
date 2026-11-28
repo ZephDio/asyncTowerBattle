@@ -79,6 +79,23 @@ describe("Cauldron", () => {
 		expect(poison.duration).toBe(secondsToFrame(2));
 	});
 
+	it("casts by itself once 5 s of ticks have passed, and again 5 s later", () => {
+		let poisoned = 0;
+		const hooks = {
+			alliedArmyBuffHooks: new ArmyBuff().getHooks(),
+			getEnemyUnits: () => [{ isAlive: () => true, addCondition: () => poisoned++ }],
+			random: () => 0,
+		} as unknown as BattleArmyHooks;
+		const grid = { cellToGrid: (cell: Cell) => new GridPosition({ x: cell.x, y: cell.y }) };
+		const totem = new Cauldron(new Cell({ x: 0, y: 0 })).toAllied(grid as never, hooks);
+		for (let tick = 0; tick < 5 * 32 - 2; tick++) totem.tick();
+		expect(poisoned).toBe(0);
+		for (let tick = 0; tick < 4; tick++) totem.tick();
+		expect(poisoned).toBe(1);
+		for (let tick = 0; tick < 5 * 32; tick++) totem.tick();
+		expect(poisoned).toBe(2);
+	});
+
 	it("takes 6 health in 32 ticks (one second) from a poisoned enemy, 7.2 with a Cauldron", () => {
 		for (const [cauldrons, expected] of [
 			[0, 6],
