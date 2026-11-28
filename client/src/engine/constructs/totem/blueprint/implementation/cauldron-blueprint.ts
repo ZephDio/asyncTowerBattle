@@ -28,7 +28,7 @@ export class CauldronBlueprint extends Derive(
 		health: NaN,
 		castleDamage: NaN,
 		projectileDamage: NaN,
-		castSpeed: castSpeedFromSeconds(5),
+		castSpeed: castSpeedFromSeconds(3),
 		attackSpeed: NaN,
 		speed: NaN,
 		foodConsumption: NaN,

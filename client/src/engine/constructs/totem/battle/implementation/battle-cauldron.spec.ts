@@ -51,8 +51,8 @@ describe("Cauldron", () => {
 		expect(new WitchHouse(new Cell({ x: 0, y: 0 })).stats.hasProjectileDamage()).toBe(false);
 	});
 
-	it("casts every 5 s for no food", () => {
-		expect(blueprint.stats.castSpeed).toBeCloseTo(castSpeedFromSeconds(5));
+	it("casts every 3 s for no food", () => {
+		expect(blueprint.stats.castSpeed).toBeCloseTo(castSpeedFromSeconds(3));
 		expect(blueprint.stats.foodConsumptionOnCast).toBeNaN();
 	});
 
@@ -79,7 +79,7 @@ describe("Cauldron", () => {
 		expect(poison.duration).toBe(secondsToFrame(2));
 	});
 
-	it("casts by itself once 5 s of ticks have passed, and again 5 s later", () => {
+	it("casts by itself once 3 s of ticks have passed, and again 3 s later", () => {
 		let poisoned = 0;
 		const hooks = {
 			alliedArmyBuffHooks: new ArmyBuff().getHooks(),
@@ -88,11 +88,11 @@ describe("Cauldron", () => {
 		} as unknown as BattleArmyHooks;
 		const grid = { cellToGrid: (cell: Cell) => new GridPosition({ x: cell.x, y: cell.y }) };
 		const totem = new Cauldron(new Cell({ x: 0, y: 0 })).toAllied(grid as never, hooks);
-		for (let tick = 0; tick < 5 * 32 - 2; tick++) totem.tick();
+		for (let tick = 0; tick < 3 * 32 - 2; tick++) totem.tick();
 		expect(poisoned).toBe(0);
 		for (let tick = 0; tick < 4; tick++) totem.tick();
 		expect(poisoned).toBe(1);
-		for (let tick = 0; tick < 5 * 32; tick++) totem.tick();
+		for (let tick = 0; tick < 3 * 32; tick++) totem.tick();
 		expect(poisoned).toBe(2);
 	});
 
