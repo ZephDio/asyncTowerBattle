@@ -10,7 +10,8 @@ above it.
 
 The back cell is the shooting range: a packed earth court fenced with logs, a bow
 leaning on a low plank wall on the left, two trees (the right one with a red target
-on its trunk), a set bear trap between them and arrows lying around.
+on its trunk), a set bear trap between them, two arrows standing against the wall and one lying
+on the ground.
 
 The canvas is the barracks' width, and its bottom cell keeps the barracks' scale and
 ground anchor; it is one cell (110px) taller, so both pieces share the same pixels per
@@ -33,7 +34,7 @@ WIDTH, HEIGHT, ORIGIN = barracks.WIDTH, barracks.HEIGHT + CELL, barracks.ORIGIN 
 
 (DECK, LOGS, CLAD, OAK, ROOF, PANE, BLUE, DOOR, ARCH, STRAW, CORD, DARK, T_LOGS, T_POST, T_ROOM, T_RAIL,
  T_CAP, T_PIN, SACK, PALISADE, PLAQUE, FUR, ANTLER, EYE, EARTH, FENCE, PLANK_WALL, BOW, STRING, SHAFT,
- HEAD, FLETCH, TARGET, TRUNK_L, LEAVES_L, TRUNK_R, LEAVES_R, TRAP, SPRING) = range(1, 40)
+ HEAD, FLETCH, FEATHER, TARGET, TRUNK_L, LEAVES_L, TRUNK_R, LEAVES_R, TRAP, SPRING) = range(1, 41)
 
 WOOD = barracks.WOOD
 DARK_WOOD = ('3f323c', '5e4448', '86604c', 'a87c5a')
@@ -59,7 +60,7 @@ class Tree:
         self.trunk_label, self.leaves_label = trunk_label, leaves_label
 
 
-TREES = (Tree(-29, 252, 26, 12, 1, TRUNK_L, LEAVES_L), Tree(27, 238, 28, 16, 2, TRUNK_R, LEAVES_R))
+TREES = (Tree(-26, 218, 26, 18, 1, TRUNK_L, LEAVES_L), Tree(27, 238, 28, 16, 2, TRUNK_R, LEAVES_R))
 TARGET_AT = (27, 15)  # x, z on the right trunk's front
 TRAP_AT = (0, 258)
 
@@ -218,7 +219,16 @@ def court(g):
                 b(x, x+1, trunk_front-3, trunk_front, z, z+1, TARGET)
     trap(g)
     arrow(g, (37, 180), (24, 195))
-    arrow(g, (-24, 222), (-10, 230))
+    # Two arrows standing against the wall, heads up, white fletching at the bottom.
+    for x0 in (-20, -13):
+        for z in range(2, 30):
+            y = 173 + (z > 14)
+            label = FEATHER if z < 9 else SHAFT
+            b(x0, x0+2, y, y+2, z, z+1, label)
+            if z < 8 and z % 2 == 0:
+                b(x0-1, x0+3, y, y+2, z, z+1, FEATHER)
+        for z, half in ((30, 1), (31, 1), (32, 0), (33, 0)):
+            b(x0-half, x0+2+half, 174, 176, z, z+1, HEAD)
     # One arrow stuck in the target, its fletching toward the camera.
     for y in range(trunk_front-13, trunk_front-3):
         b(tx+1, tx+3, y, y+1, tz+2, tz+4, FLETCH if y < trunk_front-10 else SHAFT)
@@ -386,7 +396,9 @@ def shade(h):
     if mat == SHAFT:
         return WOOD[3 if top else 2]
     if mat == HEAD:
-        return IRON[3 if top else 2]
+        return IRON[3 if top or not h.neighbor(-1, 0, 0) else 2]
+    if mat == FEATHER:
+        return CREAM if top or not h.neighbor(-1, 0, 0) else 'c8bca0'
     if mat == FLETCH:
         return RED[2 if top else 1]
     if mat == TARGET:
@@ -414,7 +426,7 @@ def shade(h):
     return {BLUE: '517ac1', CORD: '825646', DARK: '363443'}[mat]
 
 
-QUIET_SEAMS = ({CORD, STRAW, SACK, OAK}, {BOW, STRING}, {SHAFT, FLETCH, HEAD}, {TRAP, SPRING}, {FUR, EYE})
+QUIET_SEAMS = ({CORD, STRAW, SACK, OAK}, {BOW, STRING}, {SHAFT, FLETCH, FEATHER, HEAD}, {TRAP, SPRING}, {FUR, EYE})
 
 
 def seam(a, b):
