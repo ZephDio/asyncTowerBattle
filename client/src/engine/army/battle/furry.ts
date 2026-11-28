@@ -1,7 +1,8 @@
 import { secondsToFrame } from "../../../shared/seconds";
 
 export class Furry {
-	startingTime = 20;
+	startingTime = 30;
+	intervalTime = 3;
 	constructor(
 		public furryIncrease = 0,
 		public amount: number,
@@ -11,7 +12,7 @@ export class Furry {
 	tick() {
 		const time = this.getTimer().clock;
 		if (time >= secondsToFrame(this.startingTime)) {
-			if ((time - secondsToFrame(this.startingTime)) % secondsToFrame(2) === 0) {
+			if ((time - secondsToFrame(this.startingTime)) % secondsToFrame(this.intervalTime) === 0) {
 				this.increaseFurry();
 			}
 		}

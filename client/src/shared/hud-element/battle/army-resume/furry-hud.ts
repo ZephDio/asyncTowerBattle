@@ -20,12 +20,12 @@ export class FurryHud extends Derive(TRenderable, TDrawable) {
 		super({});
 	}
 
-	// Under the flame, the Fury the next trigger adds: Furry.increaseFurry increments furryIncrease before adding it.
+	// In the tooltip, the Fury the next trigger adds: Furry.increaseFurry increments furryIncrease before adding it.
 	nextIncrease() {
 		return this.furry.furryIncrease + 1;
 	}
 
-	// The flame and the number under it, while there is Fury to show.
+	// The flame and the Fury amount under it, while there is Fury to show.
 	tooltipAt(point: ScreenPosition, side: "left" | "right"): HudTooltip | null {
 		if (this.furry.amount <= 0) return null;
 		const half = this.size.width / 2;
@@ -47,7 +47,7 @@ export class FurryHud extends Derive(TRenderable, TDrawable) {
 		this.drawImage(context, canvasSize, canvasPosition, this.furryIcon);
 		drawOutlinedText(
 			context,
-			`${this.nextIncrease()}`,
+			`${Math.round(this.furry.amount)}`,
 			canvasPosition.x,
 			canvasPosition.y + canvasSize.height * 0.78,
 			canvasSize.height * 0.58,
