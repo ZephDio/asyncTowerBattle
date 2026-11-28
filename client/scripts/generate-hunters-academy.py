@@ -4,8 +4,8 @@
 A vertical two-cell barrack (`o / o`). The front cell holds the basic barracks
 (generate-barracks.py) turned to wood for a forest look: plank cladding instead of
 plaster, a weathered plank deck instead of paving, a log plinth, a palisade instead of the
-curtain wall and a log base under the lookout. The weapon rack is gone and the
-straw dummy stays. The entry is a smaller wooden arch with a deer's head trophy
+curtain wall and a log base under the lookout. The weapon rack is gone, a fishing rod
+leans where it stood, and the straw dummy stays. The entry is a smaller wooden arch with a deer's head trophy
 above it.
 
 The back cell is the shooting range: a packed earth court fenced with logs, a bow
@@ -34,7 +34,7 @@ WIDTH, HEIGHT, ORIGIN = barracks.WIDTH, barracks.HEIGHT + CELL, barracks.ORIGIN 
 
 (DECK, LOGS, CLAD, OAK, ROOF, PANE, BLUE, DOOR, ARCH, STRAW, CORD, DARK, T_LOGS, T_POST, T_ROOM, T_RAIL,
  T_CAP, T_PIN, SACK, PALISADE, PLAQUE, FUR, ANTLER, EYE, EARTH, FENCE, PLANK_WALL, BOW, STRING, SHAFT,
- HEAD, FLETCH, FEATHER, TARGET, TRUNK_L, LEAVES_L, TRUNK_R, LEAVES_R, TRAP, SPRING) = range(1, 41)
+ HEAD, FLETCH, FEATHER, TARGET, TRUNK_L, LEAVES_L, TRUNK_R, LEAVES_R, TRAP, SPRING, ROD, GRIP, LINE, BOBBER) = range(1, 45)
 
 WOOD = barracks.WOOD
 DARK_WOOD = ('3f323c', '5e4448', '86604c', 'a87c5a')
@@ -185,6 +185,22 @@ def dummy(g):
             reach = (10, 12, 10, 13, 11, 10)[z-21]
             for d in range(7, reach+1):
                 b(CX+side*d, CX+side*d+1, CY-1, CY+2, z, z+1, STRAW if d >= 9 else SACK)
+
+
+def fishing_rod(g):
+    """A rod leaning on the hall where the weapon rack stood: a wrapped grip, a pale pole, a red bobber on its line."""
+    steps = 60
+    for i in range(steps + 1):
+        t = i / steps
+        x, y, z = round(-23 + 20 * t), round(-8 + 5 * t), round(3 + 38 * t)
+        grip = t < .3
+        w = 3 if grip else 2
+        g.box(x, x+w, y, y+2, z, z+2, GRIP if grip else ROD)
+    tip_x = -3
+    for z in range(33, 42):
+        g.box(tip_x+1, tip_x+2, -3, -2, z, z+1, LINE)
+    ellipsoid(g, tip_x + 1.5, -3, 30.5, 2.8, 2.5, 3, BOBBER)
+    g.box(tip_x+1, tip_x+2, -3, -2, 24, 28, LINE)
 
 
 def court(g):
@@ -410,6 +426,14 @@ def shade(h):
         if not top and h.neighbor(0, -1, 0):
             return RED[0]
         return RED[1] if r <= 2.2 else CREAM if r <= 4.4 else RED[2] if r <= 6.4 else CREAM
+    if mat == ROD:
+        return 'cecbc2' if top or not h.neighbor(-1, 0, 0) else '9a9790'
+    if mat == GRIP:
+        return '5e5658' if (z // 2) % 2 else '3a3440'
+    if mat == LINE:
+        return '2a2230'
+    if mat == BOBBER:
+        return CREAM if z >= 32 and not h.neighbor(0, 0, 1) else RED[2] if h.light(h.normal()) > .3 else RED[1]
     if mat in (TRAP, SPRING):
         if not top:
             return IRON[1]
@@ -430,7 +454,7 @@ def shade(h):
     return {BLUE: '517ac1', CORD: '825646', DARK: '363443'}[mat]
 
 
-QUIET_SEAMS = ({CORD, STRAW, SACK, OAK}, {BOW, STRING}, {SHAFT, FLETCH, FEATHER, HEAD}, {TRAP, SPRING}, {FUR, EYE})
+QUIET_SEAMS = ({CORD, STRAW, SACK, OAK}, {BOW, STRING}, {SHAFT, FLETCH, FEATHER, HEAD}, {TRAP, SPRING}, {FUR, EYE}, {ROD, GRIP, LINE, BOBBER})
 
 
 def seam(a, b):
@@ -452,6 +476,7 @@ if __name__ == '__main__':
     trophy(g)
     lookout(g)
     dummy(g)
+    fishing_rod(g)
 
     def rgba(h):
         return (*bytes.fromhex(shade(h)), 255)
