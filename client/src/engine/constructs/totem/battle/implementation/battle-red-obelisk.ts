@@ -49,7 +49,7 @@ export class BattleRedObelisk extends Derive(CasterTotem, HTSynergy, TStatsRende
 			);
 			for (const element of elements) {
 				if (this.patternEffect.patternCondition(element)) {
-					this.stats.basePercentStat.castSpeed += 10;
+					this.stats.basePercentStat.castSpeed += 5;
 				}
 			}
 		}

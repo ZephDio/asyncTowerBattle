@@ -205,12 +205,12 @@ export class TutorialPanelHud extends Derive(TDrawable, TRenderable) {
 				width,
 			) +
 			1.6 * u;
-		// Fury (Furry, BattleArmy.addFurryBuff): from 20 s it grows every 2 s by 1, 2, 3...; spawned units get it as %.
+		// Fury (Furry, BattleArmy.addFurryBuff): from 30 s it grows every 3 s by 1, 2, 3...; spawned units get it as %.
 		this.headingWithIcon(context, "Fury", IconResources.furry.image, x, y);
 		y += TITLE_SIZE * LINE * u + 0.6 * u;
 		this.paragraph(
 			context,
-			"After 20 s, fury grows faster and faster. New units spawn with +fury% 💚 and 🥾.",
+			"After 30 s, fury grows faster and faster. New units spawn with +fury% 💚 and 🥾.",
 			x,
 			y,
 			width,

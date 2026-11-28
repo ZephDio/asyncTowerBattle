@@ -66,7 +66,7 @@ So the starting food is a buffer. An aggressive board spends it fast with many u
 
 ### Fury
 
-Fury is the late-battle clock that prevents stalemates. Starting at 20 seconds, it triggers every 2 seconds. Each trigger adds one more than the last (1, then 2, then 3…), so fury grows as 1, 3, 6, 10, 15… Every unit **spawned** afterwards gets the current fury as +X% max health and +X% movement speed. Anything that triggers fury early (the Red Obelisk) speeds up every later step.
+Fury is the late-battle clock that prevents stalemates. Starting at 30 seconds, it triggers every 3 seconds. Each trigger adds one more than the last (1, then 2, then 3…), so fury grows as 1, 3, 6, 10, 15… Every unit **spawned** afterwards gets the current fury as +X% max health and +X% movement speed. Anything that triggers fury early (the Red Obelisk) speeds up every later step.
 
 ### Army buffs
 
@@ -180,7 +180,7 @@ Units are bought like pieces and placed into barracks. Health is how long they s
 | Gobelin Portal | Epic | 10 | When a caster on a star triggers: 30% chance to summon a Gobelin. | the 4 diagonals |
 | Forging Anvil | Legendary | 10 | Damage towers on its stars deal +30% damage. | left and right |
 | Gold Mine | Common | 15 | Shop entered: +5 gold. Start of battle: +1 vitality army buff stack (💖) if a Mountain (a Rock or another Gold Mine) is on its star. Each mine stacks. | right |
-| Red Obelisk | Legendary | 20 | Every 8 s: destroys one of your own units, and if it does, triggers fury. 10% faster per Evil piece on its stars. | 5 cells around and above |
+| Red Obelisk | Legendary | 20 | Every 9 s: destroys one of your own units, and if it does, triggers fury. 5% faster per Evil piece on its stars. | 5 cells around and above |
 | Stonemason | Uncommon | 15 | Needs Dwarf science. Totem + Mountain, 1 wide and 2 tall. Every 5 s: gives a stone shield to 2 random allied units that have none, +1 unit per Mountain (Rock, Gold Mine, Go-Goat, another Stonemason) on its stars (up to 6). No food cost. Poison ignores shields. Placeholder sprite. | left and right of both cells (4 stars) |
 | Butchery | Rare | 25 | Needs Dwarf science. Totem + Food, 2 wide and 2 tall (an L: the bottom right cell is its star). Every 6 s: sacrifices a random allied Animal alive on the board (it dies through its own death effect, as with the Red Obelisk, so a White Stag drops one antler; no castle damage, gold or refund; with no Animal alive nothing happens and the timer starts over), gives 5 food and the army gains 3 random buffs, drawn with replacement from the four army buffs (unit 👢 speed, unit 💖 health, tower 🏹 projectile damage, tower 🔮 cast speed), one stack each. No food cost. As a Food piece it also feeds a Windmill on its stars (+5 max food). Star: a barrack on it that produces an Animal gets +0.1 production speed, added to its own (a Rush Barrack at 1.2 runs at 1.3), counted at battle start. | the cell right of its bottom left cell (1 star) |
 | Cauldron | Epic | 30 | Needs Witchcraft science. One cell, tagged Totem and Evil. Every 3 s: poisons a random living enemy unit for 2 s (added to the poison it has left, like the Frog's, from the battle's seeded random, no food cost). Start of battle: the army's poison effects (the Witch House's puddles and the Frog's croak, 6 damage/s) deal +20% damage, each Cauldron adding its own 20%, its own cast included. Placeholder sprite. | none |
