@@ -21,7 +21,12 @@ export class StunTrapBlueprint extends Derive(
 	TrapTag,
 	THitbox(new HitBox([[new Rectangle({ width: 4.9, height: 4.9 }), new GridPosition({ x: 0, y: 0 })]])),
 ) {
-	description = new Description("Stun Trap", ["Place it on a path tile.", "Stuns stepping", "enemies for 1 second", "Re-arms after 4.5 seconds"]);
+	description = new Description("Stun Trap", [
+		"Place it on a path tile.",
+		"Stuns stepping",
+		"enemies for 1 second",
+		"Re-arms after 4.5 seconds",
+	]);
 	toRecruit(cell: Cell) {
 		return new StunTrap(cell, this);
 	}
