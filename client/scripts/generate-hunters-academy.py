@@ -60,9 +60,12 @@ class Tree:
         self.trunk_label, self.leaves_label = trunk_label, leaves_label
 
 
-TREES = (Tree(-26, 218, 26, 18, 1, TRUNK_L, LEAVES_L), Tree(27, 238, 28, 16, 2, TRUNK_R, LEAVES_R))
+# The range is pulled toward the hall by RANGE_SHIFT voxels, so it starts right behind the roof.
+RANGE_SHIFT = 20
+TREES = (Tree(-26, 218 - RANGE_SHIFT, 26, 13, 1, TRUNK_L, LEAVES_L),
+         Tree(27, 238 - RANGE_SHIFT, 28, 16, 2, TRUNK_R, LEAVES_R))
 TARGET_AT = (27, 15)  # x, z on the right trunk's front
-TRAP_AT = (0, 258)
+TRAP_AT = (0, 258 - RANGE_SHIFT)
 
 
 def noise(*values):
@@ -185,8 +188,9 @@ def dummy(g):
 
 
 def court(g):
-    b = g.box
-    b(-47, 47, 43, 286, 0, 2, EARTH)
+    def b(x0, x1, y0, y1, z0, z1, label):
+        g.box(x0, x1, y0 - RANGE_SHIFT, y1 - RANGE_SHIFT, z0, z1, label)
+    b(-47, 47, 43 + RANGE_SHIFT, 286, 0, 2, EARTH)
     # Log fence on the sides and the back.
     for y in list(range(60, 284, 22)) + [282]:
         for x in (-47, 44):
@@ -216,9 +220,9 @@ def court(g):
     for z in range(tz-8, tz+9):
         for x in range(tx-8, tx+9):
             if math.hypot(x+.5-tx-.5, z+.5-tz-.5) <= 7.6:
-                b(x, x+1, trunk_front-3, trunk_front, z, z+1, TARGET)
+                g.box(x, x+1, trunk_front-3, trunk_front, z, z+1, TARGET)
     trap(g)
-    arrow(g, (37, 180), (24, 195))
+    arrow(g, (37, 180 - RANGE_SHIFT), (24, 195 - RANGE_SHIFT))
     # Two arrows standing against the wall, heads up, white fletching at the bottom.
     for x0 in (-20, -13):
         for z in range(2, 30):
@@ -231,7 +235,7 @@ def court(g):
             b(x0-half, x0+2+half, 174, 176, z, z+1, HEAD)
     # One arrow stuck in the target, its fletching toward the camera.
     for y in range(trunk_front-13, trunk_front-3):
-        b(tx+1, tx+3, y, y+1, tz+2, tz+4, FLETCH if y < trunk_front-10 else SHAFT)
+        g.box(tx+1, tx+3, y, y+1, tz+2, tz+4, FLETCH if y < trunk_front-10 else SHAFT)
 
 
 def arrow(g, tail, head):
@@ -437,7 +441,7 @@ def seam(a, b):
 
 def shadow(x, y):
     return min(max(abs(x)-47, -45-y, y-44)/2, max(abs(x)-46, -y, y-44)/5,
-               max(-49-x, x+34, -45-y, y+28)/3, max(abs(x)-48, 43-y, y-287)/2)
+               max(-49-x, x+34, -45-y, y+28)/3, max(abs(x)-48, 43-y, y-287+RANGE_SHIFT)/2)
 
 
 if __name__ == '__main__':
