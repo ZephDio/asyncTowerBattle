@@ -54,7 +54,7 @@ const forestAt = (x: number, y: number): Placed => ({
 	element: new Forest(at(x, y)),
 });
 
-describe("Hunter's Academy", () => {
+describe("Hunter's Association", () => {
 	const blueprint = new HuntersAcademyBlueprint({});
 
 	it("is an Uncommon barrack at 15 gold, with a 0.85 cast speed", () => {

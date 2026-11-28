@@ -79,7 +79,7 @@ describe("sciences", () => {
 		}
 	});
 
-	it("is granted by the Hunter's Academy while it stands on the grid, not in the reserve", () => {
+	it("is granted by the Hunter's Association while it stands on the grid, not in the reserve", () => {
 		const army = ArmyFactory.default(Faction.Elf);
 		const academy = new HuntersAcademy(new Cell({ x: 3, y: 2 }));
 		army.inventory.add(academy);

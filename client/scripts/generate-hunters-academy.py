@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the Hunter's Academy to public/resources/barracks/hunters-academy.png.
+"""Render the Hunter's Association to public/resources/barracks/hunters-academy.png.
 
 A vertical two-cell barrack (`o / o`). The front cell holds the basic barracks
 (generate-barracks.py) turned to wood for a forest look: plank cladding instead of

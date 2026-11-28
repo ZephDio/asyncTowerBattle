@@ -55,7 +55,7 @@ export class HuntersAcademyBlueprint extends Derive(
 	TGrantsScience(Science.Trap),
 ) {
 	description = new BarrackDescription(
-		"Hunter's Academy",
+		"Hunter's Association",
 		["Cast 5% faster per ▣", "barrack of other name", "", "Cast 10% faster per ▣", "forest"],
 		this,
 	);
