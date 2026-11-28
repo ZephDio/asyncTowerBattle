@@ -8,6 +8,7 @@ import { Cauldron } from "../../recruit/implementation/cauldron";
 import { WitchHouse } from "../../../tower/recruit/implementation/witch-house";
 import { Poisoned } from "../../../../area-effect/implementation/poison-ground";
 import { Stats } from "../../../../stats/stats";
+import { castSpeedFromSeconds, secondsToFrame } from "../../../../../shared/seconds";
 import type { BattleArmyHooks } from "../../../../army/battle/battle-army";
 
 const setup = (count: number) => {
@@ -48,6 +49,34 @@ describe("Cauldron", () => {
 
 	it("makes the Witch House itself deal no damage", () => {
 		expect(new WitchHouse(new Cell({ x: 0, y: 0 })).stats.hasProjectileDamage()).toBe(false);
+	});
+
+	it("casts every 5 s for no food", () => {
+		expect(blueprint.stats.castSpeed).toBeCloseTo(castSpeedFromSeconds(5));
+		expect(blueprint.stats.foodConsumptionOnCast).toBeNaN();
+	});
+
+	it("poisons one random living enemy for 2 s on each cast, adding to the poison it has left", () => {
+		const added: unknown[][] = [];
+		const enemy = (alive: boolean) => ({
+			isAlive: () => alive,
+			addCondition: (condition: unknown) => added.push([enemy, condition]),
+		});
+		const living = enemy(true);
+		const buffs = new ArmyBuff();
+		const hooks = {
+			alliedArmyBuffHooks: buffs.getHooks(),
+			getEnemyUnits: () => [enemy(false), living, enemy(false)],
+			random: () => 0.99,
+		} as unknown as BattleArmyHooks;
+		const grid = { cellToGrid: (cell: Cell) => new GridPosition({ x: cell.x, y: cell.y }) };
+		const totem = new Cauldron(new Cell({ x: 0, y: 0 })).toAllied(grid as never, hooks);
+		totem.onCastResolve();
+		expect(added).toHaveLength(1);
+		const poison = added[0]?.[1] as Poisoned;
+		expect(poison).toBeInstanceOf(Poisoned);
+		expect(poison.stacking).toBe("add");
+		expect(poison.duration).toBe(secondsToFrame(2));
 	});
 
 	it("takes 6 health in 32 ticks (one second) from a poisoned enemy, 7.2 with a Cauldron", () => {
